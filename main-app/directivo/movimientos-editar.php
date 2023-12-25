@@ -222,7 +222,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                     <td><?=$fila['idtx'];?></td>
                                                                     <td><?=$fila['name'];?></td>
                                                                     <td id="precio<?=$fila['idtx'];?>"><?=$fila['price'];?></td>
-                                                                    <td><input type="number" title="cantity" id="cantidadItems<?=$fila['idtx'];?>" onchange="actualizarSubtotal('<?=$fila['idtx'];?>')" value="<?=$fila['cantity'];?>"></td>
+                                                                    <td><input type="number" title="cantity" id="cantidadItems<?=$fila['idtx'];?>" onchange="actualizarSubtotal('<?=$fila['idtx'];?>')" value="<?=$fila['cantity'];?>" style="width: 50px;"></td>
                                                                     <td id="subtotal<?=$fila['idtx'];?>"><?=$fila['subtotal'];?></td>
                                                                 </tr>
                                                             <?php }} ?>
