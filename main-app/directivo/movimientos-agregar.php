@@ -25,7 +25,6 @@ if(!Modulos::validarPermisoEdicion()){
     <!--select2-->
     <link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
     <link href="../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
-	<script src="../js/Movimientos.js" ></script>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
