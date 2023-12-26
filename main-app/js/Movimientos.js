@@ -147,12 +147,17 @@ function nuevoItem() {
     // Obtener elementos del DOM
     var idItemNuevo = document.getElementById('idItemNuevo');
     var precioNuevo = document.getElementById('precioNuevo');
+    var cantidadNuevo = document.getElementById('cantidadItemNuevo');
     var subtotalNuevo = document.getElementById('subtotalNuevo');
     var items = document.getElementById('items');
+    var itemsContainer = document.getElementById('select2-items-container');
 
     // Limpiar y reiniciar los elementos del DOM relacionados con el nuevo item
     idItemNuevo.innerHTML = '';
     precioNuevo.innerHTML = '';
+    cantidadNuevo.value = 1;
+    cantidadNuevo.disabled = true;
     subtotalNuevo.innerHTML = '';
-    items.innerHTML = '';
+    items.value = '';
+    itemsContainer.innerHTML = 'Seleccione una opción';
 }
