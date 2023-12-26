@@ -108,6 +108,7 @@ $cantPreguntas = Evaluaciones::numeroPreguntasEvaluacion($conexion, $config, $id
                                    
 									<form name="formularioGuardar" action="preguntas-guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
 										<input type="hidden" value="<?=$idE;?>" name="idE">
+										<input type="hidden" value="7" name="id">
 
 										<div id="infoCero">
 											<p style="color: blue;">Puedes llenar toda la información desde cero.</p>

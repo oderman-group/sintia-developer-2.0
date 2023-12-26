@@ -72,6 +72,7 @@
 
                                    
 									<form id="form_subir" name="formularioGuardar" action="actividades-guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post" enctype="multipart/form-data">
+										<input type="hidden" value="10" name="id">
 
 										<div id="infoCero">
 											<p style="color: blue;">Puedes llenar toda la información desde cero.</p>

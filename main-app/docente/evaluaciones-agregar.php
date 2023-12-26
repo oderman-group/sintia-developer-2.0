@@ -69,6 +69,7 @@ require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");?>
                                    
 									<form name="formularioGuardar" action="evaluaciones-guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 										<input type="hidden" value="<?php if(!empty($_GET["idE"])){ echo $_GET["idE"];}?>" name="idE">
+										<input type="hidden" value="23" name="id">
 
 										<div id="infoCero">
 											<p style="color: blue;">Puedes llenar toda la información desde cero.</p>
