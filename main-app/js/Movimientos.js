@@ -98,6 +98,7 @@ function guardarNuevoItem(selectElement) {
     // Obtener los elementos del DOM
     var itemElement = document.getElementById('idItemNuevo');
     var precioElement = document.getElementById('precioNuevo');
+    var cantidadElement = document.getElementById('cantidadItemNuevo');
     var subtotalElement = document.getElementById('subtotalNuevo');
 
     // Obtener el ID de la transacción desde el elemento del DOM
@@ -125,6 +126,7 @@ function guardarNuevoItem(selectElement) {
         precioElement.innerHTML = '';
         precioElement.appendChild(document.createTextNode(precioFormat));
         precioElement.dataset.precio = precio;
+        cantidadElement.disabled = false;
         subtotalElement.innerHTML = '';
         subtotalElement.appendChild(document.createTextNode(subtotalFormat));
     })
