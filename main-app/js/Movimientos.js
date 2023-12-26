@@ -1,4 +1,31 @@
 /**
+ * Formatea un número con separadores de miles y decimales personalizables.
+ * @param {number} number - El número a formatear.
+ * @param {number} [decimals=0] - La cantidad de decimales a mostrar (por defecto, 0).
+ * @param {string} [decPoint=','] - El separador decimal (por defecto, ',').
+ * @param {string} [thousandsSep='.'] - El separador de miles (por defecto, '.').
+ * @returns {string} - El número formateado como cadena.
+ */
+function numberFormat(number, decimals = 0, decPoint = ',', thousandsSep = '.') {
+    // Validar que number sea un número
+    if (isNaN(number) || number === '' || number === null) {
+        return '';
+    }
+
+    // Redondear el número al número especificado de decimales
+    number = parseFloat(number.toFixed(decimals));
+
+    // Convertir el número a una cadena y separar los miles
+    var parts = number.toString().split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandsSep);
+
+    // Unir la parte entera y decimal con el separador decimal
+    var result = parts.join(decPoint);
+
+    return result;
+}
+
+/**
  * Actualiza el subtotal según el precio y la cantidad especificados.
  * @param {string} id - Identificador del elemento o 'idNuevo' para un nuevo item.
  */
@@ -17,11 +44,12 @@ function actualizarSubtotal(id) {
     }
 
     // Obtener los valores
-    var precio = parseFloat(precioElement.innerText);
+    var precio = parseFloat(precioElement.getAttribute("data-precio"));
     var cantidad = parseFloat(cantidadElement.value);
 
     // Calcular el subtotal
     var subtotal = precio * cantidad;
+    var subtotalFormat = "$"+numberFormat(subtotal, 0, ',', '.');
     
     fetch('../directivo/ajax-cambiar-subtotal.php?subtotal='+(subtotal)+'&cantidad='+(cantidad)+'&idItem='+(idItem), {
         method: 'GET'
@@ -29,7 +57,7 @@ function actualizarSubtotal(id) {
     .then(response => response.text()) // Convertir la respuesta a texto
     .then(data => {
         subtotalElement.innerHTML = '';
-        subtotalElement.appendChild(document.createTextNode(subtotal));
+        subtotalElement.appendChild(document.createTextNode(subtotalFormat));
     })
     .catch(error => {
          // Manejar errores
@@ -80,8 +108,10 @@ function guardarNuevoItem(selectElement) {
 
     // Obtener el ID del item, el precio y calcular el subtotal
     var idItem = itemSelecionado.value;
-    var precio = itemSelecionado.getAttribute('name');
+    var precio = parseFloat(itemSelecionado.getAttribute('name'));
+    var precioFormat = "$"+numberFormat(precio, 0, ',', '.');
     var subtotal = precio * 1;
+    var subtotalFormat = "$"+numberFormat(subtotal, 0, ',', '.');
 
     // Realizar una solicitud fetch para guardar el nuevo item
     fetch('../directivo/ajax-guardar-items.php?idTransaction=' + idTransaction + '&idItem=' + idItem + '&precio=' + precio, {
@@ -93,9 +123,10 @@ function guardarNuevoItem(selectElement) {
         itemElement.innerHTML = '';
         itemElement.appendChild(document.createTextNode(data.idInsercion));
         precioElement.innerHTML = '';
-        precioElement.appendChild(document.createTextNode(precio));
+        precioElement.appendChild(document.createTextNode(precioFormat));
+        precioElement.dataset.precio = precio;
         subtotalElement.innerHTML = '';
-        subtotalElement.appendChild(document.createTextNode(subtotal));
+        subtotalElement.appendChild(document.createTextNode(subtotalFormat));
     })
     .catch(error => {
         // Manejar errores
