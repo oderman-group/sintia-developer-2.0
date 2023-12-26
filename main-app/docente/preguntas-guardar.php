@@ -9,6 +9,8 @@ include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");
+
+$archivoSubido = new Archivos;
 $codigo=Utilidades::generateCode("PRE");
 
 if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
