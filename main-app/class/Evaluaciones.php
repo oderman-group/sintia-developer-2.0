@@ -3,6 +3,28 @@ require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.ph
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 class Evaluaciones{
     /**
+     * Este metodo me trae las preguntas de una evaluación
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idEvaluacion
+     * 
+     * @return mysqli_result $consulta
+     */
+    public static function preguntasEvaluacion(mysqli $conexion, array $config, string $idEvaluacion){
+        try{
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas aca_eva_pre
+            INNER JOIN ".BD_ACADEMICA.".academico_actividad_preguntas preg ON preg.preg_id=aca_eva_pre.evp_id_pregunta AND preg.institucion={$config['conf_id_institucion']} AND preg.year={$_SESSION["bd"]}
+            WHERE evp_id_evaluacion='".$idEvaluacion."' AND aca_eva_pre.institucion={$config['conf_id_institucion']} AND aca_eva_pre.year={$_SESSION["bd"]}
+            ");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $consulta;
+    }
+    
+    /**
      * Este metodo me trae la cantidad de preguntas de una evaluación
      * @param mysqli $conexion
      * @param array $config

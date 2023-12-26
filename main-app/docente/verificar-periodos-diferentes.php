@@ -58,7 +58,7 @@ if($existeURL != false){
 $URL = 'evaluaciones-preguntas.php';
 $existeURL = strpos($_SERVER['PHP_SELF'], $URL);
 if($existeURL != false){
-	$datosHistoricos = Evaluaciones::consultaEvaluacion($conexion, $config, $idE);
+	$datosHistoricos = Evaluaciones::consultaEvaluacion($conexion, $config, $idR);
 	if($datosHistoricos['eva_periodo']!=$periodoConsultaActual and $datosCargaActual['car_permiso2']!=1){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=208";</script>';
 		exit();	
@@ -68,7 +68,7 @@ if($existeURL != false){
 $URL = 'preguntas-editar.php';
 $existeURL = strpos($_SERVER['PHP_SELF'], $URL);
 if($existeURL != false){
-	$datosHistoricos = Evaluaciones::consultaEvaluacion($conexion, $config, $idE);
+	$datosHistoricos = Evaluaciones::consultaEvaluacion($conexion, $config, $idR);
 	if($datosHistoricos['eva_periodo']!=$periodoConsultaActual and $datosCargaActual['car_permiso2']!=1){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=208";</script>';
 		exit();	
@@ -78,6 +78,6 @@ if($existeURL != false){
 $URL = 'evaluaciones-resultados.php';
 $existeURL = strpos($_SERVER['PHP_SELF'], $URL);
 if($existeURL != false){
-	$datosHistoricos = Evaluaciones::consultaEvaluacion($conexion, $config, $idE);
+	$datosHistoricos = Evaluaciones::consultaEvaluacion($conexion, $config, $idR);
 }
 ?>
