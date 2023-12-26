@@ -14,7 +14,8 @@ try {
     WHERE ti.id_transaction = '{$idTransaction}'
     AND ti.type_transaction = 'INVOICE'
     AND ti.institucion = {$config['conf_id_institucion']}
-    AND ti.year = {$_SESSION["bd"]}";
+    AND ti.year = {$_SESSION["bd"]}
+    ORDER BY id_autoincremental";
     $itemsConsulta = mysqli_query($conexion, $consulta);
 } catch(Exception $e) {
     echo $e->getMessage();
