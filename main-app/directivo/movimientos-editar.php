@@ -254,7 +254,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                             <?php if(Modulos::validarPermisoEdicion() && $resultado['fcu_anulado']==0){?>
                                                                 <tr>
                                                                     <td colspan="5">
-                                                                        <button type="button" title="Agregar nueva linea para item" style="padding: 4px 4px; margin: 5px;" class="btn btn-sm" data-toggle="tooltip" onclick="nuevoItem()" data-placement="right" ><i class="fa fa-plus"></i> Agregar línea</button>
+                                                                        <button type="button" title="Agregar nueva línea para item" style="padding: 4px 4px; margin: 5px;" class="btn btn-sm" data-toggle="tooltip" onclick="nuevoItem()" data-placement="right" ><i class="fa fa-plus"></i> Agregar línea</button>
                                                                     </td>
                                                                 </tr>
                                                             <?php }?>
