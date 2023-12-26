@@ -36,6 +36,7 @@ try{
 $cantPreguntas = Evaluaciones::numeroPreguntasEvaluacion($conexion, $config, $_POST["idE"]);
 
 $contPreguntas = 1;
+$preguntasConsulta = Evaluaciones::preguntasEvaluacion($conexion, $config, $_POST["idE"]);
 while($preguntas = mysqli_fetch_array($preguntasConsulta, MYSQLI_BOTH)){
 	try{
 		$respuestasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_respuestas
