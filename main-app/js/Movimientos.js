@@ -101,6 +101,15 @@ function guardarNuevoItem(selectElement) {
     var cantidadElement = document.getElementById('cantidadItemNuevo');
     var subtotalElement = document.getElementById('subtotalNuevo');
 
+    var itemModificar = '';
+    var cantidad = 1;
+    // Verificar si el contenido del idItemNuevo no esta vacio
+    if (itemElement.innerHTML.trim() !== '') {
+        console.log('El <td> no está vacío.');
+        var itemModificar = itemElement.innerHTML;
+        var cantidad = cantidadElement.value;
+    }
+
     // Obtener el ID de la transacción desde el elemento del DOM
     var idTransaction = document.getElementById('idTransaction').value;
 
@@ -111,11 +120,11 @@ function guardarNuevoItem(selectElement) {
     var idItem = itemSelecionado.value;
     var precio = parseFloat(itemSelecionado.getAttribute('name'));
     var precioFormat = "$"+numberFormat(precio, 0, ',', '.');
-    var subtotal = precio * 1;
+    var subtotal = precio * cantidad;
     var subtotalFormat = "$"+numberFormat(subtotal, 0, ',', '.');
 
     // Realizar una solicitud fetch para guardar el nuevo item
-    fetch('../directivo/ajax-guardar-items.php?idTransaction=' + idTransaction + '&idItem=' + idItem + '&precio=' + precio, {
+    fetch('../directivo/ajax-guardar-items.php?idTransaction=' + idTransaction + '&idItem=' + idItem + '&itemModificar=' + itemModificar + '&subtotal=' + subtotal + '&cantidad=' + cantidad, {
         method: 'GET'
     })
     .then(response => response.json()) // Convertir la respuesta a objeto JSON

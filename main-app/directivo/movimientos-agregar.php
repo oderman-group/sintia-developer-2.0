@@ -176,7 +176,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                                     </div>
                                                                 </td>
                                                                 <td id="precioNuevo" data-precio="0">0</td>
-                                                                <td><input type="number" id="cantidadItemNuevo" onchange="actualizarSubtotal('idNuevo')" value="1" style="width: 50px;" disabled></td>
+                                                                <td><input type="number" min="0" id="cantidadItemNuevo" onchange="actualizarSubtotal('idNuevo')" value="1" style="width: 50px;" disabled></td>
                                                                 <td id="subtotalNuevo">0</td>
                                                             </tr>
                                                             <?php if(Modulos::validarPermisoEdicion()){?>

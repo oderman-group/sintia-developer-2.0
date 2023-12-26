@@ -9,7 +9,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 try{
-    $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_id='".base64_decode($_GET['idU'])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+    $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_id='".base64_decode($_GET['id'])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
 }
@@ -61,6 +61,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                     <div class="row">
 
                         <div class="col-sm-12">
+                            <?php include("../../config-general/mensajes-informativos.php"); ?>
 
 
 								<div class="panel">
@@ -199,7 +200,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                         </thead>
                                                         <tbody id="mostrarItems">
                                                             <?php
-                                                                $idTransaction = base64_decode($_GET['idU']);
+                                                                $idTransaction = base64_decode($_GET['id']);
                                                                 try {
                                                                     $consulta = "SELECT ti.id AS idtx, i.id AS idit, i.name, i.price, ti.cantity, ti.subtotal
                                                                     FROM ".BD_FINANCIERA.".transaction_items ti
@@ -222,7 +223,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                     <td><?=$fila['idtx'];?></td>
                                                                     <td><?=$fila['name'];?></td>
                                                                     <td id="precio<?=$fila['idtx'];?>" data-precio="<?=$fila['price'];?>">$<?=number_format($fila['price'], 0, ",", ".")?></td>
-                                                                    <td><input type="number" title="cantity" id="cantidadItems<?=$fila['idtx'];?>" onchange="actualizarSubtotal('<?=$fila['idtx'];?>')" value="<?=$fila['cantity'];?>" style="width: 50px;"></td>
+                                                                    <td><input type="number" title="cantity" min="0" id="cantidadItems<?=$fila['idtx'];?>" onchange="actualizarSubtotal('<?=$fila['idtx'];?>')" value="<?=$fila['cantity'];?>" style="width: 50px;"></td>
                                                                     <td id="subtotal<?=$fila['idtx'];?>">$<?=number_format($fila['subtotal'], 0, ",", ".")?></td>
                                                                 </tr>
                                                             <?php }} ?>
@@ -248,7 +249,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                     </div>
                                                                 </td>
                                                                 <td id="precioNuevo" data-precio="0">0</td>
-                                                                <td><input type="number" id="cantidadItemNuevo" onchange="actualizarSubtotal('idNuevo')" value="1" style="width: 50px;" disabled></td>
+                                                                <td><input type="number" min="0" id="cantidadItemNuevo" onchange="actualizarSubtotal('idNuevo')" value="1" style="width: 50px;" disabled></td>
                                                                 <td id="subtotalNuevo">0</td>
                                                             </tr>
                                                             <?php if(Modulos::validarPermisoEdicion() && $resultado['fcu_anulado']==0){?>
