@@ -221,9 +221,9 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                 <tr>
                                                                     <td><?=$fila['idtx'];?></td>
                                                                     <td><?=$fila['name'];?></td>
-                                                                    <td id="precio<?=$fila['idtx'];?>"><?=$fila['price'];?></td>
-                                                                    <td><input type="number" title="cantity" id="cantidadItems<?=$fila['idtx'];?>" onchange="actualizarSubtotal('<?=$fila['idtx'];?>')" value="<?=$fila['cantity'];?>"></td>
-                                                                    <td id="subtotal<?=$fila['idtx'];?>"><?=$fila['subtotal'];?></td>
+                                                                    <td id="precio<?=$fila['idtx'];?>" data-precio="<?=$fila['price'];?>">$<?=number_format($fila['price'], 0, ",", ".")?></td>
+                                                                    <td><input type="number" title="cantity" id="cantidadItems<?=$fila['idtx'];?>" onchange="actualizarSubtotal('<?=$fila['idtx'];?>')" value="<?=$fila['cantity'];?>" style="width: 50px;"></td>
+                                                                    <td id="subtotal<?=$fila['idtx'];?>">$<?=number_format($fila['subtotal'], 0, ",", ".")?></td>
                                                                 </tr>
                                                             <?php }} ?>
                                                         </tbody>
@@ -232,7 +232,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                 <td id="idItemNuevo"></td>
                                                                 <td>
                                                                     <div class="col-sm-5" style="padding: 0px;">
-                                                                        <select class="form-control  select2" id="items" onchange="guardarNuevoItem(this)">
+                                                                        <select class="form-control  select2" id="items" onchange="guardarNuevoItem(this)" <?=$disabledPermiso;?>>
                                                                             <option value="">Seleccione una opción</option>
                                                                             <?php
                                                                                 try{
@@ -247,15 +247,17 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                         </select>
                                                                     </div>
                                                                 </td>
-                                                                <td id="precioNuevo">0</td>
-                                                                <td><input type="number" id="cantidadItemNuevo" onchange="actualizarSubtotal('idNuevo')" value="1"></td>
+                                                                <td id="precioNuevo" data-precio="0">0</td>
+                                                                <td><input type="number" id="cantidadItemNuevo" onchange="actualizarSubtotal('idNuevo')" value="1" style="width: 50px;" disabled></td>
                                                                 <td id="subtotalNuevo">0</td>
                                                             </tr>
-                                                            <tr>
-                                                                <td colspan="5">
-                                                                    <button type="button" title="Agregar nuevo item" style="padding: 4px 4px;margin-left: 5px;margin-bottom: 5px;" class="btn btn-sm" data-toggle="tooltip" onclick="nuevoItem()" data-placement="right" ><i class="fa fa-plus"></i></button>
-                                                                </td>
-                                                            </tr>
+                                                            <?php if(Modulos::validarPermisoEdicion() && $resultado['fcu_anulado']==0){?>
+                                                                <tr>
+                                                                    <td colspan="5">
+                                                                        <button type="button" title="Agregar nueva línea para item" style="padding: 4px 4px; margin: 5px;" class="btn btn-sm" data-toggle="tooltip" onclick="nuevoItem()" data-placement="right" ><i class="fa fa-plus"></i> Agregar línea</button>
+                                                                    </td>
+                                                                </tr>
+                                                            <?php }?>
                                                         </tbody>
                                                     </table>
                                                 </div>
