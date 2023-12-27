@@ -220,7 +220,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                 <tr id="reg<?=$fila['idtx'];?>">
                                                                     <td><?=$fila['idtx'];?></td>
                                                                     <td><?=$fila['name'];?></td>
-                                                                    <td id="precio<?=$fila['idtx'];?>" data-precio="<?=$fila['price'];?>">$<?=number_format($fila['price'], 0, ",", ".")?></td>
+                                                                    <td id="precio<?=$fila['idtx'];?>" data-precio="<?=$fila['priceTransaction'];?>">$<?=number_format($fila['priceTransaction'], 0, ",", ".")?></td>
                                                                     <td><input type="number" title="cantity" min="0" id="cantidadItems<?=$fila['idtx'];?>" onchange="actualizarSubtotal('<?=$fila['idtx'];?>')" value="<?=$fila['cantity'];?>" style="width: 50px;"></td>
                                                                     <td id="subtotal<?=$fila['idtx'];?>" data-subtotal-anterior="<?=$fila['subtotal'];?>">$<?=number_format($fila['subtotal'], 0, ",", ".")?></td>
                                                                     <td>
