@@ -39,4 +39,34 @@ class Movimientos {
 
         return $totalNeto;
     }
+
+    /**
+     * Este metodo me trae los items de una factura
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idTransaction
+     * 
+     * @return mysqli_result $consulta
+    **/
+    public static function listarItemsTransaction (
+        mysqli $conexion, 
+        array $config, 
+        string $idTransaction
+    )
+    {
+        try {
+            $consulta = mysqli_query($conexion, "SELECT ti.id AS idtx, i.id AS idit, i.name, i.price AS priceItem, ti.price AS priceTransaction, ti.cantity, ti.subtotal, ti.description
+            FROM ".BD_FINANCIERA.".transaction_items ti
+            INNER JOIN ".BD_FINANCIERA.".items i ON i.id = ti.id_item
+            WHERE ti.id_transaction = '{$idTransaction}'
+            AND ti.type_transaction = 'INVOICE'
+            AND ti.institucion = {$config['conf_id_institucion']}
+            AND ti.year = {$_SESSION["bd"]}
+            ORDER BY id_autoincremental");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        return $consulta;
+    }
 }

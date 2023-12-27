@@ -3,6 +3,7 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
+require_once(ROOT_PATH."/main-app/class/Movimientos.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -204,20 +205,9 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                         <tbody id="mostrarItems">
                                                             <?php
                                                                 $idTransaction = base64_decode($_GET['id']);
-                                                                try {
-                                                                    $consulta = "SELECT ti.id AS idtx, i.id AS idit, i.name, i.price, ti.cantity, ti.subtotal
-                                                                    FROM ".BD_FINANCIERA.".transaction_items ti
-                                                                    INNER JOIN ".BD_FINANCIERA.".items i ON i.id = ti.id_item
-                                                                    WHERE ti.id_transaction = '{$idTransaction}'
-                                                                    AND ti.type_transaction = 'INVOICE'
-                                                                    AND ti.institucion = {$config['conf_id_institucion']}
-                                                                    AND ti.year = {$_SESSION["bd"]}
-                                                                    ORDER BY id_autoincremental";
-                                                                    $itemsConsulta = mysqli_query($conexion, $consulta);
-                                                                } catch(Exception $e) {
-                                                                    echo $e->getMessage();
-                                                                    exit();
-                                                                }
+                                                                
+                                                                $itemsConsulta = Movimientos::listarItemsTransaction($conexion, $config, $idTransaction);
+
                                                                 $subtotal=0;
                                                                 $numItems=mysqli_num_rows($itemsConsulta);
                                                                 if($numItems>0){
