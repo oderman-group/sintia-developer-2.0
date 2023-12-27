@@ -81,7 +81,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 												</div>
 											</div>
 											
-                                        <div class="table-scrollable">
+                                        <div>
                                     		<table class="display" style="width:100%;">
                                                 <thead>
                                                     <tr>
@@ -138,7 +138,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																	<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
 																		<i class="fa fa-angle-down"></i>
 																	</button>
-																	<ul class="dropdown-menu" role="menu">
+																	<ul class="dropdown-menu" role="menu" style="z-index: 10000;">
 																		<?php if( Modulos::validarSubRol(['DT0128']) ){?>
 																			<li><a href="movimientos-editar.php?id=<?=base64_encode($resultado['fcu_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
 																		<?php }?>
