@@ -221,15 +221,14 @@ function nuevoItem() {
  * Limpia y actualiza los elementos relacionados con la información de valor adicional.
  */
 function cambiarAdiconal(data) {
-    var idVlrAdicional = data.id;
     var idValorAdicional = document.getElementById('valorAdicional');
     var idTotalNeto = document.getElementById('totalNeto');
 
     var vlrAdicional= parseFloat(data.value);
-    var vlrAdicionalAnterior= parseFloat(data.getAttribute('data-vlrAdicionalAnterior'));
+    var vlrAdicionalAnteriorValor= parseFloat(data.getAttribute('data-vlr-adicional-anterior'));
     var totalNeto= parseFloat(idTotalNeto.getAttribute('data-total-neto'));
 
-    var total= (totalNeto-vlrAdicionalAnterior)+vlrAdicional;
+    var total= (totalNeto-vlrAdicionalAnteriorValor)+vlrAdicional;
 
     var vlrAdicionalFinal = "$"+numberFormat(vlrAdicional, 0, ',', '.');
     var totalFinal = "$"+numberFormat(total, 0, ',', '.');
@@ -238,6 +237,7 @@ function cambiarAdiconal(data) {
     idValorAdicional.innerHTML = '';
     idValorAdicional.appendChild(document.createTextNode(vlrAdicionalFinal));
     idValorAdicional.dataset.valorAdicional = vlrAdicional;
+    data.dataset.vlrAdicionalAnterior = vlrAdicional;
     
     idTotalNeto.innerHTML = '';
     idTotalNeto.appendChild(document.createTextNode(totalFinal));

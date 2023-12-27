@@ -109,7 +109,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
 
                                             <label class="col-sm-2 control-label">Valor adicional</label>
                                             <div class="col-sm-4">
-                                                <input type="text" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['fcu_valor'];?>" required <?=$disabledPermiso;?> data-vlrAdicionalAnterior="<?=$resultado['fcu_valor'];?>" onchange="cambiarAdiconal(this)">
+                                                <input type="text" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['fcu_valor'];?>" required <?=$disabledPermiso;?> data-vlr-adicional-anterior="<?=$resultado['fcu_valor'];?>" onchange="cambiarAdiconal(this)">
                                             </div>
 										</div>
 

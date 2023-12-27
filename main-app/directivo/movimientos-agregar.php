@@ -84,7 +84,7 @@ if(!Modulos::validarPermisoEdicion()){
 
                                             <label class="col-sm-2 control-label">Valor adicional</label>
                                             <div class="col-sm-4">
-                                                <input type="text" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="" required <?=$disabledPermiso;?> data-vlrAdicionalAnterior="0" onchange="cambiarAdiconal(this)">
+                                                <input type="text" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="" required <?=$disabledPermiso;?> data-vlr-adicional-anterior="0" onchange="cambiarAdiconal(this)">
                                             </div>
 										</div>
 
