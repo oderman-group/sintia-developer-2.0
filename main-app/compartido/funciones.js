@@ -245,6 +245,27 @@ function deseaEliminar(dato) {
                             miFuncionConDelay();
 
                             registro.classList.add('animate__animated', 'animate__bounceOutRight', 'animate__delay-0.5s');
+                            if (varObjet.restar !== "undefined") {
+                                var restar              =  varObjet.restar;
+                        
+                                var idSubtotal          = document.getElementById('subtotal');
+                                var subtotalNeto        = parseFloat(idSubtotal.getAttribute("data-subtotal"));
+                                var subtotal            = subtotalNeto-restar;
+                                var subtotalFinal       = "$"+numberFormat(subtotal, 0, ',', '.');
+                        
+                                var idTotalNeto         = document.getElementById('totalNeto');
+                                var totalNeto           = parseFloat(idTotalNeto.getAttribute("data-total-neto"));
+                                var total               = totalNeto-restar;
+                                var totalFinal          = "$"+numberFormat(total, 0, ',', '.');
+                                
+                                idSubtotal.innerHTML = '';
+                                idSubtotal.appendChild(document.createTextNode(subtotalFinal));
+                                idSubtotal.dataset.subtotal = subtotal;
+                                
+                                idTotalNeto.innerHTML = '';
+                                idTotalNeto.appendChild(document.createTextNode(totalFinal));
+                                idTotalNeto.dataset.totalNeto = total;
+                            }
                         }
 
                         if (varObjet.tipo === 2 || varObjet.tipo === 5) {

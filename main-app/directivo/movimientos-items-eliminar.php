@@ -1,7 +1,6 @@
 <?php
 include("session.php");
-Modulos::validarAccesoDirectoPaginas();
-$idPaginaInterna = 'DC0256';
+$idPaginaInterna = 'DT0256';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
 try{

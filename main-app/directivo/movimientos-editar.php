@@ -221,7 +221,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                 if($numItems>0){
                                                                 // Manejar el resultado según tus necesidades
                                                                     while ($fila = mysqli_fetch_array($itemsConsulta, MYSQLI_BOTH)) {
-                                                                        $arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
+                                                                        $arrayEnviar = array("tipo"=>1, "restar"=>$fila['subtotal'], "descripcionTipo"=>"Para ocultar fila del registro.");
                                                                         $arrayDatos = json_encode($arrayEnviar);
                                                                         $objetoEnviar = htmlentities($arrayDatos);
                                                             ?>
