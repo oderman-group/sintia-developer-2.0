@@ -108,7 +108,8 @@ if(!Modulos::validarPermisoEdicion()){
 													<option value="2" >Cheque</option>
 													<option value="3" >T. Débito</option>
 													<option value="4" >T. Crédito</option>
-													<option value="5" >No aplica</option>
+													<option value="5" >Transferencia</option>
+													<option value="6" >No aplica</option>
                                                 </select>
                                             </div>
                                         </div>

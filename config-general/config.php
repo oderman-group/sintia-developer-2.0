@@ -43,7 +43,7 @@ $timestampActual   = time();
 $numeroEnteroUnico = $timestampActual - $fechaDeInicio;
 
 $tipoEstadoFinanzas = array("","ABONO","PAGO REALIZADO A TI","COBRO","POR PAGARTE");
-$formasPagoFinanzas = array("N/A","Efectivo","Cheque","T. D&eacute;bito","T. Cr&eacute;dito", "N/A");
+$formasPagoFinanzas = array("N/A","Efectivo","Cheque","T. D&eacute;bito","T. Cr&eacute;dito", "Transferencia", "N/A");
 
 $estadosSolicitudes = [
     1 => 'Pendiente',

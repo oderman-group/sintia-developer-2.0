@@ -133,7 +133,8 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
 													<option value="2" <?php if($resultado['fcu_forma_pago']==2){ echo "selected";}?>>Cheque</option>
 													<option value="3" <?php if($resultado['fcu_forma_pago']==3){ echo "selected";}?>>T. Débito</option>
 													<option value="4" <?php if($resultado['fcu_forma_pago']==4){ echo "selected";}?>>T. Crédito</option>
-													<option value="5" <?php if($resultado['fcu_forma_pago']==5){ echo "selected";}?>>No aplica</option>
+													<option value="5" <?php if($resultado['fcu_forma_pago']==5){ echo "selected";}?>>Transferencia</option>
+													<option value="6" <?php if($resultado['fcu_forma_pago']==6){ echo "selected";}?>>No aplica</option>
                                                 </select>
                                             </div>
                                         </div>
