@@ -156,7 +156,7 @@ function guardarNuevoItem(selectElement) {
     var totalFormat = "$"+numberFormat(totalNetoFinal, 0, ',', '.');
 
     // Realizar una solicitud fetch para guardar el nuevo item
-    fetch('../directivo/ajax-guardar-items.php?idTransaction=' + idTransaction + '&idItem=' + idItem + '&itemModificar=' + itemModificar + '&subtotal=' + subtotal + '&cantidad=' + cantidad, {
+    fetch('../directivo/ajax-guardar-items.php?idTransaction=' + idTransaction + '&idItem=' + idItem + '&itemModificar=' + itemModificar + '&subtotal=' + subtotal + '&cantidad=' + cantidad + '&precio=' + precio, {
         method: 'GET'
     })
     .then(response => response.json()) // Convertir la respuesta a objeto JSON
