@@ -108,7 +108,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
 
                                             <label class="col-sm-2 control-label">Valor adicional</label>
                                             <div class="col-sm-4">
-                                                <input type="text" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['fcu_valor'];?>" required <?=$disabledPermiso;?>>
+                                                <input type="text" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['fcu_valor'];?>" required <?=$disabledPermiso;?> data-vlrAdicionalAnterior="<?=$resultado['fcu_valor'];?>" onchange="cambiarAdiconal(this)">
                                             </div>
 										</div>
 
@@ -196,6 +196,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                 <th>Precio</th>
                                                                 <th>Cant.</th>
                                                                 <th>Total</th>
+                                                                <th></th>
                                                             </tr>
                                                         </thead>
                                                         <tbody id="mostrarItems">
@@ -215,19 +216,32 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                     echo $e->getMessage();
                                                                     exit();
                                                                 }
+                                                                $subtotal=0;
                                                                 $numItems=mysqli_num_rows($itemsConsulta);
                                                                 if($numItems>0){
                                                                 // Manejar el resultado según tus necesidades
-                                                                while ($fila = mysqli_fetch_array($itemsConsulta, MYSQLI_BOTH)) {
-                                                                ?>
-                                                                <tr>
+                                                                    while ($fila = mysqli_fetch_array($itemsConsulta, MYSQLI_BOTH)) {
+                                                                        $arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
+                                                                        $arrayDatos = json_encode($arrayEnviar);
+                                                                        $objetoEnviar = htmlentities($arrayDatos);
+                                                            ?>
+                                                                <tr id="reg<?=$fila['idtx'];?>">
                                                                     <td><?=$fila['idtx'];?></td>
                                                                     <td><?=$fila['name'];?></td>
                                                                     <td id="precio<?=$fila['idtx'];?>" data-precio="<?=$fila['price'];?>">$<?=number_format($fila['price'], 0, ",", ".")?></td>
                                                                     <td><input type="number" title="cantity" min="0" id="cantidadItems<?=$fila['idtx'];?>" onchange="actualizarSubtotal('<?=$fila['idtx'];?>')" value="<?=$fila['cantity'];?>" style="width: 50px;"></td>
-                                                                    <td id="subtotal<?=$fila['idtx'];?>">$<?=number_format($fila['subtotal'], 0, ",", ".")?></td>
+                                                                    <td id="subtotal<?=$fila['idtx'];?>" data-subtotal-anterior="<?=$fila['subtotal'];?>">$<?=number_format($fila['subtotal'], 0, ",", ".")?></td>
+                                                                    <td>
+                                                                        <a href="#" title="<?=$objetoEnviar;?>" id="<?=$fila['idtx'];?>" name="movimientos-items-eliminar.php?idR=<?=base64_encode($fila['idtx']);?>" style="padding: 4px 4px; margin: 5px;" class="btn btn-sm" onClick="deseaEliminar(this)">X</a>
+                                                                    </td>
                                                                 </tr>
-                                                            <?php }} ?>
+                                                            <?php 
+                                                                    $subtotal += $fila['subtotal'];
+                                                                    }
+                                                                }
+                                                                if(empty($resultado['fcu_valor'])){ $resultado['fcu_valor']=0; }
+                                                                $total= $subtotal+$resultado['fcu_valor'];
+                                                            ?>
                                                         </tbody>
                                                         <tbody>
                                                             <tr>
@@ -249,18 +263,36 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                         </select>
                                                                     </div>
                                                                 </td>
-                                                                <td id="precioNuevo" data-precio="0">0</td>
+                                                                <td id="precioNuevo" data-precio="0">$0</td>
                                                                 <td><input type="number" min="0" id="cantidadItemNuevo" onchange="actualizarSubtotal('idNuevo')" value="1" style="width: 50px;" disabled></td>
-                                                                <td id="subtotalNuevo">0</td>
+                                                                <td id="subtotalNuevo" data-subtotal-anterior="0">$0</td>
+                                                                <td></td>
                                                             </tr>
                                                             <?php if(Modulos::validarPermisoEdicion() && $resultado['fcu_anulado']==0){?>
                                                                 <tr>
-                                                                    <td colspan="5">
+                                                                    <td colspan="6">
                                                                         <button type="button" title="Agregar nueva línea para item" style="padding: 4px 4px; margin: 5px;" class="btn btn-sm" data-toggle="tooltip" onclick="nuevoItem()" data-placement="right" ><i class="fa fa-plus"></i> Agregar línea</button>
                                                                     </td>
                                                                 </tr>
                                                             <?php }?>
                                                         </tbody>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <td align="right" colspan="4" style="padding-right: 20px;">SUBTOTAL:</td>
+                                                                <td align="left" id="subtotal" data-subtotal="<?=$subtotal;?>"><?="$".number_format($subtotal, 0, ",", ".");?></td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" colspan="4" style="padding-right: 20px;">VLR. ADICIONAL:</td>
+                                                                <td align="left" id="valorAdicional" data-valor-adicional="<?=$resultado['fcu_valor'];?>"><?="$".number_format($resultado['fcu_valor'], 0, ",", ".");?></td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <tr style="font-size: 15px; font-weight:bold;">
+                                                                <td align="right" colspan="4" style="padding-right: 20px;">TOTAL NETO:</td>
+                                                                <td align="left" id="totalNeto" data-total-neto="<?=$total;?>"><?="$".number_format($total, 0, ",", ".");?></td>
+                                                                <td></td>
+                                                            </tr>
+                                                        </tfoot>
                                                     </table>
                                                 </div>
                                             </div>
