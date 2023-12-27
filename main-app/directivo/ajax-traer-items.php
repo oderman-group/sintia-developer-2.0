@@ -26,13 +26,19 @@ $numItems=mysqli_num_rows($itemsConsulta);
 if($numItems>0){
     // Manejar el resultado según tus necesidades
     while ($fila = mysqli_fetch_array($itemsConsulta, MYSQLI_BOTH)) {
+        $arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
+        $arrayDatos = json_encode($arrayEnviar);
+        $objetoEnviar = htmlentities($arrayDatos);
 ?>
-<tr>
+<tr id="reg<?=$fila['idtx'];?>">
     <td><?=$fila['idtx'];?></td>
     <td><?=$fila['name'];?></td>
     <td id="precio<?=$fila['idtx'];?>" data-precio="<?=$fila['price'];?>">$<?=number_format($fila['price'], 0, ",", ".")?></td>
     <td><input type="number" title="cantity" min="0" id="cantidadItems<?=$fila['idtx'];?>" name="cantidadItems" onchange="actualizarSubtotal('<?=$fila['idtx'];?>')" value="<?=$fila['cantity'];?>" style="width: 50px;"></td>
     <td id="subtotal<?=$fila['idtx'];?>" data-subtotal-anterior="<?=$fila['subtotal'];?>">$<?=number_format($fila['subtotal'], 0, ",", ".")?></td>
+    <td>
+        <a href="#" title="<?=$objetoEnviar;?>" id="<?=$fila['idtx'];?>" name="movimientos-items-eliminar.php?idR=<?=base64_encode($fila['idtx']);?>" style="padding: 4px 4px; margin: 5px;" class="btn btn-sm" onClick="deseaEliminar(this)">X</a>
+    </td>
 </tr>
 <?php 
         $subtotal += $fila['subtotal'];
