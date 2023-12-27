@@ -72,7 +72,7 @@ if(!Modulos::validarPermisoEdicion()){
 
                                             <label class="col-sm-2 control-label">Fecha</label>
                                             <div class="col-sm-4">
-                                                <input type="date" name="fecha" class="form-control" autocomplete="off" required value="" <?=$disabledPermiso;?>>
+                                                <input type="date" name="fecha" class="form-control" autocomplete="off" required value="<?=date('Y-m-d');?>" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>
 										
@@ -84,7 +84,7 @@ if(!Modulos::validarPermisoEdicion()){
 
                                             <label class="col-sm-2 control-label">Valor adicional</label>
                                             <div class="col-sm-4">
-                                                <input type="text" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="" required <?=$disabledPermiso;?> data-vlr-adicional-anterior="0" onchange="cambiarAdiconal(this)">
+                                                <input type="number" min="0" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="0" required <?=$disabledPermiso;?> data-vlr-adicional-anterior="0" onchange="cambiarAdiconal(this)">
                                             </div>
 										</div>
 
