@@ -63,6 +63,7 @@ if($numItems>0){
         idSubtotal.innerHTML = '';
         idSubtotal.appendChild(document.createTextNode(subtotalFinal));
         idSubtotal.dataset.subtotal = subtotal;
+        idSubtotal.dataset.subtotalAnteriorSub = subtotal;
 
         idValorAdicional.innerHTML = '';
         idValorAdicional.appendChild(document.createTextNode(vlrAdicionalFinal));
@@ -71,6 +72,7 @@ if($numItems>0){
         idTotalNeto.innerHTML = '';
         idTotalNeto.appendChild(document.createTextNode(totalFinal));
         idTotalNeto.dataset.totalNeto = total;
+        idTotalNeto.dataset.totalNetoAnterior = total;
     </script>
 <?php
     require_once(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");

@@ -207,6 +207,7 @@ function nuevoItem() {
     var subtotalNuevo = document.getElementById('subtotalNuevo');
     var items = document.getElementById('items');
     var itemsContainer = document.getElementById('select2-items-container');
+    var idEliminarNuevo = document.getElementById('eliminarNuevo');
 
     // Limpiar y reiniciar los elementos del DOM relacionados con el nuevo item
     idItemNuevo.innerHTML = '';
@@ -218,6 +219,7 @@ function nuevoItem() {
     subtotalNuevo.dataset.subtotalAnterior = 0;
     items.value = '';
     itemsContainer.innerHTML = 'Seleccione una opción';
+    idEliminarNuevo.innerHTML = '';
 }
 
 /**
