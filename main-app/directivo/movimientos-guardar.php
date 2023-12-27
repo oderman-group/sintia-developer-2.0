@@ -64,5 +64,5 @@ try{
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 
-echo '<script type="text/javascript">window.location.href="movimientos.php?success=SC_DT_1&id='.base64_encode($idInsercion).'";</script>';
+echo '<script type="text/javascript">window.location.href="movimientos-editar.php?success=SC_DT_1&id='.base64_encode($idInsercion).'";</script>';
 exit();

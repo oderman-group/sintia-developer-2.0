@@ -17,8 +17,8 @@ if (!empty($_GET["id"])) {
 try{
     $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas fcu
     INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=fcu_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-    INNER JOIN ".BD_ADMIN.".localidad_ciudades ON ciu_id=uss_lugar_nacimiento
-    INNER JOIN ".BD_ADMIN.".localidad_departamentos ON dep_id=ciu_departamento
+    LEFT JOIN ".BD_ADMIN.".localidad_ciudades ON ciu_id=uss_lugar_nacimiento
+    LEFT JOIN ".BD_ADMIN.".localidad_departamentos ON dep_id=ciu_departamento
     WHERE fcu_id='".$id."' AND fcu.institucion={$config['conf_id_institucion']} AND fcu.year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
@@ -72,22 +72,18 @@ $fechaReplace = $dia.'/'.$mes.'/'.$year;
                         <span style="font-weight:bold; margin: 0"><?=strtoupper($informacion_inst["info_nombre"])?></span><br>
                         <?=$informacion_inst["info_direccion"]?><br>
                         Tel: <?=$informacion_inst["info_telefono"]?><br><br>
-                        <table width="100%">
+                        <table width="50%">
                             <tr>
                                 <td style="border: 1px solid #000; padding: 5px; width: 35%; background-color: #e3e3e3;">Facturar A:</td>
-                                <td style="width: 5%;"></td>
-                                <td style="border: 1px solid #000; padding: 5px; width: 35%; background-color: #e3e3e3;">Enviar A:</td>
                             </tr>
                             <tr>
                                 <td>
                                     <?=UsuariosPadre::nombreCompletoDelUsuario($resultado)?><br>
                                     <b>C.C/NIT:</b> <?=$resultado['uss_documento']?><br>
+                                    <b>TEL:</b> <?=$resultado['uss_telefono']?><br>
                                     <?=$resultado['uss_direccion']?><br>
-                                    <?=$resultado['ciu_nombre'].", ".$resultado['dep_nombre']?><br>
-                                    <b>TEL:</b> <?=$resultado['uss_telefono']?>
+                                    <?php if (!empty($resultado['uss_lugar_nacimiento'])) { echo $resultado['ciu_nombre'].", ".$resultado['dep_nombre']; }?>
                                 </td>
-                                <td></td>
-                                <td style="vertical-align: top;">Enviar A:</td>
                             </tr>
                         </table>
                     </td>

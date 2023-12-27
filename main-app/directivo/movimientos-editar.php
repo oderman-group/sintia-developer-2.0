@@ -61,9 +61,10 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                     <div class="row">
 
                         <div class="col-sm-12">
-                            <?php include("../../config-general/mensajes-informativos.php"); ?>
-
-
+                                <?php 
+                                    include("../../config-general/mensajes-informativos.php");
+                                    include("includes/barra-superior-movimientos-financieros-editar.php");
+                                ?>
 								<div class="panel">
 									<header class="panel-heading panel-heading-purple"><?=$frases[95][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
@@ -108,7 +109,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
 
                                             <label class="col-sm-2 control-label">Valor adicional</label>
                                             <div class="col-sm-4">
-                                                <input type="text" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['fcu_valor'];?>" required <?=$disabledPermiso;?> data-vlrAdicionalAnterior="<?=$resultado['fcu_valor'];?>" onchange="cambiarAdiconal(this)">
+                                                <input type="text" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['fcu_valor'];?>" required <?=$disabledPermiso;?> data-vlr-adicional-anterior="<?=$resultado['fcu_valor'];?>" onchange="cambiarAdiconal(this)">
                                             </div>
 										</div>
 
@@ -221,7 +222,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                 if($numItems>0){
                                                                 // Manejar el resultado según tus necesidades
                                                                     while ($fila = mysqli_fetch_array($itemsConsulta, MYSQLI_BOTH)) {
-                                                                        $arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
+                                                                        $arrayEnviar = array("tipo"=>1, "restar"=>$fila['subtotal'], "descripcionTipo"=>"Para ocultar fila del registro.");
                                                                         $arrayDatos = json_encode($arrayEnviar);
                                                                         $objetoEnviar = htmlentities($arrayDatos);
                                                             ?>
@@ -232,7 +233,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                     <td><input type="number" title="cantity" min="0" id="cantidadItems<?=$fila['idtx'];?>" onchange="actualizarSubtotal('<?=$fila['idtx'];?>')" value="<?=$fila['cantity'];?>" style="width: 50px;"></td>
                                                                     <td id="subtotal<?=$fila['idtx'];?>" data-subtotal-anterior="<?=$fila['subtotal'];?>">$<?=number_format($fila['subtotal'], 0, ",", ".")?></td>
                                                                     <td>
-                                                                        <a href="#" title="<?=$objetoEnviar;?>" id="<?=$fila['idtx'];?>" name="movimientos-items-eliminar.php?idR=<?=base64_encode($fila['idtx']);?>" style="padding: 4px 4px; margin: 5px;" class="btn btn-sm" onClick="deseaEliminar(this)">X</a>
+                                                                        <a href="#" title="<?=$objetoEnviar;?>" id="<?=$fila['idtx'];?>" name="movimientos-items-eliminar.php?idR=<?=$fila['idtx'];?>" style="padding: 4px 4px; margin: 5px;" class="btn btn-sm" onClick="deseaEliminar(this)">X</a>
                                                                     </td>
                                                                 </tr>
                                                             <?php 
@@ -266,7 +267,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                 <td id="precioNuevo" data-precio="0">$0</td>
                                                                 <td><input type="number" min="0" id="cantidadItemNuevo" onchange="actualizarSubtotal('idNuevo')" value="1" style="width: 50px;" disabled></td>
                                                                 <td id="subtotalNuevo" data-subtotal-anterior="0">$0</td>
-                                                                <td></td>
+                                                                <td id="eliminarNuevo"></td>
                                                             </tr>
                                                             <?php if(Modulos::validarPermisoEdicion() && $resultado['fcu_anulado']==0){?>
                                                                 <tr>
@@ -279,7 +280,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                         <tfoot>
                                                             <tr>
                                                                 <td align="right" colspan="4" style="padding-right: 20px;">SUBTOTAL:</td>
-                                                                <td align="left" id="subtotal" data-subtotal="<?=$subtotal;?>"><?="$".number_format($subtotal, 0, ",", ".");?></td>
+                                                                <td align="left" id="subtotal" data-subtotal="<?=$subtotal;?>" data-subtotal-anterior-sub="<?=$subtotal;?>"><?="$".number_format($subtotal, 0, ",", ".");?></td>
                                                                 <td></td>
                                                             </tr>
                                                             <tr>
@@ -289,7 +290,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                             </tr>
                                                             <tr style="font-size: 15px; font-weight:bold;">
                                                                 <td align="right" colspan="4" style="padding-right: 20px;">TOTAL NETO:</td>
-                                                                <td align="left" id="totalNeto" data-total-neto="<?=$total;?>"><?="$".number_format($total, 0, ",", ".");?></td>
+                                                                <td align="left" id="totalNeto" data-total-neto="<?=$total;?>" data-total-neto-anterior="<?=$total;?>"><?="$".number_format($total, 0, ",", ".");?></td>
                                                                 <td></td>
                                                             </tr>
                                                         </tfoot>

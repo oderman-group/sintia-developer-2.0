@@ -84,7 +84,7 @@ if(!Modulos::validarPermisoEdicion()){
 
                                             <label class="col-sm-2 control-label">Valor adicional</label>
                                             <div class="col-sm-4">
-                                                <input type="text" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="" required <?=$disabledPermiso;?> data-vlrAdicionalAnterior="0" onchange="cambiarAdiconal(this)">
+                                                <input type="text" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="" required <?=$disabledPermiso;?> data-vlr-adicional-anterior="0" onchange="cambiarAdiconal(this)">
                                             </div>
 										</div>
 
@@ -178,6 +178,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                                 <td id="precioNuevo" data-precio="0">$0</td>
                                                                 <td><input type="number" min="0" id="cantidadItemNuevo" onchange="actualizarSubtotal('idNuevo')" value="1" style="width: 50px;" disabled></td>
                                                                 <td id="subtotalNuevo" data-subtotal-anterior="0">$0</td>
+                                                                <td id="eliminarNuevo"></td>
                                                             </tr>
                                                             <?php if(Modulos::validarPermisoEdicion()){?>
                                                                 <tr>
@@ -190,7 +191,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                         <tfoot>
                                                             <tr>
                                                                 <td align="right" colspan="4" style="padding-right: 20px;">SUBTOTAL:</td>
-                                                                <td align="left" id="subtotal" data-subtotal="0">$0</td>
+                                                                <td align="left" id="subtotal" data-subtotal="0" data-subtotal-anterior-sub="0">$0</td>
                                                             </tr>
                                                             <tr>
                                                                 <td align="right" colspan="4" style="padding-right: 20px;">VLR. ADICIONAL:</td>
@@ -198,7 +199,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                             </tr>
                                                             <tr style="font-size: 15px; font-weight:bold;">
                                                                 <td align="right" colspan="4" style="padding-right: 20px;">TOTAL NETO:</td>
-                                                                <td align="left" id="totalNeto" data-total-neto="0">$0</td>
+                                                                <td align="left" id="totalNeto" data-total-neto="0" data-total-neto-anterior="0">$0</td>
                                                             </tr>
                                                         </tfoot>
                                                     </table>

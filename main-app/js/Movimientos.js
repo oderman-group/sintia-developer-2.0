@@ -123,6 +123,7 @@ function guardarNuevoItem(selectElement) {
     var subtotalElement = document.getElementById('subtotalNuevo');
     var idSubtotal = document.getElementById('subtotal');
     var idTotalNeto = document.getElementById('totalNeto');
+    var idEliminarNuevo = document.getElementById('eliminarNuevo');
 
     var itemModificar = '';
     var cantidad = 1;
@@ -141,8 +142,8 @@ function guardarNuevoItem(selectElement) {
     // Obtener el ID del item, el precio y calcular el subtotal
     var idItem = itemSelecionado.value;
     var precio = parseFloat(itemSelecionado.getAttribute('name'));
-    var subtotalNeto = parseFloat(idSubtotal.getAttribute("data-subtotal"));
-    var total = parseFloat(idTotalNeto.getAttribute("data-total-neto"));
+    var subtotalNeto = parseFloat(idSubtotal.getAttribute("data-subtotal-anterior-sub"));
+    var total = parseFloat(idTotalNeto.getAttribute("data-total-neto-anterior"));
 
     var precioFormat = "$"+numberFormat(precio, 0, ',', '.');
     var subtotal = precio * cantidad;
@@ -174,6 +175,9 @@ function guardarNuevoItem(selectElement) {
         subtotalElement.appendChild(document.createTextNode(subtotalFormat));
         subtotalElement.dataset.subtotalAnterior = subtotal;
 
+        var html='<a href="#" title="Eliminar item nuevo" name="movimientos-items-eliminar.php?idR='+data.idInsercion+'" style="padding: 4px 4px; margin: 5px;" class="btn btn-sm" data-toggle="tooltip" onClick="deseaEliminarNuevoItem(this)" data-placement="right">X</a>';
+        idEliminarNuevo.innerHTML = html;
+
         idSubtotal.innerHTML = '';
         idSubtotal.appendChild(document.createTextNode(subtotalNetoFormat));
         idSubtotal.dataset.subtotal = subtotalNetoFinal;
@@ -203,6 +207,7 @@ function nuevoItem() {
     var subtotalNuevo = document.getElementById('subtotalNuevo');
     var items = document.getElementById('items');
     var itemsContainer = document.getElementById('select2-items-container');
+    var idEliminarNuevo = document.getElementById('eliminarNuevo');
 
     // Limpiar y reiniciar los elementos del DOM relacionados con el nuevo item
     idItemNuevo.innerHTML = '';
@@ -214,6 +219,7 @@ function nuevoItem() {
     subtotalNuevo.dataset.subtotalAnterior = 0;
     items.value = '';
     itemsContainer.innerHTML = 'Seleccione una opción';
+    idEliminarNuevo.innerHTML = '';
 }
 
 /**
@@ -221,15 +227,14 @@ function nuevoItem() {
  * Limpia y actualiza los elementos relacionados con la información de valor adicional.
  */
 function cambiarAdiconal(data) {
-    var idVlrAdicional = data.id;
     var idValorAdicional = document.getElementById('valorAdicional');
     var idTotalNeto = document.getElementById('totalNeto');
 
     var vlrAdicional= parseFloat(data.value);
-    var vlrAdicionalAnterior= parseFloat(data.getAttribute('data-vlrAdicionalAnterior'));
+    var vlrAdicionalAnteriorValor= parseFloat(data.getAttribute('data-vlr-adicional-anterior'));
     var totalNeto= parseFloat(idTotalNeto.getAttribute('data-total-neto'));
 
-    var total= (totalNeto-vlrAdicionalAnterior)+vlrAdicional;
+    var total= (totalNeto-vlrAdicionalAnteriorValor)+vlrAdicional;
 
     var vlrAdicionalFinal = "$"+numberFormat(vlrAdicional, 0, ',', '.');
     var totalFinal = "$"+numberFormat(total, 0, ',', '.');
@@ -238,8 +243,99 @@ function cambiarAdiconal(data) {
     idValorAdicional.innerHTML = '';
     idValorAdicional.appendChild(document.createTextNode(vlrAdicionalFinal));
     idValorAdicional.dataset.valorAdicional = vlrAdicional;
+    data.dataset.vlrAdicionalAnterior = vlrAdicional;
     
     idTotalNeto.innerHTML = '';
     idTotalNeto.appendChild(document.createTextNode(totalFinal));
     idTotalNeto.dataset.totalNeto = total;
+}
+
+/**
+ * Esta función pide confirmación al usuario antes de eliminar un itenm nuevo
+ * @param {Array} dato 
+ */
+function deseaEliminarNuevoItem(dato) {
+    // Obtener los elementos del DOM
+    var items = document.getElementById('items');
+    var itemsContainer = document.getElementById('select2-items-container');
+    var itemElement = document.getElementById('idItemNuevo');
+    var precioElement = document.getElementById('precioNuevo');
+    var cantidadElement = document.getElementById('cantidadItemNuevo');
+    var subtotalElement = document.getElementById('subtotalNuevo');
+    var idSubtotal = document.getElementById('subtotal');
+    var idTotalNeto = document.getElementById('totalNeto');
+    var idEliminarNuevo = document.getElementById('eliminarNuevo');
+
+    // Obtener el ID del item, el precio y calcular el subtotal
+    var restar = parseFloat(subtotalElement.getAttribute('data-subtotal-anterior'));
+    var subtotalNeto = parseFloat(idSubtotal.getAttribute("data-subtotal"));
+    var total = parseFloat(idTotalNeto.getAttribute("data-total-neto"));
+
+    var subtotalNetoFinal= subtotalNeto-restar;
+    var subtotalNetoFormat = "$"+numberFormat(subtotalNetoFinal, 0, ',', '.');
+
+    var totalNetoFinal= total-restar;
+    var totalFormat = "$"+numberFormat(totalNetoFinal, 0, ',', '.');
+
+    var url = dato.name;
+
+    Swal.fire({
+        title: 'Desea eliminar?',
+        text: "Al eliminar este registro es posible que se eliminen otros registros que estén relacionados. Desea continuar bajo su responsabilidad?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si, deseo eliminar!',
+        cancelButtonText: 'No',
+        backdrop: `
+            rgba(0,0,123,0.4)
+            no-repeat
+        `,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios.get(url).then(function(response) {
+                // Actualizar los elementos del DOM con los datos recibidos
+                items.value = '';
+                itemsContainer.innerHTML = 'Seleccione una opción';
+
+                itemElement.innerHTML = '';
+
+                precioElement.innerHTML = '$0';
+                precioElement.dataset.precio = '0';
+
+                cantidadElement.disabled = true;
+                cantidadElement.value = 1;
+
+                subtotalElement.innerHTML = '$0';
+                subtotalElement.dataset.subtotalAnterior = 0;
+
+                idEliminarNuevo.innerHTML = '';
+
+                idSubtotal.innerHTML = '';
+                idSubtotal.appendChild(document.createTextNode(subtotalNetoFormat));
+                idSubtotal.dataset.subtotal = subtotalNetoFinal;
+
+                idTotalNeto.innerHTML = '';
+                idTotalNeto.appendChild(document.createTextNode(totalFormat));
+                idTotalNeto.dataset.totalNeto = totalNetoFinal;
+
+                $.toast({
+                    heading: 'Acción realizada',
+                    text: 'El registro fue eliminado correctamente.',
+                    position: 'bottom-right',
+                    showHideTransition: 'slide',
+                    loaderBg: '#26c281',
+                    icon: 'success',
+                    hideAfter: 5000,
+                    stack: 6
+                });
+
+            }).catch(function(error) {
+                // handle error
+                console.error(error);
+            });            
+        }else{
+            return false;
+        }
+    })
+
 }
