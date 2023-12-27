@@ -84,7 +84,7 @@ if(!Modulos::validarPermisoEdicion()){
 
                                             <label class="col-sm-2 control-label">Valor adicional</label>
                                             <div class="col-sm-4">
-                                                <input type="text" name="valor" class="form-control" autocomplete="off" value="" required <?=$disabledPermiso;?>>
+                                                <input type="text" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="" required <?=$disabledPermiso;?> data-vlrAdicionalAnterior="0" onchange="cambiarAdiconal(this)">
                                             </div>
 										</div>
 
@@ -175,9 +175,9 @@ if(!Modulos::validarPermisoEdicion()){
                                                                         </select>
                                                                     </div>
                                                                 </td>
-                                                                <td id="precioNuevo" data-precio="0">0</td>
+                                                                <td id="precioNuevo" data-precio="0">$0</td>
                                                                 <td><input type="number" min="0" id="cantidadItemNuevo" onchange="actualizarSubtotal('idNuevo')" value="1" style="width: 50px;" disabled></td>
-                                                                <td id="subtotalNuevo">0</td>
+                                                                <td id="subtotalNuevo" data-subtotal-anterior="0">$0</td>
                                                             </tr>
                                                             <?php if(Modulos::validarPermisoEdicion()){?>
                                                                 <tr>
@@ -187,6 +187,20 @@ if(!Modulos::validarPermisoEdicion()){
                                                                 </tr>
                                                             <?php }?>
                                                         </tbody>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <td align="right" colspan="4" style="padding-right: 20px;">SUBTOTAL:</td>
+                                                                <td align="left" id="subtotal" data-subtotal="0">$0</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" colspan="4" style="padding-right: 20px;">VLR. ADICIONAL:</td>
+                                                                <td align="left" id="valorAdicional" data-valor-adicional="0">$0</td>
+                                                            </tr>
+                                                            <tr style="font-size: 15px; font-weight:bold;">
+                                                                <td align="right" colspan="4" style="padding-right: 20px;">TOTAL NETO:</td>
+                                                                <td align="left" id="totalNeto" data-total-neto="0">$0</td>
+                                                            </tr>
+                                                        </tfoot>
                                                     </table>
                                                 </div>
                                             </div>
