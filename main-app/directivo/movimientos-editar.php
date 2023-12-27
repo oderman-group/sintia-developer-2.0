@@ -269,7 +269,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                         <div class="form-group row">
                                             <label class="col-sm-12 control-label">Observaciones</label>
                                             <div class="col-sm-12">
-                                                <textarea cols="80" id="editor1" name="obs" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" required <?=$disabledPermiso;?>><?=$resultado['fcu_observaciones'];?></textarea>
+                                                <textarea cols="80" id="editor1" name="obs" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?=$disabledPermiso;?>><?=$resultado['fcu_observaciones'];?></textarea>
                                             </div>
                                         </div>
 										
