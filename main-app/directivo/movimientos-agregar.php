@@ -176,8 +176,12 @@ if(!Modulos::validarPermisoEdicion()){
                                                                         </select>
                                                                     </div>
                                                                 </td>
-                                                                <td id="precioNuevo" data-precio="0">$0</td>
-                                                                <td><input type="number" min="0" id="cantidadItemNuevo" onchange="actualizarSubtotal('idNuevo')" value="1" style="width: 50px;" disabled></td>
+                                                                <td>
+                                                                    <input type="number" min="0" id="precioNuevo" data-precio="0" onchange="actualizarSubtotal('idNuevo')" value="0" disabled>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" min="0" id="cantidadItemNuevo" onchange="actualizarSubtotal('idNuevo')" value="1" style="width: 50px;" disabled>
+                                                                </td>
                                                                 <td id="subtotalNuevo" data-subtotal-anterior="0">$0</td>
                                                                 <td id="eliminarNuevo"></td>
                                                             </tr>

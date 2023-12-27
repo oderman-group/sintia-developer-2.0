@@ -46,7 +46,7 @@ function actualizarSubtotal(id) {
     var idTotalNeto = document.getElementById('totalNeto');
 
     // Obtener los valores
-    var precio = parseFloat(precioElement.getAttribute("data-precio"));
+    var precio = parseFloat(precioElement.value);
     var cantidad = parseFloat(cantidadElement.value);
     var subtotalAnterior = parseFloat(subtotalElement.getAttribute("data-subtotal-anterior"));
     var subtotalNeto = parseFloat(idSubtotal.getAttribute("data-subtotal"));
@@ -62,11 +62,13 @@ function actualizarSubtotal(id) {
     var totalNetoFinal= (total-subtotalAnterior)+subtotal;
     var totalFormat = "$"+numberFormat(totalNetoFinal, 0, ',', '.');
     
-    fetch('../directivo/ajax-cambiar-subtotal.php?subtotal='+(subtotal)+'&cantidad='+(cantidad)+'&idItem='+(idItem), {
+    fetch('../directivo/ajax-cambiar-subtotal.php?subtotal='+(subtotal)+'&cantidad='+(cantidad)+'&precio='+(precio)+'&idItem='+(idItem), {
         method: 'GET'
     })
     .then(response => response.text()) // Convertir la respuesta a texto
     .then(data => {
+        precioElement.dataset.precio = precio;
+
         subtotalElement.innerHTML = '';
         subtotalElement.appendChild(document.createTextNode(subtotalFormat));
         subtotalElement.dataset.subtotalAnterior = subtotal;
@@ -145,7 +147,6 @@ function guardarNuevoItem(selectElement) {
     var subtotalNeto = parseFloat(idSubtotal.getAttribute("data-subtotal-anterior-sub"));
     var total = parseFloat(idTotalNeto.getAttribute("data-total-neto-anterior"));
 
-    var precioFormat = "$"+numberFormat(precio, 0, ',', '.');
     var subtotal = precio * cantidad;
     var subtotalFormat = "$"+numberFormat(subtotal, 0, ',', '.');
 
@@ -165,8 +166,8 @@ function guardarNuevoItem(selectElement) {
         itemElement.innerHTML = '';
         itemElement.appendChild(document.createTextNode(data.idInsercion));
 
-        precioElement.innerHTML = '';
-        precioElement.appendChild(document.createTextNode(precioFormat));
+        precioElement.disabled = false;
+        precioElement.value = precio;
         precioElement.dataset.precio = precio;
 
         cantidadElement.disabled = false;
@@ -211,8 +212,9 @@ function nuevoItem() {
 
     // Limpiar y reiniciar los elementos del DOM relacionados con el nuevo item
     idItemNuevo.innerHTML = '';
-    precioNuevo.innerHTML = '$0';
+    precioNuevo.value = 0;
     precioNuevo.dataset.precio = 0;
+    precioNuevo.disabled = true;
     cantidadNuevo.value = 1;
     cantidadNuevo.disabled = true;
     subtotalNuevo.innerHTML = '$0';
@@ -299,8 +301,9 @@ function deseaEliminarNuevoItem(dato) {
 
                 itemElement.innerHTML = '';
 
-                precioElement.innerHTML = '$0';
-                precioElement.dataset.precio = '0';
+                precioElement.disabled = true;
+                precioElement.value = 0;
+                precioElement.dataset.precio = 0;
 
                 cantidadElement.disabled = true;
                 cantidadElement.value = 1;
@@ -337,5 +340,4 @@ function deseaEliminarNuevoItem(dato) {
             return false;
         }
     })
-
 }
