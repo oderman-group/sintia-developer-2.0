@@ -141,8 +141,8 @@ function guardarNuevoItem(selectElement) {
     // Obtener el ID del item, el precio y calcular el subtotal
     var idItem = itemSelecionado.value;
     var precio = parseFloat(itemSelecionado.getAttribute('name'));
-    var subtotalNeto = parseFloat(idSubtotal.getAttribute("data-subtotal"));
-    var total = parseFloat(idTotalNeto.getAttribute("data-total-neto"));
+    var subtotalNeto = parseFloat(idSubtotal.getAttribute("data-subtotal-anterior-sub"));
+    var total = parseFloat(idTotalNeto.getAttribute("data-total-neto-anterior"));
 
     var precioFormat = "$"+numberFormat(precio, 0, ',', '.');
     var subtotal = precio * cantidad;

@@ -190,7 +190,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                         <tfoot>
                                                             <tr>
                                                                 <td align="right" colspan="4" style="padding-right: 20px;">SUBTOTAL:</td>
-                                                                <td align="left" id="subtotal" data-subtotal="0">$0</td>
+                                                                <td align="left" id="subtotal" data-subtotal="0" data-subtotal-anterior-sub="0">$0</td>
                                                             </tr>
                                                             <tr>
                                                                 <td align="right" colspan="4" style="padding-right: 20px;">VLR. ADICIONAL:</td>
@@ -198,7 +198,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                             </tr>
                                                             <tr style="font-size: 15px; font-weight:bold;">
                                                                 <td align="right" colspan="4" style="padding-right: 20px;">TOTAL NETO:</td>
-                                                                <td align="left" id="totalNeto" data-total-neto="0">$0</td>
+                                                                <td align="left" id="totalNeto" data-total-neto="0" data-total-neto-anterior="0">$0</td>
                                                             </tr>
                                                         </tfoot>
                                                     </table>

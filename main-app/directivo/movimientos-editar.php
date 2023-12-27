@@ -280,7 +280,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                         <tfoot>
                                                             <tr>
                                                                 <td align="right" colspan="4" style="padding-right: 20px;">SUBTOTAL:</td>
-                                                                <td align="left" id="subtotal" data-subtotal="<?=$subtotal;?>"><?="$".number_format($subtotal, 0, ",", ".");?></td>
+                                                                <td align="left" id="subtotal" data-subtotal="<?=$subtotal;?>" data-subtotal-anterior-sub="<?=$subtotal;?>"><?="$".number_format($subtotal, 0, ",", ".");?></td>
                                                                 <td></td>
                                                             </tr>
                                                             <tr>
@@ -290,7 +290,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                             </tr>
                                                             <tr style="font-size: 15px; font-weight:bold;">
                                                                 <td align="right" colspan="4" style="padding-right: 20px;">TOTAL NETO:</td>
-                                                                <td align="left" id="totalNeto" data-total-neto="<?=$total;?>"><?="$".number_format($total, 0, ",", ".");?></td>
+                                                                <td align="left" id="totalNeto" data-total-neto="<?=$total;?>" data-total-neto-anterior="<?=$total;?>"><?="$".number_format($total, 0, ",", ".");?></td>
                                                                 <td></td>
                                                             </tr>
                                                         </tfoot>
