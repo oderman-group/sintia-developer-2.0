@@ -150,6 +150,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                                 <th>#</th>
                                                                 <th>Item</th>
                                                                 <th>Precio</th>
+                                                                <th>Descripción</th>
                                                                 <th>Cant.</th>
                                                                 <th>Total</th>
                                                             </tr>
@@ -178,6 +179,9 @@ if(!Modulos::validarPermisoEdicion()){
                                                                 </td>
                                                                 <td>
                                                                     <input type="number" min="0" id="precioNuevo" data-precio="0" onchange="actualizarSubtotal('idNuevo')" value="0" disabled>
+                                                                </td>
+                                                                <td>
+                                                                    <textarea  id="descripNueva" cols="30" rows="1" onchange="guardarDescripcion('idNuevo')" disabled></textarea>
                                                                 </td>
                                                                 <td>
                                                                     <input type="number" min="0" id="cantidadItemNuevo" onchange="actualizarSubtotal('idNuevo')" value="1" style="width: 50px;" disabled>

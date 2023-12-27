@@ -125,7 +125,7 @@ $fechaReplace = $dia.'/'.$mes.'/'.$year;
                     ?>
                         <tr>
                             <td><?=$fila['idtx'];?></td>
-                            <td><?=$fila['name'];?></td>
+                            <td><?=$fila['name'];?><?php if ( !empty($fila['description']) ){ echo "(".$fila['description'].")"; } ?></td>
                             <td align="right">$<?=number_format($fila['priceTransaction'], 0, ",", ".")?></td>
                             <td align="right"><?=$fila['cantity'];?></td>
                             <td align="right">$<?=number_format($fila['subtotal'], 0, ",", ".")?></td>

@@ -197,6 +197,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                 <th>#</th>
                                                                 <th>Item</th>
                                                                 <th>Precio</th>
+                                                                <th>Descripción</th>
                                                                 <th>Cant.</th>
                                                                 <th>Total</th>
                                                                 <th></th>
@@ -222,6 +223,9 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                     <td><?=$fila['name'];?></td>
                                                                     <td>
                                                                         <input type="number" min="0" id="precio<?=$fila['idtx'];?>" data-precio="<?=$fila['priceTransaction'];?>" onchange="actualizarSubtotal('<?=$fila['idtx'];?>')" value="<?=$fila['priceTransaction']?>" <?=$disabledPermiso;?>>
+                                                                    </td>
+                                                                    <td>
+                                                                        <textarea  id="descrip<?=$fila['idtx'];?>" cols="30" rows="1" onchange="guardarDescripcion('<?=$fila['idtx'];?>')"><?=$fila['description']?></textarea>
                                                                     </td>
                                                                     <td>
                                                                         <input type="number" title="cantity" min="0" id="cantidadItems<?=$fila['idtx'];?>" onchange="actualizarSubtotal('<?=$fila['idtx'];?>')" value="<?=$fila['cantity'];?>" style="width: 50px;" <?=$disabledPermiso;?>>
@@ -261,6 +265,9 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                 </td>
                                                                 <td>
                                                                     <input type="number" min="0" id="precioNuevo" data-precio="0" onchange="actualizarSubtotal('idNuevo')" value="0" disabled>
+                                                                </td>
+                                                                <td>
+                                                                    <textarea  id="descripNueva" cols="30" rows="1" onchange="guardarDescripcion('idNuevo')" disabled></textarea>
                                                                 </td>
                                                                 <td><input type="number" min="0" id="cantidadItemNuevo" onchange="actualizarSubtotal('idNuevo')" value="1" style="width: 50px;" disabled></td>
                                                                 <td id="subtotalNuevo" data-subtotal-anterior="0">$0</td>
