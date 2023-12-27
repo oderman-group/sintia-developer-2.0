@@ -61,9 +61,10 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                     <div class="row">
 
                         <div class="col-sm-12">
-                            <?php include("../../config-general/mensajes-informativos.php"); ?>
-
-
+                                <?php 
+                                    include("../../config-general/mensajes-informativos.php");
+                                    include("includes/barra-superior-movimientos-financieros-editar.php");
+                                ?>
 								<div class="panel">
 									<header class="panel-heading panel-heading-purple"><?=$frases[95][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
