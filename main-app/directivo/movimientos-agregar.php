@@ -72,7 +72,7 @@ if(!Modulos::validarPermisoEdicion()){
 
                                             <label class="col-sm-2 control-label">Fecha</label>
                                             <div class="col-sm-4">
-                                                <input type="date" name="fecha" class="form-control" autocomplete="off" required value="" <?=$disabledPermiso;?>>
+                                                <input type="date" name="fecha" class="form-control" autocomplete="off" required value="<?=date('Y-m-d');?>" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>
 										
@@ -84,7 +84,7 @@ if(!Modulos::validarPermisoEdicion()){
 
                                             <label class="col-sm-2 control-label">Valor adicional</label>
                                             <div class="col-sm-4">
-                                                <input type="text" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="" required <?=$disabledPermiso;?> data-vlr-adicional-anterior="0" onchange="cambiarAdiconal(this)">
+                                                <input type="number" min="0" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="0" required <?=$disabledPermiso;?> data-vlr-adicional-anterior="0" onchange="cambiarAdiconal(this)">
                                             </div>
 										</div>
 
@@ -108,7 +108,8 @@ if(!Modulos::validarPermisoEdicion()){
 													<option value="2" >Cheque</option>
 													<option value="3" >T. Débito</option>
 													<option value="4" >T. Crédito</option>
-													<option value="5" >No aplica</option>
+													<option value="5" >Transferencia</option>
+													<option value="6" >No aplica</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -149,6 +150,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                                 <th>#</th>
                                                                 <th>Item</th>
                                                                 <th>Precio</th>
+                                                                <th>Descripción</th>
                                                                 <th>Cant.</th>
                                                                 <th>Total</th>
                                                             </tr>
@@ -175,8 +177,15 @@ if(!Modulos::validarPermisoEdicion()){
                                                                         </select>
                                                                     </div>
                                                                 </td>
-                                                                <td id="precioNuevo" data-precio="0">$0</td>
-                                                                <td><input type="number" min="0" id="cantidadItemNuevo" onchange="actualizarSubtotal('idNuevo')" value="1" style="width: 50px;" disabled></td>
+                                                                <td>
+                                                                    <input type="number" min="0" id="precioNuevo" data-precio="0" onchange="actualizarSubtotal('idNuevo')" value="0" disabled>
+                                                                </td>
+                                                                <td>
+                                                                    <textarea  id="descripNueva" cols="30" rows="1" onchange="guardarDescripcion('idNuevo')" disabled></textarea>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" min="0" id="cantidadItemNuevo" onchange="actualizarSubtotal('idNuevo')" value="1" style="width: 50px;" disabled>
+                                                                </td>
                                                                 <td id="subtotalNuevo" data-subtotal-anterior="0">$0</td>
                                                                 <td id="eliminarNuevo"></td>
                                                             </tr>

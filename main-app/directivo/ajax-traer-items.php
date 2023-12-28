@@ -4,23 +4,13 @@ include("session.php");
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0252';
 require_once(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
+require_once(ROOT_PATH."/main-app/class/Movimientos.php");
 
 // Obtener el resultado
 $idTransaction = $_REQUEST["idTransaction"];
-try {
-    $consulta = "SELECT ti.id AS idtx, i.id AS idit, i.name, i.price, ti.cantity, ti.subtotal
-    FROM ".BD_FINANCIERA.".transaction_items ti
-    INNER JOIN ".BD_FINANCIERA.".items i ON i.id = ti.id_item
-    WHERE ti.id_transaction = '{$idTransaction}'
-    AND ti.type_transaction = 'INVOICE'
-    AND ti.institucion = {$config['conf_id_institucion']}
-    AND ti.year = {$_SESSION["bd"]}
-    ORDER BY id_autoincremental";
-    $itemsConsulta = mysqli_query($conexion, $consulta);
-} catch(Exception $e) {
-    echo $e->getMessage();
-    exit();
-}
+                                                                
+$itemsConsulta = Movimientos::listarItemsTransaction($conexion, $config, $idTransaction);
+
 $subtotal=0;
 $numItems=mysqli_num_rows($itemsConsulta);
 if($numItems>0){
@@ -33,7 +23,12 @@ if($numItems>0){
 <tr id="reg<?=$fila['idtx'];?>">
     <td><?=$fila['idtx'];?></td>
     <td><?=$fila['name'];?></td>
-    <td id="precio<?=$fila['idtx'];?>" data-precio="<?=$fila['price'];?>">$<?=number_format($fila['price'], 0, ",", ".")?></td>
+    <td>
+        <input type="number" min="0" id="precio<?=$fila['idtx'];?>" data-precio="<?=$fila['priceTransaction'];?>" onchange="actualizarSubtotal('<?=$fila['idtx'];?>')" value="<?=$fila['priceTransaction']?>">
+    </td>
+    <td>
+        <textarea  id="descrip<?=$fila['idtx'];?>" cols="30" rows="1" onchange="guardarDescripcion('<?=$fila['idtx'];?>')"><?=$fila['description']?></textarea>
+    </td>
     <td><input type="number" title="cantity" min="0" id="cantidadItems<?=$fila['idtx'];?>" name="cantidadItems" onchange="actualizarSubtotal('<?=$fila['idtx'];?>')" value="<?=$fila['cantity'];?>" style="width: 50px;"></td>
     <td id="subtotal<?=$fila['idtx'];?>" data-subtotal-anterior="<?=$fila['subtotal'];?>">$<?=number_format($fila['subtotal'], 0, ",", ".")?></td>
     <td>

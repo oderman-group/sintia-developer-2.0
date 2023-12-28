@@ -3,6 +3,7 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
+require_once(ROOT_PATH."/main-app/class/Movimientos.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -109,7 +110,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
 
                                             <label class="col-sm-2 control-label">Valor adicional</label>
                                             <div class="col-sm-4">
-                                                <input type="text" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['fcu_valor'];?>" required <?=$disabledPermiso;?> data-vlr-adicional-anterior="<?=$resultado['fcu_valor'];?>" onchange="cambiarAdiconal(this)">
+                                                <input type="number" min="0" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['fcu_valor'];?>" required <?=$disabledPermiso;?> data-vlr-adicional-anterior="<?=$resultado['fcu_valor'];?>" onchange="cambiarAdiconal(this)">
                                             </div>
 										</div>
 
@@ -133,7 +134,8 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
 													<option value="2" <?php if($resultado['fcu_forma_pago']==2){ echo "selected";}?>>Cheque</option>
 													<option value="3" <?php if($resultado['fcu_forma_pago']==3){ echo "selected";}?>>T. Débito</option>
 													<option value="4" <?php if($resultado['fcu_forma_pago']==4){ echo "selected";}?>>T. Crédito</option>
-													<option value="5" <?php if($resultado['fcu_forma_pago']==5){ echo "selected";}?>>No aplica</option>
+													<option value="5" <?php if($resultado['fcu_forma_pago']==5){ echo "selected";}?>>Transferencia</option>
+													<option value="6" <?php if($resultado['fcu_forma_pago']==6){ echo "selected";}?>>No aplica</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -195,6 +197,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                 <th>#</th>
                                                                 <th>Item</th>
                                                                 <th>Precio</th>
+                                                                <th>Descripción</th>
                                                                 <th>Cant.</th>
                                                                 <th>Total</th>
                                                                 <th></th>
@@ -203,20 +206,9 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                         <tbody id="mostrarItems">
                                                             <?php
                                                                 $idTransaction = base64_decode($_GET['id']);
-                                                                try {
-                                                                    $consulta = "SELECT ti.id AS idtx, i.id AS idit, i.name, i.price, ti.cantity, ti.subtotal
-                                                                    FROM ".BD_FINANCIERA.".transaction_items ti
-                                                                    INNER JOIN ".BD_FINANCIERA.".items i ON i.id = ti.id_item
-                                                                    WHERE ti.id_transaction = '{$idTransaction}'
-                                                                    AND ti.type_transaction = 'INVOICE'
-                                                                    AND ti.institucion = {$config['conf_id_institucion']}
-                                                                    AND ti.year = {$_SESSION["bd"]}
-                                                                    ORDER BY id_autoincremental";
-                                                                    $itemsConsulta = mysqli_query($conexion, $consulta);
-                                                                } catch(Exception $e) {
-                                                                    echo $e->getMessage();
-                                                                    exit();
-                                                                }
+                                                                
+                                                                $itemsConsulta = Movimientos::listarItemsTransaction($conexion, $config, $idTransaction);
+
                                                                 $subtotal=0;
                                                                 $numItems=mysqli_num_rows($itemsConsulta);
                                                                 if($numItems>0){
@@ -229,8 +221,15 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                 <tr id="reg<?=$fila['idtx'];?>">
                                                                     <td><?=$fila['idtx'];?></td>
                                                                     <td><?=$fila['name'];?></td>
-                                                                    <td id="precio<?=$fila['idtx'];?>" data-precio="<?=$fila['price'];?>">$<?=number_format($fila['price'], 0, ",", ".")?></td>
-                                                                    <td><input type="number" title="cantity" min="0" id="cantidadItems<?=$fila['idtx'];?>" onchange="actualizarSubtotal('<?=$fila['idtx'];?>')" value="<?=$fila['cantity'];?>" style="width: 50px;"></td>
+                                                                    <td>
+                                                                        <input type="number" min="0" id="precio<?=$fila['idtx'];?>" data-precio="<?=$fila['priceTransaction'];?>" onchange="actualizarSubtotal('<?=$fila['idtx'];?>')" value="<?=$fila['priceTransaction']?>" <?=$disabledPermiso;?>>
+                                                                    </td>
+                                                                    <td>
+                                                                        <textarea  id="descrip<?=$fila['idtx'];?>" cols="30" rows="1" onchange="guardarDescripcion('<?=$fila['idtx'];?>')"><?=$fila['description']?></textarea>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="number" title="cantity" min="0" id="cantidadItems<?=$fila['idtx'];?>" onchange="actualizarSubtotal('<?=$fila['idtx'];?>')" value="<?=$fila['cantity'];?>" style="width: 50px;" <?=$disabledPermiso;?>>
+                                                                    </td>
                                                                     <td id="subtotal<?=$fila['idtx'];?>" data-subtotal-anterior="<?=$fila['subtotal'];?>">$<?=number_format($fila['subtotal'], 0, ",", ".")?></td>
                                                                     <td>
                                                                         <a href="#" title="<?=$objetoEnviar;?>" id="<?=$fila['idtx'];?>" name="movimientos-items-eliminar.php?idR=<?=$fila['idtx'];?>" style="padding: 4px 4px; margin: 5px;" class="btn btn-sm" onClick="deseaEliminar(this)">X</a>
@@ -264,7 +263,12 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                         </select>
                                                                     </div>
                                                                 </td>
-                                                                <td id="precioNuevo" data-precio="0">$0</td>
+                                                                <td>
+                                                                    <input type="number" min="0" id="precioNuevo" data-precio="0" onchange="actualizarSubtotal('idNuevo')" value="0" disabled>
+                                                                </td>
+                                                                <td>
+                                                                    <textarea  id="descripNueva" cols="30" rows="1" onchange="guardarDescripcion('idNuevo')" disabled></textarea>
+                                                                </td>
                                                                 <td><input type="number" min="0" id="cantidadItemNuevo" onchange="actualizarSubtotal('idNuevo')" value="1" style="width: 50px;" disabled></td>
                                                                 <td id="subtotalNuevo" data-subtotal-anterior="0">$0</td>
                                                                 <td id="eliminarNuevo"></td>

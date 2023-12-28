@@ -46,7 +46,7 @@ function actualizarSubtotal(id) {
     var idTotalNeto = document.getElementById('totalNeto');
 
     // Obtener los valores
-    var precio = parseFloat(precioElement.getAttribute("data-precio"));
+    var precio = parseFloat(precioElement.value);
     var cantidad = parseFloat(cantidadElement.value);
     var subtotalAnterior = parseFloat(subtotalElement.getAttribute("data-subtotal-anterior"));
     var subtotalNeto = parseFloat(idSubtotal.getAttribute("data-subtotal"));
@@ -62,11 +62,13 @@ function actualizarSubtotal(id) {
     var totalNetoFinal= (total-subtotalAnterior)+subtotal;
     var totalFormat = "$"+numberFormat(totalNetoFinal, 0, ',', '.');
     
-    fetch('../directivo/ajax-cambiar-subtotal.php?subtotal='+(subtotal)+'&cantidad='+(cantidad)+'&idItem='+(idItem), {
+    fetch('../directivo/ajax-cambiar-subtotal.php?subtotal='+(subtotal)+'&cantidad='+(cantidad)+'&precio='+(precio)+'&idItem='+(idItem), {
         method: 'GET'
     })
     .then(response => response.text()) // Convertir la respuesta a texto
     .then(data => {
+        precioElement.dataset.precio = precio;
+
         subtotalElement.innerHTML = '';
         subtotalElement.appendChild(document.createTextNode(subtotalFormat));
         subtotalElement.dataset.subtotalAnterior = subtotal;
@@ -119,6 +121,7 @@ function guardarNuevoItem(selectElement) {
     // Obtener los elementos del DOM
     var itemElement = document.getElementById('idItemNuevo');
     var precioElement = document.getElementById('precioNuevo');
+    var descripElement = document.getElementById('descripNueva');
     var cantidadElement = document.getElementById('cantidadItemNuevo');
     var subtotalElement = document.getElementById('subtotalNuevo');
     var idSubtotal = document.getElementById('subtotal');
@@ -145,7 +148,6 @@ function guardarNuevoItem(selectElement) {
     var subtotalNeto = parseFloat(idSubtotal.getAttribute("data-subtotal-anterior-sub"));
     var total = parseFloat(idTotalNeto.getAttribute("data-total-neto-anterior"));
 
-    var precioFormat = "$"+numberFormat(precio, 0, ',', '.');
     var subtotal = precio * cantidad;
     var subtotalFormat = "$"+numberFormat(subtotal, 0, ',', '.');
 
@@ -156,7 +158,7 @@ function guardarNuevoItem(selectElement) {
     var totalFormat = "$"+numberFormat(totalNetoFinal, 0, ',', '.');
 
     // Realizar una solicitud fetch para guardar el nuevo item
-    fetch('../directivo/ajax-guardar-items.php?idTransaction=' + idTransaction + '&idItem=' + idItem + '&itemModificar=' + itemModificar + '&subtotal=' + subtotal + '&cantidad=' + cantidad, {
+    fetch('../directivo/ajax-guardar-items.php?idTransaction=' + idTransaction + '&idItem=' + idItem + '&itemModificar=' + itemModificar + '&subtotal=' + subtotal + '&cantidad=' + cantidad + '&precio=' + precio, {
         method: 'GET'
     })
     .then(response => response.json()) // Convertir la respuesta a objeto JSON
@@ -165,10 +167,11 @@ function guardarNuevoItem(selectElement) {
         itemElement.innerHTML = '';
         itemElement.appendChild(document.createTextNode(data.idInsercion));
 
-        precioElement.innerHTML = '';
-        precioElement.appendChild(document.createTextNode(precioFormat));
+        precioElement.disabled = false;
+        precioElement.value = precio;
         precioElement.dataset.precio = precio;
 
+        descripElement.disabled = false;
         cantidadElement.disabled = false;
 
         subtotalElement.innerHTML = '';
@@ -203,6 +206,7 @@ function nuevoItem() {
     // Obtener elementos del DOM
     var idItemNuevo = document.getElementById('idItemNuevo');
     var precioNuevo = document.getElementById('precioNuevo');
+    var descripElement = document.getElementById('descripNueva');
     var cantidadNuevo = document.getElementById('cantidadItemNuevo');
     var subtotalNuevo = document.getElementById('subtotalNuevo');
     var items = document.getElementById('items');
@@ -211,8 +215,11 @@ function nuevoItem() {
 
     // Limpiar y reiniciar los elementos del DOM relacionados con el nuevo item
     idItemNuevo.innerHTML = '';
-    precioNuevo.innerHTML = '$0';
+    precioNuevo.value = 0;
     precioNuevo.dataset.precio = 0;
+    precioNuevo.disabled = true;
+    descripElement.value = '';
+    descripElement.disabled = true;
     cantidadNuevo.value = 1;
     cantidadNuevo.disabled = true;
     subtotalNuevo.innerHTML = '$0';
@@ -260,6 +267,7 @@ function deseaEliminarNuevoItem(dato) {
     var itemsContainer = document.getElementById('select2-items-container');
     var itemElement = document.getElementById('idItemNuevo');
     var precioElement = document.getElementById('precioNuevo');
+    var descripElement = document.getElementById('descripNueva');
     var cantidadElement = document.getElementById('cantidadItemNuevo');
     var subtotalElement = document.getElementById('subtotalNuevo');
     var idSubtotal = document.getElementById('subtotal');
@@ -299,8 +307,12 @@ function deseaEliminarNuevoItem(dato) {
 
                 itemElement.innerHTML = '';
 
-                precioElement.innerHTML = '$0';
-                precioElement.dataset.precio = '0';
+                precioElement.disabled = true;
+                precioElement.value = 0;
+                precioElement.dataset.precio = 0;
+
+                descripElement.value = '';
+                descripElement.disabled = true;
 
                 cantidadElement.disabled = true;
                 cantidadElement.value = 1;
@@ -337,5 +349,43 @@ function deseaEliminarNuevoItem(dato) {
             return false;
         }
     })
+}
 
+/**
+ * Actualiza la descripción de un item.
+ * @param {string} id - Identificador del elemento o 'idNuevo' para un nuevo item.
+ */
+function guardarDescripcion(id) {
+    var idItem=document.getElementById('idItemNuevo').innerText;
+    // Obtener los elementos
+    var descripElement = document.getElementById('descripNueva');
+    if(id !== 'idNuevo'){
+        var idItem=id
+        // Obtener los elementos
+        var descripElement = document.getElementById('descrip'+id);
+    }
+    var descripcion = descripElement.value;
+    
+    fetch('../directivo/ajax-guardar-descripcion.php?descripcion='+(descripcion)+'&idItem='+(idItem), {
+        method: 'GET'
+    })
+    .then(response => response.text()) // Convertir la respuesta a texto
+    .then(data => {
+        descripElement.value = descripcion;
+
+        $.toast({
+            heading: 'Acción realizada',
+            text: 'La descripción fue guardada correctamente.',
+            position: 'bottom-right',
+            showHideTransition: 'slide',
+            loaderBg: '#26c281',
+            icon: 'success',
+            hideAfter: 5000,
+            stack: 6
+        });
+    })
+    .catch(error => {
+         // Manejar errores
+        console.error('Error:', error);
+    });
 }

@@ -2,6 +2,7 @@
 <?php $idPaginaInterna = 'DT0104';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Movimientos.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -110,12 +111,16 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													} catch (Exception $e) {
 														include("../compartido/error-catch-to-report.php");
 													}
-													 $contReg = 1;
+													$contReg = 1;
 													$estadosCuentas = array("","Ingreso","Egreso","Cobro (CPC)","Deuda (CPP)");
-													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														 $bgColor = '';
-														 if($resultado['fcu_anulado']==1) $bgColor = '#ff572238';
-													 ?>
+													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+														$bgColor = '';
+														if($resultado['fcu_anulado']==1) $bgColor = '#ff572238';
+
+														$vlrAdicional = !empty($resultado['fcu_valor']) ? $resultado['fcu_valor'] : 0;
+
+														$totalNeto = Movimientos::calcularTotalNeto($conexion, $config, $resultado['fcu_id'], $vlrAdicional)
+													?>
 													<tr style="background-color:<?=$bgColor;?>;">
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado['fcu_id'];?></td>
@@ -123,7 +128,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=base64_encode($usuario)?>&tipo=<?=base64_encode($tipo);?>&fecha=<?=base64_encode($resultado['fcu_fecha']);?>" style="text-decoration: underline;"><?=$resultado['fcu_fecha'];?></a>
 														</td>
 														<td><?=$resultado['fcu_detalle'];?></td>
-														<td>$<?php if(!empty($resultado['fcu_valor']) && is_numeric($resultado['fcu_valor'])) echo number_format($resultado['fcu_valor'],0,",",".");?></td>
+														<td>$<?=number_format($totalNeto,0,",",".")?></td>
 														<td>
 															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=base64_encode($usuario);?>&tipo=<?=base64_encode($resultado['fcu_tipo']);?>&fecha=<?= base64_encode($fecha); ?>" style="text-decoration: underline;"><?=$estadosCuentas[$resultado['fcu_tipo']];?></a>
 														</td>
