@@ -173,7 +173,7 @@
 									<a href="#" class="nav-link nav-toggle"> <i class="fa fa-money"></i>
 										<span class="title"><?=$frases[89][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 									</a>
-									<ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0104", "DT0106", "DT0128", "DT0105"]) ?>>
+									<ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0104", "DT0106", "DT0128", "DT0105", "DT0258", "DT0259", "DT0261"]) ?>>
 										<?php
 											if(Modulos::validarSubRol(["DT0104", "DT0258"])){
 										?>
