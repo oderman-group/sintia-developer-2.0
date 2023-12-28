@@ -245,7 +245,8 @@ function deseaEliminar(dato) {
                             miFuncionConDelay();
 
                             registro.classList.add('animate__animated', 'animate__bounceOutRight', 'animate__delay-0.5s');
-                            if (varObjet.restar !== "undefined") {
+                            if (varObjet.restar !== undefined) {
+                                console.log('Entro Aqui');
                                 var restar              =  varObjet.restar;
                         
                                 var idSubtotal          = document.getElementById('subtotal');
