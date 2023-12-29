@@ -390,7 +390,7 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                                 </select>
                             </div>
                         </div>
-                        
+
                         <div class="form-group row">
                             <label class="col-sm-2 control-label">Editar información en años anteriores?
                             <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta acción permite a los directivos editar registros en años anteriores al actual."><i class="fa fa-question"></i></button></label>
@@ -406,6 +406,21 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
 
                         <input type="hidden" name="editarInfoYears" value="<?= $datosConfiguracion['conf_permiso_edicion_years_anteriores']; ?>">
                     <?php } ?>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 control-label">Mostrar el encabezado en los informes?
+                        <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta acción permite ver el encabezado general de los informes o solo el logo."><i class="fa fa-question"></i></button></label>
+                        <div class="col-sm-2">
+                            <select class="form-control  select2" name="cambiarNombreUsuario">
+                                <option value="1" <?php if ($datosConfiguracion['conf_mostrar_encabezado_informes'] == 1) {
+                                                        echo "selected";
+                                                    } ?>>SI</option>
+                                <option value="0" <?php if ($datosConfiguracion['conf_mostrar_encabezado_informes'] == 0) {
+                                                        echo "selected";
+                                                    } ?>>NO</option>
+                            </select>
+                        </div>
+                    </div>
 
 
                     <p class="h3">Otras</p>
