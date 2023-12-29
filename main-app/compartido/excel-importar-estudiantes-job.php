@@ -23,6 +23,13 @@ $parametrosBuscar = array(
 $listadoCrobjobs=SysJobs::listar($parametrosBuscar);
 
 while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
+
+	$datos = array(
+		"id" 	  => $resultadoJobs['job_id'],
+		"estado"  => JOBS_ESTADO_PROCESO,
+	);
+	SysJobs::actualizar($datos);
+	
 	// fecha1 es la primera fecha
 	$fechaInicio = new DateTime();
 	$finalizado = false;
