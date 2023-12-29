@@ -52,6 +52,7 @@ define('TIPO_DIRECTIVO', 5);
 define('ICOLVEN', 1);
 define('DEVELOPER', 22);
 define('DEVELOPER_PROD', 30);
+define('ELLEN_KEY', 16);
 
 define('PORCENTAJE_MINIMO_GENERAR_INFORME', 99);
 
