@@ -437,6 +437,21 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                         </div>
                     </div>
 
+                    <div class="form-group row">
+                        <label class="col-sm-2 control-label">Calcular notas en reporte de sabana por indicadores?
+                        <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta acción permite calcular en el reporte de sabanas, las notas por indicador o no."><i class="fa fa-question"></i></button></label>
+                        <div class="col-sm-2">
+                            <select class="form-control  select2" name="cambiarNombreUsuario">
+                                <option value="1" <?php if ($datosConfiguracion['conf_reporte_sabanas_nota_indocador'] == 1) {
+                                                        echo "selected";
+                                                    } ?>>SI</option>
+                                <option value="0" <?php if ($datosConfiguracion['conf_reporte_sabanas_nota_indocador'] == 0) {
+                                                        echo "selected";
+                                                    } ?>>NO</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <p class="h3">Otras</p>
 
                     <div class="form-group row">
