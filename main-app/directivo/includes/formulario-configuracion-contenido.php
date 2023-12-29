@@ -363,20 +363,6 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-2 control-label">Permitir cambiar el usuario de acceso</label>
-                        <div class="col-sm-2">
-                            <select class="form-control  select2" name="cambiarNombreUsuario">
-                                <option value="SI" <?php if ($datosConfiguracion['conf_cambiar_nombre_usuario'] == 'SI') {
-                                                        echo "selected";
-                                                    } ?>>SI</option>
-                                <option value="NO" <?php if ($datosConfiguracion['conf_cambiar_nombre_usuario'] == 'NO') {
-                                                        echo "selected";
-                                                    } ?>>NO</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
                         <label class="col-sm-2 control-label">Permitir a estudiantes cambiar su clave</label>
                         <div class="col-sm-2">
                             <select class="form-control  select2" name="cambiarClaveEstudiantes">
@@ -392,6 +378,20 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
 
                     <?php if($datosUsuarioActual['uss_tipo'] == TIPO_DEV){ ?>
                         <div class="form-group row">
+                            <label class="col-sm-2 control-label">Permitir cambiar el usuario de acceso</label>
+                            <div class="col-sm-2">
+                                <select class="form-control  select2" name="cambiarNombreUsuario">
+                                    <option value="SI" <?php if ($datosConfiguracion['conf_cambiar_nombre_usuario'] == 'SI') {
+                                                            echo "selected";
+                                                        } ?>>SI</option>
+                                    <option value="NO" <?php if ($datosConfiguracion['conf_cambiar_nombre_usuario'] == 'NO') {
+                                                            echo "selected";
+                                                        } ?>>NO</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
                             <label class="col-sm-2 control-label">Editar información en años anteriores?
                             <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta acción permite a los directivos editar registros en años anteriores al actual."><i class="fa fa-question"></i></button></label>
                             <div class="col-sm-8">
@@ -402,6 +402,8 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                             </div>
                         </div>
                     <?php }else{ ?>
+                        <input type="hidden" name="cambiarNombreUsuario" value="<?= $datosConfiguracion['conf_cambiar_nombre_usuario']; ?>">
+
                         <input type="hidden" name="editarInfoYears" value="<?= $datosConfiguracion['conf_permiso_edicion_years_anteriores']; ?>">
                     <?php } ?>
 
