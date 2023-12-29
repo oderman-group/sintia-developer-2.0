@@ -29,7 +29,7 @@ if($validacionEstudiante > 0){
 $estado='';
 $mensaje='';
 $pasosMatricula='';
-if($config['conf_id_institucion'] == ICOLVEN){
+if($config['conf_mostrar_pasos_matricula'] == 1){
 	$pasosMatricula="
 		mat_iniciar_proceso='".$_POST["iniciarProceso"]."',
 		mat_actualizar_datos='".$_POST["actualizarDatos"]."',
@@ -43,6 +43,9 @@ if($config['conf_id_institucion'] == ICOLVEN){
 		mat_compromiso_convivencia_opcion='".$_POST["compromisoOpcion"]."',
 		mat_hoja_firma='".$_POST["firmaHoja"]."',
 	";
+}
+
+if($config['conf_id_institucion'] == ICOLVEN){
 	require_once("apis-sion-modify-student.php");
 }
 $fechaNacimiento="";
