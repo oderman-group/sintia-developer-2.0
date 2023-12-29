@@ -92,7 +92,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
             <div align="center">
                 <?php
-                    if($config['conf_id_institucion']==16){
+                    if($config['conf_id_institucion'] == ELLEN_KEY){
                 ?>
                     <img src="../files/images/logo/encabezadoellen.png" width="95%">
                 <?php }else{?>
