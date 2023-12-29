@@ -107,7 +107,7 @@ WHERE car_curso='".$idGrado."' AND car_grupo='".$idGrupo."' AND car.institucion=
 $numeroPeriodos=$config["conf_periodo"];
 
 $nombreInforme = "REGISTRO DE VALORACIÓN";
-if($config['conf_id_institucion']!=1){
+if($config['conf_mostrar_encabezado_informes'] == 1){
 	include("../compartido/head-informes.php");
 }else{
 ?>

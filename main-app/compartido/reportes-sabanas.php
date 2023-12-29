@@ -89,7 +89,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 				while ($mat1 = mysqli_fetch_array($materias1, MYSQLI_BOTH)) {
 
 					$defini = 0;
-					if($config['conf_id_institucion']!=23){
+					if($config['conf_reporte_sabanas_nota_indocador'] == 0){
 						$notas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin 
 						WHERE bol_estudiante='" . $fila['mat_id'] . "' 
 						AND bol_carga='" . $mat1['car_id'] . "' 

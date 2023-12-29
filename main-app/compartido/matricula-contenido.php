@@ -3,7 +3,7 @@
 $acudiente = UsuariosPadre::sesionUsuario($datosEstudianteActual["mat_acudiente"]);
 
 $classDiv="col-sm-12";
-if($config['conf_id_institucion'] == ICOLVEN){
+if($config['conf_mostrar_pasos_matricula'] == 1){
 	$classDiv="col-sm-9";
 }
 ?>
@@ -209,7 +209,7 @@ if($config['conf_id_institucion'] == ICOLVEN){
 						    </div>
 						</div>
 
-						<?php if($config['conf_id_institucion'] == ICOLVEN){ ?>
+						<?php if($config['conf_mostrar_pasos_matricula'] == 1){ ?>
 							<div class="col-sm-3">
 								<?php include("../compartido/matricula-pasos.php"); ?>
 							</div>
