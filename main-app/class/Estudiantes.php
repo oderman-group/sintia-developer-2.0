@@ -5,6 +5,16 @@ require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
 class Estudiantes {
 
+    /**
+     * Esta función lista estudiantes según varios parámetros.
+     *
+     * @param int $eliminados - Indica si se deben incluir estudiantes eliminados (0 o 1).
+     * @param string $filtroAdicional - Filtros adicionales para la consulta SQL.
+     * @param string $filtroLimite - Límite de resultados para la consulta SQL.
+     * @param mixed $cursoActual - Información sobre el curso actual (puede ser nulo).
+     *
+     * @return mysqli_result - Un array con los resultados de la consulta.
+     */
     public static function listarEstudiantes(
         int    $eliminados      = 0, 
         string $filtroAdicional = '', 
@@ -46,6 +56,17 @@ class Estudiantes {
         return $resultado;
     }
 
+    /**
+     * Función para listar estudiantes en grados.
+     *
+     * @param string $filtroAdicional Filtro adicional para la consulta SQL.
+     * @param string $filtroLimite Filtro de límite para la consulta SQL.
+     * @param mixed $cursoActual Curso actual (puede ser nulo).
+     * @param int $grupoActual Grupo actual (predeterminado: 1).
+     * @param string $yearBd Año de la base de datos (predeterminado: vacío, se toma de la sesión si no se proporciona).
+     *
+     * @return mysqli_result Arreglo con los resultados de la consulta.
+     */
     public static function listarEstudiantesEnGrados(
         string $filtroAdicional = '', 
         string $filtroLimite    = 'LIMIT 0, 2000',
@@ -89,6 +110,15 @@ class Estudiantes {
         return $resultado;
     }
 
+    /**
+     * Función para listar estudiantes con notas faltantes.
+     *
+     * @param string $carga      ID de la carga académica.
+     * @param string $periodo    Período académico.
+     * @param string $tipoGrado  Tipo de grado (opcional, por defecto es GRADO_GRUPAL).
+     *
+     * @return mysqli_result     Resultado de la consulta con la información de los estudiantes.
+     */
     public static function listarEstudiantesNotasFaltantes(
         string $carga, 
         string $periodo,
@@ -129,6 +159,14 @@ class Estudiantes {
         return $resultado;
     }
 
+    /**
+     * Obtiene la lista de estudiantes para los docentes con los filtros proporcionados.
+     *
+     * @param string $filtroDocentes Filtro adicional para docentes.
+     * @param string $filtroLimite Filtro adicional para limitar resultados.
+     *
+     * @return mysqli_result|false Resultado de la consulta o false si hay un error.
+     */
     public static function listarEstudiantesParaDocentes(string $filtroDocentes = '',string $filtroLimite = '')
     {
         global $conexion, $baseDatosServicios, $config;
@@ -153,6 +191,14 @@ class Estudiantes {
         return $resultado;
     }
 
+    /**
+     * Obtiene los datos de un estudiante según su identificación, número de matrícula o documento.
+     *
+     * @param int|string $estudiante Identificación, número de matrícula o documento del estudiante.
+     * @param string $yearBd Año de la base de datos (opcional).
+     *
+     * @return array|false Arreglo asociativo con los datos del estudiante o false si no se encuentra.
+     */
     public static function obtenerDatosEstudiante($estudiante = 0, $yearBd    = '')
     {
 
@@ -182,6 +228,12 @@ class Estudiantes {
 
     }
 
+    /**
+     * Este metodo me forma el nombre completo de un estudiante
+     * @param array $estudiante
+     * 
+     * @return string $nombre
+     */
     public static function NombreCompletoDelEstudiante(array $estudiante){
         
         $nombre=$estudiante['mat_nombres'];
@@ -197,6 +249,12 @@ class Estudiantes {
         return strtoupper($nombre);
     }
 
+    /**
+     * Este metodo me lista los acudidos de un usuario acuiente
+     * @param string $acudiente
+     * 
+     * @return mysqli_result $resultado
+     */
     public static function listarEstudiantesParaAcudientes($acudiente)
     {
         global $conexion, $baseDatosServicios, $config;
@@ -220,7 +278,15 @@ class Estudiantes {
         return $resultado;
     }
 
-    public static function listarEstudiantesParaEstudiantes(string $filtroEstudiantes = '',$cursoActual=null,$grupoActual=1)
+    /**
+     * Este metodo me lista los estudiante para un estudiante
+     * @param string $filtroEstudiante
+     * @param array $cursoActual
+     * @param string $grupoActual
+     * 
+     * @return mysqli_result $resultado
+     */
+    public static function listarEstudiantesParaEstudiantes(string $filtroEstudiantes = '', $cursoActual=null, $grupoActual=1)
     {
         global $conexion, $baseDatosServicios, $config;
         $resultado = [];
@@ -256,6 +322,13 @@ class Estudiantes {
         return $resultado;
     }
 
+    /**
+     * Obtiene los datos de un estudiante según su ID de usuario.
+     *
+     * @param int $estudianteIdUsuario ID de usuario del estudiante.
+     *
+     * @return array Arreglo asociativo con los datos del estudiante o un arreglo vacío si no se encuentra.
+     */
     public static function obtenerDatosEstudiantePorIdUsuario($estudianteIdUsuario = 0)
     {
 
@@ -284,6 +357,13 @@ class Estudiantes {
 
     }
 
+    /**
+     * Este metodo me valida la existencia de un estudiante
+     * @param string $estudiante
+     * @param string $yearBd
+     * 
+     * @return int $num
+     */
     public static function validarExistenciaEstudiante(
         $estudiante = 0,
         $BD    = '',
@@ -307,6 +387,14 @@ class Estudiantes {
 
     }
 
+    /**
+     * Este metodo me lista los estudiante para la planillas
+     * @param int $eliminados
+     * @param string $filtroAdicional
+     * @param string $yearBd
+     * 
+     * @return mysqli_result $resultado
+     */
     public static function listarEstudiantesParaPlanillas(
         int    $eliminados      = 0, 
         string $filtroAdicional = '', 
@@ -335,6 +423,13 @@ class Estudiantes {
         return $resultado;
     }
 
+    /**
+     * Este metodo me ordena el nombre de un estudiante
+     * @param array $estudiante
+     * @param int $orden
+     * 
+     * @return string $nombre
+     */
     public static function NombreCompletoDelEstudianteParaInformes(array $estudiante, $orden){
         
         $nombre=$estudiante['mat_nombres'];
@@ -363,6 +458,11 @@ class Estudiantes {
         return strtoupper($nombre);
     }
 
+    /**
+     * Este metodo me actualiza el estado de un estudiante
+     * @param string $idEstudiante
+     * @param int $estadoMatricula
+     */
     public static function ActualizarEstadoMatricula($idEstudiante, $estadoMatricula)
     {
         global $conexion, $config;
@@ -375,6 +475,13 @@ class Estudiantes {
         }
     }
 
+    /**
+     * Este metodo me registra las matriculas retiradas o restauradas
+     * @param string $idEstudiante
+     * @param string $motivo
+     * @param array $config
+     * @param mysqli $conexion
+     */
     public static function retirarRestaurarEstudiante($idEstudiante, $motivo, $config, $conexion)
     {
         $codigo=Utilidades::generateCode("MRT");
@@ -387,6 +494,13 @@ class Estudiantes {
         }
     }
 
+    /**
+     * Este metodo me trae todos los estudiantes matriculados
+     * @param string $filtro
+     * @param string $yearBD
+     * 
+     * @return mysqli_result $resultado
+     */
     public static function estudiantesMatriculados(
         string    $filtro      = '',
         string $yearBd    = ''
@@ -411,6 +525,13 @@ class Estudiantes {
         return $resultado;
     }
 
+    /**
+     * este metodo me trae los datos de un estudiante para usar en boletines
+     * @param string $estudiante
+     * @param string $yearBD
+     * 
+     * @return mysqli_result $resultado
+     */
     public static function obtenerDatosEstudiantesParaBoletin(
         string $estudiante      = "",
         string $yearBd    = ''
@@ -433,6 +554,13 @@ class Estudiantes {
         return $resultado;
     }
 
+    /**
+     * Este metodo me valida si un documento esta repetido
+     * @param string $documento
+     * @param string $idEstudiante
+     * 
+     * @return int $num
+     */
     public static function validarRepeticionDocumento($documento, $idEstudiante)
     {
 
@@ -453,6 +581,12 @@ class Estudiantes {
 
     }
     
+    /**
+     * Este metodo me lista los estudiante MT de un docente
+     * @param array $datosCargaActual
+     * 
+     * @return mysqli_result $resultado
+     */
     public static function listarEstudiantesParaDocentesMT(array $datosCargaActual = [])
     {
         global $conexion, $baseDatosServicios, $config;
@@ -476,6 +610,12 @@ class Estudiantes {
         return $resultado;
     }
 
+    /**
+     * Este metodo me cuenta los estudiante de una carga
+     * @param array $datosCargaActual
+     * 
+     * @return int $cantidad
+     */
     public static function contarEstudiantesParaDocentesMT(array $datosCargaActual = [])
     {
         global $conexion, $baseDatosServicios, $config;
@@ -500,6 +640,13 @@ class Estudiantes {
         return $cantidad;
     }
 
+    /**
+     * Este metodo me escoge la consulta segun el tipo de curso
+     * 
+     * @param array $datosCargaActual
+     * 
+     * @return mysqli_result $consulta
+     */
     public static function escogerConsultaParaListarEstudiantesParaDocentes(array $datosCargaActual = [])
     {
         $filtroDocentesParaListarEstudiantes = " AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."'";
@@ -513,7 +660,13 @@ class Estudiantes {
         return $consulta;
     }
 
-    //METODO PARA BUSCAR TODA LA INFORMACIÓN DE LOS ESTUDIANTES
+    /**
+     * Este metodo me lista todos los estudiantes
+     * 
+     * @param string $where
+     * 
+     * @return mysqli_result $consulta
+     */
     public static function reporteEstadoEstudiantes($where="")
     {
 
