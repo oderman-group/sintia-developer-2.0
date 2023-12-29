@@ -392,6 +392,21 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                         </div>
 
                         <div class="form-group row">
+                            <label class="col-sm-2 control-label">Doble buscador en listado de registros?
+                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta acción permite que las instituciones tengan doble buscador en paginas donde se listan los registros."><i class="fa fa-question"></i></button></label>
+                            <div class="col-sm-2">
+                                <select class="form-control  select2" name="cambiarNombreUsuario">
+                                    <option value="SI" <?php if ($datosConfiguracion['conf_doble_buscador'] == 'SI') {
+                                                            echo "selected";
+                                                        } ?>>SI</option>
+                                    <option value="NO" <?php if ($datosConfiguracion['conf_doble_buscador'] == 'NO') {
+                                                            echo "selected";
+                                                        } ?>>NO</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label class="col-sm-2 control-label">Editar información en años anteriores?
                             <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta acción permite a los directivos editar registros en años anteriores al actual."><i class="fa fa-question"></i></button></label>
                             <div class="col-sm-8">
