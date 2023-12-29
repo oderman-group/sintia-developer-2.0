@@ -82,6 +82,8 @@ $mensaje="";
 		while($estudianteResultado = mysqli_fetch_array($consultaListaEstudante, MYSQLI_BOTH)){
 			$estudiante = $estudianteResultado["mat_id"];
 			include(ROOT_PATH."/main-app/definitivas.php");
+			
+			$idNumericoEstudiante = preg_replace('/^MAT/', '', $estudiante); //Para ser usado en el codigo de los registros
 
 			//Consultamos si tiene registros en el boletín
 			$consultaBoletinDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin 
@@ -143,7 +145,7 @@ $mensaje="";
 				$sumaNotaIndicador  += $notInd[0];
 				
 				if($num==0){
-					$codigo=Utilidades::generateCode("RIN");
+					$codigo=Utilidades::generateCode("RIN").$idNumericoEstudiante;
 
 					mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_carga='".$carga."' AND rind_estudiante='".$estudiante."' AND rind_periodo='".$periodo."' AND rind_indicador='".$notInd[1]."' AND institucion={$config['conf_id_institucion']} AND year={$anio}");
 					
@@ -182,7 +184,7 @@ $mensaje="";
 				mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_boletin 
 				WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$estudiante."' AND institucion={$config['conf_id_institucion']} AND year={$anio}");			
 				//INSERTAR LOS DATOS EN LA TABLA BOLETIN
-				$codigoBOL=Utilidades::generateCode("BOL");
+				$codigoBOL=Utilidades::generateCode("BOL").$idNumericoEstudiante;
 				mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_boletin(bol_id, bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_fecha_registro, bol_actualizaciones, bol_nota_indicadores, bol_porcentaje, institucion, year)VALUES('".$codigoBOL."', '".$carga."', '".$estudiante."', '".$periodo."', '".$definitiva."', 1, now(), 0, '".$sumaNotaIndicador."', '".$porcentajeActual."', {$config['conf_id_institucion']}, {$anio})");	
 					
 			}
