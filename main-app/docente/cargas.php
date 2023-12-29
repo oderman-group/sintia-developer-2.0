@@ -164,9 +164,8 @@ $_SESSION["configuracion"] = $config;
 																$mensajeI = $btnGenerarInforme
 																	.'<div class="alert alert-info mt-3" role="alert" style="margin-right: 20px;">Por favor, vuelva a intentarlo!</div>';
 															}
-															
+														break;
 
-																	break;
 														case JOBS_ESTADO_PENDIENTE:
 															if($intento==0){
 																$mensajeI ='<div class="alert alert-success mt-3" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
@@ -175,7 +174,11 @@ $_SESSION["configuracion"] = $config;
 															}elseif($intento>0){
 																$mensajeI ='<div class="alert alert-warning mt-3" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].' <br><br>(La plataforma ha echo <b>'.$intento.'</b> intentos.)</div>';
 															}
-															break;
+														break;
+
+														case JOBS_ESTADO_PROCESO:
+															$mensajeI ='<div class="alert alert-success mt-3" role="alert" style="margin-right: 20px;">El informe está en proceso.</div>';
+														break;
 
 														default:
 															$mensajeI = $btnGenerarInforme;
