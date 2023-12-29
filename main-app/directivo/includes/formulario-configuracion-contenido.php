@@ -422,6 +422,20 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                         </div>
                     </div>
 
+                    <div class="form-group row">
+                        <label class="col-sm-2 control-label">Mostrar paso a paso de matricula?
+                        <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta acción permite ver a los estudiantes el paso a paso del proceso de matricula."><i class="fa fa-question"></i></button></label>
+                        <div class="col-sm-2">
+                            <select class="form-control  select2" name="cambiarNombreUsuario">
+                                <option value="1" <?php if ($datosConfiguracion['conf_mostrar_pasos_matricula'] == 1) {
+                                                        echo "selected";
+                                                    } ?>>SI</option>
+                                <option value="0" <?php if ($datosConfiguracion['conf_mostrar_pasos_matricula'] == 0) {
+                                                        echo "selected";
+                                                    } ?>>NO</option>
+                            </select>
+                        </div>
+                    </div>
 
                     <p class="h3">Otras</p>
 
