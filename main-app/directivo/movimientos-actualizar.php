@@ -15,8 +15,9 @@ if(!empty($_POST["fecha"])) {
     $fecha = $_POST["fecha"];
 }
 
-if (trim($fecha) == "" or trim($_POST["detalle"]) == "" or trim($_POST["valor"]) == "" or trim($_POST["tipo"]) == "" or trim($_POST["forma"]) == "") {
-    echo "<span style='font-family:Arial; color:red;'>Debe llenar todos los campos.</samp>";
+if (empty($_POST["fecha"]) or empty($_POST["detalle"]) or (isset($_POST["valor"]) && $_POST["valor"]=="") or empty($_POST["tipo"]) or empty($_POST["forma"])) {
+    include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
+    echo '<script type="text/javascript">window.location.href="movimientos-editar.php?error=ER_DT_4";</script>';
     exit();
 }
 

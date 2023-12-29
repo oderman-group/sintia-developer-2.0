@@ -251,11 +251,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                                         <select class="form-control  select2" id="items" onchange="guardarNuevoItem(this)" <?=$disabledPermiso;?>>
                                                                             <option value="">Seleccione una opción</option>
                                                                             <?php
-                                                                                try{
-                                                                                    $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".items WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                                                                                } catch (Exception $e) {
-                                                                                    include("../compartido/error-catch-to-report.php");
-                                                                                }
+                                                                                $consulta= Movimientos::listarItems($conexion, $config);
                                                                                 while($datosConsulta = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                                                                             ?>
                                                                             <option value="<?=$datosConsulta['id']?>" name="<?=$datosConsulta['price']?>"><?=$datosConsulta['name']?></option>

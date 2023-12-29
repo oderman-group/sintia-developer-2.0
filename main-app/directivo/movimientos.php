@@ -151,7 +151,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																			<li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','¿Deseas anular esta transacción?','question','movimientos-anular.php?idR=<?=base64_encode($resultado['fcu_id']);?>&id=<?=base64_encode($resultado['uss_id']);?>')">Anular</a></li>
 																		<?php } ?>
 																		<?php if( Modulos::validarSubRol(['DT0255']) ){?>
-																			<li><a href="movimientos-factura-venta.php?id=<?=base64_encode($resultado['fcu_id']);?>" target="_blank"><?=$frases[380][$datosUsuarioActual['uss_idioma']];?></a></li>
+																			<li><a href="movimientos-factura-venta.php?id=<?=base64_encode($resultado['fcu_id']);?>" target="_blank"><?=$frases[57][$datosUsuarioActual['uss_idioma']];?></a></li>
 																		<?php }?>
 																	</ul>
 																</div>

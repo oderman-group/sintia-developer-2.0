@@ -69,4 +69,115 @@ class Movimientos {
 
         return $consulta;
     }
+
+    /**
+     * Este metodo me trae todos los items
+     * @param mysqli $conexion
+     * @param array $config
+     * 
+     * @return mysqli_result $consulta
+    **/
+    public static function listarItems (
+        mysqli $conexion, 
+        array $config
+    )
+    {
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".items WHERE status=0 AND institucion = {$config['conf_id_institucion']} AND year = {$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        return $consulta;
+    }
+
+    /**
+     * Este metodo me guarda un item
+     * @param mysqli $conexion
+     * @param array $config
+     * @param array $POST
+     * 
+     * @return string $codigo
+    **/
+    public static function guardarItems (
+        mysqli $conexion, 
+        array $config, 
+        array $POST
+    )
+    {
+
+        $codigo=Utilidades::generateCode("IT");
+        try {
+            mysqli_query($conexion, "INSERT INTO ".BD_FINANCIERA.".items (id, name, price, tax, description, institucion, year)VALUES('".$codigo."', '".$POST["nombre"]."', ".$POST["precio"].", '".$POST["iva"]."', '".$POST["descrip"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        return $codigo;
+    }
+
+    /**
+     * Este metodo me trae la informacion de un item
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idItem
+     * 
+     * @return array $resultado
+    **/
+    public static function traerDatosItems (
+        mysqli $conexion, 
+        array $config,
+        string $idItem
+    )
+    {
+        $resultado = [];
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".items WHERE id='{$idItem}' AND institucion = {$config['conf_id_institucion']} AND year = {$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+
+        return $resultado;
+    }
+
+    /**
+     * Este metodo me actualiza un item
+     * @param mysqli $conexion
+     * @param array $config
+     * @param array $POST
+    **/
+    public static function actualizarItems (
+        mysqli $conexion, 
+        array $config, 
+        array $POST
+    )
+    {
+
+        try {
+            mysqli_query($conexion, "UPDATE ".BD_FINANCIERA.".items SET name='".$POST["nombre"]."', price=".$POST["precio"].", tax='".$POST["iva"]."', description='".$POST["descrip"]."' WHERE id='".$POST["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+    }
+
+    /**
+     * Este metodo me actualiza un item
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idItem
+    **/
+    public static function eliminarItems (
+        mysqli $conexion, 
+        array $config, 
+        string $idItem
+    )
+    {
+
+        try {
+            mysqli_query($conexion, "UPDATE ".BD_FINANCIERA.".items SET status=1 WHERE id='{$idItem}' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+    }
 }

@@ -5,12 +5,12 @@
 	<div class="navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
 			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
-					Mas Opciones
+				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  style="color:<?=$Plataforma->colorUno;?>;">
+					Más opciones
 					<span class="fa fa-angle-down"></span>
 				</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="movimientos-factura-venta.php?id=<?=base64_encode($resultado['fcu_id']);?>" target="_blank"><?=$frases[380][$datosUsuarioActual['uss_idioma']];?></a>
+					<a class="dropdown-item" href="movimientos-factura-venta.php?id=<?=base64_encode($resultado['fcu_id']);?>" target="_blank"><?=$frases[57][$datosUsuarioActual['uss_idioma']];?></a>
 				</div>
 			</li>
 		</ul> 

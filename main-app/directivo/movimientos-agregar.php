@@ -2,6 +2,7 @@
 <?php $idPaginaInterna = 'DT0106';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Movimientos.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -53,8 +54,9 @@ if(!Modulos::validarPermisoEdicion()){
                     <div class="row">
 
                         <div class="col-sm-12">
-
-
+                                <?php 
+                                    include("../../config-general/mensajes-informativos.php");
+                                ?>
 								<div class="panel">
 									<header class="panel-heading panel-heading-purple"><?=$frases[95][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
@@ -165,11 +167,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                                         <select class="form-control  select2" id="items" onchange="guardarNuevoItem(this)" <?=$disabledPermiso;?>>
                                                                             <option value="">Seleccione una opción</option>
                                                                             <?php
-                                                                                try{
-                                                                                    $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".items WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                                                                                } catch (Exception $e) {
-                                                                                    include("../compartido/error-catch-to-report.php");
-                                                                                }
+                                                                                $consulta= Movimientos::listarItems($conexion, $config);
                                                                                 while($datosConsulta = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                                                                             ?>
                                                                             <option value="<?=$datosConsulta['id']?>" name="<?=$datosConsulta['price']?>"><?=$datosConsulta['name']?></option>

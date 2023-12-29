@@ -81,7 +81,7 @@ $fechaReplace = $dia.'/'.$mes.'/'.$year;
                                 <td>
                                     <?=UsuariosPadre::nombreCompletoDelUsuario($resultado)?><br>
                                     <b>C.C/NIT:</b> <?=$resultado['uss_documento']?><br>
-                                    <b>TEL:</b> <?=$resultado['uss_telefono']?><br>
+                                    <b>CEL/TEL:</b> <?php echo $resultado['uss_celular']; if (!empty($resultado['uss_celular']) && !empty($resultado['uss_telefono'])) { echo "-"; } echo $resultado['uss_telefono']; ?><br>
                                     <?=$resultado['uss_direccion']?><br>
                                     <?php if (!empty($resultado['uss_lugar_nacimiento'])) { echo $resultado['ciu_nombre'].", ".$resultado['dep_nombre']; }?>
                                 </td>
