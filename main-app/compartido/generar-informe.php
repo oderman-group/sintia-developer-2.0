@@ -38,6 +38,8 @@ $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datos
 	$periodo = $periodo;
 	$estudiante = $resultado['mat_id'];
 	include("../definitivas.php");
+			
+	$idNumericoEstudiante = preg_replace('/^MAT/', '', $estudiante); //Para ser usado en el codigo de los registros
 	 
 	//Consultamos si tiene registros en el boletín
 	$consultaBoletinDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin 
@@ -100,7 +102,7 @@ $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datos
 		$sumaNotaIndicador  += $notInd[0];
 		
 		if($num==0){
-			$codigo=Utilidades::generateCode("RIN").strtotime("now");
+			$codigo=Utilidades::generateCode("RIN").$idNumericoEstudiante;
 			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_carga='".$carga."' AND rind_estudiante='".$resultado['mat_id']."' AND rind_periodo='".$periodo."' AND rind_indicador='".$notInd[1]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			$lineaError = __LINE__;
 			include("../compartido/reporte-errores.php");
@@ -148,7 +150,7 @@ $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datos
 		include("../compartido/reporte-errores.php");
 			
 		//INSERTAR LOS DATOS EN LA TABLA BOLETIN
-		$codigoBOL=Utilidades::generateCode("BOL").strtotime("now");
+		$codigoBOL=Utilidades::generateCode("BOL").$idNumericoEstudiante;
 		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_boletin(bol_id, bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_fecha_registro, bol_actualizaciones, bol_nota_indicadores, bol_porcentaje, institucion, year)VALUES('".$codigoBOL."', '".$carga."', '".$resultado['mat_id']."', '".$periodo."', '".$definitiva."', 1, now(), 0, '".$sumaNotaIndicador."', '".$porcentajeActual."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");	
 		$lineaError = __LINE__;
 		include("../compartido/reporte-errores.php");		
