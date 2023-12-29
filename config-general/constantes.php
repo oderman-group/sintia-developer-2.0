@@ -11,6 +11,7 @@ define('GRADO_GRUPAL', 'grupal');
 
 
 define('JOBS_ESTADO_PENDIENTE', 'Pendiente');
+define('JOBS_ESTADO_PROCESO', 'Proceso');
 define('JOBS_ESTADO_FINALIZADO', 'Finalizado');
 define('JOBS_ESTADO_ERROR', 'Error');
 
