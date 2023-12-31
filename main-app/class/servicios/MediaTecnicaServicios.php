@@ -2,6 +2,13 @@
 require_once("Servicios.php");
 class MediaTecnicaServicios extends Servicios
 {
+    /**
+     * Lista las matrículas de cursos de Media Técnica con información adicional.
+     *
+     * @param array|null $parametrosArray Arreglo de parámetros para filtrar la consulta (opcional).
+     *
+     * @return array|mysqli_result|false Arreglo de datos del resultado, objeto mysqli_result o false si hay un error.
+     */
     public static function listar($parametrosArray=null)
     {
       global $baseDatosServicios;
@@ -15,6 +22,13 @@ class MediaTecnicaServicios extends Servicios
       return Servicios::SelectSql($sql);         
     }
 
+    /**
+     * Lista las materias de Media Técnica con información adicional.
+     *
+     * @param array|null $parametrosArray Arreglo de parámetros para filtrar la consulta (opcional).
+     *
+     * @return array|mysqli_result|false Arreglo de datos del resultado, objeto mysqli_result o false si hay un error.
+     */
     public static function listarMaterias($parametrosArray=null)
     {
       global $baseDatosServicios, $config;
@@ -34,6 +48,14 @@ class MediaTecnicaServicios extends Servicios
       return Servicios::SelectSql($sql);         
     }
     
+    /**
+     * Lista los estudiantes de Media Técnica con información adicional.
+     *
+     * @param array|null $parametrosArray Arreglo de parámetros para filtrar la consulta (opcional).
+     * @param string $yearBd Año de la base de datos (opcional).
+     *
+     * @return array|mysqli_result|false Arreglo de datos del resultado, objeto mysqli_result o false si hay un error.
+     */
     public static function listarEstudiantes(
       $parametrosArray=null,
       string $yearBd    = ''
@@ -62,8 +84,17 @@ class MediaTecnicaServicios extends Servicios
       $sql=$sqlInicial." ".$andPersonalizado." ".$sqlFinal;
       return Servicios::SelectSql($sql,$limite,$esArreglo);         
     }
-    
 
+    /**
+     * Edita la información de matrículas y cursos de Media Técnica.
+     *
+     * @param int $idMatricula ID de la matrícula.
+     * @param array $cursosId Arreglo con los IDs de los cursos.
+     * @param array $config Configuración de la aplicación.
+     * @param int|null $idGrupo ID del grupo (opcional).
+     *
+     * @return void
+     */
     public static function editar($idMatricula,$cursosId,$config,$idGrupo=NULL)
     {
         global $baseDatosServicios;
@@ -76,6 +107,16 @@ class MediaTecnicaServicios extends Servicios
         MediaTecnicaServicios::guardar($idMatricula,$cursosId,$config,$idGrupo);
     }
 
+    /**
+     * Guarda la información de matrículas y cursos de Media Técnica.
+     *
+     * @param int $idMatricula ID de la matrícula.
+     * @param array $arregloCursos Arreglo con los IDs de los cursos.
+     * @param array $config Configuración de la aplicación.
+     * @param int|null $idGrupo ID del grupo (opcional).
+     *
+     * @return void
+     */
     public static function guardar($idMatricula,$arregloCursos,$config,$idGrupo=NULL)
     {
         global $baseDatosServicios;
@@ -100,6 +141,14 @@ class MediaTecnicaServicios extends Servicios
         }        
     }
 
+    /**
+     * Elimina la existencia de una matrícula en un curso de Media Técnica.
+     *
+     * @param int $idCursos ID del curso.
+     * @param array $config Configuración de la aplicación.
+     *
+     * @return void
+     */
     public static function eliminarExistenciaEnCursoMT($idCursos,$config)
     {
         global $baseDatosServicios,$conexion;
@@ -112,6 +161,16 @@ class MediaTecnicaServicios extends Servicios
         } 
     }
 
+    /**
+     * Guarda la información de matrículas y cursos de Media Técnica por curso específico.
+     *
+     * @param int $idMatricula ID de la matrícula.
+     * @param int $idCurso ID del curso.
+     * @param array $config Configuración de la aplicación.
+     * @param int|null $idGrupo ID del grupo (opcional).
+     *
+     * @return void
+     */
     public static function guardarPorCurso($idMatricula,$idCurso,$config,$idGrupo)
     {
         global $baseDatosServicios,$conexion;
@@ -133,6 +192,15 @@ class MediaTecnicaServicios extends Servicios
              );      
     }
 
+    /**
+     * Verifica la existencia de un estudiante en cursos de Media Técnica.
+     *
+     * @param array $config Configuración de la aplicación.
+     * @param int $year Año académico.
+     * @param int $estudiante ID del estudiante.
+     *
+     * @return mysqli_result|false Resultado de la consulta o false si hay un error.
+     */
     public static function existeEstudianteMT($config,$year,$estudiante = 0)
     {
 
@@ -152,7 +220,14 @@ class MediaTecnicaServicios extends Servicios
 
     }
 
-    //METODO PARA BUSCAR TODA LA INFORMACIÓN DE LOS ESTUDIANTES DE MT
+    /**
+     * Genera un informe del estado de los estudiantes de Media Técnica.
+     *
+     * @param array $config Configuración de la aplicación.
+     * @param string $filtro Filtro opcional para limitar los resultados.
+     *
+     * @return mysqli_result|false Resultado de la consulta o false si hay un error.
+     */
     public static function reporteEstadoEstudiantesMT($config,$filtro="")
     {
 

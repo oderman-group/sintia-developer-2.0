@@ -119,6 +119,10 @@ function validarPesoArchivo(archivoInput) {
     }
 }
 
+/**
+ * Esta función me hace un gardado general
+ * @param {array} datos 
+ */
 function guardarAjaxGeneral(datos){ 
     var idR = datos.id;
     var valor = 0;
@@ -166,13 +170,21 @@ function limitarSeleccion(select) {
         opcionesSeleccionadas[opcionesSeleccionadas.length - 1].selected = true;
     }
 }
-
+/**
+ * Esta función me imprime la cuenta bancaria
+ */
 function verCuentaBancaria() {
     document.getElementById("cuentaBancaria").innerHTML = `
     Cuenta de ahorros Bancolombia número <b>431-565882-54</b>
     `;
 }
 
+/**
+ * Esta función me cambia la posición de una carga
+ * @param {string} idCarga 
+ * @param {int} posicionNueva 
+ * @param {string} docente 
+ */
 function cambiarPosicion(idCarga, posicionNueva, docente) {
 	fetch('../compartido/cambiar-posicion-cargas.php?idCarga='+idCarga+'&posicionNueva='+posicionNueva+'&docente='+docente, {
 		method: 'GET'

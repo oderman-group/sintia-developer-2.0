@@ -1,11 +1,19 @@
 <?php
 class Solicitudes {
    
+    // Propiedades estáticas para manejar información sobre la cantidad de registros y la paginación
     public static $cantidadRegistros;
     public static $inicio;
     public static $maxRegistro;
    
-
+    /**
+     * Listar solicitudes de cancelación.
+     *
+     * @param array|null $parametros Parámetros adicionales para filtrar la consulta.
+     * @param bool $totalizar Indica si se debe realizar una consulta de totalización.
+     *
+     * @return array Devuelve un conjunto de resultados de la consulta.
+     */
     public static function listar($parametros = null,$totalizar =false){
         
         global $conexion;
@@ -51,6 +59,13 @@ class Solicitudes {
         return $resultado;
     }
 
+    /**
+     * Consultar detalles de una solicitud de cancelación por ID.
+     *
+     * @param int $id Identificador único de la solicitud.
+     *
+     * @return array Devuelve un conjunto de resultados de la consulta.
+     */
     public static function consultar($id){
         
         global $conexion;
