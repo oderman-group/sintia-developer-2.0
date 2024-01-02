@@ -84,16 +84,18 @@ if ($e['mat_estado_matricula'] == 1) {
                         <input type="text" name="responsable" class="form-control" autocomplete="off" value="<?= $e['uss_usuario'] . " - " . UsuariosPadre::nombreCompletoDelUsuario($e); ?>" readonly>
                     </div>
                 </div>
+            <?php } else { ?>
+                <div class="alert alert-block alert-warning">
+                    <p>Este estudiante no tiene historial de retiros.</p>
+                </div>
+            <?php } ?>
 
+            <?php if ($e['mat_estado_matricula'] == 1 || !empty($e['matret_fecha'])) { ?>
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Motivo de retiro</label>
                     <div class="col-sm-10">
                         <textarea cols="80" id="editor1" name="motivo" rows="10" <?php echo $readonly; ?>><?= $e['matret_motivo']; ?></textarea>
                     </div>
-                </div>
-            <?php } else { ?>
-                <div class="alert alert-block alert-warning">
-                    <p>Este estudiante no tiene historial de retiros.</p>
                 </div>
             <?php } ?>
 
