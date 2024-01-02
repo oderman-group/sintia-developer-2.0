@@ -392,21 +392,6 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-sm-2 control-label">Doble buscador en listado de registros?
-                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta acción permite que las instituciones tengan doble buscador en paginas donde se listan los registros."><i class="fa fa-question"></i></button></label>
-                            <div class="col-sm-2">
-                                <select class="form-control  select2" name="cambiarNombreUsuario">
-                                    <option value="SI" <?php if ($datosConfiguracion['conf_doble_buscador'] == 'SI') {
-                                                            echo "selected";
-                                                        } ?>>SI</option>
-                                    <option value="NO" <?php if ($datosConfiguracion['conf_doble_buscador'] == 'NO') {
-                                                            echo "selected";
-                                                        } ?>>NO</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
                             <label class="col-sm-2 control-label">Editar información en años anteriores?
                             <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta acción permite a los directivos editar registros en años anteriores al actual."><i class="fa fa-question"></i></button></label>
                             <div class="col-sm-8">
@@ -416,17 +401,34 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                                 </select>
                             </div>
                         </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label">Doble buscador en listado de registros?
+                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta acción permite que las instituciones tengan doble buscador en paginas donde se listan los registros."><i class="fa fa-question"></i></button></label>
+                            <div class="col-sm-2">
+                                <select class="form-control  select2" name="dobleBuscador">
+                                    <option value="SI" <?php if ($datosConfiguracion['conf_doble_buscador'] == 'SI') {
+                                                            echo "selected";
+                                                        } ?>>SI</option>
+                                    <option value="NO" <?php if ($datosConfiguracion['conf_doble_buscador'] == 'NO') {
+                                                            echo "selected";
+                                                        } ?>>NO</option>
+                                </select>
+                            </div>
+                        </div>
                     <?php }else{ ?>
                         <input type="hidden" name="cambiarNombreUsuario" value="<?= $datosConfiguracion['conf_cambiar_nombre_usuario']; ?>">
 
                         <input type="hidden" name="editarInfoYears" value="<?= $datosConfiguracion['conf_permiso_edicion_years_anteriores']; ?>">
+
+                        <input type="hidden" name="dobleBuscador" value="<?= $datosConfiguracion['conf_doble_buscador']; ?>">
                     <?php } ?>
 
                     <div class="form-group row">
                         <label class="col-sm-2 control-label">Mostrar el encabezado en los informes?
                         <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta acción permite ver el encabezado general de los informes o solo el logo."><i class="fa fa-question"></i></button></label>
                         <div class="col-sm-2">
-                            <select class="form-control  select2" name="cambiarNombreUsuario">
+                            <select class="form-control  select2" name="mostrarEncabezadoInformes">
                                 <option value="1" <?php if ($datosConfiguracion['conf_mostrar_encabezado_informes'] == 1) {
                                                         echo "selected";
                                                     } ?>>SI</option>
@@ -441,7 +443,7 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                         <label class="col-sm-2 control-label">Mostrar paso a paso de matricula?
                         <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta acción permite ver a los estudiantes el paso a paso del proceso de matricula."><i class="fa fa-question"></i></button></label>
                         <div class="col-sm-2">
-                            <select class="form-control  select2" name="cambiarNombreUsuario">
+                            <select class="form-control  select2" name="pasosMatricula">
                                 <option value="1" <?php if ($datosConfiguracion['conf_mostrar_pasos_matricula'] == 1) {
                                                         echo "selected";
                                                     } ?>>SI</option>
@@ -456,7 +458,7 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                         <label class="col-sm-2 control-label">Calcular notas en reporte de sabana por indicadores?
                         <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta acción permite calcular en el reporte de sabanas, las notas por indicador o no."><i class="fa fa-question"></i></button></label>
                         <div class="col-sm-2">
-                            <select class="form-control  select2" name="cambiarNombreUsuario">
+                            <select class="form-control  select2" name="notasReporteSabanas">
                                 <option value="1" <?php if ($datosConfiguracion['conf_reporte_sabanas_nota_indocador'] == 1) {
                                                         echo "selected";
                                                     } ?>>SI</option>
@@ -492,6 +494,14 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                                 <option value="1" <?php if($datosConfiguracion['conf_firma_estudiante_informe_asistencia']==1){ echo "selected";} ?>>SI</option>
                                 <option value="0" <?php if($datosConfiguracion['conf_firma_estudiante_informe_asistencia']==0){ echo "selected";} ?>>NO</option>
                             </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 control-label">Texto para pie de factura
+                        <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este texto se vera reflejado el final de la factura."><i class="fa fa-question"></i></button> </label>
+                        <div class="col-sm-10">
+                            <textarea cols="80" id="editor2" name="pieFactura" rows="10" <?=$disabledPermiso;?>><?=$datosConfiguracion['conf_pie_factura'];?></textarea>
                         </div>
                     </div>
 
