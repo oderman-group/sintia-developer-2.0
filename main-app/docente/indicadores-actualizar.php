@@ -6,6 +6,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 
@@ -46,6 +47,11 @@ if($datosCargaActual['car_valor_indicador']==1){
 
 		//Actualiza todos valores de la misma carga y periodo; incluyendo el que acaba de crear.
 		Indicadores::actualizarValorIndicadores($conexion, $config, $cargaConsultaActual, $periodoConsultaActual, $valorIgualIndicador);
+}
+
+//Si los valores de las calificaciones son de forma automática.
+if($datosCargaActual['car_configuracion']==0){
+	Calificaciones::actualizarValorCalificacionesDeUnaCarga($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 }
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
