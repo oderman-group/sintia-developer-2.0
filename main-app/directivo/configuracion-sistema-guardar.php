@@ -58,7 +58,12 @@ try {
 	conf_permiso_edicion_years_anteriores='" . $_POST["editarInfoYears"] . "',
 	conf_porcentaje_completo_generar_informe='" . $_POST["generarInforme"] . "',
 	conf_activar_encuesta='" . $_POST["activarEncuestaReservaCupo"] . "',
-	conf_forma_mostrar_notas='" . $_POST["formaNotas"] . "'
+	conf_forma_mostrar_notas='" . $_POST["formaNotas"] . "',
+	conf_mostrar_encabezado_informes='" . $_POST["mostrarEncabezadoInformes"] . "',
+	conf_mostrar_pasos_matricula='" . $_POST["pasosMatricula"] . "',
+	conf_reporte_sabanas_nota_indocador='" . $_POST["notasReporteSabanas"] . "',
+	conf_doble_buscador='" . $_POST["dobleBuscador"] . "'
+
 	WHERE conf_id='".$_POST['id']."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
