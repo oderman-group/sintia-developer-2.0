@@ -331,12 +331,12 @@
 							<?php
 								if($datosUsuarioActual['uss_permiso1'] == CODE_DEV_MODULE_PERMISSION && $datosUsuarioActual['uss_tipo'] == TIPO_DEV && ($_SESSION["idInstitucion"] == DEVELOPER_PROD || $_SESSION["idInstitucion"] == DEVELOPER) ){
 							?>
-								<li  <?php agregarClass(MENU_PADRE,["DV0038","DV0039"]) ?> >
+								<li  <?php agregarClass(MENU_PADRE,["DV0038","DV0039", "DV0074", "DV0075", "DV0002 "]) ?> >
 									<a href="#" class="nav-link nav-toggle"> <i class="fa fa-database"></i>
 										<span class="title">DEV-ADMIN</span> <span class="arrow"></span>
 									</a>
-									<ul  class="sub-menu" <?php agregarClass(SUB_MENU,["DV0038","DV0039"])?>>
-										<li class="nav-item"><a href="dev-scripts.php" class="nav-link"> <span class="title">scripts SQL</span></a></li>
+									<ul  class="sub-menu" <?php agregarClass(SUB_MENU,["DV0038","DV0039", "DV0074", "DV0075", "DV0002"])?>>
+										<li <?php agregarClass(MENU,["DV0074", "DV0075", "DV0002"]) ?>><a href="dev-scripts.php" class="nav-link"> <span class="title">scripts SQL</span></a></li>
 										<li class="nav-item"><a href="dev-crear-nueva-bd.php" class="nav-link"> <span class="title">Crear nueva BD</span></a></li>
 										<li class="nav-item"><a href="dev-errores-sistema.php" class="nav-link"> <span class="title">Log de errores</span></a></li>
 										<li class="nav-item"><a href="dev-console.php" class="nav-link"> <span class="title">Console</span></a></li>
