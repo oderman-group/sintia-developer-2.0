@@ -5,6 +5,7 @@ $idPaginaInterna = 'DC0144';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
+require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 
@@ -29,20 +30,7 @@ try{
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }
 
-try{
-    $consultaSumaIndicadores=mysqli_query($conexion, "SELECT
-    (SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
-    (SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
-    (SELECT count(*) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})
-    ");
-} catch (Exception $e) {
-    include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-}
-
-$sumaIndicadores = mysqli_fetch_array($consultaSumaIndicadores, MYSQLI_BOTH);
+$sumaIndicadores = Indicadores::consultarSumaIndicadores($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 $porcentajePermitido = 100 - $sumaIndicadores[0];
 $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
 
@@ -51,12 +39,7 @@ if($datosCargaActual['car_valor_indicador']==1){}else{
 //El sistema reparte los porcentajes automáticamente y equitativamente.
     $valorIgualIndicador = ($porcentajePermitido/($sumaIndicadores[2]));
     //Actualiza todos valores de la misma carga y periodo.
-    try{
-        mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_indicadores_carga SET ipc_valor='".$valorIgualIndicador."' 
-        WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-    } catch (Exception $e) {
-        include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-    }
+    Indicadores::actualizarValorIndicadores($conexion, $config, $cargaConsultaActual, $periodoConsultaActual, $valorIgualIndicador);
 
     //Si decide que los valores de las calificaciones son de forma automática.
     if($datosCargaActual['car_configuracion']==0){
