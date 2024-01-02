@@ -336,7 +336,7 @@
 										<span class="title">DEV-ADMIN</span> <span class="arrow"></span>
 									</a>
 									<ul  class="sub-menu" <?php agregarClass(SUB_MENU,["DV0038","DV0039"])?>>
-										<li class="nav-item"><a href="dev-ejecutar-scripts.php" class="nav-link"> <span class="title">Ejecutar scripts SQL</span></a></li>
+										<li class="nav-item"><a href="dev-scripts.php" class="nav-link"> <span class="title">scripts SQL</span></a></li>
 										<li class="nav-item"><a href="dev-crear-nueva-bd.php" class="nav-link"> <span class="title">Crear nueva BD</span></a></li>
 										<li class="nav-item"><a href="dev-errores-sistema.php" class="nav-link"> <span class="title">Log de errores</span></a></li>
 										<li class="nav-item"><a href="dev-console.php" class="nav-link"> <span class="title">Console</span></a></li>
