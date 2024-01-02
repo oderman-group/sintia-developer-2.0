@@ -14,8 +14,8 @@ if (!empty($_GET["id"])) {
 }
 
 try {
-    $consultaE = mysqli_query($conexion, "SELECT mat.*, matret_motivo, matret_fecha, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, uss_usuario FROM ".BD_ACADEMICA.".academico_matriculas mat
-    LEFT JOIN (SELECT * FROM ".BD_ACADEMICA.".academico_matriculas_retiradas matret WHERE matret.institucion={$config['conf_id_institucion']} AND matret.year={$_SESSION["bd"]} ORDER BY matret_id DESC LIMIT 1) AS tabla_retiradas ON tabla_retiradas.matret_estudiante=mat.mat_id
+    $consultaE = mysqli_query($conexion, "SELECT mat_id, mat_estado_matricula, mat_documento, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2, matret_motivo, matret_fecha, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, uss_usuario FROM ".BD_ACADEMICA.".academico_matriculas mat
+    LEFT JOIN (SELECT * FROM ".BD_ACADEMICA.".academico_matriculas_retiradas matret WHERE matret.institucion={$config['conf_id_institucion']} AND matret.year={$_SESSION["bd"]} ORDER BY matret.id_nuevo DESC LIMIT 1) AS tabla_retiradas ON tabla_retiradas.matret_estudiante=mat.mat_id
     LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=matret_responsable AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
     WHERE mat_id='" . $id . "' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}");
 } catch (Exception $e) {
@@ -92,16 +92,18 @@ if ($e['mat_estado_matricula'] == 1) {
                         <input type="text" name="responsable" class="form-control" autocomplete="off" value="<?= $e['uss_usuario'] . " - " . UsuariosPadre::nombreCompletoDelUsuario($e); ?>" readonly>
                     </div>
                 </div>
+            <?php } else { ?>
+                <div class="alert alert-block alert-warning">
+                    <p>Este estudiante no tiene historial de retiros.</p>
+                </div>
+            <?php } ?>
 
+            <?php if ($e['mat_estado_matricula'] == 1 || !empty($e['matret_fecha'])) { ?>
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Motivo de retiro</label>
                     <div class="col-sm-10">
                         <textarea cols="80" id="editor1" name="motivo" rows="10" <?php echo $readonly; ?>><?= $e['matret_motivo']; ?></textarea>
                     </div>
-                </div>
-            <?php } else { ?>
-                <div class="alert alert-block alert-warning">
-                    <p>Este estudiante no tiene historial de retiros.</p>
                 </div>
             <?php } ?>
 
