@@ -71,7 +71,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[187][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[381][$datosUsuarioActual['uss_idioma']];?></th>
-														<th><?=$frases[50][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[382][$datosUsuarioActual['uss_idioma']];?></th>
                                                         <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0261','DT0263'])){?>
                                                             <th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                                                         <?php }?>
@@ -82,6 +82,17 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                         $consulta= Movimientos::listarItems($conexion, $config);
                                                         $contReg = 1;
                                                         while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+                                                            $price = 0;
+                                                            if (!empty($resultado['price'])) {
+                                                                $price = $resultado['price'];
+                                                            }
+                                                            
+                                                            $tax = 0;
+                                                            if (!empty($resultado['tax'])) {
+                                                                $tax = $resultado['tax'];
+                                                            }
+
+                                                            $existeTransaction = Movimientos::validarExistenciaItemsEnTransaction($conexion, $config, $resultado['id']);
 
                                                             $arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
                                                             $arrayDatos = json_encode($arrayEnviar);
@@ -91,8 +102,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado['id'];?></td>
 														<td><?=$resultado['name'];?></td>
-														<td><?=$resultado['price'];?></td>
-														<td><?=$resultado['description'];?></td>
+														<td>$<?=number_format($price,0,",",".")?></td>
+														<td><?=$tax;?>%</td>
 														
                                                         <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0261','DT0263'])){?>
                                                             <td>
@@ -104,7 +115,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                                     <ul class="dropdown-menu" role="menu">
 																		<?php if(Modulos::validarSubRol(['DT0261'])){?>
                                                                             <li><a href="items-editar.php?id=<?=base64_encode($resultado['id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
-                                                                        <?php } if(Modulos::validarSubRol(['DT0263'])){?>
+                                                                        <?php } if(Modulos::validarSubRol(['DT0263']) && $existeTransaction==0){?>
                                                                             <li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" id="<?=$resultado['id'];?>" name="items-eliminar.php?id=<?=base64_encode($resultado['id']);?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
                                                                         <?php }?>
                                                                     </ul>
