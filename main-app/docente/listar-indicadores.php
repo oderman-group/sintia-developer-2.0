@@ -4,15 +4,9 @@ $idPaginaInterna = 'DC0034';
 include("../compartido/historial-acciones-guardar.php");
 include("verificar-carga.php");
 include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 
-$consultaSumaIndicadores=mysqli_query($conexion, "SELECT
-(SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
-(SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
-(SELECT count(*) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})");
-$sumaIndicadores = mysqli_fetch_array($consultaSumaIndicadores, MYSQLI_BOTH);
+$sumaIndicadores = Indicadores::consultarSumaIndicadores($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 $porcentajePermitido = 100 - $sumaIndicadores[0];
 $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
 ?>
