@@ -4,6 +4,7 @@ Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DC0115';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
+require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 include("verificar-carga.php");
@@ -18,6 +19,18 @@ try{
 	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_cargas SET car_valor_indicador='".$_POST["indicadores"]."', car_configuracion='".$_POST["calificaciones"]."', car_fecha_generar_informe_auto='".$_POST["fechaInforme"]."', car_posicion_docente='".$_POST["posicion"]."' WHERE car_id='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+}
+
+//Se recalcula valores de los indicadores cuando es automatico
+if($_POST["indicadores"] != $_POST["valorIndicadorActual"] && $_POST["indicadores"] == 0) {
+	echo "entro aqui";
+		$sumaIndicadores = Indicadores::consultarSumaIndicadores($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
+		$porcentajePermitido = 100 - $sumaIndicadores[0];
+		//El sistema reparte los porcentajes automáticamente y equitativamente.
+		$valorIgualIndicador = ($porcentajePermitido/($sumaIndicadores[2]));
+
+		//Actualiza todos valores de la misma carga y periodo; incluyendo el que acaba de crear.
+		Indicadores::actualizarValorIndicadores($conexion, $config, $cargaConsultaActual, $periodoConsultaActual, $valorIgualIndicador);
 }
 
 $infoCargaActual = CargaAcademica::cargasDatosEnSesion(base64_decode($_GET["carga"]), $_SESSION["id"]);
