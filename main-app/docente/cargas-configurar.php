@@ -49,6 +49,7 @@
                                 <div class="card-body " id="bar-parent6">
                                     <form action="cargas-configurar-actualizar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
                                         <input type="hidden" value="<?=$datosCargaActual['car_valor_indicador'];?>" name="valorIndicadorActual">
+                                        <input type="hidden" value="<?=$datosCargaActual['car_configuracion'];?>" name="valorCalificacionActual">
 										
                                         <div class="form-group row">
                                             <label class="col-sm-4 control-label">ID carga</label>

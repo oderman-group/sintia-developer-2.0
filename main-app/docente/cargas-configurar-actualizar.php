@@ -5,6 +5,7 @@ $idPaginaInterna = 'DC0115';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 include("verificar-carga.php");
@@ -23,7 +24,6 @@ try{
 
 //Se recalcula valores de los indicadores cuando es automatico
 if($_POST["indicadores"] != $_POST["valorIndicadorActual"] && $_POST["indicadores"] == 0) {
-	echo "entro aqui";
 		$sumaIndicadores = Indicadores::consultarSumaIndicadores($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 		$porcentajePermitido = 100 - $sumaIndicadores[0];
 		//El sistema reparte los porcentajes automáticamente y equitativamente.
@@ -31,6 +31,11 @@ if($_POST["indicadores"] != $_POST["valorIndicadorActual"] && $_POST["indicadore
 
 		//Actualiza todos valores de la misma carga y periodo; incluyendo el que acaba de crear.
 		Indicadores::actualizarValorIndicadores($conexion, $config, $cargaConsultaActual, $periodoConsultaActual, $valorIgualIndicador);
+}
+
+//Se recalcula valores de las actividades cuando es automatico
+if($_POST["calificaciones"] != $_POST["valorCalificacionActual"] && $_POST["calificaciones"] == 0) {
+	Calificaciones::actualizarValorCalificacionesDeUnaCarga($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 }
 
 $infoCargaActual = CargaAcademica::cargasDatosEnSesion(base64_decode($_GET["carga"]), $_SESSION["id"]);
