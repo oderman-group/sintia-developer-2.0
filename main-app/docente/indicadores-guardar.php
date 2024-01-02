@@ -9,6 +9,7 @@ include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 $idRegistro=Utilidades::generateCode("IND");
 
 $sumaIndicadores = Indicadores::consultarSumaIndicadores($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
@@ -91,34 +92,7 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 }
 //Si las calificaciones son de forma automática.
 if($datosCargaActual['car_configuracion']==0){
-	//Repetimos la consulta de los indicadores porque los valores fueron actualizados
-	try{
-		$indicadoresConsultaActualizado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-		WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-	} catch (Exception $e) {
-		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-	}
-	//Actualizamos todas las actividades por cada indicador
-	while($indicadoresDatos = mysqli_fetch_array($indicadoresConsultaActualizado, MYSQLI_BOTH)){
-		try{
-			$consultaActividadesNum=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades 
-			WHERE act_id_tipo='".$indicadoresDatos['ipc_indicador']."' AND act_periodo='".$periodoConsultaActual."' AND act_id_carga='".$cargaConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		} catch (Exception $e) {
-			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-		}
-		$actividadesNum = mysqli_num_rows($consultaActividadesNum);
-		//Si hay actividades relacionadas al indicador, actualizamos su valor.
-		if($actividadesNum>0){
-			$valorIgualActividad = ($indicadoresDatos['ipc_valor']/$actividadesNum);
-
-			try{
-				mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_valor='".$valorIgualActividad."' 
-				WHERE act_id_tipo='".$indicadoresDatos['ipc_indicador']."' AND act_periodo='".$periodoConsultaActual."' AND act_id_carga='".$cargaConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-			} catch (Exception $e) {
-				include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-			}
-		}
-	}			
+	Calificaciones::actualizarValorCalificacionesDeUnaCarga($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);			
 }
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
