@@ -180,4 +180,29 @@ class Movimientos {
             include("../compartido/error-catch-to-report.php");
         }
     }
+
+    /**
+     * Este metodo me consulta si existe un item en la tabla de relación con las transacciones
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idItem
+     * 
+     * @return int $num
+    **/
+    public static function validarExistenciaItemsEnTransaction (
+        mysqli $conexion, 
+        array $config, 
+        string $idItem
+    )
+    {
+
+        try {
+            $consulta = mysqli_query($conexion, "SELECT id_item FROM ".BD_FINANCIERA.".transaction_items WHERE id_item='{$idItem}' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        $num = mysqli_num_rows($consulta);
+
+        return $num;
+    }
 }

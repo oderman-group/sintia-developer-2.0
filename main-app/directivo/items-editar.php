@@ -94,6 +94,8 @@ $resultado = Movimientos::traerDatosItems($conexion, $config, $id);
                                                 <textarea cols="80" id="editor1" name="descrip" class="form-control" rows="8" placeholder="Escribe aqui la descripción para este item" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?=$disabledPermiso;?>><?=$resultado['description']?></textarea>
                                             </div>
                                         </div>
+                                        
+                                        <a href="javascript:void(0);" name="items.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                         <?php if(Modulos::validarPermisoEdicion()){?>
                                             <button type="submit" class="btn  btn-info">
                                                 <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
