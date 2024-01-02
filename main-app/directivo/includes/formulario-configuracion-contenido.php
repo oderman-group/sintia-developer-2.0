@@ -497,6 +497,14 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                         </div>
                     </div>
 
+                    <div class="form-group row">
+                        <label class="col-sm-2 control-label">Texto para pie de factura
+                        <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este texto se vera reflejado el final de la factura."><i class="fa fa-question"></i></button> </label>
+                        <div class="col-sm-10">
+                            <textarea cols="80" id="editor2" name="pieFactura" rows="10" <?=$disabledPermiso;?>><?=$datosConfiguracion['conf_pie_factura'];?></textarea>
+                        </div>
+                    </div>
+
                     <?php if(Modulos::validarPermisoEdicion() || $datosUsuarioActual['uss_tipo'] == TIPO_DEV){?>
                         <button type="submit" class="btn  btn-info">
                             <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 

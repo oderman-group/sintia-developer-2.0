@@ -62,7 +62,8 @@ try {
 	conf_mostrar_encabezado_informes='" . $_POST["mostrarEncabezadoInformes"] . "',
 	conf_mostrar_pasos_matricula='" . $_POST["pasosMatricula"] . "',
 	conf_reporte_sabanas_nota_indocador='" . $_POST["notasReporteSabanas"] . "',
-	conf_doble_buscador='" . $_POST["dobleBuscador"] . "'
+	conf_doble_buscador='" . $_POST["dobleBuscador"] . "',
+	conf_pie_factura='" . $_POST["pieFactura"] . "'
 
 	WHERE conf_id='".$_POST['id']."'");
 } catch (Exception $e) {
