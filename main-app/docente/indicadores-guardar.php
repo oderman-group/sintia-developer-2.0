@@ -8,21 +8,10 @@ include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
-$codigo=Utilidades::generateCode("IPC");
+require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 $idRegistro=Utilidades::generateCode("IND");
 
-try{
-	$consultaSumaIndicadores=mysqli_query($conexion, "SELECT
-	(SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-	WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
-	(SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-	WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
-	(SELECT count(*) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-	WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})");
-} catch (Exception $e) {
-	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-}
-$sumaIndicadores = mysqli_fetch_array($consultaSumaIndicadores, MYSQLI_BOTH);
+$sumaIndicadores = Indicadores::consultarSumaIndicadores($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 $porcentajePermitido = 100 - $sumaIndicadores[0];
 $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
 
@@ -53,28 +42,15 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 		//Si el valor es mayor al adecuado lo ajustamos al porcentaje restante; Siempre que este último sea mayor a 0.
 		if($_POST["valor"]>$porcentajeRestante and $porcentajeRestante>0){$_POST["valor"] = $porcentajeRestante;}
 
-		try{
-			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_carga(ipc_id, ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, ipc_evaluacion, institucion, year)
-			VALUES('".$codigo."', '".$cargaConsultaActual."', '".$idRegistro."', '".$_POST["valor"]."', '".$periodoConsultaActual."', 1, '".$_POST["saberes"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-		} catch (Exception $e) {
-			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-		}
+		Indicadores::guardarIndicadorCarga($conexion, $config, $cargaConsultaActual, $idRegistro, $periodoConsultaActual, $_POST, NULL);
 	}else{
 		//El sistema reparte los porcentajes automáticamente y equitativamente.
 		$valorIgualIndicador = ($porcentajePermitido/($sumaIndicadores[2]+1));
-		try{
-			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_carga(ipc_id, ipc_carga, ipc_indicador, ipc_periodo, ipc_creado, ipc_evaluacion, institucion, year)
-			VALUES('".$codigo."', '".$cargaConsultaActual."', '".$idRegistro."', '".$periodoConsultaActual."', 1, '".$_POST["saberes"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-		} catch (Exception $e) {
-			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-		}
+
+		Indicadores::guardarIndicadorCarga($conexion, $config, $cargaConsultaActual, $idRegistro, $periodoConsultaActual, $_POST, NULL);
+
 		//Actualiza todos valores de la misma carga y periodo; incluyendo el que acaba de crear.
-		try{
-			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_indicadores_carga SET ipc_valor='".$valorIgualIndicador."' 
-			WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		} catch (Exception $e) {
-			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-		}
+		Indicadores::actualizarValorIndicadores($conexion, $config, $cargaConsultaActual, $periodoConsultaActual, $valorIgualIndicador);
 	}
 }else{
 //Si escoge del banco de datos
@@ -102,28 +78,15 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 		//Si el valor es mayor al adecuado lo ajustamos al porcentaje restante; Siempre que este último sea mayor a 0.
 		if($indicadorBD['ipc_valor']>$porcentajeRestante and $porcentajeRestante>0){$indicadorBD['ipc_valor'] = $porcentajeRestante;}
 
-		try{
-			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_carga(ipc_id, ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, ipc_copiado, ipc_evaluacion, institucion, year)
-			VALUES('".$codigo."', '".$cargaConsultaActual."', '".$idRegistro."', '".$indicadorBD['ipc_valor']."', '".$periodoConsultaActual."', 1, '".$indicadorBD['ind_id']."', '".$indicadorBD['ipc_evaluacion']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-		} catch (Exception $e) {
-			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-		}
+		Indicadores::guardarIndicadorCarga($conexion, $config, $cargaConsultaActual, $idRegistro, $periodoConsultaActual, NULL, $indicadorBD);
 	}else{
 	//El sistema reparte los porcentajes automáticamente y equitativamente.
 		$valorIgualIndicador = ($porcentajePermitido/($sumaIndicadores[2]+1));
-		try{
-			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_carga(ipc_id, ipc_carga, ipc_indicador, ipc_periodo, ipc_creado, ipc_copiado, ipc_evaluacion, institucion, year)
-			VALUES('".$codigo."', '".$cargaConsultaActual."', '".$idRegistro."', '".$periodoConsultaActual."', 1, '".$indicadorBD['ind_id']."', '".$indicadorBD['ipc_evaluacion']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-		} catch (Exception $e) {
-			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-		}
+
+		Indicadores::guardarIndicadorCarga($conexion, $config, $cargaConsultaActual, $idRegistro, $periodoConsultaActual, NULL, $indicadorBD);
+
 		//Actualiza todos valores de la misma carga y periodo; incluyendo el que acaba de crear.
-		try{
-			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_indicadores_carga SET ipc_valor='".$valorIgualIndicador."' 
-			WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		} catch (Exception $e) {
-			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-		}
+		Indicadores::actualizarValorIndicadores($conexion, $config, $cargaConsultaActual, $periodoConsultaActual, $valorIgualIndicador);
 	}
 }
 //Si las calificaciones son de forma automática.
