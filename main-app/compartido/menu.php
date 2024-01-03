@@ -167,18 +167,27 @@
 							<?php 
 							//MÓDULO FINANCIERO
 							if(!empty($arregloModulos) && array_key_exists(2, $arregloModulos)){
-								if(Modulos::validarSubRol(["DT0104"])){
+								if(Modulos::validarSubRol(["DT0104", "DT0258", "DT0264"])){
 							?>
-								<li <?php agregarClass(MENU_PADRE,["DT0104", "DT0106", "DT0128", "DT0105"]) ?>>
+								<li <?php agregarClass(MENU_PADRE,["DT0104", "DT0106", "DT0128", "DT0105", "DT0258", "DT0259", "DT0261", "DT0264", "DT0265", "DT0267"]) ?>>
 									<a href="#" class="nav-link nav-toggle"> <i class="fa fa-money"></i>
 										<span class="title"><?=$frases[89][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 									</a>
-									<ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0104", "DT0106", "DT0128", "DT0105", "DT0258", "DT0259", "DT0261"]) ?>>
-										<?php
-											if(Modulos::validarSubRol(["DT0104", "DT0258"])){
+									<ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0104", "DT0106", "DT0128", "DT0105", "DT0258", "DT0259", "DT0261", "DT0264", "DT0265", "DT0267"]) ?>>
+										<?php 
+											if(Modulos::validarSubRol(["DT0104"])){
 										?>
 											<li <?php agregarClass(MENU,["DT0104", "DT0106", "DT0128", "DT0105"]) ?>><a href="movimientos.php" class="nav-link "> <span class="title"><?=$frases[95][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<?php 
+											}
+											if(Modulos::validarSubRol(["DT0258"])){ 
+										?>
 											<li <?php agregarClass(MENU,["DT0258", "DT0259", "DT0261"]) ?>><a href="items.php" class="nav-link "> <span class="title">Items</span></a></li>
+										<?php 
+											}
+											if(Modulos::validarSubRol(["DT0264"])){ 
+										?>
+											<li <?php agregarClass(MENU,["DT0264", "DT0265", "DT0267"]) ?>><a href="abonos.php" class="nav-link "> <span class="title"><?=$frases[385][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 										<?php }?>
 									</ul>
 								</li>
