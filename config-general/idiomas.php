@@ -778,6 +778,8 @@ $frases[383][$l] = 'Responsable';
 
 $frases[384][$l] = 'Ambiente';
 
+$frases[385][$l] = 'Abonos';
+
 //ENGLISH
 
 $l = 2;
@@ -1542,3 +1544,5 @@ $frases[382][$l] = 'Tax';
 $frases[383][$l] = 'Responsible';
 
 $frases[384][$l] = 'Environment';
+
+$frases[385][$l] = 'Payments';
