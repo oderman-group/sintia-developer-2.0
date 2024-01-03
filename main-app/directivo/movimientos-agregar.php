@@ -12,7 +12,10 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 $disabledPermiso = "";
 if(!Modulos::validarPermisoEdicion()){
 	$disabledPermiso = "disabled";
-}?>
+}
+
+$codigoUnico=Utilidades::generateCode("FCN");
+?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -63,7 +66,7 @@ if(!Modulos::validarPermisoEdicion()){
 
                                    
 									<form name="formularioGuardar" action="movimientos-guardar.php" method="post">
-										<input type="hidden" value="FCU_NUEVO" name="idU" id="idTransaction">
+										<input type="hidden" value="<?=$codigoUnico?>" name="idU" id="idTransaction">
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Usuario</label>
