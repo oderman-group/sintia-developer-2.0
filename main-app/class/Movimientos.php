@@ -205,4 +205,144 @@ class Movimientos {
 
         return $num;
     }
+
+    /**
+     * Este metodo me trae todos los abonos
+     * @param mysqli $conexion
+     * @param array $config
+     * 
+     * @return mysqli_result $consulta
+    **/
+    public static function listarAbonos (
+        mysqli $conexion, 
+        array $config
+    )
+    {
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".payments pay
+            INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=responsible_user AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+            WHERE is_deleted=0 AND pay.institucion = {$config['conf_id_institucion']} AND pay.year = {$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        return $consulta;
+    }
+
+    /**
+     * Este metodo me trae las facturas para listar en un select
+     * @param mysqli            $conexion
+     * @param array             $config
+     * @param string            $filtro || OPCIONAL
+     * 
+     * @return mysqli_result    $consulta
+    **/
+    public static function listarInvoicedSelect (
+        mysqli  $conexion, 
+        array   $config, 
+        string   $filtro = ""
+    )
+    {
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas fcu
+            INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=fcu_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+            WHERE fcu_anulado=0 {$filtro} AND fcu.institucion = {$config['conf_id_institucion']} AND fcu.year = {$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        return $consulta;
+    }
+
+    /**
+     * Este metodo me guarda un abono
+     * @param mysqli $conexion
+     * @param array $config
+     * @param array $POST
+     * 
+     * @return string $codigo
+    **/
+    public static function guardarAbonos (
+        mysqli $conexion, 
+        array $config, 
+        array $POST
+    )
+    {
+
+        try {
+            mysqli_query($conexion, "INSERT INTO ".BD_FINANCIERA.".payments (responsible_user, invoiced, payment, payment_method, observation, institucion, year)VALUES({$_SESSION["id"]}, '".$POST["idFactura"]."', ".$POST["valor"].", '".$POST["metodoPago"]."', '".$POST["obser"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        $idRegistro = mysqli_insert_id($conexion);
+
+        return $idRegistro;
+    }
+
+    /**
+     * Este metodo me trae la informacion de un Abono
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idAbono
+     * 
+     * @return array $resultado
+    **/
+    public static function traerDatosAbonos (
+        mysqli $conexion, 
+        array $config,
+        string $idAbono
+    )
+    {
+        $resultado = [];
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".payments pay
+            INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=responsible_user AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+            WHERE id='{$idAbono}' AND pay.institucion = {$config['conf_id_institucion']} AND pay.year = {$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+
+        return $resultado;
+    }
+
+    /**
+     * Este metodo me actualiza un abono
+     * @param mysqli $conexion
+     * @param array $config
+     * @param array $POST
+    **/
+    public static function actualizarAbono (
+        mysqli $conexion, 
+        array $config, 
+        array $POST
+    )
+    {
+
+        try {
+            mysqli_query($conexion, "UPDATE ".BD_FINANCIERA.".payments SET invoiced='".$POST["idFactura"]."', payment=".$POST["valor"].", payment_method='".$POST["metodoPago"]."', observation='".$POST["obser"]."' WHERE id='".$POST["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+    }
+
+    /**
+     * Este metodo me actualiza un abono
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idAbono
+    **/
+    public static function eliminarAbono (
+        mysqli $conexion, 
+        array $config, 
+        string $idAbono
+    )
+    {
+
+        try {
+            mysqli_query($conexion, "UPDATE ".BD_FINANCIERA.".payments SET is_deleted=1 WHERE id='{$idAbono}' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+    }
 }
