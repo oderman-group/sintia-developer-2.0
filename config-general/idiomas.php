@@ -780,6 +780,8 @@ $frases[384][$l] = 'Ambiente';
 
 $frases[385][$l] = 'Abonos';
 
+$frases[386][$l] = 'Método de Pago';
+
 //ENGLISH
 
 $l = 2;
@@ -1546,3 +1548,5 @@ $frases[383][$l] = 'Responsible';
 $frases[384][$l] = 'Environment';
 
 $frases[385][$l] = 'Payments';
+
+$frases[386][$l] = 'Payment Method';
