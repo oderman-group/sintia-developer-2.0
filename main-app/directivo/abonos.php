@@ -108,7 +108,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                                             <li><a href="abonos-editar.php?id=<?=base64_encode($resultado['id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
                                                                         <?php } if(Modulos::validarSubRol(['DT0269'])){?>
                                                                             <li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" id="<?=$resultado['id'];?>" name="abonos-eliminar.php?id=<?=base64_encode($resultado['id']);?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
-                                                                        <?php }?>
+                                                                        <?php } if( Modulos::validarSubRol(['DT0271']) ){?>
+																			<li><a href="abonos-recibo-caja.php?id=<?=base64_encode($resultado['id']);?>" target="_blank"><?=$frases[57][$datosUsuarioActual['uss_idioma']];?></a></li>
+																		<?php }?>
                                                                     </ul>
                                                                 </div>
                                                             </td>
