@@ -83,6 +83,17 @@ function actualizarSubtotal(id) {
             idTotalNeto.innerHTML = '';
             idTotalNeto.appendChild(document.createTextNode(totalFormat));
             idTotalNeto.dataset.totalNeto = totalNetoFinal;
+
+            $.toast({
+                heading: 'Acción realizada',
+                text: 'Valor guardado correctamente.',
+                position: 'bottom-right',
+                showHideTransition: 'slide',
+                loaderBg: '#26c281',
+                icon: 'success',
+                hideAfter: 5000,
+                stack: 6
+            });
         })
         .catch(error => {
             // Manejar errores
@@ -131,6 +142,17 @@ function traerItems(){
     .then(data => {
         // Actualizar el contenido de 'mostrarItems' con la respuesta obtenida
         $('#mostrarItems').empty().hide().html(data).show(1);
+
+        $.toast({
+            heading: 'Acción realizada',
+            text: 'Escoja un nuevo item.',
+            position: 'bottom-right',
+            showHideTransition: 'slide',
+            loaderBg: '#26c281',
+            icon: 'success',
+            hideAfter: 5000,
+            stack: 6
+        });
     })
     .catch(error => {
         // Manejar errores
@@ -213,6 +235,17 @@ function guardarNuevoItem(selectElement) {
         idTotalNeto.innerHTML = '';
         idTotalNeto.appendChild(document.createTextNode(totalFormat));
         idTotalNeto.dataset.totalNeto = totalNetoFinal;
+
+        $.toast({
+            heading: 'Acción realizada',
+            text: 'Nuevo item agregado correctamente.',
+            position: 'bottom-right',
+            showHideTransition: 'slide',
+            loaderBg: '#26c281',
+            icon: 'success',
+            hideAfter: 5000,
+            stack: 6
+        });
     })
     .catch(error => {
         // Manejar errores
