@@ -246,6 +246,8 @@ class Movimientos {
         try {
             $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas fcu
             INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=fcu_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+            LEFT JOIN ".BD_ADMIN.".localidad_ciudades ON ciu_id=uss_lugar_nacimiento
+            LEFT JOIN ".BD_ADMIN.".localidad_departamentos ON dep_id=ciu_departamento
             WHERE fcu_anulado=0 {$filtro} AND fcu.institucion = {$config['conf_id_institucion']} AND fcu.year = {$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
@@ -297,6 +299,8 @@ class Movimientos {
         try {
             $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".payments pay
             INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=responsible_user AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+            LEFT JOIN ".BD_ADMIN.".localidad_ciudades ON ciu_id=uss_lugar_nacimiento
+            LEFT JOIN ".BD_ADMIN.".localidad_departamentos ON dep_id=ciu_departamento
             WHERE id='{$idAbono}' AND pay.institucion = {$config['conf_id_institucion']} AND pay.year = {$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
