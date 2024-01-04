@@ -79,10 +79,12 @@ function actualizarSubtotal(id) {
             idSubtotal.innerHTML = '';
             idSubtotal.appendChild(document.createTextNode(subtotalNetoFormat));
             idSubtotal.dataset.subtotal = subtotalNetoFinal;
+            idSubtotal.dataset.subtotalAnteriorSub = subtotalNetoFinal;
 
             idTotalNeto.innerHTML = '';
             idTotalNeto.appendChild(document.createTextNode(totalFormat));
             idTotalNeto.dataset.totalNeto = totalNetoFinal;
+            idTotalNeto.dataset.totalNetoAnterior = totalNetoFinal;
 
             $.toast({
                 heading: 'Acción realizada',
@@ -317,6 +319,7 @@ function cambiarAdiconal(data) {
         idTotalNeto.innerHTML = '';
         idTotalNeto.appendChild(document.createTextNode(totalFinal));
         idTotalNeto.dataset.totalNeto = total;
+        idTotalNeto.dataset.totalNetoAnterior = total;
 
     } else {
 
@@ -343,6 +346,14 @@ function cambiarAdiconal(data) {
  * @param {Array} dato 
  */
 function deseaEliminarNuevoItem(dato) {
+
+    if (dato.title !== 'Eliminar item nuevo') {
+        let variable = (dato.title);
+        var varObjet = JSON.parse(variable);
+        var id = dato.id;
+        var registro = document.getElementById("reg" + id);
+    }
+
     // Obtener los elementos del DOM
     var items = document.getElementById('items');
     var itemsContainer = document.getElementById('select2-items-container');
@@ -354,17 +365,6 @@ function deseaEliminarNuevoItem(dato) {
     var idSubtotal = document.getElementById('subtotal');
     var idTotalNeto = document.getElementById('totalNeto');
     var idEliminarNuevo = document.getElementById('eliminarNuevo');
-
-    // Obtener el ID del item, el precio y calcular el subtotal
-    var restar = parseFloat(subtotalElement.getAttribute('data-subtotal-anterior'));
-    var subtotalNeto = parseFloat(idSubtotal.getAttribute("data-subtotal"));
-    var total = parseFloat(idTotalNeto.getAttribute("data-total-neto"));
-
-    var subtotalNetoFinal= subtotalNeto-restar;
-    var subtotalNetoFormat = "$"+numberFormat(subtotalNetoFinal, 0, ',', '.');
-
-    var totalNetoFinal= total-restar;
-    var totalFormat = "$"+numberFormat(totalNetoFinal, 0, ',', '.');
 
     var url = dato.name;
 
@@ -382,34 +382,82 @@ function deseaEliminarNuevoItem(dato) {
     }).then((result) => {
         if (result.isConfirmed) {
             axios.get(url).then(function(response) {
-                // Actualizar los elementos del DOM con los datos recibidos
-                items.value = '';
-                itemsContainer.innerHTML = 'Seleccione una opción';
+                if (typeof varObjet !== "undefined") {
 
-                itemElement.innerHTML = '';
+                        async function miFuncionConDelay() {
+                            await new Promise(resolve => setTimeout(resolve, 1000));
+                            registro.style.display = "none";
+                        }
 
-                precioElement.disabled = true;
-                precioElement.value = 0;
-                precioElement.dataset.precio = 0;
+                        miFuncionConDelay();
 
-                descripElement.value = '';
-                descripElement.disabled = true;
+                        registro.classList.add('animate__animated', 'animate__bounceOutRight', 'animate__delay-0.5s');
+                        if (varObjet.restar !== undefined) {
+                            var restar              =  varObjet.restar;
+                    
+                            var subtotalNeto        = parseFloat(idSubtotal.getAttribute("data-subtotal"));
+                            var subtotal            = subtotalNeto-restar;
+                            var subtotalFinal       = "$"+numberFormat(subtotal, 0, ',', '.');
+                    
+                            var totalNeto           = parseFloat(idTotalNeto.getAttribute("data-total-neto"));
+                            var total               = totalNeto-restar;
+                            var totalFinal          = "$"+numberFormat(total, 0, ',', '.');
+                            
+                            idSubtotal.innerHTML = '';
+                            idSubtotal.appendChild(document.createTextNode(subtotalFinal));
+                            idSubtotal.dataset.subtotal = subtotal;
+                            idSubtotal.dataset.subtotalAnteriorSub = subtotal;
+                            
+                            idTotalNeto.innerHTML = '';
+                            idTotalNeto.appendChild(document.createTextNode(totalFinal));
+                            idTotalNeto.dataset.totalNeto = total;
+                            idTotalNeto.dataset.totalNetoAnterior = total;
+                        }
 
-                cantidadElement.disabled = true;
-                cantidadElement.value = 1;
+                } else {
 
-                subtotalElement.innerHTML = '$0';
-                subtotalElement.dataset.subtotalAnterior = 0;
+                    // Obtener el ID del item, el precio y calcular el subtotal
+                    var restar = parseFloat(subtotalElement.getAttribute('data-subtotal-anterior'));
+                    var subtotalNeto = parseFloat(idSubtotal.getAttribute("data-subtotal"));
+                    var total = parseFloat(idTotalNeto.getAttribute("data-total-neto"));
+                
+                    var subtotalNetoFinal= subtotalNeto-restar;
+                    var subtotalNetoFormat = "$"+numberFormat(subtotalNetoFinal, 0, ',', '.');
+                
+                    var totalNetoFinal= total-restar;
+                    var totalFormat = "$"+numberFormat(totalNetoFinal, 0, ',', '.');
 
-                idEliminarNuevo.innerHTML = '';
+                    // Actualizar los elementos del DOM con los datos recibidos
+                    items.value = '';
+                    itemsContainer.innerHTML = 'Seleccione una opción';
 
-                idSubtotal.innerHTML = '';
-                idSubtotal.appendChild(document.createTextNode(subtotalNetoFormat));
-                idSubtotal.dataset.subtotal = subtotalNetoFinal;
+                    itemElement.innerHTML = '';
 
-                idTotalNeto.innerHTML = '';
-                idTotalNeto.appendChild(document.createTextNode(totalFormat));
-                idTotalNeto.dataset.totalNeto = totalNetoFinal;
+                    precioElement.disabled = true;
+                    precioElement.value = 0;
+                    precioElement.dataset.precio = 0;
+
+                    descripElement.value = '';
+                    descripElement.disabled = true;
+
+                    cantidadElement.disabled = true;
+                    cantidadElement.value = 1;
+
+                    subtotalElement.innerHTML = '$0';
+                    subtotalElement.dataset.subtotalAnterior = 0;
+
+                    idEliminarNuevo.innerHTML = '';
+
+                    idSubtotal.innerHTML = '';
+                    idSubtotal.appendChild(document.createTextNode(subtotalNetoFormat));
+                    idSubtotal.dataset.subtotal = subtotalNetoFinal;
+                    idSubtotal.dataset.subtotalAnteriorSub = subtotalNetoFinal;
+
+                    idTotalNeto.innerHTML = '';
+                    idTotalNeto.appendChild(document.createTextNode(totalFormat));
+                    idTotalNeto.dataset.totalNeto = totalNetoFinal;
+                    idTotalNeto.dataset.totalNetoAnterior = totalNetoFinal;
+                }
 
                 $.toast({
                     heading: 'Acción realizada',
