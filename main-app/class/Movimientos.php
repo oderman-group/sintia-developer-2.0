@@ -45,13 +45,15 @@ class Movimientos {
      * @param mysqli $conexion
      * @param array $config
      * @param string $idTransaction
+     * @param string $tipo
      * 
      * @return mysqli_result $consulta
     **/
     public static function listarItemsTransaction (
         mysqli $conexion, 
         array $config, 
-        string $idTransaction
+        string $idTransaction, 
+        string $tipo = TIPO_FACTURA
     )
     {
         try {
@@ -59,7 +61,7 @@ class Movimientos {
             FROM ".BD_FINANCIERA.".transaction_items ti
             INNER JOIN ".BD_FINANCIERA.".items i ON i.id = ti.id_item
             WHERE ti.id_transaction = '{$idTransaction}'
-            AND ti.type_transaction = 'INVOICE'
+            AND ti.type_transaction = '{$tipo}'
             AND ti.institucion = {$config['conf_id_institucion']}
             AND ti.year = {$_SESSION["bd"]}
             ORDER BY id_autoincremental");
