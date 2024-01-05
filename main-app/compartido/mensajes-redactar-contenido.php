@@ -78,7 +78,7 @@
 		                                                    </div>
 															
 		                                                    <div class="btn-group margin-top-20 ">
-				                                                <button type="button" onclick="enviarMensajes(<?=$_SESSION['bd']?>,<?=$_SESSION['idInstitucion']?>,<?=$_SESSION['id']?>,'<?=$nombreEmisor?>')" class="btn btn-primary btn-sm margin-right-10"><i class="fa fa-check"></i> Enviar</button>
+				                                                <button type="button" onclick="enviarMensajes(<?=$_SESSION['bd']?>,<?=$_SESSION['idInstitucion']?>,'<?=$_SESSION['id']?>','<?=$nombreEmisor?>')" class="btn btn-primary btn-sm margin-right-10"><i class="fa fa-check"></i> Enviar</button>
 				                                                <button type="reset" class="btn btn-sm btn-default margin-right-10"><i class="fa fa-times"></i> Cancelar</button>
 				                                            </div>
 		                                                </form>
@@ -104,9 +104,15 @@
 								loaderBg:'#26c281', 
 								icon: 'success', 
 								hideAfter: 5000, 
-								stack: 6
+								stack: 6,
 							})
-							location.href='mensajes.php?opt=Mg==';
+
+							function redireccionarMensajes() {
+								// Cambia la URL a la que deseas redirigir
+								location.href='mensajes.php?opt=Mg==';
+							}
+							setTimeout(redireccionarMensajes, 4000);
+
 						}else{
 							$.toast({
 								heading: 'Notificación',  
