@@ -351,4 +351,33 @@ class Movimientos {
             include("../compartido/error-catch-to-report.php");
         }
     }
+
+    /**
+     * Este metodo me trae la informacion de una cotizacion
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idCotizacion
+     * 
+     * @return array $resultado
+    **/
+    public static function traerDatosCotizacion (
+        mysqli $conexion, 
+        array $config,
+        string $idCotizacion
+    )
+    {
+        $resultado = [];
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".quotes cotiz
+            INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=user AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+            LEFT JOIN ".BD_ADMIN.".localidad_ciudades ON ciu_id=uss_lugar_nacimiento
+            LEFT JOIN ".BD_ADMIN.".localidad_departamentos ON dep_id=ciu_departamento
+            WHERE id='{$idCotizacion}' AND cotiz.institucion = {$config['conf_id_institucion']} AND cotiz.year = {$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+
+        return $resultado;
+    }
 }
