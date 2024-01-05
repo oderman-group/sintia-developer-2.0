@@ -174,7 +174,12 @@
 										<span class="title"><?=$frases[89][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 									</a>
 									<ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0104", "DT0106", "DT0128", "DT0105", "DT0258", "DT0259", "DT0261", "DT0264", "DT0265", "DT0267"]) ?>>
-										<?php 
+										<?php
+											if(Modulos::validarSubRol(["DT0273"])){
+										?>
+											<li <?php agregarClass(MENU,["DT0273"]) ?>><a href="configuracion-finanzas.php" class="nav-link "> <span class="title"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<?php
+											}
 											if(Modulos::validarSubRol(["DT0104"])){
 										?>
 											<li <?php agregarClass(MENU,["DT0104", "DT0106", "DT0128", "DT0105"]) ?>><a href="movimientos.php" class="nav-link "> <span class="title"><?=$frases[95][$datosUsuarioActual['uss_idioma']];?></span></a></li>
