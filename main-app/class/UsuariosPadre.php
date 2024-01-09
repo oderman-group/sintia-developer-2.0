@@ -2,24 +2,38 @@
 
 class UsuariosPadre {
 
+    /**
+     * Obtiene el nombre completo de un usuario a partir de su arreglo de datos.
+     *
+     * @param array $usuario Arreglo de datos del usuario.
+     *
+     * @return string Retorna el nombre completo del usuario en mayúsculas o '--' si el usuario no es un arreglo.
+     */
     public static function nombreCompletoDelUsuario($usuario)
     {
         if (!is_array($usuario)) {
             return '--';
         }
-        $nombre=$usuario['uss_nombre'];
-        if(!empty($usuario['uss_nombre2'])){
-            $nombre.=" ".$usuario['uss_nombre2'];
+        $nombre = $usuario['uss_nombre'];
+        if (!empty($usuario['uss_nombre2'])) {
+            $nombre .= " " . $usuario['uss_nombre2'];
         }
-        if(!empty($usuario['uss_apellido1'])){
-            $nombre.=" ".$usuario['uss_apellido1'];
+        if (!empty($usuario['uss_apellido1'])) {
+            $nombre .= " " . $usuario['uss_apellido1'];
         }
-        if(!empty($usuario['uss_apellido2'])){
-            $nombre.=" ".$usuario['uss_apellido2'];
+        if (!empty($usuario['uss_apellido2'])) {
+            $nombre .= " " . $usuario['uss_apellido2'];
         }
         return strtoupper($nombre);
     }
 
+    /**
+     * Lista los usuarios para un año específico cuyo nombre de usuario coincida con el patrón proporcionado.
+     *
+     * @param string $usuario Patrón de nombre de usuario.
+     *
+     * @return array Arreglo de usuarios con datos extendidos para cada año.
+     */
     public static function listarUsuariosAnio($usuario)
     {
         global $conexion;
@@ -27,21 +41,25 @@ class UsuariosPadre {
         global $yearEnd;
         global $baseDatosServicios;
         global $filtro;
-        $index=0;
-        $tableName = BDT_GeneralPerfiles::getTableName();        
-        while($yearStart <= $yearEnd){          
-            $consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss 
-            INNER JOIN ".$baseDatosServicios.".{$tableName} ON pes_id=uss_tipo
-            WHERE uss_usuario LIKE '".$usuario."%' AND uss.institucion={$_SESSION["idInstitucion"]} AND uss.year={$yearStart}");
-            if($consultaUsuarioAuto->num_rows>0){               
-                while($fila=$consultaUsuarioAuto->fetch_assoc()){
-                    $fila["anio"]=$yearStart;
-                    $arraysDatos[$index]=$fila;
+        $index = 0;
+        $tableName = BDT_GeneralPerfiles::getTableName();
+        $arraysDatos = [];
+
+        while ($yearStart <= $yearEnd) {
+            $consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM " . BD_GENERAL . ".usuarios uss 
+            INNER JOIN " . $baseDatosServicios . ".{$tableName} ON pes_id=uss_tipo
+            WHERE uss_usuario LIKE '" . $usuario . "%' AND uss.institucion={$_SESSION["idInstitucion"]} AND uss.year={$yearStart}");
+
+            if ($consultaUsuarioAuto->num_rows > 0) {
+                while ($fila = $consultaUsuarioAuto->fetch_assoc()) {
+                    $fila["anio"] = $yearStart;
+                    $arraysDatos[$index] = $fila;
                     $index++;
                 }
             }
-            $yearStart++; 
+            $yearStart++;
         }
+
         return $arraysDatos;
     }
 
@@ -70,6 +88,14 @@ class UsuariosPadre {
         return $datosUsuarioAuto;
     }
 
+    /**
+     * Obtiene los datos de un usuario para un año específico y un nombre de usuario dado.
+     *
+     * @param string $usuario Nombre de usuario.
+     * @param int $year Año para el cual se desea obtener los datos del usuario.
+     *
+     * @return array Arreglo de datos del usuario para el año y nombre de usuario especificados.
+     */
     public static function sesionUsuarioAnio($usuario,$year)
     {
         global $conexion;
@@ -78,6 +104,11 @@ class UsuariosPadre {
         return $datosUsuarioAuto;
     }
 
+    /**
+     * Actualiza las preferencias de tema de los usuarios para varios años.
+     *
+     * @return void
+     */
     public static function actualizarUsuariosAnios()
     {
         $get=$_GET["get"];
@@ -146,6 +177,15 @@ class UsuariosPadre {
         }        	
     }
 
+    /**
+     * Lista usuarios cuyos nombres coinciden con un patrón dado para un año específico.
+     *
+     * @param string $nombre Patrón de nombre de usuario.
+     * @param string $BD Base de datos a la que se realizará la consulta.
+     * @param string $yearBd Año para el cual se realizará la consulta.
+     *
+     * @return resource|false Devuelve el resultado de la consulta o false en caso de error.
+     */
     public static function listarUsuariosCompartir(
         $nombre='',
         $BD='',

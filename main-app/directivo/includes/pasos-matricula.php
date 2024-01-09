@@ -1,4 +1,4 @@
-<?php if($config['conf_id_institucion'] == ICOLVEN){ ?>
+<?php if($config['conf_mostrar_pasos_matricula'] == 1){ ?>
 												<hr>
 												<hr>
 												<h2><b>Proceso de matrícula</b></h2>

@@ -38,7 +38,7 @@ if(isset($_GET["periodo"])){
     <?php echo $config["conf_fecha_parcial"];?><br>
     <?php 
       $tamano='height="100" width="150"';
-      if($config['conf_id_institucion'] == 1){
+      if($config['conf_id_institucion'] == ICOLVEN){
         $tamano='width="100%"';
       }
     ?>

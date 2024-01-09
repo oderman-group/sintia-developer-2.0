@@ -413,8 +413,6 @@ function mensajes(){
 
 }
 
-setInterval('mensajes()',300000);
-
 window.onload = mensajes();			
 
 	

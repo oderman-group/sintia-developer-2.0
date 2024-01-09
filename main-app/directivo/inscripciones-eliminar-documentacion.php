@@ -1,5 +1,6 @@
 <?php
 include("session.php");
+require_once(ROOT_PATH."/main-app/class/Inscripciones.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0164';
@@ -13,13 +14,7 @@ include("../compartido/historial-acciones-guardar.php");
 $matricula="";
 if(!empty($_GET["matricula"])){ $matricula=base64_decode($_GET["matricula"]);}
 
-try{
-	$consultaDocumentos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas_documentos WHERE matd_matricula='".$matricula."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-	$documentos = mysqli_fetch_array($consultaDocumentos, MYSQLI_BOTH);
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
-	
+$documentos = Inscripciones::traerDocumentos($conexionPDO, $config, $matricula);
 
 $ruta = '../admisiones/files/otros';
 if(!empty($documentos['matd_pazysalvo']) && file_exists($ruta."/".$documentos['matd_pazysalvo'])){	unlink($ruta."/".$documentos['matd_pazysalvo']);	}
@@ -31,13 +26,9 @@ if(!empty($documentos['matd_boletines_actuales']) && file_exists($ruta."/".$docu
 if(!empty($documentos['matd_documento_identidad']) && file_exists($ruta."/".$documentos['matd_documento_identidad'])){	unlink($ruta."/".$documentos['matd_documento_identidad']);	}
 if(!empty($documentos['matd_certificados']) && file_exists($ruta."/".$documentos['matd_certificados'])){	unlink($ruta."/".$documentos['matd_certificados']);	}
 
-try{
-	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_matriculas_documentos SET matd_fecha_eliminados=now(), matd_usuario_elimados='".$_SESSION["id"]."' WHERE matd_matricula='".$matricula."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
+Inscripciones::eliminarDocumentos($conexion, $config, $matricula);
 
-	include("../compartido/guardar-historial-acciones.php");
+include("../compartido/guardar-historial-acciones.php");
 
-	echo '<script type="text/javascript">window.location.href="inscripciones.php?msg='.base64_encode(1).'";</script>';
-	exit();
+echo '<script type="text/javascript">window.location.href="inscripciones.php?msg='.base64_encode(1).'";</script>';
+exit();

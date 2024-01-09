@@ -1,5 +1,6 @@
 <?php include("session.php");?>
-<?php $idPaginaInterna = 'DC0012';?>
+<?php $idPaginaInterna = 'DC0012';
+require_once(ROOT_PATH."/main-app/class/Cronograma.php");?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");?>
@@ -58,8 +59,7 @@
                     </thead>
                     <tbody>
                         <?php
-                            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cronograma 
-                            WHERE cro_id_carga='".$cargaConsultaActual."' AND cro_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                        $consulta = Cronograma::traerDatosCompletosCronograma($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
                         $contReg=1; 
                         while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                             ?>

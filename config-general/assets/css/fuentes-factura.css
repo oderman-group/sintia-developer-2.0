@@ -1,0 +1,14 @@
+.ff0{font-family:sans-serif;visibility:hidden;}
+@font-face{font-family:ff1;src:url(../../fonts/f1.woff)format("woff");}.ff1{font-family:ff1;line-height:1.700684;font-style:normal;font-weight:normal;visibility:visible;}
+@font-face{font-family:ff2;src:url(../../fonts/f2.woff)format("woff");}.ff2{font-family:ff2;line-height:1.407715;font-style:normal;font-weight:normal;visibility:visible;}
+@font-face{font-family:ff3;src:url(../../fonts/f3.woff)format("woff");}.ff3{font-family:ff3;line-height:1.432129;font-style:normal;font-weight:normal;visibility:visible;}
+@font-face{font-family:ff4;src:url(../../fonts/f4.woff)format("woff");}.ff4{font-family:ff4;line-height:1.364258;font-style:normal;font-weight:normal;visibility:visible;}
+.m0{transform:matrix(0.250000,0.000000,0.000000,0.250000,0,0);-ms-transform:matrix(0.250000,0.000000,0.000000,0.250000,0,0);-webkit-transform:matrix(0.250000,0.000000,0.000000,0.250000,0,0);}
+.v0{vertical-align:0.000000px;}
+.ls0{letter-spacing:0.000000px;}
+.sc_{text-shadow:none;}
+.sc0{text-shadow:-0.015em 0 transparent,0 0.015em transparent,0.015em 0 transparent,0 -0.015em  transparent;}
+@media screen and (-webkit-min-device-pixel-ratio:0){
+.sc_{-webkit-text-stroke:0px transparent;}
+.sc0{-webkit-text-stroke:0.015em transparent;text-shadow:none;}
+}

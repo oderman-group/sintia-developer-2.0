@@ -13,5 +13,5 @@ try{
 }
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
-echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=110";</script>';
+echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=110&idRecurso='.base64_encode($_POST["idRecurso"]).'";</script>';
 exit();

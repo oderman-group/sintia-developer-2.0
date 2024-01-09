@@ -3,6 +3,9 @@ include("session.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0187';
+if($_POST["configDEV"]==1){
+	$idPaginaInterna = 'DV0033';
+}
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -46,20 +49,31 @@ try {
 	conf_decimales_notas='" . $_POST["decimalesNotas"] . "',
 	conf_num_registros='" . $_POST["numRegistros"] . "',
 	conf_observaciones_multiples_comportamiento='" . $_POST["observacionesMultiples"] . "',
+	conf_cambiar_nombre_usuario='" . $_POST["cambiarNombreUsuario"] . "',
+	conf_cambiar_clave_estudiantes='" . $_POST["cambiarClaveEstudiantes"] . "',
 	conf_certificado='" . $_POST["certificado"] . "',
 	conf_permiso_descargar_boletin='" . $_POST["descargarBoletin"] . "',
 	conf_firma_estudiante_informe_asistencia='" . $_POST["firmaEstudiante"] . "',
 	conf_ver_promedios_sabanas_docentes='" . $_POST["permisoDocentesPuestosSabanas"] . "',
+	conf_permiso_edicion_years_anteriores='" . $_POST["editarInfoYears"] . "',
 	conf_porcentaje_completo_generar_informe='" . $_POST["generarInforme"] . "',
 	conf_activar_encuesta='" . $_POST["activarEncuestaReservaCupo"] . "',
-	conf_forma_mostrar_notas='" . $_POST["formaNotas"] . "'
-	WHERE conf_id='".$config['conf_id']."'");
+	conf_forma_mostrar_notas='" . $_POST["formaNotas"] . "',
+	conf_mostrar_encabezado_informes='" . $_POST["mostrarEncabezadoInformes"] . "',
+	conf_mostrar_pasos_matricula='" . $_POST["pasosMatricula"] . "',
+	conf_reporte_sabanas_nota_indocador='" . $_POST["notasReporteSabanas"] . "',
+	conf_doble_buscador='" . $_POST["dobleBuscador"] . "',
+	conf_pie_factura='" . $_POST["pieFactura"] . "'
+
+	WHERE conf_id='".$_POST['id']."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
 
-$config = Plataforma::sesionConfiguracion();
-$_SESSION["configuracion"] = $config;
+if($_POST["configDEV"]==0){
+	$config = Plataforma::sesionConfiguracion();
+	$_SESSION["configuracion"] = $config;
+}
 
 include("../compartido/guardar-historial-acciones.php");
 echo '<script type="text/javascript">window.location.href="configuracion-sistema.php";</script>';

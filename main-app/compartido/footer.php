@@ -64,8 +64,8 @@ LIMIT ".$empezar.",1
 </style>
 <script>
 	// socket en la espera de una notificacion general
-	var id_usuario = '<?php echo $idSession ?>';
-	var institucion_actual = <?php echo $institucion["ins_id"] ?>;
+	var id_usuario = '<?=$_SESSION['id']?>';
+	var institucion_actual = <?=$_SESSION['idInstitucion']?>;
 	socket.on("notificacion_sala_" + id_usuario+"_inst_"+institucion_actual, (data) => {
 		let div_notificacion = document.getElementById('div_notificacion');
 		let boton_notificacion = document.getElementById('boton_notificacion');
@@ -90,6 +90,22 @@ LIMIT ".$empezar.",1
 		}
 	});
 </script>
+<?php if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO || $datosUsuarioActual['uss_tipo'] == TIPO_DEV){ ?>
+<script>
+	socket.on("notificar_solicitud_desbloqueo_<?=$_SESSION['idInstitucion']?>", (data) => {
+		$.toast({
+			heading: 'SOLICITUD DE DESBLOQUEO',  
+			text: 'Ha recibido una nueva solicitud de desbloqueo para el estudiante '+data['nombre']+'.',
+			position: 'bottom-right',
+			showHideTransition: 'slide',
+			loaderBg:'#26c281', 
+			icon: 'warning', 
+			hideAfter: 10000, 
+			stack: 6
+		})
+	});
+</script>
+<?php } ?>
 <!-- boton de chat -->
 <?php if($idPaginaInterna != 'DT0209' && $datosUsuarioActual['uss_tipo'] == TIPO_DEV ){ ?>
 <a id="boton_notificacion" style="text-shadow: none;color: #fefefe;font-family:arial; background:<?= $Plataforma->colorUno; ?>;" href="../directivo/chat2.php" class="float"> <!-- "fa-beat-fade" se agregará una clase cuando hay una nueva notificacion  -->
@@ -100,7 +116,7 @@ LIMIT ".$empezar.",1
 		$conexion,
 		"SELECT COUNT(chat_visto) as cantidad
 	FROM $baseDatosSocial.chat 
-	WHERE chat_destino_usuario = '" . $_SESSION['id'] . "' AND  chat_destino_institucion = '" . $institucion["ins_id"] . "'  AND chat_visto=1"
+	WHERE chat_destino_usuario = '" . $_SESSION['id'] . "' AND  chat_destino_institucion = '" . $_SESSION['idInstitucion'] . "'  AND chat_visto=1"
 	);
 
 	while ($resultNotificacion = mysqli_fetch_array($consultaNotificaicones, MYSQLI_BOTH)) {

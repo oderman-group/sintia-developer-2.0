@@ -1,5 +1,6 @@
 <?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0042';?>
+<?php $idPaginaInterna = 'DT0042';
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php 
@@ -8,11 +9,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
 }
-try{
-    $consultaHorario=mysqli_query($conexion, "SELECT hor_id_carga, hor_dia, hor_desde, hor_hasta FROM ".BD_ACADEMICA.".academico_horarios WHERE id_nuevo='".base64_decode($_GET["id"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-    include("../compartido/error-catch-to-report.php");
-}
+
+$consultaHorario = CargaAcademica::traerDatosHorarios($conexion, $config, $_GET["id"]);
 $rHorario=mysqli_fetch_array($consultaHorario, MYSQLI_BOTH);
 
 $disabledPermiso = "";

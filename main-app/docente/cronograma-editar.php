@@ -1,6 +1,7 @@
 <?php
 include("session.php");
 $idPaginaInterna = 'DC0014';
+require_once(ROOT_PATH."/main-app/class/Cronograma.php");
 include("../compartido/historial-acciones-guardar.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
@@ -9,8 +10,7 @@ include("../compartido/head.php");
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-$consultaDatosBD=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cronograma WHERE cro_id='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-$datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
+$datosConsultaBD = Cronograma::buscarCronograma($conexion, $config, $idR);
 ?>
 
 	<!--bootstrap -->

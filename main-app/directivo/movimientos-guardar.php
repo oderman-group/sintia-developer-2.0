@@ -11,9 +11,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 
-if (empty($_POST["fecha"]) or empty($_POST["detalle"]) or empty($_POST["valor"]) or empty($_POST["tipo"]) or empty($_POST["forma"])) {
+if (empty($_POST["fecha"]) or empty($_POST["detalle"]) or (isset($_POST["valor"]) && $_POST["valor"]=="") or empty($_POST["tipo"]) or empty($_POST["forma"])) {
     include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
-    echo '<script type="text/javascript">window.location.href="movimientos.php?error=ER_DT_4";</script>';
+    echo '<script type="text/javascript">window.location.href="movimientos-agregar.php?error=ER_DT_4";</script>';
     exit();
 }
 $consecutivo = '';
@@ -56,7 +56,13 @@ try{
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }
 
+try{
+    mysqli_query($conexion, "UPDATE ".BD_FINANCIERA.".transaction_items SET id_transaction='" .$idInsercion . "' WHERE id_transaction='" . $_POST["idU"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+} catch (Exception $e) {
+    include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+}
+
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 
-echo '<script type="text/javascript">window.location.href="movimientos.php?success=SC_DT_1&id='.base64_encode($idInsercion).'";</script>';
+echo '<script type="text/javascript">window.location.href="movimientos-editar.php?success=SC_DT_1&id='.base64_encode($idInsercion).'";</script>';
 exit();

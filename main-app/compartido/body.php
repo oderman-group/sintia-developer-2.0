@@ -23,6 +23,7 @@ $saldoEC = ($resumenEC[0] - $resumenEC[1]) * -1;
 		socket.emit('join', "sala_" + chat_remite_usuario);
 		
 	</script>
+	<script src="../js/Mensajes.js" ></script>
 <div class="loader"></div>
 
 <div id="overlay">

@@ -768,6 +768,11 @@ $frases[378][$l] = 'Al importar las calificaciones también se importarán los i
 
 $frases[379][$l] = 'Verifica que hayas seleccionado todo correctamente para esta importación. Una vez hecha no hay vuelta atrás.';
 
+$frases[380][$l] = 'Factura de Venta';
+
+$frases[381][$l] = 'Precio';
+
+$frases[382][$l] = 'Iva';
 
 //ENGLISH
 
@@ -1523,3 +1528,9 @@ $frases[377][$l] = 'Now you can specify the data you want to import.';
 $frases[378][$l] = 'When importing the grades, the indicators will also be imported automatically.';
 
 $frases[379][$l] = 'Verify that you have selected everything correctly for this import. Once it is done there is no turning back.';
+
+$frases[380][$l] = 'Sales Invoice';
+
+$frases[381][$l] = 'Price';
+
+$frases[382][$l] = 'Tax';

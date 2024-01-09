@@ -10,7 +10,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 require_once("../class/Estudiantes.php");
 $jQueryTable = '';
-if($config['conf_id_institucion'] != ICOLVEN && $config['conf_id_institucion'] != DEVELOPER && $config['conf_id_institucion'] != DEVELOPER_PROD) {
+if($config['conf_doble_buscador'] == 1) {
 	$jQueryTable = 'id="example1"';
 }
 ?>

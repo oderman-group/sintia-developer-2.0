@@ -1,5 +1,6 @@
 <?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0041';?>
+<?php $idPaginaInterna = 'DT0041';
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");
 
@@ -79,11 +80,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 </thead>
                                                 <tbody>
 													<?php
-													try{
-														$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_horarios WHERE hor_id_carga='".base64_decode($_GET["id"])."' AND hor_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-													} catch (Exception $e) {
-														include("../compartido/error-catch-to-report.php");
-													}
+													$consulta = CargaAcademica::traerHorariosCargas($conexion, $config, $_GET["id"]);
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														switch($resultado['hor_dia']){
 															case 1: $dia = 'Domingo'; break;
@@ -117,9 +114,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																	</button>
 																	<ul class="dropdown-menu" role="menu">
 																		<?php if(Modulos::validarSubRol(['DT0042'])){?>
-																		<li><a href="cargas-horarios-editar.php?id=<?=base64_encode($resultado['id_nuevo']);?>" data-toggle="popover" data-placement="top" data-content="Modificar los datos de la carga" title="Editar Horarios">Editar</a></li>
+																		<li><a href="cargas-horarios-editar.php?id=<?=base64_encode($resultado['hor_id']);?>" data-toggle="popover" data-placement="top" data-content="Modificar los datos de la carga" title="Editar Horarios">Editar</a></li>
 																		<?php } if(Modulos::validarSubRol(['DT0156'])){?>
-																		<li><a href="cargas-horarios-eliminar.php?idH=<?=base64_encode($resultado['id_nuevo']);?>&idC=<?=base64_encode($resultado['hor_id_carga']);?>" data-toggle="popover" data-placement="top" data-content="Deshabilitar los datos de la carga" title="Eliminar Horarios">Eliminar</a></li>
+																		<li><a href="cargas-horarios-eliminar.php?idH=<?=base64_encode($resultado['hor_id']);?>&idC=<?=base64_encode($resultado['hor_id_carga']);?>" data-toggle="popover" data-placement="top" data-content="Deshabilitar los datos de la carga" title="Eliminar Horarios">Eliminar</a></li>
                                                         				<?php }?>
 																	</ul>
 																</div>

@@ -1,3 +1,8 @@
+/**
+ * Esta función me guarda una definitiva
+ * @param {array} enviada 
+ * @returns 
+ */
 function def(enviada){
     var split = enviada.name.split('-');
     var nota = enviada.value;
@@ -32,6 +37,11 @@ function def(enviada){
 
 }
 
+/**
+ * Esta función me guarda una nivelacion
+ * @param {array} enviada 
+ * @returns 
+ */
 function niv(enviada){
     var split = enviada.name.split('-');
     var nota = enviada.value;
@@ -424,6 +434,12 @@ function recuperarIndicador(enviada){
                 });
 }
 
+/**
+ * Esta función me muestra la nota cualitativa
+ * @param {boolean} nota 
+ * @param {string} idEstudiante 
+ * @param {string} idCarga 
+ */
 function notaCualitativa(nota,idEstudiante,idCarga){
     let idHref = 'CU'+idEstudiante+idCarga;
     let href   = document.getElementById(idHref);
