@@ -84,6 +84,7 @@ define('MODULO_MEDIA_TECNICA', 10);
 /* TIPOS DE FACTURA o COTIZACIÓn */
 define('TIPO_FACTURA', 'INVOICE');
 define('TIPO_COTIZACION', 'QUOTE');
+define('TIPO_RECURRING', 'INVOICE_RECURRING');
 
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':
