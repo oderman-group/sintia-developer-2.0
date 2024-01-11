@@ -73,6 +73,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                    
 									<form name="formularioGuardar" action="movimientos-actualizar.php" method="post">
 										<input type="hidden" value="<?=$resultado['fcu_id'];?>" name="idU" id="idTransaction">
+										<input type="hidden" value="<?=TIPO_FACTURA;?>" name="typeTransaction" id="typeTransaction">
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Usuario</label>
