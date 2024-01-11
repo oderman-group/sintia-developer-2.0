@@ -10,6 +10,7 @@ class Movimientos {
      * @param array $config
      * @param string $idTransaction
      * @param float $valorAdicional
+     * @param string $tipo
      * 
      * @return float $totalNeto
     **/
@@ -17,7 +18,8 @@ class Movimientos {
         mysqli $conexion, 
         array $config, 
         string $idTransaction, 
-        float $valorAdicional = 0
+        float $valorAdicional = 0, 
+        string $tipo = TIPO_FACTURA
     )
     {
         $totalNeto = $valorAdicional;
@@ -25,7 +27,7 @@ class Movimientos {
         try {
             $consulta = mysqli_query($conexion,"SELECT SUM(ti.subtotal) AS totalItems FROM ".BD_FINANCIERA.".transaction_items ti
             WHERE ti.id_transaction = '{$idTransaction}'
-            AND ti.type_transaction = 'INVOICE'
+            AND ti.type_transaction = '{$tipo}'
             AND ti.institucion = {$config['conf_id_institucion']}
             AND ti.year = {$_SESSION["bd"]}
             GROUP BY ti.id_transaction");
@@ -489,5 +491,140 @@ class Movimientos {
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
+    }
+
+    /**
+     * Este metodo me trae todas las facturas recurrentes
+     * @param mysqli $conexion
+     * @param array $config
+     * 
+     * @return mysqli_result $consulta
+    **/
+    public static function listarRecurrentes (
+        mysqli $conexion, 
+        array $config
+    )
+    {
+        try{
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".recurring_invoices ri
+            INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=user AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+            WHERE is_deleted=0 AND ri.institucion={$config['conf_id_institucion']} AND ri.year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        return $consulta;
+    }
+
+    /**
+     * Este metodo me guarda una factura recurrente
+     * @param mysqli $conexion
+     * @param array $config
+     * @param array $POST
+     * 
+    **/
+    public static function guardarRecurrentes (
+        mysqli $conexion, 
+        array $config, 
+        array $POST
+    )
+    {
+        $fechaFinal = !empty($POST["fechaFinal"]) ? $POST["fechaFinal"] : NULL;
+        $dias = implode(',',$POST["dias"]);
+
+        try{
+            mysqli_query($conexion, "INSERT INTO ".BD_FINANCIERA.".recurring_invoices(id, date_start, detail, additional_value, invoice_type, observation, user, date_finish, frequency, days_in_month, payment_method, responsible_user, institucion, year)VALUES('" .$POST["id"]. "', '" . $POST["fechaInicio"] . "','" . $POST["detalle"] . "','" . $POST["valor"] . "','" . $POST["tipo"] . "','" . $POST["obs"] . "','" . $POST["usuario"] . "', '" . $fechaFinal . "','" . $POST["frecuencia"] . "', '" . $dias . "', '" . $POST["metodoPago"] . "','{$_SESSION["id"]}', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+        } catch (Exception $e) {
+            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+        }
+    }
+
+    /**
+     * Este metodo me trae la informacion de una factura recurrente
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idRecurrente
+     * 
+     * @return array $resultado
+    **/
+    public static function traerDatosRecurrentes (
+        mysqli $conexion, 
+        array $config,
+        string $idRecurrente
+    )
+    {
+        $resultado = [];
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".recurring_invoices ri
+            INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=responsible_user AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+            LEFT JOIN ".BD_ADMIN.".localidad_ciudades ON ciu_id=uss_lugar_nacimiento
+            LEFT JOIN ".BD_ADMIN.".localidad_departamentos ON dep_id=ciu_departamento
+            WHERE id='{$idRecurrente}' AND ri.institucion = {$config['conf_id_institucion']} AND ri.year = {$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+
+        return $resultado;
+    }
+
+    /**
+     * Este metodo me actualiza una factura recurrente
+     * @param mysqli $conexion
+     * @param array $config
+     * @param array $POST
+    **/
+    public static function actualizarRecurrente (
+        mysqli $conexion, 
+        array $config, 
+        array $POST
+    )
+    {
+        $dias = implode(',',$POST["dias"]);
+
+        try {
+            mysqli_query($conexion, "UPDATE ".BD_FINANCIERA.".recurring_invoices SET detail='".$POST["detalle"]."', user=".$POST["usuario"].", days_in_month='".$dias."', payment_method='".$POST["metodoPago"]."', observation='".$POST["obs"]."', invoice_type='".$POST["tipo"]."', additional_value='".$POST["valor"]."' WHERE id='".$POST["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+    }
+
+    /**
+     * Este metodo me elimina una factura recurrente
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idRecurrente
+    **/
+    public static function eliminarRecurrente (
+        mysqli $conexion, 
+        array $config, 
+        string $idRecurrente
+    )
+    {
+
+        try {
+            mysqli_query($conexion, "UPDATE ".BD_FINANCIERA.".recurring_invoices SET is_deleted=1 WHERE id='{$idRecurrente}' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+    }
+
+    /**
+     * Este metodo me trae todas las facturas recurrentes para el JOBS
+     * @param mysqli $conexion
+     * 
+     * @return mysqli_result $consulta
+    **/
+    public static function listarRecurrentesJobs (
+        mysqli $conexion
+    )
+    {
+        try{
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".recurring_invoices WHERE is_deleted=0 AND date_start <= CURDATE() AND (date_finish >= CURDATE() OR date_finish = '0000-00-00')");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        return $consulta;
     }
 }
