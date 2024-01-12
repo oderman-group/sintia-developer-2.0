@@ -5,7 +5,7 @@ require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.ph
 $conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
 $institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".instituciones
 INNER JOIN instituciones_modulos ON ipmod_institucion=ins_id AND ipmod_modulo=8 
-INNER JOIN {$baseDatosAdmisiones}.config_instituciones ON cfgi_id_institucion=ins_id AND cfgi_inscripciones_activas=1 
+INNER JOIN {$baseDatosAdmisiones}.config_instituciones ON cfgi_id_institucion=ins_id AND cfgi_inscripciones_activas=1 AND cfgi_year = ".date("Y")." 
 WHERE ins_estado = 1 AND ins_enviroment='".ENVIROMENT."'");
 $institucionesCantidad = mysqli_num_rows($institucionesConsulta);
 ?>
