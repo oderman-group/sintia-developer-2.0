@@ -44,7 +44,7 @@ $num = $est->rowCount();
 $datos = $est->fetch();
 
 //Documentos
-$datosDocumentos = Inscripciones::traerDocumentos($conexionPDO, $config, $datos['mat_id']);
+$datosDocumentos = Inscripciones::traerDocumentos($conexionPDO, $config, $datos['mat_id'], $_SESSION["bd"]);
 
 //Padre
 $padreQuery = "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id = :id AND institucion= :idInstitucion AND year= :year";
