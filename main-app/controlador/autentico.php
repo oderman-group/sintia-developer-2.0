@@ -128,6 +128,8 @@ if($num>0)
 	<script>
 	document.addEventListener('DOMContentLoaded', function() {
 
+		var urlRedireccion = "<?=$url;?>";
+
 		fetch("https://ipinfo.io/json?token=<?=TOKEN_IP_INFO;?>")
 			.then((response) => response.json())
 			.then((jsonResponse) => {
@@ -136,8 +138,6 @@ if($num>0)
 				var urlActual = "<?=$urlActual;?>";
 				var idPaginaInterna = "<?=$idPaginaInterna;?>";
 				var institucion = <?=$institucion['ins_id'];?>;
-
-				var urlRedireccion = "<?=$url;?>";
 
 				// Enviar los datos a PHP usando otra solicitud fetch
 				fetch("ip.php?countryCity=" + countryCity + 
@@ -158,6 +158,10 @@ if($num>0)
 				;
 
 				
+			}).catch(error => {
+				// Manejar errores
+				console.error('Error:', error);
+				window.location.href = urlRedireccion;
 			});
 	});
 	</script>
