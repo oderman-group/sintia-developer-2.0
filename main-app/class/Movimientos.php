@@ -627,4 +627,69 @@ class Movimientos {
 
         return $consulta;
     }
+
+    /**
+     * Este metodo me genera una factura recurrente
+     * @param mysqli $conexion
+     * @param array $datosRecurrente
+     * 
+    **/
+    public static function generarRecurrentes (
+        mysqli $conexion, 
+        array $datosRecurrente
+    )
+    {
+        switch ($datosRecurrente["payment_method"]){
+            case "EFECTIVO":
+                $metodoPago= 1;
+            break;
+            case "CHEQUE":
+                $metodoPago= 2;
+            break;
+            case "T_DEBITO":
+                $metodoPago= 3;
+            break;
+            case "T_CREDITO":
+                $metodoPago= 4;
+            break;
+            case "TRANSFERENCIA":
+                $metodoPago= 5;
+            break;
+            case "OTROS":
+                $metodoPago= 6;
+            break;
+        }
+
+        $idFactura=Utilidades::generateCode("FCU");
+
+        try{
+            mysqli_query($conexion, "INSERT INTO ".BD_FINANCIERA.".finanzas_cuentas(fcu_id, fcu_fecha, fcu_detalle, fcu_valor, fcu_tipo, fcu_observaciones, fcu_usuario, fcu_anulado, fcu_forma_pago, fcu_cerrado, institucion, year)VALUES('" .$idFactura . "', now(),'" . $datosRecurrente["detail"] . "','" . $datosRecurrente["additional_value"] . "','" . $datosRecurrente["invoice_type"] . "','" . $datosRecurrente["observation"] . "','" . $datosRecurrente["user"] . "',0,'" . $metodoPago . "',0, {$datosRecurrente['institucion']}, '{$datosRecurrente["year"]}')");
+        } catch (Exception $e) {
+            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+        }
+
+        try {
+            $itemsConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".transaction_items WHERE id_transaction = '{$datosRecurrente["id"]}' AND type_transaction = 'INVOICE_RECURRING' AND institucion = {$datosRecurrente["institucion"]} AND year = {$datosRecurrente["year"]}");
+        } catch (Exception $e) {
+            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+        }
+        $numDatos = mysqli_num_rows($itemsConsulta);
+
+        if ($numDatos > 0) {
+
+            while ($fila = mysqli_fetch_array($itemsConsulta, MYSQLI_BOTH)) {
+
+                $idItems=Utilidades::generateCode("TXI_");
+
+                try {
+                    mysqli_query($conexion, "INSERT INTO ".BD_FINANCIERA.".transaction_items(id, id_transaction, type_transaction, discount, cantity, subtotal, id_item, institucion, year, description, price)VALUES('".$idItems."', '" .$idFactura . "', 'INVOICE', '".$fila['discount']."', '".$fila['cantity']."', '".$fila['subtotal']."', '".$fila['id_item']."', {$fila['institucion']}, '{$fila['year']}', '".$fila['description']."', '".$fila['price']."')");
+                } catch (Exception $e) {
+                    include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+                }
+
+            }
+        }
+
+    }
+
 }
