@@ -90,7 +90,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Fecha</th>
 														<th>Detalle</th>
-														<th>Valor</th>
+														<th><?=$frases[107][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[389][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[390][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Tipo</th>
 														<th>Usuario</th>
 														<th><?=$frases[246][$datosUsuarioActual['uss_idioma']];?></th>
@@ -124,7 +126,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 
 														$vlrAdicional = !empty($resultado['fcu_valor']) ? $resultado['fcu_valor'] : 0;
 
-														$totalNeto = Movimientos::calcularTotalNeto($conexion, $config, $resultado['fcu_id'], $vlrAdicional)
+														$totalNeto = Movimientos::calcularTotalNeto($conexion, $config, $resultado['fcu_id'], $vlrAdicional);
+
+														$abonos = Movimientos::calcularTotalAbonado($conexion, $config, $resultado['fcu_id']);
+
+														$porCobrar = $totalNeto - $abonos;
 													?>
 													<tr style="background-color:<?=$bgColor;?>;">
                                                         <td><?=$contReg;?></td>
@@ -134,6 +140,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														</td>
 														<td><?=$resultado['fcu_detalle'];?></td>
 														<td>$<?=number_format($totalNeto,0,",",".")?></td>
+														<td>$<?=number_format($abonos,0,",",".")?></td>
+														<td>$<?=number_format($porCobrar,0,",",".")?></td>
 														<td>
 															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=base64_encode($usuario);?>&tipo=<?=base64_encode($resultado['fcu_tipo']);?>&fecha=<?= base64_encode($fecha); ?>" style="text-decoration: underline;"><?=$estadosCuentas[$resultado['fcu_tipo']];?></a>
 														</td>
