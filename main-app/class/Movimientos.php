@@ -286,7 +286,7 @@ class Movimientos {
         }
 
         try {
-            mysqli_query($conexion, "INSERT INTO ".BD_FINANCIERA.".payments (responsible_user, invoiced, payment, payment_method, observation, voucher, institucion, year)VALUES({$_SESSION["id"]}, '".$POST["idFactura"]."', ".$POST["valor"].", '".$POST["metodoPago"]."', '".$POST["obser"]."', '".$comprobante."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
+            mysqli_query($conexion, "INSERT INTO ".BD_FINANCIERA.".payments (responsible_user, invoiced, payment, payment_method, observation, voucher, note, institucion, year)VALUES({$_SESSION["id"]}, '".$POST["idFactura"]."', ".$POST["valor"].", '".$POST["metodoPago"]."', '".$POST["obser"]."', '".$comprobante."', '".$POST["notas"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
@@ -355,7 +355,7 @@ class Movimientos {
         }
 
         try {
-            mysqli_query($conexion, "UPDATE ".BD_FINANCIERA.".payments SET invoiced='".$POST["idFactura"]."', payment=".$POST["valor"].", payment_method='".$POST["metodoPago"]."', observation='".$POST["obser"]."' WHERE id='".$POST["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            mysqli_query($conexion, "UPDATE ".BD_FINANCIERA.".payments SET invoiced='".$POST["idFactura"]."', payment=".$POST["valor"].", payment_method='".$POST["metodoPago"]."', observation='".$POST["obser"]."', note='".$POST["notas"]."' WHERE id='".$POST["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
