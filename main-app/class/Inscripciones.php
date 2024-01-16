@@ -31,10 +31,11 @@ class Inscripciones {
      * @param PDO $conexionPDO
      * @param array $config
      * @param string $id
+     * @param string $year
      * 
      * @return array $datos
     **/
-    public static function traerDocumentos( PDO $conexionPDO, array $config, string $id){
+    public static function traerDocumentos( PDO $conexionPDO, array $config, string $id, string $year= ""){
 
         try {
 
@@ -43,7 +44,7 @@ class Inscripciones {
             $documentos = $conexionPDO->prepare($documentosQuery);
             $documentos->bindParam(':id', $id, PDO::PARAM_STR);
             $documentos->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
-            $documentos->bindParam(':year', $config['conf_agno'], PDO::PARAM_STR);
+            $documentos->bindParam(':year', $year, PDO::PARAM_STR);
 
             if ($documentos) {
                 $documentos->execute();
