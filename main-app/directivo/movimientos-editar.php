@@ -17,7 +17,7 @@ try{
 $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
 $disabledPermiso = "";
-if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
+if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resultado['fcu_status']==1){
 	$disabledPermiso = "disabled";
 }
 ?>
@@ -142,9 +142,9 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
 										
 										<div class="form-group row">
                                             
-                                            <label class="col-sm-2 control-label">Estado</label>
+                                            <label class="col-sm-2 control-label">Cerrado?</label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="estado" required <?=$disabledPermiso;?>>
+                                                <select class="form-control  select2" name="cerrado" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<option value="0" <?php if($resultado['fcu_cerrado']==0){ echo "selected";}?>>Abierto</option>
 													<option value="1" <?php if($resultado['fcu_cerrado']==1){ echo "selected";}?>>Cerrado</option>
@@ -157,6 +157,17 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1){
                                                     <option value="">Seleccione una opción</option>
 													<option value="0" <?php if($resultado['fcu_anulado']==0){ echo "selected";}?>>No</option>
 													<option value="1" <?php if($resultado['fcu_anulado']==1){ echo "selected";}?>>Si</option>
+                                                </select>
+                                            </div>
+                                        </div>
+										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Estado</label>
+                                            <div class="col-sm-4">
+                                                <select class="form-control  select2" name="estado" required <?=$disabledPermiso;?>>
+                                                    <option value="">Seleccione una opción</option>
+													<option value="0" <?php if($resultado['fcu_status']==0){ echo "selected";}?>>Por Cobrar</option>
+													<option value="1" <?php if($resultado['fcu_status']==1){ echo "selected";}?>>Cobrada</option>
                                                 </select>
                                             </div>
                                         </div>

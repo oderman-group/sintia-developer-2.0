@@ -93,6 +93,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<th>Valor</th>
 														<th>Tipo</th>
 														<th>Usuario</th>
+														<th><?=$frases[246][$datosUsuarioActual['uss_idioma']];?></th>
 														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0128', 'DT0089'])){?>
 															<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
 														<?php }?>
@@ -117,6 +118,10 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														$bgColor = '';
 														if($resultado['fcu_anulado']==1) $bgColor = '#ff572238';
 
+														$bgColorEstado = 'yellow';
+														$estado = 'Por Cobrar';
+														if($resultado['fcu_status']==1) { $bgColorEstado = 'green'; $estado = 'Cobrada'; }
+
 														$vlrAdicional = !empty($resultado['fcu_valor']) ? $resultado['fcu_valor'] : 0;
 
 														$totalNeto = Movimientos::calcularTotalNeto($conexion, $config, $resultado['fcu_id'], $vlrAdicional)
@@ -135,6 +140,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<td>
 															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=base64_encode($resultado['uss_id']);?>&tipo=<?=base64_encode($tipo);?>&fecha=<?= base64_encode($fecha); ?>" style="text-decoration: underline;"><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></a>
 														</td>
+														<td align="center" style="background-color:<?=$bgColorEstado;?>; color: black; font-weight:bold;"><?=$estado?></td>
 
 														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0128', 'DT0089'])){?>
 															<td>
@@ -147,7 +153,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		<?php if( Modulos::validarSubRol(['DT0128']) ){?>
 																			<li><a href="movimientos-editar.php?id=<?=base64_encode($resultado['fcu_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
 																		<?php }?>
-																		<?php if($resultado['fcu_anulado']!=1 && Modulos::validarSubRol(['DT0089'])){?>
+																		<?php if($resultado['fcu_anulado']!=1 && $resultado['fcu_status']!=1 && Modulos::validarSubRol(['DT0089'])){?>
 																			<li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','¿Deseas anular esta transacción?','question','movimientos-anular.php?idR=<?=base64_encode($resultado['fcu_id']);?>&id=<?=base64_encode($resultado['uss_id']);?>')">Anular</a></li>
 																		<?php } ?>
 																		<?php if( Modulos::validarSubRol(['DT0255']) ){?>
