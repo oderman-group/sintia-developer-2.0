@@ -721,4 +721,34 @@ class Movimientos {
 
     }
 
+    /**
+     * Este metodo me calcula el total de Abonos a una factura
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $factura
+     * 
+     * @return float $total
+    **/
+    public static function calcularTotalAbonado (
+        mysqli $conexion, 
+        array $config,
+        string $factura
+    )
+    {
+        try {
+            $consulta = mysqli_query($conexion, "SELECT SUM(payment) as totalAbono FROM ".BD_FINANCIERA.".payments
+            WHERE invoiced='{$factura}' AND is_deleted=0 AND institucion = {$config['conf_id_institucion']} AND year = {$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        
+        $total = 0;
+        if (mysqli_num_rows($consulta) > 0){
+            $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+            $total = $resultado['totalAbono'];
+        }
+
+        return $total;
+    }
+
 }
