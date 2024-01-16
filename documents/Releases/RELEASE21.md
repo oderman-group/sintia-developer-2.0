@@ -4,3 +4,4 @@ PES-455 [DEV-ADMIN] Opción de listar y ver detalles de esta tabla de historial 
 PES-568 Opción recalcular el porcentaje de los indicadores y calificaciones.
 PES-601 CRUD a abonos
 PES-604 Diseño e impresión de comprobante de pago (Abono)
+PES-606 Diseño e impresión de cotización
