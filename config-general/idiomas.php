@@ -774,6 +774,10 @@ $frases[381][$l] = 'Precio';
 
 $frases[382][$l] = 'Iva';
 
+$frases[383][$l] = 'Responsable';
+
+$frases[384][$l] = 'Ambiente';
+
 //ENGLISH
 
 $l = 2;
@@ -1534,3 +1538,7 @@ $frases[380][$l] = 'Sales Invoice';
 $frases[381][$l] = 'Price';
 
 $frases[382][$l] = 'Tax';
+
+$frases[383][$l] = 'Responsible';
+
+$frases[384][$l] = 'Environment';
