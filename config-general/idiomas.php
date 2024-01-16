@@ -782,7 +782,9 @@ $frases[385][$l] = 'Abonos';
 
 $frases[386][$l] = 'Método de Pago';
 
-$frases[387][$l] = 'Notas Adicionales';
+$frases[387][$l] = 'Facturas Recurrentes';
+
+$frases[388][$l] = 'Notas Adicionales';
 
 //ENGLISH
 
@@ -1553,4 +1555,6 @@ $frases[385][$l] = 'Payments';
 
 $frases[386][$l] = 'Payment Method';
 
-$frases[387][$l] = 'Additional notes';
+$frases[387][$l] = 'Recurring Invoices';
+
+$frases[388][$l] = 'Additional notes';

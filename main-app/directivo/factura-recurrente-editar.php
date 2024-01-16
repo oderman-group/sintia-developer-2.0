@@ -1,5 +1,5 @@
 <?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0128';?>
+<?php $idPaginaInterna = 'DT0278';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php
@@ -9,15 +9,18 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
 }
-try{
-    $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_id='".base64_decode($_GET['id'])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-    include("../compartido/error-catch-to-report.php");
+
+$id = '';
+if (!empty($_GET['id'])) {
+    $id = base64_decode($_GET['id']);;
 }
-$resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+
+$resultado = Movimientos::traerDatosRecurrentes($conexion, $config, $id);
+
+$datosResponsable = UsuariosPadre::sesionUsuario($resultado['responsible_user']);
 
 $disabledPermiso = "";
-if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resultado['fcu_status']==1){
+if(!Modulos::validarPermisoEdicion()){
 	$disabledPermiso = "disabled";
 }
 ?>
@@ -50,12 +53,12 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title">Editar Movimientos</div>
+                                <div class="page-title">Editar <?=$frases[387][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="movimientos.php" onClick="deseaRegresar(this)"><?=$frases[95][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active">Editar Movimientos</li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="factura-recurrente.php" onClick="deseaRegresar(this)"><?=$frases[387][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active">Editar <?=$frases[387][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
@@ -64,112 +67,114 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
                         <div class="col-sm-12">
                                 <?php 
                                     include("../../config-general/mensajes-informativos.php");
-                                    include("includes/barra-superior-movimientos-financieros-editar.php");
                                 ?>
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[95][$datosUsuarioActual['uss_idioma']];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[387][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="movimientos-actualizar.php" method="post">
-										<input type="hidden" value="<?=$resultado['fcu_id'];?>" name="idU" id="idTransaction">
-										<input type="hidden" value="<?=TIPO_FACTURA;?>" name="typeTransaction" id="typeTransaction">
-										
-										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Usuario</label>
+									<form name="formularioGuardar" action="factura-recurrente-actualizar.php" method="post">
+										<input type="hidden" value="<?=$resultado['id'];?>" name="id" id="idTransaction">
+										<input type="hidden" value="<?=TIPO_RECURRING;?>" name="typeTransaction" id="typeTransaction">
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Usuario <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
-                                                <?php
-                                                try{
-                                                    $datosConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss
-                                                    INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
-                                                    WHERE uss_id='".$resultado['fcu_usuario']."' AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
-                                                } catch (Exception $e) {
-                                                    include("../compartido/error-catch-to-report.php");
-                                                }
-                                                ?>
                                                 <select class="form-control  select2" id="select_usuario" name="usuario" required <?=$disabledPermiso;?>>
-                                                    <option value="">Seleccione una opción</option>
                                                     <?php
-                                                    while($resultadosDatos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
+                                                        try{
+                                                            $datosConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss
+                                                            INNER JOIN ".BD_ADMIN.".general_perfiles ON pes_id=uss_tipo
+                                                            WHERE uss_id='".$resultado['user']."' AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
+                                                        } catch (Exception $e) {
+                                                            include("../compartido/error-catch-to-report.php");
+                                                        }
+                                                        while($resultadosDatos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
                                                     ?>
-                                                        <option value="<?=$resultadosDatos['uss_id'];?>" <?php if($resultado['fcu_usuario']==$resultadosDatos['uss_id']){ echo "selected";}?>><?=UsuariosPadre::nombreCompletoDelUsuario($resultadosDatos)." (".$resultadosDatos['pes_nombre'].")";?></option>
+                                                            <option value="<?=$resultadosDatos['uss_id'];?>" <?php if($resultado['user']==$resultadosDatos['uss_id']){ echo "selected";}?>><?=UsuariosPadre::nombreCompletoDelUsuario($resultadosDatos)." (".$resultadosDatos['pes_nombre'].")";?></option>
                                                     <?php }?>
                                                 </select>
                                             </div>
 
-                                            <label class="col-sm-2 control-label">Fecha</label>
+                                            
+                                            <label class="col-sm-2 control-label">Responsable</label>
                                             <div class="col-sm-4">
-                                                <input type="date" name="fecha" class="form-control" autocomplete="off" required value="<?=$resultado['fcu_fecha'];?>" <?=$disabledPermiso;?>>
+                                                <input type="text" class="form-control" autocomplete="off" value="<?=UsuariosPadre::nombreCompletoDelUsuario($datosResponsable)?>" disabled>
                                             </div>
                                         </div>
-										
-										<div class="form-group row">
-                                        <label class="col-sm-2 control-label">Descripción general</label>
-                                            <div class="col-sm-4">
-                                                <input type="text" name="detalle" class="form-control" autocomplete="off" value="<?=$resultado['fcu_detalle'];?>" required <?=$disabledPermiso;?>>
-                                            </div>
-
-                                            <label class="col-sm-2 control-label">Valor adicional</label>
-                                            <div class="col-sm-4">
-                                                <input type="number" min="0" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['fcu_valor'];?>" required <?=$disabledPermiso;?> data-vlr-adicional-anterior="<?=$resultado['fcu_valor'];?>" onchange="cambiarAdiconal(this)">
-                                            </div>
-										</div>
 
                                         <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Tipo de movimiento</label>
+                                            <label class="col-sm-2 control-label">Fecha de inicio <span style="color: red;">(*)</span> <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Fecha en la que se crea la primer factura."><i class="fa fa-question"></i></button></label>
+                                            <div class="col-sm-4">
+                                                <input type="date" name="fechaInicio" class="form-control" autocomplete="off" required value="<?=$resultado['date_start'];?>" disabled>
+                                            </div>
+
+                                            <label class="col-sm-2 control-label">Fecha de finalización <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Indica el último día de la creación automática de la factura."><i class="fa fa-question"></i></button></label>
+                                            <div class="col-sm-4">
+                                                <input type="date" name="fechaFinal" class="form-control" autocomplete="off" value="<?=$resultado['date_finish'];?>" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Frecuencia <span style="color: red;">(*)</span> <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Indica cada cuántos meses se generará la factura, por ejemplo si eliges 2 se creará cada 2 meses."><i class="fa fa-question"></i></button></label>
+                                            <div class="col-sm-4">
+                                                <input type="number" min="1" name="frecuencia" class="form-control" autocomplete="off" value="1" required disabled>
+                                            </div>
+                                            
+                                            <label class="col-sm-2 control-label">Días de facturación <span style="color: red;">(*)</span> <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Indica que dias del mes deseas que se genere la factura."><i class="fa fa-question"></i></button></label>
+                                            <div class="col-sm-4">
+                                                <select class="form-control select2-multiple" multiple name="dias[]" required <?=$disabledPermiso;?>>
+                                                    <option value="" >Seleccione una opción</option>
+                                                    <?php
+                                                        $dias = explode(',',$resultado['days_in_month']);
+                                                        $i = 1;
+                                                        while ($i <= 31){
+                                                            $selected = ($dias!="" && in_array($i, $dias)) ? "selected" : "";
+                                                    ?>
+                                                        <option value="<?=$i?>"  <?=$selected;?>><?=$i?></option>
+                                                    <?php
+                                                            $i++;
+                                                        }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Tipo de movimiento <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2" name="tipo" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
-													<option value="1" <?php if($resultado['fcu_tipo']==1){ echo "selected";}?>>Ingreso</option>
-													<option value="2" <?php if($resultado['fcu_tipo']==2){ echo "selected";}?>>Egreso</option>
-													<option value="3" <?php if($resultado['fcu_tipo']==3){ echo "selected";}?>>Cobro (CPC)</option>
-													<option value="4" <?php if($resultado['fcu_tipo']==4){ echo "selected";}?>>Deuda (CPP)</option>
+                                                    <option value="1" <?php if($resultado['invoice_type']==1){ echo "selected";}?>>Ingreso</option>
+                                                    <option value="2" <?php if($resultado['invoice_type']==2){ echo "selected";}?>>Egreso</option>
+                                                    <option value="3" <?php if($resultado['invoice_type']==3){ echo "selected";}?>>Cobro (CPC)</option>
+                                                    <option value="4" <?php if($resultado['invoice_type']==4){ echo "selected";}?>>Deuda (CPP)</option>
                                                 </select>
                                             </div>
 
-                                            <label class="col-sm-2 control-label">Forma de pago</label>
+                                            <label class="col-sm-2 control-label"><?=$frases[386][$datosUsuarioActual['uss_idioma']];?> <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="forma" required <?=$disabledPermiso;?>>
-                                                    <option value="">Seleccione una opción</option>
-													<option value="1" <?php if($resultado['fcu_forma_pago']==1){ echo "selected";}?>>Efectivo</option>
-													<option value="2" <?php if($resultado['fcu_forma_pago']==2){ echo "selected";}?>>Cheque</option>
-													<option value="3" <?php if($resultado['fcu_forma_pago']==3){ echo "selected";}?>>T. Débito</option>
-													<option value="4" <?php if($resultado['fcu_forma_pago']==4){ echo "selected";}?>>T. Crédito</option>
-													<option value="5" <?php if($resultado['fcu_forma_pago']==5){ echo "selected";}?>>Transferencia</option>
-													<option value="6" <?php if($resultado['fcu_forma_pago']==6){ echo "selected";}?>>No aplica</option>
+                                                <select class="form-control select2" id="metodoPago" name="metodoPago" required <?=$disabledPermiso;?>>
+                                                    <option value="" >Seleccione una opción</option>
+                                                    <option value="EFECTIVO" <?php if($resultado['payment_method'] == "EFECTIVO"){ echo "selected";}?>>Efectivo</option>
+                                                    <option value="CHEQUE" <?php if($resultado['payment_method'] == "CHEQUE"){ echo "selected";}?>>Cheque</option>
+                                                    <option value="T_DEBITO" <?php if($resultado['payment_method'] == "T_DEBITO"){ echo "selected";}?>>T. Débito</option>
+                                                    <option value="T_CREDITO" <?php if($resultado['payment_method'] == "T_CREDITO"){ echo "selected";}?>>T. Crédito</option>
+                                                    <option value="TRANSFERENCIA" <?php if($resultado['payment_method'] == "TRANSFERENCIA"){ echo "selected";}?>>Transferencia</option>
+                                                    <option value="OTROS" <?php if($resultado['payment_method'] == "OTROS"){ echo "selected";}?>>Otras Formas de pago</option>
                                                 </select>
                                             </div>
                                         </div>
-										
-										<div class="form-group row">
-                                            
-                                            <label class="col-sm-2 control-label">Cerrado?</label>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Descripción general <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="cerrado" required <?=$disabledPermiso;?>>
-                                                    <option value="">Seleccione una opción</option>
-													<option value="0" <?php if($resultado['fcu_cerrado']==0){ echo "selected";}?>>Abierto</option>
-													<option value="1" <?php if($resultado['fcu_cerrado']==1){ echo "selected";}?>>Cerrado</option>
-                                                </select>
+                                                <textarea name="detalle" cols="70" rows="2" required <?=$disabledPermiso;?>><?=$resultado['detail'];?></textarea>
                                             </div>
-                                            
-                                            <label class="col-sm-2 control-label">Anulado</label>
+
+                                            <label class="col-sm-2 control-label">Valor adicional <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="anulado" required <?=$disabledPermiso;?>>
-                                                    <option value="">Seleccione una opción</option>
-													<option value="0" <?php if($resultado['fcu_anulado']==0){ echo "selected";}?>>No</option>
-													<option value="1" <?php if($resultado['fcu_anulado']==1){ echo "selected";}?>>Si</option>
-                                                </select>
-                                            </div>
-                                        </div>
-										
-										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Estado</label>
-                                            <div class="col-sm-4">
-                                                <select class="form-control  select2" name="estado" required <?=$disabledPermiso;?>>
-                                                    <option value="">Seleccione una opción</option>
-													<option value="0" <?php if($resultado['fcu_status']==0){ echo "selected";}?>>Por Cobrar</option>
-													<option value="1" <?php if($resultado['fcu_status']==1){ echo "selected";}?>>Cobrada</option>
-                                                </select>
+                                                <input type="number" min="0" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['additional_value'];?>" required <?=$disabledPermiso;?> data-vlr-adicional-anterior="0" onchange="cambiarAdiconal(this)">
                                             </div>
                                         </div>
 
@@ -217,9 +222,9 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
                                                         </thead>
                                                         <tbody id="mostrarItems">
                                                             <?php
-                                                                $idTransaction = base64_decode($_GET['id']);
+                                                                $idTransaction = $id;
                                                                 
-                                                                $itemsConsulta = Movimientos::listarItemsTransaction($conexion, $config, $idTransaction);
+                                                                $itemsConsulta = Movimientos::listarItemsTransaction($conexion, $config, $idTransaction, TIPO_RECURRING);
 
                                                                 $subtotal=0;
                                                                 $numItems=mysqli_num_rows($itemsConsulta);
@@ -251,8 +256,8 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
                                                                     $subtotal += $fila['subtotal'];
                                                                     }
                                                                 }
-                                                                if(empty($resultado['fcu_valor'])){ $resultado['fcu_valor']=0; }
-                                                                $total= $subtotal+$resultado['fcu_valor'];
+                                                                if(empty($resultado['additional_value'])){ $resultado['additional_value']=0; }
+                                                                $total= $subtotal+$resultado['additional_value'];
                                                             ?>
                                                         </tbody>
                                                         <tbody>
@@ -281,7 +286,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
                                                                 <td id="subtotalNuevo" data-subtotal-anterior="0">$0</td>
                                                                 <td id="eliminarNuevo"></td>
                                                             </tr>
-                                                            <?php if(Modulos::validarPermisoEdicion() && $resultado['fcu_anulado']==0){?>
+                                                            <?php if(Modulos::validarPermisoEdicion()){?>
                                                                 <tr>
                                                                     <td colspan="6">
                                                                         <button type="button" title="Agregar nueva línea para item" style="padding: 4px 4px; margin: 5px;" class="btn btn-sm" data-toggle="tooltip" onclick="nuevoItem()" data-placement="right" ><i class="fa fa-plus"></i> Agregar línea</button>
@@ -297,7 +302,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
                                                             </tr>
                                                             <tr>
                                                                 <td align="right" colspan="4" style="padding-right: 20px;">VLR. ADICIONAL:</td>
-                                                                <td align="left" id="valorAdicional" data-valor-adicional="<?=$resultado['fcu_valor'];?>"><?="$".number_format($resultado['fcu_valor'], 0, ",", ".");?></td>
+                                                                <td align="left" id="valorAdicional" data-valor-adicional="<?=$resultado['additional_value'];?>"><?="$".number_format($resultado['additional_value'], 0, ",", ".");?></td>
                                                                 <td></td>
                                                             </tr>
                                                             <tr style="font-size: 15px; font-weight:bold;">
@@ -312,15 +317,15 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
                                         </div>
                                         <hr>
                                         <div class="form-group row">
-                                            <label class="col-sm-12 control-label">Observaciones</label>
+                                            <label class="col-sm-12 control-label">Observaciones <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Observaciones adicionales que quieres que vea tu cliente en la factura."><i class="fa fa-question"></i></button></label>
                                             <div class="col-sm-12">
-                                                <textarea cols="80" id="editor1" name="obs" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?=$disabledPermiso;?>><?=$resultado['fcu_observaciones'];?></textarea>
+                                                <textarea cols="80" id="editor1" name="obs" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?=$disabledPermiso;?>><?=$resultado['observation'];?></textarea>
                                             </div>
                                         </div>
 										
                                         <div class="text-right">
-                                            <a href="javascript:void(0);" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
-                                            <?php if(Modulos::validarPermisoEdicion() && $resultado['fcu_anulado']==0){?>
+                                            <a href="javascript:void(0);" name="factura-recurrente.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                            <?php if(Modulos::validarPermisoEdicion()){?>
                                                 <button type="submit" class="btn  btn-info">
                                                     <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
                                                 </button>
