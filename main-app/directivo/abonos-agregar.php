@@ -129,7 +129,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         </div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-12 control-label"><?=$frases[387][$datosUsuarioActual['uss_idioma']];?>
+                                            <label class="col-sm-12 control-label"><?=$frases[388][$datosUsuarioActual['uss_idioma']];?>
                                                 <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Estas notas no se verán reflejadas en el comprobante."><i class="fa fa-question"></i></button>
                                             </label>
                                             <div class="col-sm-12">
