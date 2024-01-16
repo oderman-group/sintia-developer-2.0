@@ -120,9 +120,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														$bgColor = '';
 														if($resultado['fcu_anulado']==1) $bgColor = '#ff572238';
 
-														$bgColorEstado = 'yellow';
+														$bgColorEstado = '#eeff0038';
 														$estado = 'Por Cobrar';
-														if($resultado['fcu_status']==1) { $bgColorEstado = 'green'; $estado = 'Cobrada'; }
+														if($resultado['fcu_status']==1) { $bgColorEstado = '#00F13A38'; $estado = 'Cobrada'; }
 
 														$vlrAdicional = !empty($resultado['fcu_valor']) ? $resultado['fcu_valor'] : 0;
 
@@ -148,7 +148,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<td>
 															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=base64_encode($resultado['uss_id']);?>&tipo=<?=base64_encode($tipo);?>&fecha=<?= base64_encode($fecha); ?>" style="text-decoration: underline;"><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></a>
 														</td>
-														<td align="center" style="background-color:<?=$bgColorEstado;?>; color: black; font-weight:bold;"><?=$estado?></td>
+														<td align="center" style="background-color:<?=$bgColorEstado;?>; color: black;"><?=$estado?></td>
 
 														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0128', 'DT0089'])){?>
 															<td>
