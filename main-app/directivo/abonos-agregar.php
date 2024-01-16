@@ -113,6 +113,13 @@ if(!Modulos::validarPermisoEdicion()){
                                                 </select>
                                             </div>
 										</div>
+										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label"><?=$frases[345][$datosUsuarioActual['uss_idioma']];?></label>
+                                            <div class="col-sm-4">
+                                                <input type="file" name="comprobante" class="form-control" <?=$disabledPermiso;?>>
+                                            </div>
+										</div>
 
                                         <div class="form-group row">
                                             <label class="col-sm-12 control-label"><?=$frases[109][$datosUsuarioActual['uss_idioma']];?></label>

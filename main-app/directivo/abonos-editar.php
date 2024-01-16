@@ -144,6 +144,16 @@ $resultado = Movimientos::traerDatosAbonos($conexion, $config, $id);
                                                 </select>
                                             </div>
                                         </div>
+										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label"><?=$frases[345][$datosUsuarioActual['uss_idioma']];?></label>
+                                            <div class="col-sm-4">
+                                                <?php if (!empty($resultado['voucher']) and file_exists(ROOT_PATH.'/main-app/files/comprobantes/' . $resultado['voucher'])) { ?>
+                                                    <a href="<?= REDIRECT_ROUTE; ?>/files/comprobantes/<?= $resultado['voucher']; ?>" target="_blank" class="link"><?= $resultado['voucher']; ?></a>
+                                                <?php } ?>
+                                                <input type="file" name="comprobante" class="form-control" <?=$disabledPermiso;?>>
+                                            </div>
+										</div>
 
                                         <div class="form-group row">
                                             <label class="col-sm-12 control-label"><?=$frases[109][$datosUsuarioActual['uss_idioma']];?></label>

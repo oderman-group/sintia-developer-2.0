@@ -73,6 +73,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<th><?=$frases[380][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[385][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[386][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[345][$datosUsuarioActual['uss_idioma']];?></th>
                                                         <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0267','DT0269'])){?>
                                                             <th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                                                         <?php }?>
@@ -83,6 +84,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                         $consulta= Movimientos::listarAbonos($conexion, $config);
                                                         $contReg = 1;
                                                         while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+
+                                                            $vaucher = '';
+                                                            if (!empty($resultado['voucher']) and file_exists(ROOT_PATH.'/main-app/files/comprobantes/' . $resultado['voucher'])) {
+                                                                $vaucher = '<a href="'.REDIRECT_ROUTE.'/files/comprobantes/'.$resultado['voucher'].'" target="_blank" class="link">'.$resultado['voucher'].'</a>';
+                                                            }
 
                                                             $arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
                                                             $arrayDatos = json_encode($arrayEnviar);
@@ -95,6 +101,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<td><?=$resultado['invoiced'];?></td>
 														<td>$<?=number_format($resultado['payment'],0,",",".")?></td>
 														<td><?=$resultado['payment_method'];?></td>
+														<td><?=$vaucher;?></td>
 														
                                                         <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0267','DT0269'])){?>
                                                             <td>
