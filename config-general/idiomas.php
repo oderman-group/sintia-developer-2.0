@@ -782,6 +782,8 @@ $frases[385][$l] = 'Abonos';
 
 $frases[386][$l] = 'Método de Pago';
 
+$frases[387][$l] = 'Notas Adicionales';
+
 //ENGLISH
 
 $l = 2;
@@ -1550,3 +1552,5 @@ $frases[384][$l] = 'Environment';
 $frases[385][$l] = 'Payments';
 
 $frases[386][$l] = 'Payment Method';
+
+$frases[387][$l] = 'Additional notes';
