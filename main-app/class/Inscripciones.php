@@ -67,7 +67,7 @@ class Inscripciones {
      * 
      * @return array $documentos
     **/
-    public static function actualizarDocumentos( PDO $conexionPDO, array $config, array $FILES, array $POST){
+    public static function actualizarDocumentos( PDO $conexionPDO, array $config, array $FILES, array $POST, string $year= ""){
 
         try {
 
@@ -182,7 +182,7 @@ class Inscripciones {
             $documentos->bindParam(':recomendacion', $recomendacion, PDO::PARAM_STR);
             $documentos->bindParam(':certificado', $certificado, PDO::PARAM_STR);
             $documentos->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
-            $documentos->bindParam(':year', $config['conf_agno'], PDO::PARAM_STR);
+            $documentos->bindParam(':year', $year, PDO::PARAM_STR);
 
             if ($documentos) {
                 $documentos->execute();
