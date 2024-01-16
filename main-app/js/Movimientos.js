@@ -132,12 +132,13 @@ function traerItems(){
     // Obtener el valor del ID de transacción desde el elemento HTML
     var idTransaction = document.getElementById('idTransaction').value;
     var vlrAdicional = document.getElementById('vlrAdicional').value;
+    var typeTransaction = document.getElementById('typeTransaction').value;
 
     // Mostrar un mensaje de carga mientras se obtienen los items
     $('#mostrarItems').empty().hide().html("Cargando Items...").show(1);
     
     // Realizar una solicitud fetch para obtener los items asociados a la transacción
-    fetch('../directivo/ajax-traer-items.php?idTransaction=' + idTransaction + '&vlrAdicional=' + vlrAdicional, {
+    fetch('../directivo/ajax-traer-items.php?idTransaction=' + idTransaction + '&vlrAdicional=' + vlrAdicional + '&typeTransaction=' + typeTransaction, {
         method: 'GET'
     })
     .then(response => response.text()) // Convertir la respuesta a texto
@@ -187,6 +188,7 @@ function guardarNuevoItem(selectElement) {
 
     // Obtener el ID de la transacción desde el elemento del DOM
     var idTransaction = document.getElementById('idTransaction').value;
+    var typeTransaction = document.getElementById('typeTransaction').value;
 
     // Obtener la opción seleccionada del elemento select
     var itemSelecionado = selectElement.options[selectElement.selectedIndex];
@@ -207,7 +209,7 @@ function guardarNuevoItem(selectElement) {
     var totalFormat = "$"+numberFormat(totalNetoFinal, 0, ',', '.');
 
     // Realizar una solicitud fetch para guardar el nuevo item
-    fetch('../directivo/ajax-guardar-items.php?idTransaction=' + idTransaction + '&idItem=' + idItem + '&itemModificar=' + itemModificar + '&subtotal=' + subtotal + '&cantidad=' + cantidad + '&precio=' + precio, {
+    fetch('../directivo/ajax-guardar-items.php?idTransaction=' + idTransaction + '&idItem=' + idItem + '&itemModificar=' + itemModificar + '&subtotal=' + subtotal + '&cantidad=' + cantidad + '&precio=' + precio + '&typeTransaction=' + typeTransaction, {
         method: 'GET'
     })
     .then(response => response.json()) // Convertir la respuesta a objeto JSON
