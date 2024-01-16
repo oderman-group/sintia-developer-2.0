@@ -786,6 +786,10 @@ $frases[387][$l] = 'Facturas Recurrentes';
 
 $frases[388][$l] = 'Notas Adicionales';
 
+$frases[389][$l] = 'Cobrado';
+
+$frases[390][$l] = 'Por cobrar';
+
 //ENGLISH
 
 $l = 2;
@@ -1558,3 +1562,7 @@ $frases[386][$l] = 'Payment Method';
 $frases[387][$l] = 'Recurring Invoices';
 
 $frases[388][$l] = 'Additional notes';
+
+$frases[389][$l] = 'Collected';
+
+$frases[390][$l] = 'To collect';
