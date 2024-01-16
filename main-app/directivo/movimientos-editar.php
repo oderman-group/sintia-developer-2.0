@@ -16,8 +16,12 @@ try{
 }
 $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
+$abonos = Movimientos::calcularTotalAbonado($conexion, $config, $resultado['fcu_id']);
+
+// $abonos = number_format($abonos, 0, ",", ".");
+
 $disabledPermiso = "";
-if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resultado['fcu_status']==1){
+if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resultado['fcu_status']==1 || $abonos>0){
 	$disabledPermiso = "disabled";
 }
 ?>
@@ -252,7 +256,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
                                                                     }
                                                                 }
                                                                 if(empty($resultado['fcu_valor'])){ $resultado['fcu_valor']=0; }
-                                                                $total= $subtotal+$resultado['fcu_valor'];
+                                                                $total= ($subtotal+$resultado['fcu_valor'])-$abonos;
                                                             ?>
                                                         </tbody>
                                                         <tbody>
@@ -300,6 +304,11 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
                                                                 <td align="left" id="valorAdicional" data-valor-adicional="<?=$resultado['fcu_valor'];?>"><?="$".number_format($resultado['fcu_valor'], 0, ",", ".");?></td>
                                                                 <td></td>
                                                             </tr>
+                                                            <tr>
+                                                                <td align="right" colspan="4" style="padding-right: 20px;">ABONADO:</td>
+                                                                <td align="left"><?="$".number_format($abonos, 0, ",", ".");?></td>
+                                                                <td></td>
+                                                            </tr>
                                                             <tr style="font-size: 15px; font-weight:bold;">
                                                                 <td align="right" colspan="4" style="padding-right: 20px;">TOTAL NETO:</td>
                                                                 <td align="left" id="totalNeto" data-total-neto="<?=$total;?>" data-total-neto-anterior="<?=$total;?>"><?="$".number_format($total, 0, ",", ".");?></td>
@@ -320,7 +329,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
 										
                                         <div class="text-right">
                                             <a href="javascript:void(0);" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
-                                            <?php if(Modulos::validarPermisoEdicion() && $resultado['fcu_anulado']==0){?>
+                                            <?php if(Modulos::validarPermisoEdicion() && $resultado['fcu_anulado']==0 && $resultado['fcu_status']==0 && $abonos==0){?>
                                                 <button type="submit" class="btn  btn-info">
                                                     <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
                                                 </button>
