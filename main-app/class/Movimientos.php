@@ -380,4 +380,114 @@ class Movimientos {
 
         return $resultado;
     }
+
+    /**
+     * Este metodo me valida si ya existe una configuración de la institución para finanzas
+     * @param mysqli $conexion
+     * @param array $config
+     * 
+     * @return int $num
+    **/
+    public static function validarConfiguracionFinanzas(
+        mysqli $conexion,
+        array $config
+    )
+    {
+
+        try {
+            $configConsulta = mysqli_query($conexion,"SELECT * FROM ".BD_FINANCIERA.".configuration WHERE institucion = {$config['conf_id_institucion']} AND year = {$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        $num = mysqli_num_rows($configConsulta);
+
+        return $num;
+    }
+
+    /**
+     * Este metodo me busca la configuración de la institución para finanzas
+     * @param mysqli $conexion
+     * @param array $config
+     * 
+     * @return array $resultado
+    **/
+    public static function configuracionFinanzas(
+        mysqli $conexion,
+        array $config
+    )
+    {
+        $resultado = [];
+
+        try {
+            $configConsulta = mysqli_query($conexion,"SELECT * FROM ".BD_FINANCIERA.".configuration WHERE institucion = {$config['conf_id_institucion']} AND year = {$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        $resultado = mysqli_fetch_array($configConsulta, MYSQLI_BOTH);
+
+        return $resultado;
+    }
+
+    /**
+     * Este metodo me guarda la configuración de la institución para finanzas
+     * @param mysqli $conexion
+     * @param array $config
+     * @param array $POST
+     * 
+    **/
+    public static function guardarConfiguracionFinanzas(
+        mysqli $conexion,
+        array $config,
+        array $POST
+    )
+    {
+
+        try {
+            mysqli_query($conexion,"INSERT INTO ".BD_FINANCIERA.".configuration(consecutive_start, institucion, year) VALUES('".$POST['consecutivo']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+    }
+
+    /**
+     * Este metodo me actualiza la configuración de la institución para finanzas
+     * @param mysqli $conexion
+     * @param array $config
+     * @param array $POST
+     * 
+    **/
+    public static function actualizarConfiguracionFinanzas(
+        mysqli $conexion,
+        array $config,
+        array $POST
+    )
+    {
+
+        try {
+            mysqli_query($conexion,"UPDATE ".BD_FINANCIERA.".configuration SET consecutive_start='".$POST['consecutivo']."' WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+    }
+
+    /**
+     * Este metodo me actualiza la configuración de la institución para finanzas
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $firma
+     * 
+    **/
+    public static function actualizarFirmaConfiguracionFinanzas(
+        mysqli $conexion,
+        array $config,
+        string $firma
+    )
+    {
+
+        try {
+            mysqli_query($conexion,"UPDATE ".BD_FINANCIERA.".configuration SET signature='".$firma."' WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+    }
 }
