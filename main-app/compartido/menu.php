@@ -192,7 +192,7 @@
 											}
 											if(Modulos::validarSubRol(["DT0264"])){ 
 										?>
-											<li <?php agregarClass(MENU,["DT0264", "DT0265", "DT0267"]) ?>><a href="abonos.php" class="nav-link "> <span class="title"><?=$frases[385][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+											<li <?php agregarClass(MENU,["DT0264", "DT0265", "DT0267"]) ?>><a href="abonos.php" class="nav-link "> <span class="title"><?=$frases[413][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 										<?php }?>
 									</ul>
 								</li>
