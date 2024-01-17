@@ -29,7 +29,7 @@ $Plataforma = new Plataforma;
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
-                            <div class="page-title">Productos</div>
+                            <div class="page-title"><?=$frases[410][$datosUsuarioActual['uss_idioma']];?></div>
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                     </div>
@@ -47,7 +47,7 @@ $Plataforma = new Plataforma;
 
                                 <div class="card card-topline-purple">
                                     <div class="card-head">
-                                        <header>Productos</header>
+                                        <header><?=$frases[410][$datosUsuarioActual['uss_idioma']];?></header>
                                     </div>
                                     <div class="card-body">
 

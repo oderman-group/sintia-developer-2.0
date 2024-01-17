@@ -91,7 +91,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<th>Fecha</th>
 														<th>Detalle</th>
 														<th>Valor</th>
-														<th>Tipo</th>
+														<th><?=$frases[53][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Usuario</th>
 														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0128', 'DT0089'])){?>
 															<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
