@@ -6,7 +6,7 @@ try {
 
 		//CURSOS
 		try{
-			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_grados(gra_id, gra_codigo, gra_nombre, gra_formato_boletin, gra_valor_matricula, gra_valor_pension, gra_estado, institucion, year) SELECT gra_id, gra_codigo, gra_nombre, gra_formato_boletin, gra_valor_matricula, gra_valor_pension, gra_estado, institucion, {$year} FROM ".BD_ACADEMICA.".academico_grados WHERE institucion={$idInsti} AND year={$yearAnterior}");
+			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_grados(gra_id, gra_codigo, gra_nombre, gra_formato_boletin, gra_valor_matricula, gra_valor_pension, gra_estado, gra_grado_siguiente, gra_vocal, gra_nivel, gra_grado_anterior, gra_periodos, gra_nota_minima, gra_tipo, institucion, year) SELECT gra_id, gra_codigo, gra_nombre, gra_formato_boletin, gra_valor_matricula, gra_valor_pension, gra_estado, gra_grado_siguiente, gra_vocal, gra_nivel, gra_grado_anterior, gra_periodos, gra_nota_minima, gra_tipo, institucion, {$year} FROM ".BD_ACADEMICA.".academico_grados WHERE institucion={$idInsti} AND year={$yearAnterior}");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
