@@ -189,7 +189,7 @@ $fechaVencimiento = $fechaConvertir->format('d/m/Y');
                     <td align="center">
                         <?php
                             $responsable = Usuarios::obtenerDatosUsuario($resultado['responsible_user']);
-                            if(!empty($responsable["uss_firma"])){
+                            if(!empty($responsable["uss_firma"]) && file_exists(ROOT_PATH.'/main-app/files/fotos/' . $responsable['uss_firma'])){
                                 echo '<img src="../files/fotos/'.$responsable["uss_firma"].'" width="100"><br>';
                             }else{
                                 echo '<p>&nbsp;</p>
