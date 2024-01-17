@@ -45,7 +45,7 @@ if(!Modulos::validarPermisoEdicion()){
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="disciplina-faltas.php" onClick="deseaRegresar(this)">Faltas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="disciplina-faltas.php" onClick="deseaRegresar(this)"><?=$frases[248][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Agregar Faltas</li>
                             </ol>
                         </div>
