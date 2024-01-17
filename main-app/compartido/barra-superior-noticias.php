@@ -28,8 +28,8 @@
     <?php }?>
 
     <form class="form-inline my-2 my-lg-0" action="noticias.php" method="get" data-hint="Aquí podrás buscar noticias específicas, dentro de todas las publicadas, usando palabras que claves que se encuentren en su titulo, descripción, etc.">
-        <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?php if(isset($_GET['busqueda'])) echo $_GET["busqueda"];?>">
-      <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
+        <input class="form-control mr-sm-2" type="search" placeholder="<?=$frases[386][$datosUsuarioActual['uss_idioma']];?>..." aria-label="Search" name="busqueda" value="<?php if(isset($_GET['busqueda'])) echo $_GET["busqueda"];?>">
+      <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit"><?=$frases[8][$datosUsuarioActual['uss_idioma']];?></button>
     </form>
 
 
