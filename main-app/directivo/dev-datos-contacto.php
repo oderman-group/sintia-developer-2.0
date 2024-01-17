@@ -45,18 +45,18 @@ $datosContacto = mysqli_fetch_array($consultaDatosContacto, MYSQLI_BOTH);
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
-                            <div class="page-title">Datos de contacto</div>
+                            <div class="page-title"><?=$frases[407][$datosUsuarioActual['uss_idioma']];?></div>
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                         <ol class="breadcrumb page-breadcrumb pull-right">
-                            <li class="active">Datos de contacto</li>
+                            <li class="active"><?=$frases[407][$datosUsuarioActual['uss_idioma']];?></li>
                         </ol>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="panel">
-                            <header class="panel-heading panel-heading-purple">Datos de contacto</header>
+                            <header class="panel-heading panel-heading-purple"><?=$frases[407][$datosUsuarioActual['uss_idioma']];?></header>
                             <div class="panel-body">
 
                                 <form name="formularioGuardar" action="dev-datos-contacto-actualizar.php" method="post">

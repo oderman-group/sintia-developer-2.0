@@ -132,7 +132,7 @@
 										if(!empty($arregloModulos) && array_key_exists(9, $arregloModulos)){
 											if(Modulos::validarSubRol(['DT0121'])){
 									?>
-										<li <?php agregarClass(MENU,["DT0121"]) ?>><a href="reservar-cupo.php" class="nav-link "> <span class="title">Reserva de cupos</span></a></li>
+										<li <?php agregarClass(MENU,["DT0121"]) ?>><a href="reservar-cupo.php" class="nav-link "> <span class="title"><?=$frases[391][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									<?php }}?>
 									
 	                            </ul>
@@ -146,19 +146,19 @@
 							?>
 								<li <?php agregarClass(MENU_PADRE,["DT0102", "DT0014"]) ?>>
 									<a href="#" class="nav-link nav-toggle"> <i class="fa fa-address-book"></i>
-										<span class="title">Inscripciones</span> <span class="arrow"></span>
+										<span class="title"><?=$frases[390][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 									</a>
 									<ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0102", "DT0014"]) ?>>
 										<?php
 											if(Modulos::validarSubRol(["DT0102"])){
 										?>
-											<li <?php agregarClass(MENU,["DT0102"]) ?>><a href="inscripciones.php" class="nav-link "> <span class="title">Listado de inscripciones</span></a></li>
+											<li <?php agregarClass(MENU,["DT0102"]) ?>><a href="inscripciones.php" class="nav-link "> <span class="title"><?=$frases[392][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 										<?php }?>
 
 										<?php
 											if(Modulos::validarSubRol(["DT0014"])){
 										?>
-											<li <?php agregarClass(MENU,["DT0014"]) ?>><a href="configuracion-admisiones.php" class="nav-link "> <span class="title">Configuración</span></a></li>
+											<li <?php agregarClass(MENU,["DT0014"]) ?>><a href="configuracion-admisiones.php" class="nav-link "> <span class="title"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 										<?php }?>
 									</ul>
 								</li>
@@ -192,7 +192,7 @@
 											}
 											if(Modulos::validarSubRol(["DT0264"])){ 
 										?>
-											<li <?php agregarClass(MENU,["DT0264", "DT0265", "DT0267"]) ?>><a href="abonos.php" class="nav-link "> <span class="title"><?=$frases[385][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+											<li <?php agregarClass(MENU,["DT0264", "DT0265", "DT0267"]) ?>><a href="abonos.php" class="nav-link "> <span class="title"><?=$frases[413][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 										<?php }?>
 									</ul>
 								</li>
@@ -225,13 +225,13 @@
 
 											if(Modulos::validarSubRol(["DT0069"])){
 										?>
-											<li class="nav-item"><a href="disciplina-categorias.php" class="nav-link"> <span class="title">Categorías</span></a></li>
+											<li class="nav-item"><a href="disciplina-categorias.php" class="nav-link"> <span class="title"><?=$frases[222][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 										<?php
 											}
 											
 											if(Modulos::validarSubRol(["DT0066"])){
 										?>
-											<li class="nav-item"><a href="disciplina-faltas.php" class="nav-link"> <span class="title">Faltas</span></a></li>
+											<li class="nav-item"><a href="disciplina-faltas.php" class="nav-link"> <span class="title"><?=$frases[248][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 										<?php
 											}
 										?>
@@ -283,11 +283,11 @@
 							if(!empty($arregloModulos) && array_key_exists(18, $arregloModulos)){?>
 							<li class="nav-item">
 	                            <a href="#" class="nav-link nav-toggle"> <i class="fa fa-question"></i>
-	                                <span class="title">Cuestionarios</span> <span class="arrow"></span>
+	                                <span class="title"><?=$frases[388][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 	                            </a>
 	                            <ul class="sub-menu">
-	                                <li class="nav-item"><a href="#" class="nav-link "> <span class="title">Ver cuestionarios</span></a></li>
-									<li class="nav-item"><a href="#" class="nav-link "> <span class="title">Preguntas</span></a></li>
+	                                <li class="nav-item"><a href="#" class="nav-link "> <span class="title"><?=$frases[393][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<li class="nav-item"><a href="#" class="nav-link "> <span class="title"><?=$frases[139][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 
 	                            </ul>
 	                        </li>
@@ -312,19 +312,19 @@
 							?>
 							<li class="nav-item">
 	                            <a href="#" class="nav-link nav-toggle"> <i class="fa fa-cogs"></i></i>
-	                                <span class="title">Configuraci&oacute;n </span> <span class="arrow"></span>
+	                                <span class="title"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?> </span> <span class="arrow"></span>
 	                            </a>
 	                            <ul class="sub-menu">
 									<?php
 										if(Modulos::validarSubRol(["DT0057"])){
 									?>
-										<li><a href="configuracion-sistema.php">del Sistema</a></li>
+										<li><a href="configuracion-sistema.php"><?=$frases[395][$datosUsuarioActual['uss_idioma']];?></a></li>
 									<?php
 										}
 										
 										if(Modulos::validarSubRol(["DT0060"])){
 									?>
-										<li><a href="configuracion-institucion.php">de la Instituci&oacute;n</a></li>
+										<li><a href="configuracion-institucion.php"><?=$frases[396][$datosUsuarioActual['uss_idioma']];?></a></li>
 									<?php
 										}
 									?>
@@ -337,7 +337,7 @@
 							?>
 							<li class="nav-item">
 	                            <a href="informes-todos.php" class="nav-link nav-toggle"> <i class="fa fa-file-text"></i>
-	                                <span class="title">Informes</span> 
+	                                <span class="title"><?=$frases[385][$datosUsuarioActual['uss_idioma']];?></span> 
 	                            </a>
 	                        </li>
 							<?php }?>
@@ -351,19 +351,19 @@
 									</a>
 									<ul  class="sub-menu" <?php agregarClass(SUB_MENU,["DV0038","DV0039", "DV0074", "DV0075", "DV0002"])?>>
 										<li <?php agregarClass(MENU,["DV0074", "DV0075", "DV0002"]) ?>><a href="dev-scripts.php" class="nav-link"> <span class="title">scripts SQL</span></a></li>
-										<li class="nav-item"><a href="dev-crear-nueva-bd.php" class="nav-link"> <span class="title">Crear nueva BD</span></a></li>
-										<li class="nav-item"><a href="dev-errores-sistema.php" class="nav-link"> <span class="title">Log de errores</span></a></li>
+										<li class="nav-item"><a href="dev-crear-nueva-bd.php" class="nav-link"> <span class="title"><?=$frases[397][$datosUsuarioActual['uss_idioma']];?> BD</span></a></li>
+										<li class="nav-item"><a href="dev-errores-sistema.php" class="nav-link"> <span class="title"><?=$frases[398][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 										<li class="nav-item"><a href="dev-console.php" class="nav-link"> <span class="title">Console</span></a></li>
-										<li class="nav-item"><a href="dev-historial-acciones.php" class="nav-link"> <span class="title">Historial de acciones</span></a></li>
-										<li class="nav-item"><a href="dev-instituciones.php" class="nav-link"> <span class="title">Instituciones</span></a></li>
-										<li  <?php agregarClass(MENU,["DV0038","DV0039"]) ?>><a href="dev-solicitudes-cancelacion.php" class="nav-link"> <span class="title">Solicitudes de cancelacion</span></a></li>
-										<li class="nav-item"><a href="dev-modulos.php" class="nav-link"> <span class="title">Módulos</span></a></li>
-										<li class="nav-item"><a href="dev-paginas.php" class="nav-link"> <span class="title">Páginas</span></a></li>
-										<li class="nav-item"><a href="configuracion-opciones-generales.php" class="nav-link"> <span class="title">Opciones generales</span></a></li>
-										<li class="nav-item"><a href="#" class="nav-link"> <span class="title">Claves restauradas</span></a></li>
-										<li class="nav-item"><a href="dev-contratos.php" class="nav-link"> <span class="title">Contratos</span></a></li>
+										<li class="nav-item"><a href="dev-historial-acciones.php" class="nav-link"> <span class="title"><?=$frases[400][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<li class="nav-item"><a href="dev-instituciones.php" class="nav-link"> <span class="title"><?=$frases[399][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<li  <?php agregarClass(MENU,["DV0038","DV0039"]) ?>><a href="dev-solicitudes-cancelacion.php" class="nav-link"> <span class="title"><?=$frases[401][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<li class="nav-item"><a href="dev-modulos.php" class="nav-link"> <span class="title"><?=$frases[402][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<li class="nav-item"><a href="dev-paginas.php" class="nav-link"> <span class="title"><?=$frases[403][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<li class="nav-item"><a href="configuracion-opciones-generales.php" class="nav-link"> <span class="title"><?=$frases[404][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<li class="nav-item"><a href="#" class="nav-link"> <span class="title"><?=$frases[405][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<li class="nav-item"><a href="dev-contratos.php" class="nav-link"> <span class="title"><?=$frases[406][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 										<li class="nav-item"><a href="dev-terminos.php" class="nav-link"> <span class="title">T&C</span></a></li>
-										<li class="nav-item"><a href="dev-datos-contacto.php" class="nav-link"> <span class="title">Datos de contacto</span></a></li>
+										<li class="nav-item"><a href="dev-datos-contacto.php" class="nav-link"> <span class="title"><?=$frases[407][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									</ul>
 								</li>
 								
@@ -372,10 +372,10 @@
 										<span class="title">ADMIN-MPS</span> <span class="arrow"></span>
 									</a>
 									<ul  class="sub-menu">
-										<li class="nav-item"><a href="mps-categorias-productos.php" class="nav-link"> <span class="title">Categorias productos</span></a></li>
-										<li class="nav-item"><a href="mps-categorias-servicios.php" class="nav-link"> <span class="title">Categorias servicios</span></a></li>
-										<li class="nav-item"><a href="mps-productos.php" class="nav-link"> <span class="title">Productos</span></a></li>
-										<li class="nav-item"><a href="mps-empresas.php" class="nav-link"> <span class="title">Empresas</span></a></li>
+										<li class="nav-item"><a href="mps-categorias-productos.php" class="nav-link"> <span class="title"><?=$frases[408][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<li class="nav-item"><a href="mps-categorias-servicios.php" class="nav-link"> <span class="title"><?=$frases[409][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<li class="nav-item"><a href="mps-productos.php" class="nav-link"> <span class="title"><?=$frases[410][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<li class="nav-item"><a href="mps-empresas.php" class="nav-link"> <span class="title"><?=$frases[411][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									</ul>
 								</li>
 							<?php }?>

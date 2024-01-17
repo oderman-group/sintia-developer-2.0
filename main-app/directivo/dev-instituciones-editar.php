@@ -216,7 +216,7 @@ $datosInstitucion = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Modulos</label>
+                                        <label class="col-sm-2 control-label"><?=$frases[402][$datosUsuarioActual['uss_idioma']];?></label>
                                         <div class="col-sm-10">
                                             <select class="form-control  select2-multiple" name="modulos[]" multiple>
                                                 <option value="">Seleccione una opción</option>
