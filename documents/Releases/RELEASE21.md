@@ -7,3 +7,4 @@ PES-604 Diseño e impresión de comprobante de pago (Abono)
 PES-606 Diseño e impresión de cotización
 PES-657 Ver más grandes los formatos de boletines y certificados.
 PES-602 Update a configuración
+PES-605 Opción de factura recurente CRONJOB
