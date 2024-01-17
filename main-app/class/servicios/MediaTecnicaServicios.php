@@ -88,7 +88,7 @@ class MediaTecnicaServicios extends Servicios
     /**
      * Edita la información de matrículas y cursos de Media Técnica.
      *
-     * @param int $idMatricula ID de la matrícula.
+     * @param string $idMatricula ID de la matrícula.
      * @param array $cursosId Arreglo con los IDs de los cursos.
      * @param array $config Configuración de la aplicación.
      * @param int|null $idGrupo ID del grupo (opcional).
@@ -100,7 +100,7 @@ class MediaTecnicaServicios extends Servicios
         global $baseDatosServicios;
         Servicios::UpdateSql(
             "DELETE FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos 
-            WHERE matcur_id_matricula =".$idMatricula."
+            WHERE matcur_id_matricula ='".$idMatricula."'
             AND matcur_id_institucion =".(int)$config['conf_id_institucion']."
             AND matcur_years          =".(int)$config['conf_agno']."
             ");
@@ -110,7 +110,7 @@ class MediaTecnicaServicios extends Servicios
     /**
      * Guarda la información de matrículas y cursos de Media Técnica.
      *
-     * @param int $idMatricula ID de la matrícula.
+     * @param string $idMatricula ID de la matrícula.
      * @param array $arregloCursos Arreglo con los IDs de los cursos.
      * @param array $config Configuración de la aplicación.
      * @param int|null $idGrupo ID del grupo (opcional).

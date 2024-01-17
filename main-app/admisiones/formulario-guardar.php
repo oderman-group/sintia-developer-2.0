@@ -76,7 +76,6 @@ $filasAfectadas = $stmt->rowCount();
 
 
 //Actualiza estado en aspirantes
-
 $nombreCompleto=$_POST['nombre'].' '.$_POST['primerApellidos'].' '.$_POST['segundoApellidos'];
 $aspQuery = 'UPDATE aspirantes SET asp_estado_solicitud = 4, asp_nombre = :nombre WHERE asp_id = :id';
 $asp = $pdo->prepare($aspQuery);
@@ -84,13 +83,8 @@ $asp->bindParam(':id', $_POST['solicitud'], PDO::PARAM_INT);
 $asp->bindParam(':nombre', $nombreCompleto, PDO::PARAM_STR);
 $asp->execute();
 
-
 //Documentos
 Inscripciones::actualizarDocumentos($pdoI, $datosConfig, $_FILES, $_POST, $yearConsultar);
-
-$documentos->execute();
-$filasAfectadasDoc = $documentos->rowCount();
-
 
 //Acudiente
 $acudienteQuery = "UPDATE ".BD_GENERAL.".usuarios SET
