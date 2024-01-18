@@ -1,5 +1,5 @@
 <?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0106';?>
+<?php $idPaginaInterna = 'DT0276';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Movimientos.php");
@@ -14,7 +14,7 @@ if(!Modulos::validarPermisoEdicion()){
 	$disabledPermiso = "disabled";
 }
 
-$codigoUnico=Utilidades::generateCode("FCN");
+$idRecurrente=Utilidades::generateCode("FCR");
 ?>
 
 	<!--bootstrap -->
@@ -45,12 +45,12 @@ $codigoUnico=Utilidades::generateCode("FCN");
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[95][$datosUsuarioActual['uss_idioma']];?></div>
+                                <div class="page-title"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[415][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="movimientos.php" onClick="deseaRegresar(this)"><?=$frases[95][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[95][$datosUsuarioActual['uss_idioma']];?></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="factura-recurrente.php" onClick="deseaRegresar(this)"><?=$frases[415][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[415][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
@@ -61,64 +61,94 @@ $codigoUnico=Utilidades::generateCode("FCN");
                                     include("../../config-general/mensajes-informativos.php");
                                 ?>
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[95][$datosUsuarioActual['uss_idioma']];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[415][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="movimientos-guardar.php" method="post">
-										<input type="hidden" value="<?=$codigoUnico?>" name="idU" id="idTransaction">
-										<input type="hidden" value="<?=TIPO_FACTURA;?>" name="typeTransaction" id="typeTransaction">
-										
-										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Usuario</label>
+									<form name="formularioGuardar" action="factura-recurrente-guardar.php" method="post">
+										<input type="hidden" value="<?=$idRecurrente;?>" name="id" id="idTransaction">
+										<input type="hidden" value="<?=TIPO_RECURRING;?>" name="typeTransaction" id="typeTransaction">
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Usuario <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2" id="select_usuario" name="usuario" required <?=$disabledPermiso;?>>
                                                 </select>
                                             </div>
-
-                                            <label class="col-sm-2 control-label">Fecha</label>
+                                        </div>
+										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Fecha de inicio <span style="color: red;">(*)</span> <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Fecha en la que se crea la primer factura."><i class="fa fa-question"></i></button></label>
                                             <div class="col-sm-4">
-                                                <input type="date" name="fecha" class="form-control" autocomplete="off" required value="<?=date('Y-m-d');?>" <?=$disabledPermiso;?>>
+                                                <input type="date" name="fechaInicio" class="form-control" autocomplete="off" required value="<?=date('Y-m-d', strtotime('+1 day'));?>" <?=$disabledPermiso;?>>
+                                            </div>
+
+                                            <label class="col-sm-2 control-label">Fecha de finalización <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Indica el último día de la creación automática de la factura."><i class="fa fa-question"></i></button></label>
+                                            <div class="col-sm-4">
+                                                <input type="date" name="fechaFinal" class="form-control" autocomplete="off" <?=$disabledPermiso;?>>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
-                                        <label class="col-sm-2 control-label">Descripción general</label>
+                                            <label class="col-sm-2 control-label">Frecuencia <span style="color: red;">(*)</span> <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Indica cada cuántos meses se generará la factura, por ejemplo si eliges 2 se creará cada 2 meses."><i class="fa fa-question"></i></button></label>
                                             <div class="col-sm-4">
-                                                <input type="text" name="detalle" class="form-control" autocomplete="off" value="" required <?=$disabledPermiso;?>>
+                                                <input type="number" min="1" name="frecuencia" class="form-control" autocomplete="off" value="1" required <?=$disabledPermiso;?>>
                                             </div>
-
-                                            <label class="col-sm-2 control-label">Valor adicional</label>
+                                            
+                                            <label class="col-sm-2 control-label">Días de facturación <span style="color: red;">(*)</span> <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Indica que dias del mes deseas que se genere la factura."><i class="fa fa-question"></i></button></label>
                                             <div class="col-sm-4">
-                                                <input type="number" min="0" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="0" required <?=$disabledPermiso;?> data-vlr-adicional-anterior="0" onchange="cambiarAdiconal(this)">
+                                                <select class="form-control select2-multiple" multiple name="dias[]" required <?=$disabledPermiso;?>>
+                                                    <option value="" >Seleccione una opción</option>
+                                                    <?php
+                                                        $i = 1;
+                                                        while ($i <= 31){
+                                                    ?>
+                                                        <option value="<?=$i?>" ><?=$i?></option>
+                                                    <?php
+                                                            $i++;
+                                                        }
+                                                    ?>
+                                                </select>
                                             </div>
 										</div>
 
                                         <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Tipo de movimiento</label>
+                                            <label class="col-sm-2 control-label">Tipo de movimiento <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2" name="tipo" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
-													<option value="1" >Ingreso</option>
-													<option value="2" >Egreso</option>
-													<option value="3" >Cobro (CPC)</option>
-													<option value="4" >Deuda (CPP)</option>
+                                                    <option value="1" >Ingreso</option>
+                                                    <option value="2" >Egreso</option>
+                                                    <option value="3" >Cobro (CPC)</option>
+                                                    <option value="4" >Deuda (CPP)</option>
                                                 </select>
                                             </div>
 
-                                            <label class="col-sm-2 control-label">Forma de pago</label>
+                                            <label class="col-sm-2 control-label"><?=$frases[386][$datosUsuarioActual['uss_idioma']];?> <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="forma" required <?=$disabledPermiso;?>>
-                                                    <option value="">Seleccione una opción</option>
-													<option value="1" >Efectivo</option>
-													<option value="2" >Cheque</option>
-													<option value="3" >T. Débito</option>
-													<option value="4" >T. Crédito</option>
-													<option value="5" >Transferencia</option>
-													<option value="6" >No aplica</option>
+                                                <select class="form-control select2" id="metodoPago" name="metodoPago" required <?=$disabledPermiso;?>>
+                                                    <option value="" >Seleccione una opción</option>
+                                                    <option value="EFECTIVO" >Efectivo</option>
+                                                    <option value="CHEQUE" >Cheque</option>
+                                                    <option value="T_DEBITO" >T. Débito</option>
+                                                    <option value="T_CREDITO" >T. Crédito</option>
+                                                    <option value="TRANSFERENCIA" >Transferencia</option>
+                                                    <option value="OTROS" >Otras Formas de pago</option>
                                                 </select>
                                             </div>
                                         </div>
+										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Descripción general <span style="color: red;">(*)</span></label>
+                                            <div class="col-sm-4">
+                                                <textarea name="detalle" cols="70" rows="2" required <?=$disabledPermiso;?>></textarea>
+                                            </div>
+
+                                            <label class="col-sm-2 control-label">Valor adicional <span style="color: red;">(*)</span></label>
+                                            <div class="col-sm-4">
+                                                <input type="number" min="0" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="0" required <?=$disabledPermiso;?> data-vlr-adicional-anterior="0" onchange="cambiarAdiconal(this)">
+                                            </div>
+										</div>
 
                                         <script>
                                             $(document).ready(function() {
@@ -219,14 +249,14 @@ $codigoUnico=Utilidades::generateCode("FCN");
                                         </div>
                                         <hr>
                                         <div class="form-group row">
-                                            <label class="col-sm-12 control-label">Observaciones</label>
+                                            <label class="col-sm-12 control-label">Observaciones <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Observaciones adicionales que quieres que vea tu cliente en la factura."><i class="fa fa-question"></i></button></label>
                                             <div class="col-sm-12">
                                                 <textarea cols="80" id="editor1" name="obs" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?=$disabledPermiso;?>></textarea>
                                             </div>
                                         </div>
 										
                                         <div class="text-right">
-                                            <a href="javascript:void(0);" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                            <a href="javascript:void(0);" name="factura-recurrente.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                             <?php if(Modulos::validarPermisoEdicion()){?>
                                                 <button type="submit" class="btn  btn-info">
                                                     <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 

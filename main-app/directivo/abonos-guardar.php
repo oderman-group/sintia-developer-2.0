@@ -12,7 +12,7 @@
 		exit();
 	}
 
-	$codigo=Movimientos::guardarAbonos($conexion, $config, $_POST);
+	$codigo=Movimientos::guardarAbonos($conexion, $config, $_POST, $_FILES);
 	
 	require_once(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 	echo '<script type="text/javascript">window.location.href="abonos.php?success=SC_DT_1&id='.base64_encode($codigo).'";</script>';

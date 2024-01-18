@@ -11,7 +11,7 @@
 		exit();
 	}
 
-	Movimientos::actualizarAbono($conexion, $config, $_POST);
+	Movimientos::actualizarAbono($conexion, $config, $_POST, $_FILES);
 
 	require_once(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 	echo '<script type="text/javascript">window.location.href="abonos.php?success=SC_DT_2&id='.base64_encode($_POST["id"]).'";</script>';

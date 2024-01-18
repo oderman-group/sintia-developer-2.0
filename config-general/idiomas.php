@@ -810,6 +810,10 @@ $frases[412][$l] = 'Filtrar por cursos';
 $frases[413][$l] = 'Abonos';
 $frases[414][$l] = 'Método de Pago';
 
+$frases[415][$l] = 'Facturas Recurrentes';
+$frases[416][$l] = 'Notas Adicionales';
+$frases[417][$l] = 'Cobrado';
+$frases[418][$l] = 'Por cobrar';
 
 //ENGLISH
 
@@ -1609,3 +1613,7 @@ $frases[412][$l] = 'Filter by courses';
 $frases[413][$l] = 'Payments';
 $frases[414][$l] = 'Payment Method';
 
+$frases[387][$l] = 'Recurring Invoices';
+$frases[388][$l] = 'Additional notes';
+$frases[389][$l] = 'Collected';
+$frases[390][$l] = 'To collect';
