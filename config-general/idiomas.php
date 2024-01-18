@@ -1613,7 +1613,7 @@ $frases[412][$l] = 'Filter by courses';
 $frases[413][$l] = 'Payments';
 $frases[414][$l] = 'Payment Method';
 
-$frases[387][$l] = 'Recurring Invoices';
-$frases[388][$l] = 'Additional notes';
-$frases[389][$l] = 'Collected';
-$frases[390][$l] = 'To collect';
+$frases[415][$l] = 'Recurring Invoices';
+$frases[416][$l] = 'Additional notes';
+$frases[417][$l] = 'Collected';
+$frases[418][$l] = 'To collect';
