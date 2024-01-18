@@ -75,7 +75,7 @@ if (!empty($_GET["busqueda"])) {
             <input type="hidden" name="cat" value="<?= base64_encode($cat); ?>" />
             <input type="hidden" name="company" value="<?= base64_encode($company); ?>" />
             <input class="form-control mr-sm-2" type="search" placeholder="Búscar Producto..." aria-label="Search" name="busqueda" value="<?= $busqueda; ?>">
-            <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
+            <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit"><?=$frases[8][$datosUsuarioActual['uss_idioma']];?></button>
         </form>
 
     </div>

@@ -257,7 +257,7 @@
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Direcci&oacute;n</label>
 												<div class="col-sm-4">
-													<input type="text" name="direccion" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual['mat_barrio'];?>" <?=$disabledPermiso;?>>
+													<input type="text" name="direccion" class="form-control" autocomplete="off" value="<?=$datosEstudianteActual['mat_direccion'];?>" <?=$disabledPermiso;?>>
 												</div>
 												<div class="col-sm-4">
 													<input type="text" name="barrio" class="form-control" placeholder="Barrio" autocomplete="off" value="<?=$datosEstudianteActual['mat_barrio'];?>" <?=$disabledPermiso;?>>
