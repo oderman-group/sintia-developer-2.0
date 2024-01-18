@@ -21,7 +21,7 @@ $abonos = Movimientos::calcularTotalAbonado($conexion, $config, $resultado['fcu_
 // $abonos = number_format($abonos, 0, ",", ".");
 
 $disabledPermiso = "";
-if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resultado['fcu_status']==1 || $abonos>0){
+if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resultado['fcu_status']==COBRADA || $abonos>0){
 	$disabledPermiso = "disabled";
 }
 ?>
@@ -171,8 +171,8 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2" name="estado" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
-													<option value="0" <?php if($resultado['fcu_status']==0){ echo "selected";}?>>Por Cobrar</option>
-													<option value="1" <?php if($resultado['fcu_status']==1){ echo "selected";}?>>Cobrada</option>
+													<option value="<?=POR_COBRAR?>" <?php if($resultado['fcu_status']==POR_COBRAR){ echo "selected";}?>>Por Cobrar</option>
+													<option value="<?=COBRADA?>" <?php if($resultado['fcu_status']==COBRADA){ echo "selected";}?>>Cobrada</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -285,7 +285,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
                                                                 <td id="subtotalNuevo" data-subtotal-anterior="0">$0</td>
                                                                 <td id="eliminarNuevo"></td>
                                                             </tr>
-                                                            <?php if(Modulos::validarPermisoEdicion() && $resultado['fcu_anulado']==0 && $resultado['fcu_status']==0 && $abonos==0){?>
+                                                            <?php if(Modulos::validarPermisoEdicion() && $resultado['fcu_anulado']==0 && $resultado['fcu_status']==POR_COBRAR && $abonos==0){?>
                                                                 <tr>
                                                                     <td colspan="6">
                                                                         <button type="button" title="Agregar nueva línea para item" style="padding: 4px 4px; margin: 5px;" class="btn btn-sm" data-toggle="tooltip" onclick="nuevoItem()" data-placement="right" ><i class="fa fa-plus"></i> Agregar línea</button>
@@ -329,7 +329,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
 										
                                         <div class="text-right">
                                             <a href="javascript:void(0);" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
-                                            <?php if(Modulos::validarPermisoEdicion() && $resultado['fcu_anulado']==0 && $resultado['fcu_status']==0 && $abonos==0){?>
+                                            <?php if(Modulos::validarPermisoEdicion() && $resultado['fcu_anulado']==0 && $resultado['fcu_status']==POR_COBRAR && $abonos==0){?>
                                                 <button type="submit" class="btn  btn-info">
                                                     <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
                                                 </button>
