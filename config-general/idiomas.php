@@ -1600,7 +1600,6 @@ $frases[400][$l] = 'Stock history';
 $frases[401][$l] = 'Cancellation requests';
 $frases[402][$l] = 'Modules';
 $frases[403][$l] = 'Pages';
-$frases[403][$l] = 'Paginas';
 $frases[404][$l] = 'General options';
 $frases[405][$l] = 'Restored keys';
 $frases[406][$l] = 'Contracts';
