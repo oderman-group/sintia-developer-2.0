@@ -598,17 +598,19 @@ if(mysqli_num_rows($cndisiplina)>0){
 
 </div>  
 <?php 
-if($periodoActual==4){
-	if($materiasPerdidas>=$config["conf_num_materias_perder_agno"])
-		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr['mat_primer_apellido']." ".$datosUsr['mat_segundo_apellido']." ".$datosUsr["mat_nombres"])." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
-	elseif($materiasPerdidas<$config["conf_num_materias_perder_agno"] and $materiasPerdidas>0)
-		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr['mat_primer_apellido']." ".$datosUsr['mat_segundo_apellido']." ".$datosUsr["mat_nombres"])." DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";
-	else
-		$msj = "<center>EL (LA) ESTUDIANTE ".strtoupper($datosUsr['mat_primer_apellido']." ".$datosUsr['mat_segundo_apellido']." ".$datosUsr["mat_nombres"])." FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";	
-}
+	if($periodoActual==4){
+		if($materiasPerdidas>=$config["conf_num_materias_perder_agno"])
+			$msj = "<center>EL (LA) ESTUDIANTE ".UsuariosPadre::nombreCompletoDelUsuario($datosUsr)." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+		elseif($materiasPerdidas<$config["conf_num_materias_perder_agno"] and $materiasPerdidas>0)
+			$msj = "<center>EL (LA) ESTUDIANTE ".UsuariosPadre::nombreCompletoDelUsuario($datosUsr)." DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";
+		else
+			$msj = "<center>EL (LA) ESTUDIANTE ".UsuariosPadre::nombreCompletoDelUsuario($datosUsr)." FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";	
+	}
 ?>
 
-
+<p align="center">
+	<div style="font-weight:bold; font-family:Arial, Helvetica, sans-serif; font-style:italic; font-size:12px;" align="center"><?=$msj;?></div>
+</p>
 <?php include("../compartido/footer-informes.php") ?>
 				                   
 <!-- 

@@ -21,7 +21,7 @@ if(!isset($_GET["carga"]) or !isset($_GET["periodo"]) or !is_numeric($periodo)){
 		$cargaConsultaActual = $_COOKIE["carga"];
 		$periodoConsultaActual = $_COOKIE["periodo"];
 	}else{
-			echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=100";</script>';
+			echo '<script type="text/javascript">window.location.href="../docente/page-info.php?idmsg=100";</script>';
 			exit();
 	}
 }else{
@@ -46,7 +46,7 @@ $dgArray = array ("NO","SI");
 
 if(empty($datosCargaActual))
 {
-	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=100";</script>';
+	echo '<script type="text/javascript">window.location.href="../docente/page-info.php?idmsg=100";</script>';
 	exit();		
 }
 $filtroDocentesParaListarEstudiantes = " AND mat_grado='".$datosCargaActual['car_curso']."' AND mat_grupo='".$datosCargaActual['car_grupo']."'";
