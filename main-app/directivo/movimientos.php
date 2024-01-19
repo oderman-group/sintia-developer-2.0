@@ -91,8 +91,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<th>Fecha</th>
 														<th>Detalle</th>
 														<th><?=$frases[107][$datosUsuarioActual['uss_idioma']];?></th>
-														<th><?=$frases[389][$datosUsuarioActual['uss_idioma']];?></th>
-														<th><?=$frases[390][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[417][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[418][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Tipo</th>
 														<th>Usuario</th>
 														<th><?=$frases[246][$datosUsuarioActual['uss_idioma']];?></th>
@@ -122,7 +122,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 
 														$bgColorEstado = '#eeff0038';
 														$estado = 'Por Cobrar';
-														if($resultado['fcu_status']==1) { $bgColorEstado = '#00F13A38'; $estado = 'Cobrada'; }
+														if($resultado['fcu_status']==COBRADA) { $bgColorEstado = '#00F13A38'; $estado = 'Cobrada'; }
 
 														$vlrAdicional = !empty($resultado['fcu_valor']) ? $resultado['fcu_valor'] : 0;
 
@@ -132,7 +132,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 
 														$porCobrar = $totalNeto - $abonos;
 													?>
-													<tr style="background-color:<?=$bgColor;?>;">
+													<tr id="reg<?=$resultado['fcu_id'];?>" style="background-color:<?=$bgColor;?>;">
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado['fcu_id'];?></td>
 														<td>
@@ -161,8 +161,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		<?php if( Modulos::validarSubRol(['DT0128']) ){?>
 																			<li><a href="movimientos-editar.php?id=<?=base64_encode($resultado['fcu_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
 																		<?php }?>
-																		<?php if($resultado['fcu_anulado']!=1 && $resultado['fcu_status']!=1 && Modulos::validarSubRol(['DT0089'])){?>
-																			<li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','¿Deseas anular esta transacción?','question','movimientos-anular.php?idR=<?=base64_encode($resultado['fcu_id']);?>&id=<?=base64_encode($resultado['uss_id']);?>')">Anular</a></li>
+																		<?php if($resultado['fcu_anulado']!=1 && $resultado['fcu_status']==POR_COBRAR && Modulos::validarSubRol(['DT0089'])){?>
+																			<li id="anulado<?=$resultado['fcu_id'];?>"><a href="javascript:void(0);" onClick="anularMovimiento(this)" data-id-registro="<?=$resultado['fcu_id'];?>" data-id-usuario="<?=$resultado['uss_id'];?>">Anular</a></li>
 																		<?php } ?>
 																		<?php if( Modulos::validarSubRol(['DT0255']) ){?>
 																			<li><a href="movimientos-factura-venta.php?id=<?=base64_encode($resultado['fcu_id']);?>" target="_blank"><?=$frases[57][$datosUsuarioActual['uss_idioma']];?></a></li>

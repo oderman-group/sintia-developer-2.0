@@ -25,7 +25,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
   <tr style="font-weight:bold; font-size:12px; height:30px; background:<?php echo $config[12] ?>;">
 	<th>ID</th>
                                         <th>Nombre</th>
-                                         <th>Tipo</th>
+                                         <th><?=$frases[53][$datosUsuarioActual['uss_idioma']];?></th>
                                         <th>Email</th>
                                         <th>Celular</th>
                                         <th>Saldo</th>
