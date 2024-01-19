@@ -151,8 +151,8 @@
     <form class="form-inline my-2 my-lg-0" action="estudiantes.php" method="get">
         <input type="hidden" name="curso" value="<?=base64_encode($curso);?>"/>
         <input type="hidden" name="estadoM" value="<?=base64_encode($estadoM);?>"/>
-        <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?=$busqueda;?>">
-      <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
+        <input class="form-control mr-sm-2" type="search" placeholder="<?=$frases[386][$datosUsuarioActual['uss_idioma']];?>..." aria-label="Search" name="busqueda" value="<?=$busqueda;?>">
+      <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit"><?=$frases[8][$datosUsuarioActual['uss_idioma']];?></button>
     </form>
 
   </div>

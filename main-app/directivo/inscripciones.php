@@ -33,7 +33,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title">Inscripciones</div>
+                                <div class="page-title"><?=$frases[390][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                         </div>
@@ -84,7 +84,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                     <?php } ?>
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
-                                            <header>Inscripciones</header>
+                                            <header><?=$frases[390][$datosUsuarioActual['uss_idioma']];?></header>
                                             <div class="tools">
                                                 <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
 			                                    <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>

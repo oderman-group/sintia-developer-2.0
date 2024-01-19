@@ -70,8 +70,8 @@ if (!empty($_GET['busqueda'])) {
         <form class="form-inline my-2 my-lg-0" action="<?= $_SERVER['PHP_SELF']; ?>" method="get">
             <input type="hidden" name="uss" value="<?= $ussDev; ?>"/>
             <input type="hidden" name="modulo" value="<?= $moduloDev; ?>"/>
-            <input class="form-control mr-sm-2" type="search" placeholder="Búsqueda..." aria-label="Search" name="busqueda" value="<?= $busqueda; ?>">
-            <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit">Buscar</button>
+            <input class="form-control mr-sm-2" type="search" placeholder="<?=$frases[386][$datosUsuarioActual['uss_idioma']];?>..." aria-label="Search" name="busqueda" value="<?= $busqueda; ?>">
+            <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit"><?=$frases[8][$datosUsuarioActual['uss_idioma']];?></button>
         </form>
 
     </div>
