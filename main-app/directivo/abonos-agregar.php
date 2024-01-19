@@ -113,11 +113,27 @@ if(!Modulos::validarPermisoEdicion()){
                                                 </select>
                                             </div>
 										</div>
+										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label"><?=$frases[345][$datosUsuarioActual['uss_idioma']];?></label>
+                                            <div class="col-sm-4">
+                                                <input type="file" name="comprobante" class="form-control" <?=$disabledPermiso;?>>
+                                            </div>
+										</div>
 
                                         <div class="form-group row">
                                             <label class="col-sm-12 control-label"><?=$frases[109][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-12">
                                                 <textarea cols="80" id="editor1" name="obser" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?=$disabledPermiso;?>></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-12 control-label"><?=$frases[388][$datosUsuarioActual['uss_idioma']];?>
+                                                <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Estas notas no se verán reflejadas en el comprobante."><i class="fa fa-question"></i></button>
+                                            </label>
+                                            <div class="col-sm-12">
+                                                <textarea cols="80" id="editor2" name="notas" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?=$disabledPermiso;?>></textarea>
                                             </div>
                                         </div>
                                         
@@ -172,6 +188,7 @@ if(!Modulos::validarPermisoEdicion()){
 
     <script>
         CKEDITOR.replace( 'editor1' );
+        CKEDITOR.replace( 'editor2' );
     </script>
 </body>
 
