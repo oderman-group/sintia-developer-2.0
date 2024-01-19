@@ -79,7 +79,7 @@ if(!empty($_GET['msj'])){
 														<th>ID</th>
 														<th>Usuario </th>
 														<th>Nombre</th>
-														<th>Tipo</th>
+														<th><?=$frases[53][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Año</th>
                                                     </tr>
                                                 </thead>

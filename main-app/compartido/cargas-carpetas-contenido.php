@@ -63,7 +63,7 @@
 	
 											<div class="form-group row">
 												<div class="col-sm-8">
-													<input type="text" name="busqueda" class="form-control" value="<?php if(!empty($_GET["busqueda"])){ echo $_GET["busqueda"];}?>" placeholder="Búsqueda...">
+													<input type="text" name="busqueda" class="form-control" value="<?php if(!empty($_GET["busqueda"])){ echo $_GET["busqueda"];}?>" placeholder="<?=$frases[386][$datosUsuarioActual['uss_idioma']];?>...">
 												</div>
 												<div class="col-sm-4">
 													<input type="submit" class="btn btn-primary" value="<?=$frases[8][$datosUsuarioActual['uss_idioma']];?>">
