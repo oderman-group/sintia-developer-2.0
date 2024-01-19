@@ -122,7 +122,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 
 														$bgColorEstado = '#eeff0038';
 														$estado = 'Por Cobrar';
-														if($resultado['fcu_status']==1) { $bgColorEstado = '#00F13A38'; $estado = 'Cobrada'; }
+														if($resultado['fcu_status']==COBRADA) { $bgColorEstado = '#00F13A38'; $estado = 'Cobrada'; }
 
 														$vlrAdicional = !empty($resultado['fcu_valor']) ? $resultado['fcu_valor'] : 0;
 
@@ -161,7 +161,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		<?php if( Modulos::validarSubRol(['DT0128']) ){?>
 																			<li><a href="movimientos-editar.php?id=<?=base64_encode($resultado['fcu_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
 																		<?php }?>
-																		<?php if($resultado['fcu_anulado']!=1 && $resultado['fcu_status']!=1 && Modulos::validarSubRol(['DT0089'])){?>
+																		<?php if($resultado['fcu_anulado']!=1 && $resultado['fcu_status']==POR_COBRAR && Modulos::validarSubRol(['DT0089'])){?>
 																			<li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','¿Deseas anular esta transacción?','question','movimientos-anular.php?idR=<?=base64_encode($resultado['fcu_id']);?>&id=<?=base64_encode($resultado['uss_id']);?>')">Anular</a></li>
 																		<?php } ?>
 																		<?php if( Modulos::validarSubRol(['DT0255']) ){?>
