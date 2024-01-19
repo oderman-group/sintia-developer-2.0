@@ -3,7 +3,7 @@
         <div class="page-bar">
             <div class="page-title-breadcrumb">
                 <div class=" pull-left">
-                    <div class="page-title">Paginas</div>
+                    <div class="page-title"><?=$frases[403][$datosUsuarioActual['uss_idioma']];?></div>
                     <?php include("../compartido/texto-manual-ayuda.php");?>
                 </div>
             </div>

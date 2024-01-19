@@ -52,7 +52,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                         <th>#</th>
 														<th><?=$frases[51][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Falta</th>
-														<th>Tipo</th>
+														<th><?=$frases[53][$datosUsuarioActual['uss_idioma']];?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

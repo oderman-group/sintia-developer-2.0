@@ -778,17 +778,42 @@ $frases[383][$l] = 'Responsable';
 
 $frases[384][$l] = 'Ambiente';
 
-$frases[385][$l] = 'Abonos';
 
-$frases[386][$l] = 'Método de Pago';
+$frases[385][$l] = 'Informes';
+$frases[386][$l] = 'Busqueda';
+$frases[387][$l] = 'Más acciones';
+$frases[388][$l] = 'Cuestionarios';
+$frases[389][$l] = 'Último ingreso';
+$frases[390][$l] = 'Inscripciones';
+$frases[391][$l] = 'Reserva de cupos';
+$frases[392][$l] = 'Listado de inscripciones';
+$frases[393][$l] = 'Ver cuestionarios';
+$frases[394][$l] = 'Solicitud desbloqueo';
+$frases[395][$l] = 'Del sitema';
+$frases[396][$l] = 'De la institución';
+$frases[397][$l] = 'Crear nueva BD';
+$frases[398][$l] = 'Log de errores';
+$frases[399][$l] = 'Instituciones';
+$frases[400][$l] = 'Historial de acciones';
+$frases[401][$l] = 'Solicitudes de cancelacion';
+$frases[402][$l] = 'Módulos';
+$frases[403][$l] = 'Paginas';
+$frases[404][$l] = 'Opciones generales';
+$frases[405][$l] = 'Claves restauradas';
+$frases[406][$l] = 'Contratos';
+$frases[407][$l] = 'Datos de contacto';
+$frases[408][$l] = 'Categorías  productos';
+$frases[409][$l] = 'Categorías servicios';
+$frases[410][$l] = 'Productos';
+$frases[411][$l] = 'Empresas';
+$frases[412][$l] = 'Filtrar por cursos';
+$frases[413][$l] = 'Abonos';
+$frases[414][$l] = 'Método de Pago';
 
-$frases[387][$l] = 'Facturas Recurrentes';
-
-$frases[388][$l] = 'Notas Adicionales';
-
-$frases[389][$l] = 'Cobrado';
-
-$frases[390][$l] = 'Por cobrar';
+$frases[415][$l] = 'Facturas Recurrentes';
+$frases[416][$l] = 'Notas Adicionales';
+$frases[417][$l] = 'Cobrado';
+$frases[418][$l] = 'Por cobrar';
 
 //ENGLISH
 
@@ -1555,14 +1580,39 @@ $frases[383][$l] = 'Responsible';
 
 $frases[384][$l] = 'Environment';
 
-$frases[385][$l] = 'Payments';
 
-$frases[386][$l] = 'Payment Method';
+$frases[385][$l] = 'Reports';
+$frases[386][$l] = 'Search';
+$frases[387][$l] = 'More actions';
+$frases[388][$l] = 'Questionnaires';
+$frases[389][$l] = 'Last login';
+$frases[390][$l] = 'Registrations';
+$frases[391][$l] = 'Reservation of places';
+$frases[392][$l] = 'Registration list';
+$frases[393][$l] = 'see questionnaires';
+$frases[394][$l] = 'Unlock request';
+$frases[395][$l] = 'Of the system';
+$frases[396][$l] = 'Of the institution';
+$frases[397][$l] = 'Create new DB';
+$frases[398][$l] = 'Error log';
+$frases[399][$l] = 'Institutions';
+$frases[400][$l] = 'Stock history';
+$frases[401][$l] = 'Cancellation requests';
+$frases[402][$l] = 'Modules';
+$frases[403][$l] = 'Pages';
+$frases[404][$l] = 'General options';
+$frases[405][$l] = 'Restored keys';
+$frases[406][$l] = 'Contracts';
+$frases[407][$l] = 'Contact information';
+$frases[408][$l] = 'Product categories';
+$frases[409][$l] = 'Service categories';
+$frases[410][$l] = 'Product';
+$frases[411][$l] = 'Companies';
+$frases[412][$l] = 'Filter by courses';
+$frases[413][$l] = 'Payments';
+$frases[414][$l] = 'Payment Method';
 
-$frases[387][$l] = 'Recurring Invoices';
-
-$frases[388][$l] = 'Additional notes';
-
-$frases[389][$l] = 'Collected';
-
-$frases[390][$l] = 'To collect';
+$frases[415][$l] = 'Recurring Invoices';
+$frases[416][$l] = 'Additional notes';
+$frases[417][$l] = 'Collected';
+$frases[418][$l] = 'To collect';
