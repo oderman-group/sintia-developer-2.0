@@ -85,16 +85,16 @@ if (!Modulos::validarPermisoEdicion()) {
                                     <div class="form-group row">
 
                                         <div class="col-sm-2">
-                                            <label class="control-label"><?= $frases[51][$datosUsuarioActual['uss_idioma']]; ?><span style="color: red;">(*)</span> </label>
+                                            <label class="control-label"><?= $frases[51][$datosUsuarioActual['uss_idioma']]; ?> </label>
                                             
-                                            <input type="text" name="fecha" disabled class="form-control" autocomplete="off" required value="<?=$resultado['evag_fecha']?>" >
+                                            <input type="text" name="fecha" disabled class="form-control"  required value="<?=$resultado['evag_fecha']?>" >
                                         </div>
 
                                         <div class="col-sm-2">
                                             <label class="control-label">Obligatoria</label>
                                             <select class="form-control  select2" name="obligatoria" <?= $disabledPermiso; ?>>
                                                 <option value="1" <?php if($resultado['evag_obligatoria']==1){ echo "selected";}?>><?= $frases[275][$datosUsuarioActual['uss_idioma']]; ?></option>
-                                                <option value="0" <?php if($resultado['evag_obligatoria']==1){ echo "selected";}?>><?= $frases[276][$datosUsuarioActual['uss_idioma']]; ?></option>
+                                                <option value="0" <?php if($resultado['evag_obligatoria']==0){ echo "selected";}?>><?= $frases[276][$datosUsuarioActual['uss_idioma']]; ?></option>
                                             </select>
                                         </div>
 
@@ -102,7 +102,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                             <label class="control-label">Visible</label>
                                             <select class="form-control  select2" name="visible" <?= $disabledPermiso; ?>>
                                                 <option value="1" <?php if($resultado['evag_visible']==1){ echo "selected";}?>><?= $frases[275][$datosUsuarioActual['uss_idioma']]; ?></option>
-                                                <option value="0" <?php if($resultado['evag_visible']==1){ echo "selected";}?>><?= $frases[276][$datosUsuarioActual['uss_idioma']]; ?></option>
+                                                <option value="0" <?php if($resultado['evag_visible']==0){ echo "selected";}?>><?= $frases[276][$datosUsuarioActual['uss_idioma']]; ?></option>
                                             </select>
                                         </div>
                                         <div class="col-sm-6">

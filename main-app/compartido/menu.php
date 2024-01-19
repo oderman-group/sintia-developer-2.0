@@ -286,14 +286,14 @@
 							<?php 
 							//MÓDULO CUESTIONARIO EVALUATIVO
 							if(!empty($arregloModulos) && array_key_exists(18, $arregloModulos)){?>
-							<li <?php agregarClass(MENU_PADRE,["DT0281","DT0282","DT0283"]) ?>>
+							<li <?php agregarClass(MENU_PADRE,["DT0281","DT0283","DT0285"]) ?>>
 	                            <a href="javascript:void(0);" class="nav-link nav-toggle"> <i class="fa fa-question"></i>
 	                                <span class="title">Cuestionarios</span> <span class="arrow"></span>
 	                            </a>
-	                            <ul class="sub-menu">
+	                            <ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0281","DT0283","DT0285"])?>>
 	                                <li ><a href="javascript:void(0);" class="nav-link "> <span class="title">Ver cuestionarios</span></a></li>									
 									<li ><a href="javascript:void(0);" class="nav-link "> <span class="title">Preguntas</span></a></li>
-									<li <?php agregarClass(MENU,["DT0281","DT0282","DT0283"]) ?>><a href="evaluaciones.php" class="nav-link "> <span class="title"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<li <?php agregarClass(MENU,["DT0281","DT0283","DT0285"]) ?>><a href="evaluaciones.php" class="nav-link "> <span class="title"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 
 	                            </ul>
 	                        </li>

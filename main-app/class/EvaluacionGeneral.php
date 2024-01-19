@@ -53,18 +53,27 @@ class EvaluacionGeneral  extends Servicios{
      */
     public static function actualizar($Post)
     {
-        global $config;
         Servicios::UpdateSql(
             "UPDATE " . BD_ADMIN . ".general_evaluaciones SET 
-            evag_nombre='" . $Post["codigoC"] . "', 
-            evag_descripcion='" . $Post["nombreC"] . "', 
+            evag_nombre='" . $Post["nombre"] . "', 
+            evag_descripcion='" . $Post["descripcion"] . "', 
             evag_clave='" . $Post["clave"] . "', 
-            evag_fecha='" . $Post["fecha"] . "', 
-            evag_editada=' 1 ', 
+            evag_editada=1, 
             evag_visible='" . $Post["visible"] . "', 
             evag_obligatoria='" . $Post["obligatoria"] . "'
-            WHERE gra_id='" . $Post["id"] . "' "
+            WHERE evag_id='" . $Post["id"] . "' "
         );
+    }
+
+      /**
+     * Elimina la existencia de una Evaluacion
+     * @param string $id ID del la evaluacion.
+     *
+     * @return void
+     */
+    public static function eliminar($id)
+    {        
+            Servicios::UpdateSql( "DELETE FROM " . BD_ADMIN . ".general_evaluaciones WHERE evag_id='".$id."';");         
     }
 
         /**
@@ -88,8 +97,7 @@ class EvaluacionGeneral  extends Servicios{
      * @return array|mysqli_result|false Arreglo de datos del resultado, objeto mysqli_result o false si hay un error.
      */
     public static function listar(
-        $parametrosArray=null,
-        string $yearBd    = ''
+        $parametrosArray=null
       )
       {
         
