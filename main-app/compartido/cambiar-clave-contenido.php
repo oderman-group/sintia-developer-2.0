@@ -25,25 +25,43 @@
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Contraseña actual</label>
                     <div class="col-sm-4">
-                        <input type="password" name="claveActual" class="form-control" required>
+                        <div class="input-group">
+                            <div class="input-group-prepend" onclick="cambiarTipoInput('claveActual', 'icoVerActual')">
+                                <span class="input-group-text"><i class="fas fa-eye" id="icoVerActual"></i></span>
+                            </div>
+                            <input type="password" name="claveActual" id="claveActual" oninput="validarClaveActual(this)" data-clave-actual="<?=$datosUsuarioActual['uss_clave']?>" class="form-control" required>
+                        </div>
                     </div>
+                    <span id="respuestaClaveActual" style="display:none"></span>
                 </div>
                 
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Contraseña nueva</label>
                     <div class="col-sm-4">
-                        <input type="password" name="claveNueva" class="form-control" required>
+                        <div class="input-group">
+                            <div class="input-group-prepend" onclick="cambiarTipoInput('claveNueva', 'icoVerNueva')">
+                                <span class="input-group-text"><i class="fas fa-eye" id="icoVerNueva"></i></span>
+                            </div>
+                            <input type="password" name="claveNueva" id="claveNueva" oninput="validarClaveNueva(this)" class="form-control" required>
+                        </div>
                     </div>
+                    <span id="respuestaClaveNueva" style="display:none"></span>
                 </div>
 
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Confirmar contraseña nueva</label>
                     <div class="col-sm-4">
-                        <input type="password" name="claveNuevaDos" class="form-control" required>
+                        <div class="input-group">
+                            <div class="input-group-prepend" onclick="cambiarTipoInput('claveNuevaDos', 'icoVerNuevaDos')">
+                                <span class="input-group-text"><i class="fas fa-eye" id="icoVerNuevaDos"></i></span>
+                            </div>
+                            <input type="password" name="claveNuevaDos" id="claveNuevaDos" oninput="claveNuevaConfirmar(this)" class="form-control" required>
+                        </div>
                     </div>
+                    <span id="respuestaConfirmacionClaveNueva" style="display:none"></span>
                 </div>
 
-                <button type="submit" class="btn  btn-info">
+                <button type="submit" class="btn  btn-info" id="btnEnviar">
                     <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
                 </button>
             </form>
