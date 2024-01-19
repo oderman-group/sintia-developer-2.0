@@ -42,12 +42,12 @@ if(!Modulos::validarPermisoEdicion()){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[385][$datosUsuarioActual['uss_idioma']];?></div>
+                                <div class="page-title"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[413][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php require_once(ROOT_PATH."/main-app/compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="abonos.php" onClick="deseaRegresar(this)"><?=$frases[385][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[385][$datosUsuarioActual['uss_idioma']];?></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="abonos.php" onClick="deseaRegresar(this)"><?=$frases[413][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[413][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
@@ -55,7 +55,7 @@ if(!Modulos::validarPermisoEdicion()){
                         <div class="col-sm-12">
                             <?php require_once(ROOT_PATH."/config-general/mensajes-informativos.php"); ?>
                             <div class="panel">
-                                <header class="panel-heading panel-heading-purple"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[385][$datosUsuarioActual['uss_idioma']];?></header>
+                                <header class="panel-heading panel-heading-purple"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[413][$datosUsuarioActual['uss_idioma']];?></header>
                                 <div class="panel-body">
 									<form name="formularioGuardar" action="abonos-guardar.php" method="post" enctype="multipart/form-data">
 
@@ -113,11 +113,27 @@ if(!Modulos::validarPermisoEdicion()){
                                                 </select>
                                             </div>
 										</div>
+										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label"><?=$frases[345][$datosUsuarioActual['uss_idioma']];?></label>
+                                            <div class="col-sm-4">
+                                                <input type="file" name="comprobante" class="form-control" <?=$disabledPermiso;?>>
+                                            </div>
+										</div>
 
                                         <div class="form-group row">
                                             <label class="col-sm-12 control-label"><?=$frases[109][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-12">
                                                 <textarea cols="80" id="editor1" name="obser" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?=$disabledPermiso;?>></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-12 control-label"><?=$frases[416][$datosUsuarioActual['uss_idioma']];?>
+                                                <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Estas notas no se verán reflejadas en el comprobante."><i class="fa fa-question"></i></button>
+                                            </label>
+                                            <div class="col-sm-12">
+                                                <textarea cols="80" id="editor2" name="notas" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?=$disabledPermiso;?>></textarea>
                                             </div>
                                         </div>
                                         
@@ -172,6 +188,7 @@ if(!Modulos::validarPermisoEdicion()){
 
     <script>
         CKEDITOR.replace( 'editor1' );
+        CKEDITOR.replace( 'editor2' );
     </script>
 </body>
 

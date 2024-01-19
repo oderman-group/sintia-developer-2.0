@@ -27,11 +27,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[385][$datosUsuarioActual['uss_idioma']];?></div>
+                                <div class="page-title"><?=$frases[413][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php require_once(ROOT_PATH."/main-app/compartido/texto-manual-ayuda.php");?>
                             </div>
                             <ol class="breadcrumb page-breadcrumb pull-right">
-                                <li class="active"><?=$frases[385][$datosUsuarioActual['uss_idioma']];?></li>
+                                <li class="active"><?=$frases[413][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
@@ -44,7 +44,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                 <?php require_once(ROOT_PATH."/config-general/mensajes-informativos.php"); ?>
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
-                                            <header><?=$frases[385][$datosUsuarioActual['uss_idioma']];?></header>
+                                            <header><?=$frases[413][$datosUsuarioActual['uss_idioma']];?></header>
                                             <div class="tools">
                                                 <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
 			                                    <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
@@ -71,8 +71,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<th><?=$frases[51][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[383][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[380][$datosUsuarioActual['uss_idioma']];?></th>
-														<th><?=$frases[385][$datosUsuarioActual['uss_idioma']];?></th>
-														<th><?=$frases[386][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[413][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[414][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[345][$datosUsuarioActual['uss_idioma']];?></th>
                                                         <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0267','DT0269'])){?>
                                                             <th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                                                         <?php }?>
@@ -83,6 +84,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                         $consulta= Movimientos::listarAbonos($conexion, $config);
                                                         $contReg = 1;
                                                         while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+
+                                                            $vaucher = '';
+                                                            if (!empty($resultado['voucher']) and file_exists(ROOT_PATH.'/main-app/files/comprobantes/' . $resultado['voucher'])) {
+                                                                $vaucher = '<a href="'.REDIRECT_ROUTE.'/files/comprobantes/'.$resultado['voucher'].'" target="_blank" class="link">'.$resultado['voucher'].'</a>';
+                                                            }
 
                                                             $arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
                                                             $arrayDatos = json_encode($arrayEnviar);
@@ -95,6 +101,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<td><?=$resultado['invoiced'];?></td>
 														<td>$<?=number_format($resultado['payment'],0,",",".")?></td>
 														<td><?=$resultado['payment_method'];?></td>
+														<td><?=$vaucher;?></td>
 														
                                                         <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0267','DT0269'])){?>
                                                             <td>

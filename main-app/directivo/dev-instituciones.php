@@ -61,7 +61,7 @@ $Plataforma = new Plataforma;
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
-                            <div class="page-title">Instituciones</div>
+                            <div class="page-title"><?=$frases[399][$datosUsuarioActual['uss_idioma']];?></div>
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                     </div>
@@ -88,7 +88,7 @@ $Plataforma = new Plataforma;
 
                                 <div class="card card-topline-purple">
                                     <div class="card-head">
-                                        <header>Instituciones</header>
+                                        <header><?=$frases[399][$datosUsuarioActual['uss_idioma']];?></header>
                                         <div class="tools">
                                             <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
                                             <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
@@ -171,7 +171,7 @@ $Plataforma = new Plataforma;
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
                                                                         <li><a href="dev-instituciones-editar.php?id=<?= base64_encode($resultado['ins_id']); ?>">Editar</a></li>
-                                                                        <li><a href="dev-instituciones-configuracion.php?id=<?= base64_encode($resultado['ins_id']); ?>">Configuración</a></li>
+                                                                        <li><a href="dev-instituciones-configuracion.php?id=<?= base64_encode($resultado['ins_id']); ?>"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?></a></li>
                                                                         <li><a href="dev-instituciones-Informacion.php?id=<?= base64_encode($resultado['ins_id']); ?>">Información</a></li>
                                                                         <li><a href="auto-login-dev.php?user=<?=base64_encode(1);?>&idInstitucion=<?=base64_encode($resultado['ins_id']);?>&bd=<?=base64_encode($resultado['ins_bd']);?>&yearDefault=<?=base64_encode($resultado['ins_year_default']);?>">Autologin</a></li>
                                                                     </ul>
