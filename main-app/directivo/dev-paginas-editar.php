@@ -180,6 +180,17 @@ if(!Modulos::validarPaginasHijasSubRol(base64_decode($_GET["idP"]))){
                                         </div>
 										
 										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Asignable a SubRoles?</label>
+                                            <div class="col-sm-3">
+                                                <select class="form-control  select2" name="subroles" id="subroles">
+                                                    <option value="">Seleccione una opción</option>
+                                                    <option value="<?=SI?>" <?php if($datosPaginas['pagp_asignable_subroles'] == SI){ echo "selected";} ?>>SI</option>
+                                                    <option value="<?=NO?>" <?php if($datosPaginas['pagp_asignable_subroles'] == NO){ echo "selected";} ?>>NO</option>
+                                                </select>
+                                            </div>
+                                        </div>
+										
+										<div class="form-group row">
                                             <label class="col-sm-2 control-label">CRUD</label>
                                             <div class="col-sm-3">
                                                 <select class="form-control  select2" name="crud" id="crud" <?=$disabled;?>>
