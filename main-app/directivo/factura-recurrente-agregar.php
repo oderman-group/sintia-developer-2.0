@@ -45,12 +45,12 @@ $idRecurrente=Utilidades::generateCode("FCR");
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[387][$datosUsuarioActual['uss_idioma']];?></div>
+                                <div class="page-title"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[415][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="factura-recurrente.php" onClick="deseaRegresar(this)"><?=$frases[387][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[387][$datosUsuarioActual['uss_idioma']];?></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="factura-recurrente.php" onClick="deseaRegresar(this)"><?=$frases[415][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[415][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
@@ -61,7 +61,7 @@ $idRecurrente=Utilidades::generateCode("FCR");
                                     include("../../config-general/mensajes-informativos.php");
                                 ?>
 								<div class="panel">
-									<header class="panel-heading panel-heading-purple"><?=$frases[387][$datosUsuarioActual['uss_idioma']];?> </header>
+									<header class="panel-heading panel-heading-purple"><?=$frases[415][$datosUsuarioActual['uss_idioma']];?> </header>
                                 	<div class="panel-body">
 
                                    

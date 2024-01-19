@@ -82,7 +82,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<th>Pensión</th>														
 														<th>#P</th>
 														<?php if(array_key_exists(10,$arregloModulos) ){?>
-															<th>Tipo</th>
+															<th><?=$frases[53][$datosUsuarioActual['uss_idioma']];?></th>
 														<?php }?>
 														<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                                                     </tr>

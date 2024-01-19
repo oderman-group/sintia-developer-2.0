@@ -200,7 +200,7 @@ switch ($resultado['payment_method']) {
                 <tr>
                     <td align="center">
                         <?php
-                            if(!empty($resultado["uss_firma"])){
+                            if(!empty($resultado["uss_firma"]) && file_exists(ROOT_PATH.'/main-app/files/fotos/' . $resultado['uss_firma'])){
                                 echo '<img src="../files/fotos/'.$resultado["uss_firma"].'" width="100"><br>';
                             }else{
                                 echo '<p>&nbsp;</p>
