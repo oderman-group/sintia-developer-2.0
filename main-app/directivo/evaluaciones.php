@@ -76,7 +76,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <tbody>
 													<?php
 													 $parametros = [
-														'evag_visible'=>1,
+														'evag_year'=>$config['conf_agno'],
 														'arreglo'=>false
 													];
 													$consulta = EvaluacionGeneral::listar($parametros);
@@ -89,6 +89,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														$nombre = !empty($resultado['evag_nombre']) ? $resultado['evag_nombre'] : "";
 														$visible = !empty($resultado['evag_visible']) ? $resultado['evag_visible'] : "";
 														$preguntas = !empty($resultado['preguntas']) ? $resultado['preguntas'] : "";
+														$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
+														$arrayDatos = json_encode($arrayEnviar);
+														$objetoEnviar = htmlentities($arrayDatos);
 													?>
 													<tr id="reg<?=$resultado['evag_id'];?>">
                                                         <td><?=$contReg;?></td>
@@ -108,7 +111,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																			<li><a href="evaluacion-editar.php?id=<?=base64_encode($resultado['evag_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
 																		<?php }?>
 																		<?php if( Modulos::validarSubRol(['DT0287']) ){?>
-                                                                            <li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" id="<?=$resultado['evag_id'];?>" name="factura-recurrente-eliminar.php?id=<?=base64_encode($resultado['evag_id']);?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
+                                                                            <li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" id="<?=$resultado['evag_id'];?>" name="evaluacion-eliminar.php?id=<?=base64_encode($resultado['evag_id']);?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
 																		<?php } ?>
 																	</ul>
 																</div>
