@@ -51,12 +51,12 @@ if (!Modulos::validarPermisoEdicion()) {
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
-                            <div class="page-title"><?= $frases[165][$datosUsuarioActual['uss_idioma']]; ?> <?= $frases[114][$datosUsuarioActual['uss_idioma']]; ?></div>
+                            <div class="page-title"><?= $frases[165][$datosUsuarioActual['uss_idioma']]; ?> <?= $frases[139][$datosUsuarioActual['uss_idioma']]; ?></div>
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                         <ol class="breadcrumb page-breadcrumb pull-right">
-                            <li><a class="parent-item" href="javascript:void(0);" name="preguntas.php" onClick="deseaRegresar(this)"><?= $frases[114][$datosUsuarioActual['uss_idioma']]; ?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                            <li class="active"><?= $frases[165][$datosUsuarioActual['uss_idioma']]; ?> <?= $frases[114][$datosUsuarioActual['uss_idioma']]; ?></li>
+                            <li><a class="parent-item" href="javascript:void(0);" name="preguntas.php" onClick="deseaRegresar(this)"><?= $frases[139][$datosUsuarioActual['uss_idioma']]; ?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                            <li class="active"><?= $frases[165][$datosUsuarioActual['uss_idioma']]; ?> <?= $frases[139][$datosUsuarioActual['uss_idioma']]; ?></li>
                         </ol>
                     </div>
                 </div>
@@ -67,7 +67,7 @@ if (!Modulos::validarPermisoEdicion()) {
                         include("../../config-general/mensajes-informativos.php");
                         ?>
                         <div class="panel">
-                            <header class="panel-heading panel-heading-purple"><?= $frases[114][$datosUsuarioActual['uss_idioma']]; ?> </header>
+                            <header class="panel-heading panel-heading-purple"><?= $frases[139][$datosUsuarioActual['uss_idioma']]; ?> </header>
                             <div class="panel-body">
 
 
