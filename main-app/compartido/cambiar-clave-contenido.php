@@ -1,3 +1,5 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
 <div class="col-sm-4">
     <div class="panel">
         <header class="panel-heading panel-heading-blue">Instrucciones</header>
@@ -48,3 +50,4 @@
         </div>
     </div>
 </div>
+<script src="../js/CambiarClave.js" ></script>
