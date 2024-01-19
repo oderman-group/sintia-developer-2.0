@@ -292,7 +292,7 @@
 	                            </a>
 	                            <ul class="sub-menu">
 	                                <li class="nav-item"><a href="#" class="nav-link "> <span class="title">Ver cuestionarios</span></a></li>
-									<li class="nav-item"><a href="#" class="nav-link "> <span class="title">Preguntas</span></a></li>
+									<li class="nav-item"><a href="preguntas.php" class="nav-link "> <span class="title">Preguntas</span></a></li>
 
 	                            </ul>
 	                        </li>
