@@ -89,6 +89,9 @@ define('TIPO_RECURRING', 'INVOICE_RECURRING');
 define('COBRADA', 'COBRADA');
 define('POR_COBRAR', 'POR_COBRAR');
 
+define('SI', 'SI');
+define('NO', 'NO');
+
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':
         define('REDIRECT_ROUTE', 'http://localhost/app-sintia/main-app');
