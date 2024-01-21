@@ -85,8 +85,8 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 			*/
 			$idAcudiente = '0000';
 
-			//Validamos que el documento y el nombre del acudiente no venga vacío
-			if(!empty($hojaActual->getCell('R'.$f)->getValue()) && !empty($hojaActual->getCell('S'.$f)->getValue())) {
+			//Validamos que el documento no venga vacío
+			if(!empty($hojaActual->getCell('R'.$f)->getValue())) {
 				$datosAcudiente = [
 					'uss_usuario' => $hojaActual->getCell('R'.$f)->getValue(),
 					'uss_clave'   => $clavePorDefectoUsuarios,
@@ -100,13 +100,17 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 					$idAcudiente = $datosAcudienteExistente['uss_id'];
 					$acudientesExistentes["FILA_".$f] = $datosAcudienteExistente['uss_usuario'];
 				} else {
-					$idAcudiente=Utilidades::generateCode("USS");
-					try{
-						mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_idioma, institucion, year) VALUES ('".$idAcudiente."', '".$datosAcudiente['uss_usuario']."', '".$datosAcudiente['uss_clave']."', '".$datosAcudiente['uss_tipo']."', '".$datosAcudiente['uss_nombre']."', 1, {$config['conf_id_institucion']}, {$anio})");
-					} catch (Exception $e) {
-					SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
+					if(!empty($datosAcudiente['uss_nombre'])) {
+						$idAcudiente=Utilidades::generateCode("USS");
+						try{
+							mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_idioma, institucion, year) VALUES ('".$idAcudiente."', '".$datosAcudiente['uss_usuario']."', '".$datosAcudiente['uss_clave']."', '".$datosAcudiente['uss_tipo']."', '".$datosAcudiente['uss_nombre']."', 1, {$config['conf_id_institucion']}, {$anio})");
+						} catch (Exception $e) {
+							SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
+						}
+						$acudientesCreados["FILA_".$f] = $datosAcudiente['uss_usuario'];
+					} else {
+						$acudientesNoCreados[] = "FILA ".$f;
 					}
-					$acudientesCreados["FILA_".$f] = $datosAcudiente['uss_usuario'];
 				}
 			} else {
 				$acudientesNoCreados[] = "FILA ".$f;
