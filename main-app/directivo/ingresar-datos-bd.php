@@ -296,6 +296,14 @@ try {
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
+		
+		//TODOS LOS USUARIOS
+		try{
+			mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios_por_estudiantes(upe_id, upe_id_usuario, upe_id_estudiante, upe_parentezco, institucion, year) VALUES 
+			('1', '4', '1', 'Padre', '".$idInsti."', '".$year."');");
+		} catch (Exception $e) {
+			include("../compartido/error-catch-to-report.php");
+		}
 
 		//CARGAS
 		try{
