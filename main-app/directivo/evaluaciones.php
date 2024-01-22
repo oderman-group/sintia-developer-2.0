@@ -1,11 +1,13 @@
-<?php
-include("session.php");
-$idPaginaInterna = 'DV0068';
-include("../compartido/historial-acciones-guardar.php");
+<?php include("session.php");?>
+<?php $idPaginaInterna = 'DT0281';?>
+<?php include("../compartido/historial-acciones-guardar.php");?>
+<?php include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/EvaluacionGeneral.php");
 
-Modulos::verificarPermisoDev();
-include("../compartido/head.php");
-?>
+if(!Modulos::validarSubRol([$idPaginaInterna])){
+	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
+	exit();
+}?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -24,20 +26,19 @@ include("../compartido/head.php");
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[404][$datosUsuarioActual['uss_idioma']];?></div>
+                                <div class="page-title"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="row">
-								
-								<div class="col-md-12">
+                        <?php include("../../config-general/mensajes-informativos.php"); ?>
+									<?php include("../compartido/publicidad-lateral.php");?>
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
-                                            <header><?=$frases[404][$datosUsuarioActual['uss_idioma']];?></header>
+                                            <header><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></header>
                                             <div class="tools">
                                                 <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
 			                                    <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
@@ -49,63 +50,86 @@ include("../compartido/head.php");
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<a href="configuracion-opciones-generales-info.php" id="addRow" class="btn deepPink-bgcolor">
-															Agregar nuevo <i class="fa fa-plus"></i>
-														</a>
+														<?php if(Modulos::validarPermisoEdicion() &&  Modulos::validarSubRol(['DT0283']) ) {?>
+															<a href="evaluacion-agregar.php" id="addRow" class="btn deepPink-bgcolor">
+															<?=$frases[231][$datosUsuarioActual['uss_idioma']];?> <i class="fa fa-plus"></i>
+															</a>
+														<?php }?>
 													</div>
 												</div>
 											</div>
 											
-                                        <div class="table-scrollable">
+                                        <div>
                                     		<table id="example1" class="display" style="width:100%;">
                                                 <thead>
                                                     <tr>
-                                                        <th>ID</th>
-                                                        <th>Nombre</th>
-                                                        <th>Grupo</th>
-                                                        <th>Acciones</th>
+                                                        <th>#</th>
+														<th><?=$frases[51][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[187][$datosUsuarioActual['uss_idioma']];?></th>
+														<th>Visible</th>
+														<th><?=$frases[139][$datosUsuarioActual['uss_idioma']];?></th>
+														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0283', 'DT0287'])){?>
+															<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
+														<?php }?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 													<?php
-                                                    try{
-                                                        $consulta = mysqli_query($conexion, "SELECT * FROM $baseDatosServicios.opciones_generales");
-                                                    } catch (Exception $e) {
-                                                        include("../compartido/error-catch-to-report.php");
-                                                    }
-								                    $num_registros = mysqli_num_rows($consulta);
-                                                    while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+													 $parametros = [
+														'evag_year'=>$config['conf_agno'],
+														'arreglo'=>false
+													];
+													$consulta = EvaluacionGeneral::listar($parametros);
+													$contReg = 1;
+												if(!empty($consulta)){
+													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+
+														$fechaBD = new DateTime($resultado['evag_fecha']);
+														$fecha = $fechaBD->format('d/m/Y');
+														$nombre = !empty($resultado['evag_nombre']) ? $resultado['evag_nombre'] : "";
+														$visible = !empty($resultado['evag_visible']) ? $resultado['evag_visible'] : "";
+														$preguntas = !empty($resultado['preguntas']) ? $resultado['preguntas'] : "";
+														$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
+														$arrayDatos = json_encode($arrayEnviar);
+														$objetoEnviar = htmlentities($arrayDatos);
 													?>
-													<tr>
-                                                        <td><?=$resultado['ogen_id'];?></td>
-                                                        <td><?=$resultado["ogen_nombre"];?></td>
-                                                        <td><?=$opcionesGenerales[$resultado['ogen_grupo']]?></td>
-														<td>
-															<div class="btn-group">
-																  <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
-																  <button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
-																	  <i class="fa fa-angle-down"></i>
-																  </button>
-																  <ul class="dropdown-menu" role="menu">
-																	  <li><a href="configuracion-opciones-generales-editar.php?idogen=<?=base64_encode($resultado["ogen_id"]);?>" data-toggle="popover" data-placement="top" data-content="Editar Informacion" title="Editar Informacion">Editar</a></li>
-																	  <li>
-                                                                      <a href="javascript:void(0);" title="Eliminar" data-toggle="popover" data-placement="top" data-content="Eliminar" title="Eliminar Horarios" onClick="sweetConfirmacion('Alerta!','Deseas eliminar este registro?','question','configuracion-opciones-generales-eliminar.php?idogen=<?=base64_encode($resultado["ogen_id"]);?>')">Eliminar</a>  
-                                                                     </li>
-																  </ul>
-															</div>
-														</td>
+													<tr id="reg<?=$resultado['evag_id'];?>">
+                                                        <td><?=$contReg;?></td>
+														<td><?=$fecha?></td>
+														<td><?=$nombre;?></td>
+														<td><?=$visible;?></td>
+														<td><?=$preguntas;?></td>
+														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0283', 'DT0287'])){?>
+															<td>
+																<div class="btn-group">
+																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
+																	<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
+																		<i class="fa fa-angle-down"></i>
+																	</button>
+																	<ul class="dropdown-menu" role="menu" style="z-index: 10000;">
+																		<?php if( Modulos::validarSubRol(['DT0283']) ){?>
+																			<li><a href="evaluacion-editar.php?id=<?=base64_encode($resultado['evag_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
+																		<?php }?>
+																		<?php if( Modulos::validarSubRol(['DT0287']) ){?>
+                                                                            <li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" id="<?=$resultado['evag_id'];?>" name="evaluacion-eliminar.php?id=<?=base64_encode($resultado['evag_id']);?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
+																		<?php } ?>
+																	</ul>
+																</div>
+															</td>
+														<?php }?>
                                                     </tr>
-                                      				<?php }?>
+													<?php 
+															$contReg++;
+														}
+													}
+													?>
                                                 </tbody>
                                             </table>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-								
-								
-								
-							
+
                             </div>
                         </div>
                     </div>
