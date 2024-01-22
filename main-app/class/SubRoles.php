@@ -1,4 +1,5 @@
 <?php
+require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 class SubRoles {
 
      /**
@@ -303,7 +304,7 @@ class SubRoles {
         $sqlExecute="SELECT * FROM ".$baseDatosServicios.".paginas_publicidad
         LEFT JOIN ".$baseDatosServicios .".modulos ON mod_id=pagp_modulo
         ".$sqlJoin." JOIN ".$baseDatosServicios .".sub_roles_paginas ON spp_id_pagina=pagp_id AND spp_id_rol='".$subRol."'
-        WHERE pagp_tipo_usuario = '".$tipoUsuario."' AND (pagp_pagina_padre='' OR pagp_pagina_padre IS NULL) 
+        WHERE pagp_tipo_usuario = '".$tipoUsuario."' AND pagp_asignable_subroles = '".SI."' AND (pagp_pagina_padre='' OR pagp_pagina_padre IS NULL) 
         ORDER BY spp_id_pagina DESC";
         try {
             $resultado = mysqli_query($conexion,$sqlExecute);
