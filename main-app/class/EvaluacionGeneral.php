@@ -55,6 +55,7 @@ class EvaluacionGeneral  extends Servicios{
     {
         Servicios::UpdateSql(
             "UPDATE " . BD_ADMIN . ".general_evaluaciones SET 
+            evag_fecha='" . $Post["fecha"] . "', 
             evag_nombre='" . $Post["nombre"] . "', 
             evag_descripcion='" . $Post["descripcion"] . "', 
             evag_clave='" . $Post["clave"] . "', 

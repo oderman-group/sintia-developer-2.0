@@ -11,6 +11,12 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 include("../compartido/historial-acciones-guardar.php");
 
+if (empty($_POST["fecha"]) or empty($_POST["nombre"]) or empty($_POST["clave"])) {
+    include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
+    echo '<script type="text/javascript">window.location.href="evaluacion-agregar.php?error=ER_DT_4";</script>';
+    exit();
+}
+
 EvaluacionGeneral::actualizar($_POST);
 
 include("../compartido/guardar-historial-acciones.php");
