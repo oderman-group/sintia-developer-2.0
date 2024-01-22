@@ -17,8 +17,8 @@ if (empty($_POST["descripcion"]) or empty($_POST["tipo_pregunta"]) ) {
     exit();
 }
 
-$_POST["obligatoria"] = empty($_POST["obligatoria"])?0:1;
-$_POST["visible"] = empty($_POST["visible"])?0:1;
+$_POST["obligatoria"] = empty($_POST["obligatoria"]) ? 0 : 1;
+$_POST["visible"] = empty($_POST["visible"]) ? 0 : 1;
 
 $valor = PreguntaGeneral::guardar($_POST);
 
