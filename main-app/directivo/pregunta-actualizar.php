@@ -11,8 +11,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 include("../compartido/historial-acciones-guardar.php");
 
-$_POST["obligatoria"]=empty($_POST["obligatoria"])?0:1;
-$_POST["visible"]=empty($_POST["visible"])?0:1;
+$_POST["obligatoria"] = empty($_POST["obligatoria"])?0:1;
+$_POST["visible"] = empty($_POST["visible"])?0:1;
 PreguntaGeneral::actualizar($_POST);
 
 include("../compartido/guardar-historial-acciones.php");

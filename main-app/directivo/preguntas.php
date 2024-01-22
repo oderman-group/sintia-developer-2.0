@@ -95,33 +95,30 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                         <td><?=$contReg;?></td>
 														<td><?=$descripcion;?></td>
 														<td>
-															<?php 
-																if($tipo_pregunta==TEXT){?>
+														<?php 
+															if($tipo_pregunta === TEXT){?>
  															    	<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="<?=TEXT?>"><i class="fa fa-inbox"></i></button>
-																<?php }else if($tipo_pregunta==MULTIPLE){?>
+																<?php }elseif($tipo_pregunta === MULTIPLE){?>
 																	<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="<?=MULTIPLE?>"><i class="fa fa-tasks"></i></button>
-																<?php  }else if($tipo_pregunta==SINGLE){?>
+															<?php  }else if($tipo_pregunta === SINGLE){?>
 																	<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="<?=SINGLE?>"><i class="fa fa-bars"></i></button>
-																<?php }?>
-																	
+														<?php }?>
 														</td>
 														<td>
-															<?php 
-																if($visible==1){?>
- 															    	<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta visible"><i class="fa fa-eye"></i></button>
-																<?php }else{?>
-																	<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="No esta visible"><i class="fa fa-eye-slash"></i></button>
-																<?php }?>
-																	
+														<?php 
+															if($visible === 1){?>
+ 														   		<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta visible"><i class="fa fa-eye"></i></button>
+															<?php }else{?>
+																<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="No esta visible"><i class="fa fa-eye-slash"></i></button>
+														<?php }?>
 														</td>
 														<td>
-															<?php 
-																if($obligatoria==1){?>
- 															    	<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Es requerido"><i class="fa fa-lock"></i></button>
-																<?php }else{?>
-																	<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="No es requerido"><i class="fa fa-unlock" aria-hidden="true"></i></button>
-																<?php }?>
-																	
+														<?php 
+															if($obligatoria === 1){?>
+ 																<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Es requerido"><i class="fa fa-lock"></i></button>
+															<?php }else{?>
+																<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="No es requerido"><i class="fa fa-unlock" aria-hidden="true"></i></button>
+														<?php }?>
 														</td>
 														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0289', 'DT0293'])){?>
 															<td>
@@ -131,12 +128,12 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		<i class="fa fa-angle-down"></i>
 																	</button>
 																	<ul class="dropdown-menu" role="menu" style="z-index: 10000;">
-																		<?php if( Modulos::validarSubRol(['DT0289']) ){?>
-																			<li><a href="pregunta-editar.php?id=<?=base64_encode($resultado['pregg_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
-																		<?php }?>
-																		<?php if( Modulos::validarSubRol(['DT0293']) ){?>
-                                                                            <li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" id="<?=$resultado['pregg_id'];?>" name="pregunta-eliminar.php?id=<?=base64_encode($resultado['pregg_id']);?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
-																		<?php } ?>
+																	<?php if( Modulos::validarSubRol(['DT0289']) ){?>
+																		<li><a href="pregunta-editar.php?id=<?=base64_encode($resultado['pregg_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
+																	<?php }?>
+																	<?php if( Modulos::validarSubRol(['DT0293']) ){?>
+                                                                    	<li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" id="<?=$resultado['pregg_id'];?>" name="pregunta-eliminar.php?id=<?=base64_encode($resultado['pregg_id']);?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
+																	<?php } ?>
 																	</ul>
 																</div>
 															</td>

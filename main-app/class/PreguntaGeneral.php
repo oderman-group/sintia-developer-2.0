@@ -13,7 +13,7 @@ class PreguntaGeneral  extends Servicios{
     public static function guardar($Post)
     {
       global  $config;
-        $sql=
+        $sql = 
         " INSERT INTO ".BD_ADMIN.".general_preguntas(
          pregg_descripcion, 
          pregg_tipo_pregunta,
@@ -48,11 +48,11 @@ class PreguntaGeneral  extends Servicios{
     {
         Servicios::UpdateSql(
             "UPDATE " . BD_ADMIN . ".general_preguntas SET 
-            pregg_descripcion='" . $Post["descripcion"] . "', 
-            pregg_tipo_pregunta='" . $Post["tipo_pregunta"] . "', 
-            pregg_obligatoria='" . $Post["obligatoria"] . "',
-            pregg_visible='" . $Post["visible"] . "' 
-            WHERE pregg_id='" . $Post["id"] . "' "
+            pregg_descripcion = '" . $Post["descripcion"] . "', 
+            pregg_tipo_pregunta = '" . $Post["tipo_pregunta"] . "', 
+            pregg_obligatoria = '" . $Post["obligatoria"] . "',
+            pregg_visible = '" . $Post["visible"] . "' 
+            WHERE pregg_id = '" . $Post["id"] . "' "
         );
     }
 
@@ -64,7 +64,7 @@ class PreguntaGeneral  extends Servicios{
      */
     public static function eliminar($id)
     {        
-            Servicios::UpdateSql( "DELETE FROM " . BD_ADMIN . ".general_preguntas WHERE pregg_id='".$id."';");         
+            Servicios::UpdateSql( "DELETE FROM " . BD_ADMIN . ".general_preguntas WHERE pregg_id = '".$id."';");         
     }
 
         /**
@@ -77,7 +77,7 @@ class PreguntaGeneral  extends Servicios{
     public static function consultar($idDato = 1)
     {
        
-        return Servicios::getSql("SELECT * FROM " . BD_ADMIN . ".general_preguntas WHERE pregg_id='" . $idDato."' ");
+        return Servicios::getSql("SELECT * FROM " . BD_ADMIN . ".general_preguntas WHERE pregg_id = '" . $idDato."' ");
     }
       /**
      * Lista las Evaluaciones Registradas
@@ -88,17 +88,17 @@ class PreguntaGeneral  extends Servicios{
      * @return array|mysqli_result|false Arreglo de datos del resultado, objeto mysqli_result o false si hay un error.
      */
     public static function listar(
-        $parametrosArray=null
+        $parametrosArray = null
       )
       {
         
-        $sqlInicial="SELECT * FROM ".BD_ADMIN.".general_preguntas";
+        $sqlInicial = "SELECT * FROM ".BD_ADMIN.".general_preguntas";
         if($parametrosArray && count($parametrosArray)>0){
-          $parametrosValidos=array('pregg_id_evaluacion','pregg_tipo_pregunta','pregg_obligatoria','evag_editada','pregg_id_evaluacion','pregg_year','pregg_visible');
-          $sqlInicial=Servicios::concatenarWhereAnd($sqlInicial,$parametrosValidos,$parametrosArray);
+          $parametrosValidos = array('pregg_id_evaluacion','pregg_tipo_pregunta','pregg_obligatoria','evag_editada','pregg_id_evaluacion','pregg_year','pregg_visible');
+          $sqlInicial = Servicios::concatenarWhereAnd($sqlInicial,$parametrosValidos,$parametrosArray);
         };
-        $limite= !empty($parametrosArray['limite']) ? $parametrosArray['limite'] : "";
-        $esArreglo= !empty($parametrosArray['arreglo']) ? $parametrosArray['arreglo'] : "";
+        $limite = !empty($parametrosArray['limite']) ? $parametrosArray['limite'] : "";
+        $esArreglo = !empty($parametrosArray['arreglo']) ? $parametrosArray['arreglo'] : "";
         return Servicios::SelectSql($sqlInicial,$limite,$esArreglo);         
       }
 
