@@ -14,7 +14,7 @@ $numInstituciones=mysqli_num_rows($consultaInstituciones);
 $datosInstitucion=mysqli_fetch_array($consultaInstituciones, MYSQLI_BOTH);
 
 $insBD=!empty($_POST['ins_bd']) ? $_POST['ins_bd'] : "";
-$variables='?tipoInsti='.base64_encode($_POST['tipoInsti']).'&idInsti='.base64_encode($_POST['idInsti']).'&ins_bd='.base64_encode($insBD).'&yearA='.base64_encode($_POST['yearA']).'&siglasBD='.base64_encode($_POST['siglasBD']).'&nombreInsti='.base64_encode($_POST['nombreInsti']).'&siglasInst='.base64_encode($_POST['siglasInst']).'&yearN='.base64_encode($_POST['yearN']);
+$variables='?tipoInsti='.base64_encode($_POST['tipoInsti']).'&idInsti='.base64_encode($_POST['idInsti']).'&ins_bd='.base64_encode($insBD).'&yearA='.base64_encode($_POST['yearA']).'&siglasBD='.base64_encode($_POST['siglasBD']).'&nombreInsti='.base64_encode($_POST['nombreInsti']).'&siglasInst='.base64_encode($_POST['siglasInst']).'&yearN='.base64_encode($_POST['yearN']).'&nombre1='.base64_encode($_POST['nombre1']).'&nombre2='.base64_encode($_POST['nombre2']).'&apellido1='.base64_encode($_POST['apellido1']).'&apellido2='.base64_encode($_POST['apellido2']).'&tipoDoc='.base64_encode($_POST['tipoDoc']).'&documento='.base64_encode($_POST['documento']).'&email='.base64_encode($_POST['email']).'&celular='.base64_encode($_POST['celular']);
 ?>
 </head>
 
@@ -78,6 +78,14 @@ $variables='?tipoInsti='.base64_encode($_POST['tipoInsti']).'&idInsti='.base64_e
                                                 <input type="hidden" name="nombreInsti" value="<?=$_POST['nombreInsti'];?>">
                                                 <input type="hidden" name="siglasInst" value="<?=$_POST['siglasInst'];?>">
                                                 <input type="hidden" name="yearN" value="<?=$_POST['yearN'];?>">
+                                                <input type="hidden" name="nombre1" value="<?=$_POST['nombre1'];?>">
+                                                <input type="hidden" name="nombre2" value="<?=$_POST['nombre2'];?>">
+                                                <input type="hidden" name="apellido1" value="<?=$_POST['apellido1'];?>">
+                                                <input type="hidden" name="apellido2" value="<?=$_POST['apellido2'];?>">
+                                                <input type="hidden" name="tipoDoc" value="<?=$_POST['tipoDoc'];?>">
+                                                <input type="hidden" name="documento" value="<?=$_POST['documento'];?>">
+                                                <input type="hidden" name="email" value="<?=$_POST['email'];?>">
+                                                <input type="hidden" name="celular" value="<?=$_POST['celular'];?>">
                                                 <input type="hidden" name="confirmacion" value="1">
 
                                                 <a href="javascript:void(0);" name="dev-crear-nueva-bd.php<?=$variables;?>" class="btn btn-secondary" onclick="deseaRegresar(this)"><i class="fa fa-long-arrow-left" aria-hidden="true"></i>Regresar</a>
@@ -121,6 +129,14 @@ $variables='?tipoInsti='.base64_encode($_POST['tipoInsti']).'&idInsti='.base64_e
                                                 <input type="hidden" name="nombreInsti" value="<?=$_POST['nombreInsti'];?>">
                                                 <input type="hidden" name="siglasInst" value="<?=$_POST['siglasInst'];?>">
                                                 <input type="hidden" name="yearN" value="<?=$_POST['yearN'];?>">
+                                                <input type="hidden" name="nombre1" value="<?=$_POST['nombre1'];?>">
+                                                <input type="hidden" name="nombre2" value="<?=$_POST['nombre2'];?>">
+                                                <input type="hidden" name="apellido1" value="<?=$_POST['apellido1'];?>">
+                                                <input type="hidden" name="apellido2" value="<?=$_POST['apellido2'];?>">
+                                                <input type="hidden" name="tipoDoc" value="<?=$_POST['tipoDoc'];?>">
+                                                <input type="hidden" name="documento" value="<?=$_POST['documento'];?>">
+                                                <input type="hidden" name="email" value="<?=$_POST['email'];?>">
+                                                <input type="hidden" name="celular" value="<?=$_POST['celular'];?>">
                                                 <input type="hidden" name="continue" value="1">
 
                                                 <a href="javascript:void(0);" name="dev-crear-nueva-bd.php<?=$variables;?>" class="btn btn-secondary" onclick="deseaRegresar(this)"><i class="fa fa-long-arrow-left" aria-hidden="true"></i>Regresar</a>
