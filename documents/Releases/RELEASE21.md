@@ -10,3 +10,4 @@ PES-602 Update a configuración
 PES-605 Opción de factura recurente CRONJOB
 PES-677 Feedback para el modulo financieros
 PES-578 [RT] - Al anular un registro en finanzas.
+PES-665 Permitir el filtro por respuestas en reserva de cupos
