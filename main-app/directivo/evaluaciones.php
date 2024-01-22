@@ -88,7 +88,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														$fecha = $fechaBD->format('d/m/Y');
 														$nombre = !empty($resultado['evag_nombre']) ? $resultado['evag_nombre'] : "";
 														$visible = !empty($resultado['evag_visible']) ? $resultado['evag_visible'] : "";
-														$preguntas = !empty($resultado['preguntas']) ? $resultado['preguntas'] : "";
+														$preguntas = !empty($resultado['preguntas']) ? $resultado['preguntas'] :  0;
 														$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
 														$arrayDatos = json_encode($arrayEnviar);
 														$objetoEnviar = htmlentities($arrayDatos);
@@ -97,7 +97,14 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                         <td><?=$contReg;?></td>
 														<td><?=$fecha?></td>
 														<td><?=$nombre;?></td>
-														<td><?=$visible;?></td>
+														<td>
+															<?php 
+																if($visible==1){?>
+ 															      <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta visible"><i class="fa fa-eye"></i></button>
+																<?php }else{?>
+																  <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="No esta visible"><i class="fa fa-eye-slash"></i></button>
+															<?php }?>
+														</td>
 														<td><?=$preguntas;?></td>
 														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0283', 'DT0287'])){?>
 															<td>
@@ -110,7 +117,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		<?php if( Modulos::validarSubRol(['DT0283']) ){?>
 																			<li><a href="evaluacion-editar.php?id=<?=base64_encode($resultado['evag_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
 																		<?php }?>
-																		<?php if( Modulos::validarSubRol(['DT0287']) ){?>
+																		<?php if( Modulos::validarSubRol(['DT0287']) && $preguntas==0){?>
                                                                             <li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" id="<?=$resultado['evag_id'];?>" name="evaluacion-eliminar.php?id=<?=base64_encode($resultado['evag_id']);?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
 																		<?php } ?>
 																	</ul>
