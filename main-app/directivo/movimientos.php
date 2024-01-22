@@ -91,8 +91,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<th>Fecha</th>
 														<th>Detalle</th>
 														<th><?=$frases[107][$datosUsuarioActual['uss_idioma']];?></th>
-														<th><?=$frases[389][$datosUsuarioActual['uss_idioma']];?></th>
-														<th><?=$frases[390][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[417][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[418][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Tipo</th>
 														<th>Usuario</th>
 														<th><?=$frases[246][$datosUsuarioActual['uss_idioma']];?></th>

@@ -26,7 +26,7 @@ require_once("../class/UsuariosPadre.php");
                                         <th>Fecha</th>
                                         <th>Detalle</th>
                                         <th>Valor</th>
-                                        <th>Tipo</th>
+                                        <th><?=$frases[53][$datosUsuarioActual['uss_idioma']];?></th>
                                         <th>Forma de pago</th>
                                         <th>Observaciones</th>
                                         <th>Cerrado</th>

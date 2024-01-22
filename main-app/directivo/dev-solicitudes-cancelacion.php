@@ -32,7 +32,7 @@ include("../compartido/head.php");
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
-                            <div class="page-title">Solicitudes de cancelacion</div>
+                            <div class="page-title"><?=$frases[401][$datosUsuarioActual['uss_idioma']];?></div>
                             <?php include("../../config-general/mensajes-informativos.php"); ?>
                         </div>
                     </div>
