@@ -58,11 +58,26 @@ class Utilidades {
     {
         $key = "";
         $pattern = "1234567890";
-        $max = strlen($pattern)-1;
-        for($i = 0; $i < 2; $i++){
-            $key .= substr($pattern, mt_rand(0,$max), 1);
-        }
-        $code=$index.$key.strtotime("now");
+        $max = strlen($pattern) - 1;
+
+        // Intentar generar un código único
+        do {
+
+            $key = "";
+            for ($i = 0; $i < 2; $i++) {
+
+                $key .= substr($pattern, mt_rand(0, $max), 1);
+
+            }
+
+            $code = $index . $key . microtime(true);
+            $code = str_replace(['.', ' '], '', $code); // Eliminar punto decimal y espacios
+
+        } while (self::codeExists($code)); // Verificar si el código ya existe
+
+        // Almacenar el código temporalmente
+        self::$codigoTemporal = $code;
+
         return $code;
     }
 }
