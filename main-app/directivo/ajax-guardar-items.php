@@ -17,7 +17,7 @@ if(!empty($_REQUEST['itemModificar'])){
 }else{
     $idInsercion=Utilidades::generateCode("TXI_");
     try {
-        mysqli_query($conexion, "INSERT INTO ".BD_FINANCIERA.".transaction_items(id, id_transaction, type_transaction, discount, cantity, subtotal, id_item, institucion, year, price)VALUES('".$idInsercion."', '".$_REQUEST['idTransaction']."', 'INVOICE', 0, '".$_REQUEST['cantidad']."', '".$_REQUEST['subtotal']."', '".$_REQUEST['idItem']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}, '".$_REQUEST['precio']."')");
+        mysqli_query($conexion, "INSERT INTO ".BD_FINANCIERA.".transaction_items(id, id_transaction, type_transaction, discount, cantity, subtotal, id_item, institucion, year, price)VALUES('".$idInsercion."', '".$_REQUEST['idTransaction']."', '".$_REQUEST['typeTransaction']."', 0, '".$_REQUEST['cantidad']."', '".$_REQUEST['subtotal']."', '".$_REQUEST['idItem']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}, '".$_REQUEST['precio']."')");
     } catch(Exception $e) {
         echo $e->getMessage();
         exit();
