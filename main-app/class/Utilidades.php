@@ -82,4 +82,23 @@ class Utilidades {
 
         return $code;
     }
+
+    /**
+     * Verifica si el código ya se genero anteriormente.
+     *
+     * @param string $code El código a verificar.
+     * @return bool true si el código ya existe, false en caso contrario.
+     */
+    private static function codeExists($code)
+    {
+        // Verificar si el código existe en la variable temporal
+        if ($code === self::$codigoTemporal) {
+
+            return true;
+
+        }
+
+        // Ejemplo: devuelve siempre false, ajusta según tus necesidades.
+        return false;
+    }
 }
