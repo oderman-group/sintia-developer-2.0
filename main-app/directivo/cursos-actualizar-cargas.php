@@ -17,7 +17,7 @@ try{
 	include("../compartido/error-catch-to-report.php");
 }
 	while ($c = mysqli_fetch_array($cargas, MYSQLI_BOTH)) {
-		$codigo=Utilidades::generateCode("IPC");
+		$codigo=Utilidades::generateCode("IPC").Utilidades::generateCode();
 
 		try{
 			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_intensidad_curso WHERE ipc_curso='" . $c['car_curso'] . "' AND ipc_materia='" . $c['car_materia'] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
