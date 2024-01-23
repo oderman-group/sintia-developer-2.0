@@ -57,13 +57,16 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
     if(!empty($_REQUEST["grupo"])){
         $filtro .= " AND mat_grupo='".base64_decode($_REQUEST["grupo"])."'";
     }
+
     $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
     $numeroEstudiantes = mysqli_num_rows($matriculadosPorCurso);
+
     if ($numeroEstudiantes == 0) {
-    ?>
-        NO HAY REGISTROS...
-    <?php
+
+        $url= UsuariosPadre::verificarTipoUsuario($datosUsuarioActual['uss_tipo'],'page-info.php?idmsg=306');
+        echo '<script type="text/javascript">window.location.href="' . $url . '";</script>';
         exit();
+
     }
 
     $idDirector="";
