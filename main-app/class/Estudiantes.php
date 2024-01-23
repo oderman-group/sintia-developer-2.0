@@ -514,7 +514,7 @@ class Estudiantes {
             $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat 
             INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON mat.mat_grupo=gru.gru_id AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$year}
             INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON mat.mat_grado=gra_id AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$year} 
-            WHERE mat.mat_eliminado=0 AND mat.mat_estado_matricula IN (1, 2, 3) AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year} $filtro 
+            WHERE mat.mat_eliminado=0 AND mat.mat_estado_matricula IN (".MATRICULADO.", ".ASISTENTE.", ".CANCELADO.") AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year} $filtro 
             GROUP BY mat.mat_id
             ORDER BY mat.mat_grupo, mat.mat_primer_apellido");
         } catch (Exception $e) {

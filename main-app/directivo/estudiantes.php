@@ -250,7 +250,7 @@ if($config['conf_doble_buscador'] == 1) {
 																		<?php } ?>
 																		<?php if(Modulos::validarSubRol(['DT0074'])){
 																		$retirarRestaurar='Retirar';
-																		if($resultado['mat_estado_matricula']==3){
+																		if($resultado['mat_estado_matricula'] == CANCELADO){
 																				$retirarRestaurar='Restaurar';
 																		}
 																		?>
