@@ -122,7 +122,9 @@ try{
                 document.getElementById('antigua').style.display='none';
                 
                 inputElementsNueva.forEach((input) => {
-                    input.required = true;
+                    if (input.id !== "nombre2" && input.id !== "apellido2" && input.id !== "celular"){
+                        input.required = true;
+                    }
                 });
 
                 inputElementsAntigua.forEach((input) => {
@@ -204,12 +206,12 @@ try{
                                             <h2><b>Datos de Institución</b></h2>
 
                                             <div class="form-group row">
-                                                <label class="col-sm-2 control-label">Nombre de la institución</label>
+                                                <label class="col-sm-2 control-label">Nombre de la institución <span style="color: red;">(*)</span></label>
                                                 <div class="col-sm-4">
-                                                    <input type="text" name="nombreInsti" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['nombreInsti'];?>">
+                                                    <input type="text" name="nombreInsti" class="form-control" value="<?=$datosNuevaBD['nombreInsti'];?>">
                                                 </div>
                                                 
-                                                <label class="col-sm-2 control-label">Siglas de la institución
+                                                <label class="col-sm-2 control-label">Siglas de la institución <span style="color: red;">(*)</span>
                                                     <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Nombre corto de la institución."><i class="fa fa-question"></i></button> 
                                                 </label>
                                                 <div class="col-sm-4">
@@ -218,14 +220,14 @@ try{
                                             </div>
 
                                             <div class="form-group row">
-                                                <label class="col-sm-2 control-label">Nombre de la Base de datos <b>(SiglasBD)</b>
+                                                <label class="col-sm-2 control-label">Nombre de la Base de datos <b>(SiglasBD)</b> <span style="color: red;">(*)</span>
                                                     <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Aquí colocamos las siglas que van al intermedio del nombre de la BD ejemplo: dominio_{{SiglasBD}}_year"><i class="fa fa-question"></i></button> 
                                                 </label>
                                                 <div class="col-sm-4">
                                                     <input type="text" name="siglasBD" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['siglasBD'];?>">
                                                 </div>
                                                 
-                                                <label class="col-sm-2 control-label">Año a crear</label>
+                                                <label class="col-sm-2 control-label">Año a crear <span style="color: red;">(*)</span></label>
                                                 <div class="col-sm-4">
                                                     <input type="number" name="yearN" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['yearN'];?>">
                                                 </div>
@@ -266,7 +268,7 @@ try{
                                                 
                                                 <label class="col-sm-2 control-label">Segundo Nombre</label>
                                                 <div class="col-sm-4">
-                                                    <input type="text" name="nombre2" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['nombre2'];?>">
+                                                    <input type="text" name="nombre2" id="nombre2" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['nombre2'];?>">
                                                 </div>
                                             </div>
 
@@ -278,7 +280,7 @@ try{
                                                 
                                                 <label class="col-sm-2 control-label">Segundo Apellido</label>
                                                 <div class="col-sm-4">
-                                                    <input type="text" name="apellido2" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['apellido2'];?>">
+                                                    <input type="text" name="apellido2" id="apellido2" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['apellido2'];?>">
                                                 </div>
                                             </div>
 
@@ -290,7 +292,7 @@ try{
                                                 
                                                 <label class="col-sm-2 control-label">Celular</label>
                                                 <div class="col-sm-4">
-                                                    <input type="text" name="celular" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['celular'];?>">
+                                                    <input type="text" name="celular" id="celular" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['celular'];?>">
                                                 </div>
                                             </div>
 
@@ -299,7 +301,7 @@ try{
                                         <div id="antigua" style="display: <?=$displayAntigua?>;">
 
                                             <div class="form-group row">
-                                                <label class="col-sm-2 control-label">Institución</label>
+                                                <label class="col-sm-2 control-label">Institución  <span style="color: red;">(*)</span></label>
                                                 <div class="col-sm-3">
                                                     <select class="form-control" name="idInsti">
                                                         <option value="">Seleccione una opción</option>
@@ -313,7 +315,7 @@ try{
                                             </div>
 
                                             <div class="form-group row">
-                                                <label class="col-sm-2 control-label">Año a crear</label>
+                                                <label class="col-sm-2 control-label">Año a crear <span style="color: red;">(*)</span></label>
                                                 <div class="col-sm-3">
                                                     <input type="number" name="yearA" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['yearA'];?>">
                                                 </div>
