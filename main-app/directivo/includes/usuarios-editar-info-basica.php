@@ -70,6 +70,7 @@
                     </select>
                 </div>
             </div>
+            <?php if ( array_key_exists(16, $arregloModulos) ) { ?>
             <div id="subRoles" >
                 <div class="form-group row"  >
                                 <label class="col-sm-2 control-label" >Sub Roles</label>
@@ -100,30 +101,12 @@
                                 </div>
                 </div>
             </div>
+
             <script>
             $(document).ready(mostrarSubroles(document.getElementById("tipoUsuario")));
-            function mostrarSubroles(enviada) {
-                var valor = enviada.value;
-                if (valor == '5') {
-                    document.getElementById("subRoles").style.display='block';
-                } else {
-                    document.getElementById("subRoles").style.display='none';
-                }
-            }
-            function habilitarClave() {
-                var cambiarClave = document.getElementById("cambiarClave");
-                var clave = document.getElementById("clave");
-                
-                if (cambiarClave.checked) {
-                clave.disabled = false;
-                clave.required = 'required';
-                } else {
-                clave.disabled = true;
-                clave.required = '';
-                clave.value = '';
-                }
-            }
             </script>
+
+            <?php }?>
 
             <div class="form-group row">
                 <label class="col-sm-2 control-label">Contraseña</label>
