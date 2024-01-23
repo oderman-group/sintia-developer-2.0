@@ -265,3 +265,39 @@ function cambiarEstados (data) {
     var url = 'solicitudes-estado-actualizar.php?idRegistro='+idRegistro+'&estado='+idEstado+'&idUsuario='+idUsuario;
     fetchSoloAccion(url);
 }
+
+/**
+ * Esta función habilita o deshabilita el campo clave
+ */
+function habilitarClave() {
+    var cambiarClave = document.getElementById("cambiarClave");
+    var clave = document.getElementById("clave");
+    
+    if (cambiarClave.checked) {
+    clave.disabled = false;
+    clave.required = 'required';
+    } else {
+    clave.disabled = true;
+    clave.required = '';
+    clave.value = '';
+    }
+}
+
+/**
+ * Displays or hides the subroles section based on the selected role value.
+ *
+ * This function checks the value of the provided 'enviada' element. If the value is '5',
+ * it will display the HTML element with the id 'subRoles'. For any other value, it will
+ * hide the 'subRoles' element. Typically used in response to a 'change' event on a select
+ * element where the user's role is chosen.
+ *
+ * @param {HTMLSelectElement} enviada - The select element that triggers the function.
+ */
+function mostrarSubroles(enviada) {
+    var valor = enviada.value;
+    if (valor == '5') {
+        document.getElementById("subRoles").style.display='block';
+    } else {
+        document.getElementById("subRoles").style.display='none';
+    }
+}

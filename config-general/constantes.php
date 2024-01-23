@@ -81,13 +81,23 @@ define('MODULO_ADMISIONES', 8);
 define('MODULO_RESERVA_CUPO', 9);
 define('MODULO_MEDIA_TECNICA', 10);
 
+/* TIPOS DE FACTURA o COTIZACIÓn */
+define('TIPO_FACTURA', 'INVOICE');
+define('TIPO_COTIZACION', 'QUOTE');
+define('TIPO_RECURRING', 'INVOICE_RECURRING');
+
+define('COBRADA', 'COBRADA');
+define('POR_COBRAR', 'POR_COBRAR');
+
+define('SI', 'SI');
+define('NO', 'NO');
+
 /* ESTADOS DE MATRICULA */
 define('MATRICULADO', 1);
 define('ASISTENTE', 2);
 define('CANCELADO', 3);
 define('NO_MATRICULADO', 4);
 define('EN_INSCRIPCION', 5);
-
 
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':

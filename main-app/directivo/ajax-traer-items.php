@@ -9,7 +9,7 @@ require_once(ROOT_PATH."/main-app/class/Movimientos.php");
 // Obtener el resultado
 $idTransaction = $_REQUEST["idTransaction"];
                                                                 
-$itemsConsulta = Movimientos::listarItemsTransaction($conexion, $config, $idTransaction);
+$itemsConsulta = Movimientos::listarItemsTransaction($conexion, $config, $idTransaction, $_REQUEST["typeTransaction"]);
 
 $subtotal=0;
 $numItems=mysqli_num_rows($itemsConsulta);
