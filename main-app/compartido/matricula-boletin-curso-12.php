@@ -29,19 +29,19 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
     switch($periodoActual){
         case 1:
             $periodoActuales = "Uno";
-            $acomulado=0.25;
             break;
         case 2:
             $periodoActuales = "Dos";
-            $acomulado=0.50;
             break;
         case 3:
             $periodoActuales = "Tres";
-            $acomulado=0.75;
             break;
         case 4:
             $periodoActuales = "Final";
-            $acomulado=1;
+            break;
+        case 5:
+            $periodoActual = 4;
+            $periodoActuales = "Final";
             break;
     }
 
@@ -194,24 +194,6 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
             </thead>
             <tbody>
                 <?php
-                    switch($periodoActual){
-                        case 1:
-                            $condicion = "1";
-                            $condicion2 = "1";
-                            break;
-                        case 2:
-                            $condicion = "1,2";
-                            $condicion2 = "2";
-                            break;
-                        case 3:
-                            $condicion = "1,2,3";
-                            $condicion2 = "3";
-                            break;
-                        case 4:
-                            $condicion = "1,2,3,4";
-                            $condicion2 = "4";
-                            break;
-                    }
                     $consultaAreas= mysqli_query($conexion,"SELECT ar_id, ar_nombre, count(*) AS numMaterias, car_curso, car_grupo FROM ".BD_ACADEMICA.".academico_materias am
                     INNER join ".BD_ACADEMICA.".academico_areas a ON a.ar_id = am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
                     INNER JOIN ".BD_ACADEMICA.".academico_cargas car on car_materia = am.mat_id and car_curso = '".$gradoActual."' AND car_grupo = '".$grupoActual."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
@@ -233,7 +215,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                         FROM ".BD_ACADEMICA.".academico_cargas car
                         INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id = car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
                         INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id = am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
-                        INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol_carga=car_id AND bol_periodo ='".$periodoActual."' AND bol_estudiante = '".$matriculadosDatos['mat_id']."' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
+                        LEFT JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol_carga=car_id AND bol_periodo ='".$periodoActual."' AND bol_estudiante = '".$matriculadosDatos['mat_id']."' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
                         WHERE car_curso = '".$datosAreas['car_curso']."' AND car_grupo = '".$datosAreas['car_grupo']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year} AND am.mat_area = '".$datosAreas['ar_id']."'");
                         $notaArea=0;
                         $notaAreasPeriodos=0;
@@ -244,7 +226,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                             }
 
                             //NOTA PARA LAS MATERIAS
-                            $notaMateria=round($datosMaterias['bol_nota'], 1);
+                            $notaMateria = !empty($datosMaterias['bol_nota']) ? round($datosMaterias['bol_nota'], 1) : 0;
                             $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaMateria,$year);
                             if($notaMateria<10){
                                 $estiloNota['notip_nombre']="Bajo";
@@ -272,6 +254,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                     <td align="center"><?=$datosMaterias['car_ih']?></td>
                                     <?php
                                         $notaMateriasPeriodosTotal=0;
+                                        $ultimoPeriodo = $config["conf_periodos_maximos"];
                                         for($i=1;$i<=$periodoActual;$i++){
                                             if($i!=$periodoActual){
                                                 $consultaPeriodos=mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$datosMaterias['car_id']."' AND bol_periodo='".$i."' AND bol_estudiante = '".$matriculadosDatos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
@@ -291,20 +274,29 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                                         $notaMateriasPeriodosFinal="Superior";
                                                     }
                                                 }
+                                                if (empty($datosPeriodos['bol_periodo'])){
+                                                    $ultimoPeriodo -= 1;
+                                                }
                                     ?>
                                     <td align="center" style="background: #9ed8ed"><?=$notaMateriasPeriodosFinal?></td>
                                     <?php
                                                 }else{
+                                                    $notaMateriaFinal = $notaMateria;
+                                                    if (empty($datosMaterias['bol_periodo'])){
+                                                        $notaMateriaFinal = "";
+                                                        $estiloNota['notip_nombre'] = "";
+                                                        $ultimoPeriodo  -= 1;
+                                                    }
                                     ?>
-                                    <td align="center"><?=$notaMateria?></td>
+                                    <td align="center"><?=$notaMateriaFinal?></td>
                                     <td align="center"><?=$estiloNota['notip_nombre']?></td>
                                     <?php
                                             }
                                         }//FIN FOR
 
                                         //ACOMULADO PARA LAS MATERIAS
-                                        $notaAcomuladoMateria=($notaMateria+$notaMateriasPeriodosTotal)/$config["conf_periodos_maximos"];
-                                        $notaAcomuladoMateria= round($notaAcomuladoMateria,1);
+                                        $notaAcomuladoMateria = ($notaMateria + $notaMateriasPeriodosTotal) / $ultimoPeriodo;
+                                        $notaAcomuladoMateria = round($notaAcomuladoMateria,1);
                                         if(strlen($notaAcomuladoMateria) === 1 || $notaAcomuladoMateria == 10){
                                             $notaAcomuladoMateria = $notaAcomuladoMateria.".0";
                                         }
@@ -340,6 +332,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                 $promGeneralPer1=0;
                                 $promGeneralPer2=0;
                                 $promGeneralPer3=0;
+                                $ultimoPeriodoAreas = $config["conf_periodos_maximos"];
                                 for($i=1;$i<=$periodoActual;$i++){
                                     if($i!=$periodoActual){
                                         $consultaAreasPeriodos=mysqli_query($conexion,"SELECT mat_valor,
@@ -365,6 +358,10 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                                 break;
                                         }
 
+                                        if (empty($datosAreasPeriodos['bol_periodo'])){
+                                            $ultimoPeriodoAreas -= 1;
+                                        }
+
                                         $notaAreasPeriodosFinal=$notaAreasPeriodos;
                                         if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
                                             $estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAreasPeriodos,$year);
@@ -387,16 +384,23 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                         if($notaArea>50){
                                             $estiloNotaAreas['notip_nombre']="Superior";
                                         }
+
+                                        $notaAreaFinal = $notaArea;
+                                        if (empty($notaArea) || $notaArea == 0){
+                                            $notaAreaFinal = "";
+                                            $estiloNotaAreas['notip_nombre'] = "";
+                                            $ultimoPeriodoAreas -= 1;
+                                        }
                             ?>
-                            <td align="center"><?=$notaArea?></td>
+                            <td align="center"><?=$notaAreaFinal?></td>
                             <td align="center"><?=$estiloNotaAreas['notip_nombre']?></td>
                             <?php
                                     }
                                 }
                         
                                 //ACOMULADO PARA LAS AREAS
-                                $notaAcomuladoArea=($notaArea+$notaAreasPeriodosTotal)/$config["conf_periodos_maximos"];
-                                $notaAcomuladoArea= round($notaAcomuladoArea,1);
+                                $notaAcomuladoArea = ($notaArea + $notaAreasPeriodosTotal) / $ultimoPeriodoAreas;
+                                $notaAcomuladoArea = round($notaAcomuladoArea,1);
                                 if(strlen($notaAcomuladoArea) === 1 || $notaAcomuladoArea == 10){
                                     $notaAcomuladoArea = $notaAcomuladoArea.".0";
                                 }
@@ -554,6 +558,9 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                         echo "- ".$rndisiplina["dn_observacion"]."<br>";
                                     }
                                 }
+                            }
+                            if ($periodoActual == $config["conf_periodos_maximos"] && $ultimoPeriodoAreas < $config["conf_periodos_maximos"]) {
+                                Echo "ESTUDIANTE RETIRADO SIN FINALIZAR AÑO LECTIVO.";
                             }
                         ?>
                         <p>&nbsp;</p>
