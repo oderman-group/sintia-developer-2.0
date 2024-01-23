@@ -814,7 +814,11 @@ $frases[415][$l] = 'Facturas Recurrentes';
 $frases[416][$l] = 'Notas Adicionales';
 $frases[417][$l] = 'Cobrado';
 $frases[418][$l] = 'Por cobrar';
-
+$frases[419][$l] = 'Guardar cambios';
+$frases[420][$l] = 'Obligatoria';
+$frases[421][$l] = 'TEXTO';
+$frases[422][$l] = 'UNICA';
+$frases[423][$l] = 'MÚLTIPLE';
 //ENGLISH
 
 $l = 2;
@@ -1616,3 +1620,8 @@ $frases[415][$l] = 'Recurring Invoices';
 $frases[416][$l] = 'Additional notes';
 $frases[417][$l] = 'Collected';
 $frases[418][$l] = 'To collect';
+$frases[419][$l] = 'Save Changes';
+$frases[420][$l] = 'Mandatory';
+$frases[421][$l] = 'TEXT';
+$frases[422][$l] = 'SINGLE';
+$frases[423][$l] = 'MULTIPLE';
