@@ -14,6 +14,7 @@ PES-665 Permitir el filtro por respuestas en reserva de cupos
 PES-577 [RT] - Al cambiar la clave me diga de una vez si es la correcta y si la nueva coincide y es válida.
 PES-666 Debemos tener una columna en paginas para preguntar si es asignable a los roles, diferente a navegable
 PES-590 En el informe de movimientos financieros sigue apareciendo el logo y colores antiguos.
+PES-656 Transferir cargas de forma parcial.
 
 ### LUGIE
 PES-571 Traducir palabras y frases faltantes
