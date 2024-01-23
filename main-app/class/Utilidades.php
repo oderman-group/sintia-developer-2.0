@@ -1,6 +1,8 @@
 <?php
 class Utilidades {
 
+    private static $codigoTemporal;
+
     /**
      * Obtiene una representación de cadena de un valor.
      *
