@@ -156,6 +156,17 @@ include("../compartido/head.php");
                                         </div>
 										
 										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Asignable a SubRoles?</label>
+                                            <div class="col-sm-3">
+                                                <select class="form-control  select2" name="subroles" id="subroles">
+                                                    <option value="">Seleccione una opción</option>
+                                                    <option value="<?=SI?>">SI</option>
+                                                    <option value="<?=NO?>">NO</option>
+                                                </select>
+                                            </div>
+                                        </div>
+										
+										<div class="form-group row">
                                             <label class="col-sm-2 control-label">CRUD</label>
                                             <div class="col-sm-3">
                                                 <select class="form-control  select2" name="crud" id="crud">

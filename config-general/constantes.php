@@ -86,8 +86,17 @@ define('TIPO_FACTURA', 'INVOICE');
 define('TIPO_COTIZACION', 'QUOTE');
 define('TIPO_RECURRING', 'INVOICE_RECURRING');
 
+
+/* TIPOS DE PREGUNTAS */
+define('TEXT', 'TEXT');
+define('MULTIPLE', 'MULTIPLE');
+define('SINGLE', 'SINGLE');
+
 define('COBRADA', 'COBRADA');
 define('POR_COBRAR', 'POR_COBRAR');
+
+define('SI', 'SI');
+define('NO', 'NO');
 
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':

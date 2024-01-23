@@ -8,3 +8,5 @@ PES-606 Diseño e impresión de cotización
 PES-657 Ver más grandes los formatos de boletines y certificados.
 PES-602 Update a configuración
 PES-605 Opción de factura recurente CRONJOB
+PES-677 Feedback para el modulo financieros
+PES-578 [RT] - Al anular un registro en finanzas.
