@@ -281,7 +281,7 @@ if($config['conf_doble_buscador'] == 1) {
 																	<?php }?>
 																	
 																	<?php if(!empty($resultado['mat_grado']) && !empty($resultado['mat_grupo'])) {?>
-																		<?php if(Modulos::validarSubRol(['DT0224'])){?>
+																		<?php if(Modulos::validarSubRol(['DT0224']) && ($resultado['mat_estado_matricula'] != 4 && $resultado['mat_estado_matricula'] != 5)){?>
 																		<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank">Boletín</a></li>
                                                         				<?php }?>
 																		<?php if(Modulos::validarSubRol(['DT0247'])){?>
