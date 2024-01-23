@@ -19,7 +19,11 @@ if (!empty($_GET['busqueda'])) {
 }
 $curso = '';
 if (!empty($_GET['curso'])) {
-    $curso = $_GET['curso'];
+    $curso = base64_decode($_GET['curso']);
+}
+$resp = '';
+if (!empty($_GET['resp'])) {
+    $resp = base64_decode($_GET['resp']);
 }
 ?>
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #41c4c4;">
@@ -29,7 +33,6 @@ if (!empty($_GET['curso'])) {
 
   <div class="navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-
 
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
@@ -43,12 +46,23 @@ if (!empty($_GET['curso'])) {
             $estiloResaltado = '';
             if ($grado['gra_id'] == $curso) $estiloResaltado = 'style="color: ' . $Plataforma->colorUno . ';"';
           ?>
-            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?curso=<?= base64_encode($grado['gra_id']); ?>&busqueda=<?= $busqueda; ?>" <?= $estiloResaltado; ?>><?= $grado['gra_nombre']; ?></a>
+            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?resp=<?= base64_encode($resp); ?>&curso=<?= base64_encode($grado['gra_id']); ?>&busqueda=<?= $busqueda; ?>" <?= $estiloResaltado; ?>><?= $grado['gra_nombre']; ?></a>
           <?php } ?>
           <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
         </div>
       </li>
 
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
+          Filtrar por Respuesta
+          <span class="fa fa-angle-down"></span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?resp=<?= base64_encode(1); ?>&curso=<?= base64_encode($curso); ?>&busqueda=<?= $busqueda; ?>" <?= $estiloResaltado; ?>>SI</a>
+            <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>?resp=<?= base64_encode(2); ?>&curso=<?= base64_encode($curso); ?>&busqueda=<?= $busqueda; ?>" <?= $estiloResaltado; ?>>NO</a>
+          <a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
+        </div>
+      </li>
 
     </ul>
 

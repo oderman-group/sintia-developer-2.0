@@ -86,8 +86,7 @@ if (!Modulos::validarPermisoEdicion()) {
 
                                         <div class="col-sm-2">
                                             <label class="control-label"><?= $frases[51][$datosUsuarioActual['uss_idioma']]; ?> </label>
-                                            
-                                            <input type="text" name="fecha" disabled class="form-control"  required value="<?=$resultado['evag_fecha']?>" >
+                                            <input type="date" name="fecha" class="form-control" autocomplete="off" required required value =<?= date("Y-m-d", strtotime( $resultado['evag_fecha']))?> <?= $disabledPermiso; ?>>
                                         </div>
 
                                         <div class="col-sm-2">
@@ -123,7 +122,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                         <a href="javascript:void(0);" name="evaluaciones.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i><?= $frases[184][$datosUsuarioActual['uss_idioma']]; ?></a>
                                         <?php if (Modulos::validarPermisoEdicion()) { ?>
                                             <button type="submit" class="btn  btn-info">
-                                                <i class="fa fa-save" aria-hidden="true"></i> <?= $frases[41][$datosUsuarioActual['uss_idioma']]; ?>
+                                                <i class="fa fa-save" aria-hidden="true"></i> <?= $frases[419][$datosUsuarioActual['uss_idioma']]; ?>
                                             </button>
                                         <?php } ?>
                                     </div>
