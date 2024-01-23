@@ -286,6 +286,21 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 					
 					$codigoMAT=Utilidades::generateCode("MAT");
 					$sql .= "('".$codigoMAT."', '".$arrayIndividual['mat_matricula']."', NOW(), '".$arrayIndividual['mat_primer_apellido']."', '".$arrayIndividual['mat_segundo_apellido']."', '".$arrayIndividual['mat_nombres']."', '".$grado."', '".$idUsuarioEstudiante."', '".$idAcudiente."', '".$arrayIndividual['mat_documento']."', '".$tipoDocumento."', '".$grupo."', '".$arrayIndividual['mat_direccion']."', '".$genero."', '".$fNacimiento."', '".$arrayIndividual['mat_barrio']."', '".$arrayIndividual['mat_celular']."', '".$email."', '".$estrato."', '".$arrayIndividual['mat_tipo_sangre']."', '".$arrayIndividual['mat_eps']."', '".$arrayIndividual['mat_nombre2']."', {$config['conf_id_institucion']}, {$anio}),";
+					
+					//Borramos si hay alguna asociación igual y creamos la nueva
+					try{
+						mysqli_query($conexion, "DELETE FROM ".BD_GENERAL.".usuarios_por_estudiantes WHERE upe_id_usuario='".$idAcudiente."' AND upe_id_estudiante='".$codigoMAT."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+					} catch (Exception $e) {
+						include("../compartido/error-catch-to-report.php");
+					}
+
+					$idInsercion=Utilidades::generateCode("UPE");
+					try{
+						mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios_por_estudiantes(upe_id, upe_id_usuario, upe_id_estudiante, institucion, year)VALUES('" .$idInsercion . "', '".$idAcudiente."', '".$codigoMAT."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+					} catch (Exception $e) {
+						include("../compartido/error-catch-to-report.php");
+					}
+
 					$estudiantesCreados["FILA_".$f] = $arrayIndividual['mat_documento'];
 				}
 			} else {
