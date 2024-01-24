@@ -86,24 +86,16 @@ if (!Modulos::validarPermisoEdicion()) {
                                         <label class="col-sm-1 control-label"><?=$frases[53][$datosUsuarioActual['uss_idioma']];?> <?=$frases[139][$datosUsuarioActual['uss_idioma']];?></label>
                                         <div class="col-sm-2">
                                             <select class="form-control  select2" name="tipo_pregunta" <?= $disabledPermiso; ?>>
-                                                <option value="TEXT" <?php if($resultado['pregg_tipo_pregunta']=="TEXT"){ echo "selected";}?>>TEXT</option>
-                                                <option value="MULTIPLE" <?php if($resultado['pregg_tipo_pregunta']=="MULTIPLE"){ echo "selected";}?>>MULTIPLE</option>
-                                                <option value="SINGLE" <?php if($resultado['pregg_tipo_pregunta']=="SINGLE"){ echo "selected";}?>>SINGLE</option>
+                                                <option value="TEXT" <?php if($resultado['pregg_tipo_pregunta']=="TEXT"){ echo "selected";}?>><?=$frases[421][$datosUsuarioActual['uss_idioma']];?></option>
+                                                <option value="MULTIPLE" <?php if($resultado['pregg_tipo_pregunta']=="MULTIPLE"){ echo "selected";}?>><?=$frases[422][$datosUsuarioActual['uss_idioma']];?></option>
+                                                <option value="SINGLE" <?php if($resultado['pregg_tipo_pregunta']=="SINGLE"){ echo "selected";}?>><?=$frases[423][$datosUsuarioActual['uss_idioma']];?></option>
                                             </select>
                                         </div>
 
 
                                     </div>
                                     <div class="form-group row">
-                                        <div class="col-sm-2 card-head" style=" border-bottom: 0px rgba(0, 0, 0, 0.2);">
-                                            <header>
-                                                <label class="switchToggle">
-                                                    <input name="obligatoria" type="checkbox" <?php if($resultado['pregg_obligatoria']==1){ echo "checked";}?>  >
-                                                    <span class="slider green round"></span>
-                                                </label>
-                                            </header>
-                                            Obligatoria
-                                        </div>
+                                       
                                         <div class="col-sm-2 card-head" style=" border-bottom: 0px rgba(0, 0, 0, 0.2);">
                                             <header>
                                                 <label class="switchToggle">
@@ -113,12 +105,21 @@ if (!Modulos::validarPermisoEdicion()) {
                                             </header>
                                             Visible
                                         </div>
+                                        <div class="col-sm-2 card-head" style=" border-bottom: 0px rgba(0, 0, 0, 0.2);">
+                                            <header>
+                                                <label class="switchToggle">
+                                                    <input name="obligatoria" type="checkbox" <?php if($resultado['pregg_obligatoria']==1){ echo "checked";}?>  >
+                                                    <span class="slider green round"></span>
+                                                </label>
+                                            </header>
+                                            <?=$frases[420][$datosUsuarioActual['uss_idioma']];?>
+                                        </div>
                                     </div>
                                     <div class="text-right">
                                         <a href="javascript:void(0);" name="preguntas.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i><?= $frases[184][$datosUsuarioActual['uss_idioma']]; ?></a>
                                         <?php if (Modulos::validarPermisoEdicion()) { ?>
                                             <button type="submit" class="btn  btn-info">
-                                                <i class="fa fa-save" aria-hidden="true"></i> <?= $frases[41][$datosUsuarioActual['uss_idioma']]; ?>
+                                                <i class="fa fa-save" aria-hidden="true"></i> <?= $frases[419][$datosUsuarioActual['uss_idioma']]; ?>
                                             </button>
                                         <?php } ?>
                                     </div>

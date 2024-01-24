@@ -106,7 +106,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														</td>
 														<td>
 														<?php 
-															if($visible === 1){?>
+															if($visible == 1){?>
  														   		<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta visible"><i class="fa fa-eye"></i></button>
 															<?php }else{?>
 																<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="No esta visible"><i class="fa fa-eye-slash"></i></button>
@@ -114,7 +114,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														</td>
 														<td>
 														<?php 
-															if($obligatoria === 1){?>
+															if($obligatoria == 1){?>
  																<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Es requerido"><i class="fa fa-lock"></i></button>
 															<?php }else{?>
 																<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="No es requerido"><i class="fa fa-unlock" aria-hidden="true"></i></button>
