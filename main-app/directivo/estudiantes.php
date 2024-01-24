@@ -285,7 +285,7 @@ if($config['conf_doble_buscador'] == 1) {
 																		<li><a href="../compartido/matricula-boletin-curso-<?=$resultado['gra_formato_boletin'];?>.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank">Boletín</a></li>
                                                         				<?php }?>
 																		<?php if(Modulos::validarSubRol(['DT0247'])){?>
-																		<li><a href="../compartido/matricula-libro.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank">Libro Final</a></li>
+																		<li><a href="../compartido/matricula-libro-curso-<?=$config['conf_libro_final']?>.php?id=<?=base64_encode($resultado["mat_id"]);?>&periodo=<?=base64_encode($config[2]);?>" target="_blank">Libro Final</a></li>
                                                         				<?php }?>
 																		<?php if(Modulos::validarSubRol(['DT0248'])){?>
 																		<li><a href="../compartido/informe-parcial.php?estudiante=<?=base64_encode($resultado["mat_id"]);?>" target="_blank">Informe parcial</a></li>
