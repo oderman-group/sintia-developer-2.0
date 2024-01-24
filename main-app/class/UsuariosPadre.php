@@ -228,4 +228,17 @@ class UsuariosPadre {
 
     }
 
+	public static function verificarTipoUsuario($tipoUsuario, $paginaRedireccion){
+		switch($tipoUsuario){	
+			case 1: $url = '../directivo/'.$paginaRedireccion; break;
+			case 2: $url = '../docente/'.$paginaRedireccion; break;
+			case 3: $url = '../acudiente/'.$paginaRedireccion; break;
+			case 4: $url = '../estudiante/'.$paginaRedireccion; break;
+			case 5: $url = '../directivo/'.$paginaRedireccion; break;
+
+			default: $url = '../controlador/salir.php'; break;
+	  	}
+		return $url;
+	}
+
 }   

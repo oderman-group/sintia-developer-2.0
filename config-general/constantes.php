@@ -81,6 +81,13 @@ define('MODULO_ADMISIONES', 8);
 define('MODULO_RESERVA_CUPO', 9);
 define('MODULO_MEDIA_TECNICA', 10);
 
+/* ESTADOS DE MATRICULA */
+define('MATRICULADO', 1);
+define('ASISTENTE', 2);
+define('CANCELADO', 3);
+define('NO_MATRICULADO', 4);
+define('EN_INSCRIPCION', 5);
+
 
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':
