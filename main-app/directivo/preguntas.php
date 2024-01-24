@@ -97,11 +97,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<td>
 														<?php 
 															if($tipo_pregunta === TEXT){?>
- 															    	<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="<?=TEXT?>"><i class="fa fa-inbox"></i></button>
+ 															    	<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="<?=$frases[421][$datosUsuarioActual['uss_idioma']];?>"><i class="fa fa-inbox"></i></button>
 																<?php }elseif($tipo_pregunta === MULTIPLE){?>
-																	<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="<?=MULTIPLE?>"><i class="fa fa-tasks"></i></button>
+																	<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="<?=$frases[422][$datosUsuarioActual['uss_idioma']];?>"><i class="fa fa-tasks"></i></button>
 															<?php  }else if($tipo_pregunta === SINGLE){?>
-																	<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="<?=SINGLE?>"><i class="fa fa-bars"></i></button>
+																	<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="<?=$frases[423][$datosUsuarioActual['uss_idioma']];?>"><i class="fa fa-check"></i></button>
 														<?php }?>
 														</td>
 														<td>

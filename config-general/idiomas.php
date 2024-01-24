@@ -817,8 +817,8 @@ $frases[418][$l] = 'Por cobrar';
 $frases[419][$l] = 'Guardar cambios';
 $frases[420][$l] = 'Obligatoria';
 $frases[421][$l] = 'TEXTO';
-$frases[422][$l] = 'UNICA';
-$frases[423][$l] = 'MÚLTIPLE';
+$frases[422][$l] = 'MÚLTIPLE';
+$frases[423][$l] = 'ÚNICA';
 //ENGLISH
 
 $l = 2;
@@ -1623,5 +1623,5 @@ $frases[418][$l] = 'To collect';
 $frases[419][$l] = 'Save Changes';
 $frases[420][$l] = 'Mandatory';
 $frases[421][$l] = 'TEXT';
-$frases[422][$l] = 'SINGLE';
-$frases[423][$l] = 'MULTIPLE';
+$frases[422][$l] = 'MULTIPLE';
+$frases[423][$l] = 'SINGLE';
