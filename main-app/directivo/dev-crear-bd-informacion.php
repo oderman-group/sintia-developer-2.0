@@ -4,7 +4,7 @@ $idPaginaInterna = 'DV0007';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
 
-//CONSULTA EXISTENCIA DE LA INSTITUCIÓN
+//CONSULTA EXISTENCIA DE LA Compañía
 try{
     $consultaInstituciones = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".instituciones WHERE ins_bd='".$bdInstitucion."' AND (SUBSTRING_INDEX(ins_years, ',', 1)<='".$year."' AND SUBSTRING_INDEX(ins_years, ',', -1)>='".$year."')");
 } catch (Exception $e) {
@@ -45,18 +45,18 @@ $variables='?tipoInsti='.base64_encode($_POST['tipoInsti']).'&idInsti='.base64_e
                                     if(empty($_POST["confirmacion"]) || $_POST["confirmacion"]!=1){
 
                                         $msgConfirmacion="
-                                            Usted esta creando una institución nueva para el año <b>$year</b> con los siguientes datos:<br><br>
-                                            Tipo De Institución:      <b>Nueva</b>.<br>
-                                            Nombre De La Institución: <b>".$_POST['nombreInsti']."</b>.<br>
-                                            Siglas De La Institución: <b>".$_POST['siglasInst']."</b>.<br>
+                                            Usted esta creando una Compañía nueva para el año <b>$year</b> con los siguientes datos:<br><br>
+                                            Tipo De Compañía:      <b>Nueva</b>.<br>
+                                            Nombre De La Compañía: <b>".$_POST['nombreInsti']."</b>.<br>
+                                            Siglas De La Compañía: <b>".$_POST['siglasInst']."</b>.<br>
                                             Año a crear:              <b>".$year."</b>.
                                         ";
                                         if($nueva==0){
                                             $msgConfirmacion="
-                                                Usted está renovando una institución para el año <b>$year</b> con los siguientes datos:<br><br>
-                                                Tipo De Institución:      <b>Antigua</b>.<br>
+                                                Usted está renovando una Compañía para el año <b>$year</b> con los siguientes datos:<br><br>
+                                                Tipo De Compañía:      <b>Antigua</b>.<br>
                                                 ID:                       <b>$idInsti</b>.<br>
-                                                Nombre De La Institución: <b>".$datosInsti['ins_nombre']."</b>.<br>
+                                                Nombre De La Compañía: <b>".$datosInsti['ins_nombre']."</b>.<br>
                                                 Año a crear:              <b>".$year."</b>.
                                             ";
                                         }
@@ -110,7 +110,7 @@ $variables='?tipoInsti='.base64_encode($_POST['tipoInsti']).'&idInsti='.base64_e
                                         if($numInstituciones>0){
                                             $boton='';
                                             $texto="
-                                                Ya existe en nuestro sistema <b>$numInstituciones</b> institución con el año <b>$year</b>.<br>
+                                                Ya existe en nuestro sistema <b>$numInstituciones</b> Compañía con el año <b>$year</b>.<br>
                                                 Por favor, confirmar los datos ingresados para poder continuar.
                                             ";
                                         }
