@@ -513,10 +513,10 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
             <tr>
                 <td align="center">
                     <?php
-                        $directorGrupo = Usuarios::obtenerDatosUsuario($idDirector);
-                        $nombreDirectorGrupo = UsuariosPadre::nombreCompletoDelUsuario($directorGrupo);
-                        if(!empty($directorGrupo["uss_firma"]) && file_exists(ROOT_PATH.'/main-app/files/fotos/' . $directorGrupo['uss_firma'])){
-                            echo '<img src="../files/fotos/'.$directorGrupo["uss_firma"].'" width="100"><br>';
+                        $secretaria = Usuarios::obtenerDatosUsuario($informacion_inst["info_secretaria_academica"]);
+                        $nombreSecretaria = UsuariosPadre::nombreCompletoDelUsuario($secretaria);
+                        if(!empty($secretaria["uss_firma"]) && file_exists(ROOT_PATH.'/main-app/files/fotos/' . $secretaria['uss_firma'])){
+                            echo '<img src="../files/fotos/'.$secretaria["uss_firma"].'" width="100"><br>';
                         }else{
                             echo '<p>&nbsp;</p>
                                 <p>&nbsp;</p>
@@ -525,8 +525,8 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                     ?>
                     <p style="height:0px;"></p>_________________________________<br>
                     <p>&nbsp;</p>
-                    <?=$nombreDirectorGrupo?><br>
-                    Director(a) de grupo
+                    <?=$nombreSecretaria?><br>
+                    Secretario(a)
                 </td>
                 <td align="center">
                     <?php
