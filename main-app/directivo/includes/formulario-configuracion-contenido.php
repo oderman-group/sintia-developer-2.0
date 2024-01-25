@@ -173,6 +173,7 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                             <select class="form-control  select2" id="tipoCertificado" name="certificado" onchange="cambiarTipo()" <?=$disabledPermiso;?>>
                                 <option value="1" <?php if($datosConfiguracion['conf_certificado']==1){ echo "selected";} ?>>Certificado 1</option>
                                 <option value="2" <?php if($datosConfiguracion['conf_certificado']==2){ echo "selected";} ?>>Certificado 2</option>
+                                <option value="3" <?php if($datosConfiguracion['conf_certificado']==3){ echo "selected";} ?>>Certificado 3</option>
                             </select>
                         </div>
                         <button type="button" titlee="Ver formato certificado" class="btn btn-sm" data-toggle="popover" ><i class="fa fa-eye"></i></button>
@@ -197,6 +198,18 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                                     }
                                 }
                         </script>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 control-label">Estampilla de pago en certificados
+                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta opción permite agregar un referente o estampilla de pago a los certificados."><i class="fa fa-question"></i></button> 
+                        </label>
+                        <div class="col-sm-2">
+                            <select class="form-control  select2" name="estampilla" <?=$disabledPermiso;?>>
+                                <option value="<?=SI?>" <?php if($datosConfiguracion['conf_estampilla_certificados'] == SI){ echo "selected";} ?>>SI</option>
+                                <option value="<?=NO?>" <?php if($datosConfiguracion['conf_estampilla_certificados'] == NO){ echo "selected";} ?>>NO</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="form-group row">

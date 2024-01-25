@@ -56,7 +56,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                         
                                        <?php 
                                         try{
-                                            $consultaDatosInf=mysqli_query($conexion, "SELECT info_id, info_rector, info_secretaria_academica, info_logo, info_nit, info_nombre, info_direccion, info_telefono, info_clase, info_caracter, info_calendario, info_jornada, info_horario, info_niveles, info_modalidad, info_propietario, info_coordinador_academico, info_tesorero FROM ".$baseDatosServicios.".general_informacion WHERE info_institucion='" . $config['conf_id_institucion'] . "' AND info_year='" . $_SESSION["bd"] . "';");
+                                            $consultaDatosInf=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_informacion WHERE info_institucion='" . $config['conf_id_institucion'] . "' AND info_year='" . $_SESSION["bd"] . "';");
                                         } catch (Exception $e) {
                                             include("../compartido/error-catch-to-report.php");
                                         }
@@ -89,6 +89,13 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													<input type="text" name="nitI" class="form-control" required value="<?= $datosinf["info_nit"];?>">
 												</div>
 											</div>
+
+                                            <div class="form-group row">
+												<label class="col-sm-2 control-label">Código DANE</label>
+												<div class="col-sm-2">
+													<input type="text" name="dane" class="form-control" required value="<?= $datosinf["info_dane"];?>">
+												</div>
+											</div>
 											
 										    <div class="form-group row">
 												<label class="col-sm-2 control-label">Nombre de la institución</label>
@@ -103,6 +110,32 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                     <input name="direccionI" class="form-control" type="text" required value="<?=$datosinf["info_direccion"];?>">
 												</div>
 											</div>
+												
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 control-label">Ciudad</label>
+                                                <div class="col-sm-4">
+                                                    <select class="form-control  select2" name="ciudad">
+                                                        <option value="">Seleccione una opción</option>
+                                                        <?php
+                                                        try{
+                                                            $opcionesG = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".localidad_ciudades
+                                                            INNER JOIN ".BD_ADMIN.".localidad_departamentos ON dep_id=ciu_departamento 
+                                                            ORDER BY ciu_nombre ");
+                                                        } catch (Exception $e) {
+                                                            include("../compartido/error-catch-to-report.php");
+                                                        }
+                                                        while($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)){
+                                                        $selected='';
+                                                        if($opg['ciu_id']==$datosinf['info_ciudad']){
+                                                            $selected='selected';
+                                                        }
+
+                                                        ?>
+                                                        <option value="<?=$opg['ciu_id'];?>" <?=$selected;?>><?=$opg['ciu_nombre'].", ".$opg['dep_nombre'];?></option>
+                                                        <?php }?>
+                                                    </select>
+                                                </div>
+                                            </div>
 											
 										    <div class="form-group row">
 												<label class="col-sm-2 control-label">Telefono</label>
@@ -164,6 +197,20 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 												<label class="col-sm-2 control-label">Propietario</label>
 												<div class="col-sm-4">
                                                 <input name="propietarioI" class="form-control" type="text" required value="<?=$datosinf["info_propietario"]?>">
+												</div>
+											</div>
+											
+										    <div class="form-group row">
+												<label class="col-sm-2 control-label">Resolución para certificados</label>
+												<div class="col-sm-6">
+                                                <textarea name="resolucion" cols="79" rows="3" required><?=$datosinf["info_resolucion"]?></textarea>
+												</div>
+											</div>
+											
+										    <div class="form-group row">
+												<label class="col-sm-2 control-label">Decretos de plan de estudio para certificados</label>
+												<div class="col-sm-6">
+                                                <textarea name="decretos" cols="79" rows="3" required><?=$datosinf["info_decreto_plan_estudio"]?></textarea>
 												</div>
 											</div>
 											   
