@@ -117,7 +117,7 @@ try {
 
 		//CREAMOS LA NUEVA INFORMACIÓN DE LA INSTITUCIÓN
 		try{
-			mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".general_informacion (info_rector,info_secretaria_academica,info_logo,info_nit,info_nombre,info_direccion,info_telefono,info_clase,info_caracter,info_calendario,info_jornada,info_horario,info_niveles,info_modalidad,info_propietario,info_coordinador_academico,info_tesorero,info,info_institucion,info_year) SELECT info_rector,info_secretaria_academica,info_logo,info_nit,info_nombre,info_direccion,info_telefono,info_clase,info_caracter,info_calendario,info_jornada,info_horario,info_niveles,info_modalidad,info_propietario,info_coordinador_academico,info_tesorero,info,info_institucion,'".$year."' FROM ".BD_ADMIN.".general_informacion WHERE info_institucion='".$idInsti."' AND info_year='".$yearAnterior."'");
+			mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".general_informacion (info_rector,info_secretaria_academica,info_logo,info_nit,info_nombre,info_direccion,info_telefono,info_clase,info_caracter,info_calendario,info_jornada,info_horario,info_niveles,info_modalidad,info_propietario,info_coordinador_academico,info_tesorero,info_dane,info_ciudad,info_resolucion,info_decreto_plan_estudio,info_institucion,info_year) SELECT info_rector,info_secretaria_academica,info_logo,info_nit,info_nombre,info_direccion,info_telefono,info_clase,info_caracter,info_calendario,info_jornada,info_horario,info_niveles,info_modalidad,info_propietario,info_coordinador_academico,info_tesorero,info_dane,info_ciudad,info_resolucion,info_decreto_plan_estudio,info_institucion,'".$year."' FROM ".BD_ADMIN.".general_informacion WHERE info_institucion='".$idInsti."' AND info_year='".$yearAnterior."'");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -208,7 +208,7 @@ try {
 
 		//CREAMOS LA NUEVA INFORMACIÓN DE LA INSTITUCIÓN
 		try{
-			mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".general_informacion (info_rector,info_secretaria_academica,info_logo,info_nit,info_nombre,info_direccion,info_telefono,info_clase,info_caracter,info_calendario,info_jornada,info_horario,info_niveles,info_modalidad,info_propietario,info_coordinador_academico,info_tesorero,info,info_institucion,info_year) VALUES ('2','2','sintia-logo-2023.png','0000000000-0','".$nombreInsti."','Cra 00 # 00-00','(000)000-0000','Privado','Mixto','A','Mañana','6:00 am - 12:30 pm','Preescolar, Basica, Media','Academica','PROPIETARIO PRUEBA','2','2','1','".$idInsti."','".$year."')");
+			mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".general_informacion (info_rector,info_secretaria_academica,info_logo,info_nit,info_nombre,info_direccion,info_telefono,info_clase,info_caracter,info_calendario,info_jornada,info_horario,info_niveles,info_modalidad,info_propietario,info_coordinador_academico,info_tesorero,info_dane,info_ciudad,info_resolucion,info_decreto_plan_estudio,info_institucion,info_year) VALUES ('2','2','sintia-logo-2023.png','0000000000-0','".$nombreInsti."','Cra 00 # 00-00','(000)000-0000','Privado','Mixto','A','Mañana','6:00 am - 12:30 pm','Preescolar, Basica, Media','Academica','PROPIETARIO PRUEBA','2','2', NULL, NULL, NULL, NULL,'".$idInsti."','".$year."')");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
