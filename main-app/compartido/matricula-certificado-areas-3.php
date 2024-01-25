@@ -353,7 +353,7 @@ $Plataforma = new Plataforma;
 	} ?>
 	<span style="font-size:16px; text-align:justify;">
 		Se expide en <?= ucwords(strtolower($informacion_inst["ciu_nombre"])) ?> el <?= date("d"); ?> de <?= $meses[$mes]; ?> de <?= date("Y"); ?>, con destino al
-		interesado. Se anula estampilla número <mark><?= $_REQUEST["estampilla"] ?></mark>, según ordenanza 012/05 y decreto 005/06.
+		interesado. <?php if ($config['conf_estampilla_certificados'] == SI) { echo "Se anula estampilla número <mark>".$_REQUEST["estampilla"]."</mark>, según ordenanza 012/05 y decreto 005/06."; } ?>
 	</span>
 
 	<p>&nbsp;</p>
