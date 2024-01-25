@@ -20,7 +20,7 @@ $colorBoton = 'success';
 $readonly = "readonly";
 $tituloFormulario = 'Restaurar Estudiante';
 
-if ($e['mat_estado_matricula'] == 1) {
+if ($e['mat_estado_matricula'] == MATRICULADO || $e['mat_estado_matricula'] == ASISTENTE || $e['mat_estado_matricula'] == NO_MATRICULADO || $e['mat_estado_matricula'] == EN_INSCRIPCION) {
     $nombreBoton = 'Retirar y cancelar matrícula';
     $colorBoton = 'danger';
     $readonly = "";
@@ -90,7 +90,7 @@ if ($e['mat_estado_matricula'] == 1) {
                 </div>
             <?php } ?>
 
-            <?php if ($e['mat_estado_matricula'] == 1 || !empty($e['matret_fecha'])) { ?>
+            <?php if ($e['mat_estado_matricula'] == MATRICULADO || $e['mat_estado_matricula'] == ASISTENTE || $e['mat_estado_matricula'] == NO_MATRICULADO || $e['mat_estado_matricula'] == EN_INSCRIPCION || !empty($e['matret_fecha'])) { ?>
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Motivo de retiro</label>
                     <div class="col-sm-10">
