@@ -833,4 +833,117 @@ class Movimientos {
         return $consulta;
     }
 
+    /**
+    * Este metodo me trae todos los impuestos
+    * @param mysqli $conexion
+    * @param array $config
+    * 
+    * @return mysqli_result $consulta
+   **/
+    public static function listarImpuestos (
+        mysqli $conexion, 
+        array $config
+    )
+    {
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".taxes tax
+            WHERE is_deleted=0 AND tax.institucion = {$config['conf_id_institucion']} AND tax.year = {$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        return $consulta;
+    }
+
+    /**
+     * Este metodo me guarda un impuesto
+     * @param mysqli $conexion
+     * @param array $config
+     * @param array $POST
+     * 
+     * @return string $codigo
+    **/
+    public static function guardarImpuestos (
+        mysqli $conexion, 
+        array $config, 
+        array $POST
+    )
+    {
+
+        try {
+            mysqli_query($conexion, "INSERT INTO ".BD_FINANCIERA.".taxes (type_tax, name, fee, description, institucion, year)VALUES('".$POST["typeTax"]."', '".$POST["name"]."', '".$POST["fee"]."', '".$POST["description"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        $idRegistro = mysqli_insert_id($conexion);
+
+        return $idRegistro;
+    }
+
+    /**
+     * Este metodo me trae la informacion de un impuesto
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idImpuesto
+     * 
+     * @return array $resultado
+    **/
+    public static function traerDatosImpuestos (
+        mysqli $conexion, 
+        array $config,
+        string $idImpuesto
+    )
+    {
+        $resultado = [];
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".taxes tax
+            WHERE id='{$idImpuesto}' AND tax.institucion = {$config['conf_id_institucion']} AND tax.year = {$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+
+        return $resultado;
+    }
+
+    /**
+     * Este metodo me actualiza un impuesto
+     * @param mysqli $conexion
+     * @param array $config
+     * @param array $POST
+    **/
+    public static function actualizarImpuestos (
+        mysqli $conexion, 
+        array $config, 
+        array $POST
+    )
+    {
+
+        try {
+            mysqli_query($conexion, "UPDATE ".BD_FINANCIERA.".taxes SET type_tax='".$POST["typeTax"]."', name='".$POST["name"]."', fee='".$POST["fee"]."', description='".$POST["description"]."' WHERE id='".$POST["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+    }
+
+    /**
+     * Este metodo me actualiza un impuesto
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idImpuesto
+    **/
+    public static function eliminarImpuestos (
+        mysqli $conexion, 
+        array $config, 
+        string $idImpuesto
+    )
+    {
+
+        try {
+            mysqli_query($conexion, "UPDATE ".BD_FINANCIERA.".taxes SET is_deleted=1 WHERE id='{$idImpuesto}' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+    }
+
 }
