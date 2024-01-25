@@ -92,6 +92,12 @@ define('POR_COBRAR', 'POR_COBRAR');
 define('SI', 'SI');
 define('NO', 'NO');
 
+/* Tipos de impuestos */
+define('IVA', 'IVA');
+define('ICO', 'ICO');
+define('ICUI', 'ICUI');
+define('OTRO', 'OTRO');
+
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':
         define('REDIRECT_ROUTE', 'http://localhost/app-sintia/main-app');
