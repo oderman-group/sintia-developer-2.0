@@ -98,6 +98,15 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                     </div>
                 </div>
 
+                <?php if ($config['conf_estampilla_certificados'] == SI) { ?>
+                    <div class="form-group row">
+                        <label class="col-sm-2 control-label">Estampilla o referente de pago</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="estampilla" value="">
+                        </div>
+                    </div>
+                <?php } ?>
+
                 <input type="submit" class="btn btn-primary" value="Generar Certificado">
             </form>
         </div>
