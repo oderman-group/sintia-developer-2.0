@@ -102,6 +102,24 @@ if ($e['mat_estado_matricula'] == MATRICULADO || $e['mat_estado_matricula'] == A
             <input type="submit" class="btn btn-<?= $colorBoton; ?>" value="<?= $nombreBoton; ?>" name="consultas">
 
         </form>
+        <p>&nbsp;</p>
+        <div class="form-group row" style="margin-left: 20px;">
+            <?php
+                $consultaHistorial = Estudiantes::listarDatosEstudiantesretirados($conexion, $config, $id);
+                $numHistorial = mysqli_num_rows($consultaHistorial);
+                if ($numHistorial > 0) {
+                    $cont = 1;
+                    echo "<span style='font-weight:bold;'>Historial de retiro:</span><br><br>";
+                    while ($datosHistorial = mysqli_fetch_array($consultaHistorial)){
+                        $motivo = str_replace(['<p>', '</p>'], '', $datosHistorial['matret_motivo']);
+                        
+                        echo $cont.") Fecha: ".$datosHistorial['matret_fecha']." Motivo: ".$motivo." Responsable: ".UsuariosPadre::nombreCompletoDelUsuario($datosHistorial)."<br>";
+
+                        $cont ++;
+                    }
+                }
+            ?>
+        </div>
     </div>
   
     </body>
