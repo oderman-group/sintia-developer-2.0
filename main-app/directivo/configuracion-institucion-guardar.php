@@ -34,7 +34,10 @@ include("../compartido/historial-acciones-guardar.php");
 	}
 
 	try{
-		$informacionInstConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_informacion WHERE info_institucion='" . $config['conf_id_institucion'] . "' AND info_year='" . $_SESSION["bd"] . "'");
+		$informacionInstConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_informacion
+		LEFT JOIN ".$baseDatosServicios.".localidad_ciudades ON ciu_id=info_ciudad
+		LEFT JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento
+		WHERE info_institucion='" . $config['conf_id_institucion'] . "' AND info_year='" . $_SESSION["bd"] . "'");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
