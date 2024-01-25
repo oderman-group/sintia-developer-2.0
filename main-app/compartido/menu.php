@@ -286,13 +286,14 @@
 							<?php 
 							//MÓDULO CUESTIONARIO EVALUATIVO
 							if(!empty($arregloModulos) && array_key_exists(18, $arregloModulos)){?>
-							<li class="nav-item">
-	                            <a href="#" class="nav-link nav-toggle"> <i class="fa fa-question"></i>
+							<li <?php agregarClass(MENU_PADRE,["DT0281","DT0283","DT0285"]) ?>>
+	                            <a href="javascript:void(0);" class="nav-link nav-toggle"> <i class="fa fa-question"></i>
 	                                <span class="title"><?=$frases[388][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 	                            </a>
-	                            <ul class="sub-menu">
-	                                <li class="nav-item"><a href="#" class="nav-link "> <span class="title"><?=$frases[393][$datosUsuarioActual['uss_idioma']];?></span></a></li>
-									<li class="nav-item"><a href="#" class="nav-link "> <span class="title"><?=$frases[139][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+	                            <ul <?php agregarClass(SUB_MENU,["DT0281","DT0283","DT0285"])?>>
+	                                <li class="nav-item"><a href="javascript:void(0);" class="nav-link "> <span class="title"><?=$frases[393][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<li class="nav-item"><a href="javascript:void(0);" class="nav-link "> <span class="title"><?=$frases[139][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<li <?php agregarClass(MENU,["DT0281","DT0282","DT0283"]) ?>><a href="evaluaciones.php" class="nav-link "> <span class="title"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 
 	                            </ul>
 	                        </li>
