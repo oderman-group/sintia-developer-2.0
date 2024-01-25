@@ -19,9 +19,22 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
 <div class="col-sm-12">
 
     <?php
-    $ext = '';
-    if ($config['conf_certificado'] == 2) {
-        $ext = '-2';
+    switch ($config['conf_certificado']) {
+        case 1:
+            $ext = '';
+        break;
+
+        case 2:
+            $ext = '-2';
+        break;
+
+        case 3:
+            $ext = '-3';
+        break;
+
+        default:
+            $ext = '';
+        break;
     }
     ?>
     <div class="panel">
