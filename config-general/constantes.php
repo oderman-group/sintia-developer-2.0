@@ -97,7 +97,7 @@ define('MEDIA', 4);
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':
         define('REDIRECT_ROUTE', 'http://localhost/app-sintia/main-app');
-        define('ENVIROMENT', 'PROD');
+        define('ENVIROMENT', 'TEST');
         break;
 
 	case 'developer.plataformasintia.com':
