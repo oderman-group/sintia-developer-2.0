@@ -88,6 +88,9 @@ define('CANCELADO', 3);
 define('NO_MATRICULADO', 4);
 define('EN_INSCRIPCION', 5);
 
+define('SI', 'SI');
+define('NO', 'NO');
+
 /* NIVELES EDUCATIVOS */
 define('PREESCOLAR', 1);
 define('BASICA_PRIMARIA', 2);
