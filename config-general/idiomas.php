@@ -815,6 +815,9 @@ $frases[416][$l] = 'Notas Adicionales';
 $frases[417][$l] = 'Cobrado';
 $frases[418][$l] = 'Por cobrar';
 $frases[419][$l] = 'Guardar Cambios';
+$frases[420][$l] = 'Impuesto';
+$frases[421][$l] = 'Tarifa';
+
 //ENGLISH
 
 $l = 2;
@@ -1617,3 +1620,5 @@ $frases[416][$l] = 'Additional notes';
 $frases[417][$l] = 'Collected';
 $frases[418][$l] = 'To collect';
 $frases[419][$l] = 'Save Changes';
+$frases[420][$l] = 'Taxe';
+$frases[421][$l] = 'Fee';
