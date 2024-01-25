@@ -205,6 +205,12 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                     <td width="3%">Desempeño</td>
                 </tr>
             </thead>
+            <?php
+                $consultaBoletin=mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante = '".$matriculadosDatos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
+                $numNotas = mysqli_num_rows($consultaBoletin);
+
+                if ($numNotas > 0) {
+            ?>
             <tbody>
                 <?php
                     $consultaAreas= mysqli_query($conexion,"SELECT ar_id, ar_nombre, count(*) AS numMaterias, car_curso, car_grupo FROM ".BD_ACADEMICA.".academico_materias am
@@ -492,7 +498,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 									$msj = "EL(LA) ESTUDIANTE FUE PROMOVIDO(A) AL GRADO SIGUIENTE.";
 								}
 
-								if ($ultimoPeriodoAreas < $config["conf_periodos_maximos"]) {
+								if ($matriculadosDatos['mat_id'] == CANCELADO && $ultimoPeriodoAreas < $config["conf_periodos_maximos"]) {
 									$msj = "EL(LA) ESTUDIANTE FUE RETIRADO SIN FINALIZAR AÑO LECTIVO.";
 								}
 							}
@@ -502,6 +508,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 					</td>
 				</tr>
             </tfoot>
+            <?php } ?>
         </table>
 
         <p>&nbsp;</p>
