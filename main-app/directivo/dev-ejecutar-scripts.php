@@ -33,6 +33,10 @@
                                 <div class="page-title">Execute SQL Script</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
+                            <ol class="breadcrumb page-breadcrumb pull-right">
+                                <li><a class="parent-item" href="javascript:void(0);" name="dev-scripts.php" onClick="deseaRegresar(this)">Script SQL</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active">Execute SQL Script</li>
+                            </ol>
                         </div>
                     </div>
                     

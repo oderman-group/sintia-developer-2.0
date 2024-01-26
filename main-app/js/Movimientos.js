@@ -132,12 +132,13 @@ function traerItems(){
     // Obtener el valor del ID de transacción desde el elemento HTML
     var idTransaction = document.getElementById('idTransaction').value;
     var vlrAdicional = document.getElementById('vlrAdicional').value;
+    var typeTransaction = document.getElementById('typeTransaction').value;
 
     // Mostrar un mensaje de carga mientras se obtienen los items
     $('#mostrarItems').empty().hide().html("Cargando Items...").show(1);
     
     // Realizar una solicitud fetch para obtener los items asociados a la transacción
-    fetch('../directivo/ajax-traer-items.php?idTransaction=' + idTransaction + '&vlrAdicional=' + vlrAdicional, {
+    fetch('../directivo/ajax-traer-items.php?idTransaction=' + idTransaction + '&vlrAdicional=' + vlrAdicional + '&typeTransaction=' + typeTransaction, {
         method: 'GET'
     })
     .then(response => response.text()) // Convertir la respuesta a texto
@@ -187,6 +188,7 @@ function guardarNuevoItem(selectElement) {
 
     // Obtener el ID de la transacción desde el elemento del DOM
     var idTransaction = document.getElementById('idTransaction').value;
+    var typeTransaction = document.getElementById('typeTransaction').value;
 
     // Obtener la opción seleccionada del elemento select
     var itemSelecionado = selectElement.options[selectElement.selectedIndex];
@@ -207,7 +209,7 @@ function guardarNuevoItem(selectElement) {
     var totalFormat = "$"+numberFormat(totalNetoFinal, 0, ',', '.');
 
     // Realizar una solicitud fetch para guardar el nuevo item
-    fetch('../directivo/ajax-guardar-items.php?idTransaction=' + idTransaction + '&idItem=' + idItem + '&itemModificar=' + itemModificar + '&subtotal=' + subtotal + '&cantidad=' + cantidad + '&precio=' + precio, {
+    fetch('../directivo/ajax-guardar-items.php?idTransaction=' + idTransaction + '&idItem=' + idItem + '&itemModificar=' + itemModificar + '&subtotal=' + subtotal + '&cantidad=' + cantidad + '&precio=' + precio + '&typeTransaction=' + typeTransaction, {
         method: 'GET'
     })
     .then(response => response.json()) // Convertir la respuesta a objeto JSON
@@ -517,4 +519,57 @@ function guardarDescripcion(id) {
          // Manejar errores
         console.error('Error:', error);
     });
+}
+
+/**
+ * Esta función anula una movimiento financiero.
+ * @param {string} datos
+ */
+function anularMovimiento(datos) {
+    
+    var idR = datos.getAttribute('data-id-registro');
+    var idUsuario = datos.getAttribute('data-id-usuario');
+
+    Swal.fire({
+        title: 'Alerta!',
+        text: "¿Deseas anular esta transacción?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si, deseo anular!',
+        cancelButtonText: 'No',
+        backdrop: `
+            rgba(0,0,123,0.4)
+            no-repeat
+        `,
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            fetch('../directivo/movimientos-anular.php?idR='+(idR)+'&id='+(idUsuario), {
+                method: 'GET'
+            })
+            .then(response => response.text()) // Convertir la respuesta a texto
+            .then(data => {
+
+                document.getElementById("reg"+idR).style.backgroundColor="#ff572238";
+                document.getElementById("anulado"+idR).style.display = "none";
+
+                $.toast({
+                    heading: 'Acción realizada',
+                    text: 'La transacción fue anulada correctamente.',
+                    position: 'bottom-right',
+                    showHideTransition: 'slide',
+                    loaderBg: '#26c281',
+                    icon: 'success',
+                    hideAfter: 5000,
+                    stack: 6
+                });
+            })
+            .catch(error => {
+                // Manejar errores
+                console.error('Error:', error);
+            });
+        }else{
+            return false;
+        }
+    })
 }

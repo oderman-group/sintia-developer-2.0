@@ -8,16 +8,26 @@ include("../compartido/historial-acciones-guardar.php");
 Modulos::verificarPermisoDev();
 
 include("../compartido/head.php");
+
 $datosNuevaBD = [
 	'tipoInsti'     => '',
-	'idInsti'      => '',
-	'ins_bd'       => '',
-	'yearA'    => '',
+	'idInsti'       => '',
+	'ins_bd'        => '',
+	'yearA'         => '',
 	'siglasBD'      => '',
-	'nombreInsti' => '',
-	'siglasInst'      => '',
-	'yearN'       => ''
+	'nombreInsti'   => '',
+	'siglasInst'    => '',
+	'yearN'         => '',
+	'nombre1'       => '',
+	'nombre2'       => '',
+	'apellido1'     => '',
+	'apellido2'     => '',
+	'email'         => '',
+	'celular'       => '',
+	'tipoDoc'       => '',
+	'documento'     => ''
 ];
+
 $displayNueva= 'none';
 $displayAntigua= 'none';
 if(isset($_GET['tipoInsti'])){
@@ -51,6 +61,30 @@ if(isset($_GET['siglasInst'])){
 }
 if(isset($_GET['yearN'])){
 	$datosNuevaBD['yearN'] = base64_decode($_GET['yearN']);
+}
+if(isset($_GET['nombre1'])){
+	$datosNuevaBD['nombre1'] = base64_decode($_GET['nombre1']);
+}
+if(isset($_GET['nombre2'])){
+	$datosNuevaBD['nombre2'] = base64_decode($_GET['nombre2']);
+}
+if(isset($_GET['apellido1'])){
+	$datosNuevaBD['apellido1'] = base64_decode($_GET['apellido1']);
+}
+if(isset($_GET['apellido2'])){
+	$datosNuevaBD['apellido2'] = base64_decode($_GET['apellido2']);
+}
+if(isset($_GET['tipoDoc'])){
+	$datosNuevaBD['tipoDoc'] = base64_decode($_GET['tipoDoc']);
+}
+if(isset($_GET['documento'])){
+	$datosNuevaBD['documento'] = base64_decode($_GET['documento']);
+}
+if(isset($_GET['email'])){
+	$datosNuevaBD['email'] = base64_decode($_GET['email']);
+}
+if(isset($_GET['celular'])){
+	$datosNuevaBD['celular'] = base64_decode($_GET['celular']);
 }
 
 try{
@@ -88,7 +122,9 @@ try{
                 document.getElementById('antigua').style.display='none';
                 
                 inputElementsNueva.forEach((input) => {
-                    input.required = true;
+                    if (input.id !== "nombre2" && input.id !== "apellido2" && input.id !== "celular"){
+                        input.required = true;
+                    }
                 });
 
                 inputElementsAntigua.forEach((input) => {
@@ -155,7 +191,7 @@ try{
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Tipo Institución</label>
-											<div class="col-sm-3">
+											<div class="col-sm-4">
                                                 <select class="form-control  select2" name="tipoInsti" required onchange="institucion(this)">
                                                     <option value="">Seleccione una opción</option>
                                                     <option value="1"<?php if($datosNuevaBD['tipoInsti']==1){echo "selected";}?>>Nueva</option>
@@ -165,34 +201,98 @@ try{
 										</div>
                                         
                                         <div id="nueva" style="display: <?=$displayNueva?>;">
+                                            
+                                            <hr>
+                                            <h2><b>Datos de Institución</b></h2>
 
                                             <div class="form-group row">
-                                                <label class="col-sm-2 control-label">Nombre de la institución</label>
-                                                <div class="col-sm-3">
-                                                    <input type="text" name="nombreInsti" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['nombreInsti'];?>">
+                                                <label class="col-sm-2 control-label">Nombre de la institución <span style="color: red;">(*)</span></label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" name="nombreInsti" class="form-control" value="<?=$datosNuevaBD['nombreInsti'];?>">
                                                 </div>
-                                            </div>
-
-                                            <div class="form-group row">
-                                                <label class="col-sm-2 control-label">Siglas de la institución</label>
-                                                <div class="col-sm-3">
+                                                
+                                                <label class="col-sm-2 control-label">Siglas de la institución <span style="color: red;">(*)</span>
+                                                    <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Nombre corto de la institución."><i class="fa fa-question"></i></button> 
+                                                </label>
+                                                <div class="col-sm-4">
                                                     <input type="text" name="siglasInst" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['siglasInst'];?>">
-                                                    <span style="color:#6017dc;">Nombre corto de la institución.</span>
                                                 </div>
                                             </div>
 
                                             <div class="form-group row">
-                                                <label class="col-sm-2 control-label">Nombre de la Base de datos <b>(SiglasBD)</b></label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" name="siglasBD" class="form-control col-sm-6" autocomplete="off" value="<?=$datosNuevaBD['siglasBD'];?>">
-                                                    <span style="color:#6017dc;">Aquí colocamos las siglas que van al intermedio del nombre de la BD ejemplo: dominio_<b>SiglasBD</b>_year</span>
+                                                <label class="col-sm-2 control-label">Nombre de la Base de datos <b>(SiglasBD)</b> <span style="color: red;">(*)</span>
+                                                    <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Aquí colocamos las siglas que van al intermedio del nombre de la BD ejemplo: dominio_{{SiglasBD}}_year"><i class="fa fa-question"></i></button> 
+                                                </label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" name="siglasBD" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['siglasBD'];?>">
                                                 </div>
-                                            </div>
-
-                                            <div class="form-group row">
-                                                <label class="col-sm-2 control-label">Año a crear</label>
-                                                <div class="col-sm-3">
+                                                
+                                                <label class="col-sm-2 control-label">Año a crear <span style="color: red;">(*)</span></label>
+                                                <div class="col-sm-4">
                                                     <input type="number" name="yearN" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['yearN'];?>">
+                                                </div>
+                                            </div>
+
+                                            <hr>
+                                            <h2><b>Datos de Contacto Principal</b></h2>
+
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 control-label">Tipo de Documento <span style="color: red;">(*)</span></label>
+                                                <div class="col-sm-4">
+													<?php
+													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales
+													WHERE ogen_grupo=1");
+													?>
+													<select class="form-control  select2" name="tipoDoc" style="width: 100% !important;">
+														<option value="">Seleccione una opción</option>
+														<?php while($o = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
+															if($o['ogen_id']==$datosNuevaBD['tipoDoc'])
+															echo '<option value="'.$o['ogen_id'].'" selected>'.$o['ogen_nombre'].'</option>';
+														else
+															echo '<option value="'.$o['ogen_id'].'">'.$o['ogen_nombre'].'</option>';	
+														}?>
+													</select>
+                                                </div>
+                                                
+                                                <label class="col-sm-2 control-label">Documento <span style="color: red;">(*)</span></label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" name="documento" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['documento'];?>">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 control-label">Primer Nombre <span style="color: red;">(*)</span></label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" name="nombre1" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['nombre1'];?>">
+                                                </div>
+                                                
+                                                <label class="col-sm-2 control-label">Segundo Nombre</label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" name="nombre2" id="nombre2" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['nombre2'];?>">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 control-label">Primer Apellido <span style="color: red;">(*)</span></label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" name="apellido1" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['apellido1'];?>">
+                                                </div>
+                                                
+                                                <label class="col-sm-2 control-label">Segundo Apellido</label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" name="apellido2" id="apellido2" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['apellido2'];?>">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 control-label">Correo Principal <span style="color: red;">(*)</span></label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" name="email" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['email'];?>">
+                                                </div>
+                                                
+                                                <label class="col-sm-2 control-label">Celular</label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" name="celular" id="celular" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['celular'];?>">
                                                 </div>
                                             </div>
 
@@ -201,7 +301,7 @@ try{
                                         <div id="antigua" style="display: <?=$displayAntigua?>;">
 
                                             <div class="form-group row">
-                                                <label class="col-sm-2 control-label">Institución</label>
+                                                <label class="col-sm-2 control-label">Institución  <span style="color: red;">(*)</span></label>
                                                 <div class="col-sm-3">
                                                     <select class="form-control" name="idInsti">
                                                         <option value="">Seleccione una opción</option>
@@ -215,7 +315,7 @@ try{
                                             </div>
 
                                             <div class="form-group row">
-                                                <label class="col-sm-2 control-label">Año a crear</label>
+                                                <label class="col-sm-2 control-label">Año a crear <span style="color: red;">(*)</span></label>
                                                 <div class="col-sm-3">
                                                     <input type="number" name="yearA" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['yearA'];?>">
                                                 </div>

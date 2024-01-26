@@ -81,7 +81,7 @@ if(!Modulos::validarPaginasHijasSubRol(base64_decode($_GET["idP"]))){
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="dev-paginas.php" onClick="deseaRegresar(this)">Paginas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="dev-paginas.php" onClick="deseaRegresar(this)"><?=$frases[403][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Editar Paginas</li>
                             </ol>
                         </div>
@@ -175,6 +175,17 @@ if(!Modulos::validarPaginasHijasSubRol(base64_decode($_GET["idP"]))){
                                                     <option value="">Seleccione una opción</option>
                                                     <option value="1" <?php if($datosPaginas['pagp_navegable']==1){ echo "selected";} ?>>SI</option>
                                                     <option value="0" <?php if($datosPaginas['pagp_navegable']==0){ echo "selected";} ?>>NO</option>
+                                                </select>
+                                            </div>
+                                        </div>
+										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Asignable a SubRoles?</label>
+                                            <div class="col-sm-3">
+                                                <select class="form-control  select2" name="subroles" id="subroles">
+                                                    <option value="">Seleccione una opción</option>
+                                                    <option value="<?=SI?>" <?php if($datosPaginas['pagp_asignable_subroles'] == SI){ echo "selected";} ?>>SI</option>
+                                                    <option value="<?=NO?>" <?php if($datosPaginas['pagp_asignable_subroles'] == NO){ echo "selected";} ?>>NO</option>
                                                 </select>
                                             </div>
                                         </div>
