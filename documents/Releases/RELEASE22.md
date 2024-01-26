@@ -5,3 +5,4 @@ PES-667 - Al crear una nueva institución se debe designar al directivo como dir
 
 ### LUGIE
 PES-530 CRUD a la tabla Evaluaciones
+PES-531 CRUD a la tabla Preguntas
