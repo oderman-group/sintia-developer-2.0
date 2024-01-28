@@ -59,7 +59,7 @@ class Movimientos {
     )
     {
         try {
-            $consulta = mysqli_query($conexion, "SELECT ti.id AS idtx, i.id AS idit, i.name, i.price AS priceItem, ti.price AS priceTransaction, ti.cantity, ti.subtotal, ti.description
+            $consulta = mysqli_query($conexion, "SELECT ti.id AS idtx, i.id AS idit, i.name, i.price AS priceItem, ti.price AS priceTransaction, ti.cantity, ti.subtotal, ti.description, ti.discount, ti.tax
             FROM ".BD_FINANCIERA.".transaction_items ti
             INNER JOIN ".BD_FINANCIERA.".items i ON i.id = ti.id_item
             WHERE ti.id_transaction = '{$idTransaction}'
