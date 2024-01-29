@@ -371,10 +371,6 @@ while($i<=$restaAgnos){
 
         </table>
 
-        
-
-        <p>&nbsp;</p>
-
     	<?php
 
 		$nivelaciones = mysqli_query($conexion, "SELECT niv_definitiva, niv_acta, niv_fecha_nivelacion, mat_nombre FROM ".BD_ACADEMICA.".academico_nivelaciones niv 
@@ -680,22 +676,11 @@ while($i<=$restaAgnos){
 
 ?>
 
-
-
-
-
-<p>&nbsp;</p>
 <?php if(date('m')<10){$mes = substr(date('m'),1);}else{$mes = date('m');}?>	
 <span style="font-size:16px; text-align:justify;">
 PLAN DE ESTUDIOS: <?= $informacion_inst["info_decreto_plan_estudio"] ?>. Intensidad horaria <?=$horasT;?> horas semanales de 55 minutos.<br><br>
 Se expide el presente certificado en <?= ucwords(strtolower($informacion_inst["ciu_nombre"])) ?> el <?=date("d");?> de <?= $meses[$mes];?> de <?=date("Y");?>. 
 </span>
-
-
-
-
-
-<p>&nbsp;</p>
 
 <table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
 
@@ -708,8 +693,7 @@ Se expide el presente certificado en <?= ucwords(strtolower($informacion_inst["c
 				if(!empty($rector["uss_firma"]) && file_exists(ROOT_PATH.'/main-app/files/fotos/' . $rector['uss_firma'])){
 					echo '<img src="../files/fotos/'.$rector["uss_firma"].'" width="100"><br>';
 				}else{
-					echo '<p>&nbsp;</p>
-						<p>&nbsp;</p>';
+					echo '<p>&nbsp;</p>';
 				}
 			?>
 			<p style="height:0px;"></p>_________________________________<br>
