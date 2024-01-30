@@ -807,4 +807,28 @@ class Movimientos {
         return $total;
     }
 
+    /**
+     * Este metodo me trae las facturas de un usuario para listar
+     * @param mysqli            $conexion
+     * @param array             $config
+     * @param string            $codAbono
+     * 
+     * @return mysqli_result    $consulta
+    **/
+    public static function listarConceptos (
+        mysqli  $conexion, 
+        array   $config, 
+        string   $codAbono
+    )
+    {
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".payments_invoiced
+            WHERE payments='{$codAbono}' AND institucion = {$config['conf_id_institucion']} AND year = {$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        return $consulta;
+    }
+
 }

@@ -632,7 +632,7 @@ function actualizarAbonado(datos) {
         var idFactura   = datos.getAttribute("data-id-factura");
         var abonoAnterior   = parseFloat(datos.getAttribute("data-abono-anterior"));
         
-        fetch('../directivo/ajax-guardar-abono.php?abono='+(nuevoAbono)+'&idAbono='+(idAbono)+'&idFactura='+(idFactura)+'&abonoAnterior='+(abonoAnterior), {
+        fetch('../directivo/ajax-guardar-abono.php?type=INVOICE&abono='+(nuevoAbono)+'&idAbono='+(idAbono)+'&idFactura='+(idFactura)+'&abonoAnterior='+(abonoAnterior), {
             method: 'GET'
         })
         .then(response => response.text()) // Convertir la respuesta a texto
@@ -736,4 +736,251 @@ function cambiarEstadoFactura(idFactura) {
     .catch(error => {
         console.error('Error:', error);
     });
+}
+
+/**
+ * Guarda un nuevo abono.
+ * @param {HTMLSelectElement} selectElement - El elemento select que contiene la opción seleccionada.
+ */
+function guardarNuevoConcepto(selectElement) {
+    var concepto = selectElement.value;
+    var idAbono = document.getElementById('idAbono').value;
+    var precioElement = document.getElementById('precioNuevo');
+    var descripElement = document.getElementById('descripNueva');
+    var cantidadElement = document.getElementById('cantidadNuevo');
+    var conceptoElement = document.getElementById('idConcepto');
+
+    var conceptoModificar = '';
+    if (conceptoElement.innerHTML.trim() !== '') {
+        var conceptoModificar = conceptoElement.innerHTML;
+    }
+
+    fetch('../directivo/ajax-guardar-abono.php?type=ACCOUNT&conceptoModificar='+conceptoModificar+'&idAbono=' + idAbono + '&concepto=' + concepto + '&precio=0&cantidad=1&subtotal=0', {
+        method: 'GET'
+    })
+    .then(response => response.json()) // Convertir la respuesta a objeto JSON
+    .then(data => {
+        conceptoElement.innerHTML = '';
+        conceptoElement.appendChild(document.createTextNode(data.idInsercion));
+
+        precioElement.disabled = false;
+        descripElement.disabled = false;
+        cantidadElement.disabled = false;
+
+        $.toast({
+            heading: 'Acción realizada',
+            text: 'Nuevo item agregado correctamente.',
+            position: 'bottom-right',
+            showHideTransition: 'slide',
+            loaderBg: '#26c281',
+            icon: 'success',
+            hideAfter: 5000,
+            stack: 6
+        });
+    })
+    .catch(error => {
+        // Manejar errores
+        console.error('Error:', error);
+    });
+}
+
+/**
+ * Actualiza el subtotal según el precio y la cantidad especificados.
+ * @param {string} id
+ */
+function actualizarSubtotalConceptos(id) {
+    var idConcepto=document.getElementById('idConcepto').innerText;
+    // Obtener los elementos
+    var precioElement = document.getElementById('precioNuevo');
+    var cantidadElement = document.getElementById('cantidadNuevo');
+    var subtotalElement = document.getElementById('subtotalNuevo');
+    if(id !== 'idNuevo'){
+        var idConcepto=id
+        // Obtener los elementos
+        var precioElement = document.getElementById('precio'+id);
+        var cantidadElement = document.getElementById('cantidad'+id);
+        var subtotalElement = document.getElementById('subtotal'+id);
+    }
+
+    if (precioElement.value.trim() !== '' && cantidadElement.value.trim() !== '') {
+
+        // Obtener los valores
+        var precio = parseFloat(precioElement.value);
+        var cantidad = parseFloat(cantidadElement.value);
+
+        // Calcular el subtotal
+        var subtotal = precio * cantidad;
+        var subtotalFormat = "$"+numberFormat(subtotal, 0, ',', '.');
+        
+        fetch('../directivo/ajax-cambiar-subtotal-concepto.php?subtotal='+(subtotal)+'&cantidad='+(cantidad)+'&precio='+(precio)+'&idConcepto='+(idConcepto), {
+            method: 'GET'
+        })
+        .then(response => response.text()) // Convertir la respuesta a texto
+        .then(data => {
+            precioElement.dataset.precio = precio;
+
+            subtotalElement.innerHTML = '';
+            subtotalElement.appendChild(document.createTextNode(subtotalFormat));
+
+            $.toast({
+                heading: 'Acción realizada',
+                text: 'Valor guardado correctamente.',
+                position: 'bottom-right',
+                showHideTransition: 'slide',
+                loaderBg: '#26c281',
+                icon: 'success',
+                hideAfter: 5000,
+                stack: 6
+            });
+        })
+        .catch(error => {
+            // Manejar errores
+            console.error('Error:', error);
+        });
+
+    } else {
+
+        Swal.fire({
+            title: 'Campo Vacío',
+            text: "Los campos de precio y cantidad no pueden ir vacío",
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonText: 'Ok',
+            backdrop: `
+                rgba(0,0,123,0.4)
+                no-repeat
+            `,
+        }).then((result) => {
+            var precioAnterior = parseFloat(precioElement.getAttribute("data-precio"));
+            var cantidadAnterior = parseFloat(cantidadElement.getAttribute("data-cantidad"));
+            
+            precioElement.value = precioAnterior;
+            cantidadElement.value = cantidadAnterior;
+        })
+
+    }
+}
+
+/**
+ * Actualiza la descripción de un abono.
+ * @param {string} id
+ */
+function guardarDescripcionConcepto(id) {
+    var idConcepto=document.getElementById('idConcepto').innerText;
+    // Obtener los elementos
+    var descripElement = document.getElementById('descripNueva');
+    if(id !== 'idNuevo'){
+        var idConcepto=id
+        // Obtener los elementos
+        var descripElement = document.getElementById('descrip'+id);
+    }
+    var descripcion = descripElement.value;
+    
+    fetch('../directivo/ajax-guardar-descripcion-concepto.php?descripcion='+(descripcion)+'&idConcepto='+(idConcepto), {
+        method: 'GET'
+    })
+    .then(response => response.text()) // Convertir la respuesta a texto
+    .then(data => {
+        descripElement.value = descripcion;
+
+        $.toast({
+            heading: 'Acción realizada',
+            text: 'La descripción fue guardada correctamente.',
+            position: 'bottom-right',
+            showHideTransition: 'slide',
+            loaderBg: '#26c281',
+            icon: 'success',
+            hideAfter: 5000,
+            stack: 6
+        });
+    })
+    .catch(error => {
+         // Manejar errores
+        console.error('Error:', error);
+    });
+}
+
+/**
+ * Esta función pide confirmación al usuario antes de eliminar un itenm nuevo
+ * @param {Array} dato 
+ */
+function deseaEliminarNuevoConcepto(dato) {
+
+    // Obtener los elementos del DOM
+    var concepto = document.getElementById('concepto');
+    var conceptoContainer = document.getElementById('select2-concepto-container');
+    var idConcepto = document.getElementById('idConcepto');
+
+    var precioElement = document.getElementById('precioNuevo');
+    var descripElement = document.getElementById('descripNueva');
+    var cantidadElement = document.getElementById('cantidadNuevo');
+    var subtotalElement = document.getElementById('subtotalNuevo');
+    var idEliminarNuevo = document.getElementById('eliminarNuevo');
+
+    if (dato.title !== 'Eliminar concepto') {
+        var id = dato.title;
+
+        var precioElement = document.getElementById('precio' + id);
+        var descripElement = document.getElementById('descrip' + id);
+        var cantidadElement = document.getElementById('cantidad' + id);
+        var subtotalElement = document.getElementById('subtotal' + id);
+        var idEliminarNuevo = document.getElementById('eliminar' + id);
+    }
+
+    var url = dato.name;
+
+    Swal.fire({
+        title: 'Desea eliminar?',
+        text: "Al eliminar este registro es posible que se eliminen otros registros que estén relacionados. Desea continuar bajo su responsabilidad?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si, deseo eliminar!',
+        cancelButtonText: 'No',
+        backdrop: `
+            rgba(0,0,123,0.4)
+            no-repeat
+        `,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios.get(url).then(function(response) {
+
+                // Actualizar los elementos del DOM con los datos recibidos
+                concepto.value = '';
+                conceptoContainer.innerHTML = 'Seleccione una opción';
+
+                idConcepto.innerHTML = '';
+
+                precioElement.disabled = true;
+                precioElement.value = 0;
+                precioElement.dataset.precio = 0;
+
+                descripElement.value = '';
+                descripElement.disabled = true;
+
+                cantidadElement.disabled = true;
+                cantidadElement.value = 1;
+
+                subtotalElement.innerHTML = '$0';
+
+                idEliminarNuevo.innerHTML = '';
+
+                $.toast({
+                    heading: 'Acción realizada',
+                    text: 'El registro fue eliminado correctamente.',
+                    position: 'bottom-right',
+                    showHideTransition: 'slide',
+                    loaderBg: '#26c281',
+                    icon: 'success',
+                    hideAfter: 5000,
+                    stack: 6
+                });
+
+            }).catch(function(error) {
+                // handle error
+                console.error(error);
+            });            
+        }else{
+            return false;
+        }
+    })
 }
