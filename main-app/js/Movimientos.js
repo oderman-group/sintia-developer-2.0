@@ -573,3 +573,167 @@ function anularMovimiento(datos) {
         }
     })
 }
+
+/**
+ * Esta función muestra el campo para escoger el tipo de transacción
+ */
+function mostrarTipoTransaccion(){
+    document.getElementById("divTipoTransaccion").style.display="block";
+}
+
+/**
+ * Segun el tipo de transacción me habilita algunos campos
+ * @param {int} tipo 
+ */
+function tipoAbono(tipo){
+
+	if(tipo==1){
+        var idAbono = document.getElementById('idAbono').value;
+        var idUsuario = document.getElementById('select_cliente').value;
+    
+        document.getElementById("divFacturas").style.display="block";
+        document.getElementById("divCuentasContables").style.display="none";
+
+        document.getElementById("opt1").checked="checked";
+        document.getElementById("opt2").checked="";
+        $('#mostrarFacturas').empty().hide().html("<tr><td colspan='5' align='center' style='font-size: 17px; font-weight:bold;'>Cargando Facturas...</td></tr>").show(1);
+        
+        fetch('../directivo/ajax-traer-facturas.php?idUsuario=' + idUsuario + '&idAbono=' + idAbono, {
+            method: 'GET'
+        })
+        .then(response => response.text())
+        .then(data => {
+            $('#mostrarFacturas').empty().hide().html(data).show(1);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+	}
+	if(tipo==2){
+        $('#mostrarFacturas').empty().hide().html('').show(1);
+		document.getElementById("divFacturas").style.display="none";
+		document.getElementById("divCuentasContables").style.display="block";
+
+		document.getElementById("opt1").checked="";
+		document.getElementById("opt2").checked="checked";
+	}
+}
+
+/**
+ * Actualiza o guarda lo abonado a una factura6
+ * @param {array} datos
+ */
+function actualizarAbonado(datos) {
+    var abono       = datos.value;
+
+    if (abono.trim() !== '') {
+        var nuevoAbono  = parseFloat(datos.value);
+        var idAbono     = datos.getAttribute("data-id-abono");
+        var idFactura   = datos.getAttribute("data-id-factura");
+        var abonoAnterior   = parseFloat(datos.getAttribute("data-abono-anterior"));
+        
+        fetch('../directivo/ajax-guardar-abono.php?abono='+(nuevoAbono)+'&idAbono='+(idAbono)+'&idFactura='+(idFactura)+'&abonoAnterior='+(abonoAnterior), {
+            method: 'GET'
+        })
+        .then(response => response.text()) // Convertir la respuesta a texto
+        .then(data => {
+            var elementTotalNeto    = document.getElementById("totalNeto"+idFactura);
+            var elementAbono        = document.getElementById("abonos"+idFactura);
+            var elementPorCobrar    = document.getElementById("porCobrar"+idFactura);
+            
+            var totalNeto           = parseFloat(elementTotalNeto.getAttribute("data-total-neto"));
+            var totalAbonos         = elementAbono.getAttribute("data-abonos");
+
+            var totalAbono          = (totalAbonos - abonoAnterior) + nuevoAbono;
+            var totalAbonoFinal     = "$"+numberFormat(totalAbono, 0, ',', '.');
+
+            var porCobrar           = totalNeto - totalAbono;
+            var porCobrarFinal      = "$"+numberFormat(porCobrar, 0, ',', '.');
+
+            elementAbono.innerHTML = '';
+            elementAbono.appendChild(document.createTextNode(totalAbonoFinal));
+            elementAbono.dataset.abonos = totalAbono;
+
+            elementPorCobrar.innerHTML = '';
+            elementPorCobrar.appendChild(document.createTextNode(porCobrarFinal));
+            elementPorCobrar.dataset.porCobrar = porCobrar;
+
+            if (porCobrar < 1) {
+                cambiarEstadoFactura(idFactura);
+            }
+
+            datos.dataset.abonoAnterior = nuevoAbono;
+
+            $.toast({
+                heading: 'Acción realizada',
+                text: 'Valor guardado correctamente.',
+                position: 'bottom-right',
+                showHideTransition: 'slide',
+                loaderBg: '#26c281',
+                icon: 'success',
+                hideAfter: 5000,
+                stack: 6
+            });
+        })
+        .catch(error => {
+            datos.value = 0;
+            console.error('Error:', error);
+        });
+
+    } else {
+
+        Swal.fire({
+            title: 'Campo Vacío',
+            text: "Los campos valor recibido no pueden ir vacío",
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonText: 'Ok',
+            backdrop: `
+                rgba(0,0,123,0.4)
+                no-repeat
+            `,
+        }).then((result) => {
+            datos.value = 0;
+        })
+
+    }
+}
+
+/**
+ * cambia el estado de una factura a cobrada
+ * @param {string} idFactura
+ */
+function cambiarEstadoFactura(idFactura) {
+    
+    var registro = document.getElementById("reg" + idFactura);
+        
+    fetch('../directivo/ajax-cambiar-estado-factura.php?idFactura='+(idFactura), {
+        method: 'GET'
+    })
+    .then(response => response.text()) // Convertir la respuesta a texto
+    .then(data => {
+
+        async function miFuncionConDelay() {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            registro.style.display = "none";
+        }
+
+        miFuncionConDelay();
+
+        registro.classList.add('animate__animated', 'animate__bounceOutRight', 'animate__delay-0.5s');
+
+        $.toast({
+            heading: 'Acción realizada',
+            text: 'El registro fue pagado en su totalidad.',
+            position: 'bottom-right',
+            showHideTransition: 'slide',
+            loaderBg: '#26c281',
+            icon: 'success',
+            hideAfter: 5000,
+            stack: 6
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
