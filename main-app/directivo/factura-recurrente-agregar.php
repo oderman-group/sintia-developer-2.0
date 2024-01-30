@@ -124,7 +124,7 @@ $idRecurrente=Utilidades::generateCode("FCR");
                                                 </select>
                                             </div>
 
-                                            <label class="col-sm-2 control-label"><?=$frases[386][$datosUsuarioActual['uss_idioma']];?> <span style="color: red;">(*)</span></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[414][$datosUsuarioActual['uss_idioma']];?> <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
                                                 <select class="form-control select2" id="metodoPago" name="metodoPago" required <?=$disabledPermiso;?>>
                                                     <option value="" >Seleccione una opción</option>
@@ -231,15 +231,15 @@ $idRecurrente=Utilidades::generateCode("FCR");
                                                         </tbody>
                                                         <tfoot>
                                                             <tr>
-                                                                <td align="right" colspan="4" style="padding-right: 20px;">SUBTOTAL:</td>
+                                                                <td align="right" colspan="5" style="padding-right: 20px;">SUBTOTAL:</td>
                                                                 <td align="left" id="subtotal" data-subtotal="0" data-subtotal-anterior-sub="0">$0</td>
                                                             </tr>
                                                             <tr>
-                                                                <td align="right" colspan="4" style="padding-right: 20px;">VLR. ADICIONAL:</td>
+                                                                <td align="right" colspan="5" style="padding-right: 20px;">VLR. ADICIONAL:</td>
                                                                 <td align="left" id="valorAdicional" data-valor-adicional="0">$0</td>
                                                             </tr>
                                                             <tr style="font-size: 15px; font-weight:bold;">
-                                                                <td align="right" colspan="4" style="padding-right: 20px;">TOTAL NETO:</td>
+                                                                <td align="right" colspan="5" style="padding-right: 20px;">TOTAL NETO:</td>
                                                                 <td align="left" id="totalNeto" data-total-neto="0" data-total-neto-anterior="0">$0</td>
                                                             </tr>
                                                         </tfoot>
