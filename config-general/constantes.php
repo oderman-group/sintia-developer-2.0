@@ -81,6 +81,11 @@ define('MODULO_ADMISIONES', 8);
 define('MODULO_RESERVA_CUPO', 9);
 define('MODULO_MEDIA_TECNICA', 10);
 
+/* TIPO DE VALIDACION*/
+define('IDENTIFICAION', 'Identificacion');
+define('USUARIO', 'Usuario');
+define('CORREO', 'Correo');
+
 /* TIPOS DE FACTURA o COTIZACIÓn */
 define('TIPO_FACTURA', 'INVOICE');
 define('TIPO_COTIZACION', 'QUOTE');
