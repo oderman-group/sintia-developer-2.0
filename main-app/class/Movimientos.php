@@ -851,6 +851,8 @@ class Movimientos {
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
+
+        return $consulta;
     }
 
     /** Este metodo me guarda un impuesto
