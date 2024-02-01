@@ -25,7 +25,8 @@ class Movimientos {
         $totalNeto = $valorAdicional;
 
         try {
-            $consulta = mysqli_query($conexion,"SELECT SUM(ti.subtotal) AS totalItems FROM ".BD_FINANCIERA.".transaction_items ti
+            $consulta = mysqli_query($conexion,"SELECT SUM(ti.subtotal + (ti.subtotal * (tax.fee / 100))) AS totalItems FROM ".BD_FINANCIERA.".transaction_items ti
+            INNER JOIN ".BD_FINANCIERA.".taxes tax ON tax.id=ti.tax AND tax.institucion = {$config['conf_id_institucion']} AND tax.year = {$_SESSION["bd"]}
             WHERE ti.id_transaction = '{$idTransaction}'
             AND ti.type_transaction = '{$tipo}'
             AND ti.institucion = {$config['conf_id_institucion']}
@@ -61,7 +62,7 @@ class Movimientos {
         try {
             $consulta = mysqli_query($conexion, "SELECT ti.id AS idtx, i.id AS idit, i.name, i.price AS priceItem, ti.price AS priceTransaction, ti.cantity, ti.subtotal, ti.description, ti.discount, ti.tax
             FROM ".BD_FINANCIERA.".transaction_items ti
-            INNER JOIN ".BD_FINANCIERA.".items i ON i.id = ti.id_item
+            INNER JOIN ".BD_FINANCIERA.".items i ON i.id = ti.id_item AND i.institucion = {$config['conf_id_institucion']} AND i.year = {$_SESSION["bd"]}
             WHERE ti.id_transaction = '{$idTransaction}'
             AND ti.type_transaction = '{$tipo}'
             AND ti.institucion = {$config['conf_id_institucion']}
