@@ -659,7 +659,9 @@ function actualizarAbonado(datos) {
             elementPorCobrar.dataset.porCobrar = porCobrar;
 
             if (porCobrar < 1) {
-                cambiarEstadoFactura(idFactura);
+                cambiarEstadoFactura(idFactura, 1);
+            } else if (porCobrar > 0) {
+                cambiarEstadoFactura(idFactura, 2);
             }
 
             datos.dataset.abonoAnterior = nuevoAbono;
@@ -703,35 +705,28 @@ function actualizarAbonado(datos) {
  * cambia el estado de una factura a cobrada
  * @param {string} idFactura
  */
-function cambiarEstadoFactura(idFactura) {
+function cambiarEstadoFactura(idFactura, estado) {
     
     var registro = document.getElementById("reg" + idFactura);
         
-    fetch('../directivo/ajax-cambiar-estado-factura.php?idFactura='+(idFactura), {
+    fetch('../directivo/ajax-cambiar-estado-factura.php?idFactura='+(idFactura)+'&estado='+(estado), {
         method: 'GET'
     })
-    .then(response => response.text()) // Convertir la respuesta a texto
+    .then(response => response.json())
     .then(data => {
 
-        async function miFuncionConDelay() {
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            registro.style.display = "none";
+        if (data.estado === "COBRADA") {
+            $.toast({
+                heading: 'Acción realizada',
+                text: 'El registro fue pagado en su totalidad.',
+                position: 'bottom-right',
+                showHideTransition: 'slide',
+                loaderBg: '#26c281',
+                icon: 'success',
+                hideAfter: 5000,
+                stack: 6
+            });
         }
-
-        miFuncionConDelay();
-
-        registro.classList.add('animate__animated', 'animate__bounceOutRight', 'animate__delay-0.5s');
-
-        $.toast({
-            heading: 'Acción realizada',
-            text: 'El registro fue pagado en su totalidad.',
-            position: 'bottom-right',
-            showHideTransition: 'slide',
-            loaderBg: '#26c281',
-            icon: 'success',
-            hideAfter: 5000,
-            stack: 6
-        });
     })
     .catch(error => {
         console.error('Error:', error);
