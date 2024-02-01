@@ -574,6 +574,455 @@ function anularMovimiento(datos) {
     })
 }
 
+/**
+ * Esta función muestra el campo para escoger el tipo de transacción
+ */
+function mostrarTipoTransaccion(){
+    document.getElementById("divTipoTransaccion").style.display="block";
+}
+
+/**
+ * Segun el tipo de transacción me habilita algunos campos
+ * @param {int} tipo 
+ */
+function tipoAbono(tipo){
+
+	if(tipo==1){
+        var idAbono = document.getElementById('idAbono').value;
+        var idUsuario = document.getElementById('select_cliente').value;
+    
+        document.getElementById("divFacturas").style.display="block";
+        document.getElementById("divCuentasContables").style.display="none";
+
+        document.getElementById("opt1").checked="checked";
+        document.getElementById("opt2").checked="";
+        $('#mostrarFacturas').empty().hide().html("<tr><td colspan='5' align='center' style='font-size: 17px; font-weight:bold;'>Cargando Facturas...</td></tr>").show(1);
+        
+        fetch('../directivo/ajax-traer-facturas.php?idUsuario=' + idUsuario + '&idAbono=' + idAbono, {
+            method: 'GET'
+        })
+        .then(response => response.text())
+        .then(data => {
+            $('#mostrarFacturas').empty().hide().html(data).show(1);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+	}
+	if(tipo==2){
+        $('#mostrarFacturas').empty().hide().html('').show(1);
+		document.getElementById("divFacturas").style.display="none";
+		document.getElementById("divCuentasContables").style.display="block";
+
+		document.getElementById("opt1").checked="";
+		document.getElementById("opt2").checked="checked";
+	}
+}
+
+/**
+ * Actualiza o guarda lo abonado a una factura6
+ * @param {array} datos
+ */
+function actualizarAbonado(datos) {
+    var abono       = datos.value;
+
+    if (abono.trim() !== '') {
+        var nuevoAbono  = parseFloat(datos.value);
+        var idAbono     = datos.getAttribute("data-id-abono");
+        var idFactura   = datos.getAttribute("data-id-factura");
+        var abonoAnterior   = parseFloat(datos.getAttribute("data-abono-anterior"));
+        
+        fetch('../directivo/ajax-guardar-abono.php?type=INVOICE&abono='+(nuevoAbono)+'&idAbono='+(idAbono)+'&idFactura='+(idFactura)+'&abonoAnterior='+(abonoAnterior), {
+            method: 'GET'
+        })
+        .then(response => response.text()) // Convertir la respuesta a texto
+        .then(data => {
+            var elementTotalNeto    = document.getElementById("totalNeto"+idFactura);
+            var elementAbono        = document.getElementById("abonos"+idFactura);
+            var elementPorCobrar    = document.getElementById("porCobrar"+idFactura);
+            
+            var totalNeto           = parseFloat(elementTotalNeto.getAttribute("data-total-neto"));
+            var totalAbonos         = elementAbono.getAttribute("data-abonos");
+
+            var totalAbono          = (totalAbonos - abonoAnterior) + nuevoAbono;
+            var totalAbonoFinal     = "$"+numberFormat(totalAbono, 0, ',', '.');
+
+            var porCobrar           = totalNeto - totalAbono;
+            var porCobrarFinal      = "$"+numberFormat(porCobrar, 0, ',', '.');
+
+            elementAbono.innerHTML = '';
+            elementAbono.appendChild(document.createTextNode(totalAbonoFinal));
+            elementAbono.dataset.abonos = totalAbono;
+
+            elementPorCobrar.innerHTML = '';
+            elementPorCobrar.appendChild(document.createTextNode(porCobrarFinal));
+            elementPorCobrar.dataset.porCobrar = porCobrar;
+
+            if (porCobrar < 1) {
+                cambiarEstadoFactura(idFactura, 1);
+            } else if (porCobrar > 0) {
+                cambiarEstadoFactura(idFactura, 2);
+            }
+
+            datos.dataset.abonoAnterior = nuevoAbono;
+
+            totalizarAbonos()
+
+            $.toast({
+                heading: 'Acción realizada',
+                text: 'Valor guardado correctamente.',
+                position: 'bottom-right',
+                showHideTransition: 'slide',
+                loaderBg: '#26c281',
+                icon: 'success',
+                hideAfter: 5000,
+                stack: 6
+            });
+        })
+        .catch(error => {
+            datos.value = 0;
+            console.error('Error:', error);
+        });
+
+    } else {
+
+        Swal.fire({
+            title: 'Campo Vacío',
+            text: "Los campos valor recibido no pueden ir vacío",
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonText: 'Ok',
+            backdrop: `
+                rgba(0,0,123,0.4)
+                no-repeat
+            `,
+        }).then((result) => {
+            datos.value = 0;
+        })
+
+    }
+}
+
+/**
+ * cambia el estado de una factura a cobrada
+ * @param {string} idFactura
+ */
+function cambiarEstadoFactura(idFactura, estado) {
+    
+    var registro = document.getElementById("reg" + idFactura);
+        
+    fetch('../directivo/ajax-cambiar-estado-factura.php?idFactura='+(idFactura)+'&estado='+(estado), {
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if (data.estado === "COBRADA") {
+            $.toast({
+                heading: 'Acción realizada',
+                text: 'El registro fue pagado en su totalidad.',
+                position: 'bottom-right',
+                showHideTransition: 'slide',
+                loaderBg: '#26c281',
+                icon: 'success',
+                hideAfter: 5000,
+                stack: 6
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+/**
+ * Guarda un nuevo abono.
+ * @param {HTMLSelectElement} selectElement - El elemento select que contiene la opción seleccionada.
+ */
+function guardarNuevoConcepto(selectElement) {
+    var concepto = selectElement.value;
+    var idAbono = document.getElementById('idAbono').value;
+    var precioElement = document.getElementById('precioNuevo');
+    var descripElement = document.getElementById('descripNueva');
+    var cantidadElement = document.getElementById('cantidadNuevo');
+    var conceptoElement = document.getElementById('idConcepto');
+
+    var conceptoModificar = '';
+    if (conceptoElement.innerHTML.trim() !== '') {
+        var conceptoModificar = conceptoElement.innerHTML;
+    }
+
+    fetch('../directivo/ajax-guardar-abono.php?type=ACCOUNT&conceptoModificar='+conceptoModificar+'&idAbono=' + idAbono + '&concepto=' + concepto + '&precio=0&cantidad=1&subtotal=0', {
+        method: 'GET'
+    })
+    .then(response => response.json()) // Convertir la respuesta a objeto JSON
+    .then(data => {
+        conceptoElement.innerHTML = '';
+        conceptoElement.appendChild(document.createTextNode(data.idInsercion));
+
+        precioElement.disabled = false;
+        descripElement.disabled = false;
+        cantidadElement.disabled = false;
+
+        $.toast({
+            heading: 'Acción realizada',
+            text: 'Nuevo item agregado correctamente.',
+            position: 'bottom-right',
+            showHideTransition: 'slide',
+            loaderBg: '#26c281',
+            icon: 'success',
+            hideAfter: 5000,
+            stack: 6
+        });
+    })
+    .catch(error => {
+        // Manejar errores
+        console.error('Error:', error);
+    });
+}
+
+/**
+ * Actualiza el subtotal según el precio y la cantidad especificados.
+ * @param {string} id
+ */
+function actualizarSubtotalConceptos(id) {
+    var idConcepto=document.getElementById('idConcepto').innerText;
+    // Obtener los elementos
+    var precioElement = document.getElementById('precioNuevo');
+    var cantidadElement = document.getElementById('cantidadNuevo');
+    var subtotalElement = document.getElementById('subtotalNuevo');
+    if(id !== 'idNuevo'){
+        var idConcepto=id
+        // Obtener los elementos
+        var precioElement = document.getElementById('precio'+id);
+        var cantidadElement = document.getElementById('cantidad'+id);
+        var subtotalElement = document.getElementById('subtotal'+id);
+    }
+
+    if (precioElement.value.trim() !== '' && cantidadElement.value.trim() !== '') {
+
+        // Obtener los valores
+        var precio = parseFloat(precioElement.value);
+        var cantidad = parseFloat(cantidadElement.value);
+
+        // Calcular el subtotal
+        var subtotal = precio * cantidad;
+        var subtotalFormat = "$"+numberFormat(subtotal, 0, ',', '.');
+        
+        fetch('../directivo/ajax-cambiar-subtotal-concepto.php?subtotal='+(subtotal)+'&cantidad='+(cantidad)+'&precio='+(precio)+'&idConcepto='+(idConcepto), {
+            method: 'GET'
+        })
+        .then(response => response.text()) // Convertir la respuesta a texto
+        .then(data => {
+            precioElement.dataset.precio = precio;
+
+            subtotalElement.innerHTML = '';
+            subtotalElement.appendChild(document.createTextNode(subtotalFormat));
+
+            $.toast({
+                heading: 'Acción realizada',
+                text: 'Valor guardado correctamente.',
+                position: 'bottom-right',
+                showHideTransition: 'slide',
+                loaderBg: '#26c281',
+                icon: 'success',
+                hideAfter: 5000,
+                stack: 6
+            });
+        })
+        .catch(error => {
+            // Manejar errores
+            console.error('Error:', error);
+        });
+
+    } else {
+
+        Swal.fire({
+            title: 'Campo Vacío',
+            text: "Los campos de precio y cantidad no pueden ir vacío",
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonText: 'Ok',
+            backdrop: `
+                rgba(0,0,123,0.4)
+                no-repeat
+            `,
+        }).then((result) => {
+            var precioAnterior = parseFloat(precioElement.getAttribute("data-precio"));
+            var cantidadAnterior = parseFloat(cantidadElement.getAttribute("data-cantidad"));
+            
+            precioElement.value = precioAnterior;
+            cantidadElement.value = cantidadAnterior;
+        })
+
+    }
+}
+
+/**
+ * Actualiza la descripción de un abono.
+ * @param {string} id
+ */
+function guardarDescripcionConcepto(id) {
+    var idConcepto=document.getElementById('idConcepto').innerText;
+    // Obtener los elementos
+    var descripElement = document.getElementById('descripNueva');
+    if(id !== 'idNuevo'){
+        var idConcepto=id
+        // Obtener los elementos
+        var descripElement = document.getElementById('descrip'+id);
+    }
+    var descripcion = descripElement.value;
+    
+    fetch('../directivo/ajax-guardar-descripcion-concepto.php?descripcion='+(descripcion)+'&idConcepto='+(idConcepto), {
+        method: 'GET'
+    })
+    .then(response => response.text()) // Convertir la respuesta a texto
+    .then(data => {
+        descripElement.value = descripcion;
+
+        $.toast({
+            heading: 'Acción realizada',
+            text: 'La descripción fue guardada correctamente.',
+            position: 'bottom-right',
+            showHideTransition: 'slide',
+            loaderBg: '#26c281',
+            icon: 'success',
+            hideAfter: 5000,
+            stack: 6
+        });
+    })
+    .catch(error => {
+         // Manejar errores
+        console.error('Error:', error);
+    });
+}
+
+/**
+ * Esta función pide confirmación al usuario antes de eliminar un itenm nuevo
+ * @param {Array} dato 
+ */
+function deseaEliminarNuevoConcepto(dato) {
+
+    // Obtener los elementos del DOM
+    var concepto = document.getElementById('concepto');
+    var conceptoContainer = document.getElementById('select2-concepto-container');
+    var idConcepto = document.getElementById('idConcepto');
+
+    var precioElement = document.getElementById('precioNuevo');
+    var descripElement = document.getElementById('descripNueva');
+    var cantidadElement = document.getElementById('cantidadNuevo');
+    var subtotalElement = document.getElementById('subtotalNuevo');
+    var idEliminarNuevo = document.getElementById('eliminarNuevo');
+
+    if (dato.title !== 'Eliminar concepto') {
+        var id = dato.title;
+
+        var precioElement = document.getElementById('precio' + id);
+        var descripElement = document.getElementById('descrip' + id);
+        var cantidadElement = document.getElementById('cantidad' + id);
+        var subtotalElement = document.getElementById('subtotal' + id);
+        var idEliminarNuevo = document.getElementById('eliminar' + id);
+    }
+
+    var url = dato.name;
+
+    Swal.fire({
+        title: 'Desea eliminar?',
+        text: "Al eliminar este registro es posible que se eliminen otros registros que estén relacionados. Desea continuar bajo su responsabilidad?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si, deseo eliminar!',
+        cancelButtonText: 'No',
+        backdrop: `
+            rgba(0,0,123,0.4)
+            no-repeat
+        `,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios.get(url).then(function(response) {
+
+                // Actualizar los elementos del DOM con los datos recibidos
+                concepto.value = '';
+                conceptoContainer.innerHTML = 'Seleccione una opción';
+
+                idConcepto.innerHTML = '';
+
+                precioElement.disabled = true;
+                precioElement.value = 0;
+                precioElement.dataset.precio = 0;
+
+                descripElement.value = '';
+                descripElement.disabled = true;
+
+                cantidadElement.disabled = true;
+                cantidadElement.value = 1;
+
+                subtotalElement.innerHTML = '$0';
+
+                idEliminarNuevo.innerHTML = '';
+
+                $.toast({
+                    heading: 'Acción realizada',
+                    text: 'El registro fue eliminado correctamente.',
+                    position: 'bottom-right',
+                    showHideTransition: 'slide',
+                    loaderBg: '#26c281',
+                    icon: 'success',
+                    hideAfter: 5000,
+                    stack: 6
+                });
+
+            }).catch(function(error) {
+                // handle error
+                console.error(error);
+            });            
+        }else{
+            return false;
+        }
+    })
+}
+
+function totalizarAbonos(){
+    var tabla = document.getElementById('tablaItems');
+
+    var totalNeto = 0;
+    var totalAbonos = 0;
+    var totalPorCobrar = 0;
+    for (let i = 1; i < tabla.rows.length; i++) {
+        var fila = tabla.rows[i];
+
+        var total = parseFloat(fila.cells[1].getAttribute('data-total-neto'));
+        totalNeto = totalNeto + total;
+
+        var abonos = parseFloat(fila.cells[2].getAttribute('data-abonos'));
+        if (isNaN(abonos)) {
+            var abonos = 0;
+        }
+        totalAbonos = totalAbonos + abonos;
+
+        var porCobrar = parseFloat(fila.cells[3].getAttribute('data-por-cobrar'));
+        totalPorCobrar = totalPorCobrar + porCobrar;
+    }
+
+    //TOTAL NETO
+    var totalNetoFinal = "$"+numberFormat(totalNeto, 0, ',', '.');
+    var elementTotalNeto = document.getElementById('totalNeto');
+    elementTotalNeto.innerHTML = '';
+    elementTotalNeto.appendChild(document.createTextNode(totalNetoFinal));
+
+    //TOTAL ABONOS
+    var totalAbonosFinal = "$"+numberFormat(totalAbonos, 0, ',', '.');
+    var elementAbonos = document.getElementById('abonosNeto');
+    elementAbonos.innerHTML = '';
+    elementAbonos.appendChild(document.createTextNode(totalAbonosFinal));
+    
+    //TOTAL POR COBRAR
+    var porCobrarNetoFinal = "$"+numberFormat(totalPorCobrar, 0, ',', '.');
+    var elementPorCobrarNeto = document.getElementById('porCobrarNeto');
+    elementPorCobrarNeto.innerHTML = '';
+    elementPorCobrarNeto.appendChild(document.createTextNode(porCobrarNetoFinal));
+}
+
 function totalizarMovimientos(){
     var tabla = document.getElementById('tablaItems');
 

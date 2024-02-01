@@ -297,22 +297,22 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
                                                         </tbody>
                                                         <tfoot>
                                                             <tr>
-                                                                <td align="right" colspan="4" style="padding-right: 20px;">SUBTOTAL:</td>
+                                                                <td align="right" colspan="5" style="padding-right: 20px;">SUBTOTAL:</td>
                                                                 <td align="left" id="subtotal" data-subtotal="<?=$subtotal;?>" data-subtotal-anterior-sub="<?=$subtotal;?>"><?="$".number_format($subtotal, 0, ",", ".");?></td>
                                                                 <td></td>
                                                             </tr>
                                                             <tr>
-                                                                <td align="right" colspan="4" style="padding-right: 20px;">VLR. ADICIONAL:</td>
+                                                                <td align="right" colspan="5" style="padding-right: 20px;">VLR. ADICIONAL:</td>
                                                                 <td align="left" id="valorAdicional" data-valor-adicional="<?=$resultado['fcu_valor'];?>"><?="$".number_format($resultado['fcu_valor'], 0, ",", ".");?></td>
                                                                 <td></td>
                                                             </tr>
                                                             <tr>
-                                                                <td align="right" colspan="4" style="padding-right: 20px;">ABONADO:</td>
+                                                                <td align="right" colspan="5" style="padding-right: 20px;">ABONADO:</td>
                                                                 <td align="left"><?="$".number_format($abonos, 0, ",", ".");?></td>
                                                                 <td></td>
                                                             </tr>
                                                             <tr style="font-size: 15px; font-weight:bold;">
-                                                                <td align="right" colspan="4" style="padding-right: 20px;">TOTAL NETO:</td>
+                                                                <td align="right" colspan="5" style="padding-right: 20px;">TOTAL NETO:</td>
                                                                 <td align="left" id="totalNeto" data-total-neto="<?=$total;?>" data-total-neto-anterior="<?=$total;?>"><?="$".number_format($total, 0, ",", ".");?></td>
                                                                 <td></td>
                                                             </tr>
