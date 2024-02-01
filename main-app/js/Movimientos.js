@@ -1019,6 +1019,9 @@ function totalizarMovimientos() {
     elementPorCobrarNeto.appendChild(document.createTextNode(porCobrarNetoFinal));
 }
 
+/**
+ * Esta funcion me calcula los totales de una factura
+ */
 function totalizar(){
     var tabla = document.getElementById('tablaItems');
 
