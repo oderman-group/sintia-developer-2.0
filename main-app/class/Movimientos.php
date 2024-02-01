@@ -781,19 +781,21 @@ class Movimientos {
      * @param mysqli $conexion
      * @param array $config
      * @param string $cliente
+     * @param string $codAbono
      * 
      * @return float $total
     **/
     public static function calcularTotalAbonadoCliente (
         mysqli $conexion, 
         array $config,
-        string $cliente
+        string $cliente,
+        string $codAbono
     )
     {
         try {
             $consulta = mysqli_query($conexion, "SELECT SUM(pi.payment) as totalAbono FROM ".BD_FINANCIERA.".payments p
             INNER JOIN ".BD_FINANCIERA.".payments_invoiced pi ON p.cod_payment=pi.payments AND pi.institucion = {$config['conf_id_institucion']} AND pi.year = {$_SESSION["bd"]}
-            WHERE p.invoiced='{$cliente}' AND p.is_deleted=0 AND p.institucion = {$config['conf_id_institucion']} AND p.year = {$_SESSION["bd"]}");
+            WHERE p.invoiced='{$cliente}' AND pi.payments='{$codAbono}' AND p.is_deleted=0 AND p.institucion = {$config['conf_id_institucion']} AND p.year = {$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }

@@ -69,6 +69,7 @@ $resultado = Movimientos::traerDatosAbonos($conexion, $config, $id);
 									<form name="formularioGuardar" action="abonos-actualizar.php" method="post" enctype="multipart/form-data">
                                         <input type="hidden" value="<?=$id?>" name="id">
 										<input type="hidden" value="<?=$resultado['cod_payment']?>" name="codigoUnico" id="idAbono">
+										<input type="hidden" value="<?=$resultado['invoiced']?>" name="cliente">
 
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[383][$datosUsuarioActual['uss_idioma']];?></label>
@@ -87,7 +88,7 @@ $resultado = Movimientos::traerDatosAbonos($conexion, $config, $id);
                                                 <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Puedes buscar por ID de la factura o por el nombre del usuario que realiza el abono."><i class="fa fa-question"></i></button>
                                             </label>
                                             <div class="col-sm-10">
-                                                <select class="form-control select2" id="select_cliente" name="cliente" onchange="mostrarTipoTransaccion()" required disabled <?=$disabledPermiso;?>>
+                                                <select class="form-control select2" id="select_cliente" onchange="mostrarTipoTransaccion()" required disabled <?=$disabledPermiso;?>>
                                                     <?php
                                                         try{
                                                             $datosConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss
