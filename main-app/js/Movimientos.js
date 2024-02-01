@@ -1022,3 +1022,59 @@ function totalizarAbonos(){
     elementPorCobrarNeto.innerHTML = '';
     elementPorCobrarNeto.appendChild(document.createTextNode(porCobrarNetoFinal));
 }
+
+/**
+ * Calcula y muestra el total neto, total abonos y total por cobrar
+ * basado en los valores de la tabla 'tablaItems'.
+ */
+function totalizarMovimientos() {
+    // Obtener el elemento de la tabla por su ID
+    var tabla = document.getElementById('tablaItems');
+
+    // Inicializar variables para almacenar valores totales
+    var totalNeto = 0;
+    var totalAbonos = 0;
+    var totalPorCobrar = 0;
+
+    // Iterar a través de las filas de la tabla, comenzando desde el índice 1
+    for (let i = 1; i < tabla.rows.length; i++) {
+        // Obtener la fila actual
+        var fila = tabla.rows[i];
+
+        // Obtener y acumular el valor neto total del atributo de datos
+        var total = parseFloat(fila.cells[4].getAttribute('data-total-neto'));
+        totalNeto = totalNeto + total;
+
+        // Obtenga y acumule el valor total de abonos del atributo de datos
+        var abonos = parseFloat(fila.cells[5].getAttribute('data-abonos'));
+        // Validar si abonos es un número válido, establecer en 0 si NaN
+        if (isNaN(abonos)) {
+            abonos = 0;
+        }
+        totalAbonos = totalAbonos + abonos;
+
+        // Obtener y acumular el valor total por cobrar del atributo de datos
+        var porCobrar = parseFloat(fila.cells[6].getAttribute('data-por-cobrar'));
+        totalPorCobrar = totalPorCobrar + porCobrar;
+    }
+
+    // Actualiza los elementos DOM con los valores calculados.
+
+    // Actualiza total neto
+    var totalNetoFinal = "$" + numberFormat(totalNeto, 0, ',', '.');
+    var elementTotalNeto = document.getElementById('totalNeto');
+    elementTotalNeto.innerHTML = '';
+    elementTotalNeto.appendChild(document.createTextNode(totalNetoFinal));
+
+    // Actualiza total abonos
+    var totalAbonosFinal = "$" + numberFormat(totalAbonos, 0, ',', '.');
+    var elementAbonos = document.getElementById('abonosNeto');
+    elementAbonos.innerHTML = '';
+    elementAbonos.appendChild(document.createTextNode(totalAbonosFinal));
+
+    // Actualiza total por cobrar
+    var porCobrarNetoFinal = "$" + numberFormat(totalPorCobrar, 0, ',', '.');
+    var elementPorCobrarNeto = document.getElementById('porCobrarNeto');
+    elementPorCobrarNeto.innerHTML = '';
+    elementPorCobrarNeto.appendChild(document.createTextNode(porCobrarNetoFinal));
+}
