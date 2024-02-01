@@ -54,7 +54,6 @@ function actualizarSubtotal(id) {
         // Obtener los valores
         var precio = parseFloat(precioElement.value);
         var cantidad = parseFloat(cantidadElement.value);
-        var cantidadAnterior = parseFloat(cantidadElement.getAttribute("data-cantidad"));
         var porcentajeDescuento= parseFloat(descuentoElement.value);
         var impuesto= parseFloat(impuestoElement.value);
 
@@ -71,8 +70,8 @@ function actualizarSubtotal(id) {
         .then(response => response.text()) // Convertir la respuesta a texto
         .then(data => {
             precioElement.dataset.precio = precio;
-
-            descuentoElement.dataset.descuentoAnterior = vlrDescuentoAnterior;
+            cantidadElement.dataset.cantidad = cantidad;
+            descuentoElement.dataset.descuentoAnterior = porcentajeDescuento;
 
             subtotalElement.innerHTML = '';
             subtotalElement.appendChild(document.createTextNode(subtotalFormat));
@@ -110,9 +109,12 @@ function actualizarSubtotal(id) {
             `,
         }).then((result) => {
             var precioAnterior = parseFloat(precioElement.getAttribute("data-precio"));
+            var cantidadAnterior = parseFloat(cantidadElement.getAttribute("data-cantidad"));
+            var descuentoAnterior = parseFloat(descuentoElement.getAttribute("data-descuento-anterior"));
             
             precioElement.value = precioAnterior;
             cantidadElement.value = cantidadAnterior;
+            descuentoElement.value = descuentoAnterior;
         })
 
     }
