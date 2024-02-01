@@ -115,7 +115,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
 
                                             <label class="col-sm-2 control-label">Valor adicional</label>
                                             <div class="col-sm-4">
-                                                <input type="number" min="0" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['fcu_valor'];?>" required <?=$disabledPermiso;?> data-vlr-adicional-anterior="<?=$resultado['fcu_valor'];?>" onchange="cambiarAdiconal(this)">
+                                                <input type="number" min="0" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="<?=$resultado['fcu_valor'];?>" required <?=$disabledPermiso;?> data-vlr-adicional-anterior="<?=$resultado['fcu_valor'];?>" onchange="totalizar(this)">
                                             </div>
 										</div>
 
@@ -175,6 +175,11 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
 													<option value="<?=COBRADA?>" <?php if($resultado['fcu_status']==COBRADA){ echo "selected";}?>>Cobrada</option>
                                                 </select>
                                             </div>
+
+                                            <label class="col-sm-2 control-label">Total Abonado</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" class="form-control" autocomplete="off" value="<?="$".number_format($abonos, 0, ",", ".");?>" readonly>
+                                            </div>
                                         </div>
 
                                         <script>
@@ -207,12 +212,14 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
                                             <div class="panel-body">
 
                                                 <div class="table-scrollable">
-                                                    <table class="display" style="width:100%;">
+                                                    <table class="display" style="width:100%;" id="tablaItems">
                                                         <thead>
                                                             <tr>
                                                                 <th>#</th>
                                                                 <th>Item</th>
                                                                 <th>Precio</th>
+                                                                <th>Desc %</th>
+                                                                <th>Impuesto</th>
                                                                 <th>Descripción</th>
                                                                 <th>Cant.</th>
                                                                 <th>Total</th>
@@ -241,6 +248,23 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
                                                                         <input type="number" min="0" id="precio<?=$fila['idtx'];?>" data-precio="<?=$fila['priceTransaction'];?>" onchange="actualizarSubtotal('<?=$fila['idtx'];?>')" value="<?=$fila['priceTransaction']?>" <?=$disabledPermiso;?>>
                                                                     </td>
                                                                     <td>
+                                                                        <input type="text" id="descuento<?=$fila['idtx'];?>" data-descuento-anterior="<?=$descuentoAnterior?>" onchange="actualizarSubtotal('<?=$fila['idtx'];?>')" value="<?=$fila['discount']?>">
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="col-sm-12" style="padding: 0px;">
+                                                                            <select class="form-control  select2" id="impuesto<?=$fila['idtx'];?>" onchange="actualizarSubtotal('<?=$fila['idtx'];?>')">
+                                                                                <option value="0" name="0">Ninguno - (0%)</option>
+                                                                                <?php
+                                                                                    $consulta= Movimientos::listarImpuestos($conexion, $config);
+                                                                                    while($datosConsulta = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+                                                                                        $selected = $fila['tax'] == $datosConsulta['id'] ? "selected" : "";
+                                                                                ?>
+                                                                                <option value="<?=$datosConsulta['id']?>" data-name-impuesto="<?=$datosConsulta['type_tax']?>" data-valor-impuesto="<?=$datosConsulta['fee']?>" <?=$selected?>><?=$datosConsulta['type_tax']." - (".$datosConsulta['fee']."%)"?></option>
+                                                                                <?php } ?>
+                                                                            </select>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
                                                                         <textarea  id="descrip<?=$fila['idtx'];?>" cols="30" rows="1" onchange="guardarDescripcion('<?=$fila['idtx'];?>')" <?=$disabledPermiso;?>><?=$fila['description']?></textarea>
                                                                     </td>
                                                                     <td>
@@ -254,11 +278,8 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
                                                                     </td>
                                                                 </tr>
                                                             <?php 
-                                                                    $subtotal += $fila['subtotal'];
                                                                     }
                                                                 }
-                                                                if(empty($resultado['fcu_valor'])){ $resultado['fcu_valor']=0; }
-                                                                $total= ($subtotal+$resultado['fcu_valor'])-$abonos;
                                                             ?>
                                                         </tbody>
                                                         <tbody>
@@ -281,42 +302,61 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
                                                                     <input type="number" min="0" id="precioNuevo" data-precio="0" onchange="actualizarSubtotal('idNuevo')" value="0" disabled>
                                                                 </td>
                                                                 <td>
+                                                                    <input type="text" id="descuentoNuevo" data-total-precio="0" data-precio-item-anterior="0" data-descuento-anterior="0" onchange="actualizarSubtotal('idNuevo')" value="0" disabled>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="col-sm-12" style="padding: 0px;">
+                                                                        <select class="form-control  select2" id="impuestoNuevo" onchange="actualizarSubtotal('idNuevo')" <?=$disabledPermiso;?> disabled>
+                                                                            <option value="0" name="0">Ninguno - (0%)</option>
+                                                                            <?php
+                                                                                $consulta= Movimientos::listarImpuestos($conexion, $config);
+                                                                                while($datosConsulta = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+                                                                            ?>
+                                                                            <option value="<?=$datosConsulta['id']?>" data-name-impuesto="<?=$datosConsulta['type_tax']?>" data-valor-impuesto="<?=$datosConsulta['fee']?>"><?=$datosConsulta['type_tax']." - (".$datosConsulta['fee']."%)"?></option>
+                                                                            <?php } ?>
+                                                                        </select>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
                                                                     <textarea  id="descripNueva" cols="30" rows="1" onchange="guardarDescripcion('idNuevo')" disabled></textarea>
                                                                 </td>
                                                                 <td><input type="number" min="0" id="cantidadItemNuevo" data-cantidad="1" onchange="actualizarSubtotal('idNuevo')" value="1" style="width: 50px;" disabled></td>
                                                                 <td id="subtotalNuevo" data-subtotal-anterior="0">$0</td>
                                                                 <td id="eliminarNuevo"></td>
                                                             </tr>
+                                                        </tbody>
+                                                        <tfoot id="tfootTotalizar">
                                                             <?php if(Modulos::validarPermisoEdicion() && $resultado['fcu_anulado']==0 && $resultado['fcu_status']==POR_COBRAR && $abonos==0){?>
                                                                 <tr>
-                                                                    <td colspan="6">
+                                                                    <td colspan="9">
                                                                         <button type="button" title="Agregar nueva línea para item" style="padding: 4px 4px; margin: 5px;" class="btn btn-sm" data-toggle="tooltip" onclick="nuevoItem()" data-placement="right" ><i class="fa fa-plus"></i> Agregar línea</button>
                                                                     </td>
                                                                 </tr>
                                                             <?php }?>
-                                                        </tbody>
-                                                        <tfoot>
                                                             <tr>
-                                                                <td align="right" colspan="4" style="padding-right: 20px;">SUBTOTAL:</td>
-                                                                <td align="left" id="subtotal" data-subtotal="<?=$subtotal;?>" data-subtotal-anterior-sub="<?=$subtotal;?>"><?="$".number_format($subtotal, 0, ",", ".");?></td>
-                                                                <td></td>
+                                                                <td align="right" colspan="7" style="padding-right: 20px;">SUBTOTAL:</td>
+                                                                <td align="left" colspan="2"id="subtotal" data-subtotal="0" data-subtotal-anterior-sub="0">$0</td>
                                                             </tr>
                                                             <tr>
-                                                                <td align="right" colspan="4" style="padding-right: 20px;">VLR. ADICIONAL:</td>
-                                                                <td align="left" id="valorAdicional" data-valor-adicional="<?=$resultado['fcu_valor'];?>"><?="$".number_format($resultado['fcu_valor'], 0, ",", ".");?></td>
-                                                                <td></td>
+                                                                <td align="right" colspan="7" style="padding-right: 20px;">VLR. ADICIONAL:</td>
+                                                                <td align="left" colspan="2"id="valorAdicional" data-valor-adicional="0">$0</td>
                                                             </tr>
                                                             <tr>
-                                                                <td align="right" colspan="4" style="padding-right: 20px;">ABONADO:</td>
-                                                                <td align="left"><?="$".number_format($abonos, 0, ",", ".");?></td>
-                                                                <td></td>
+                                                                <td align="right" colspan="7" style="padding-right: 20px;">DESCUENTO:</td>
+                                                                <td align="left" colspan="2"id="valorDescuento" data-valor-descuento="0">$0</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" colspan="7" style="padding-right: 20px;">IMPUESTO:</td>
+                                                                <td align="left" colspan="2"id="valorImpuesto">$0</td>
                                                             </tr>
                                                             <tr style="font-size: 15px; font-weight:bold;">
-                                                                <td align="right" colspan="4" style="padding-right: 20px;">TOTAL NETO:</td>
-                                                                <td align="left" id="totalNeto" data-total-neto="<?=$total;?>" data-total-neto-anterior="<?=$total;?>"><?="$".number_format($total, 0, ",", ".");?></td>
-                                                                <td></td>
+                                                                <td align="right" colspan="7" style="padding-right: 20px;">TOTAL NETO:</td>
+                                                                <td align="left" colspan="2"id="totalNeto" data-total-neto="0" data-total-neto-anterior="0">$0</td>
                                                             </tr>
                                                         </tfoot>
+                                                        <script>
+                                                            $(document).ready(totalizar);
+                                                        </script>
                                                     </table>
                                                 </div>
                                             </div>
