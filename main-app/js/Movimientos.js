@@ -513,7 +513,9 @@ function validarInput(datos) {
         $("#resp").html('Por favor, ingrese solo números.');
     }
 }
-
+/**
+ * Esta funcion me calcula los totales de una factura
+ */
 function totalizar(){
     var tabla = document.getElementById('tablaItems');
 
