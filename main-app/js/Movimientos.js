@@ -1024,55 +1024,55 @@ function totalizarAbonos(){
 }
 
 /**
- * Calculate and display the total net, total abonos, and total por cobrar
- * based on the values in the 'tablaItems' table.
+ * Calcula y muestra el total neto, total abonos y total por cobrar
+ * basado en los valores de la tabla 'tablaItems'.
  */
 function totalizarMovimientos() {
-    // Get the table element by its ID
+    // Obtener el elemento de la tabla por su ID
     var tabla = document.getElementById('tablaItems');
 
-    // Initialize variables to store total values
+    // Inicializar variables para almacenar valores totales
     var totalNeto = 0;
     var totalAbonos = 0;
     var totalPorCobrar = 0;
 
-    // Iterate through the rows of the table, starting from index 1
+    // Iterar a través de las filas de la tabla, comenzando desde el índice 1
     for (let i = 1; i < tabla.rows.length; i++) {
-        // Get the current row
+        // Obtener la fila actual
         var fila = tabla.rows[i];
 
-        // Get and accumulate total neto value from data attribute
+        // Obtener y acumular el valor neto total del atributo de datos
         var total = parseFloat(fila.cells[4].getAttribute('data-total-neto'));
         totalNeto = totalNeto + total;
 
-        // Get and accumulate total abonos value from data attribute
+        // Obtenga y acumule el valor total de abonos del atributo de datos
         var abonos = parseFloat(fila.cells[5].getAttribute('data-abonos'));
-        // Validate if abonos is a valid number, set to 0 if NaN
+        // Validar si abonos es un número válido, establecer en 0 si NaN
         if (isNaN(abonos)) {
             abonos = 0;
         }
         totalAbonos = totalAbonos + abonos;
 
-        // Get and accumulate total por cobrar value from data attribute
+        // Obtener y acumular el valor total por cobrar del atributo de datos
         var porCobrar = parseFloat(fila.cells[6].getAttribute('data-por-cobrar'));
         totalPorCobrar = totalPorCobrar + porCobrar;
     }
 
-    // Update the DOM elements with the calculated values
+    // Actualiza los elementos DOM con los valores calculados.
 
-    // Update total neto
+    // Actualiza total neto
     var totalNetoFinal = "$" + numberFormat(totalNeto, 0, ',', '.');
     var elementTotalNeto = document.getElementById('totalNeto');
     elementTotalNeto.innerHTML = '';
     elementTotalNeto.appendChild(document.createTextNode(totalNetoFinal));
 
-    // Update total abonos
+    // Actualiza total abonos
     var totalAbonosFinal = "$" + numberFormat(totalAbonos, 0, ',', '.');
     var elementAbonos = document.getElementById('abonosNeto');
     elementAbonos.innerHTML = '';
     elementAbonos.appendChild(document.createTextNode(totalAbonosFinal));
 
-    // Update total por cobrar
+    // Actualiza total por cobrar
     var porCobrarNetoFinal = "$" + numberFormat(totalPorCobrar, 0, ',', '.');
     var elementPorCobrarNeto = document.getElementById('porCobrarNeto');
     elementPorCobrarNeto.innerHTML = '';
