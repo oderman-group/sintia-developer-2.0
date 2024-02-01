@@ -39,6 +39,11 @@ if ($numFacturas > 0) {
     </tr>
 <?php 
 }
+?>
+    <script>
+        $(document).ready(totalizarAbonos);
+    </script>
+<?php 
 
 require_once(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 exit();

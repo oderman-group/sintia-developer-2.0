@@ -61,8 +61,8 @@ $resultado = Movimientos::traerDatosAbonos($conexion, $config, $id);
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12">
-                                <?php require_once(ROOT_PATH."/config-general/mensajes-informativos.php"); ?>
+                        <?php require_once(ROOT_PATH."/config-general/mensajes-informativos.php"); ?>
+                        <div class="col-sm-9">
 								<div class="panel">
 									<header class="panel-heading panel-heading-purple"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> <?=$frases[413][$datosUsuarioActual['uss_idioma']];?></header>
                                 	<div class="panel-body">
@@ -196,7 +196,7 @@ $resultado = Movimientos::traerDatosAbonos($conexion, $config, $id);
                                                 <div class="panel-body">
 
                                                     <div class="table-scrollable">
-                                                        <table class="display" style="width:100%;">
+                                                        <table class="display" style="width:100%;" id="tablaItems">
                                                             <thead>
                                                                 <tr>
                                                                     <th>Cod</th>
@@ -284,6 +284,28 @@ $resultado = Movimientos::traerDatosAbonos($conexion, $config, $id);
                                             </button>
                                         <?php }?>
                                     </form>
+                                </div>
+                            </div>
+                        </div>
+						
+						<div class="col-sm-3">
+                            <div class="panel">
+                                <header class="panel-heading panel-heading-blue">TOTAL</header>
+                                <div class="panel-body">
+                                    <table style="width: 100%;" align="center">
+                                        <tr>
+                                            <td style="padding-right: 20px;">TOTAL:</td>
+                                            <td align="left" id="totalNeto">$0</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-right: 20px;">TOTAL. ABONOS:</td>
+                                            <td align="left" id="abonosNeto">$0</td>
+                                        </tr>
+                                        <tr style="font-size: 15px; font-weight:bold;">
+                                            <td style="padding-right: 20px;">TOTAL POR COBRAR:</td>
+                                            <td align="left" id="porCobrarNeto">$0</td>
+                                        </tr>
+                                    </table>
                                 </div>
                             </div>
                         </div>
