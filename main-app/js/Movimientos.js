@@ -573,3 +573,44 @@ function anularMovimiento(datos) {
         }
     })
 }
+
+function totalizarMovimientos(){
+    var tabla = document.getElementById('tablaItems');
+
+    var totalNeto = 0;
+    var totalAbonos = 0;
+    var totalPorCobrar = 0;
+    for (let i = 1; i < tabla.rows.length; i++) {
+        var fila = tabla.rows[i];
+
+        var total = parseFloat(fila.cells[4].getAttribute('data-total-neto'));
+        totalNeto = totalNeto + total;
+
+        var abonos = parseFloat(fila.cells[5].getAttribute('data-abonos'));
+        if (isNaN(abonos)) {
+            var abonos = 0;
+        }
+        totalAbonos = totalAbonos + abonos;
+
+        var porCobrar = parseFloat(fila.cells[6].getAttribute('data-por-cobrar'));
+        totalPorCobrar = totalPorCobrar + porCobrar;
+    }
+
+    //TOTAL NETO
+    var totalNetoFinal = "$"+numberFormat(totalNeto, 0, ',', '.');
+    var elementTotalNeto = document.getElementById('totalNeto');
+    elementTotalNeto.innerHTML = '';
+    elementTotalNeto.appendChild(document.createTextNode(totalNetoFinal));
+
+    //TOTAL ABONOS
+    var totalAbonosFinal = "$"+numberFormat(totalAbonos, 0, ',', '.');
+    var elementAbonos = document.getElementById('abonosNeto');
+    elementAbonos.innerHTML = '';
+    elementAbonos.appendChild(document.createTextNode(totalAbonosFinal));
+
+    //TOTAL POR COBRAR
+    var porCobrarNetoFinal = "$"+numberFormat(totalPorCobrar, 0, ',', '.');
+    var elementPorCobrarNeto = document.getElementById('porCobrarNeto');
+    elementPorCobrarNeto.innerHTML = '';
+    elementPorCobrarNeto.appendChild(document.createTextNode(porCobrarNetoFinal));
+}
