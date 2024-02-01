@@ -98,7 +98,7 @@ $datosAsp = $asp->fetch();
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                             <ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="inscripciones.php" onClick="deseaRegresar(this)">Inscripciones</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="inscripciones.php" onClick="deseaRegresar(this)"><?=$frases[390][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Gestionar Inscripción</li>
                             </ol>
                         </div>

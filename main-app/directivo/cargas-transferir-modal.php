@@ -20,7 +20,7 @@ if (!Modulos::validarPermisoEdicion()) {
     <div class="panel-body">
 
 
-        <form name="formularioGuardar" action="cargas-transferir-actualizar.php" method="post">
+        <form name="formularioGuardar" action="cargas-transferir.php" method="post">
 
             <div class="form-group row">
                 <label class="col-sm-2 control-label">Del Docente</label>

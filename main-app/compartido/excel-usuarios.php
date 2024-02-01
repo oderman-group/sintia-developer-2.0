@@ -24,7 +24,7 @@ $consulta=mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss
     	<tr>
             <th scope="col" align="center">No.</th>
             <th scope="col" align="center">Nombre</th>
-            <th scope="col" align="center">Tipo</th>
+            <th scope="col" align="center"><?=$frases[53][$datosUsuarioActual['uss_idioma']];?></th>
             <th scope="col" align="center">Email</th>
         </tr>
     </thead>

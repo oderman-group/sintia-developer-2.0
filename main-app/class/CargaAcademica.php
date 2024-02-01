@@ -370,5 +370,40 @@ class CargaAcademica {
             exit();
         }
     }
+    
+    /**
+     * Listar todas las cargas.
+     *
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $filtroMT
+     * @param string $filtro
+     * @param string $order
+     * @param string $limit
+     *
+     */
+    public static function listarCargas(
+        mysqli $conexion, 
+        array $config, 
+        string $filtroMT = "", 
+        string $filtro = "", 
+        string $order = "car_id", 
+        string $limit = "LIMIT 0, 2000"
+
+    ){
+        try {
+            $consulta=mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
+            INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} {$filtroMT}
+            LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
+            LEFT JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+            LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+            WHERE car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]} {$filtro}
+            ORDER BY {$order}
+            {$limit};");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        return $consulta;
+    }
 
 }

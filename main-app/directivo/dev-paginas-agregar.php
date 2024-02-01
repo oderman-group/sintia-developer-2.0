@@ -66,7 +66,7 @@ include("../compartido/head.php");
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="dev-paginas.php" onClick="deseaRegresar(this)">Paginas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="dev-paginas.php" onClick="deseaRegresar(this)"><?=$frases[403][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 <li class="active">Agregar Paginas</li>
                             </ol>
                         </div>
@@ -151,6 +151,17 @@ include("../compartido/head.php");
                                                     <option value="">Seleccione una opción</option>
                                                     <option value="1">SI</option>
                                                     <option value="0">NO</option>
+                                                </select>
+                                            </div>
+                                        </div>
+										
+										<div class="form-group row">
+                                            <label class="col-sm-2 control-label">Asignable a SubRoles?</label>
+                                            <div class="col-sm-3">
+                                                <select class="form-control  select2" name="subroles" id="subroles">
+                                                    <option value="">Seleccione una opción</option>
+                                                    <option value="<?=SI?>">SI</option>
+                                                    <option value="<?=NO?>">NO</option>
                                                 </select>
                                             </div>
                                         </div>

@@ -142,11 +142,11 @@ try {
 			$dataToInsert = array(
 				'ins_nombre' => $nombreInsti,
 				'ins_fecha_inicio' => $fechaCompleta,
-				'ins_telefono_principal' => NULL,
-				'ins_contacto_principal' => NULL,
+				'ins_telefono_principal' => $_POST['celular'],
+				'ins_contacto_principal' => $_POST['nombre1']." ".$_POST['nombre2']." ".$_POST['apellido1']." ".$_POST['apellido2'],
 				'ins_cargo_contacto' => NULL,
-				'ins_celular_contacto' => NULL,
-				'ins_email_contacto' => NULL,
+				'ins_celular_contacto' => $_POST['celular'],
+				'ins_email_contacto' => $_POST['email'],
 				'ins_email_institucion' => NULL,
 				'ins_ciudad' => NULL,
 				'ins_enviroment' => ENVIROMENT,
@@ -273,12 +273,12 @@ try {
 		
 		//TODOS LOS USUARIOS
 		try{
-			mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_apellido1, uss_estado, uss_foto, uss_portada, uss_idioma, uss_tema, uss_perfil, uss_ocupacion, uss_email, uss_fecha_nacimiento, uss_permiso1, uss_celular, uss_genero, uss_ultimo_ingreso, uss_ultima_salida, uss_telefono, uss_bloqueado, institucion, year) VALUES 
-			('1','sintia',SHA1('sintia2014$'),1,'ADMINISTRACIÓN', 'SINTIA',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','Administrador','soporte@plataformasintia.com','2022-12-06',1298,'(313) 591-2073',126,'2023-01-26 05:56:36','2023-01-26 05:55:46','853755',0,'".$idInsti."','".$year."'),
-			('2','pruebaDT',SHA1('12345678'),5,'USUARIO','DIRECTIVO',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','DIRECTIVO',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,'".$idInsti."','".$year."'),
-			('3','pruebaDC',SHA1('12345678'),2,'USUARIO','DOCENTE',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','DOCENTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,'".$idInsti."','".$year."'),
-			('4','pruebaAC',SHA1('12345678'),3,'USUARIO','ACUDIENTE',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','ACUDIENTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,'".$idInsti."','".$year."'),
-			('5','pruebaES',SHA1('12345678'),4,'USUARIO','ESTUDIANTE',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','ESTUDIANTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0,'".$idInsti."','".$year."');");
+			mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, uss_estado, uss_foto, uss_portada, uss_idioma, uss_tema, uss_perfil, uss_ocupacion, uss_email, uss_fecha_nacimiento, uss_permiso1, uss_celular, uss_genero, uss_ultimo_ingreso, uss_ultima_salida, uss_telefono, uss_bloqueado, uss_tipo_documento, uss_documento, institucion, year) VALUES 
+			('1','sintia',SHA1('sintia2014$'),1,'ADMINISTRACIÓN', NULL, 'SINTIA', NULL,0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','Administrador','soporte@plataformasintia.com','2022-12-06',1298,'(313) 591-2073',126,'2023-01-26 05:56:36','2023-01-26 05:55:46','853755',0, NULL, NULL,'".$idInsti."','".$year."'),
+			('2','".$_POST['documento']."',SHA1('12345678'),5,'".$_POST['nombre1']."','".$_POST['nombre2']."','".$_POST['apellido1']."','".$_POST['apellido2']."',0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','DIRECTIVO', '".$_POST['email']."',NULL, 1298, '".$_POST['celular']."',126,NULL,NULL,NULL,0, '".$_POST['tipoDoc']."', '".$_POST['documento']."','".$idInsti."','".$year."'),
+			('3','pruebaDC',SHA1('12345678'),2,'USUARIO', NULL,'DOCENTE', NULL,0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','DOCENTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0, NULL, NULL,'".$idInsti."','".$year."'),
+			('4','pruebaAC',SHA1('12345678'),3,'USUARIO', NULL,'ACUDIENTE', NULL,0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','ACUDIENTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0, NULL, NULL,'".$idInsti."','".$year."'),
+			('5','pruebaES',SHA1('12345678'),4,'USUARIO', NULL,'ESTUDIANTE', NULL,0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','ESTUDIANTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0, NULL, NULL,'".$idInsti."','".$year."');");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
@@ -286,6 +286,14 @@ try {
 		//TODOS LAS MATRICULAS
 		try{
 			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_matriculas(mat_id, mat_matricula, mat_fecha, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_grado, mat_grupo, mat_genero, mat_fecha_nacimiento, mat_lugar_nacimiento, mat_tipo_documento, mat_documento, mat_lugar_expedicion, mat_religion, mat_direccion, mat_barrio, mat_telefono, mat_celular, mat_estrato, mat_foto, mat_tipo, mat_estado_matricula, mat_id_usuario, mat_eliminado, mat_email, mat_acudiente, mat_privilegio1, mat_privilegio2, mat_privilegio3, institucion, year) VALUES ('1','00001','0000-00-00 00:00:00','PRUEBA','DE','ESTUDIANTE','1','1',126,'1993-10-21','1',108,'0000000000','1',111,'Cra 00 #00-00','B. Prueba',NULL,NULL,116,NULL,129,1,'5',0,'notiene@notiene.com','4',0,'0',0,'".$idInsti."','".$year."')");
+		} catch (Exception $e) {
+			include("../compartido/error-catch-to-report.php");
+		}
+		
+		//TODOS LOS USUARIOS
+		try{
+			mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios_por_estudiantes(upe_id, upe_id_usuario, upe_id_estudiante, upe_parentezco, institucion, year) VALUES 
+			('1', '4', '1', 'Padre', '".$idInsti."', '".$year."');");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}

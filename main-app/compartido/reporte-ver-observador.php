@@ -32,9 +32,9 @@ if(!empty($_GET["busqueda"])){
       <div class="col-sm">
         <form action="reporte-ver-observador.php" method="GET" class="form-inline">
           <div class="form-group mx-sm-4 mb-2">
-            <input type="text" class="form-control" name="busqueda" value="<?= $busqueda; ?>" placeholder="Búsqueda de estudiante...">
+            <input type="text" class="form-control" name="busqueda" value="<?= $busqueda; ?>" placeholder="<?=$frases[386][$datosUsuarioActual['uss_idioma']];?> de estudiante...">
           </div>
-          <button type="submit" class="btn btn-primary mb-2">Buscar</button>
+          <button type="submit" class="btn btn-primary mb-2"><?=$frases[8][$datosUsuarioActual['uss_idioma']];?></button>
         </form>
       </div>
     </div>

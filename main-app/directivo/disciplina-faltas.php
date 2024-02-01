@@ -25,7 +25,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title">Faltas</div>
+                                <div class="page-title"><?=$frases[248][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                         </div>
@@ -39,7 +39,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                 <?php include("../../config-general/mensajes-informativos.php"); ?>
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
-                                            <header>Faltas</header>
+                                            <header><?=$frases[248][$datosUsuarioActual['uss_idioma']];?></header>
                                             <div class="tools">
                                                 <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
 			                                    <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
