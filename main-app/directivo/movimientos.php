@@ -135,7 +135,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado['fcu_id'];?></td>
 														<td>
-															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=base64_encode($usuario)?>&tipo=<?=base64_encode($tipo);?>&fecha=<?=base64_encode($resultado['fcu_fecha']);?>" style="text-decoration: underline;"><?=$resultado['fcu_fecha'];?></a>
+															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=base64_encode($usuario)?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&tipo=<?=base64_encode($tipo);?>&fecha=<?=base64_encode($resultado['fcu_fecha']);?>" style="text-decoration: underline;"><?=$resultado['fcu_fecha'];?></a>
 														</td>
 														<td><?=$resultado['fcu_detalle'];?></td>
 														<td data-total-neto="<?=$totalNeto?>">$<?=number_format($totalNeto,0,",",".")?></td>
@@ -145,7 +145,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=base64_encode($usuario);?>&tipo=<?=base64_encode($resultado['fcu_tipo']);?>&fecha=<?= base64_encode($fecha); ?>" style="text-decoration: underline;"><?=$estadosCuentas[$resultado['fcu_tipo']];?></a>
 														</td>
 														<td>
-															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=base64_encode($resultado['uss_id']);?>&tipo=<?=base64_encode($tipo);?>&fecha=<?= base64_encode($fecha); ?>" style="text-decoration: underline;"><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></a>
+															<a href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?=base64_encode($resultado['uss_id']);?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&tipo=<?=base64_encode($tipo);?>&fecha=<?= base64_encode($fecha); ?>" style="text-decoration: underline;"><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></a>
 														</td>
 														<td align="center" style="background-color:<?=$bgColorEstado;?>; color: black;"><?=$estado?></td>
 
