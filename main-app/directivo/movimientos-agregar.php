@@ -90,7 +90,7 @@ $codigoUnico=Utilidades::generateCode("FCN");
 
                                             <label class="col-sm-2 control-label">Valor adicional</label>
                                             <div class="col-sm-4">
-                                                <input type="number" min="0" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="0" required <?=$disabledPermiso;?> data-vlr-adicional-anterior="0" onchange="cambiarAdiconal(this)">
+                                                <input type="number" min="0" id="vlrAdicional" name="valor" class="form-control" autocomplete="off" value="0" required <?=$disabledPermiso;?> data-vlr-adicional-anterior="0" onchange="totalizar(this)">
                                             </div>
 										</div>
 
@@ -150,7 +150,7 @@ $codigoUnico=Utilidades::generateCode("FCN");
                                             <div class="panel-body">
 
                                                 <div class="table-scrollable">
-                                                    <table class="display" style="width:100%;">
+                                                    <table class="display" style="width:100%;" id="tablaItems">
                                                         <thead>
                                                             <tr>
                                                                 <th>#</th>
@@ -182,10 +182,10 @@ $codigoUnico=Utilidades::generateCode("FCN");
                                                                     </div>
                                                                 </td>
                                                                 <td>
-                                                                    <input type="number" min="0" id="precioNuevo" data-precio="0" onchange="actualizarSubtotal('idNuevo')" value="0" disabled>
+                                                                    <input type="number" min="0" id="precioNuevo" data-precio="0" data-precio-anterior="0" onchange="actualizarSubtotal('idNuevo')" value="0" disabled>
                                                                 </td>
                                                                 <td>
-                                                                    <input type="number" min="0" id="descuentoNuevo" onchange="actualizarSubtotal('idNuevo')" value="0" disabled>
+                                                                    <input type="text" id="descuentoNuevo" data-total-precio="0" data-precio-item-anterior="0" data-descuento-anterior="0" onchange="actualizarSubtotal('idNuevo')" value="0" disabled>
                                                                 </td>
                                                                 <td>
                                                                     <div class="col-sm-12" style="padding: 0px;">
@@ -195,7 +195,7 @@ $codigoUnico=Utilidades::generateCode("FCN");
                                                                                 $consulta= Movimientos::listarImpuestos($conexion, $config);
                                                                                 while($datosConsulta = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
                                                                             ?>
-                                                                            <option value="<?=$datosConsulta['id']?>" name="<?=$datosConsulta['fee']?>"><?=$datosConsulta['type_tax']." - (".$datosConsulta['fee']."%)"?></option>
+                                                                            <option value="<?=$datosConsulta['id']?>" data-name-impuesto="<?=$datosConsulta['type_tax']?>" data-valor-impuesto="<?=$datosConsulta['fee']?>"><?=$datosConsulta['type_tax']." - (".$datosConsulta['fee']."%)"?></option>
                                                                             <?php } ?>
                                                                         </select>
                                                                     </div>
@@ -209,34 +209,34 @@ $codigoUnico=Utilidades::generateCode("FCN");
                                                                 <td id="subtotalNuevo" data-subtotal-anterior="0">$0</td>
                                                                 <td id="eliminarNuevo"></td>
                                                             </tr>
+                                                        </tbody>
+                                                        <tfoot>
                                                             <?php if(Modulos::validarPermisoEdicion()){?>
                                                                 <tr>
-                                                                    <td colspan="5">
+                                                                    <td colspan="9">
                                                                         <button type="button" title="Agregar nueva línea para item" style="padding: 4px 4px; margin: 5px;" class="btn btn-sm" data-toggle="tooltip" onclick="nuevoItem()" data-placement="right" ><i class="fa fa-plus"></i> Agregar línea</button>
                                                                     </td>
                                                                 </tr>
                                                             <?php }?>
-                                                        </tbody>
-                                                        <tfoot>
                                                             <tr>
                                                                 <td align="right" colspan="7" style="padding-right: 20px;">SUBTOTAL:</td>
-                                                                <td align="left" id="subtotal" data-subtotal="0" data-subtotal-anterior-sub="0">$0</td>
+                                                                <td align="left" colspan="2"id="subtotal" data-subtotal="0" data-subtotal-anterior-sub="0">$0</td>
                                                             </tr>
                                                             <tr>
                                                                 <td align="right" colspan="7" style="padding-right: 20px;">VLR. ADICIONAL:</td>
-                                                                <td align="left" id="valorAdicional" data-valor-adicional="0">$0</td>
+                                                                <td align="left" colspan="2"id="valorAdicional" data-valor-adicional="0">$0</td>
                                                             </tr>
                                                             <tr>
                                                                 <td align="right" colspan="7" style="padding-right: 20px;">DESCUENTO:</td>
-                                                                <td align="left" id="valorDescuento" data-valor-descuento="0">$0</td>
+                                                                <td align="left" colspan="2"id="valorDescuento" data-valor-descuento="0">$0</td>
                                                             </tr>
                                                             <tr>
-                                                                <td align="right" colspan="7" style="padding-right: 20px;">NINGUNO:</td>
-                                                                <td align="left" id="valorInpuesto" data-valor-adicional="0">$0</td>
+                                                                <td align="right" colspan="7" style="padding-right: 20px;">IMPUESTO:</td>
+                                                                <td align="left" colspan="2"id="valorImpuesto">$0</td>
                                                             </tr>
                                                             <tr style="font-size: 15px; font-weight:bold;">
                                                                 <td align="right" colspan="7" style="padding-right: 20px;">TOTAL NETO:</td>
-                                                                <td align="left" id="totalNeto" data-total-neto="0" data-total-neto-anterior="0">$0</td>
+                                                                <td align="left" colspan="2"id="totalNeto" data-total-neto="0" data-total-neto-anterior="0">$0</td>
                                                             </tr>
                                                         </tfoot>
                                                     </table>
