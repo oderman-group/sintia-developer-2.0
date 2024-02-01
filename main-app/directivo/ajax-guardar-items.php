@@ -6,14 +6,17 @@ $idPaginaInterna = 'DT0254';
 require_once(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
+$creado = null;
 if(!empty($_REQUEST['itemModificar'])){
     $idInsercion=$_REQUEST['itemModificar'];
     try {
-        mysqli_query($conexion, "UPDATE ".BD_FINANCIERA.".transaction_items SET id_item='".$_REQUEST['idItem']."', cantity='".$_REQUEST['cantidad']."', subtotal='".$_REQUEST['subtotal']."', price='".$_REQUEST['precio']."' WHERE id='".$_REQUEST['itemModificar']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        mysqli_query($conexion, "UPDATE ".BD_FINANCIERA.".transaction_items SET id_item='".$_REQUEST['idItem']."', cantity='".$_REQUEST['cantidad']."', subtotal='".$_REQUEST['subtotal']."', price='".$_REQUEST['precio']."', discount=0, tax=0 WHERE id='".$_REQUEST['itemModificar']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
     } catch(Exception $e) {
         echo $e->getMessage();
         exit();
     }
+
+    $creado = 0;
 }else{
     $idInsercion=Utilidades::generateCode("TXI_");
     try {
@@ -22,9 +25,11 @@ if(!empty($_REQUEST['itemModificar'])){
         echo $e->getMessage();
         exit();
     }
+    
+    $creado = 1;
 }
 
-$arrayIdInsercion=["idInsercion"=>$idInsercion];
+$arrayIdInsercion=["idInsercion"=>$idInsercion, "creado"=>$creado];
 
 header('Content-Type: application/json');
 echo json_encode($arrayIdInsercion);
