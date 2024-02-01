@@ -42,12 +42,12 @@ if(!Modulos::validarPermisoEdicion()){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[420][$datosUsuarioActual['uss_idioma']];?></div>
+                                <div class="page-title"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[425][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php require_once(ROOT_PATH."/main-app/compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li><a class="parent-item" href="javascript:void(0);" name="impuestos.php" onClick="deseaRegresar(this)"><?=$frases[420][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                                <li class="active"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[420][$datosUsuarioActual['uss_idioma']];?></li>
+                                <li><a class="parent-item" href="javascript:void(0);" name="impuestos.php" onClick="deseaRegresar(this)"><?=$frases[425][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[425][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
@@ -55,12 +55,12 @@ if(!Modulos::validarPermisoEdicion()){
                         <div class="col-sm-12">
                             <?php require_once(ROOT_PATH."/config-general/mensajes-informativos.php"); ?>
                             <div class="panel">
-                                <header class="panel-heading panel-heading-purple"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[420][$datosUsuarioActual['uss_idioma']];?></header>
+                                <header class="panel-heading panel-heading-purple"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[425][$datosUsuarioActual['uss_idioma']];?></header>
                                 <div class="panel-body">
 									<form name="formularioGuardar" action="impuestos-guardar.php" method="post" enctype="multipart/form-data">
 
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[294][$datosUsuarioActual['uss_idioma']];?> <?=$frases[420][$datosUsuarioActual['uss_idioma']];?> <span style="color: red;">(*)</span></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[294][$datosUsuarioActual['uss_idioma']];?> <?=$frases[425][$datosUsuarioActual['uss_idioma']];?> <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
                                                 <select class="form-control select2" name="typeTax" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
@@ -80,7 +80,7 @@ if(!Modulos::validarPermisoEdicion()){
 										</div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[421][$datosUsuarioActual['uss_idioma']];?> <span style="color: red;">(*)</span></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[426][$datosUsuarioActual['uss_idioma']];?> <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
                                                 <input type="text" name="fee" class="form-control" onchange="validarInput(this)" required <?=$disabledPermiso;?>>
                                             </div>

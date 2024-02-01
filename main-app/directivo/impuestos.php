@@ -68,9 +68,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[294][$datosUsuarioActual['uss_idioma']];?> <?=$frases[420][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[294][$datosUsuarioActual['uss_idioma']];?> <?=$frases[425][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[187][$datosUsuarioActual['uss_idioma']];?></th>
-														<th><?=$frases[421][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[426][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[50][$datosUsuarioActual['uss_idioma']];?></th>
                                                         <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0297','DT0299'])){?>
                                                             <th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>

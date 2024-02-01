@@ -81,10 +81,28 @@ define('MODULO_ADMISIONES', 8);
 define('MODULO_RESERVA_CUPO', 9);
 define('MODULO_MEDIA_TECNICA', 10);
 
+/* TIPO DE VALIDACION*/
+define('IDENTIFICAION', 'Identificacion');
+define('USUARIO', 'Usuario');
+define('CORREO', 'Correo');
+
 /* TIPOS DE FACTURA o COTIZACIÓn */
 define('TIPO_FACTURA', 'INVOICE');
 define('TIPO_COTIZACION', 'QUOTE');
 define('TIPO_RECURRING', 'INVOICE_RECURRING');
+
+
+/* TIPOS DE PREGUNTAS */
+define('TEXT', 'TEXT');
+define('MULTIPLE', 'MULTIPLE');
+define('SINGLE', 'SINGLE');
+
+/* TIPOS DE ESTADO DE MATRICULA MEDIATECNICA */
+define('ESTADO_CURSO_ACTIVO', 'ACTIVO');
+define('ESTADO_CURSO_INACTIVO', 'INACTIVO');
+define('ESTADO_CURSO_PRE_INSCRITO', 'PRE INSCRITO');
+define('ESTADO_CURSO_APROBADO', 'APROBADO');
+define('ESTADO_CURSO_NO_APROBADO', 'NO APROBADO');
 
 define('COBRADA', 'COBRADA');
 define('POR_COBRAR', 'POR_COBRAR');
@@ -97,6 +115,9 @@ define('IVA', 'IVA');
 define('ICO', 'ICO');
 define('ICUI', 'ICUI');
 define('OTRO', 'OTRO');
+
+define('INVOICE', 'INVOICE');
+define('ACCOUNT', 'ACCOUNT');
 
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':

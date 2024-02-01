@@ -40,6 +40,13 @@
 		$fecha = base64_decode($_GET['fecha']);
 		$filtro .= " AND fcu_fecha='".$fecha."'";
 	}
+	$desde='';
+	$hasta='';
+	if (!empty($_GET["fFecha"]) || (!empty($_GET["desde"]) || !empty($_GET["hasta"]))) {
+		$desde=$_GET["desde"];
+		$hasta=$_GET["hasta"];
+		$filtro .= " AND (fcu_fecha BETWEEN '" . $_GET["desde"] . "' AND '" . $_GET["hasta"] . "' OR fcu_fecha LIKE '%" . $_GET["hasta"] . "%')";
+	}
 ?>
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #41c4c4;">
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,10 +73,35 @@
 					<span class="fa fa-angle-down"></span>
 				</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">	
-					<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?= base64_encode($usuario); ?>&tipo=<?=base64_encode(1)?>&busqueda=<?= $busqueda; ?>&estadoM=<?= base64_encode($estadoM); ?>&fecha=<?= base64_encode($fecha); ?>">Ingresos</a>
-					<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?= base64_encode($usuario); ?>&tipo=<?=base64_encode(2)?>&busqueda=<?= $busqueda; ?>&estadoM=<?= base64_encode($estadoM); ?>&fecha=<?= base64_encode($fecha); ?>">Egresos</a>
+					<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?= base64_encode($usuario); ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&tipo=<?=base64_encode(1)?>&busqueda=<?= $busqueda; ?>&estadoM=<?= base64_encode($estadoM); ?>&fecha=<?= base64_encode($fecha); ?>">Ingresos</a>
+					<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?usuario=<?= base64_encode($usuario); ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&tipo=<?=base64_encode(2)?>&busqueda=<?= $busqueda; ?>&estadoM=<?= base64_encode($estadoM); ?>&fecha=<?= base64_encode($fecha); ?>">Egresos</a>
 					<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>">Ver todos</a>
 
+				</div>
+			</li>
+
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
+					Filtrar por Fecha
+					<span class="fa fa-angle-down"></span>
+				</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					
+					<form class="dropdown-item" method="get" action="<?= $_SERVER['PHP_SELF']; ?>">
+						<input type="hidden" name="tipo" value="<?= base64_encode($tipo); ?>"/>
+						<input type="hidden" name="busqueda" value="<?= $busqueda; ?>"/>
+						<input type="hidden" name="usuario" value="<?= base64_encode($usuario); ?>"/>
+						<input type="hidden" name="estadoM" value="<?= base64_encode($estadoM); ?>"/>
+						<input type="hidden" name="fecha" value="<?= base64_encode($fecha); ?>"/>
+						<label>Fecha Desde:</label>
+						<input type="date" class="form-control" placeholder="desde"  name="desde" value="<?= $desde; ?>"/>
+
+						<label>Hasta</label>
+						<input type="date" class="form-control" placeholder="hasta"  name="hasta" value="<?= $hasta; ?>"/>
+						
+						<input type="submit" class="btn deepPink-bgcolor" name="fFecha" value="Filtrar" style="margin: 5px;">
+					</form>
+					<a class="dropdown-item" href="<?= $_SERVER['PHP_SELF']; ?>" style="font-weight: bold; text-align: center;">VER TODO</a>
 				</div>
 			</li>
 
@@ -85,6 +117,8 @@
 			<input type="hidden" name="tipo" value="<?= base64_encode($tipo); ?>" />
 			<input type="hidden" name="estadoM" value="<?= base64_encode($estadoM); ?>" />
 			<input type="hidden" name="fecha" value="<?= base64_encode($fecha); ?>" />
+			<input type="hidden" name="desde" value="<?= $desde; ?>"/>
+			<input type="hidden" name="hasta" value="<?= $hasta; ?>"/>
 			<input class="form-control mr-sm-2" type="search" placeholder="<?=$frases[386][$datosUsuarioActual['uss_idioma']];?>..." aria-label="Search" name="busqueda" value="<?= $busqueda; ?>">
 			<button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit"><?=$frases[8][$datosUsuarioActual['uss_idioma']];?></button>
 		</form>

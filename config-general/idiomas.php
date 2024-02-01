@@ -814,10 +814,14 @@ $frases[415][$l] = 'Facturas Recurrentes';
 $frases[416][$l] = 'Notas Adicionales';
 $frases[417][$l] = 'Cobrado';
 $frases[418][$l] = 'Por cobrar';
-$frases[419][$l] = 'Guardar Cambios';
-$frases[420][$l] = 'Impuesto';
-$frases[421][$l] = 'Tarifa';
-
+$frases[419][$l] = 'Guardar cambios';
+$frases[420][$l] = 'Obligatoria';
+$frases[421][$l] = 'TEXTO';
+$frases[422][$l] = 'MÚLTIPLE';
+$frases[423][$l] = 'ÚNICA';
+$frases[424][$l] = 'Cliente';
+$frases[425][$l] = 'Impuesto';
+$frases[426][$l] = 'Tarifa';
 //ENGLISH
 
 $l = 2;
@@ -1620,5 +1624,10 @@ $frases[416][$l] = 'Additional notes';
 $frases[417][$l] = 'Collected';
 $frases[418][$l] = 'To collect';
 $frases[419][$l] = 'Save Changes';
-$frases[420][$l] = 'Taxe';
-$frases[421][$l] = 'Fee';
+$frases[420][$l] = 'Mandatory';
+$frases[421][$l] = 'TEXT';
+$frases[422][$l] = 'MULTIPLE';
+$frases[423][$l] = 'SINGLE';
+$frases[424][$l] = 'Client';
+$frases[425][$l] = 'Taxe';
+$frases[426][$l] = 'Fee';

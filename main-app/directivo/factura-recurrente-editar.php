@@ -152,7 +152,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                 </select>
                                             </div>
 
-                                            <label class="col-sm-2 control-label"><?=$frases[386][$datosUsuarioActual['uss_idioma']];?> <span style="color: red;">(*)</span></label>
+                                            <label class="col-sm-2 control-label"><?=$frases[414][$datosUsuarioActual['uss_idioma']];?> <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
                                                 <select class="form-control select2" id="metodoPago" name="metodoPago" required <?=$disabledPermiso;?>>
                                                     <option value="" >Seleccione una opción</option>
