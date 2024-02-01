@@ -70,7 +70,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                         <th>#</th>
 														<th><?=$frases[51][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[383][$datosUsuarioActual['uss_idioma']];?></th>
-														<th><?=$frases[380][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[424][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[413][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[414][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[345][$datosUsuarioActual['uss_idioma']];?></th>
@@ -90,6 +90,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                                 $vaucher = '<a href="'.REDIRECT_ROUTE.'/files/comprobantes/'.$resultado['voucher'].'" target="_blank" class="link">'.$resultado['voucher'].'</a>';
                                                             }
 
+                                                            $datosCliente = UsuariosPadre::sesionUsuario($resultado["invoiced"]);
+                                                            $cliente = UsuariosPadre::nombreCompletoDelUsuario($datosCliente);
+                                                            
+                                                            $abonos = Movimientos::calcularTotalAbonadoCliente($conexion, $config, $resultado['invoiced'], $resultado['cod_payment']);
+
                                                             $arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
                                                             $arrayDatos = json_encode($arrayEnviar);
                                                             $objetoEnviar = htmlentities($arrayDatos);
@@ -98,8 +103,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado['registration_date'];?></td>
 														<td><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></td>
-														<td><?=$resultado['invoiced'];?></td>
-														<td>$<?=number_format($resultado['payment'],0,",",".")?></td>
+														<td><?=$cliente;?></td>
+														<td>$<?=number_format($abonos,0,",",".")?></td>
 														<td><?=$resultado['payment_method'];?></td>
 														<td><?=$vaucher;?></td>
 														
