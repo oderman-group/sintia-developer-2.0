@@ -66,6 +66,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                     <tr>
                                                         <th>#</th>
 														<th>ID</th>
+														<th><?=$frases[49][$datosUsuarioActual['uss_idioma']];?></th>
 														<th>Falta</th>
 														<th>Categoría</th>
                                                         <?php if(Modulos::validarPermisoEdicion()){?>
@@ -91,6 +92,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													<tr>
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado['dfal_id'];?></td>
+														<td><?=$resultado['dfal_codigo'];?></td>
 														<td><?=$resultado['dfal_nombre'];?></td>
 														<td><?=$resultado['dcat_nombre'];?></td>
 														
