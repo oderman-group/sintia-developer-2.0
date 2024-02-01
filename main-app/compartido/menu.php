@@ -197,7 +197,7 @@
 											}
 											if(Modulos::validarSubRol(["DT0294"])){ 
 										?>
-											<li <?php agregarClass(MENU,["DT0294", "DT0295", "DT0297"]) ?>><a href="impuestos.php" class="nav-link "> <span class="title"><?=$frases[420][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+											<li <?php agregarClass(MENU,["DT0294", "DT0295", "DT0297"]) ?>><a href="impuestos.php" class="nav-link "> <span class="title"><?=$frases[425][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 										<?php
 											}
 											if(Modulos::validarSubRol(["DT0273"])){
