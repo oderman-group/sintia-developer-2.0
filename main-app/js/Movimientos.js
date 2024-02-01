@@ -35,56 +35,50 @@ function actualizarSubtotal(id) {
     var precioElement = document.getElementById('precioNuevo');
     var cantidadElement = document.getElementById('cantidadItemNuevo');
     var subtotalElement = document.getElementById('subtotalNuevo');
+    var descuentoElement = document.getElementById('descuentoNuevo');
+    var impuestoElement = document.getElementById('impuestoNuevo');
     if(id !== 'idNuevo'){
         var idItem=id
         // Obtener los elementos
         var precioElement = document.getElementById('precio'+id);
         var cantidadElement = document.getElementById('cantidadItems'+id);
         var subtotalElement = document.getElementById('subtotal'+id);
+        var descuentoElement = document.getElementById('descuento'+id);
+        var impuestoElement = document.getElementById('impuesto'+id);
     }
+    
+    var regex = /^[0-9]+(\.[0-9]+)?$/;
 
-    if (precioElement.value.trim() !== '' && cantidadElement.value.trim() !== '') {
-
-        var idSubtotal = document.getElementById('subtotal');
-        var idTotalNeto = document.getElementById('totalNeto');
+    if ((precioElement.value.trim() !== '' && cantidadElement.value.trim() !== '' && descuentoElement.value.trim() !== '' && regex.test(precioElement.value) && regex.test(cantidadElement.value) && regex.test(descuentoElement.value))) {
 
         // Obtener los valores
         var precio = parseFloat(precioElement.value);
         var cantidad = parseFloat(cantidadElement.value);
-        var subtotalAnterior = parseFloat(subtotalElement.getAttribute("data-subtotal-anterior"));
-        var subtotalNeto = parseFloat(idSubtotal.getAttribute("data-subtotal"));
-        var total = parseFloat(idTotalNeto.getAttribute("data-total-neto"));
+        var cantidadAnterior = parseFloat(cantidadElement.getAttribute("data-cantidad"));
+        var porcentajeDescuento= parseFloat(descuentoElement.value);
+        var impuesto= parseFloat(impuestoElement.value);
 
         // Calcular el subtotal
-        var subtotal = precio * cantidad;
+        var vlrDescuento = precio * (porcentajeDescuento / 100);
+        var vlrDescuentoAnterior = vlrDescuento * cantidad;
+
+        var subtotal = (precio-vlrDescuento) * cantidad;
         var subtotalFormat = "$"+numberFormat(subtotal, 0, ',', '.');
-
-        var subtotalNetoFinal= (subtotalNeto-subtotalAnterior)+subtotal;
-        var subtotalNetoFormat = "$"+numberFormat(subtotalNetoFinal, 0, ',', '.');
-
-        var totalNetoFinal= (total-subtotalAnterior)+subtotal;
-        var totalFormat = "$"+numberFormat(totalNetoFinal, 0, ',', '.');
         
-        fetch('../directivo/ajax-cambiar-subtotal.php?subtotal='+(subtotal)+'&cantidad='+(cantidad)+'&precio='+(precio)+'&idItem='+(idItem), {
+        fetch('../directivo/ajax-cambiar-subtotal.php?subtotal='+(subtotal)+'&cantidad='+(cantidad)+'&precio='+(precio)+'&idItem='+(idItem)+'&porcentajeDescuento='+(porcentajeDescuento)+'&impuesto='+(impuesto), {
             method: 'GET'
         })
         .then(response => response.text()) // Convertir la respuesta a texto
         .then(data => {
             precioElement.dataset.precio = precio;
 
+            descuentoElement.dataset.descuentoAnterior = vlrDescuentoAnterior;
+
             subtotalElement.innerHTML = '';
             subtotalElement.appendChild(document.createTextNode(subtotalFormat));
             subtotalElement.dataset.subtotalAnterior = subtotal;
 
-            idSubtotal.innerHTML = '';
-            idSubtotal.appendChild(document.createTextNode(subtotalNetoFormat));
-            idSubtotal.dataset.subtotal = subtotalNetoFinal;
-            idSubtotal.dataset.subtotalAnteriorSub = subtotalNetoFinal;
-
-            idTotalNeto.innerHTML = '';
-            idTotalNeto.appendChild(document.createTextNode(totalFormat));
-            idTotalNeto.dataset.totalNeto = totalNetoFinal;
-            idTotalNeto.dataset.totalNetoAnterior = totalNetoFinal;
+            totalizar();
 
             $.toast({
                 heading: 'Acción realizada',
@@ -106,7 +100,7 @@ function actualizarSubtotal(id) {
 
         Swal.fire({
             title: 'Campo Vacío',
-            text: "Los campos de precio y cantidad no pueden ir vacío",
+            text: "Los campos de precio, descuento y cantidad no pueden ir vacío, o con letras",
             icon: 'warning',
             showCancelButton: false,
             confirmButtonText: 'Ok',
@@ -116,7 +110,6 @@ function actualizarSubtotal(id) {
             `,
         }).then((result) => {
             var precioAnterior = parseFloat(precioElement.getAttribute("data-precio"));
-            var cantidadAnterior = parseFloat(cantidadElement.getAttribute("data-cantidad"));
             
             precioElement.value = precioAnterior;
             cantidadElement.value = cantidadAnterior;
@@ -131,20 +124,21 @@ function actualizarSubtotal(id) {
 function traerItems(){
     // Obtener el valor del ID de transacción desde el elemento HTML
     var idTransaction = document.getElementById('idTransaction').value;
-    var vlrAdicional = document.getElementById('vlrAdicional').value;
     var typeTransaction = document.getElementById('typeTransaction').value;
 
     // Mostrar un mensaje de carga mientras se obtienen los items
     $('#mostrarItems').empty().hide().html("Cargando Items...").show(1);
     
     // Realizar una solicitud fetch para obtener los items asociados a la transacción
-    fetch('../directivo/ajax-traer-items.php?idTransaction=' + idTransaction + '&vlrAdicional=' + vlrAdicional + '&typeTransaction=' + typeTransaction, {
+    fetch('../directivo/ajax-traer-items.php?idTransaction=' + idTransaction + '&typeTransaction=' + typeTransaction, {
         method: 'GET'
     })
     .then(response => response.text()) // Convertir la respuesta a texto
     .then(data => {
         // Actualizar el contenido de 'mostrarItems' con la respuesta obtenida
         $('#mostrarItems').empty().hide().html(data).show(1);
+
+        totalizar();
 
         $.toast({
             heading: 'Acción realizada',
@@ -171,11 +165,12 @@ function guardarNuevoItem(selectElement) {
     // Obtener los elementos del DOM
     var itemElement = document.getElementById('idItemNuevo');
     var precioElement = document.getElementById('precioNuevo');
+    var descuentoElement = document.getElementById('descuentoNuevo');
+    var impuestoElement = document.getElementById('impuestoNuevo');
+    var impuestoContainer = document.getElementById('select2-impuestoNuevo-container');
     var descripElement = document.getElementById('descripNueva');
     var cantidadElement = document.getElementById('cantidadItemNuevo');
     var subtotalElement = document.getElementById('subtotalNuevo');
-    var idSubtotal = document.getElementById('subtotal');
-    var idTotalNeto = document.getElementById('totalNeto');
     var idEliminarNuevo = document.getElementById('eliminarNuevo');
 
     var itemModificar = '';
@@ -196,17 +191,9 @@ function guardarNuevoItem(selectElement) {
     // Obtener el ID del item, el precio y calcular el subtotal
     var idItem = itemSelecionado.value;
     var precio = parseFloat(itemSelecionado.getAttribute('name'));
-    var subtotalNeto = parseFloat(idSubtotal.getAttribute("data-subtotal-anterior-sub"));
-    var total = parseFloat(idTotalNeto.getAttribute("data-total-neto-anterior"));
 
     var subtotal = precio * cantidad;
     var subtotalFormat = "$"+numberFormat(subtotal, 0, ',', '.');
-
-    var subtotalNetoFinal= subtotalNeto+subtotal;
-    var subtotalNetoFormat = "$"+numberFormat(subtotalNetoFinal, 0, ',', '.');
-
-    var totalNetoFinal= total+subtotal;
-    var totalFormat = "$"+numberFormat(totalNetoFinal, 0, ',', '.');
 
     // Realizar una solicitud fetch para guardar el nuevo item
     fetch('../directivo/ajax-guardar-items.php?idTransaction=' + idTransaction + '&idItem=' + idItem + '&itemModificar=' + itemModificar + '&subtotal=' + subtotal + '&cantidad=' + cantidad + '&precio=' + precio + '&typeTransaction=' + typeTransaction, {
@@ -221,6 +208,7 @@ function guardarNuevoItem(selectElement) {
         precioElement.disabled = false;
         precioElement.value = precio;
         precioElement.dataset.precio = precio;
+        precioElement.dataset.precioAnterior = precio;
 
         descripElement.disabled = false;
         cantidadElement.disabled = false;
@@ -229,16 +217,21 @@ function guardarNuevoItem(selectElement) {
         subtotalElement.appendChild(document.createTextNode(subtotalFormat));
         subtotalElement.dataset.subtotalAnterior = subtotal;
 
+        descuentoElement.disabled = false;
+        
+        impuestoElement.disabled = false;
+
+        if (data.creado == 0) {
+            descuentoElement.value = 0;
+
+            impuestoElement.value = 0;
+            impuestoContainer.innerHTML = 'Ninguno - (0%)';
+        }
+
         var html='<a href="#" title="Eliminar item nuevo" name="movimientos-items-eliminar.php?idR='+data.idInsercion+'" style="padding: 4px 4px; margin: 5px;" class="btn btn-sm" data-toggle="tooltip" onClick="deseaEliminarNuevoItem(this)" data-placement="right">X</a>';
         idEliminarNuevo.innerHTML = html;
 
-        idSubtotal.innerHTML = '';
-        idSubtotal.appendChild(document.createTextNode(subtotalNetoFormat));
-        idSubtotal.dataset.subtotal = subtotalNetoFinal;
-
-        idTotalNeto.innerHTML = '';
-        idTotalNeto.appendChild(document.createTextNode(totalFormat));
-        idTotalNeto.dataset.totalNeto = totalNetoFinal;
+        totalizar();
 
         $.toast({
             heading: 'Acción realizada',
@@ -270,15 +263,18 @@ function nuevoItem() {
     var precioNuevo = document.getElementById('precioNuevo');
     var descripElement = document.getElementById('descripNueva');
     var cantidadNuevo = document.getElementById('cantidadItemNuevo');
-    var subtotalNuevo = document.getElementById('subtotalNuevo');
     var items = document.getElementById('items');
     var itemsContainer = document.getElementById('select2-items-container');
     var idEliminarNuevo = document.getElementById('eliminarNuevo');
+    var descuentoElement = document.getElementById('descuentoNuevo');
+    var impuestoElement = document.getElementById('impuestoNuevo');
+    var impuestoContainer = document.getElementById('select2-impuestoNuevo-container');
 
     // Limpiar y reiniciar los elementos del DOM relacionados con el nuevo item
     idItemNuevo.innerHTML = '';
     precioNuevo.value = 0;
     precioNuevo.dataset.precio = 0;
+    precioNuevo.dataset.precioAnterior = 0;
     precioNuevo.disabled = true;
     descripElement.value = '';
     descripElement.disabled = true;
@@ -289,58 +285,12 @@ function nuevoItem() {
     items.value = '';
     itemsContainer.innerHTML = 'Seleccione una opción';
     idEliminarNuevo.innerHTML = '';
-}
-
-/**
- * Realiza la acción de añadir o modificar el valor adiconal.
- * Limpia y actualiza los elementos relacionados con la información de valor adicional.
- */
-function cambiarAdiconal(data) {
-
-    var idValorAdicional = document.getElementById('valorAdicional');
-    var idTotalNeto = document.getElementById('totalNeto');
-
-    var vlrAdicional= parseFloat(data.value);
-    var vlrAdicionalAnteriorValor= parseFloat(data.getAttribute('data-vlr-adicional-anterior'));
-    var totalNeto= parseFloat(idTotalNeto.getAttribute('data-total-neto'));
-    
-    if (data.value.trim() !== '') {
-        console.log('Entro aqui');
-
-        var total= (totalNeto-vlrAdicionalAnteriorValor)+vlrAdicional;
-
-        var vlrAdicionalFinal = "$"+numberFormat(vlrAdicional, 0, ',', '.');
-        var totalFinal = "$"+numberFormat(total, 0, ',', '.');
-
-        // Limpiar y reiniciar los elementos del DOM relacionados con el nuevo item
-        idValorAdicional.innerHTML = '';
-        idValorAdicional.appendChild(document.createTextNode(vlrAdicionalFinal));
-        idValorAdicional.dataset.valorAdicional = vlrAdicional;
-        data.dataset.vlrAdicionalAnterior = vlrAdicional;
-        
-        idTotalNeto.innerHTML = '';
-        idTotalNeto.appendChild(document.createTextNode(totalFinal));
-        idTotalNeto.dataset.totalNeto = total;
-        idTotalNeto.dataset.totalNetoAnterior = total;
-
-    } else {
-
-        Swal.fire({
-            title: 'Campo Vacío',
-            text: "El campo de valor adicional no puede ir vacío",
-            icon: 'warning',
-            showCancelButton: false,
-            confirmButtonText: 'Ok',
-            backdrop: `
-                rgba(0,0,123,0.4)
-                no-repeat
-            `,
-        }).then((result) => {
-            data.dataset.vlrAdicionalAnterior = vlrAdicionalAnteriorValor;
-            data.value = vlrAdicionalAnteriorValor;
-        })
-        
-    }
+    descuentoElement.value = 0;
+    descuentoElement.dataset.precioItemAnterior = 0;
+    descuentoElement.disabled = true;
+    impuestoElement.value = 0;
+    impuestoElement.disabled = true;
+    impuestoContainer.innerHTML = 'Ninguno - (0%)';
 }
 
 /**
@@ -364,9 +314,10 @@ function deseaEliminarNuevoItem(dato) {
     var descripElement = document.getElementById('descripNueva');
     var cantidadElement = document.getElementById('cantidadItemNuevo');
     var subtotalElement = document.getElementById('subtotalNuevo');
-    var idSubtotal = document.getElementById('subtotal');
-    var idTotalNeto = document.getElementById('totalNeto');
     var idEliminarNuevo = document.getElementById('eliminarNuevo');
+    var descuentoElement = document.getElementById('descuentoNuevo');
+    var impuestoElement = document.getElementById('impuestoNuevo');
+    var impuestoContainer = document.getElementById('select2-impuestoNuevo-container');
 
     var url = dato.name;
 
@@ -393,41 +344,9 @@ function deseaEliminarNuevoItem(dato) {
 
                         miFuncionConDelay();
 
-                        registro.classList.add('animate__animated', 'animate__bounceOutRight', 'animate__delay-0.5s');
-                        if (varObjet.restar !== undefined) {
-                            var restar              =  varObjet.restar;
-                    
-                            var subtotalNeto        = parseFloat(idSubtotal.getAttribute("data-subtotal"));
-                            var subtotal            = subtotalNeto-restar;
-                            var subtotalFinal       = "$"+numberFormat(subtotal, 0, ',', '.');
-                    
-                            var totalNeto           = parseFloat(idTotalNeto.getAttribute("data-total-neto"));
-                            var total               = totalNeto-restar;
-                            var totalFinal          = "$"+numberFormat(total, 0, ',', '.');
-                            
-                            idSubtotal.innerHTML = '';
-                            idSubtotal.appendChild(document.createTextNode(subtotalFinal));
-                            idSubtotal.dataset.subtotal = subtotal;
-                            idSubtotal.dataset.subtotalAnteriorSub = subtotal;
-                            
-                            idTotalNeto.innerHTML = '';
-                            idTotalNeto.appendChild(document.createTextNode(totalFinal));
-                            idTotalNeto.dataset.totalNeto = total;
-                            idTotalNeto.dataset.totalNetoAnterior = total;
-                        }
+                        registro.classList.add('animate__animated', 'animate__bounceOutRight', 'animate__delay-0.5s', 'fila-oculta');
 
                 } else {
-
-                    // Obtener el ID del item, el precio y calcular el subtotal
-                    var restar = parseFloat(subtotalElement.getAttribute('data-subtotal-anterior'));
-                    var subtotalNeto = parseFloat(idSubtotal.getAttribute("data-subtotal"));
-                    var total = parseFloat(idTotalNeto.getAttribute("data-total-neto"));
-                
-                    var subtotalNetoFinal= subtotalNeto-restar;
-                    var subtotalNetoFormat = "$"+numberFormat(subtotalNetoFinal, 0, ',', '.');
-                
-                    var totalNetoFinal= total-restar;
-                    var totalFormat = "$"+numberFormat(totalNetoFinal, 0, ',', '.');
 
                     // Actualizar los elementos del DOM con los datos recibidos
                     items.value = '';
@@ -450,16 +369,16 @@ function deseaEliminarNuevoItem(dato) {
 
                     idEliminarNuevo.innerHTML = '';
 
-                    idSubtotal.innerHTML = '';
-                    idSubtotal.appendChild(document.createTextNode(subtotalNetoFormat));
-                    idSubtotal.dataset.subtotal = subtotalNetoFinal;
-                    idSubtotal.dataset.subtotalAnteriorSub = subtotalNetoFinal;
+                    descuentoElement.value = 0;
+                    descuentoElement.dataset.precioItemAnterior = 0;
+                    descuentoElement.disabled = true;
 
-                    idTotalNeto.innerHTML = '';
-                    idTotalNeto.appendChild(document.createTextNode(totalFormat));
-                    idTotalNeto.dataset.totalNeto = totalNetoFinal;
-                    idTotalNeto.dataset.totalNetoAnterior = totalNetoFinal;
+                    impuestoElement.value = 0;
+                    impuestoElement.disabled = true;
+                    impuestoContainer.innerHTML = 'Ninguno - (0%)';
                 }
+
+                totalizar();
 
                 $.toast({
                     heading: 'Acción realizada',
@@ -1077,4 +996,97 @@ function totalizarMovimientos() {
     var elementPorCobrarNeto = document.getElementById('porCobrarNeto');
     elementPorCobrarNeto.innerHTML = '';
     elementPorCobrarNeto.appendChild(document.createTextNode(porCobrarNetoFinal));
+}
+
+/**
+* Se valida input para que solo reciba numeros decimales
+*/
+function validarInput(datos) {
+   var valor = datos.value;
+
+   // Utilizar una expresión regular para verificar si el valor es un número decimal válido
+   var regex = /^[0-9]+(\.[0-9]+)?$/;
+
+   if (regex.test(valor)) {
+       document.getElementById("resp").style.display = 'none';
+       document.getElementById("btnEnviar").style.visibility = 'visible';
+       $("#resp").html('');
+   } else {
+       document.getElementById("resp").style.color = 'red';
+       document.getElementById("resp").style.display = 'block';
+       document.getElementById("btnEnviar").style.visibility = 'hidden';
+       $("#resp").html('Por favor, ingrese solo números.');
+   }
+}
+
+/**
+* Esta funcion me calcula los totales de una factura
+*/
+function totalizar(){
+    var tabla = document.getElementById('tablaItems');
+
+    var totalPrecio = 0;
+    var totalDescuento = 0;
+    var totalImpuesto = 0;
+    for (let i = 1; i < tabla.rows.length; i++) {
+        var fila = tabla.rows[i];
+        if (fila.cells.length === 9) {
+            if (fila.classList.contains('fila-oculta')) {
+                continue;
+            }
+
+            var precio = parseFloat(fila.cells[2].querySelector('input').value);
+            var porcentajeDescuento = parseFloat(fila.cells[3].querySelector('input').value);
+            var cantidad = parseFloat(fila.cells[6].querySelector('input').value);
+            var selectImpuesto = fila.cells[4].querySelector('select');
+            var opcionSeleccionada = selectImpuesto.selectedOptions[0];
+            var impuestoValue = opcionSeleccionada.value;
+            var impuestoValor = parseFloat(opcionSeleccionada.getAttribute('data-valor-impuesto'));
+            var impuestoName = opcionSeleccionada.getAttribute('data-name-impuesto');
+
+            var precioNeto = (precio * cantidad);
+            var totalPrecio = totalPrecio + precioNeto;
+
+            var descuento = precioNeto * (porcentajeDescuento / 100)
+            var totalDescuento = totalDescuento + descuento;
+
+            if (impuestoValue > 0) {
+                var impuesto = (precioNeto - descuento) * (impuestoValor / 100);
+                var totalImpuesto = totalImpuesto + impuesto;
+            }
+        }
+    }
+
+    //SUBTOTAL NETO
+    var totalPrecioFinal = "$"+numberFormat(totalPrecio, 0, ',', '.');
+    var idSubtotal = document.getElementById('subtotal');
+    idSubtotal.innerHTML = '';
+    idSubtotal.appendChild(document.createTextNode(totalPrecioFinal));
+
+    //VALOR ADICIONAL
+    var vlrAdicional = parseFloat(document.getElementById('vlrAdicional').value);
+    var vlrAdicionalFinal = "$"+numberFormat(vlrAdicional, 0, ',', '.');
+    var idValorAdicional = document.getElementById('valorAdicional');
+    idValorAdicional.innerHTML = '';
+    idValorAdicional.appendChild(document.createTextNode(vlrAdicionalFinal));
+
+    //TOTAL DESCUENTO
+    var negativo = totalDescuento === 0 ? '' : '-';
+    var descuentoFinal = negativo+"$"+numberFormat(totalDescuento, 0, ',', '.');
+    var idDescuento = document.getElementById('valorDescuento');
+    idDescuento.innerHTML = '';
+    idDescuento.appendChild(document.createTextNode(descuentoFinal));
+
+    //IMPUESTOS
+    var impuestoFinal = "$"+numberFormat(totalImpuesto, 0, ',', '.');
+    var idImpuesto = document.getElementById('valorImpuesto');
+    idImpuesto.innerHTML = '';
+    idImpuesto.appendChild(document.createTextNode(impuestoFinal));
+    
+    //TOTAL NETO
+    var totalNeto = ((totalPrecio + vlrAdicional) - totalDescuento) + totalImpuesto;
+    var totalNetoFinal = "$"+numberFormat(totalNeto, 0, ',', '.');
+    var idTotalNeto = document.getElementById('totalNeto');
+    idTotalNeto.innerHTML = '';
+    idTotalNeto.appendChild(document.createTextNode(totalNetoFinal));
 }
