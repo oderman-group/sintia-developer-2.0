@@ -93,7 +93,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                             $datosCliente = UsuariosPadre::sesionUsuario($resultado["invoiced"]);
                                                             $cliente = UsuariosPadre::nombreCompletoDelUsuario($datosCliente);
                                                             
-                                                            $abonos = Movimientos::calcularTotalAbonadoCliente($conexion, $config, $resultado['invoiced']);
+                                                            $abonos = Movimientos::calcularTotalAbonadoCliente($conexion, $config, $resultado['invoiced'], $resultado['cod_payment']);
 
                                                             $arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
                                                             $arrayDatos = json_encode($arrayEnviar);
