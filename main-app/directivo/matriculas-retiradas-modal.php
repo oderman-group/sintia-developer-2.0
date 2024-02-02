@@ -81,7 +81,7 @@ require_once("../class/Estudiantes.php");
                     </div>
                 </div>
 
-                <input type="submit" class="btn btn-primary" value="Generar Boletin">&nbsp;
+                <input type="submit" class="btn btn-primary" value="Generar Informe">&nbsp;
             </form>
         </div>
     </div>
