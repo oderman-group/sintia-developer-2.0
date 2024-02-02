@@ -14,19 +14,39 @@ require_once("../class/UsuariosPadre.php");
 require_once("../class/servicios/GradoServicios.php");
 $Plataforma = new Plataforma;
 
-if(empty($_REQUEST["periodo"])){
-	$periodoActual = 4;
-}else{
-	$periodoActual = $_REQUEST["periodo"];
-}
-//$periodoActual=2;
-if($periodoActual==1) $periodoActuales = "Primero";
-if($periodoActual==2) $periodoActuales = "Segundo";
-if($periodoActual==3) $periodoActuales = "Tercero";
-if($periodoActual==4) $periodoActuales = "Final";
 $year=$_SESSION["bd"];
 if(isset($_POST["year"])){
-$year=$_POST["year"];
+	$year=$_POST["year"];
+}
+if(isset($_GET["year"])){
+	$year=base64_decode($_GET["year"]);
+}
+
+$periodoActual = 4;
+if(isset($_POST["periodo"])){
+	$periodoActual=$_POST["periodo"];
+}
+if(isset($_GET["periodo"])){
+	$periodoActual=base64_decode($_GET["periodo"]);
+}
+
+switch($periodoActual){
+	case 1:
+		$periodoActuales = "Primero";
+		break;
+	case 2:
+		$periodoActuales = "Segundo";
+		break;
+	case 3:
+		$periodoActuales = "Tercero";
+		break;
+	case 4:
+		$periodoActuales = "Final";
+		break;
+	case 5:
+		$periodoActual = 4;
+		$periodoActuales = "Final";
+		break;
 }
 //CONSULTA ESTUDIANTES MATRICULADOS
 $curso='';
@@ -37,8 +57,18 @@ if(isset($_GET["curso"])){
 	$curso=base64_decode($_GET["curso"]);
 }
 
-$filtro = 'AND (mat_estado_matricula=1 OR mat_estado_matricula=2)';
+$id='';
+if(isset($_POST["id"])){
+	$id=$_POST["id"];
+}
+if(isset($_GET["id"])){
+	$id=base64_decode($_GET["id"]);
+}
+
+$filtro = '';
 if(!empty($_REQUEST["curso"])){$filtro .= " AND mat_grado='".$curso."'";}
+
+if(!empty($_REQUEST["id"])){$filtro .= " AND mat_id='".$id."'";}
 
 $grupo="";
 if(!empty($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'"; $grupo=$_REQUEST["grupo"];}
@@ -46,8 +76,7 @@ if(!empty($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"].
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <?php
 
-$cursoActual=GradoServicios::consultarCurso($curso);
-$matriculadosPorCurso =Estudiantes::listarEstudiantesEnGrados($filtro,"",$cursoActual,$grupo,$year);
+$matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
 while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)){
 //contador materias
 $contPeriodos=0;
@@ -56,19 +85,18 @@ $materiasPerdidas=0;
 //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
 $usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos['mat_id'],$year);
 $numUsr=mysqli_num_rows($usr);
-if($numUsr==0)
-{
-?>
-	<script type="text/javascript">
-		window.close();
-	</script>
-<?php
+
+if ($numUsr == 0) {
+
+	$url= UsuariosPadre::verificarTipoUsuario($datosUsuarioActual['uss_tipo'],'page-info.php?idmsg=306');
+	echo '<script type="text/javascript">window.location.href="' . $url . '";</script>';
 	exit();
+
 }
 $datosUsr = mysqli_fetch_array($usr, MYSQLI_BOTH);
 $idGrado=$datosUsr["mat_grado"];
 $idGrupo=$datosUsr["mat_grupo"];
-if($cursoActual["gra_tipo"]==GRADO_INDIVIDUAL){
+if($matriculadosDatos["mat_tipo_matricula"]==GRADO_INDIVIDUAL){
 	$idGrado=$matriculadosDatos["matcur_id_curso"];
 	$idGrupo=$matriculadosDatos["matcur_id_grupo"];
 }
@@ -148,13 +176,15 @@ if($config['conf_mostrar_encabezado_informes'] == 1){
     	<td class="area" colspan="<?=$columnas;?>" style="font-size:10px; font-weight:bold;"></td>
     </tr>
 
-        <?php while($fila = mysqli_fetch_array($consultaMatAreaEst, MYSQLI_BOTH)){
+        <?php 
+		$ultimoPeriodoAreas = $config['conf_periodos_maximos'];
+		while($fila = mysqli_fetch_array($consultaMatAreaEst, MYSQLI_BOTH)){
 		
 		$condicion="1,2,3,4";
 		$condicion2="4";
 		
 //CONSULTA QUE ME TRAE EL NOMBRE Y EL PROMEDIO DEL AREA
-$consultaNotdefArea=mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre FROM ".BD_ACADEMICA.".academico_materias am
+$consultaNotdefArea=mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma, MAX(bol_periodo) AS periodo, ar_nombre FROM ".BD_ACADEMICA.".academico_materias am
 INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
 INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car.car_materia=am.mat_id AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
 INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=car.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
@@ -183,6 +213,10 @@ $numfilasNotArea=mysqli_num_rows($consultaNotdefArea);
 $totalPromedio = 0;
 if(!empty($resultadoNotArea["suma"])){
 	$totalPromedio = round($resultadoNotArea["suma"],1);
+}
+
+if (!empty($resultadoNotArea['periodo']) && $resultadoNotArea['periodo'] < $config['conf_periodos_maximos']){
+	$ultimoPeriodoAreas = $resultadoNotArea['periodo'];
 }
 
 
@@ -307,7 +341,7 @@ while($fila2=mysqli_fetch_array($consultaAMat, MYSQLI_BOTH)){
 }}//while fin areas
 
 //MEDIA TECNICA
-if (array_key_exists(10, $_SESSION["modulos"]) && $cursoActual["gra_tipo"]!=GRADO_INDIVIDUAL){
+if (array_key_exists(10, $_SESSION["modulos"]) && $matriculadosDatos["mat_tipo_matricula"]!=GRADO_INDIVIDUAL){
 	$consultaEstudianteActualMT = MediaTecnicaServicios::existeEstudianteMT($config,$year,$matriculadosDatos['mat_id']);
 	while($datosEstudianteActualMT = mysqli_fetch_array($consultaEstudianteActualMT, MYSQLI_BOTH)){
 		if(!empty($datosEstudianteActualMT)){
@@ -348,7 +382,7 @@ ORDER BY mat_id,bol_periodo
 
 
 $resultadoNotArea=mysqli_fetch_array($consultaNotdefArea, MYSQLI_BOTH);
-$numfilasNotArea=mysqli_num_rows($consultaNotdefArea);
+$numfilasNotAreaMT=mysqli_num_rows($consultaNotdefArea);
 $totalPromedio = 0;
 if(!empty($resultadoNotArea["suma"])){
 $totalPromedio = round($resultadoNotArea["suma"],1);
@@ -356,7 +390,7 @@ $totalPromedio = round($resultadoNotArea["suma"],1);
 
 
 if($totalPromedio==1)	$totalPromedio="1.0";	if($totalPromedio==2)	$totalPromedio="2.0";		if($totalPromedio==3)	$totalPromedio="3.0";	if($totalPromedio==4)	$totalPromedio="4.0";	if($totalPromedio==5)	$totalPromedio="5.0";
-if($numfilasNotArea>0){
+if($numfilasNotAreaMT>0){
 	?>
 <tr style="font-size:10px;">
 	<td style="font-size:10px; font-weight:bold;"><?php echo $resultadoNotArea["ar_nombre"];?></td> 
@@ -481,13 +515,18 @@ while($rDesempeno=mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH)){
 
 </div>
 <?php 
-if($periodoActual==4){
+$msj = "";
+if($periodoActual==4 && $numfilasNotArea > 0){
 	if($materiasPerdidas>=$config["conf_num_materias_perder_agno"]){
 		$msj = "EL (LA) ESTUDIANTE ".$nombre." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE";
 	}elseif($materiasPerdidas<$config["conf_num_materias_perder_agno"] and $materiasPerdidas>0){
 		$msj = "EL (LA) ESTUDIANTE ".$nombre." DEBE NIVELAR LAS MATERIAS PERDIDAS";
 	}else{
 		$msj = "EL (LA) ESTUDIANTE ".$nombre." FUE PROMOVIDO(A) AL GRADO SIGUIENTE";
+	}
+
+	if ($matriculadosDatos['mat_id'] == CANCELADO && $ultimoPeriodoAreas < $config["conf_periodos_maximos"]) {
+		$msj = "EL(LA) ESTUDIANTE FUE RETIRADO SIN FINALIZAR AÑO LECTIVO.";
 	}
 }
 ?>
@@ -504,7 +543,7 @@ if($periodoActual==4){
 				$rector = mysqli_fetch_array($consultaRector, MYSQLI_BOTH);
 				// $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
 				$nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
-				if(!empty($rector["uss_firma"])){
+				if(!empty($rector["uss_firma"]) && file_exists(ROOT_PATH.'/main-app/files/fotos/' . $rector['uss_firma'])){
 					echo '<img src="../files/fotos/'.$rector["uss_firma"].'" width="200"><br>';
 				}else{
 					echo '<p>&nbsp;</p>
@@ -523,7 +562,7 @@ if($periodoActual==4){
 				$secretario = mysqli_fetch_array($consultaSecretario, MYSQLI_BOTH);
 				// $secretario = Usuarios::obtenerDatosUsuario($informacion_inst["info_secretaria_academica"]);
 				$nombreScretario = UsuariosPadre::nombreCompletoDelUsuario($secretario);
-				if(!empty($secretario["uss_firma"])){
+				if(!empty($secretario["uss_firma"]) && file_exists(ROOT_PATH.'/main-app/files/fotos/' . $secretario['uss_firma'])){
 					echo '<img src="../files/fotos/'.$secretario["uss_firma"].'" width="100"><br>';
 				}else{
 					echo '<p>&nbsp;</p>

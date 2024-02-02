@@ -3,6 +3,18 @@ include("bd-conexion.php");
 include("php-funciones.php");
 require_once(ROOT_PATH."/main-app/class/Inscripciones.php");
 
+//ASPIRANTE
+$aspiranteConsulta = "SELECT * FROM ".BD_ADMISIONES.".aspirantes WHERE asp_id = :id";
+$aspirante = $pdoI->prepare($aspiranteConsulta);
+$aspirante->bindParam(':id', $_POST['solicitud'], PDO::PARAM_INT);
+$aspirante->execute();
+$datosAspirante = $aspirante->fetch();
+$datosFecha = explode("-", $datosAspirante['asp_fecha']);
+$yearAspirante = $datosFecha[0];
+$yearConsultar = $datosConfig['conf_agno'];
+if ($yearAspirante < date("Y")){
+    $yearConsultar = $yearAspirante;
+}
 
 if (!empty($_FILES['foto']['name'])) {
 	$destino = "files/fotos";
@@ -57,14 +69,13 @@ $stmt->bindParam(':lugarExp', $_POST['LugarExp'], PDO::PARAM_STR);
 $stmt->bindParam(':motivoRetiro', $_POST['motivo'], PDO::PARAM_STR);
 $stmt->bindParam(':foto', $foto, PDO::PARAM_STR);
 $stmt->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
-$stmt->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
+$stmt->bindParam(':year', $yearConsultar, PDO::PARAM_STR);
 
 $stmt->execute();
 $filasAfectadas = $stmt->rowCount();
 
 
 //Actualiza estado en aspirantes
-
 $nombreCompleto=$_POST['nombre'].' '.$_POST['primerApellidos'].' '.$_POST['segundoApellidos'];
 $aspQuery = 'UPDATE aspirantes SET asp_estado_solicitud = 4, asp_nombre = :nombre WHERE asp_id = :id';
 $asp = $pdo->prepare($aspQuery);
@@ -72,13 +83,8 @@ $asp->bindParam(':id', $_POST['solicitud'], PDO::PARAM_INT);
 $asp->bindParam(':nombre', $nombreCompleto, PDO::PARAM_STR);
 $asp->execute();
 
-
 //Documentos
-Inscripciones::actualizarDocumentos($pdoI, $datosConfig, $_FILES, $_POST);
-
-$documentos->execute();
-$filasAfectadasDoc = $documentos->rowCount();
-
+Inscripciones::actualizarDocumentos($pdoI, $datosConfig, $_FILES, $_POST, $yearConsultar);
 
 //Acudiente
 $acudienteQuery = "UPDATE ".BD_GENERAL.".usuarios SET
@@ -104,7 +110,7 @@ $acudiente->bindParam(':emailAcudiente', $_POST['emailAcudiente'], PDO::PARAM_ST
 $acudiente->bindParam(':religionAcudiente', $_POST['religionAcudiente'], PDO::PARAM_STR);
 $acudiente->bindParam(':parentescoAcudiente', $_POST['parentesco'], PDO::PARAM_STR);
 $acudiente->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
-$acudiente->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
+$acudiente->bindParam(':year', $yearConsultar, PDO::PARAM_STR);
 
 $acudiente->execute();
 $filasAfectadasAcu = $acudiente->rowCount();
@@ -135,7 +141,7 @@ $padre->bindParam(':ocupacionpadre', $_POST['ocupacionPadre'], PDO::PARAM_STR);
 $padre->bindParam(':religionpadre', $_POST['religionPadre'], PDO::PARAM_STR);
 $padre->bindParam(':tipodocpadre', $_POST['tipoDocumentoPadre'], PDO::PARAM_STR);
 $padre->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
-$padre->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
+$padre->bindParam(':year', $yearConsultar, PDO::PARAM_STR);
 
 $padre->execute();
 $filasAfectadasPad = $padre->rowCount();
@@ -167,7 +173,7 @@ $madre->bindParam(':ocupacionmadre', $_POST['ocupacionMadre'], PDO::PARAM_STR);
 $madre->bindParam(':religionmadre', $_POST['religionMadre'], PDO::PARAM_STR);
 $madre->bindParam(':tipodocmadre', $_POST['tipoDocumentoMadre'], PDO::PARAM_STR);
 $madre->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
-$madre->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
+$madre->bindParam(':year', $yearConsultar, PDO::PARAM_STR);
 
 $madre->execute();
 $filasAfectadasMad = $madre->rowCount();

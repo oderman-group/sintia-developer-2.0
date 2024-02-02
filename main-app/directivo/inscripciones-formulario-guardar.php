@@ -82,7 +82,7 @@ $asp->execute();
 
 
 //Documentos
-Inscripciones::actualizarDocumentos($conexionPDO, $config, $_FILES, $_POST);
+Inscripciones::actualizarDocumentos($conexionPDO, $config, $_FILES, $_POST, $_SESSION["bd"]);
 
 
 //Acudiente

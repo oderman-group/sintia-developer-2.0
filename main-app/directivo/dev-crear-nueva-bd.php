@@ -59,6 +59,7 @@ if(isset($_GET['nombreInsti'])){
 if(isset($_GET['siglasInst'])){
 	$datosNuevaBD['siglasInst'] = base64_decode($_GET['siglasInst']);
 }
+$datosNuevaBD['yearN'] = date("Y");
 if(isset($_GET['yearN'])){
 	$datosNuevaBD['yearN'] = base64_decode($_GET['yearN']);
 }
@@ -122,7 +123,9 @@ try{
                 document.getElementById('antigua').style.display='none';
                 
                 inputElementsNueva.forEach((input) => {
-                    input.required = true;
+                    if (input.id !== "nombre2" && input.id !== "apellido2" && input.id !== "celular"){
+                        input.required = true;
+                    }
                 });
 
                 inputElementsAntigua.forEach((input) => {
@@ -159,36 +162,26 @@ try{
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title">Crear BD Nueva</div>
+                                <div class="page-title">Crear compañía nueva</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
 							<ol class="breadcrumb page-breadcrumb pull-right">
-                                <li class="active">Crear BD Nueva</li>
+                                <li class="active">Crear compañía nueva</li>
                             </ol>
                         </div>
                     </div>
                     <div class="row">
-
-                        <div class="col-sm-3">
-                            <div class="panel animate__animated animate__pulse animate__delay-1s animate__repeat-2">
-                                <header class="panel-heading panel-heading-purple">Información importante</header>
-                                <div class="panel-body">
-                                    <b>Paso 1:</b> Ir al <a href="https://sintia.co:2083/" target="_blank">cPanel</a> y crear la BD nueva que usará en esta implementación.<br>
-                                    <b>Paso 2:</b> Asignar la BD al usuario para este ambiente. (Recuerda asignar todos los privilegios).<br>
-                                </div>
-                            </div>
-                        </div>
 						
-                        <div class="col-sm-9">
+                        <div class="col-sm-12">
                             <?php include("../../config-general/mensajes-informativos.php"); ?>
                             <div class="panel">
-                                <header class="panel-heading panel-heading-purple">Crear BD</header>
+                                <header class="panel-heading panel-heading-purple">Crear</header>
                                 <div class="panel-body">
 
 									<form name="formularioGuardar" action="crear-bd.php" method="post">
 
 										<div class="form-group row">
-											<label class="col-sm-2 control-label">Tipo Institución</label>
+											<label class="col-sm-2 control-label">Tipo</label>
 											<div class="col-sm-4">
                                                 <select class="form-control  select2" name="tipoInsti" required onchange="institucion(this)">
                                                     <option value="">Seleccione una opción</option>
@@ -201,16 +194,16 @@ try{
                                         <div id="nueva" style="display: <?=$displayNueva?>;">
                                             
                                             <hr>
-                                            <h2><b>Datos de Institución</b></h2>
+                                            <h2><b>Datos de la compañía</b></h2>
 
                                             <div class="form-group row">
-                                                <label class="col-sm-2 control-label">Nombre de la institución</label>
+                                                <label class="col-sm-2 control-label">Nombre de la compañía <span style="color: red;">(*)</span></label>
                                                 <div class="col-sm-4">
-                                                    <input type="text" name="nombreInsti" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['nombreInsti'];?>">
+                                                    <input type="text" name="nombreInsti" class="form-control" value="<?=$datosNuevaBD['nombreInsti'];?>">
                                                 </div>
                                                 
-                                                <label class="col-sm-2 control-label">Siglas de la institución
-                                                    <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Nombre corto de la institución."><i class="fa fa-question"></i></button> 
+                                                <label class="col-sm-2 control-label">Siglas de la compañía <span style="color: red;">(*)</span>
+                                                    <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Nombre corto de la compañía."><i class="fa fa-question"></i></button> 
                                                 </label>
                                                 <div class="col-sm-4">
                                                     <input type="text" name="siglasInst" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['siglasInst'];?>">
@@ -218,14 +211,14 @@ try{
                                             </div>
 
                                             <div class="form-group row">
-                                                <label class="col-sm-2 control-label">Nombre de la Base de datos <b>(SiglasBD)</b>
+                                                <label class="col-sm-2 control-label">Nombre de la Base de datos <b>(SiglasBD)</b> <span style="color: red;">(*)</span>
                                                     <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Aquí colocamos las siglas que van al intermedio del nombre de la BD ejemplo: dominio_{{SiglasBD}}_year"><i class="fa fa-question"></i></button> 
                                                 </label>
                                                 <div class="col-sm-4">
                                                     <input type="text" name="siglasBD" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['siglasBD'];?>">
                                                 </div>
                                                 
-                                                <label class="col-sm-2 control-label">Año a crear</label>
+                                                <label class="col-sm-2 control-label">Año a crear <span style="color: red;">(*)</span></label>
                                                 <div class="col-sm-4">
                                                     <input type="number" name="yearN" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['yearN'];?>">
                                                 </div>
@@ -266,7 +259,7 @@ try{
                                                 
                                                 <label class="col-sm-2 control-label">Segundo Nombre</label>
                                                 <div class="col-sm-4">
-                                                    <input type="text" name="nombre2" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['nombre2'];?>">
+                                                    <input type="text" name="nombre2" id="nombre2" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['nombre2'];?>">
                                                 </div>
                                             </div>
 
@@ -278,7 +271,7 @@ try{
                                                 
                                                 <label class="col-sm-2 control-label">Segundo Apellido</label>
                                                 <div class="col-sm-4">
-                                                    <input type="text" name="apellido2" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['apellido2'];?>">
+                                                    <input type="text" name="apellido2" id="apellido2" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['apellido2'];?>">
                                                 </div>
                                             </div>
 
@@ -290,7 +283,7 @@ try{
                                                 
                                                 <label class="col-sm-2 control-label">Celular</label>
                                                 <div class="col-sm-4">
-                                                    <input type="text" name="celular" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['celular'];?>">
+                                                    <input type="text" name="celular" id="celular" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['celular'];?>">
                                                 </div>
                                             </div>
 
@@ -299,7 +292,7 @@ try{
                                         <div id="antigua" style="display: <?=$displayAntigua?>;">
 
                                             <div class="form-group row">
-                                                <label class="col-sm-2 control-label">Institución</label>
+                                                <label class="col-sm-2 control-label">compañía  <span style="color: red;">(*)</span></label>
                                                 <div class="col-sm-3">
                                                     <select class="form-control" name="idInsti">
                                                         <option value="">Seleccione una opción</option>
@@ -313,7 +306,7 @@ try{
                                             </div>
 
                                             <div class="form-group row">
-                                                <label class="col-sm-2 control-label">Año a crear</label>
+                                                <label class="col-sm-2 control-label">Año a crear <span style="color: red;">(*)</span></label>
                                                 <div class="col-sm-3">
                                                     <input type="number" name="yearA" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['yearA'];?>">
                                                 </div>

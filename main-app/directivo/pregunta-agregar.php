@@ -78,25 +78,16 @@ $idRecurrente = Utilidades::generateCode("PRG");
                                         <label class="col-sm-2 control-label"><?=$frases[53][$datosUsuarioActual['uss_idioma']];?> <?=$frases[139][$datosUsuarioActual['uss_idioma']];?></label>
                                         <div class="col-sm-2">
                                             <select class="form-control  select2" name="tipo_pregunta" <?= $disabledPermiso; ?>>
-                                                <option value="<?=TEXT?>"><?=TEXT?></option>
-                                                <option value="<?=MULTIPLE?>"><?=MULTIPLE?></option>
-                                                <option value="<?=SINGLE?>"><?=SINGLE?></option>
+                                                <option value="<?=TEXT?>"><?=$frases[421][$datosUsuarioActual['uss_idioma']];?></option>
+                                                <option value="<?=MULTIPLE?>"><?=$frases[422][$datosUsuarioActual['uss_idioma']];?></option>
+                                                <option value="<?=SINGLE?>"><?=$frases[423][$datosUsuarioActual['uss_idioma']];?></option>
                                             </select>
                                         </div>
 
 
 
                                     </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-2 card-head" style=" border-bottom: 0px rgba(0, 0, 0, 0.2);">
-                                            <header>
-                                                <label class="switchToggle">
-                                                    <input name="obligatoria" type="checkbox"  >
-                                                    <span class="slider green round"></span>
-                                                </label>
-                                            </header>
-                                            Obligatoria
-                                        </div>
+                                    <div class="form-group row">                                        
                                         <div class="col-sm-2 card-head" style=" border-bottom: 0px rgba(0, 0, 0, 0.2);">
                                             <header>
                                                 <label class="switchToggle">
@@ -106,13 +97,22 @@ $idRecurrente = Utilidades::generateCode("PRG");
                                             </header>
                                             Visible
                                         </div>
+                                        <div class="col-sm-2 card-head" style=" border-bottom: 0px rgba(0, 0, 0, 0.2);">
+                                            <header>
+                                                <label class="switchToggle">
+                                                    <input name="obligatoria" type="checkbox"  >
+                                                    <span class="slider green round"></span>
+                                                </label>
+                                            </header>
+                                            <?=$frases[420][$datosUsuarioActual['uss_idioma']];?>
+                                        </div>
                                     </div>
                                     
                                     <div class="text-right">
                                         <a href="javascript:void(0);" name="preguntas.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i><?= $frases[184][$datosUsuarioActual['uss_idioma']]; ?></a>
                                         <?php if (Modulos::validarPermisoEdicion()) { ?>
                                             <button type="submit" class="btn  btn-info">
-                                                <i class="fa fa-save" aria-hidden="true"></i> <?= $frases[41][$datosUsuarioActual['uss_idioma']]; ?>
+                                                <i class="fa fa-save" aria-hidden="true"></i> <?= $frases[419][$datosUsuarioActual['uss_idioma']]; ?>
                                             </button>
                                         <?php } ?>
                                     </div>
