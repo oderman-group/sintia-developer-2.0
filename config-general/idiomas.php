@@ -822,6 +822,8 @@ $frases[423][$l] = 'ÚNICA';
 $frases[424][$l] = 'Cliente';
 $frases[425][$l] = 'Impuesto';
 $frases[426][$l] = 'Tarifa';
+$frases[427][$l] = 'Reportes Gráficos';
+
 //ENGLISH
 
 $l = 2;
@@ -1631,3 +1633,4 @@ $frases[423][$l] = 'SINGLE';
 $frases[424][$l] = 'Client';
 $frases[425][$l] = 'Taxe';
 $frases[426][$l] = 'Fee';
+$frases[427][$l] = 'Graphic Reports';
