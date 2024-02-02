@@ -27,11 +27,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[420][$datosUsuarioActual['uss_idioma']];?></div>
+                                <div class="page-title"><?=$frases[425][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php require_once(ROOT_PATH."/main-app/compartido/texto-manual-ayuda.php");?>
                             </div>
                             <ol class="breadcrumb page-breadcrumb pull-right">
-                                <li class="active"><?=$frases[420][$datosUsuarioActual['uss_idioma']];?></li>
+                                <li class="active"><?=$frases[425][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
@@ -44,7 +44,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                 <?php require_once(ROOT_PATH."/config-general/mensajes-informativos.php"); ?>
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
-                                            <header><?=$frases[420][$datosUsuarioActual['uss_idioma']];?></header>
+                                            <header><?=$frases[425][$datosUsuarioActual['uss_idioma']];?></header>
                                             <div class="tools">
                                                 <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
 			                                    <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
@@ -68,9 +68,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[294][$datosUsuarioActual['uss_idioma']];?> <?=$frases[420][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[294][$datosUsuarioActual['uss_idioma']];?> <?=$frases[425][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[187][$datosUsuarioActual['uss_idioma']];?></th>
-														<th><?=$frases[421][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[426][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[50][$datosUsuarioActual['uss_idioma']];?></th>
                                                         <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0297','DT0299'])){?>
                                                             <th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
