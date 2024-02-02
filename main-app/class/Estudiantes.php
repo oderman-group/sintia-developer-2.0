@@ -1060,14 +1060,20 @@ class Estudiantes {
      * 
      * @return mysqli_result $consulta
      */
-    public static function listarDatosEstudiantesretirados(mysqli $conexion, array $config, string $id)
+    public static function listarDatosEstudiantesretirados(
+        mysqli $conexion, 
+        array $config, 
+        string $id, 
+        string $yearBd    = ''
+    )
     {
 
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
         try {
             $consulta=mysqli_query($conexion, "SELECT mat_id, mat_estado_matricula, mat_documento, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2, matret_motivo, matret_fecha, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, uss_usuario FROM ".BD_ACADEMICA.".academico_matriculas mat
-            INNER JOIN (SELECT * FROM ".BD_ACADEMICA.".academico_matriculas_retiradas matret WHERE matret.institucion={$config['conf_id_institucion']} AND matret.year={$_SESSION["bd"]}) AS tabla_retiradas ON tabla_retiradas.matret_estudiante=mat.mat_id
-            INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=matret_responsable AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-            WHERE mat_id='".$id."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
+            INNER JOIN (SELECT * FROM ".BD_ACADEMICA.".academico_matriculas_retiradas matret WHERE matret.institucion={$config['conf_id_institucion']} AND matret.year={$year}) AS tabla_retiradas ON tabla_retiradas.matret_estudiante=mat.mat_id
+            INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=matret_responsable AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$year}
+            WHERE mat_id='".$id."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year}
             ORDER BY tabla_retiradas.id_nuevo DESC");
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
