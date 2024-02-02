@@ -25,8 +25,8 @@ class Movimientos {
         $totalNeto = $valorAdicional;
 
         try {
-            $consulta = mysqli_query($conexion,"SELECT SUM(ti.subtotal + (ti.subtotal * (tax.fee / 100))) AS totalItems FROM ".BD_FINANCIERA.".transaction_items ti
-            INNER JOIN ".BD_FINANCIERA.".taxes tax ON tax.id=ti.tax AND tax.institucion = {$config['conf_id_institucion']} AND tax.year = {$_SESSION["bd"]}
+            $consulta = mysqli_query($conexion,"SELECT SUM(ti.subtotal + CASE WHEN ti.tax != 0 THEN (ti.subtotal * (tax.fee / 100)) ELSE 0 END) AS totalItems FROM ".BD_FINANCIERA.".transaction_items ti
+            LEFT JOIN ".BD_FINANCIERA.".taxes tax ON tax.id=ti.tax AND tax.institucion = {$config['conf_id_institucion']} AND tax.year = {$_SESSION["bd"]}
             WHERE ti.id_transaction = '{$idTransaction}'
             AND ti.type_transaction = '{$tipo}'
             AND ti.institucion = {$config['conf_id_institucion']}
@@ -1019,10 +1019,11 @@ class Movimientos {
                 SUM(CASE WHEN fc.fcu_tipo = '2' THEN (CAST(fc.fcu_valor AS DECIMAL(10, 2)) + IFNULL(ti.totalItems, 0)) ELSE 0 END) AS totalEgresos
             FROM ".BD_FINANCIERA.".finanzas_cuentas fc
             LEFT JOIN (
-                SELECT id_transaction, SUM(price * cantity * (1 - discount / 100) * (1 + tax / 100)) AS totalItems, institucion, year
-                FROM ".BD_FINANCIERA.".transaction_items 
-                WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-                GROUP BY id_transaction
+                SELECT ti.id_transaction, SUM(ti.price * ti.cantity * (1 - ti.discount / 100) * CASE WHEN ti.tax != 0 THEN (1 + tax.fee / 100) ELSE 1 END) AS totalItems, ti.institucion, ti.year
+                FROM ".BD_FINANCIERA.".transaction_items ti 
+                LEFT JOIN ".BD_FINANCIERA.".taxes tax ON tax.id=ti.tax AND tax.institucion = {$config['conf_id_institucion']} AND tax.year = {$_SESSION["bd"]}
+                WHERE ti.institucion={$config['conf_id_institucion']} AND ti.year={$_SESSION["bd"]}
+                GROUP BY ti.id_transaction
             ) ti ON fc.fcu_id = ti.id_transaction AND ti.institucion={$config['conf_id_institucion']} AND ti.year={$_SESSION["bd"]}
             WHERE fc.institucion={$config['conf_id_institucion']} AND fc.year={$_SESSION["bd"]}
             GROUP BY mes
@@ -1052,10 +1053,11 @@ class Movimientos {
                 SUM(CASE WHEN fc.fcu_tipo = '1' AND fc.fcu_status = 'POR_COBRAR' THEN (CAST(fc.fcu_valor AS DECIMAL(10, 2)) + IFNULL(ti.totalItems, 0)) ELSE 0 END) AS totalPorCobrar
             FROM ".BD_FINANCIERA.".finanzas_cuentas fc
             LEFT JOIN (
-                SELECT id_transaction, SUM(price * cantity * (1 - discount / 100) * (1 + tax / 100)) AS totalItems, institucion, year
-                FROM ".BD_FINANCIERA.".transaction_items 
-                WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-                GROUP BY id_transaction
+                SELECT ti.id_transaction, SUM(ti.price * ti.cantity * (1 - ti.discount / 100) * CASE WHEN ti.tax != 0 THEN (1 + tax.fee / 100) ELSE 1 END) AS totalItems, ti.institucion, ti.year
+                FROM ".BD_FINANCIERA.".transaction_items ti
+                LEFT JOIN ".BD_FINANCIERA.".taxes tax ON tax.id=ti.tax AND tax.institucion = {$config['conf_id_institucion']} AND tax.year = {$_SESSION["bd"]}
+                WHERE ti.institucion={$config['conf_id_institucion']} AND ti.year={$_SESSION["bd"]}
+                GROUP BY ti.id_transaction
             ) ti ON fc.fcu_id = ti.id_transaction AND ti.institucion={$config['conf_id_institucion']} AND ti.year={$_SESSION["bd"]}
             WHERE fc.institucion={$config['conf_id_institucion']} AND fc.year={$_SESSION["bd"]}
             GROUP BY mes
