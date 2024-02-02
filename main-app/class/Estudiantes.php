@@ -143,7 +143,7 @@ class Estudiantes {
             INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car_id='".$carga."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}
             INNER JOIN ".BD_ACADEMICA.".academico_calificaciones aac ON aac.cal_id_estudiante=mat.mat_id AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]} 
             LEFT JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id=aac.cal_id_actividad and aa.act_id_carga=car_id and aa.act_periodo='".$periodo."' and aa.act_registrada=1 and aa.act_estado=1 AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$_SESSION["bd"]}
-            WHERE matcur_id_curso=car_curso AND matcur_id_grupo=car_grupo AND matcur_id_institucion={$config['conf_id_institucion']} AND matcur_years={$_SESSION["bd"]}
+            WHERE matcur_id_curso=car_curso AND matcur_id_grupo=car_grupo AND matcur_estado='".ACTIVO."' AND matcur_id_institucion={$config['conf_id_institucion']} AND matcur_years={$_SESSION["bd"]}
             GROUP BY mat.mat_id
             HAVING acumulado < ".PORCENTAJE_MINIMO_GENERAR_INFORME." OR acumulado IS NULL
             ORDER BY mat.mat_primer_apellido, mat.mat_segundo_apellido, mat.mat_nombres";
@@ -514,7 +514,7 @@ class Estudiantes {
             $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat 
             INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON mat.mat_grupo=gru.gru_id AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$year}
             INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON mat.mat_grado=gra_id AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$year} 
-            WHERE mat.mat_eliminado=0 AND mat.mat_estado_matricula=1 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year} $filtro 
+            WHERE mat.mat_eliminado=0 AND mat.mat_estado_matricula IN (".MATRICULADO.", ".ASISTENTE.", ".CANCELADO.") AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year} $filtro 
             GROUP BY mat.mat_id
             ORDER BY mat.mat_grupo, mat.mat_primer_apellido");
         } catch (Exception $e) {
@@ -599,7 +599,7 @@ class Estudiantes {
             LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=matcur_id_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
             LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=mat.mat_id_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
             LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat.mat_genero
-            WHERE matcur_id_curso='".$datosCargaActual['car_curso']."' AND matcur_id_grupo='".$datosCargaActual['car_grupo']."' AND matcur_id_institucion='".$config['conf_id_institucion']."'
+            WHERE matcur_id_curso='".$datosCargaActual['car_curso']."' AND matcur_id_grupo='".$datosCargaActual['car_grupo']."' AND matcur_estado='".ACTIVO."' AND matcur_id_institucion='".$config['conf_id_institucion']."'
             ORDER BY mat.mat_primer_apellido, mat.mat_segundo_apellido, mat.mat_nombres;
             ");
         } catch (Exception $e) {
@@ -628,7 +628,7 @@ class Estudiantes {
             LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=matcur_id_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
             LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=mat.mat_id_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
             LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat.mat_genero
-            WHERE matcur_id_curso='".$datosCargaActual['car_curso']."' AND matcur_id_grupo='".$datosCargaActual['car_grupo']."' AND matcur_id_institucion='".$config['conf_id_institucion']."'
+            WHERE matcur_id_curso='".$datosCargaActual['car_curso']."' AND matcur_id_grupo='".$datosCargaActual['car_grupo']."' AND matcur_estado='".ACTIVO."' AND matcur_id_institucion='".$config['conf_id_institucion']."'
             ORDER BY mat.mat_primer_apellido, mat.mat_segundo_apellido, mat.mat_nombres;
             ");
             $cantidad = mysqli_num_rows($consulta);
@@ -1038,8 +1038,8 @@ class Estudiantes {
         $resultado=[];
 
         try {
-            $consulta=mysqli_query($conexion, "SELECT mat_id, mat_estado_matricula, mat_documento, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2, matret_motivo, matret_fecha, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, uss_usuario FROM ".BD_ACADEMICA.".academico_matriculas mat
-            LEFT JOIN (SELECT * FROM ".BD_ACADEMICA.".academico_matriculas_retiradas matret WHERE matret.institucion={$config['conf_id_institucion']} AND matret.year={$_SESSION["bd"]} ORDER BY matret.id_nuevo DESC LIMIT 1) AS tabla_retiradas ON tabla_retiradas.matret_estudiante=mat.mat_id
+            $consulta=mysqli_query($conexion, "SELECT MAX(tabla_retiradas.id_nuevo), mat_id, mat_estado_matricula, mat_documento, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2, matret_motivo, matret_fecha, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, uss_usuario FROM ".BD_ACADEMICA.".academico_matriculas mat
+            LEFT JOIN (SELECT * FROM ".BD_ACADEMICA.".academico_matriculas_retiradas matret WHERE matret.institucion={$config['conf_id_institucion']} AND matret.year={$_SESSION["bd"]} ORDER BY matret.id_nuevo DESC) AS tabla_retiradas ON tabla_retiradas.matret_estudiante=mat.mat_id
             LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=matret_responsable AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
             WHERE mat_id='".$id."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}");
         } catch (Exception $e) {
@@ -1049,6 +1049,38 @@ class Estudiantes {
         $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
         return $resultado;
+
+    }
+
+    /**
+     * Me lista los datos de un estudiante retirado.
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $id
+     * 
+     * @return mysqli_result $consulta
+     */
+    public static function listarDatosEstudiantesretirados(
+        mysqli $conexion, 
+        array $config, 
+        string $id, 
+        string $yearBd    = ''
+    )
+    {
+
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+        try {
+            $consulta=mysqli_query($conexion, "SELECT mat_id, mat_estado_matricula, mat_documento, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2, matret_motivo, matret_fecha, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, uss_usuario FROM ".BD_ACADEMICA.".academico_matriculas mat
+            INNER JOIN (SELECT * FROM ".BD_ACADEMICA.".academico_matriculas_retiradas matret WHERE matret.institucion={$config['conf_id_institucion']} AND matret.year={$year}) AS tabla_retiradas ON tabla_retiradas.matret_estudiante=mat.mat_id
+            INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=matret_responsable AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$year}
+            WHERE mat_id='".$id."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year}
+            ORDER BY tabla_retiradas.id_nuevo DESC");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $consulta;
 
     }
 

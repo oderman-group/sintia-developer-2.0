@@ -38,7 +38,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 									$filtro = '';
 									$filtroMat = '';
 									if(isset($_GET["curso"]) AND is_numeric(base64_decode($_GET["curso"]))){$filtroMat .= " AND mat_grado='".base64_decode($_GET["curso"])."'";}
-									if(isset($_GET["resp"]) AND is_numeric($_GET["resp"])){$filtro .= " AND genc_respuesta='".$_GET["resp"]."'";}
+									if(isset($_GET["resp"]) AND is_numeric(base64_decode($_GET["resp"]))){$filtro .= " AND genc_respuesta='".base64_decode($_GET["resp"])."'";}
 									include("includes/barra-superior-reservar-cupo.php");
 								?>
 								

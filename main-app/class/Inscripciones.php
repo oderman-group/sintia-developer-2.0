@@ -31,10 +31,11 @@ class Inscripciones {
      * @param PDO $conexionPDO
      * @param array $config
      * @param string $id
+     * @param string $year
      * 
      * @return array $datos
     **/
-    public static function traerDocumentos( PDO $conexionPDO, array $config, string $id){
+    public static function traerDocumentos( PDO $conexionPDO, array $config, string $id, string $year= ""){
 
         try {
 
@@ -43,7 +44,7 @@ class Inscripciones {
             $documentos = $conexionPDO->prepare($documentosQuery);
             $documentos->bindParam(':id', $id, PDO::PARAM_STR);
             $documentos->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
-            $documentos->bindParam(':year', $config['conf_agno'], PDO::PARAM_STR);
+            $documentos->bindParam(':year', $year, PDO::PARAM_STR);
 
             if ($documentos) {
                 $documentos->execute();
@@ -66,7 +67,7 @@ class Inscripciones {
      * 
      * @return array $documentos
     **/
-    public static function actualizarDocumentos( PDO $conexionPDO, array $config, array $FILES, array $POST){
+    public static function actualizarDocumentos( PDO $conexionPDO, array $config, array $FILES, array $POST, string $year= ""){
 
         try {
 
@@ -181,7 +182,7 @@ class Inscripciones {
             $documentos->bindParam(':recomendacion', $recomendacion, PDO::PARAM_STR);
             $documentos->bindParam(':certificado', $certificado, PDO::PARAM_STR);
             $documentos->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
-            $documentos->bindParam(':year', $config['conf_agno'], PDO::PARAM_STR);
+            $documentos->bindParam(':year', $year, PDO::PARAM_STR);
 
             if ($documentos) {
                 $documentos->execute();
@@ -200,7 +201,7 @@ class Inscripciones {
      * @param array $config
      * @param string $id
      * 
-     * @return array $datos
+     * @return string $codigo
     **/
     public static function guardarDocumentos( PDO $conexionPDO, array $config, string $id){
 
@@ -214,7 +215,6 @@ class Inscripciones {
             $documentos->bindParam(':matricula', $id, PDO::PARAM_STR);
             $documentos->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
             $documentos->bindParam(':year', $config['conf_agno'], PDO::PARAM_STR);
-            $documentos->execute();
 
             if ($documentos) {
                 $documentos->execute();
@@ -232,8 +232,6 @@ class Inscripciones {
      * @param mysqli $conexion
      * @param array $config
      * @param string $id
-     * 
-     * @return array $datos
     **/
     public static function eliminarDocumentos( mysqli $conexion, array $config, string $id){
 

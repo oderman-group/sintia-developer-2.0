@@ -198,10 +198,10 @@ if(!Modulos::validarPermisoEdicion()){
                                             <div class="col-sm-10">
                                                 <select class="form-control  select2" name="nivel"  <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
-                                                    <option value="1" <?php if($resultadoCurso['gra_nivel']==1){ echo 'selected'; } ?>>Educación Precolar</option>
-                                                    <option value="2" <?php if($resultadoCurso['gra_nivel']==2){ echo 'selected'; } ?>>Educación Basica Primaria</option>
-                                                    <option value="3" <?php if($resultadoCurso['gra_nivel']==3){ echo 'selected'; } ?>>Educación Basica Secundaria</option>
-                                                    <option value="4" <?php if($resultadoCurso['gra_nivel']==4){ echo 'selected'; } ?>>Educación Media</option>
+                                                    <option value="1" <?php if($resultadoCurso['gra_nivel'] == PREESCOLAR){ echo 'selected'; } ?>>Educación Precolar</option>
+                                                    <option value="2" <?php if($resultadoCurso['gra_nivel'] == BASICA_PRIMARIA){ echo 'selected'; } ?>>Educación Basica Primaria</option>
+                                                    <option value="3" <?php if($resultadoCurso['gra_nivel'] == BASICA_SECUNDARIA){ echo 'selected'; } ?>>Educación Basica Secundaria</option>
+                                                    <option value="4" <?php if($resultadoCurso['gra_nivel'] == MEDIA){ echo 'selected'; } ?>>Educación Media</option>
                                                 </select>
                                             </div>
                                         </div>

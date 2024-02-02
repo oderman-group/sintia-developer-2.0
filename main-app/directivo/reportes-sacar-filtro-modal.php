@@ -89,7 +89,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                         include("../compartido/error-catch-to-report.php");
                     }
                     ?>
-                    <select class="form-control  select2" style="width: 100%;" name="est">
+                    <select class="form-control  select2" id="selectEstudiantesReportes" style="width: 100%;" name="est" multiple>
                         <option value="">Seleccione una opción</option>
                         <?php
                         while ($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)) {
@@ -97,6 +97,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                             <option value="<?= $datos['uss_id']; ?>"><?= UsuariosPadre::nombreCompletoDelUsuario($datos); ?></option>
                         <?php } ?>
                     </select>
+                    <span style="color: darkblue;">Seleccione solo una opción de este listado.</span>
                 </div>
             </div>
 
@@ -149,3 +150,12 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
 <!--select2-->
 <script src="../../config-general/assets/plugins/select2/js/select2.js"></script>
 <script src="../../config-general/assets/js/pages/select2/select2-init.js"></script>
+<script src="../../config-general/assets/plugins/popper/popper.js" ></script>
+
+<script>
+// Agregar el evento onchange al select
+var miSelect = document.getElementById('selectEstudiantesReportes');
+miSelect.onchange = function() {
+    limitarSeleccion(this);
+};
+</script>

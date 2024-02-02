@@ -4,7 +4,7 @@ $idPaginaInterna = 'DV0007';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
 
-//CONSULTA EXISTENCIA DE LA INSTITUCIÓN
+//CONSULTA EXISTENCIA DE LA Compañía
 try{
     $consultaInstituciones = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".instituciones WHERE ins_bd='".$bdInstitucion."' AND (SUBSTRING_INDEX(ins_years, ',', 1)<='".$year."' AND SUBSTRING_INDEX(ins_years, ',', -1)>='".$year."')");
 } catch (Exception $e) {
@@ -14,7 +14,7 @@ $numInstituciones=mysqli_num_rows($consultaInstituciones);
 $datosInstitucion=mysqli_fetch_array($consultaInstituciones, MYSQLI_BOTH);
 
 $insBD=!empty($_POST['ins_bd']) ? $_POST['ins_bd'] : "";
-$variables='?tipoInsti='.base64_encode($_POST['tipoInsti']).'&idInsti='.base64_encode($_POST['idInsti']).'&ins_bd='.base64_encode($insBD).'&yearA='.base64_encode($_POST['yearA']).'&siglasBD='.base64_encode($_POST['siglasBD']).'&nombreInsti='.base64_encode($_POST['nombreInsti']).'&siglasInst='.base64_encode($_POST['siglasInst']).'&yearN='.base64_encode($_POST['yearN']);
+$variables='?tipoInsti='.base64_encode($_POST['tipoInsti']).'&idInsti='.base64_encode($_POST['idInsti']).'&ins_bd='.base64_encode($insBD).'&yearA='.base64_encode($_POST['yearA']).'&siglasBD='.base64_encode($_POST['siglasBD']).'&nombreInsti='.base64_encode($_POST['nombreInsti']).'&siglasInst='.base64_encode($_POST['siglasInst']).'&yearN='.base64_encode($_POST['yearN']).'&nombre1='.base64_encode($_POST['nombre1']).'&nombre2='.base64_encode($_POST['nombre2']).'&apellido1='.base64_encode($_POST['apellido1']).'&apellido2='.base64_encode($_POST['apellido2']).'&tipoDoc='.base64_encode($_POST['tipoDoc']).'&documento='.base64_encode($_POST['documento']).'&email='.base64_encode($_POST['email']).'&celular='.base64_encode($_POST['celular']);
 ?>
 </head>
 
@@ -45,18 +45,18 @@ $variables='?tipoInsti='.base64_encode($_POST['tipoInsti']).'&idInsti='.base64_e
                                     if(empty($_POST["confirmacion"]) || $_POST["confirmacion"]!=1){
 
                                         $msgConfirmacion="
-                                            Usted esta creando una institución nueva para el año <b>$year</b> con los siguientes datos:<br><br>
-                                            Tipo De Institución:      <b>Nueva</b>.<br>
-                                            Nombre De La Institución: <b>".$_POST['nombreInsti']."</b>.<br>
-                                            Siglas De La Institución: <b>".$_POST['siglasInst']."</b>.<br>
+                                            Usted esta creando una Compañía nueva para el año <b>$year</b> con los siguientes datos:<br><br>
+                                            Tipo De Compañía:      <b>Nueva</b>.<br>
+                                            Nombre De La Compañía: <b>".$_POST['nombreInsti']."</b>.<br>
+                                            Siglas De La Compañía: <b>".$_POST['siglasInst']."</b>.<br>
                                             Año a crear:              <b>".$year."</b>.
                                         ";
                                         if($nueva==0){
                                             $msgConfirmacion="
-                                                Usted está renovando una institución para el año <b>$year</b> con los siguientes datos:<br><br>
-                                                Tipo De Institución:      <b>Antigua</b>.<br>
+                                                Usted está renovando una Compañía para el año <b>$year</b> con los siguientes datos:<br><br>
+                                                Tipo De Compañía:      <b>Antigua</b>.<br>
                                                 ID:                       <b>$idInsti</b>.<br>
-                                                Nombre De La Institución: <b>".$datosInsti['ins_nombre']."</b>.<br>
+                                                Nombre De La Compañía: <b>".$datosInsti['ins_nombre']."</b>.<br>
                                                 Año a crear:              <b>".$year."</b>.
                                             ";
                                         }
@@ -78,6 +78,14 @@ $variables='?tipoInsti='.base64_encode($_POST['tipoInsti']).'&idInsti='.base64_e
                                                 <input type="hidden" name="nombreInsti" value="<?=$_POST['nombreInsti'];?>">
                                                 <input type="hidden" name="siglasInst" value="<?=$_POST['siglasInst'];?>">
                                                 <input type="hidden" name="yearN" value="<?=$_POST['yearN'];?>">
+                                                <input type="hidden" name="nombre1" value="<?=$_POST['nombre1'];?>">
+                                                <input type="hidden" name="nombre2" value="<?=$_POST['nombre2'];?>">
+                                                <input type="hidden" name="apellido1" value="<?=$_POST['apellido1'];?>">
+                                                <input type="hidden" name="apellido2" value="<?=$_POST['apellido2'];?>">
+                                                <input type="hidden" name="tipoDoc" value="<?=$_POST['tipoDoc'];?>">
+                                                <input type="hidden" name="documento" value="<?=$_POST['documento'];?>">
+                                                <input type="hidden" name="email" value="<?=$_POST['email'];?>">
+                                                <input type="hidden" name="celular" value="<?=$_POST['celular'];?>">
                                                 <input type="hidden" name="confirmacion" value="1">
 
                                                 <a href="javascript:void(0);" name="dev-crear-nueva-bd.php<?=$variables;?>" class="btn btn-secondary" onclick="deseaRegresar(this)"><i class="fa fa-long-arrow-left" aria-hidden="true"></i>Regresar</a>
@@ -102,7 +110,7 @@ $variables='?tipoInsti='.base64_encode($_POST['tipoInsti']).'&idInsti='.base64_e
                                         if($numInstituciones>0){
                                             $boton='';
                                             $texto="
-                                                Ya existe en nuestro sistema <b>$numInstituciones</b> institución con el año <b>$year</b>.<br>
+                                                Ya existe en nuestro sistema <b>$numInstituciones</b> Compañía con el año <b>$year</b>.<br>
                                                 Por favor, confirmar los datos ingresados para poder continuar.
                                             ";
                                         }
@@ -121,6 +129,14 @@ $variables='?tipoInsti='.base64_encode($_POST['tipoInsti']).'&idInsti='.base64_e
                                                 <input type="hidden" name="nombreInsti" value="<?=$_POST['nombreInsti'];?>">
                                                 <input type="hidden" name="siglasInst" value="<?=$_POST['siglasInst'];?>">
                                                 <input type="hidden" name="yearN" value="<?=$_POST['yearN'];?>">
+                                                <input type="hidden" name="nombre1" value="<?=$_POST['nombre1'];?>">
+                                                <input type="hidden" name="nombre2" value="<?=$_POST['nombre2'];?>">
+                                                <input type="hidden" name="apellido1" value="<?=$_POST['apellido1'];?>">
+                                                <input type="hidden" name="apellido2" value="<?=$_POST['apellido2'];?>">
+                                                <input type="hidden" name="tipoDoc" value="<?=$_POST['tipoDoc'];?>">
+                                                <input type="hidden" name="documento" value="<?=$_POST['documento'];?>">
+                                                <input type="hidden" name="email" value="<?=$_POST['email'];?>">
+                                                <input type="hidden" name="celular" value="<?=$_POST['celular'];?>">
                                                 <input type="hidden" name="continue" value="1">
 
                                                 <a href="javascript:void(0);" name="dev-crear-nueva-bd.php<?=$variables;?>" class="btn btn-secondary" onclick="deseaRegresar(this)"><i class="fa fa-long-arrow-left" aria-hidden="true"></i>Regresar</a>

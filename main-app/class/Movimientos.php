@@ -25,7 +25,8 @@ class Movimientos {
         $totalNeto = $valorAdicional;
 
         try {
-            $consulta = mysqli_query($conexion,"SELECT SUM(ti.subtotal) AS totalItems FROM ".BD_FINANCIERA.".transaction_items ti
+            $consulta = mysqli_query($conexion,"SELECT SUM(ti.subtotal + (ti.subtotal * (tax.fee / 100))) AS totalItems FROM ".BD_FINANCIERA.".transaction_items ti
+            INNER JOIN ".BD_FINANCIERA.".taxes tax ON tax.id=ti.tax AND tax.institucion = {$config['conf_id_institucion']} AND tax.year = {$_SESSION["bd"]}
             WHERE ti.id_transaction = '{$idTransaction}'
             AND ti.type_transaction = '{$tipo}'
             AND ti.institucion = {$config['conf_id_institucion']}
@@ -59,9 +60,9 @@ class Movimientos {
     )
     {
         try {
-            $consulta = mysqli_query($conexion, "SELECT ti.id AS idtx, i.id AS idit, i.name, i.price AS priceItem, ti.price AS priceTransaction, ti.cantity, ti.subtotal, ti.description
+            $consulta = mysqli_query($conexion, "SELECT ti.id AS idtx, i.id AS idit, i.name, i.price AS priceItem, ti.price AS priceTransaction, ti.cantity, ti.subtotal, ti.description, ti.discount, ti.tax
             FROM ".BD_FINANCIERA.".transaction_items ti
-            INNER JOIN ".BD_FINANCIERA.".items i ON i.id = ti.id_item
+            INNER JOIN ".BD_FINANCIERA.".items i ON i.id = ti.id_item AND i.institucion = {$config['conf_id_institucion']} AND i.year = {$_SESSION["bd"]}
             WHERE ti.id_transaction = '{$idTransaction}'
             AND ti.type_transaction = '{$tipo}'
             AND ti.institucion = {$config['conf_id_institucion']}
@@ -282,13 +283,13 @@ class Movimientos {
             $destino = ROOT_PATH.'/main-app/files/comprobantes';
             $explode = explode(".", $FILES['comprobante']['name']);
             $extension = end($explode);
-            $comprobante= uniqid('abono_'.$POST["idFactura"].'_') . "." . $extension;
+            $comprobante= uniqid('abono_'.$POST["cliente"].'_') . "." . $extension;
             @unlink($destino . "/" . $comprobante);
             move_uploaded_file($FILES['comprobante']['tmp_name'], $destino . "/" . $comprobante);
         }
 
         try {
-            mysqli_query($conexion, "INSERT INTO ".BD_FINANCIERA.".payments (responsible_user, invoiced, payment, payment_method, observation, voucher, note, institucion, year)VALUES({$_SESSION["id"]}, '".$POST["idFactura"]."', ".$POST["valor"].", '".$POST["metodoPago"]."', '".$POST["obser"]."', '".$comprobante."', '".$POST["notas"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
+            mysqli_query($conexion, "INSERT INTO ".BD_FINANCIERA.".payments (responsible_user, invoiced, cod_payment, type_payments, payment_method, observation, voucher, note, institucion, year)VALUES({$_SESSION["id"]}, '".$POST["cliente"]."', '".$POST["codigoUnico"]."', '".$POST["tipoTransaccion"]."', '".$POST["metodoPago"]."', '".$POST["obser"]."', '".$comprobante."', '".$POST["notas"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
@@ -345,7 +346,7 @@ class Movimientos {
             $destino = ROOT_PATH.'/main-app/files/comprobantes';
             $explode = explode(".", $FILES['comprobante']['name']);
             $extension = end($explode);
-            $comprobante= uniqid('abono_'.$POST["idFactura"].'_') . "." . $extension;
+            $comprobante= uniqid('abono_'.$POST["cliente"].'_') . "." . $extension;
             @unlink($destino . "/" . $comprobante);
             move_uploaded_file($FILES['comprobante']['tmp_name'], $destino . "/" . $comprobante);
         
@@ -357,7 +358,7 @@ class Movimientos {
         }
 
         try {
-            mysqli_query($conexion, "UPDATE ".BD_FINANCIERA.".payments SET invoiced='".$POST["idFactura"]."', payment=".$POST["valor"].", payment_method='".$POST["metodoPago"]."', observation='".$POST["obser"]."', note='".$POST["notas"]."' WHERE id='".$POST["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            mysqli_query($conexion, "UPDATE ".BD_FINANCIERA.".payments SET invoiced='".$POST["cliente"]."', payment_method='".$POST["metodoPago"]."', observation='".$POST["obser"]."', note='".$POST["notas"]."' WHERE id='".$POST["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
@@ -711,7 +712,7 @@ class Movimientos {
                 $idItems=Utilidades::generateCode("TXI_");
 
                 try {
-                    mysqli_query($conexion, "INSERT INTO ".BD_FINANCIERA.".transaction_items(id, id_transaction, type_transaction, discount, cantity, subtotal, id_item, institucion, year, description, price)VALUES('".$idItems."', '" .$idFactura . "', 'INVOICE', '".$fila['discount']."', '".$fila['cantity']."', '".$fila['subtotal']."', '".$fila['id_item']."', {$fila['institucion']}, '{$fila['year']}', '".$fila['description']."', '".$fila['price']."')");
+                    mysqli_query($conexion, "INSERT INTO ".BD_FINANCIERA.".transaction_items(id, id_transaction, type_transaction, discount, cantity, subtotal, id_item, institucion, year, description, price, tax)VALUES('".$idItems."', '" .$idFactura . "', 'INVOICE', '".$fila['discount']."', '".$fila['cantity']."', '".$fila['subtotal']."', '".$fila['id_item']."', {$fila['institucion']}, '{$fila['year']}', '".$fila['description']."', '".$fila['price']."', '".$fila['tax']."')");
                 } catch (Exception $e) {
                     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
                 }
@@ -736,8 +737,9 @@ class Movimientos {
     )
     {
         try {
-            $consulta = mysqli_query($conexion, "SELECT SUM(payment) as totalAbono FROM ".BD_FINANCIERA.".payments
-            WHERE invoiced='{$factura}' AND is_deleted=0 AND institucion = {$config['conf_id_institucion']} AND year = {$_SESSION["bd"]}");
+            $consulta = mysqli_query($conexion, "SELECT SUM(pi.payment) as totalAbono FROM ".BD_FINANCIERA.".payments_invoiced pi
+            INNER JOIN ".BD_FINANCIERA.".payments p ON p.cod_payment=pi.payments AND p.institucion = {$config['conf_id_institucion']} AND p.year = {$_SESSION["bd"]}
+            WHERE pi.invoiced='{$factura}' AND p.is_deleted=0 AND pi.institucion = {$config['conf_id_institucion']} AND pi.year = {$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
@@ -749,6 +751,200 @@ class Movimientos {
         }
 
         return $total;
+    }
+
+    /**
+     * Este metodo me trae las facturas de un usuario para listar
+     * @param mysqli            $conexion
+     * @param array             $config
+     * @param string            $filtro || OPCIONAL
+     * 
+     * @return mysqli_result    $consulta
+    **/
+    public static function listarFacturas (
+        mysqli  $conexion, 
+        array   $config, 
+        string   $filtro = ""
+    )
+    {
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas
+            WHERE fcu_anulado=0 {$filtro} AND fcu_status='".POR_COBRAR."' AND institucion = {$config['conf_id_institucion']} AND year = {$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        return $consulta;
+    }
+
+    /**
+     * Este metodo me calcula el total de Abonos a un cliente
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $cliente
+     * @param string $codAbono
+     * 
+     * @return float $total
+    **/
+    public static function calcularTotalAbonadoCliente (
+        mysqli $conexion, 
+        array $config,
+        string $cliente,
+        string $codAbono
+    )
+    {
+        try {
+            $consulta = mysqli_query($conexion, "SELECT SUM(pi.payment) as totalAbono FROM ".BD_FINANCIERA.".payments p
+            INNER JOIN ".BD_FINANCIERA.".payments_invoiced pi ON p.cod_payment=pi.payments AND pi.institucion = {$config['conf_id_institucion']} AND pi.year = {$_SESSION["bd"]}
+            WHERE p.invoiced='{$cliente}' AND pi.payments='{$codAbono}' AND p.is_deleted=0 AND p.institucion = {$config['conf_id_institucion']} AND p.year = {$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        
+        $total = 0;
+        if (mysqli_num_rows($consulta) > 0){
+            $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+            $total = $resultado['totalAbono'];
+        }
+
+        return $total;
+    }
+
+    /**
+     * Este metodo me trae las facturas de un usuario para listar
+     * @param mysqli            $conexion
+     * @param array             $config
+     * @param string            $codAbono
+     * 
+     * @return mysqli_result    $consulta
+    **/
+    public static function listarConceptos (
+        mysqli  $conexion, 
+        array   $config, 
+        string   $codAbono
+    )
+    {
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".payments_invoiced
+            WHERE payments='{$codAbono}' AND institucion = {$config['conf_id_institucion']} AND year = {$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        return $consulta;
+    }
+
+    /**
+    * Este metodo me trae todos los impuestos
+    * @param mysqli $conexion
+    * @param array $config
+    * 
+    * @return mysqli_result $consulta
+   **/
+    public static function listarImpuestos (
+        mysqli $conexion, 
+        array $config
+    )
+    {
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".taxes tax
+            WHERE is_deleted=0 AND tax.institucion = {$config['conf_id_institucion']} AND tax.year = {$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        return $consulta;
+    }
+
+    /**
+     * Este metodo me guarda un impuesto
+     * @param mysqli $conexion
+     * @param array $config
+     * @param array $POST
+     * 
+     * @return string $codigo
+    **/
+    public static function guardarImpuestos (
+        mysqli $conexion, 
+        array $config, 
+        array $POST
+    )
+    {
+
+        try {
+            mysqli_query($conexion, "INSERT INTO ".BD_FINANCIERA.".taxes (type_tax, name, fee, description, institucion, year)VALUES('".$POST["typeTax"]."', '".$POST["name"]."', '".$POST["fee"]."', '".$POST["description"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        $idRegistro = mysqli_insert_id($conexion);
+
+        return $idRegistro;
+    }
+
+    /**
+     * Este metodo me trae la informacion de un impuesto
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idImpuesto
+     * 
+     * @return array $resultado
+    **/
+    public static function traerDatosImpuestos (
+        mysqli $conexion, 
+        array $config,
+        string $idImpuesto
+    )
+    {
+        $resultado = [];
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".taxes tax
+            WHERE id='{$idImpuesto}' AND tax.institucion = {$config['conf_id_institucion']} AND tax.year = {$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+
+        return $resultado;
+    }
+
+    /**
+     * Este metodo me actualiza un impuesto
+     * @param mysqli $conexion
+     * @param array $config
+     * @param array $POST
+    **/
+    public static function actualizarImpuestos (
+        mysqli $conexion, 
+        array $config, 
+        array $POST
+    )
+    {
+
+        try {
+            mysqli_query($conexion, "UPDATE ".BD_FINANCIERA.".taxes SET type_tax='".$POST["typeTax"]."', name='".$POST["name"]."', fee='".$POST["fee"]."', description='".$POST["description"]."' WHERE id='".$POST["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+    }
+
+    /**
+     * Este metodo me actualiza un impuesto
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idImpuesto
+    **/
+    public static function eliminarImpuestos (
+        mysqli $conexion, 
+        array $config, 
+        string $idImpuesto
+    )
+    {
+
+        try {
+            mysqli_query($conexion, "UPDATE ".BD_FINANCIERA.".taxes SET is_deleted=1 WHERE id='{$idImpuesto}' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
     }
 
 }

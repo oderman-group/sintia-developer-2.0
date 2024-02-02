@@ -6,7 +6,6 @@
                             </div>
                             <ol class="breadcrumb page-breadcrumb pull-right">
 								<?php if($datosUsuarioActual['uss_tipo']==TIPO_ESTUDIANTE){?>
-                                	<li><a class="parent-item" href="cronograma.php"><?=$frases[111][$datosUsuarioActual['uss_idioma']];?></a>&nbsp;<i class="fa fa-angle-right"></i></li>
                                 	<li class="active"><?=$frases[245][$datosUsuarioActual['uss_idioma']];?></li>
 								<?php }?>
 								
