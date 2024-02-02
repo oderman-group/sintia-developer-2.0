@@ -167,19 +167,14 @@
 							<?php 
 							//MÓDULO FINANCIERO
 							if(!empty($arregloModulos) && array_key_exists(2, $arregloModulos)){
-								if(Modulos::validarSubRol(["DT0104", "DT0258", "DT0264", "DT0273", "DT0275"])){
+								if(Modulos::validarSubRol(["DT0104", "DT0258", "DT0264", "DT0273", "DT0275", "DT0294"])){
 							?>
-								<li <?php agregarClass(MENU_PADRE,["DT0104", "DT0106", "DT0128", "DT0105", "DT0258", "DT0259", "DT0261", "DT0264", "DT0265", "DT0267", "DT0273", "DT0275", "DT0276", "DT0278"]) ?>>
+								<li <?php agregarClass(MENU_PADRE,["DT0104", "DT0106", "DT0128", "DT0105", "DT0258", "DT0259", "DT0261", "DT0264", "DT0265", "DT0267", "DT0273", "DT0275", "DT0276", "DT0278", "DT0294", "DT0295", "DT0297"]) ?>>
 									<a href="#" class="nav-link nav-toggle"> <i class="fa fa-money"></i>
 										<span class="title"><?=$frases[89][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 									</a>
-									<ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0104", "DT0106", "DT0128", "DT0105", "DT0258", "DT0259", "DT0261", "DT0264", "DT0265", "DT0267", "DT0273", "DT0275", "DT0276", "DT0278"]) ?>>
+									<ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0104", "DT0106", "DT0128", "DT0105", "DT0258", "DT0259", "DT0261", "DT0264", "DT0265", "DT0267", "DT0273", "DT0275", "DT0276", "DT0278", "DT0294", "DT0295", "DT0297"]) ?>>
 										<?php
-											if(Modulos::validarSubRol(["DT0273"])){
-										?>
-											<li <?php agregarClass(MENU,["DT0273"]) ?>><a href="configuracion-finanzas.php" class="nav-link "> <span class="title"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?></span></a></li>
-										<?php
-											}
 											if(Modulos::validarSubRol(["DT0104"])){
 										?>
 											<li <?php agregarClass(MENU,["DT0104", "DT0106", "DT0128", "DT0105"]) ?>><a href="movimientos.php" class="nav-link "> <span class="title"><?=$frases[95][$datosUsuarioActual['uss_idioma']];?></span></a></li>
@@ -190,14 +185,29 @@
 											<li <?php agregarClass(MENU,["DT0275", "DT0276", "DT0278"]) ?>><a href="factura-recurrente.php" class="nav-link "> <span class="title"><?=$frases[415][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 										<?php 
 											}
+											if(Modulos::validarSubRol(["DT0264"])){ 
+										?>
+											<li <?php agregarClass(MENU,["DT0264", "DT0265", "DT0267"]) ?>><a href="abonos.php" class="nav-link "> <span class="title"><?=$frases[413][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<?php 
+											}
 											if(Modulos::validarSubRol(["DT0258"])){ 
 										?>
 											<li <?php agregarClass(MENU,["DT0258", "DT0259", "DT0261"]) ?>><a href="items.php" class="nav-link "> <span class="title">Items</span></a></li>
 										<?php 
 											}
-											if(Modulos::validarSubRol(["DT0264"])){ 
+											if(Modulos::validarSubRol(["DT0294"])){ 
 										?>
-											<li <?php agregarClass(MENU,["DT0264", "DT0265", "DT0267"]) ?>><a href="abonos.php" class="nav-link "> <span class="title"><?=$frases[413][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+											<li <?php agregarClass(MENU,["DT0294", "DT0295", "DT0297"]) ?>><a href="impuestos.php" class="nav-link "> <span class="title"><?=$frases[425][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<?php
+											}
+											if(Modulos::validarSubRol(["DT0273"])){
+										?>
+											<li <?php agregarClass(MENU,["DT0273"]) ?>><a href="configuracion-finanzas.php" class="nav-link "> <span class="title"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<?php 
+											}
+											if(Modulos::validarSubRol(["DT0305"])){
+										?>
+											<li <?php agregarClass(MENU,["DT0305"]) ?>><a href="moviminetos-reportes-graficos.php" class="nav-link "> <span class="title"><?=$frases[427][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 										<?php }?>
 									</ul>
 								</li>
@@ -358,7 +368,7 @@
 									</a>
 									<ul  class="sub-menu" <?php agregarClass(SUB_MENU,["DV0038","DV0039", "DV0074", "DV0075", "DV0002"])?>>
 										<li <?php agregarClass(MENU,["DV0074", "DV0075", "DV0002"]) ?>><a href="dev-scripts.php" class="nav-link"> <span class="title">scripts SQL</span></a></li>
-										<li class="nav-item"><a href="dev-crear-nueva-bd.php" class="nav-link"> <span class="title"><?=$frases[397][$datosUsuarioActual['uss_idioma']];?> BD</span></a></li>
+										<li class="nav-item"><a href="dev-crear-nueva-bd.php" class="nav-link"> <span class="title"><?=$frases[397][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 										<li class="nav-item"><a href="dev-errores-sistema.php" class="nav-link"> <span class="title"><?=$frases[398][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 										<li class="nav-item"><a href="dev-console.php" class="nav-link"> <span class="title">Console</span></a></li>
 										<li class="nav-item"><a href="dev-historial-acciones.php" class="nav-link"> <span class="title"><?=$frases[400][$datosUsuarioActual['uss_idioma']];?></span></a></li>

@@ -173,6 +173,7 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                             <select class="form-control  select2" id="tipoCertificado" name="certificado" onchange="cambiarTipo()" <?=$disabledPermiso;?>>
                                 <option value="1" <?php if($datosConfiguracion['conf_certificado']==1){ echo "selected";} ?>>Certificado 1</option>
                                 <option value="2" <?php if($datosConfiguracion['conf_certificado']==2){ echo "selected";} ?>>Certificado 2</option>
+                                <option value="3" <?php if($datosConfiguracion['conf_certificado']==3){ echo "selected";} ?>>Certificado 3</option>
                             </select>
                         </div>
                         <button type="button" titlee="Ver formato certificado" class="btn btn-sm" data-toggle="popover" ><i class="fa fa-eye"></i></button>
@@ -194,6 +195,50 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                                     var lbl_tipo = document.getElementById('lbl_tipo');
                                     imagen_boletin.src ="../files/images/certificados/tipo"+valor.value+".png";
                                     lbl_tipo.textContent='Estilo Certificado '+valor.value;
+                                    }
+                                }
+                        </script>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 control-label">Estampilla de pago en certificados
+                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta opción permite agregar un referente o estampilla de pago a los certificados."><i class="fa fa-question"></i></button> 
+                        </label>
+                        <div class="col-sm-2">
+                            <select class="form-control  select2" name="estampilla" <?=$disabledPermiso;?>>
+                                <option value="<?=SI?>" <?php if($datosConfiguracion['conf_estampilla_certificados'] == SI){ echo "selected";} ?>>SI</option>
+                                <option value="<?=NO?>" <?php if($datosConfiguracion['conf_estampilla_certificados'] == NO){ echo "selected";} ?>>NO</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 control-label">Estilo de Libro Final</label>
+                        <div class="col-sm-2">
+                            <select class="form-control  select2" id="tipoLibroFinal" name="libroFinal" onchange="cambiarTipoLibro()" <?=$disabledPermiso;?>>
+                                <option value="1" <?php if($datosConfiguracion['conf_libro_final']==1){ echo "selected";} ?>>Formato libro final 1</option>
+                                <option value="2" <?php if($datosConfiguracion['conf_libro_final']==2){ echo "selected";} ?>>Formato libro final 2</option>
+                            </select>
+                        </div>
+                        <button type="button" titlee="Ver formato libro final" class="btn btn-sm" data-toggle="popover_2" ><i class="fa fa-eye"></i></button>
+                        <script>
+                                $(document).ready(function(){
+                                $('[data-toggle="popover_2"]').popover({
+                                    html: true, // Habilitar contenido HTML
+                                    content: function () {
+                                        valor = document.getElementById("tipoLibroFinal");
+                                    return '<div id="myPopover" class="popover-content"><label id="lbl_tipo_libro">Estilo libro final '+valor.value+'</label>'+
+                                    '<img id="img-libro" src="../files/images/libros/tipo'+valor.value+'.png" class="w-100" />'+                                                       
+                                    '</div>';}
+                                    });                                                    
+                                });
+                                function cambiarTipoLibro(){  
+                                    var imagen_libro = document.getElementById('img-libro'); 
+                                    if(imagen_libro){                                                     
+                                    var valor = document.getElementById("tipoLibroFinal");  
+                                    var lbl_tipo_libro = document.getElementById('lbl_tipo_libro');
+                                    imagen_libro.src ="../files/images/libros/tipo"+valor.value+".png";
+                                    lbl_tipo_libro.textContent='Estilo libro final '+valor.value;
                                     }
                                 }
                         </script>

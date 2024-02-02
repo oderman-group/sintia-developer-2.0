@@ -20,7 +20,7 @@ $colorBoton = 'success';
 $readonly = "readonly";
 $tituloFormulario = 'Restaurar Estudiante';
 
-if ($e['mat_estado_matricula'] == 1) {
+if ($e['mat_estado_matricula'] == MATRICULADO || $e['mat_estado_matricula'] == ASISTENTE || $e['mat_estado_matricula'] == NO_MATRICULADO || $e['mat_estado_matricula'] == EN_INSCRIPCION) {
     $nombreBoton = 'Retirar y cancelar matrícula';
     $colorBoton = 'danger';
     $readonly = "";
@@ -90,7 +90,7 @@ if ($e['mat_estado_matricula'] == 1) {
                 </div>
             <?php } ?>
 
-            <?php if ($e['mat_estado_matricula'] == 1 || !empty($e['matret_fecha'])) { ?>
+            <?php if ($e['mat_estado_matricula'] == MATRICULADO || $e['mat_estado_matricula'] == ASISTENTE || $e['mat_estado_matricula'] == NO_MATRICULADO || $e['mat_estado_matricula'] == EN_INSCRIPCION || !empty($e['matret_fecha'])) { ?>
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Motivo de retiro</label>
                     <div class="col-sm-10">
@@ -102,6 +102,24 @@ if ($e['mat_estado_matricula'] == 1) {
             <input type="submit" class="btn btn-<?= $colorBoton; ?>" value="<?= $nombreBoton; ?>" name="consultas">
 
         </form>
+        <p>&nbsp;</p>
+        <div class="form-group row" style="margin-left: 20px;">
+            <?php
+                $consultaHistorial = Estudiantes::listarDatosEstudiantesretirados($conexion, $config, $id);
+                $numHistorial = mysqli_num_rows($consultaHistorial);
+                if ($numHistorial > 0) {
+                    $cont = 1;
+                    echo "<span style='font-weight:bold;'>Historial de retiro:</span><br><br>";
+                    while ($datosHistorial = mysqli_fetch_array($consultaHistorial)){
+                        $motivo = str_replace(['<p>', '</p>'], '', $datosHistorial['matret_motivo']);
+                        
+                        echo $cont.") Fecha: ".$datosHistorial['matret_fecha']." Motivo: ".$motivo." Responsable: ".UsuariosPadre::nombreCompletoDelUsuario($datosHistorial)."<br>";
+
+                        $cont ++;
+                    }
+                }
+            ?>
+        </div>
     </div>
   
     </body>

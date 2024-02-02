@@ -464,7 +464,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
             INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car_curso=matcur_id_curso AND car_grupo=matcur_id_grupo AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
             INNER JOIN ".BD_ACADEMICA.".academico_materias am ON mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
             INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar_id= mat_area AND ar.institucion={$config['conf_id_institucion']} AND ar.year={$year}
-            WHERE matcur_id_matricula='".$matriculadosDatos['mat_id']."' AND matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_years='".$year."'
+            WHERE matcur_id_matricula='".$matriculadosDatos['mat_id']."' AND matcur_estado='".ACTIVO."' AND matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_years='".$year."'
             GROUP BY ar_id ORDER BY ar_posicion ASC;");
             $numMediaTecnica=mysqli_num_rows($consultaMediaTecnica);
             if ((array_key_exists(10, $_SESSION["modulos"])) && $numMediaTecnica>0){

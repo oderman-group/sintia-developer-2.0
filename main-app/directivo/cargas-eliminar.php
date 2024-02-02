@@ -30,20 +30,12 @@ try{
 	include("../compartido/error-catch-to-report.php");
 }
 
-$data = [
-	'usuario_email'    => 'info@oderman-group.com',
-	'usuario_nombre'   => 'Jhon Oderman',
-	'usuario2_email'   => $datosUsuarioActual['uss_email'],
-	'usuario2_nombre'  => $datosUsuarioActual['uss_nombre'],
-	'institucion_id'   => $config['conf_id_institucion'],
-	'institucion_agno' => $_SESSION["bd"],
-	'usuario_id'       => $_SESSION["id"],
-	'contenido_msj'    => $contenidoMsg
-];
-$asunto = 'Se eliminó la carga académica - COD: '.base64_decode($_GET["id"]);
-$bodyTemplateRoute = ROOT_PATH.'/config-general/plantilla-email-2.php';
 
-EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute, null, null);
+try {
+	mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".seguridad_historial_registros_borrados(hrb_id_institucion, hrb_year, hrb_id_registro, hrb_responsable, hrb_referencia)VALUES('".$config['conf_id_institucion']."', '".$_SESSION["bd"]."', '".base64_decode($_GET["id"])."', '".$_SESSION["id"]."', 'CARGA_ACADEMICA')");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
 
 include("../compartido/guardar-historial-acciones.php");
 
