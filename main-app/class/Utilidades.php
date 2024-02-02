@@ -1,6 +1,8 @@
 <?php
 class Utilidades {
 
+    private static $codigoTemporal;
+
     /**
      * Obtiene una representación de cadena de un valor.
      *
@@ -58,11 +60,45 @@ class Utilidades {
     {
         $key = "";
         $pattern = "1234567890";
-        $max = strlen($pattern)-1;
-        for($i = 0; $i < 2; $i++){
-            $key .= substr($pattern, mt_rand(0,$max), 1);
-        }
-        $code=$index.$key.strtotime("now");
+        $max = strlen($pattern) - 1;
+
+        // Intentar generar un código único
+        do {
+
+            $key = "";
+            for ($i = 0; $i < 2; $i++) {
+
+                $key .= substr($pattern, mt_rand(0, $max), 1);
+
+            }
+
+            $code = $index . $key . microtime(true);
+            $code = str_replace(['.', ' '], '', $code); // Eliminar punto decimal y espacios
+
+        } while (self::codeExists($code)); // Verificar si el código ya existe
+
+        // Almacenar el código temporalmente
+        self::$codigoTemporal = $code;
+
         return $code;
+    }
+
+    /**
+     * Verifica si el código ya se genero anteriormente.
+     *
+     * @param string $code El código a verificar.
+     * @return bool true si el código ya existe, false en caso contrario.
+     */
+    private static function codeExists($code)
+    {
+        // Verificar si el código existe en la variable temporal
+        if ($code === self::$codigoTemporal) {
+
+            return true;
+
+        }
+
+        // Ejemplo: devuelve siempre false, ajusta según tus necesidades.
+        return false;
     }
 }

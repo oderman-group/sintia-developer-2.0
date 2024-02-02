@@ -109,7 +109,7 @@ $codigoUnico=Utilidades::generateCode("ABO");
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[414][$datosUsuarioActual['uss_idioma']];?></label>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
                                                 <select class="form-control select2" id="metodoPago" name="metodoPago" required <?=$disabledPermiso;?>>
                                                     <option value="" >Seleccione una opción</option>
 													<option value="EFECTIVO" >Efectivo</option>
