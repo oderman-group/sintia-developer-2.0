@@ -117,7 +117,7 @@ class MediaTecnicaServicios extends Servicios
      *
      * @return void
      */
-    public static function guardar($idMatricula,$arregloCursos,$config,$idGrupo=NULL)
+    public static function guardar($idMatricula,$arregloCursos,$config,$idGrupo=NULL,$estado=ESTADO_CURSO_PRE_INSCRITO)
     {
         global $baseDatosServicios;
         foreach ($arregloCursos as $clave => $curso) {
@@ -127,7 +127,8 @@ class MediaTecnicaServicios extends Servicios
                  matcur_id_matricula,
                  matcur_id_institucion,
                  matcur_years,
-                 matcur_id_grupo
+                 matcur_id_grupo,
+                 matcur_estado
                  )
                  VALUES
                  (
@@ -135,12 +136,90 @@ class MediaTecnicaServicios extends Servicios
                   '".$idMatricula."',
                   '".$config['conf_id_institucion']."',
                   '".$config['conf_agno']."',
-                  '".$idGrupo."'
+                  '".$idGrupo."',
+                  '".$estado."'
                  )"
              );
         }        
     }
 
+    /**
+     * Guarda la información de matrículas y cursos de Media resiviendo un array.
+     *
+     * @param string $idMatricula ID de la matrícula.
+     * @param array $arregloCursos Arreglo con los IDs de los cursos.
+     * @param array $config Configuración de la aplicación.
+     *
+     * @return void
+     */
+    public static function guardarJson($arreglo,$config)
+    {
+        global $baseDatosServicios;
+        foreach ($arreglo as $clave => $dato) {
+            Servicios::InsertSql(
+                " INSERT INTO ".$baseDatosServicios.".mediatecnica_matriculas_cursos(
+                 matcur_id_curso, 
+                 matcur_id_matricula,
+                 matcur_id_institucion,
+                 matcur_years,
+                 matcur_id_grupo,
+                 matcur_estado
+                 )
+                 VALUES
+                 (
+                  '".$dato["curso"]."',
+                  '".$dato["matricula"]."',
+                  '".$config['conf_id_institucion']."',
+                  '".$config['conf_agno']."',
+                  '".$dato["grupo"]."',
+                  '".$dato["estado"]."'
+                 )"
+             );
+        }        
+    }
+      /**
+     * Elimina la existencia de una matrícula en un curso de Media Técnica.
+     *
+     * @param int $idCursos ID del curso.
+     * @param array $config Configuración de la aplicación.
+     *
+     * @return void
+     */
+    public static function eliminarExistenciaMT($matricula,$idCursos,$config)
+    {
+        global $baseDatosServicios,$conexion;
+
+        try {
+          $consulta= mysqli_query($conexion,"DELETE FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos WHERE matcur_id_curso='".$idCursos."' AND matcur_id_matricula='".$matricula."'  AND matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_years='".$config['conf_agno']."'");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        } 
+    }
+ /**
+     * Edita la información de matrículas y cursos de Media Técnica.
+     *
+     * @param string $idMatricula ID de la matrícula.
+     * @param array $cursosId Arreglo con los IDs de los cursos.
+     * @param array $config Configuración de la aplicación.
+     * @param int|null $idGrupo ID del grupo (opcional).
+     *  @param string|null $estado estado de la asignacion (opcional).
+     *
+     * @return void
+     */
+    public static function editarporCurso($idMatricula,$cursosId,$config,$idGrupo=NULL,$estado=ESTADO_CURSO_PRE_INSCRITO)
+    {
+        global $baseDatosServicios;
+        Servicios::UpdateSql(
+            "UPDATE ".$baseDatosServicios.".mediatecnica_matriculas_cursos
+            SET matcur_id_grupo ='".$idGrupo."',
+            matcur_estado ='".$estado."'
+            WHERE matcur_id_matricula ='".$idMatricula."'
+            AND matcur_id_curso ='".$cursosId."'
+            AND matcur_id_institucion =".(int)$config['conf_id_institucion']."
+            AND matcur_years          =".(int)$config['conf_agno']."
+            ");
+    }
     /**
      * Elimina la existencia de una matrícula en un curso de Media Técnica.
      *
@@ -171,7 +250,7 @@ class MediaTecnicaServicios extends Servicios
      *
      * @return void
      */
-    public static function guardarPorCurso($idMatricula,$idCurso,$config,$idGrupo)
+    public static function guardarPorCurso($idMatricula,$idCurso,$config,$idGrupo,$estado=ESTADO_CURSO_PRE_INSCRITO)
     {
         global $baseDatosServicios,$conexion;
           mysqli_query($conexion," INSERT INTO ".$baseDatosServicios.".mediatecnica_matriculas_cursos(
@@ -179,7 +258,8 @@ class MediaTecnicaServicios extends Servicios
                  matcur_id_matricula,
                  matcur_id_institucion,
                  matcur_years,
-                 matcur_id_grupo
+                 matcur_id_grupo,
+                 matcur_estado
                  )
                  VALUES
                  (
@@ -187,7 +267,8 @@ class MediaTecnicaServicios extends Servicios
                   '".$idMatricula."',
                   '".$config['conf_id_institucion']."',
                   '".$config['conf_agno']."',
-                  '".$idGrupo."'
+                  '".$idGrupo."',
+                  '".$estado."'
                  )"
              );      
     }
@@ -217,6 +298,39 @@ class MediaTecnicaServicios extends Servicios
         }
 
         return $consulta;
+
+    }
+
+      /**
+     * Verifica la existencia de un estudiante en cursos de Media Técnica.
+     *
+
+     * @param string $estudiante ID del estudiante.
+     * @param string $curso ID del curso.
+     * @param array $config Configuración de la aplicación.
+     * @param int $year Año académico.
+     *
+     * @return boolean  Resultado de la consulta o false si hay un error.
+     */
+    public static function existeEstudianteMTCursos($estudiante,$curso,$config,$year)
+    {
+
+        global $conexion, $baseDatosServicios;
+        $result = false;
+
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos 
+            WHERE matcur_id_matricula='".$estudiante."' AND matcur_id_curso='".$curso."' AND matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_years='".$year."'");
+            
+            if(mysqli_num_rows($consulta)>0){
+              $result=true;
+            }
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $result;
 
     }
 
@@ -255,7 +369,7 @@ class MediaTecnicaServicios extends Servicios
             INNER JOIN $baseDatosServicios.opciones_generales og4 ON og4.ogen_id=am.mat_estrato
             INNER JOIN $baseDatosServicios.opciones_generales og5 ON og5.ogen_id=am.mat_tipo_documento
             INNER JOIN ".BD_GENERAL.".usuarios uss ON uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]} AND (uss.uss_id=am.mat_acudiente or am.mat_acudiente is null)
-            WHERE matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_years='".$config['conf_agno']."' AND $filtro
+            WHERE matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_estado='".ACTIVO."' AND matcur_years='".$config['conf_agno']."' AND $filtro
             GROUP BY mat_id
             ORDER BY mat_primer_apellido,mat_estado_matricula;");
         } catch (Exception $e) {

@@ -1030,7 +1030,6 @@ function totalizar(){
     var totalPrecio = 0;
     var totalDescuento = 0;
     var totalImpuesto = 0;
-    var nuevostr  = "";
     for (let i = 1; i < tabla.rows.length; i++) {
         var fila = tabla.rows[i];
         if (fila.cells.length === 9) {
