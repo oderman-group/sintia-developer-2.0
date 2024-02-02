@@ -7,6 +7,7 @@ PES-711 - Feedback del SPRINT DEMO 21
 PES-685 - FIltros y resumen de valores facturados
 PES-710 - Descuentos e Impuestos
 PES-678 - Ver el historial de las matriculas retiradas de los estudiantes
+pes-628 - Modifying querys of the course enrollments
 
 ### LUGIE
 PES-530 CRUD a la tabla Evaluaciones

@@ -125,6 +125,9 @@ define('BASICA_PRIMARIA', 2);
 define('BASICA_SECUNDARIA', 3);
 define('MEDIA', 4);
 
+define('ACTIVO', 'ACTIVO');
+define('INACTIVO', 'INACTIVO');
+
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':
         define('REDIRECT_ROUTE', 'http://localhost/app-sintia/main-app');

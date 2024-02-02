@@ -255,7 +255,7 @@ class MediaTecnicaServicios extends Servicios
             INNER JOIN $baseDatosServicios.opciones_generales og4 ON og4.ogen_id=am.mat_estrato
             INNER JOIN $baseDatosServicios.opciones_generales og5 ON og5.ogen_id=am.mat_tipo_documento
             INNER JOIN ".BD_GENERAL.".usuarios uss ON uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]} AND (uss.uss_id=am.mat_acudiente or am.mat_acudiente is null)
-            WHERE matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_years='".$config['conf_agno']."' AND $filtro
+            WHERE matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_estado='".ACTIVO."' AND matcur_years='".$config['conf_agno']."' AND $filtro
             GROUP BY mat_id
             ORDER BY mat_primer_apellido,mat_estado_matricula;");
         } catch (Exception $e) {

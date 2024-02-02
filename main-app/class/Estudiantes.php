@@ -143,7 +143,7 @@ class Estudiantes {
             INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car_id='".$carga."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}
             INNER JOIN ".BD_ACADEMICA.".academico_calificaciones aac ON aac.cal_id_estudiante=mat.mat_id AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]} 
             LEFT JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id=aac.cal_id_actividad and aa.act_id_carga=car_id and aa.act_periodo='".$periodo."' and aa.act_registrada=1 and aa.act_estado=1 AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$_SESSION["bd"]}
-            WHERE matcur_id_curso=car_curso AND matcur_id_grupo=car_grupo AND matcur_id_institucion={$config['conf_id_institucion']} AND matcur_years={$_SESSION["bd"]}
+            WHERE matcur_id_curso=car_curso AND matcur_id_grupo=car_grupo AND matcur_estado='".ACTIVO."' AND matcur_id_institucion={$config['conf_id_institucion']} AND matcur_years={$_SESSION["bd"]}
             GROUP BY mat.mat_id
             HAVING acumulado < ".PORCENTAJE_MINIMO_GENERAR_INFORME." OR acumulado IS NULL
             ORDER BY mat.mat_primer_apellido, mat.mat_segundo_apellido, mat.mat_nombres";
@@ -599,7 +599,7 @@ class Estudiantes {
             LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=matcur_id_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
             LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=mat.mat_id_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
             LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat.mat_genero
-            WHERE matcur_id_curso='".$datosCargaActual['car_curso']."' AND matcur_id_grupo='".$datosCargaActual['car_grupo']."' AND matcur_id_institucion='".$config['conf_id_institucion']."'
+            WHERE matcur_id_curso='".$datosCargaActual['car_curso']."' AND matcur_id_grupo='".$datosCargaActual['car_grupo']."' AND matcur_estado='".ACTIVO."' AND matcur_id_institucion='".$config['conf_id_institucion']."'
             ORDER BY mat.mat_primer_apellido, mat.mat_segundo_apellido, mat.mat_nombres;
             ");
         } catch (Exception $e) {
@@ -628,7 +628,7 @@ class Estudiantes {
             LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=matcur_id_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
             LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=mat.mat_id_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
             LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat.mat_genero
-            WHERE matcur_id_curso='".$datosCargaActual['car_curso']."' AND matcur_id_grupo='".$datosCargaActual['car_grupo']."' AND matcur_id_institucion='".$config['conf_id_institucion']."'
+            WHERE matcur_id_curso='".$datosCargaActual['car_curso']."' AND matcur_id_grupo='".$datosCargaActual['car_grupo']."' AND matcur_estado='".ACTIVO."' AND matcur_id_institucion='".$config['conf_id_institucion']."'
             ORDER BY mat.mat_primer_apellido, mat.mat_segundo_apellido, mat.mat_nombres;
             ");
             $cantidad = mysqli_num_rows($consulta);
