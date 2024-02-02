@@ -820,6 +820,9 @@ $frases[421][$l] = 'TEXTO';
 $frases[422][$l] = 'MÚLTIPLE';
 $frases[423][$l] = 'ÚNICA';
 $frases[424][$l] = 'Cliente';
+$frases[425][$l] = 'Impuesto';
+$frases[426][$l] = 'Tarifa';
+
 //ENGLISH
 
 $l = 2;
@@ -1627,3 +1630,5 @@ $frases[421][$l] = 'TEXT';
 $frases[422][$l] = 'MULTIPLE';
 $frases[423][$l] = 'SINGLE';
 $frases[424][$l] = 'Client';
+$frases[425][$l] = 'Taxe';
+$frases[426][$l] = 'Fee';
