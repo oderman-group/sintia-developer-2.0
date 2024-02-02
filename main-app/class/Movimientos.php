@@ -985,10 +985,11 @@ class Movimientos {
     )
     {
         try {
-            $consulta = mysqli_query($conexion, "SELECT SUM((ti.price * ti.cantity * (1 - ti.discount / 100) * (1 + ti.tax / 100)) + fc.fcu_valor) AS totalPagado, uss.uss_nombre, uss.uss_nombre2, uss.uss_apellido1, uss.uss_apellido2 
+            $consulta = mysqli_query($conexion, "SELECT SUM((ti.price * ti.cantity * (1 - ti.discount / 100) * CASE WHEN ti.tax != 0 THEN (1 + tax.fee / 100) ELSE 1 END) + fc.fcu_valor) AS totalPagado, uss.uss_nombre, uss.uss_nombre2, uss.uss_apellido1, uss.uss_apellido2 
             FROM ".BD_FINANCIERA.".finanzas_cuentas fc
             INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=fcu_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
             INNER JOIN ".BD_FINANCIERA.".transaction_items ti ON fc.fcu_id = ti.id_transaction  AND ti.institucion={$config['conf_id_institucion']} AND ti.year={$_SESSION["bd"]}
+            LEFT JOIN ".BD_FINANCIERA.".taxes tax ON tax.id=ti.tax AND tax.institucion = {$config['conf_id_institucion']} AND tax.year = {$_SESSION["bd"]}
             WHERE fc.fcu_anulado = 0 AND fc.fcu_status = '".COBRADA."' AND fc.institucion={$config['conf_id_institucion']} AND fc.year={$_SESSION["bd"]}
             GROUP BY fc.fcu_usuario
             ORDER BY totalPagado DESC
