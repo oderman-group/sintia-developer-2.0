@@ -10,6 +10,8 @@ if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol(
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/Usuarios.php");
+require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 $Plataforma = new Plataforma;
 
 $modulo = 1;
@@ -48,15 +50,15 @@ $modulo = 1;
 
 <div align="center" style="margin-bottom:20px; margin-top:20px;">
 
-<img src="https://main.plataformasintia.com/app-sintia/main-app/files/images/logo/WhatsApp%20Image%202022-01-19%20at%2011.21.24%20AM.jpeg" width="100"><br><br>
+<img src="../files/images/logo/<?= $informacion_inst["info_logo"] ?>" width="100"><br><br>
     
-<b>LICEO INFANTIL GRANDES INNOVADORES</b><br>
-Carácter Privado en Jornada Diurna<br>
-Reconocimiento Oficial por resolución 023221 del 02 de Diciembre de 2015<br>
-Secretaría de Educación de Santander<br>
-Código DANE 368235800001-- NIT 32.858.419-1<br><br>
+<b><?= strtoupper($informacion_inst["info_nombre"]) ?></b><br>
+Carácter <?= $informacion_inst["info_caracter"] ?> en Jornada <?= ucwords(strtolower($informacion_inst["info_jornada"])) ?><br>
+Secretaría de Educación de <?= ucwords(strtolower($informacion_inst["dep_nombre"])) ?><br>
+Código DANE <?= $informacion_inst["info_dane"] ?> - NIT <?= $informacion_inst["info_nit"] ?><br>
+Reconocimiento Oficial por resolución <?= $informacion_inst["info_resolucion"] ?><br><br>
 
-<b>LA DIRECTORA DEL LICEO INFANTIL GRANDES INNOVADORES</b>
+<b>DIRECTOR(A) DEL <?= strtoupper($informacion_inst["info_nombre"]) ?></b>
 
 
 </div>
@@ -82,11 +84,28 @@ while($i<=$restaAgnos){
 	
 	$estudiante = Estudiantes::obtenerDatosEstudiante($_POST["id"],$inicio);
 	$nombre = Estudiantes::NombreCompletoDelEstudiante($estudiante);
-	
-	if($estudiante["mat_grado"]>=1 and $estudiante["mat_grado"]<=5) {$educacion = "PREESCOLAR"; $horasT = 25;}	
-	elseif($estudiante["mat_grado"]>=6 and $estudiante["mat_grado"]<=10) {$educacion = "BÁSICA PRIMARIA"; $horasT = 30;}	
-	elseif($estudiante["mat_grado"]>=11 and $estudiante["mat_grado"]<=14) {$educacion = "BÁSICA SECUNDARIA"; $horasT = 35;}
-	elseif($estudiante["mat_grado"]>=15 and $estudiante["mat_grado"]<=16) {$educacion = "MEDIA"; $horasT = 35;}											
+
+	switch ($estudiante["gra_nivel"]) {
+		case PREESCOLAR: 
+			$educacion = "PREESCOLAR"; 
+		break;
+
+		case BASICA_PRIMARIA: 
+			$educacion = "BÁSICA PRIMARIA"; 
+		break;
+
+		case BASICA_SECUNDARIA: 
+			$educacion = "BÁSICA SECUNDARIA"; 
+		break;
+
+		case MEDIA: 
+			$educacion = "MEDIA"; 
+		break;
+		
+		default: 
+			$educacion = "BÁSICA"; 
+		break;
+	}
 
 	if($i<$restaAgnos)
 
@@ -107,7 +126,7 @@ while($i<=$restaAgnos){
 	
 
 
-    <p>Que, <b><?=$nombre?></b> cursó en esta Institución <b><?=strtoupper($grados);?> GRADO DE EDUCACIÓN <?=$educacion;?></b>  y obtuvo las siguientes calificaciones:</p>
+    <p>Que, <b><?=$nombre?></b> cursó en esta Institución <b><?=strtoupper($grados);?> GRADO DE EDUCACIÓN <?=$educacion?></b>  y obtuvo las siguientes calificaciones:</p>
 
     
 
@@ -182,7 +201,11 @@ while($i<=$restaAgnos){
 
 				$j=1;
 
-				while($mat=mysqli_fetch_array($materias, MYSQLI_BOTH)){if($j<$numMat)$mate .=$mat[0].","; else $mate .=$mat[0]; $j++;}
+				while($mat=mysqli_fetch_array($materias, MYSQLI_BOTH)){
+					if ($j < $numMat) $mate .= "'" . $mat[0] . "',";
+					else $mate .= "'" . $mat[0] . "'";
+					$j++;
+				}
 
 				//OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES DE TODAS LAS MATERIAS DE UNA MISMA AREA
 
@@ -261,9 +284,6 @@ while($i<=$restaAgnos){
 
 										WHERE car_curso='" . $datosEstudianteActualMT["matcur_id_curso"] . "' AND car_grupo='" . $datosEstudianteActualMT["matcur_id_grupo"] . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$inicio} GROUP BY am.mat_area");
 
-
-			$materiasPerdidas = 0;
-
 			while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
 
 				//CONSULTAMOS LAS MATERIAS DEL AREA
@@ -279,14 +299,14 @@ while($i<=$restaAgnos){
 				$j = 1;
 
 				while ($mat = mysqli_fetch_array($materias, MYSQLI_BOTH)) {
-					if ($j < $numMat) $mate .= $mat[0] . ",";
-					else $mate .= $mat[0];
+					if ($j < $numMat) $mate .= "'" . $mat[0] . "',";
+					else $mate .= "'" . $mat[0] . "'";
 					$j++;
 				}
 
 				//OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES DE TODAS LAS MATERIAS DE UNA MISMA AREA
 
-				$consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga IN(" . $mate . ") AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
+				$consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga IN('" . $mate . "') AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
 				$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 
 				$nota = round($boletin[0], 1);
@@ -295,6 +315,8 @@ while($i<=$restaAgnos){
 				}
 				$consultaDesempeno = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND notip_desde<='" . $nota . "' AND notip_hasta>='" . $nota . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
 				$desempenoA = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
+
+				$desempenoA['notip_nombre'] = $nota == 0 ? "Bajo" : $desempenoA['notip_nombre'];
 
 			?>
 
@@ -319,9 +341,6 @@ while($i<=$restaAgnos){
 					$notaDefMateria = round($notaDefMateria[0], 1);
 					for ($n = 0; $n <= 5; $n++) {
 						if ($notaDefMateria == $n) $notaDefMateria = $notaDefMateria . ".0";
-					}
-					if ($notaDefMateria < $config[5]) {
-						$materiasPerdidas++;
 					}
 					$consultaDesempeno = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND notip_desde<='" . $notaDefMateria . "' AND notip_hasta>='" . $notaDefMateria . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
 					$desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
@@ -351,10 +370,6 @@ while($i<=$restaAgnos){
             
 
         </table>
-
-        
-
-        <p>&nbsp;</p>
 
     	<?php
 
@@ -389,14 +404,19 @@ while($i<=$restaAgnos){
 				$cargasAcademicasC = mysqli_query($conexion, "SELECT car_id FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$matricula["mat_grado"]."' AND car_grupo='".$matricula["mat_grupo"]."' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
 				$materiasPerdidas = 0;
 				$vectorMP = array();
+				$periodoFinal = $config['conf_periodos_maximos'];
 				while($cargasC=mysqli_fetch_array($cargasAcademicasC, MYSQLI_BOTH)){	
 					//OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
-					$consultaBoletinC=mysqli_query($conexion, "SELECT avg(bol_nota) FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$_POST["id"]."' AND bol_carga='".$cargasC["car_id"]."' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
+					$consultaBoletinC=mysqli_query($conexion, "SELECT avg(bol_nota) AS promedio, MAX(bol_periodo) AS periodo FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$_POST["id"]."' AND bol_carga='".$cargasC["car_id"]."' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
 					$boletinC = mysqli_fetch_array($consultaBoletinC, MYSQLI_BOTH);
-					$notaC = round($boletinC[0],1);
+					$notaC = round($boletinC['promedio'],1);
 					if($notaC<$config[5]){
 						$vectorMP[$materiasPerdidas] = $cargasC["car_id"];
 						$materiasPerdidas++;
+					}
+
+					if ($boletinC['periodo'] < $config['conf_periodos_maximos']){
+						$periodoFinal = $boletinC['periodo'];
 					}
 				}
 		//FIN DE LAS MATERIAS QUE
@@ -412,10 +432,15 @@ while($i<=$restaAgnos){
 				$m++;						
 			}
 		}
-		   if($materiasPerdidas==0 or $niveladas>=$materiasPerdidas)
-                $msj = "<center>EL (LA) ESTUDIANTE ".$nombre." FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>"; 
-            else
-                $msj = "<center>EL (LA) ESTUDIANTE ".$nombre." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";	
+		if($materiasPerdidas == 0 || $niveladas >= $materiasPerdidas){
+			$msj = "<center>EL (LA) ESTUDIANTE ".$nombre." FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>"; 
+		} else {
+			$msj = "<center>EL (LA) ESTUDIANTE ".$nombre." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";	
+		}
+
+		if ($periodoFinal < $config["conf_periodos_maximos"] && $matricula["mat_estado_matricula"] == CANCELADO) {
+			$msj = "<center>EL(LA) ESTUDIANTE ".$nombre." FUE RETIRADO SIN FINALIZAR AÑO LECTIVO</center>";
+		}
         ?>
     
         <br><div align="left" style="font-weight:bold; font-style:italic; font-size:12px; margin-bottom:10px;"><?=$msj;?></div>
@@ -470,18 +495,23 @@ while($i<=$restaAgnos){
 
 			$materiasPerdidas = 0;
 			$horasT = 0;
+			$periodoFinal = $config['conf_periodos_maximos'];
 			while($cargas=mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)){	
 
                 //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
 
-				$consunltaBoletin=mysqli_query($conexion, "SELECT avg(bol_nota) FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$_POST["id"]."' AND bol_carga='".$cargas["car_id"]."' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
+				$consunltaBoletin=mysqli_query($conexion, "SELECT avg(bol_nota) AS promedio, MAX(bol_periodo) AS periodo FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$_POST["id"]."' AND bol_carga='".$cargas["car_id"]."' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
                 $boletin = mysqli_fetch_array($consunltaBoletin, MYSQLI_BOTH);
 
-                $nota = round($boletin[0],1);
+                $nota = round($boletin['promedio'],1);
 				
 				if ($nota < $config[5]) {
 					$materiasPerdidas++;
 				}
+
+                if ($boletin['periodo'] < $config['conf_periodos_maximos']){
+                    $periodoFinal = $boletin['periodo'];
+                }
 
 				$consultaDesempeno=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$nota.">=notip_desde AND ".$nota."<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
 				$desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);					   
@@ -614,10 +644,15 @@ while($i<=$restaAgnos){
         </table>
 		<?php
 		$msj='';
-		if ($materiasPerdidas == 0)
-			$msj = "<center>EL (LA) ESTUDIANTE " . $nombre . " FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
-		else
-			$msj = "<center>EL (LA) ESTUDIANTE " . $nombre . " NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+		if($materiasPerdidas == 0){
+			$msj = "<center>EL (LA) ESTUDIANTE ".$nombre." FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>"; 
+		} else {
+			$msj = "<center>EL (LA) ESTUDIANTE ".$nombre." NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";	
+		}
+
+		if ($periodoFinal < $config["conf_periodos_maximos"] && $matricula["mat_estado_matricula"] == CANCELADO) {
+			$msj = "<center>EL(LA) ESTUDIANTE ".$nombre." FUE RETIRADO SIN FINALIZAR AÑO LECTIVO</center>";
+		}
 		?>
 		<div align="left" style="font-weight:bold; font-style:italic; font-size:12px; margin-bottom:20px;"><?= $msj; ?></div>
 
@@ -641,28 +676,30 @@ while($i<=$restaAgnos){
 
 ?>
 
-
-
-
-
-<p>&nbsp;</p>
 <?php if(date('m')<10){$mes = substr(date('m'),1);}else{$mes = date('m');}?>	
 <span style="font-size:16px; text-align:justify;">
-PLAN DE ESTUDIOS: Ley 115 de Educación, artículo 23, Decreto 1860 de 1994. Decreto 1290 de 2009 y Decreto 3055 del 12 de diciembre de 2002. Intensidad horaria <?=$horasT;?> horas semanales de 55 minutos.<br><br>
-Se expide el presente certificado en el Carmen de Chucurí  el <?=date("d");?> de <?php echo $meses[$mes];?> de <?=date("Y");?>. 
+PLAN DE ESTUDIOS: <?= $informacion_inst["info_decreto_plan_estudio"] ?>. Intensidad horaria <?=$horasT;?> horas semanales de 55 minutos.<br><br>
+Se expide el presente certificado en <?= ucwords(strtolower($informacion_inst["ciu_nombre"])) ?> el <?=date("d");?> de <?= $meses[$mes];?> de <?=date("Y");?>. 
 </span>
-
-
-
-
-
-<p>&nbsp;</p>
 
 <table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
 
 	<tr>
 
-		<td align="left">_________________________________<br><!--<?=strtoupper("");?><br>-->Director(a)</td>
+		<td align="left">
+			<?php
+				$rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
+				$nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
+				if(!empty($rector["uss_firma"]) && file_exists(ROOT_PATH.'/main-app/files/fotos/' . $rector['uss_firma'])){
+					echo '<img src="../files/fotos/'.$rector["uss_firma"].'" width="100"><br>';
+				}else{
+					echo '<p>&nbsp;</p>';
+				}
+			?>
+			<p style="height:0px;"></p>_________________________________<br>
+			<?=$nombreRector?><br>
+			Director(a)
+		</td>
 
     </tr>
 

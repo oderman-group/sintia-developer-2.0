@@ -86,7 +86,10 @@ if($num>0)
 	$config = Plataforma::sesionConfiguracion();
 	$_SESSION["configuracion"] = $config;
 
-	$informacionInstConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_informacion WHERE info_institucion='" . $config['conf_id_institucion'] . "' AND info_year='" . $_SESSION["bd"] . "'");
+	$informacionInstConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_informacion
+	LEFT JOIN ".$baseDatosServicios.".localidad_ciudades ON ciu_id=info_ciudad
+	LEFT JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento
+	WHERE info_institucion='" . $config['conf_id_institucion'] . "' AND info_year='" . $_SESSION["bd"] . "'");
 	$informacion_inst = mysqli_fetch_array($informacionInstConsulta, MYSQLI_BOTH);
 	$_SESSION["informacionInstConsulta"] = $informacion_inst;
 

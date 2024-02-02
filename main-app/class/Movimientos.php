@@ -712,7 +712,7 @@ class Movimientos {
                 $idItems=Utilidades::generateCode("TXI_");
 
                 try {
-                    mysqli_query($conexion, "INSERT INTO ".BD_FINANCIERA.".transaction_items(id, id_transaction, type_transaction, discount, cantity, subtotal, id_item, institucion, year, description, price)VALUES('".$idItems."', '" .$idFactura . "', 'INVOICE', '".$fila['discount']."', '".$fila['cantity']."', '".$fila['subtotal']."', '".$fila['id_item']."', {$fila['institucion']}, '{$fila['year']}', '".$fila['description']."', '".$fila['price']."')");
+                    mysqli_query($conexion, "INSERT INTO ".BD_FINANCIERA.".transaction_items(id, id_transaction, type_transaction, discount, cantity, subtotal, id_item, institucion, year, description, price, tax)VALUES('".$idItems."', '" .$idFactura . "', 'INVOICE', '".$fila['discount']."', '".$fila['cantity']."', '".$fila['subtotal']."', '".$fila['id_item']."', {$fila['institucion']}, '{$fila['year']}', '".$fila['description']."', '".$fila['price']."', '".$fila['tax']."')");
                 } catch (Exception $e) {
                     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
                 }

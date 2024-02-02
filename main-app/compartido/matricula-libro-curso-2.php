@@ -1,6 +1,6 @@
 <?php
 include("session-compartida.php");
-$idPaginaInterna = 'DT0224';
+$idPaginaInterna = 'DT0227';
 
 if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
@@ -11,20 +11,40 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
     require_once("../class/Boletin.php");
     require_once("../class/Usuarios.php");
     require_once("../class/UsuariosPadre.php");
+	require_once("../class/servicios/GradoServicios.php");
     $Plataforma = new Plataforma;
 
     $year=$_SESSION["bd"];
-    if(isset($_REQUEST["year"])){
-    $year=base64_decode($_REQUEST["year"]);
+	if(isset($_POST["year"])){
+		$year=$_POST["year"];
+	}
+    if(isset($_GET["year"])){
+		$year=base64_decode($_GET["year"]);
     }
 
-    $modulo = 1;
-
-    if (empty($_REQUEST["periodo"])) {
-        $periodoActual = 1;
-    } else {
-        $periodoActual = base64_decode($_REQUEST["periodo"]);
+	$periodoActual = 4;
+	if(isset($_POST["periodo"])){
+		$periodoActual=$_POST["periodo"];
+	}
+    if(isset($_GET["periodo"])){
+		$periodoActual=base64_decode($_GET["periodo"]);
     }
+
+	$curso='';
+	if(isset($_POST["curso"])){
+		$curso=$_POST["curso"];
+	}
+	if(isset($_GET["curso"])){
+		$curso=base64_decode($_GET["curso"]);
+	}
+
+	$id='';
+	if(isset($_POST["id"])){
+		$id=$_POST["id"];
+	}
+	if(isset($_GET["id"])){
+		$id=base64_decode($_GET["id"]);
+	}
 
     switch($periodoActual){
         case 1:
@@ -45,18 +65,13 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
             break;
     }
 
-    $filtro = "";
-    if (!empty($_REQUEST["id"])) {
-        $filtro .= " AND mat_id='" . base64_decode($_REQUEST["id"]) . "'";
-    }
+	$filtro = "";
+	if(!empty($_REQUEST["curso"])){$filtro .= " AND mat_grado='".$curso."'";}
 
-    if (!empty($_REQUEST["curso"])) {
-        $filtro .= " AND mat_grado='" . base64_decode($_REQUEST["curso"]) . "'";
-    }
-
-    if(!empty($_REQUEST["grupo"])){
-        $filtro .= " AND mat_grupo='".base64_decode($_REQUEST["grupo"])."'";
-    }
+	if(!empty($_REQUEST["id"])){$filtro .= " AND mat_id='".$id."'";}
+	
+	$grupo="";
+	if(!empty($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'"; $grupo=$_REQUEST["grupo"];}
 
     $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
     $numeroEstudiantes = mysqli_num_rows($matriculadosPorCurso);
@@ -92,6 +107,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                 $grupo= "Sin Grupo";
             break;
         }
+		$materiasPerdidas=0;
         //METODO QUE ME TRAE EL NOMBRE COMPLETO DEL ESTUDIANTE
         $nombreEstudainte=Estudiantes::NombreCompletoDelEstudiante($matriculadosDatos);
 	
@@ -104,14 +120,20 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 <!doctype html>
 <html class="no-js" lang="en">
     <head>
-        <title>Boletín</title>
+        <title>Libro Final</title>
         <meta name="tipo_contenido" content="text/html;" http-equiv="content-type" charset="utf-8">
         <!-- favicon -->
-        <link rel="shortcut icon" href="../sintia-icono.png" />
+        <link rel="shortcut icon" href="<?=$Plataforma->logo;?>" />
         <style>
             #saltoPagina {
                 PAGE-BREAK-AFTER: always;
             }
+
+			.divBordeado {
+				height: 3px;
+				border: 3px solid #9ed8ed;
+				background-color: #00ACFB;
+			}
         </style>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
     </head>
@@ -119,26 +141,28 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
         <div style="margin: 15px 0;">
             <table width="100%" cellspacing="5" cellpadding="5" border="1" rules="all" style="font-size: 13px;">
                 <tr>
-                    <td rowspan="2" width="20%"><img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" width="100%"></td>
-                    <td align="center" rowspan="2" width="25%">
+                    <td rowspan="3" width="20%"><img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" width="100%"></td>
+                    <td align="center" rowspan="3" width="25%">
                         <h3 style="font-weight:bold; color: #00adefad; margin: 0"><?=strtoupper($informacion_inst["info_nombre"])?></h3><br>
                         <?=$informacion_inst["info_direccion"]?><br>
-                        Informes: <?=$informacion_inst["info_telefono"]?><br><br>
-                        AÑO LECTIVO: <?=$year?>
+                        Informes: <?=$informacion_inst["info_telefono"]?>
                     </td>
-                    <td>Documento:<br> <b style="color: #00adefad;"><?=number_format($matriculadosDatos["mat_documento"],0,",",".");?></b></td>
+                    <td>Código:<br> <b style="color: #00adefad;"><?=number_format($matriculadosDatos["mat_id"],0,",",".");?></b></td>
                     <td>Nombre:<br> <b style="color: #00adefad;"><?=$nombreEstudainte?></b></td>
-                    <td>Grado:<br> <b style="color: #00adefad;"><?=strtoupper($matriculadosDatos["gra_nombre"]." ".$grupo)?></b></td>
                 </tr>
                 <tr>
-                    <td>E. Básica:<br> <b style="color: #00adefad;"><?=$educacion?></b></td>
+                    <td>Curso:<br> <b style="color: #00adefad;"><?=strtoupper($matriculadosDatos["gra_nombre"])?></b></td>
                     <td>Sede:<br> <b style="color: #00adefad;"><?=strtoupper($informacion_inst["info_nombre"])?></b></td>
+                </tr>
+                <tr>
                     <td>Jornada:<br> <b style="color: #00adefad;"><?=strtoupper($informacion_inst["info_jornada"])?></b></td>
+                    <td>Documento:<br> <b style="color: #00adefad;">BOLETÍN DEFINITIVO DE NOTAS - EDUCACIÓN BÁSICA <?=strtoupper($educacion)?></b></td>
                 </tr>
             </table>
             <p>&nbsp;</p>
         </div>
-        <table width="100%" cellspacing="5" cellpadding="5" rules="all" style="font-size: 13px;">
+        <table width="100%">
+            <tr><td><div class="divBordeado">&nbsp;</div></td></tr>
             <tr style="text-align:center; font-size: 13px;">
                 <td style="color: #b2adad;">
                     <?php
@@ -156,42 +180,37 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                     ?>
                 </td>
             </tr>
+            <tr><td>&nbsp;</td></tr>
+            <tr style="text-align:center; font-size: 20px; font-weight:bold;">
+                <td>AÑO LECTIVO: <?=$year?></td>
+            </tr>
         </table>
         <table width="100%" rules="all" border="1" style="font-size: 15px;">
-            <thead style="background-color: #00adefad;">
+            <thead>
                 <tr style="font-weight:bold; text-align:center;">
                     <td width="20%" rowspan="2">ASIGNATURAS</td>
                     <td width="3%" rowspan="2">I.H</td>
-                    <?php
-                        if($periodoActual!=1){
-                    ?>
-                    <td width="3%" colspan="<?=$periodosCursados?>"><a href="#" style="color:#000; text-decoration:none;">Periodo Cursados</a></td>
-                    <?php
-                        }
-                    ?>
-                    <td width="3%" colspan="2">Periodo Actual (<?=strtoupper($periodoActuales)?>)</td>
-                    <td width="3%" colspan="3">TOTAL ACUMULADO</td>
+                    <td width="3%" colspan="4" style="background-color: #00adefad;"><a href="#" style="color:#000; text-decoration:none;">Periodo Cursados</a></td>
+                    <td width="3%" colspan="2"><a href="#" style="color:#000; text-decoration:none;">DEFINITIVA</a></td>
                 </tr>
                 <tr style="font-weight:bold; text-align:center;">
                     <?php
                         for($i=1;$i<=$periodoActual;$i++){
-                            if($i!=$periodoActual){
                     ?>
-                        <td width="3%"><?=$i?></td>
+                        <td width="3%" style="background-color: #00adefad;"><?=$i?></td>
                     <?php
-                        }else{
-                    ?>
-                    <td width="3%">Nota</td>
-                    <td width="3%">Desempeño</td>
-                    <?php
-                            }
                         }
                     ?>
-                    <td width="3%">Fallas</td>
-                    <td width="3%">Nota</td>
+                    <td width="3%">DEF</td>
                     <td width="3%">Desempeño</td>
                 </tr>
             </thead>
+            <?php
+                $consultaBoletin=mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante = '".$matriculadosDatos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
+                $numNotas = mysqli_num_rows($consultaBoletin);
+
+                if ($numNotas > 0) {
+            ?>
             <tbody>
                 <?php
                     $consultaAreas= mysqli_query($conexion,"SELECT ar_id, ar_nombre, count(*) AS numMaterias, car_curso, car_grupo FROM ".BD_ACADEMICA.".academico_materias am
@@ -205,6 +224,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                     $sumaPromedioGeneralPeriodo1=0;
                     $sumaPromedioGeneralPeriodo2=0;
                     $sumaPromedioGeneralPeriodo3=0;
+                    $sumaPromedioGeneralPeriodo4=0;
                     while($datosAreas = mysqli_fetch_array($consultaAreas, MYSQLI_BOTH)){
 
                         $consultaMaterias= mysqli_query($conexion,"SELECT car_id, car_ih, car_materia, car_docente, car_director_grupo,
@@ -225,25 +245,6 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                 $idDirector=$datosMaterias["car_docente"];
                             }
 
-                            //NOTA PARA LAS MATERIAS
-                            $notaMateria = !empty($datosMaterias['bol_nota']) ? round($datosMaterias['bol_nota'], 1) : 0;
-                            $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaMateria,$year);
-                            if($notaMateria<10){
-                                $estiloNota['notip_nombre']="Bajo";
-                            }
-                            if($notaMateria>50){
-                                $estiloNota['notip_nombre']="Superior";
-                            }
-
-                            //AUSENCIAS EN ESTA MATERIA
-                            $consultaDatosAusencias = Boletin::obtenerDatosAusencias($gradoActual, $datosMaterias['car_materia'], $periodoActual, $matriculadosDatos['mat_id'], $year);
-                            $datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
-                            $ausencia="";
-
-                            if ($datosAusencias[0]>0) {
-                                $ausencia= round($datosAusencias[0],0);
-                            }
-
                             //VARIABLES NECESARIAS
                             $background='';
                             $ih=$datosMaterias["car_ih"];
@@ -256,7 +257,6 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                         $notaMateriasPeriodosTotal=0;
                                         $ultimoPeriodo = $config["conf_periodos_maximos"];
                                         for($i=1;$i<=$periodoActual;$i++){
-                                            if($i!=$periodoActual){
                                                 $consultaPeriodos=mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$datosMaterias['car_id']."' AND bol_periodo='".$i."' AND bol_estudiante = '".$matriculadosDatos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
                                                 $datosPeriodos=mysqli_fetch_array($consultaPeriodos, MYSQLI_BOTH);
                                                 $notaMateriasPeriodos=$datosPeriodos['bol_nota'];
@@ -280,22 +280,10 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                     ?>
                                     <td align="center" style="background: #9ed8ed"><?=$notaMateriasPeriodosFinal?></td>
                                     <?php
-                                                }else{
-                                                    $notaMateriaFinal = $notaMateria;
-                                                    if (empty($datosMaterias['bol_periodo'])){
-                                                        $notaMateriaFinal = "";
-                                                        $estiloNota['notip_nombre'] = "";
-                                                        $ultimoPeriodo  -= 1;
-                                                    }
-                                    ?>
-                                    <td align="center"><?=$notaMateriaFinal?></td>
-                                    <td align="center"><?=$estiloNota['notip_nombre']?></td>
-                                    <?php
-                                            }
                                         }//FIN FOR
 
                                         //ACOMULADO PARA LAS MATERIAS
-                                        $notaAcomuladoMateria = ($notaMateria + $notaMateriasPeriodosTotal) / $ultimoPeriodo;
+                                        $notaAcomuladoMateria = $notaMateriasPeriodosTotal / $ultimoPeriodo;
                                         $notaAcomuladoMateria = round($notaAcomuladoMateria,1);
                                         if(strlen($notaAcomuladoMateria) === 1 || $notaAcomuladoMateria == 10){
                                             $notaAcomuladoMateria = $notaAcomuladoMateria.".0";
@@ -308,7 +296,6 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                             $estiloNotaAcomuladoMaterias['notip_nombre']="Superior";
                                         }
                                     ?>
-                                    <td align="center"><?=$ausencia?></td>
                                     <td align="center"><?=$notaAcomuladoMateria?></td>
                                     <td align="center"><?=$estiloNotaAcomuladoMaterias['notip_nombre']?></td>
                                 </tr>
@@ -332,9 +319,9 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                 $promGeneralPer1=0;
                                 $promGeneralPer2=0;
                                 $promGeneralPer3=0;
+                                $promGeneralPer4=0;
                                 $ultimoPeriodoAreas = $config["conf_periodos_maximos"];
                                 for($i=1;$i<=$periodoActual;$i++){
-                                    if($i!=$periodoActual){
                                         $consultaAreasPeriodos=mysqli_query($conexion,"SELECT mat_valor,
                                         bol_estudiante, bol_periodo, bol_nota,
                                         SUM(bol_nota * (mat_valor/100)) AS notaArea
@@ -356,6 +343,9 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                             case 3:
                                                 $promGeneralPer3+=$notaAreasPeriodos;
                                                 break;
+											case 4:
+												$promGeneralPer4+=$notaAreasPeriodos;
+												break;
                                         }
 
                                         if (empty($datosAreasPeriodos['bol_periodo'])){
@@ -376,30 +366,10 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                             ?>
                             <td align="center" style="background: #9ed8ed"><?=$notaAreasPeriodosFinal?></td>
                             <?php
-                                    }else{
-                                        $estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaArea,$year);
-                                        if($notaArea<10){
-                                            $estiloNotaAreas['notip_nombre']="Bajo";
-                                        }
-                                        if($notaArea>50){
-                                            $estiloNotaAreas['notip_nombre']="Superior";
-                                        }
-
-                                        $notaAreaFinal = $notaArea;
-                                        if (empty($notaArea) || $notaArea == 0){
-                                            $notaAreaFinal = "";
-                                            $estiloNotaAreas['notip_nombre'] = "";
-                                            $ultimoPeriodoAreas -= 1;
-                                        }
-                            ?>
-                            <td align="center"><?=$notaAreaFinal?></td>
-                            <td align="center"><?=$estiloNotaAreas['notip_nombre']?></td>
-                            <?php
-                                    }
                                 }
                         
                                 //ACOMULADO PARA LAS AREAS
-                                $notaAcomuladoArea = ($notaArea + $notaAreasPeriodosTotal) / $ultimoPeriodoAreas;
+                                $notaAcomuladoArea = $notaAreasPeriodosTotal / $ultimoPeriodoAreas;
                                 $notaAcomuladoArea = round($notaAcomuladoArea,1);
                                 if(strlen($notaAcomuladoArea) === 1 || $notaAcomuladoArea == 10){
                                     $notaAcomuladoArea = $notaAcomuladoArea.".0";
@@ -411,8 +381,11 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                 if($notaAcomuladoArea>50){
                                     $estiloNotaAcomuladoAreas['notip_nombre']="Superior";
                                 }
+
+								if($notaAcomuladoArea < $config['conf_nota_minima_aprobar']){
+									$materiasPerdidas++;
+								}
                             ?>
-                            <td align="center"><?=$ausencia?></td>
                             <td align="center"><?=$notaAcomuladoArea?></td>
                             <td align="center"><?=$estiloNotaAcomuladoAreas['notip_nombre']?></td>
                         </tr>
@@ -425,6 +398,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                             $sumaPromedioGeneralPeriodo1+=$promGeneralPer1;
                             $sumaPromedioGeneralPeriodo2+=$promGeneralPer2;
                             $sumaPromedioGeneralPeriodo3+=$promGeneralPer3;
+                            $sumaPromedioGeneralPeriodo4+=$promGeneralPer4;
                             
                         } //FIN WHILE DE LAS AREAS
 
@@ -438,12 +412,12 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                         
                     ?>
             </tbody>
-            <tfoot style="font-weight:bold; font-size: 13px;">
-                <tr style="background: #EAEAEA">
+            <tfoot style="font-size: 13px;">
+                <tr style="font-weight:bold; background: #EAEAEA">
                     <td colspan="2">PROMEDIO GENERAL</td>
                     <?php
+					$promedioGeneralPeriodosTotal = 0;
                     for ($j = 1; $j <= $periodoActual; $j++) {
-                        if($j!=$periodoActual){
                             switch($j){
                                 case 1:
                                     $sumaPromedioGeneralPeriodos=$sumaPromedioGeneralPeriodo1;
@@ -454,11 +428,16 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                 case 3:
                                     $sumaPromedioGeneralPeriodos=$sumaPromedioGeneralPeriodo3;
                                     break;
+								case 4:
+									$sumaPromedioGeneralPeriodos=$sumaPromedioGeneralPeriodo4;
+									break;
                             }
 
                             //PROMEDIO DE LAS AREAS PERIODOS ANTERIORES
                             $promedioGeneralPeriodos=($sumaPromedioGeneralPeriodos/$numAreas);
                             $promedioGeneralPeriodos= round($promedioGeneralPeriodos,1);
+							
+							$promedioGeneralPeriodosTotal+=$promedioGeneralPeriodos;
 
                             $promedioGeneralPeriodosFinal=$promedioGeneralPeriodos;
                             if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
@@ -474,148 +453,62 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                     ?>
                     <td align="center"><?=$promedioGeneralPeriodosFinal;?></td>
                     <?php
-                        }else{
-                    ?>
-                    <td align="center"><?=$promedioGeneral;?></td>
-                    <td align="center"><?=$estiloNotaPromedioGeneral['notip_nombre']?></td>
-                    <?php
-                        }
-                    }// FIN FOR
-                    ?>
-                    <td align="center"></td>
-                    <td align="center"></td>
-                    <td align="center"></td>
-                </tr>
-            </tfoot>
-        </table>
-
-        <p>&nbsp;</p>
-        <!--******PUESTO DEL ESTUDIANTE******-->
-        <table style="font-size: 15px;" width="80%" cellspacing="5" cellpadding="5" rules="all" border="1" align="right">
-            <tr style="background-color: #EAEAEA;">
-                <?php
-                    if(empty($_REQUEST["curso"])){
-                        $filtro = " AND mat_grado='" . $gradoActual . "' AND mat_grupo='".$grupoActual."'";
-                        $matriculadosDelCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
-                        $numeroEstudiantes = mysqli_num_rows($matriculadosDelCurso);
-                    }
-                    //Buscamos Puesto del estudiante en el curso
-                    $puestoEstudiantesCurso = 0;
-                    $puestosCursos = Boletin::obtenerPuestoYpromedioEstudiante($periodoActual, $gradoActual, $grupoActual,$year);
-                    
-                    while($puestoCurso = mysqli_fetch_array($puestosCursos, MYSQLI_BOTH)){
-                        if($puestoCurso['bol_estudiante']==$matriculadosDatos['mat_id']){
-                            $puestoEstudiantesCurso = $puestoCurso['puesto'];
-                        }
-                    }
-                    
-                    //Buscamos Puesto del estudiante en la institución
-                    $matriculadosDeLaInstitucion = Estudiantes::estudiantesMatriculados("", $year);
-                    $numeroEstudiantesInstitucion = mysqli_num_rows($matriculadosDeLaInstitucion);
-
-                    $puestoEstudiantesInstitucion = 0;
-                    $puestosInstitucion = Boletin::obtenerPuestoEstudianteEnInstitucion($periodoActual, $year);
-                    
-                    while($puestoInstitucion = mysqli_fetch_array($puestosInstitucion, MYSQLI_BOTH)){
-                        if($puestoInstitucion['bol_estudiante']==$matriculadosDatos['mat_id']){
-                            $puestoEstudiantesInstitucion = $puestoInstitucion['puesto'];
-                        }
-                    }
-                ?>
-                <td align="center" width="40%">Puesto en el curso <b><?=$puestoEstudiantesCurso?></b> entre <b><?=$numeroEstudiantes?></b> Estudiantes.</td>
-                <td align="center" width="40%">Puesto en el colegio <b><?=$puestoEstudiantesInstitucion?></b> entre <b><?=$numeroEstudiantesInstitucion?></b> Estudiantes.</td>
-            </tr>
-        </table>
-
-        <p>&nbsp;</p>
-        <p>&nbsp;</p>
-        <p>&nbsp;</p>
-        <!--******OBSERVACIONES******-->
-
-        <table style="font-size: 15px;" width="100%" cellspacing="5" cellpadding="5" rules="all" border="1" align="center">
-            <thead>
-                <tr style="font-weight:bold; text-align:left; background-color: #00adefad;">
-                    <td><b>Observaciones:</b></td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr style="color:#000;">
-                    <td style="padding-left: 20px;">
-                        <?php 
-                            $cndisiplina = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='".$matriculadosDatos['mat_id']."' AND dn_periodo='".$periodoActual."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-                            while($rndisiplina=mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)){
-
-                                if(!empty($rndisiplina['dn_observacion'])){
-                                    if($config['conf_observaciones_multiples_comportamiento'] == '1'){
-                                        $explode=explode(",",$rndisiplina['dn_observacion']);
-                                        $numDatos=count($explode);
-                                        for($i=0;$i<$numDatos;$i++){
-                                            $consultaObservaciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".observaciones WHERE obser_id=$explode[$i] AND obser_id_institucion=".$config['conf_id_institucion']." AND obser_years=".$config['conf_agno']."");
-                                            $observaciones = mysqli_fetch_array($consultaObservaciones, MYSQLI_BOTH);
-                                            echo "- ".$observaciones['obser_descripcion']."<br>";
-                                        }
-                                    }else{
-                                        echo "- ".$rndisiplina["dn_observacion"]."<br>";
-                                    }
-                                }
-                            }
-                            if ($periodoActual == $config["conf_periodos_maximos"] && $ultimoPeriodoAreas < $config["conf_periodos_maximos"]) {
-                                Echo "ESTUDIANTE RETIRADO SIN FINALIZAR AÑO LECTIVO.";
-                            }
-                        ?>
-                        <p>&nbsp;</p>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div id="saltoPagina"></div>
-        <!--******SEGUNDA PAGINA******-->
-        <p>&nbsp;</p>
-        <p>&nbsp;</p>
-        <!--******INDICADORES POR ASIGNATURA******-->
-
-        <table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1" align="center">
-            <thead>
-                <tr style="font-weight:bold; text-align:center; background-color: #00adefad;">
-                    <td width="30%">Asignatura</td>
-                    <td width="70%">Indicadores de desempeño</td>
-                </tr>
-            </thead>
-
-            <?php
-            $conCargasDos = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
-	        INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-	        INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$year}
-	        WHERE car_curso='" . $gradoActual . "' AND car_grupo='" . $grupoActual . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}");
-            while ($datosCargasDos = mysqli_fetch_array($conCargasDos, MYSQLI_BOTH)) {
-
-                
-            ?>
-                <tbody>
-                    <tr style="color:#000;">
-                        <td><?= $datosCargasDos['mat_nombre']; ?><br><span style="color:#C1C1C1;"><?= UsuariosPadre::nombreCompletoDelUsuario($datosCargasDos); ?></span></td>
-                        <td>
+						}// FIN FOR
                         
-                            <?php
-                            //INDICADORES
-                            $indicadores = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga aic
-		                    INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=aic.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$year}
-		                    WHERE aic.ipc_carga='" . $datosCargasDos['car_id'] . "' AND aic.ipc_periodo='" . $periodoActual . "' AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$year}");
-                            while ($indicador = mysqli_fetch_array($indicadores, MYSQLI_BOTH)) {
-                            ?>
-                   
-                        <?= $indicador['ind_nombre']; ?><br>
-                    
-                <?php
-                            }
-                ?>
-                    </td>
+						//ACOMULADO GENERAL
+						$notaAcomuladoTotal = $promedioGeneralPeriodosTotal / $ultimoPeriodoAreas;
+						$notaAcomuladoTotal = round($notaAcomuladoTotal,1);
+						if(strlen($notaAcomuladoTotal) === 1 || $notaAcomuladoTotal == 10){
+							$notaAcomuladoTotal = $notaAcomuladoTotal.".0";
+						}
+						$estiloNotaAcomuladoTotal = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoTotal,$year);
+						if($notaAcomuladoTotal<10){
+							$estiloNotaAcomuladoTotal['notip_nombre']="Bajo";
+						}
+						if($notaAcomuladoTotal>50){
+							$estiloNotaAcomuladoTotal['notip_nombre']="Superior";
+						}
+
+						$notaAcomuladoTotalFinal=$notaAcomuladoTotal;
+						if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+							$estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoTotal,$year);
+							$notaAcomuladoTotalFinal= !empty($estiloNotaAreas['notip_nombre']) ? $estiloNotaAreas['notip_nombre'] : "";
+							if($notaAcomuladoTotal<10){
+								$notaAcomuladoTotalFinal="Bajo";
+							}
+							if($notaAcomuladoTotal>50){
+								$notaAcomuladoTotalFinal="Superior";
+							}
+						}
+                    ?>
+                    <td align="center"><?=$notaAcomuladoTotalFinal?></td>
+                    <td align="center"><?=$estiloNotaAcomuladoTotal['notip_nombre']?></td>
                 </tr>
-                </tbody>
-            <?php
-            }
-            ?>
+				<tr style="color:#000;">
+					<td style="padding-left: 10px;" colspan="8">
+						<h4 style="font-weight:bold; color: #00adefad;"><b>Observación definitiva:</b></h4>
+						<?php
+							if($periodoActual == $config["conf_periodos_maximos"]){
+
+								if ($materiasPerdidas >= $config["conf_num_materias_perder_agno"]) {
+									$msj = "EL(LA) ESTUDIANTE NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE.";
+								} elseif ($materiasPerdidas < $config["conf_num_materias_perder_agno"] && $materiasPerdidas > 0) {
+									$msj = "EL(LA) ESTUDIANTE DEBE NIVELAR LAS MATERIAS PERDIDAS.";
+								} else {
+									$msj = "EL(LA) ESTUDIANTE FUE PROMOVIDO(A) AL GRADO SIGUIENTE.";
+								}
+
+								if ($matriculadosDatos['mat_id'] == CANCELADO && $ultimoPeriodoAreas < $config["conf_periodos_maximos"]) {
+									$msj = "EL(LA) ESTUDIANTE FUE RETIRADO SIN FINALIZAR AÑO LECTIVO.";
+								}
+							}
+							echo "<span style='padding-left: 10px;'>".$msj."</span>";
+						?>
+						<p>&nbsp;</p>
+					</td>
+				</tr>
+            </tfoot>
+            <?php } ?>
         </table>
 
         <p>&nbsp;</p>
@@ -627,10 +520,10 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
             <tr>
                 <td align="center">
                     <?php
-                        $directorGrupo = Usuarios::obtenerDatosUsuario($idDirector);
-                        $nombreDirectorGrupo = UsuariosPadre::nombreCompletoDelUsuario($directorGrupo);
-                        if(!empty($directorGrupo["uss_firma"])){
-                            echo '<img src="../files/fotos/'.$directorGrupo["uss_firma"].'" width="100"><br>';
+                        $secretaria = Usuarios::obtenerDatosUsuario($informacion_inst["info_secretaria_academica"]);
+                        $nombreSecretaria = UsuariosPadre::nombreCompletoDelUsuario($secretaria);
+                        if(!empty($secretaria["uss_firma"]) && file_exists(ROOT_PATH.'/main-app/files/fotos/' . $secretaria['uss_firma'])){
+                            echo '<img src="../files/fotos/'.$secretaria["uss_firma"].'" width="100"><br>';
                         }else{
                             echo '<p>&nbsp;</p>
                                 <p>&nbsp;</p>
@@ -639,14 +532,14 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                     ?>
                     <p style="height:0px;"></p>_________________________________<br>
                     <p>&nbsp;</p>
-                    <?=$nombreDirectorGrupo?><br>
-                    Director(a) de grupo
+                    <?=$nombreSecretaria?><br>
+                    Secretario(a)
                 </td>
                 <td align="center">
                     <?php
                         $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
                         $nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
-                        if(!empty($rector["uss_firma"])){
+                        if(!empty($rector["uss_firma"]) && file_exists(ROOT_PATH.'/main-app/files/fotos/' . $rector['uss_firma'])){
                             echo '<img src="../files/fotos/'.$rector["uss_firma"].'" width="100"><br>';
                         }else{
                             echo '<p>&nbsp;</p>

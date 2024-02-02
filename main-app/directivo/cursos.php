@@ -128,7 +128,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																	<li><a href="../compartido/indicadores-perdidos-curso.php?curso=<?=base64_encode($resultado['gra_id']);?>&periodo=<?=base64_encode($config[2]);?>" title="Imprimir boletin por curso" target="_blank">Indicadores perdidos</a></li>
                                                         			<?php }?>
 																	<?php if(Modulos::validarSubRol(['DT0227'])){?>
-																	<li><a href="../compartido/matricula-libro-curso.php?curso=<?=base64_encode($resultado['gra_id']);?>" title="Imprimir Libro por curso" target="_blank">Libro por curso</a></li>
+																	<li><a href="../compartido/matricula-libro-curso-<?=$config['conf_libro_final']?>.php?curso=<?=base64_encode($resultado['gra_id']);?>" title="Imprimir Libro por curso" target="_blank">Libro por curso</a></li>
                                                         			<?php }?>
 																	<?php if(Modulos::validarSubRol(['DT0251'])){?>
 																	<li><a href="../compartido/matriculas-formato3-curso.php?curso=<?=base64_encode($resultado['gra_id']);?>" title="Hoja de matrícula por curso" target="_blank">Hojas de matrícula</a></li>
