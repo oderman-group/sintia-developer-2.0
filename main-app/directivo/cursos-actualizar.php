@@ -53,12 +53,8 @@ if (empty($_POST["maxEstudiantes"])) {
 if (empty($_POST["horas"])) {
 	$_POST["horas"] = '0';
 }
-if (empty($_POST["autoenrollment"])) {
-	$_POST["autoenrollment"] = '0';
-}
-if (empty($_POST["activo"])) {
-	$_POST["activo"] = '0';
-}
+$_POST["autoenrollment"] = empty($_POST["autoenrollment"]) ? 0 : 1;
+$_POST["activo"] = empty($_POST["activo"]) ? 0 : 1;
 
 try {
 	mysqli_query($conexion, "UPDATE " . BD_ACADEMICA . ".academico_grados SET 
@@ -101,7 +97,7 @@ if ($_POST["tipoG"] == GRADO_INDIVIDUAL) {
 		if ($consulta == null) {
 			foreach ($arrayDatos as $estudiante) {
 				try {
-				MediaTecnicaServicios::guardarJson($arrayDatos, $config);
+					MediaTecnicaServicios::guardarJson($arrayDatos, $config);
 				} catch (Exception $e) {
 					include("../compartido/error-catch-to-report.php");
 				}
@@ -118,19 +114,19 @@ if ($_POST["tipoG"] == GRADO_INDIVIDUAL) {
 				$editar = in_array($estudiante["matricula"], $idEstudianteMT);
 				if ($editar) {
 					try {
-					MediaTecnicaServicios::editarporCurso($estudiante["matricula"], $estudiante["curso"], $config, $estudiante["grupo"], $estudiante["estado"]);
-				} catch (Exception $e) {
-					include("../compartido/error-catch-to-report.php");
-				}
+						MediaTecnicaServicios::editarporCurso($estudiante["matricula"], $estudiante["curso"], $config, $estudiante["grupo"], $estudiante["estado"]);
+					} catch (Exception $e) {
+						include("../compartido/error-catch-to-report.php");
+					}
 				} else {
 					try {
-					MediaTecnicaServicios::guardarPorCurso($estudiante["matricula"], $estudiante["curso"], $config, $estudiante["grupo"], $estudiante["estado"]);
-				} catch (Exception $e) {
-					include("../compartido/error-catch-to-report.php");
-				}
+						MediaTecnicaServicios::guardarPorCurso($estudiante["matricula"], $estudiante["curso"], $config, $estudiante["grupo"], $estudiante["estado"]);
+					} catch (Exception $e) {
+						include("../compartido/error-catch-to-report.php");
+					}
 				}
 			}
-			$estudaintesEliminar = array_diff( $idEstudianteMT,$idEstudianteMTNuevos);
+			$estudaintesEliminar = array_diff($idEstudianteMT, $idEstudianteMTNuevos);
 			//Eliminamos los estudiantes que ya no vayan a paertenecer a este curso
 			foreach ($estudaintesEliminar as $matricula) {
 				try {
@@ -140,7 +136,6 @@ if ($_POST["tipoG"] == GRADO_INDIVIDUAL) {
 				}
 			}
 		}
-		
 	} else {
 		try {
 			MediaTecnicaServicios::eliminarExistenciaEnCursoMT($_POST["id_curso"], $config);
