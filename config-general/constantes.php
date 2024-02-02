@@ -97,11 +97,24 @@ define('TEXT', 'TEXT');
 define('MULTIPLE', 'MULTIPLE');
 define('SINGLE', 'SINGLE');
 
+/* TIPOS DE ESTADO DE MATRICULA MEDIATECNICA */
+define('ESTADO_CURSO_ACTIVO', 'ACTIVO');
+define('ESTADO_CURSO_INACTIVO', 'INACTIVO');
+define('ESTADO_CURSO_PRE_INSCRITO', 'PRE INSCRITO');
+define('ESTADO_CURSO_APROBADO', 'APROBADO');
+define('ESTADO_CURSO_NO_APROBADO', 'NO APROBADO');
+
 define('COBRADA', 'COBRADA');
 define('POR_COBRAR', 'POR_COBRAR');
 
 define('SI', 'SI');
 define('NO', 'NO');
+
+/* Tipos de impuestos */
+define('IVA', 'IVA');
+define('ICO', 'ICO');
+define('ICUI', 'ICUI');
+define('OTRO', 'OTRO');
 
 define('INVOICE', 'INVOICE');
 define('ACCOUNT', 'ACCOUNT');
@@ -124,6 +137,9 @@ define('PREESCOLAR', 1);
 define('BASICA_PRIMARIA', 2);
 define('BASICA_SECUNDARIA', 3);
 define('MEDIA', 4);
+
+define('ACTIVO', 'ACTIVO');
+define('INACTIVO', 'INACTIVO');
 
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':
