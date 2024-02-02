@@ -14,7 +14,7 @@ class MediaTecnicaServicios extends Servicios
       global $baseDatosServicios;
       $sqlInicial="SELECT * FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos";
       if($parametrosArray && count($parametrosArray)>0){
-        $parametrosValidos=array('matcur_id_matricula','matcur_id_institucion','matcur_years');
+        $parametrosValidos=array('matcur_id_curso','matcur_id_matricula','matcur_id_institucion','matcur_years');
         $sqlInicial=Servicios::concatenarWhereAnd($sqlInicial,$parametrosValidos,$parametrosArray);
       };
       $sqlFinal ="";
