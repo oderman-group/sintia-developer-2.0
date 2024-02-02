@@ -30,7 +30,7 @@ include("../compartido/head.php");
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
-                            <div class="page-title">Informes</div>
+                            <div class="page-title"><?=$frases[427][$datosUsuarioActual['uss_idioma']];?></div>
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                     </div>
