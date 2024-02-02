@@ -507,7 +507,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                                         </select>
                                                                     </td>
                                                                     <td>
-                                                                        <button type="button" onclick="eliminarFila(<?=$idEstudiante["matcur_id_matricula"]?>)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                                                        <button type="button" onclick="eliminarFila(this)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                                                                     </td>
                                                                 </tr>
                                                         <?php  }
