@@ -819,6 +819,8 @@ $frases[420][$l] = 'Obligatoria';
 $frases[421][$l] = 'TEXTO';
 $frases[422][$l] = 'MÚLTIPLE';
 $frases[423][$l] = 'ÚNICA';
+$frases[424][$l] = 'Cursos Adicionales';
+
 //ENGLISH
 
 $l = 2;
@@ -1625,3 +1627,4 @@ $frases[420][$l] = 'Mandatory';
 $frases[421][$l] = 'TEXT';
 $frases[422][$l] = 'MULTIPLE';
 $frases[423][$l] = 'SINGLE';
+$frases[424][$l] = 'Additional courses';
