@@ -834,7 +834,8 @@ class Movimientos {
         return $consulta;
     }
 
-    /** Este metodo me trae todos los impuestos
+    /**
+    * Este metodo me trae todos los impuestos
     * @param mysqli $conexion
     * @param array $config
     * 
@@ -855,13 +856,14 @@ class Movimientos {
         return $consulta;
     }
 
-    /** Este metodo me guarda un impuesto
-    * @param mysqli $conexion
-    * @param array $config
-    * @param array $POST
-    * 
-    * @return string $codigo
-   **/
+    /**
+     * Este metodo me guarda un impuesto
+     * @param mysqli $conexion
+     * @param array $config
+     * @param array $POST
+     * 
+     * @return string $codigo
+    **/
     public static function guardarImpuestos (
         mysqli $conexion, 
         array $config, 
@@ -880,12 +882,12 @@ class Movimientos {
     }
 
     /**
-        * Este metodo me trae la informacion de un impuesto
-        * @param mysqli $conexion
-        * @param array $config
-        * @param string $idImpuesto
-        * 
-        * @return array $resultado
+     * Este metodo me trae la informacion de un impuesto
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idImpuesto
+     * 
+     * @return array $resultado
     **/
     public static function traerDatosImpuestos (
         mysqli $conexion, 
@@ -906,10 +908,10 @@ class Movimientos {
     }
 
     /**
-        * Este metodo me actualiza un impuesto
-        * @param mysqli $conexion
-        * @param array $config
-        * @param array $POST
+     * Este metodo me actualiza un impuesto
+     * @param mysqli $conexion
+     * @param array $config
+     * @param array $POST
     **/
     public static function actualizarImpuestos (
         mysqli $conexion, 
@@ -926,10 +928,10 @@ class Movimientos {
     }
 
     /**
-        * Este metodo me actualiza un impuesto
-        * @param mysqli $conexion
-        * @param array $config
-        * @param string $idImpuesto
+     * Este metodo me actualiza un impuesto
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idImpuesto
     **/
     public static function eliminarImpuestos (
         mysqli $conexion, 

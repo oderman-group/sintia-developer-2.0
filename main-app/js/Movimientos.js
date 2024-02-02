@@ -496,6 +496,27 @@ function anularMovimiento(datos) {
 }
 
 /**
+* Se valida input para que solo reciba numeros decimales
+*/
+function validarInput(datos) {
+    var valor = datos.value;
+
+    // Utilizar una expresión regular para verificar si el valor es un número decimal válido
+    var regex = /^[0-9]+(\.[0-9]+)?$/;
+
+    if (regex.test(valor)) {
+        document.getElementById("resp").style.display = 'none';
+        document.getElementById("btnEnviar").style.visibility = 'visible';
+        $("#resp").html('');
+    } else {
+        document.getElementById("resp").style.color = 'red';
+        document.getElementById("resp").style.display = 'block';
+        document.getElementById("btnEnviar").style.visibility = 'hidden';
+        $("#resp").html('Por favor, ingrese solo números.');
+    }
+}
+
+/**
  * Esta función muestra el campo para escoger el tipo de transacción
  */
 function mostrarTipoTransaccion(){
@@ -1001,29 +1022,8 @@ function totalizarMovimientos() {
 }
 
 /**
-* Se valida input para que solo reciba numeros decimales
-*/
-function validarInput(datos) {
-   var valor = datos.value;
-
-   // Utilizar una expresión regular para verificar si el valor es un número decimal válido
-   var regex = /^[0-9]+(\.[0-9]+)?$/;
-
-   if (regex.test(valor)) {
-       document.getElementById("resp").style.display = 'none';
-       document.getElementById("btnEnviar").style.visibility = 'visible';
-       $("#resp").html('');
-   } else {
-       document.getElementById("resp").style.color = 'red';
-       document.getElementById("resp").style.display = 'block';
-       document.getElementById("btnEnviar").style.visibility = 'hidden';
-       $("#resp").html('Por favor, ingrese solo números.');
-   }
-}
-
-/**
-* Esta funcion me calcula los totales de una factura
-*/
+ * Esta funcion me calcula los totales de una factura
+ */
 function totalizar(){
     var tabla = document.getElementById('tablaItems');
 

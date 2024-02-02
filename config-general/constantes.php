@@ -119,6 +119,12 @@ define('OTRO', 'OTRO');
 define('INVOICE', 'INVOICE');
 define('ACCOUNT', 'ACCOUNT');
 
+/* Tipos de impuestos */
+define('IVA', 'IVA');
+define('ICO', 'ICO');
+define('ICUI', 'ICUI');
+define('OTRO', 'OTRO');
+
 /* ESTADOS DE MATRICULA */
 define('MATRICULADO', 1);
 define('ASISTENTE', 2);
