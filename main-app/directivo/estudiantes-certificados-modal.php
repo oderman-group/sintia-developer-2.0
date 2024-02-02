@@ -19,9 +19,22 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
 <div class="col-sm-12">
 
     <?php
-    $ext = '';
-    if ($config['conf_certificado'] == 2) {
-        $ext = '-2';
+    switch ($config['conf_certificado']) {
+        case 1:
+            $ext = '';
+        break;
+
+        case 2:
+            $ext = '-2';
+        break;
+
+        case 3:
+            $ext = '-3';
+        break;
+
+        default:
+            $ext = '';
+        break;
     }
     ?>
     <div class="panel">
@@ -84,6 +97,15 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                         </select>
                     </div>
                 </div>
+
+                <?php if ($config['conf_estampilla_certificados'] == SI) { ?>
+                    <div class="form-group row">
+                        <label class="col-sm-2 control-label">Estampilla o referente de pago</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="estampilla" value="">
+                        </div>
+                    </div>
+                <?php } ?>
 
                 <input type="submit" class="btn btn-primary" value="Generar Certificado">
             </form>
