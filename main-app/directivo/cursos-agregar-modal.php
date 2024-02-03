@@ -113,25 +113,25 @@ if (!Modulos::validarPermisoEdicion()) {
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label">Precio</label>
                                 <div class="col-sm-10">
-                                    <input type="number"  name="precio" disabled class="form-control" value="0"  <?= $disabledPermiso; ?>>
+                                    <input type="number"  name="precio"  class="form-control" value="0"  <?= $disabledPermiso; ?>>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label">Minimo de estudiantes</label>
                                 <div class="col-sm-10">
-                                    <input type="number" name="minEstudiantes" class="form-control" value="1"  <?= $disabledPermiso; ?>>
+                                    <input type="number" name="minEstudiantes" class="form-control" value="1"  min="1" <?= $disabledPermiso; ?>>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label">Maximo de estudiantes</label>
                                 <div class="col-sm-10">
-                                    <input type="number" name="maxEstudiantes" class="form-control" value="10" <?= $disabledPermiso; ?>>
+                                    <input type="number" name="maxEstudiantes" disabled class="form-control" value="1" min="1"<?= $disabledPermiso; ?>>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label">Duracion en horas</label>
                                 <div class="col-sm-10">
-                                    <input type="number" id="horas" name="horas" class="form-control" value="0"  min="1" max="10" <?= $disabledPermiso; ?>>
+                                    <input type="number" id="horas" name="horas" class="form-control" value="0"   <?= $disabledPermiso; ?>>
                                 </div>
                             </div>
                             <div class="form-group row">
