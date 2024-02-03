@@ -25,8 +25,8 @@ class Movimientos {
         $totalNeto = $valorAdicional;
 
         try {
-            $consulta = mysqli_query($conexion,"SELECT SUM(ti.subtotal + (ti.subtotal * (tax.fee / 100))) AS totalItems FROM ".BD_FINANCIERA.".transaction_items ti
-            INNER JOIN ".BD_FINANCIERA.".taxes tax ON tax.id=ti.tax AND tax.institucion = {$config['conf_id_institucion']} AND tax.year = {$_SESSION["bd"]}
+            $consulta = mysqli_query($conexion,"SELECT SUM(ti.subtotal + CASE WHEN ti.tax != 0 THEN (ti.subtotal * (tax.fee / 100)) ELSE 0 END) AS totalItems FROM ".BD_FINANCIERA.".transaction_items ti
+            LEFT JOIN ".BD_FINANCIERA.".taxes tax ON tax.id=ti.tax AND tax.institucion = {$config['conf_id_institucion']} AND tax.year = {$_SESSION["bd"]}
             WHERE ti.id_transaction = '{$idTransaction}'
             AND ti.type_transaction = '{$tipo}'
             AND ti.institucion = {$config['conf_id_institucion']}
@@ -947,4 +947,126 @@ class Movimientos {
         }
     }
 
+    /**
+     * Este metodo me trae los items mas vendidos
+     * @param mysqli            $conexion
+     * @param array             $config
+     * 
+     * @return mysqli_result    $consulta
+    **/
+    public static function itemsMasVendidos (
+        mysqli  $conexion, 
+        array   $config
+    )
+    {
+        try {
+            $consulta = mysqli_query($conexion, "SELECT SUM(cantity) AS cantidadTotal, i.id, i.name FROM ".BD_FINANCIERA.".transaction_items ti
+            INNER JOIN ".BD_FINANCIERA.".items i ON i.id=ti.id_item AND i.institucion={$config['conf_id_institucion']} AND i.year={$_SESSION["bd"]}
+            WHERE ti.institucion={$config['conf_id_institucion']} AND ti.year={$_SESSION["bd"]}
+            GROUP BY id_item
+            ORDER BY cantidadTotal DESC");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        return $consulta;
+    }
+
+    /**
+     * Este metodo me trae los 5 mejores clientes
+     * @param mysqli            $conexion
+     * @param array             $config
+     * 
+     * @return mysqli_result    $consulta
+    **/
+    public static function mejorCliente (
+        mysqli  $conexion, 
+        array   $config
+    )
+    {
+        try {
+            $consulta = mysqli_query($conexion, "SELECT SUM((ti.price * ti.cantity * (1 - ti.discount / 100) * CASE WHEN ti.tax != 0 THEN (1 + tax.fee / 100) ELSE 1 END) + fc.fcu_valor) AS totalPagado, uss.uss_nombre, uss.uss_nombre2, uss.uss_apellido1, uss.uss_apellido2 
+            FROM ".BD_FINANCIERA.".finanzas_cuentas fc
+            INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=fcu_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+            INNER JOIN ".BD_FINANCIERA.".transaction_items ti ON fc.fcu_id = ti.id_transaction  AND ti.institucion={$config['conf_id_institucion']} AND ti.year={$_SESSION["bd"]}
+            LEFT JOIN ".BD_FINANCIERA.".taxes tax ON tax.id=ti.tax AND tax.institucion = {$config['conf_id_institucion']} AND tax.year = {$_SESSION["bd"]}
+            WHERE fc.fcu_anulado = 0 AND fc.fcu_status = '".COBRADA."' AND fc.institucion={$config['conf_id_institucion']} AND fc.year={$_SESSION["bd"]}
+            GROUP BY fc.fcu_usuario
+            ORDER BY totalPagado DESC
+            LIMIT 5");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        return $consulta;
+    }
+
+    /**
+     * Este metodo me el ingreso y egresos de los meses de un año
+     * @param mysqli            $conexion
+     * @param array             $config
+     * 
+     * @return mysqli_result    $consulta
+    **/
+    public static function TotalIngresosEgresos (
+        mysqli  $conexion, 
+        array   $config
+    )
+    {
+        try {
+            $consulta = mysqli_query($conexion, "SELECT 
+                LPAD(MONTH(fc.fcu_fecha), 2, '0') AS mes,
+                SUM(CASE WHEN fc.fcu_tipo = '1' THEN (CAST(fc.fcu_valor AS DECIMAL(10, 2)) + IFNULL(ti.totalItems, 0)) ELSE 0 END) AS totalIngresos,
+                SUM(CASE WHEN fc.fcu_tipo = '2' THEN (CAST(fc.fcu_valor AS DECIMAL(10, 2)) + IFNULL(ti.totalItems, 0)) ELSE 0 END) AS totalEgresos
+            FROM ".BD_FINANCIERA.".finanzas_cuentas fc
+            LEFT JOIN (
+                SELECT ti.id_transaction, SUM(ti.price * ti.cantity * (1 - ti.discount / 100) * CASE WHEN ti.tax != 0 THEN (1 + tax.fee / 100) ELSE 1 END) AS totalItems, ti.institucion, ti.year
+                FROM ".BD_FINANCIERA.".transaction_items ti 
+                LEFT JOIN ".BD_FINANCIERA.".taxes tax ON tax.id=ti.tax AND tax.institucion = {$config['conf_id_institucion']} AND tax.year = {$_SESSION["bd"]}
+                WHERE ti.institucion={$config['conf_id_institucion']} AND ti.year={$_SESSION["bd"]}
+                GROUP BY ti.id_transaction
+            ) ti ON fc.fcu_id = ti.id_transaction AND ti.institucion={$config['conf_id_institucion']} AND ti.year={$_SESSION["bd"]}
+            WHERE fc.institucion={$config['conf_id_institucion']} AND fc.year={$_SESSION["bd"]}
+            GROUP BY mes
+            ORDER BY mes");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        return $consulta;
+    }
+
+    /**
+     * Este metodo me trae el total de cuentas por cobrar de cada mes
+     * @param mysqli            $conexion
+     * @param array             $config
+     * 
+     * @return mysqli_result    $consulta
+    **/
+    public static function cuentasPorCobrar (
+        mysqli  $conexion, 
+        array   $config
+    )
+    {
+        try {
+            $consulta = mysqli_query($conexion, "SELECT 
+                LPAD(MONTH(fc.fcu_fecha), 2, '0') AS mes,
+                SUM(CASE WHEN fc.fcu_tipo = '1' AND fc.fcu_status = 'POR_COBRAR' THEN (CAST(fc.fcu_valor AS DECIMAL(10, 2)) + IFNULL(ti.totalItems, 0)) ELSE 0 END) AS totalPorCobrar
+            FROM ".BD_FINANCIERA.".finanzas_cuentas fc
+            LEFT JOIN (
+                SELECT ti.id_transaction, SUM(ti.price * ti.cantity * (1 - ti.discount / 100) * CASE WHEN ti.tax != 0 THEN (1 + tax.fee / 100) ELSE 1 END) AS totalItems, ti.institucion, ti.year
+                FROM ".BD_FINANCIERA.".transaction_items ti
+                LEFT JOIN ".BD_FINANCIERA.".taxes tax ON tax.id=ti.tax AND tax.institucion = {$config['conf_id_institucion']} AND tax.year = {$_SESSION["bd"]}
+                WHERE ti.institucion={$config['conf_id_institucion']} AND ti.year={$_SESSION["bd"]}
+                GROUP BY ti.id_transaction
+            ) ti ON fc.fcu_id = ti.id_transaction AND ti.institucion={$config['conf_id_institucion']} AND ti.year={$_SESSION["bd"]}
+            WHERE fc.institucion={$config['conf_id_institucion']} AND fc.year={$_SESSION["bd"]}
+            GROUP BY mes
+            ORDER BY mes");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        return $consulta;
+    }
 }
