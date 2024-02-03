@@ -224,7 +224,7 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 				<div class="page-bar">
 					<div class="page-title-breadcrumb">
 						<div class=" pull-left">
-							<div class="page-title"><?= $frases[424][$datosUsuarioActual['uss_idioma']]; ?></div>
+							<div class="page-title"><?= $frases[428][$datosUsuarioActual['uss_idioma']]; ?></div>
 							<?php include("../compartido/texto-manual-ayuda.php"); ?>
 
 						</div>
@@ -258,7 +258,7 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 								} else {
 									$urlImagen = $dato["gra_cover_image"];
 								};
-								$limiteCaracteres = 150;
+								$limiteCaracteres = 300;
 
 								$textoTruncado = "";
 								if (strlen($dato["gra_overall_description"]) > $limiteCaracteres) { // Verificar si la longitud del texto es mayor que el límite
@@ -296,6 +296,7 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 												];
 												$listaMatriculados = MediaTecnicaServicios::listar($parametros);
 												$hidden = '';
+												$numInscritos = 0;
 												if (!empty($listaMatriculados)) {
 													$numInscritos = count($listaMatriculados);
 													foreach ($listaMatriculados as $inscrito) {
@@ -314,7 +315,7 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 											<ul class="postcard__tagbox">
 												<li class="tag__item"><i class="fas fa-tag mr-2"></i>$<?= number_format($dato["gra_price"], 0, ",", "."); ?></li>
 												<li class="tag__item"><i class="fas fa-clock mr-2"></i><?= $dato["gra_duration_hours"]; ?> Hrs.</li>
-												<li class="tag__item play " <?= $hidden ?>>
+												<li class="tag__item play btn-success" <?= $hidden ?> onclick="inscribirse('<?=$dato['gra_id']?>')">
 													<a href="#"><i class="fa-regular fa-pen-to-square"></i>Inscribirme</a>
 												</li>
 											</ul>
@@ -368,14 +369,13 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 			var url = "fetch-inscribirse-curso.php";
 			var data = {
 				"codigo": (valor),
-				"year": <?php echo $config['conf_agno'] ?>,
-				"institucion": <?php echo $config['conf_id_institucion'] ?>
+				"matricula": <?php echo $datosEstudianteActual['mat_id'] ?>
 			};
 			fetch(url, {
 					method: "POST", // or 'PUT'
 					body: JSON.stringify(data), // data can be `string` or {object}!
 					headers: {
-						"Content-Type": "text/html"
+						"Content-Type": "application/json"
 					},
 				})
 				.then((res) => res.text())
@@ -383,9 +383,6 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 				.then(
 					function(res) {
 						console.log(res);
-						const contenido = document.getElementById('contenidoModal');
-						contenido.innerHTML = res;
-						$('#Modal1').modal('show');
 						location.reload();
 
 					});
