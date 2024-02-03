@@ -55,6 +55,7 @@ if (empty($curso["gra_cover_image"])) {
                                 ];
                                 $listaMatriculados = MediaTecnicaServicios::listar($parametros);
                                 $hidden = '';
+                                $numInscritos = 0;
                                 if (!empty($listaMatriculados)) {
                                     $numInscritos = count($listaMatriculados);
                                     foreach ($listaMatriculados as $inscrito) {
@@ -78,7 +79,7 @@ if (empty($curso["gra_cover_image"])) {
                     </div>
                 </div>
                 <div style="text-align: center;">
-                    <button type="button" <?= $hidden ?>  class="btn btn-primary">Inscribirme</button>
+                    <button type="button" <?= $hidden ?>  onclick="inscribirse('<?=$curso['gra_id']?>')" class="btn btn-primary">Inscribirme</button>
 
                     <p style="color:green" <?= empty($hidden) ? "hidden" : "" ?>><i class="fa fa-check"></i> Estoy inscrito</p>
                 </div>
