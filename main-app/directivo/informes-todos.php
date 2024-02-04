@@ -35,7 +35,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 							<h4>INFORMES ACADEMICOS</h4>
                             <div class="row">
 								
-								<?php if(Modulos::validarSubRol(['DT0100','DT0082','DT0134','DT0135','DT0133','DT0101','DT0143','DT0136','DT0120','DT0147'])){?>
+								<?php if(Modulos::validarSubRol(['DT0100','DT0082','DT0134','DT0135','DT0133','DT0101','DT0143','DT0136','DT0120','DT0147', 'DT0307'])){?>
 								<div class="col-md-6">
 									<div class="panel">
 										<header class="panel-heading panel-heading-blue">MATRICULAS</header>
@@ -112,7 +112,15 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 												if(Modulos::validarSubRol(['DT0223'])){
 											?>
 												<p><a href="../compartido/informes/informe-matriculas-repetidas.php" target="_blank">13. Informe Matriculas repetidas</a></p>
-											<?php }?>
+											<?php 
+												}
+												if(Modulos::validarSubRol(['DT0307'])){
+											?>
+												<p><a href="javascript:void(0);"  data-toggle="modal" data-target="#modal14">14. Informe Matriculas retiradas</a></p>
+											<?php 
+												$idModal = "modal14"; $contenido = "matriculas-retiradas-modal.php";  include("../compartido/contenido-modal.php");
+												}
+											?>
 										</div>
                                 	</div>
 								</div>

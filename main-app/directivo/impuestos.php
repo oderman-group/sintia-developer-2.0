@@ -1,6 +1,6 @@
 <?php
 include("session.php");
-$idPaginaInterna = 'DT0264';
+$idPaginaInterna = 'DT0294';
 require_once(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once(ROOT_PATH."/main-app/compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Movimientos.php");
@@ -27,11 +27,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[413][$datosUsuarioActual['uss_idioma']];?></div>
+                                <div class="page-title"><?=$frases[425][$datosUsuarioActual['uss_idioma']];?></div>
 								<?php require_once(ROOT_PATH."/main-app/compartido/texto-manual-ayuda.php");?>
                             </div>
                             <ol class="breadcrumb page-breadcrumb pull-right">
-                                <li class="active"><?=$frases[413][$datosUsuarioActual['uss_idioma']];?></li>
+                                <li class="active"><?=$frases[425][$datosUsuarioActual['uss_idioma']];?></li>
                             </ol>
                         </div>
                     </div>
@@ -44,7 +44,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                 <?php require_once(ROOT_PATH."/config-general/mensajes-informativos.php"); ?>
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
-                                            <header><?=$frases[413][$datosUsuarioActual['uss_idioma']];?></header>
+                                            <header><?=$frases[425][$datosUsuarioActual['uss_idioma']];?></header>
                                             <div class="tools">
                                                 <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
 			                                    <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
@@ -56,8 +56,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-                                                        <?php if (Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0265'])) { ?>
-                                                            <a href="abonos-agregar.php" class="btn deepPink-bgcolor"> Agregar nuevo <i class="fa fa-plus"></i></a>
+                                                        <?php if (Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0295'])) { ?>
+                                                            <a href="impuestos-agregar.php" class="btn deepPink-bgcolor"> Agregar nuevo <i class="fa fa-plus"></i></a>
                                                         <?php } ?>
 													</div>
 												</div>
@@ -68,32 +68,20 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[51][$datosUsuarioActual['uss_idioma']];?></th>
-														<th><?=$frases[383][$datosUsuarioActual['uss_idioma']];?></th>
-														<th><?=$frases[424][$datosUsuarioActual['uss_idioma']];?></th>
-														<th><?=$frases[413][$datosUsuarioActual['uss_idioma']];?></th>
-														<th><?=$frases[414][$datosUsuarioActual['uss_idioma']];?></th>
-														<th><?=$frases[345][$datosUsuarioActual['uss_idioma']];?></th>
-                                                        <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0267','DT0269'])){?>
+														<th><?=$frases[294][$datosUsuarioActual['uss_idioma']];?> <?=$frases[425][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[187][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[426][$datosUsuarioActual['uss_idioma']];?></th>
+														<th><?=$frases[50][$datosUsuarioActual['uss_idioma']];?></th>
+                                                        <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0297','DT0299'])){?>
                                                             <th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                                                         <?php }?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 													<?php
-                                                        $consulta= Movimientos::listarAbonos($conexion, $config);
+                                                        $consulta= Movimientos::listarImpuestos($conexion, $config);
                                                         $contReg = 1;
                                                         while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-
-                                                            $vaucher = '';
-                                                            if (!empty($resultado['voucher']) and file_exists(ROOT_PATH.'/main-app/files/comprobantes/' . $resultado['voucher'])) {
-                                                                $vaucher = '<a href="'.REDIRECT_ROUTE.'/files/comprobantes/'.$resultado['voucher'].'" target="_blank" class="link">'.$resultado['voucher'].'</a>';
-                                                            }
-
-                                                            $datosCliente = UsuariosPadre::sesionUsuario($resultado["invoiced"]);
-                                                            $cliente = UsuariosPadre::nombreCompletoDelUsuario($datosCliente);
-                                                            
-                                                            $abonos = Movimientos::calcularTotalAbonadoCliente($conexion, $config, $resultado['invoiced'], $resultado['cod_payment']);
 
                                                             $arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
                                                             $arrayDatos = json_encode($arrayEnviar);
@@ -101,14 +89,12 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                     ?>
 													<tr id="reg<?=$resultado['id'];?>">
                                                         <td><?=$contReg;?></td>
-														<td><?=$resultado['registration_date'];?></td>
-														<td><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></td>
-														<td><?=$cliente;?></td>
-														<td>$<?=number_format($abonos,0,",",".")?></td>
-														<td><?=$resultado['payment_method'];?></td>
-														<td><?=$vaucher;?></td>
+														<td><?=$resultado['type_tax'];?></td>
+														<td><?=$resultado['name'];?></td>
+														<td><?=$resultado['fee']?>%</td>
+														<td><?=$resultado['description'];?></td>
 														
-                                                        <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0267','DT0269'])){?>
+                                                        <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0297','DT0299'])){?>
                                                             <td>
                                                                 <div class="btn-group">
                                                                     <button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
@@ -116,12 +102,10 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                                         <i class="fa fa-angle-down"></i>
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
-																		<?php if(Modulos::validarSubRol(['DT0267'])){?>
-                                                                            <li><a href="abonos-editar.php?id=<?=base64_encode($resultado['id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
-                                                                        <?php } if(Modulos::validarSubRol(['DT0269'])){?>
-                                                                            <li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" id="<?=$resultado['id'];?>" name="abonos-eliminar.php?id=<?=base64_encode($resultado['id']);?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
-                                                                        <?php } if( Modulos::validarSubRol(['DT0271']) ){?>
-																			<li><a href="abonos-recibo-caja.php?id=<?=base64_encode($resultado['id']);?>" target="_blank"><?=$frases[57][$datosUsuarioActual['uss_idioma']];?></a></li>
+																		<?php if(Modulos::validarSubRol(['DT0297'])){?>
+                                                                            <li><a href="impuestos-editar.php?id=<?=base64_encode($resultado['id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
+                                                                        <?php } if(Modulos::validarSubRol(['DT0299'])){?>
+                                                                            <li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" id="<?=$resultado['id'];?>" name="impuestos-eliminar.php?id=<?=base64_encode($resultado['id']);?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
 																		<?php }?>
                                                                     </ul>
                                                                 </div>
@@ -129,9 +113,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                         <?php }?>
                                                     </tr>
 													<?php 
-														 $contReg++;
-													  }
-													  ?>
+                                                        $contReg++;
+                                                    }
+                                                    ?>
                                                 </tbody>
                                             </table>
                                             </div>
