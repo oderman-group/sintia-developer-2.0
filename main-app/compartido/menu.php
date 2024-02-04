@@ -203,7 +203,12 @@
 											if(Modulos::validarSubRol(["DT0273"])){
 										?>
 											<li <?php agregarClass(MENU,["DT0273"]) ?>><a href="configuracion-finanzas.php" class="nav-link "> <span class="title"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?></span></a></li>
-										<?php } ?>
+										<?php 
+											}
+											if(Modulos::validarSubRol(["DT0305"])){
+										?>
+											<li <?php agregarClass(MENU,["DT0305"]) ?>><a href="moviminetos-reportes-graficos.php" class="nav-link "> <span class="title"><?=$frases[427][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<?php }?>
 									</ul>
 								</li>
 							<?php }}?>
