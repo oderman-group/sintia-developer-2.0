@@ -113,7 +113,7 @@ if (!Modulos::validarPermisoEdicion()) {
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label">Precio</label>
                                 <div class="col-sm-10">
-                                    <input type="number"  name="precio" disabled class="form-control" value="0"  <?= $disabledPermiso; ?>>
+                                    <input type="number"  name="precio"  class="form-control" value="0"  <?= $disabledPermiso; ?>>
                                 </div>
                             </div>
                             <div class="form-group row">
