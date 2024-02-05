@@ -84,13 +84,13 @@
 								
 								//MÓDULO ACADÉMICO
 								if(!empty($arregloModulos) && array_key_exists(1, $arregloModulos)){
-									if(Modulos::validarSubRol(["DT0102","DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195"])){
+									if(Modulos::validarSubRol(["DT0102","DT0001","DT0062","DT0064","DT0017","DT0020","DT0032","DT0121","DT0195"])){
 							?>
-							<li <?php agregarClass(MENU_PADRE,["DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195","DT0196","DT0197"]) ?>>
+							<li <?php agregarClass(MENU_PADRE,["DT0001","DT0062","DT0064","DT0017","DT0020","DT0032","DT0121","DT0195","DT0196","DT0197"]) ?>>
 	                            <a href="#" class="nav-link nav-toggle"> <i class="material-icons">assignment_ind</i>
 	                                <span class="title"><?=$frases[88][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 	                            </a>
-	                            <ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195","DT0196","DT0197"]) ?> >
+	                            <ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0001","DT0062","DT0064","DT0017","DT0020","DT0032","DT0121","DT0195","DT0196","DT0197"]) ?> >
 									
 									<?php 
 										if(Modulos::validarSubRol(['DT0001'])){
@@ -101,7 +101,7 @@
 									
 										if(Modulos::validarSubRol(['DT0062'])){
 									?>
-										<li <?php agregarClass(MENU,["DT0062"]) ?>><a href="cursos.php" class="nav-link "> <span class="title"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<li <?php agregarClass(MENU,["DT0062","DT0064"]) ?>><a href="cursos.php" class="nav-link "> <span class="title"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									<?php
 										}
 									
@@ -563,8 +563,11 @@
 							
 							<?php 
 							//MENÚ ESTUDIANTES
-							if($datosUsuarioActual['uss_tipo'] == TIPO_ESTUDIANTE){?>
-
+							if($datosUsuarioActual['uss_tipo'] == TIPO_ESTUDIANTE){
+								if (empty($datosEstudianteActual)) {
+									include("verificar-usuario.php");
+								}
+							 ?>
 	                        
 							
 							<li class="nav-item">
@@ -572,7 +575,13 @@
 	                                <span class="title"><?=$frases[73][$datosUsuarioActual['uss_idioma']];?></span> 
 	                            </a>
 	                        </li>
-
+							<?php if ($datosEstudianteActual['mat_tipo_matricula'] == GRADO_INDIVIDUAL) {?>
+							<li class="nav-item">
+	                            <a href="cargas-adicionales.php" class="nav-link nav-toggle"> <i class="fa-solid fa-sitemap"></i>
+	                                <span class="title"><?=$frases[428][$datosUsuarioActual['uss_idioma']];?></span> 
+	                            </a>
+	                        </li>
+							<?php }?>
 
 							<?php if((!empty($_COOKIE["cargaE"]) && !empty($_COOKIE["periodoE"])) || (!empty($_GET["carga"]) && !empty($_GET["periodo"]))){?>
 							<li class="nav-item">
