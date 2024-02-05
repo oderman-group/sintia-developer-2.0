@@ -91,7 +91,6 @@ define('TIPO_FACTURA', 'INVOICE');
 define('TIPO_COTIZACION', 'QUOTE');
 define('TIPO_RECURRING', 'INVOICE_RECURRING');
 
-
 /* TIPOS DE PREGUNTAS */
 define('TEXT', 'TEXT');
 define('MULTIPLE', 'MULTIPLE');

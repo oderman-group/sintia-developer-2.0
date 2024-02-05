@@ -37,6 +37,9 @@ function seleccionarEstudiantes(datos) {
     var idEstudiante = datos.value;
     var grupo = datos.getAttribute('data-grupo'); 
     var all = document.getElementById('all'); 
+
+    var elementCambiarEstado = document.getElementById('cambiarEstado'+idEstudiante);
+
     if (datos.checked) {
         var cont=0;
         checkboxes.forEach(function(checkElement) {
@@ -47,14 +50,29 @@ function seleccionarEstudiantes(datos) {
         if(cont==checkboxes.length){
             all.checked=true;
         }
+
         agregarEstudiantes(idEstudiante);
         crearInputGrupoEstudiante('noThis', idEstudiante, grupo);
+
+        elementCambiarEstado.disabled = false;
     } else {
         if(all.checked){
             all.checked=false;
         }
         eliminarEstudiantes(idEstudiante);
         eliminarGrupoEstudiantes(idEstudiante);
+
+        elementCambiarEstado.checked = false;
+        elementCambiarEstado.disabled = true;
+        var existe = existeElemento("hiddenEstado"+idEstudiante);
+        if (existe) {
+            var miDiv = document.getElementById("divEstudiante");
+            var inputEliminar = document.getElementById("hiddenEstado"+idEstudiante);
+        
+            if (inputEliminar) {
+                miDiv.removeChild(inputEliminar);
+            }
+        }
     }
 }
 
@@ -115,27 +133,11 @@ function crearInputCarga(datos) {
 
         var existe = existeElemento(id);
 
-        if(data.coinciden === true){
-
-            if (!existe) {
-                var input = document.createElement("input");
-                input.type = "hidden";
-                input.id = id; 
-                input.name = idCarga; 
-                input.value = cargaPasar; 
-        
-                var miDiv = document.getElementById("divCargas");
-                miDiv.appendChild(input);
-            } else {
-                var input = document.getElementById(id);
-                input.value = cargaPasar; 
-            }
-
-        }else{
+        if(data.coinciden === false){
 
             Swal.fire({
                 title: 'Cargas no coinciden',
-                text: "El grupo o la asignatura no coinciden por favor verifica nuevamente.",
+                text: "El grupo o la asignatura no coinciden con el grupo y la asignatura de la carga con la que deseas relacionarla.",
                 icon: 'warning',
                 showCancelButton: false,
                 confirmButtonText: 'Ok',
@@ -143,23 +145,22 @@ function crearInputCarga(datos) {
                     rgba(0,0,123,0.4)
                     no-repeat
                 `,
-            }).then((result) => {
-                var carga = document.getElementById(idCarga);
-                var cargaContainer = document.getElementById('select2-'+idCarga+'-container');
-                
-                carga.value = '';
-                cargaContainer.innerHTML = 'Seleccione una opción';
-
-                if (existe) {
-                    var miDiv = document.getElementById("divCargas");
-                    var input = document.getElementById(id);
-
-                    if (input) {
-                        miDiv.removeChild(input);
-                    }
-                }
             })
 
+        }
+
+        if (!existe) {
+            var input = document.createElement("input");
+            input.type = "hidden";
+            input.id = id; 
+            input.name = idCarga; 
+            input.value = cargaPasar; 
+    
+            var miDiv = document.getElementById("divCargas");
+            miDiv.appendChild(input);
+        } else {
+            var input = document.getElementById(id);
+            input.value = cargaPasar; 
         }
     })
 }
@@ -203,5 +204,52 @@ function eliminarGrupoEstudiantes(idEstudiante) {
 
     if (inputEliminar) {
         miDiv.removeChild(inputEliminar);
+    }
+}
+
+/**
+ * Esta función habilita los campos para selecionar los grupos de forma generar cuando
+ * se van a relacionar las cargas.
+ */
+function relacionCargasGrupos(data) {
+    if (data.checked == true) {
+        document.getElementById("elementGroup").style.display = "flex";
+        document.getElementById("grupoDesde").required = true;
+        document.getElementById("grupoPara").required = true;
+    } else {
+        document.getElementById("grupoDesde").required = false;
+        document.getElementById("grupoPara").required = false;
+        document.getElementById("elementGroup").style.display = "none";
+    }
+}
+
+/**
+ * Esta función crea un input hidden con la opcion de si desea cambiar el estado del estudiante.
+ * @param id
+ */
+function crearInputEstadoEstudiante(datos) {
+    var miDiv = document.getElementById("divEstudiante");
+
+    var idEstudiante = datos.getAttribute("data-id-estudiante");
+    var idHidden = "hiddenEstado"+idEstudiante;
+    var id = "estado"+idEstudiante;
+
+    if (datos.checked == true) {
+        var input = document.createElement("input");
+        input.type = "hidden";
+        input.id = idHidden; 
+        input.name = id; 
+        input.value = 1; 
+
+        miDiv.appendChild(input);
+    } else {
+        var existe = existeElemento(idHidden);
+        if (existe) {
+            var inputEliminar = document.getElementById(idHidden);
+        
+            if (inputEliminar) {
+                miDiv.removeChild(inputEliminar);
+            }
+        }
     }
 }
