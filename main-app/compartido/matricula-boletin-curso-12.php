@@ -344,7 +344,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                         WHERE am.mat_area = '".$datosAreas['ar_id']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
                                         GROUP BY am.mat_area");
                                         $datosAreasPeriodos=mysqli_fetch_array($consultaAreasPeriodos, MYSQLI_BOTH);
-                                        if(!empty($datosAreasPeriodos['notaArea'])) $notaAreasPeriodos=round($datosAreasPeriodos['notaArea'], 1);
+                                        $notaAreasPeriodos = !empty($datosAreasPeriodos['notaArea']) ? round($datosAreasPeriodos['notaArea'], 1) : 0;
                                         $notaAreasPeriodosTotal+=$notaAreasPeriodos;
                                         switch($i){
                                             case 1:
