@@ -518,24 +518,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
         <table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
             <tr>
-                <td align="center">
-                    <?php
-                        $secretaria = Usuarios::obtenerDatosUsuario($informacion_inst["info_secretaria_academica"]);
-                        $nombreSecretaria = UsuariosPadre::nombreCompletoDelUsuario($secretaria);
-                        if(!empty($secretaria["uss_firma"]) && file_exists(ROOT_PATH.'/main-app/files/fotos/' . $secretaria['uss_firma'])){
-                            echo '<img src="../files/fotos/'.$secretaria["uss_firma"].'" width="100"><br>';
-                        }else{
-                            echo '<p>&nbsp;</p>
-                                <p>&nbsp;</p>
-                                <p>&nbsp;</p>';
-                        }
-                    ?>
-                    <p style="height:0px;"></p>_________________________________<br>
-                    <p>&nbsp;</p>
-                    <?=$nombreSecretaria?><br>
-                    Secretario(a)
-                </td>
-                <td align="center">
+                <td align="left">
                     <?php
                         $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
                         $nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
