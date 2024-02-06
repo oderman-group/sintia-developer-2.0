@@ -240,11 +240,13 @@ function deseaEliminar(dato) {
                             async function miFuncionConDelay() {
                                 await new Promise(resolve => setTimeout(resolve, 1000));
                                 registro.style.display = "none";
+                                registro.remove();
                             }
 
-                            miFuncionConDelay();
+                            
 
                             registro.classList.add('animate__animated', 'animate__bounceOutRight', 'animate__delay-0.5s');
+                            miFuncionConDelay();                          
                             if (varObjet.restar !== undefined) {
                                 var restar              =  varObjet.restar;
                         
