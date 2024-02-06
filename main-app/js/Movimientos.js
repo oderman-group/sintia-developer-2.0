@@ -473,6 +473,7 @@ function anularMovimiento(datos) {
 
                 document.getElementById("reg"+idR).style.backgroundColor="#ff572238";
                 document.getElementById("anulado"+idR).style.display = "none";
+                document.getElementById("totalNeto"+idR).dataset.anulado = 1;
 
                 $.toast({
                     heading: 'Acción realizada',
@@ -484,6 +485,8 @@ function anularMovimiento(datos) {
                     hideAfter: 5000,
                     stack: 6
                 });
+
+                totalizarMovimientos();
             })
             .catch(error => {
                 // Manejar errores
@@ -982,6 +985,8 @@ function totalizarMovimientos() {
     for (let i = 1; i < tabla.rows.length; i++) {
         // Obtener la fila actual
         var fila = tabla.rows[i];
+
+        if (fila.cells[4].getAttribute('data-anulado') == 1) { continue; }
 
         // Obtener y acumular el valor neto total del atributo de datos
         var total = parseFloat(fila.cells[4].getAttribute('data-total-neto'));

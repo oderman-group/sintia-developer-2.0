@@ -135,7 +135,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 															<a href="<?=$_SERVER['PHP_SELF'];?>?estadoFil=<?= base64_encode($estadoFil); ?>&usuario=<?=base64_encode($usuario)?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&tipo=<?=base64_encode($tipo);?>&fecha=<?=base64_encode($resultado['fcu_fecha']);?>" style="text-decoration: underline;"><?=$resultado['fcu_fecha'];?></a>
 														</td>
 														<td><?=$resultado['fcu_detalle'];?></td>
-														<td data-total-neto="<?=$totalNeto?>">$<?=number_format($totalNeto,0,",",".")?></td>
+														<td id="totalNeto<?=$resultado['fcu_id'];?>" data-anulado="<?=$resultado['fcu_anulado']?>" data-total-neto="<?=$totalNeto?>">$<?=number_format($totalNeto,0,",",".")?></td>
 														<td data-abonos="<?=$abonos?>">$<?=number_format($abonos,0,",",".")?></td>
 														<td data-por-cobrar="<?=$porCobrar?>">$<?=number_format($porCobrar,0,",",".")?></td>
 														<td>
