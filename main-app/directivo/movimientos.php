@@ -157,7 +157,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		<?php if( Modulos::validarSubRol(['DT0128']) ){?>
 																			<li><a href="movimientos-editar.php?id=<?=base64_encode($resultado['fcu_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
 																		<?php }?>
-																		<?php if($resultado['fcu_anulado']!=1 && $resultado['fcu_status']==POR_COBRAR && Modulos::validarSubRol(['DT0089'])){?>
+																		<?php if($resultado['fcu_anulado']!=1 && $abonos <= 0 && $resultado['fcu_status']==POR_COBRAR && Modulos::validarSubRol(['DT0089'])){?>
 																			<li id="anulado<?=$resultado['fcu_id'];?>"><a href="javascript:void(0);" onClick="anularMovimiento(this)" data-id-registro="<?=$resultado['fcu_id'];?>" data-id-usuario="<?=$resultado['uss_id'];?>">Anular</a></li>
 																		<?php } ?>
 																		<?php if( Modulos::validarSubRol(['DT0255']) ){?>
