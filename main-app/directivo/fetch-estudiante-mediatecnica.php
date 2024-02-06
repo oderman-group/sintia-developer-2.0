@@ -24,7 +24,6 @@ if (!empty($tipo)) {
                 $response["msg"] = "El Curso " . $curso . " fue Creado correctamente.";
                 break;
             case ACCION_MODIFICAR:
-                MediaTecnicaServicios::editarporCurso($matricula, $curso, $grupo, $estado);
                 if (empty($input)) {
                     $grupo =  base64_decode($_GET['grupo']);
                     $estado = base64_decode($_GET['estado']);
@@ -32,6 +31,7 @@ if (!empty($tipo)) {
                     $grupo = $input['grupo'];
                     $estado = $input['estado'];
                 }
+                MediaTecnicaServicios::editarporCurso($matricula, $curso, $grupo, $estado);
                 $response["ok"] = true;
                 $response["msg"] = "El Curso " . $curso . " fue Modificado correctamente.";
                 break;
