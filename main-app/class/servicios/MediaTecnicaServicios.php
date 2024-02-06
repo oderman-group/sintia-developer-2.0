@@ -174,63 +174,70 @@ class MediaTecnicaServicios extends Servicios
                   '".$dato["grupo"]."',
                   '".$dato["estado"]."'
                  )"
-             );
-        }        
+      );
     }
-      /**
-     * Elimina la existencia de una matrícula en un curso de Media Técnica.
-     *
-     * @param int $idCursos ID del curso.
-     * @param array $config Configuración de la aplicación.
-     *
-     * @return void
-     */
-    public static function eliminarExistenciaMT($matricula,$idCursos,$config)
-    {
-        global $baseDatosServicios,$conexion;
+  }
+  /**
+   * Elimina la existencia de una matrícula en un curso de Media Técnica.
+   *
+   * @param int $idCursos ID del curso.
+   * @param array $config Configuración de la aplicación.
+   *
+   * @return void
+   */
+  public static function eliminarPorCurso($idMatricula, $idCursos, $institucion = null, $year = null)
+  {
+    global $baseDatosServicios, $config;
+    $institucion = empty($institucion) ? $config['conf_id_institucion'] : $institucion;
+    $year = empty($year) ? $config['conf_agno'] : $year;
 
-        try {
-          $consulta= mysqli_query($conexion,"DELETE FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos WHERE matcur_id_curso='".$idCursos."' AND matcur_id_matricula='".$matricula."'  AND matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_years='".$config['conf_agno']."'");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        } 
-    }
- /**
-     * Edita la información de matrículas y cursos de Media Técnica.
-     *
-     * @param string $idMatricula ID de la matrícula.
-     * @param array $cursosId Arreglo con los IDs de los cursos.
-     * @param array $config Configuración de la aplicación.
-     * @param int|null $idGrupo ID del grupo (opcional).
-     *  @param string|null $estado estado de la asignacion (opcional).
-     *
-     * @return void
-     */
-    public static function editarporCurso($idMatricula,$cursosId,$config,$idGrupo=NULL,$estado=ESTADO_CURSO_PRE_INSCRITO)
-    {
-        global $baseDatosServicios;
-        Servicios::UpdateSql(
-            "UPDATE ".$baseDatosServicios.".mediatecnica_matriculas_cursos
-            SET matcur_id_grupo ='".$idGrupo."',
-            matcur_estado ='".$estado."'
-            WHERE matcur_id_matricula ='".$idMatricula."'
-            AND matcur_id_curso ='".$cursosId."'
-            AND matcur_id_institucion =".(int)$config['conf_id_institucion']."
-            AND matcur_years          =".(int)$config['conf_agno']."
-            ");
-    }
-    /**
-     * Elimina la existencia de una matrícula en un curso de Media Técnica.
-     *
-     * @param int $idCursos ID del curso.
-     * @param array $config Configuración de la aplicación.
-     *
-     * @return void
-     */
-    public static function eliminarExistenciaEnCursoMT($idCursos,$config)
-    {
-        global $baseDatosServicios,$conexion;
+    Servicios::UpdateSql(
+      "DELETE FROM " . $baseDatosServicios . ".mediatecnica_matriculas_cursos 
+            WHERE matcur_id_matricula ='" . $idMatricula . "'
+            AND matcur_id_curso ='" . $idCursos . "'
+            AND matcur_id_institucion =" . (int)$institucion . "
+            AND matcur_years          =" . (int)$year . "
+            "
+    );
+  }
+  /**
+   * Edita la información de matrículas y cursos de Media Técnica.
+   *
+   * @param string $idMatricula ID de la matrícula.
+   * @param array $cursosId Arreglo con los IDs de los cursos.
+   * @param array $config Configuración de la aplicación.
+   * @param int|null $idGrupo ID del grupo (opcional).
+   *  @param string|null $estado estado de la asignacion (opcional).
+   *
+   * @return void
+   */
+  public static function editarporCurso($idMatricula, $idCurso, $idGrupo = 1, $estado = ESTADO_CURSO_PRE_INSCRITO, $institucion = null, $year = null)
+  {
+    global $baseDatosServicios, $config;
+    $institucion = empty($institucion) ? $config['conf_id_institucion'] : $institucion;
+    $year = empty($year) ? $config['conf_agno'] : $year;
+    Servicios::UpdateSql(
+      "UPDATE " . $baseDatosServicios . ".mediatecnica_matriculas_cursos
+            SET matcur_id_grupo ='" . $idGrupo . "',
+            matcur_estado ='" . $estado . "'
+            WHERE matcur_id_matricula ='" . $idMatricula . "'
+            AND matcur_id_curso ='" . $idCurso . "'
+            AND matcur_id_institucion =" . (int)$institucion . "
+            AND matcur_years          =" . (int)$year . "
+            "
+    );
+  }
+  /**
+   * Elimina la existencia de una matrícula en un curso de Media Técnica.
+   *
+   * @param int $idCursos ID del curso.
+   * @param array $config Configuración de la aplicación.
+   *
+   * @return void
+   */
+  public static function eliminarExistenciaEnCursoMT($idCursos, $config)
+  {
+    global $baseDatosServicios,$conexion;
 
         try {
           $consulta= mysqli_query($conexion,"DELETE FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos WHERE matcur_id_curso='".$idCursos."' AND matcur_id_institucion='".$config['conf_id_institucion']."' AND matcur_years='".$config['conf_agno']."'");
@@ -240,20 +247,25 @@ class MediaTecnicaServicios extends Servicios
         } 
     }
 
-    /**
-     * Guarda la información de matrículas y cursos de Media Técnica por curso específico.
-     *
-     * @param int $idMatricula ID de la matrícula.
-     * @param int $idCurso ID del curso.
-     * @param array $config Configuración de la aplicación.
-     * @param int|null $idGrupo ID del grupo (opcional).
-     *
-     * @return void
-     */
-    public static function guardarPorCurso($idMatricula,$idCurso,$config,$idGrupo,$estado=ESTADO_CURSO_PRE_INSCRITO)
-    {
-        global $baseDatosServicios,$conexion;
-          mysqli_query($conexion," INSERT INTO ".$baseDatosServicios.".mediatecnica_matriculas_cursos(
+  /**
+   * Guarda la información de matrículas y cursos de Media Técnica por curso específico.
+   *
+   * @param int $idMatricula ID de la matrícula.
+   * @param int $idCurso ID del curso.
+   * @param array $config Configuración de la aplicación.
+   * @param int|null $idGrupo ID del grupo (opcional).
+   *
+   * @return void
+   */
+  public static function guardarPorCurso($idMatricula, $idCurso, $idGrupo = 1, $estado = ESTADO_CURSO_PRE_INSCRITO, $institucion = null, $year = null)
+  {
+
+    global $baseDatosServicios, $conexion, $config;
+    $institucion = empty($institucion) ? $config['conf_id_institucion'] : $institucion;
+    $year = empty($year) ? $config['conf_agno'] : $year;
+    mysqli_query(
+      $conexion,
+      " INSERT INTO " . $baseDatosServicios . ".mediatecnica_matriculas_cursos(
                  matcur_id_curso, 
                  matcur_id_matricula,
                  matcur_id_institucion,
@@ -263,12 +275,12 @@ class MediaTecnicaServicios extends Servicios
                  )
                  VALUES
                  (
-                  '".$idCurso."',
-                  '".$idMatricula."',
-                  '".$config['conf_id_institucion']."',
-                  '".$config['conf_agno']."',
-                  '".$idGrupo."',
-                  '".$estado."'
+                  '" . $idCurso . "',
+                  '" . $idMatricula . "',
+                  '" . $institucion . "',
+                  '" . $year . "',
+                  '" . $idGrupo . "',
+                  '" . $estado . "'
                  )"
              );      
     }

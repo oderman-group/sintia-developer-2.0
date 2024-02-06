@@ -54,10 +54,10 @@ if (empty($_POST["horas"])) {
 	$_POST["horas"] = '0';
 }
 if (empty($_POST["autoenrollment"])) {
-	$_POST["autoenrollment"] = '0';
+	$_POST["autoenrollment"] = 1;
 }
 if (empty($_POST["activo"])) {
-	$_POST["activo"] = '0';
+	$_POST["activo"] = 0;
 }
 
 try {
@@ -86,68 +86,6 @@ try {
 	WHERE gra_id='" . $_POST["id_curso"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
-}
-
-if ($_POST["tipoG"] == GRADO_INDIVIDUAL) {
-	if (!empty($_POST["estudiantesMT"])) {
-		$arrayDatos = json_decode($_POST["estudiantesMT"], true);
-		$parametros = [
-			'matcur_id_curso' => $_POST["id_curso"],
-			'matcur_id_institucion' => $config['conf_id_institucion'],
-			'arreglo' => true
-		];
-		$consulta = MediaTecnicaServicios::listarEstudiantes($parametros);
-		// como la lista esta vacia procedemos a registrar todo lo que viene de la vista
-		if ($consulta == null) {
-			foreach ($arrayDatos as $estudiante) {
-				try {
-				MediaTecnicaServicios::guardarJson($arrayDatos, $config);
-				} catch (Exception $e) {
-					include("../compartido/error-catch-to-report.php");
-				}
-			}
-		} else {
-			$idEstudianteMT = array();
-			$idEstudianteMTNuevos = array();
-			foreach ($consulta as $dato) {
-				$idEstudianteMT[] = $dato['matcur_id_matricula'];
-			}
-			//Agregamos o editamos los estudiantes 
-			foreach ($arrayDatos as $estudiante) {
-				$idEstudianteMTNuevos[] = $estudiante["matricula"];
-				$editar = in_array($estudiante["matricula"], $idEstudianteMT);
-				if ($editar) {
-					try {
-					MediaTecnicaServicios::editarporCurso($estudiante["matricula"], $estudiante["curso"], $config, $estudiante["grupo"], $estudiante["estado"]);
-				} catch (Exception $e) {
-					include("../compartido/error-catch-to-report.php");
-				}
-				} else {
-					try {
-					MediaTecnicaServicios::guardarPorCurso($estudiante["matricula"], $estudiante["curso"], $config, $estudiante["grupo"], $estudiante["estado"]);
-				} catch (Exception $e) {
-					include("../compartido/error-catch-to-report.php");
-				}
-				}
-			}
-			$estudaintesEliminar = array_diff( $idEstudianteMT,$idEstudianteMTNuevos);
-			//Eliminamos los estudiantes que ya no vayan a paertenecer a este curso
-			foreach ($estudaintesEliminar as $matricula) {
-				try {
-					MediaTecnicaServicios::eliminarExistenciaMT($matricula, $_POST["id_curso"], $config);
-				} catch (Exception $e) {
-					include("../compartido/error-catch-to-report.php");
-				}
-			}
-		}
-		
-	} else {
-		try {
-			MediaTecnicaServicios::eliminarExistenciaEnCursoMT($_POST["id_curso"], $config);
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-	}
 }
 
 include("../compartido/guardar-historial-acciones.php");
