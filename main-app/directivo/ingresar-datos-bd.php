@@ -187,7 +187,7 @@ try {
 
 		//ASIGNAMOS MODULOS A LA INSTITUCIÓN
 		try{
-			mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".instituciones_modulos (ipmod_institucion,ipmod_modulo) VALUES ($idInsti,1),($idInsti,2),($idInsti,3),($idInsti,4),($idInsti,5),($idInsti,6),($idInsti,7)");
+			mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".instituciones_modulos (ipmod_institucion,ipmod_modulo) VALUES ($idInsti,4),($idInsti,5),($idInsti,7),($idInsti,17),($idInsti,22)");
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
