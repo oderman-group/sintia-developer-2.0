@@ -66,4 +66,4 @@ try {
 
 include('ingresar-datos-bd.php');
 
-echo '<script type="text/javascript">window.location.href="dev-instituciones.php?success=SC_DT_10";</script>';
+echo '<script type="text/javascript">window.location.href="dev-instituciones-editar.php?id='.base64_encode($idInsti).'&success=SC_DT_10";</script>';
