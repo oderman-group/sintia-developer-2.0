@@ -16,10 +16,10 @@ $id="";
 if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
 
 require_once("../class/SubRoles.php");
-$rolActual = SubRoles::consultar($id);
-$activasTodas=empty($_GET["activas"]) ?"0":"1";
-$checkActivas=($activasTodas=="0")?"":"checked";
-$listaPaginas = SubRoles::listarPaginas($id,"5",$activasTodas);
+$rolActual    = SubRoles::consultar($id);
+$activasTodas = empty($_GET["activas"]) ? "0" : "1";
+$checkActivas = ($activasTodas=="0") ? "" : "checked";
+$listaPaginas = SubRoles::listarPaginas($id, "5", $activasTodas);
 
 ?>
 <!-- Theme Styles -->
