@@ -25,6 +25,19 @@ $codGRADO=Utilidades::generateCode("GRAD");
 	if(empty($_POST["tipoG"])){ $_POST["tipoG"]=GRADO_GRUPAL;}
 	$codigoCurso = "GRA".strtotime("now");
 	
+
+		if(empty($_POST["imagen"])) {$_POST["imagen"] = '';}
+		if(empty($_POST["descripcion"])) {$_POST["descripcion"] = '';}
+		if(empty($_POST["contenido"])) {$_POST["contenido"] = '';}
+		if(empty($_POST["precio"])) {$_POST["precio"] = '0';}
+		if(empty($_POST["minEstudiantes"])) {$_POST["minEstudiantes"] = '0';}
+		if(empty($_POST["maxEstudiantes"])) {$_POST["maxEstudiantes"] = '0';}
+		if(empty($_POST["horas"])) {$_POST["horas"] = '0';}
+		if(empty($_POST["autoenrollment"])) {$_POST["autoenrollment"] = '0';}
+		if(empty($_POST["activo"])) {$_POST["activo"] = '0';}
+		$_POST["autoenrollment"] = empty($_POST["autoenrollment"]) ? 0 : 1;
+		$_POST["activo"] = empty($_POST["activo"]) ? 0 : 1;
+
 	try{
 		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_grados (gra_id, gra_codigo, gra_nombre, gra_formato_boletin, gra_valor_matricula, gra_valor_pension, gra_estado,gra_grado_siguiente, gra_periodos, gra_tipo, institucion, year)VALUES('".$codGRADO."', '".$codigoCurso."', '".$_POST["nombreC"]."', '1', ".$_POST["valorM"].", ".$_POST["valorP"].", 1, '".$_POST["graSiguiente"]."', '".$config['conf_periodos_maximos']."', '".$_POST["tipoG"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 	} catch (Exception $e) {
