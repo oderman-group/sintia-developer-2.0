@@ -212,11 +212,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													<td align="left" id="totalNetoCompra">$0</td>
 												</tr>
 												<tr>
-													<td style="padding-right: 20px;">TOTAL COBRADO:</td>
+													<td style="padding-right: 20px;">TOTAL PAGADO:</td>
 													<td align="left" id="abonosNetoCompra">$0</td>
 												</tr>
 												<tr style="font-size: 15px; font-weight:bold;">
-													<td style="padding-right: 20px;">TOTAL POR COBRAR:</td>
+													<td style="padding-right: 20px;">TOTAL POR PAGAR:</td>
 													<td align="left" id="porCobrarNetoCompra">$0</td>
 												</tr>
 											</table>
