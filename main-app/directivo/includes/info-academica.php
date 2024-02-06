@@ -168,7 +168,7 @@
 						<table class="table" id="cursosRegistrados">
 							<thead>
 								<tr>
-									<th scope="col">#</th>
+									<!-- <th scope="col">#</th> -->
 									<th scope="col">Nombre</th>
 									<th scope="col" width="100px">Grupo</th>
 									<th scope="col" width="200px">Estado</th>
@@ -192,7 +192,7 @@
 
 								?>
 										<tr id="reg<?= $idCurso["gra_id"]; ?>">
-											<td><?= $idCurso["gra_id"]; ?></td>
+											<!-- <td><?= $idCurso["gra_id"]; ?></td> -->
 											<td><?= $idCurso["gra_nombre"]; ?></td>
 											<td>
 												<select id="grupo-<?= $idCurso["gra_id"]; ?>" class="form-control" onchange="editarCurso('<?= $idCurso['gra_id']; ?>')" <?= $disabledPermiso; ?>>
@@ -268,8 +268,6 @@
 				.catch((res) => console.error("Error:"+res))
 				.then(
 					function(result) {
-						console.log(JSON.stringify(result));
-						console.log(result);
 						$.toast({
 							heading: 'Acción realizada',
 							text: result["msg"],
@@ -296,9 +294,9 @@
 				encontro = false;
 				for (var i = 0; i < filas.length; i++) { // Recorre las filas
 					var celdas = filas[i].getElementsByTagName("td"); // Obtén todas las celdas de la fila actual
-
+				
 					for (var j = 0; j < celdas.length; j++) { // Recorre las celdas
-						if (celdas[j].innerHTML == valor) {
+						if (filas[i].id == "reg"+valor) {
 							encontro = true; // cambio el estado de  a tru si encuentra un codigo igual
 						}
 					}
@@ -365,11 +363,11 @@
 					// Agregar datos a las celdas
 					fila.id = "reg" + valor;
 					fila.classList.add('animate__animated', 'animate__fadeInDown');
-					fila.insertCell(0).innerHTML = valor;
-					fila.insertCell(1).innerHTML = etiqueta;
-					fila.insertCell(2).appendChild(select1);
-					fila.insertCell(3).appendChild(select2);
-					fila.insertCell(4).appendChild(boton);
+					// fila.insertCell(0).innerHTML = valor;
+					fila.insertCell(0).innerHTML = etiqueta;
+					fila.insertCell(1).appendChild(select1);
+					fila.insertCell(2).appendChild(select2);
+					fila.insertCell(3).appendChild(boton);
 
 				} else {
 					Swal.fire('Curso ya se encuentra registrado');
