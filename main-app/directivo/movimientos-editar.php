@@ -167,7 +167,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Estado</label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="estado" required <?=$disabledPermiso;?>>
+                                                <select class="form-control  select2" disabled>
                                                     <option value="">Seleccione una opción</option>
 													<option value="<?=POR_COBRAR?>" <?php if($resultado['fcu_status']==POR_COBRAR){ echo "selected";}?>>Por Cobrar</option>
 													<option value="<?=COBRADA?>" <?php if($resultado['fcu_status']==COBRADA){ echo "selected";}?>>Cobrada</option>
