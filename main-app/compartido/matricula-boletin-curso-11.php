@@ -465,7 +465,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
         </table>
         <p>&nbsp;</p>
         <?php
-        $cndisciplina = Boletin::obtenerNotaDisciplina($matriculadosDatos['mat_id'], $condicion);
+        $cndisciplina = Boletin::obtenerNotaDisciplina($matriculadosDatos['mat_id'], $condicion, $year);
         if (@mysqli_num_rows($cndisciplina) > 0) {
         ?>
             <table width="100%" cellspacing="0" cellpadding="0" rules="all" border="1" align="center">
