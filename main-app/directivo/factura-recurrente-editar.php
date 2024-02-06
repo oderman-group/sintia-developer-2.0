@@ -145,10 +145,8 @@ if(!Modulos::validarPermisoEdicion()){
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2" name="tipo" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
-                                                    <option value="1" <?php if($resultado['invoice_type']==1){ echo "selected";}?>>Ingreso</option>
-                                                    <option value="2" <?php if($resultado['invoice_type']==2){ echo "selected";}?>>Egreso</option>
-                                                    <option value="3" <?php if($resultado['invoice_type']==3){ echo "selected";}?>>Cobro (CPC)</option>
-                                                    <option value="4" <?php if($resultado['invoice_type']==4){ echo "selected";}?>>Deuda (CPP)</option>
+                                                    <option value="1" <?php if($resultado['invoice_type']==1){ echo "selected";}?>>Fact. Venta</option>
+                                                    <option value="2" <?php if($resultado['invoice_type']==2){ echo "selected";}?>>Fact. Compra</option>
                                                 </select>
                                             </div>
 

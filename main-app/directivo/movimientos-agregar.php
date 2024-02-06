@@ -99,14 +99,12 @@ $codigoUnico=Utilidades::generateCode("FCN");
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2" name="tipo" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
-													<option value="1" >Ingreso</option>
-													<option value="2" >Egreso</option>
-													<option value="3" >Cobro (CPC)</option>
-													<option value="4" >Deuda (CPP)</option>
+													<option value="1" >Fact. Venta</option>
+													<option value="2" >Fact. Compra</option>
                                                 </select>
                                             </div>
 
-                                            <label class="col-sm-2 control-label">Forma de pago</label>
+                                            <label class="col-sm-2 control-label">Medio de pago</label>
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2" name="forma" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>

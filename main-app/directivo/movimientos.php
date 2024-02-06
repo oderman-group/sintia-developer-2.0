@@ -114,22 +114,19 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														include("../compartido/error-catch-to-report.php");
 													}
 													$contReg = 1;
-													$estadosCuentas = array("","Ingreso","Egreso","Cobro (CPC)","Deuda (CPP)");
+													$estadosCuentas = array("","Fact. Venta","Fact. Compra");
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$bgColor = '';
 														if($resultado['fcu_anulado']==1) $bgColor = '#ff572238';
 
 														$bgColorEstado = '#eeff0038';
 														$estado = 'Por Cobrar';
-														if($resultado['fcu_status']==COBRADA) { $bgColorEstado = '#00F13A38'; $estado = 'Cobrada'; }
+														if($resultado['fcu_status'] == COBRADA) { $bgColorEstado = '#00F13A38'; $estado = 'Cobrada'; }
 
 														$vlrAdicional = !empty($resultado['fcu_valor']) ? $resultado['fcu_valor'] : 0;
-
-														$totalNeto = Movimientos::calcularTotalNeto($conexion, $config, $resultado['fcu_id'], $vlrAdicional);
-
-														$abonos = Movimientos::calcularTotalAbonado($conexion, $config, $resultado['fcu_id']);
-
-														$porCobrar = $totalNeto - $abonos;
+														$totalNeto    = Movimientos::calcularTotalNeto($conexion, $config, $resultado['fcu_id'], $vlrAdicional);
+														$abonos       = Movimientos::calcularTotalAbonado($conexion, $config, $resultado['fcu_id']);
+														$porCobrar    = $totalNeto - $abonos;
 													?>
 													<tr id="reg<?=$resultado['fcu_id'];?>" style="background-color:<?=$bgColor;?>;">
                                                         <td><?=$contReg;?></td>
@@ -191,11 +188,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 										<div class="panel-body">
 											<table style="width: 100%;" align="center">
 												<tr>
-													<td style="padding-right: 20px;">TOTAL:</td>
+													<td style="padding-right: 20px;">TOTAL FACTURAS:</td>
 													<td align="left" id="totalNeto">$0</td>
 												</tr>
 												<tr>
-													<td style="padding-right: 20px;">TOTAL. ABONOS:</td>
+													<td style="padding-right: 20px;">TOTAL COBRADO:</td>
 													<td align="left" id="abonosNeto">$0</td>
 												</tr>
 												<tr style="font-size: 15px; font-weight:bold;">
