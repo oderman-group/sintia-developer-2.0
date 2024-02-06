@@ -7,6 +7,7 @@ require_once("../class/Estudiantes.php");
 require_once("../class/servicios/GradoServicios.php");
 require_once("../class/servicios/CargaServicios.php");
 require_once("../class/servicios/MatriculaServicios.php");
+require_once("../compartido/includes/includeSelectSearch.php");
 
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
     echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -410,17 +411,10 @@ if (!Modulos::validarPermisoEdicion()) {
                                                 <div class="form-group row">
                                                     <label class="col-sm-2 control-label">Agregar un estudainte:</label>
                                                     <div class="col-sm-6 ">
-                                                        <div class="input-group">
-                                                            <select id="select_estudiante" class="form-control select2-multiple" onchange="selecionarEstudiante(this.value)" style="width: 80% !important" name="estudiantesMT">
-                                                                <option value="">Seleccione un estudiante</option>
-                                                            </select>
-                                                            <div class="input-group-append">
-                                                                <!-- <div class="btn-group" role="group" > -->
-                                                                <button style="display: none;" id="btnEliminar" type="button" class="input-group-text btn btn-danger btn-sm" onclick="limpiarSelecionEstudiante()"><i class="fa fa-trash"></i></button>
-                                                                <button style="display: none;" id="btnAgregar" type="button" class="input-group-text btn btn-info btn-sm" onclick="agregarEstudainte()"><i class="fa fa-add"></i></button>
-                                                                <!-- </div> -->
-                                                            </div>
-                                                        </div>
+                                                        <?php
+                                                        $selectEctudiante2 = new includeSelectSearch("SeleccionEstudiante", "ajax-listar-estudiantes.php", "buscar estudiante", "agregarEstudainte");
+                                                        $selectEctudiante2->generarComponente();
+                                                        ?>
                                                     </div>
                                                     <?php
                                                     $cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM " . BD_ACADEMICA . ".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
@@ -431,7 +425,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                                 echo '<option value="' . $rv[0] . '" selected >' . $rv[1] . '</option>';
                                                             } ?>
                                                         </select>
-                                                        <select id="grupoEstado" multiple class="form-control select2-multiple">
+                                                        <select id="estadoBase" multiple class="form-control select2-multiple">
                                                             <option value="<?= ESTADO_CURSO_ACTIVO ?>" selected><?= ESTADO_CURSO_ACTIVO ?></option>
                                                             <option value="<?= ESTADO_CURSO_INACTIVO ?>" selected><?= ESTADO_CURSO_INACTIVO ?></option>
                                                             <option value="<?= ESTADO_CURSO_PRE_INSCRITO ?>" selected><?= ESTADO_CURSO_PRE_INSCRITO ?></option>
@@ -463,18 +457,21 @@ if (!Modulos::validarPermisoEdicion()) {
                                                             foreach ($ListaEstudiantes as $idEstudiante) {
                                                                 $matricualaEstudiante = MatriculaServicios::consultar($idEstudiante["matcur_id_matricula"]);
                                                                 $nombre = "";
+                                                                $arrayEnviar = array("tipo" => 1, "descripcionTipo" => "Para ocultar fila del registro.");
+                                                                $arrayDatos = json_encode($arrayEnviar);
+                                                                $objetoEnviar = htmlentities($arrayDatos);
                                                                 if (!is_null($matricualaEstudiante)) {
                                                                     $nombre = Estudiantes::NombreCompletoDelEstudiante($matricualaEstudiante);
                                                                 }
                                                         ?>
-                                                                <tr id="fila<?=$idEstudiante["matcur_id_matricula"];?>">
+                                                                <tr id="reg<?= $idEstudiante["matcur_id_matricula"]; ?>">
                                                                     <td><?= $idEstudiante["matcur_id_matricula"]; ?></td>
                                                                     <td><?= $nombre; ?></td>
                                                                     <td>
                                                                         <?php
                                                                         $cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM " . BD_ACADEMICA . ".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                                         ?>
-                                                                        <select class="form-control" name="grupo" <?= $disabledPermiso; ?>>
+                                                                        <select id="grupo-<?= $idEstudiante["matcur_id_matricula"]; ?>" class="form-control" onchange="editarEstudainte('<?= $idEstudiante['matcur_id_matricula']; ?>')" <?= $disabledPermiso; ?>>
                                                                             <?php while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
                                                                                 if ($rv[0] == $idEstudiante['matcur_id_grupo'])
                                                                                     echo '<option value="' . $rv[0] . '" selected>' . $rv[1] . '</option>';
@@ -487,27 +484,17 @@ if (!Modulos::validarPermisoEdicion()) {
                                                                         <?php
                                                                         $cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM " . BD_ACADEMICA . ".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                                         ?>
-                                                                        <select class="form-control" name="grupo" <?= $disabledPermiso; ?>>
-                                                                            <option value="<?= ESTADO_CURSO_ACTIVO ?>" 
-                                                                            <?php echo $idEstudiante['matcur_estado'] == ESTADO_CURSO_ACTIVO?'selected':''; ?>
-                                                                            >
-                                                                            <?= ESTADO_CURSO_ACTIVO ?></option>
-                                                                            <option value="<?= ESTADO_CURSO_INACTIVO ?>" 
-                                                                            <?php echo $idEstudiante['matcur_estado'] == ESTADO_CURSO_INACTIVO?'selected':''; ?>
-                                                                            ><?= ESTADO_CURSO_INACTIVO ?></option>
-                                                                            <option value="<?= ESTADO_CURSO_PRE_INSCRITO ?>" 
-                                                                            <?php echo $idEstudiante['matcur_estado'] == ESTADO_CURSO_PRE_INSCRITO?'selected':''; ?>
-                                                                            ><?= ESTADO_CURSO_PRE_INSCRITO ?></option>
-                                                                            <option value="<?= ESTADO_CURSO_NO_APROBADO ?>" 
-                                                                            <?php echo $idEstudiante['matcur_estado'] == ESTADO_CURSO_NO_APROBADO?'selected':''; ?>
-                                                                            ><?= ESTADO_CURSO_NO_APROBADO ?></option>
-                                                                            <option value="<?= ESTADO_CURSO_APROBADO ?>" 
-                                                                            <?php echo $idEstudiante['matcur_estado'] == ESTADO_CURSO_APROBADO?'selected':''; ?>
-                                                                            ><?= ESTADO_CURSO_APROBADO ?></option>
+                                                                        <select id="estado-<?= $idEstudiante["matcur_id_matricula"]; ?>" class="form-control" onchange="editarEstudainte('<?= $idEstudiante['matcur_id_matricula']; ?>')" <?= $disabledPermiso; ?>>
+                                                                            <option value="<?= ESTADO_CURSO_ACTIVO ?>" <?php echo $idEstudiante['matcur_estado'] == ESTADO_CURSO_ACTIVO ? 'selected' : ''; ?>>
+                                                                                <?= ESTADO_CURSO_ACTIVO ?></option>
+                                                                            <option value="<?= ESTADO_CURSO_INACTIVO ?>" <?php echo $idEstudiante['matcur_estado'] == ESTADO_CURSO_INACTIVO ? 'selected' : ''; ?>><?= ESTADO_CURSO_INACTIVO ?></option>
+                                                                            <option value="<?= ESTADO_CURSO_PRE_INSCRITO ?>" <?php echo $idEstudiante['matcur_estado'] == ESTADO_CURSO_PRE_INSCRITO ? 'selected' : ''; ?>><?= ESTADO_CURSO_PRE_INSCRITO ?></option>
+                                                                            <option value="<?= ESTADO_CURSO_NO_APROBADO ?>" <?php echo $idEstudiante['matcur_estado'] == ESTADO_CURSO_NO_APROBADO ? 'selected' : ''; ?>><?= ESTADO_CURSO_NO_APROBADO ?></option>
+                                                                            <option value="<?= ESTADO_CURSO_APROBADO ?>" <?php echo $idEstudiante['matcur_estado'] == ESTADO_CURSO_APROBADO ? 'selected' : ''; ?>><?= ESTADO_CURSO_APROBADO ?></option>
                                                                         </select>
                                                                     </td>
                                                                     <td>
-                                                                        <button type="button" onclick="eliminarFila(this)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                                                        <button type="button" title="<?= $objetoEnviar; ?>" name="fetch-estudiante-mediatecnica.php?tipo=<?= base64_encode(ACCION_ELIMINAR) ?>&matricula=<?= base64_encode($idEstudiante["matcur_id_matricula"]) ?>&curso=<?= $_GET["id"] ?>" id="<?= $idEstudiante["matcur_id_matricula"]; ?>" onClick="deseaEliminar(this)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                                                                     </td>
                                                                 </tr>
                                                         <?php  }
@@ -525,9 +512,6 @@ if (!Modulos::validarPermisoEdicion()) {
                                                 <!-- end js include path -->
                                                 <script src="../ckeditor/ckeditor.js"></script>
                                                 <script type="text/javascript">
-                                                    // Almacenar el estado actual de los grupos
-                                                    var estadoActualGrupos = {};
-
                                                     CKEDITOR.replace('editor1');
                                                     CKEDITOR.replace('editor2');
 
@@ -553,13 +537,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                         }
                                                     }
 
-                                                    function limpiarSelecionEstudiante() {
-                                                        $('#select_estudiante').val(null).trigger('change');
-                                                        const btnEliminar = document.getElementById("btnEliminar");
-                                                        const btnAgregar = document.getElementById("btnAgregar");
-                                                        btnEliminar.style.display = "none";
-                                                        btnAgregar.style.display = "none";
-                                                    };
+
 
                                                     function eliminarFila(button) {
                                                         var fila = button.parentNode.parentNode; // Obtener la referencia a la fila actual                                                        
@@ -567,19 +545,71 @@ if (!Modulos::validarPermisoEdicion()) {
                                                         tabla.deleteRow(fila.rowIndex); // Eliminar la fila de la tabla
                                                     }
 
-                                                    function agregarEstudainte() {
-                                                        var seleccion = $('#select_estudiante').select2('data')[0];
 
+                                                    function agregarEstudainte(dato) {
+                                                        crearFila(dato);
+                                                    };
+
+                                                    function editarEstudainte(id) {
+                                                        var grupoSelect = document.getElementById("grupo-"+id);
+                                                        var estadoSelect = document.getElementById("estado-"+id);
+                                                        var data = {
+                                                            "matricula": id,
+                                                            "grupo": grupoSelect.value,
+                                                            "estado": estadoSelect.value,
+                                                            "curso": '<?php echo base64_decode($_GET["id"]) ?>'
+                                                        };
+                                                        accionCursoMatricula(data, '<?php echo ACCION_MODIFICAR ?>');
+                                                    };
+
+
+
+                                                    function accionCursoMatricula(data, tipo) {
+                                                        data["tipo"] = tipo;
+                                                        var url = "fetch-estudiante-mediatecnica.php";
+
+                                                        console.log(JSON.stringify(data));
+
+                                                        fetch(url, {
+                                                                method: "POST", // or 'PUT'
+                                                                body: JSON.stringify(data), // data can be `string` or {object}!
+                                                                headers: {
+                                                                    "Content-Type": "application/json"
+                                                                },
+                                                            })
+                                                            .then((res) => res.json())
+                                                            .catch(function(error) {
+                                                                console.error("Error:", error)
+                                                            })
+                                                            .then(
+                                                                function(response) {
+                                                                    $.toast({
+                                                                        heading: 'Acción realizada',
+                                                                        text: tipo,
+                                                                        position: 'bottom-right',
+                                                                        showHideTransition: 'slide',
+                                                                        loaderBg: '#26c281',
+                                                                        icon: 'success',
+                                                                        hideAfter: 5000,
+                                                                        stack: 6
+                                                                    });
+
+                                                                });
+                                                    }
+
+                                                    function crearFila(seleccion) {
                                                         if (seleccion) {
                                                             var valor = seleccion.id; // El valor de la opción
                                                             var etiqueta = seleccion.text; // La etiqueta de la opción
                                                             // se insertan los valores en la tabla
                                                             var tabla = document.getElementById("estudaintesRegistrados");
                                                             var filas = tabla.getElementsByTagName("tr");
+
                                                             // buscamos si ya se encuentra registrado                                                            
                                                             encontro = false;
                                                             for (var i = 0; i < filas.length; i++) { // Recorre las filas
                                                                 var celdas = filas[i].getElementsByTagName("td"); // Obtén todas las celdas de la fila actual
+
                                                                 for (var j = 0; j < celdas.length; j++) { // Recorre las celdas
                                                                     if (celdas[j].innerHTML == valor) {
                                                                         encontro = true; // cambio el estado de  a tru si encuentra un codigo igual
@@ -589,6 +619,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                             if (!encontro) {
                                                                 // creamos el select del grupo
                                                                 var select1 = document.createElement("select");
+                                                                select1.id = "grupo-" + valor;
                                                                 select1.classList.add('form-control');
                                                                 var opciones = $('#grupoBase').select2('data');
                                                                 for (var i = 0; i < opciones.length; i++) {
@@ -597,116 +628,69 @@ if (!Modulos::validarPermisoEdicion()) {
                                                                     opcion.value = opciones[i].id;
                                                                     select1.add(opcion);
                                                                 }
+                                                                select1.addEventListener('change', function() {
+                                                                    editarEstudainte(valor);
+                                                                });
                                                                 // creamos el select del estado
                                                                 var select2 = document.createElement("select");
+                                                                select2.id = "estado-" + valor;
                                                                 select2.classList.add('form-control');
-                                                                var opciones2 = $('#grupoEstado').select2('data');
+                                                                var opciones2 = $('#estadoBase').select2('data');
                                                                 for (var i = 0; i < opciones2.length; i++) {
                                                                     var opcion = document.createElement("option");
                                                                     opcion.text = opciones2[i].text;
                                                                     opcion.value = opciones2[i].id;
                                                                     select2.add(opcion);
                                                                 }
+                                                                select2.addEventListener('change', function() {
+                                                                    editarEstudainte(valor);
+                                                                });
+
                                                                 // Crea un elemento de botón
                                                                 var boton = document.createElement("button");
+                                                                boton.type = "button";
+                                                                boton.id = valor;
+                                                                boton.title = '{"tipo":1,"descripcionTipo":"Para ocultar fila del registro."}';
+                                                                boton.name = "fetch-estudiante-mediatecnica.php?" +
+                                                                    "tipo=<?php echo base64_encode(ACCION_ELIMINAR) ?>" +
+                                                                    "&matricula=" + btoa(valor) +
+                                                                    "&curso=<?php echo $_GET["id"] ?>";
                                                                 boton.classList.add('btn', 'btn-danger', 'btn-sm');
                                                                 var icon = document.createElement('i'); // se crea la icono
                                                                 icon.classList.add('fa', 'fa-trash');
                                                                 boton.appendChild(icon);
                                                                 // Agregar un evento al botón
                                                                 boton.addEventListener('click', function() {
-                                                                    eliminarFila(boton);
+                                                                    var fila = document.getElementById("reg" + valor);
+                                                                    fila.classList.remove('animate__animated', 'animate__fadeInDown');
+                                                                    deseaEliminar(boton);
                                                                 });
 
-
-                                                                // Crear una nueva fila
+                                                                // se guarda en la base de datos
+                                                                var data = {
+                                                                    "matricula": valor,
+                                                                    "curso": '<?php echo base64_decode($_GET["id"]) ?>'
+                                                                };
+                                                                accionCursoMatricula(data, '<?php echo ACCION_CREAR ?>');
+                                                                // Crear una nueva fila                                                                
                                                                 var fila = tabla.insertRow();
                                                                 // Agregar datos a las celdas
+                                                                fila.id = "reg" + valor;
+                                                                fila.classList.add('animate__animated', 'animate__fadeInDown');
                                                                 fila.insertCell(0).innerHTML = valor;
                                                                 fila.insertCell(1).innerHTML = etiqueta;
                                                                 fila.insertCell(2).appendChild(select1);
                                                                 fila.insertCell(3).appendChild(select2);
                                                                 fila.insertCell(4).appendChild(boton);
+
                                                             } else {
-                                                                console.log('Estudainte ya se encuentra registrado');
+                                                                Swal.fire('Estudiante ya se encuentra registrado');
                                                             }
 
                                                         } else {
-                                                            console.log('No hay opción seleccionada.');
+                                                            Swal.fire('mo hay opcion selecionada');
                                                         }
-                                                        limpiarSelecionEstudiante();
-                                                    };
-
-
-                                                    function selecionarEstudiante(data) {
-                                                        console.log(data);
-                                                        const btnEliminar = document.getElementById("btnEliminar");
-                                                        const btnAgregar = document.getElementById("btnAgregar");
-                                                        btnEliminar.style.display = "block";
-                                                        btnAgregar.style.display = "block";
-                                                    };
-
-                                                    function enviarDatos() {
-                                                        var tabla = document.getElementById('estudaintesRegistrados'); // Obtener la referencia a la tabla                                                       
-                                                        var formulario = document.getElementById('miFormulario'); // Obtener la referencia al formulario
-                                                        // Crear un campo oculto para almacenar los datos de la tabla
-                                                        var datosInput = document.createElement('input');
-                                                        datosInput.type = 'hidden';
-                                                        datosInput.name = 'estudiantesMT';
-                                                        datosInput.value = obtenerDatosTabla(tabla); // Función para obtener los datos de la tabla
-                                                        console.log('valores de la tabla' + datosInput.value);
-                                                        formulario.appendChild(datosInput);
-                                                        // Enviar el formulario
-                                                        formulario.submit();
                                                     }
-
-                                                    function obtenerDatosTabla(tabla) {
-                                                        // Recorrer las filas de la tabla y obtener los datos
-                                                        var cruso = document.getElementById('id_curso');
-                                                        var datos = [];
-                                                        for (var i = 1; i < tabla.rows.length; i++) {
-                                                            var fila = tabla.rows[i];
-                                                            var id = fila.cells[0].innerText;
-                                                            var nombre = fila.cells[1].innerText;
-                                                            var grupo = fila.cells[2].querySelector('select').value;
-                                                            var estado = fila.cells[3].querySelector('select').value;
-                                                            datos.push({
-                                                                curso: cruso.value,
-                                                                matricula: id,
-                                                                nombre: nombre,
-                                                                grupo: grupo,
-                                                                estado:estado
-                                                            });
-                                                        }
-
-                                                        // Convertir los datos a formato JSON
-                                                        return JSON.stringify(datos);
-                                                    }
-
-                                                    $(document).ready(function() {
-
-                                                        $('#select_estudiante').select2({
-                                                            placeholder: 'Seleccione el estudiante agregar...',
-                                                            theme: "bootstrap",
-                                                            multiple: false,
-                                                            ajax: {
-                                                                type: 'GET',
-                                                                url: 'ajax-listar-estudiantes.php',
-                                                                processResults: function(data) {
-                                                                    data = JSON.parse(data);
-                                                                    return {
-                                                                        results: $.map(data, function(item) {
-                                                                            return {
-                                                                                id: item.value,
-                                                                                text: item.label,
-                                                                                title: item.title
-                                                                            }
-                                                                        })
-                                                                    };
-                                                                }
-                                                            }
-                                                        });
-                                                    });
                                                 </script>
 
                                             </div>
@@ -737,7 +721,9 @@ if (!Modulos::validarPermisoEdicion()) {
         <?php include("../compartido/footer.php"); ?>
     </div>
 </div>
-
+<!-- bootstrap -->
+<script src="../../config-general/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="../../config-general/assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 <script src="../../config-general/assets/plugins/jquery/jquery.min.js"></script>
 <script src="../../config-general/assets/plugins/popper/popper.js"></script>
 <script src="../../config-general/assets/plugins/jquery-blockui/jquery.blockui.min.js"></script>
@@ -750,15 +736,24 @@ if (!Modulos::validarPermisoEdicion()) {
 <script src="../../config-general/assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker-init.js" charset="UTF-8"></script>
 <script src="../../config-general/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 <script src="../../config-general/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker-init.js" charset="UTF-8"></script>
-
-
-
+<!-- data tables -->
+<script src="../../config-general/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.js"></script>
+<script src="../../config-general/assets/js/pages/table/table_data.js"></script>
 <!--select2-->
 <script src="../../config-general/assets/plugins/select2/js/select2.js"></script>
 <script src="../../config-general/assets/js/pages/select2/select2-init.js"></script>
 
 </body>
-
+<!-- Common js-->
+<script src="../../config-general/assets/js/app.js"></script>
+<script src="../../config-general/assets/js/layout.js"></script>
+<script src="../../config-general/assets/js/theme-color.js"></script>
+<!-- notifications -->
+<script src="../../config-general/assets/plugins/jquery-toast/dist/jquery.toast.min.js"></script>
+<script src="../../config-general/assets/plugins/jquery-toast/dist/toast.js"></script>
+<!-- Material -->
+<script src="../../config-general/assets/plugins/material/material.min.js"></script>
 <!-- Mirrored from radixtouch.in/templates/admin/smart/source/light/advance_form.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 18 May 2018 17:32:54 GMT -->
 
 </html>
