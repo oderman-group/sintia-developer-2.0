@@ -104,8 +104,8 @@
 					<span class="fa fa-angle-down"></span>
 				</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">	
-					<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoFil=<?= base64_encode(POR_COBRAR); ?>&usuario=<?= base64_encode($usuario); ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&tipo=<?=base64_encode(1)?>&busqueda=<?= $busqueda; ?>&estadoM=<?= base64_encode($estadoM); ?>&fecha=<?= base64_encode($fecha); ?>" <?=$estiloResaltadoPorCobrar;?>>Por Cobrar</a>
-					<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoFil=<?= base64_encode(COBRADA); ?>&usuario=<?= base64_encode($usuario); ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&tipo=<?=base64_encode(2)?>&busqueda=<?= $busqueda; ?>&estadoM=<?= base64_encode($estadoM); ?>&fecha=<?= base64_encode($fecha); ?>" <?=$estiloResaltadoCobrado;?>>Cobradas</a>
+					<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoFil=<?= base64_encode(POR_COBRAR); ?>&usuario=<?= base64_encode($usuario); ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&tipo=<?php if(isset($_GET["tipo"])) echo $_GET["tipo"];?>&busqueda=<?= $busqueda; ?>&estadoM=<?= base64_encode($estadoM); ?>&fecha=<?= base64_encode($fecha); ?>" <?=$estiloResaltadoPorCobrar;?>>Por Cobrar</a>
+					<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoFil=<?= base64_encode(COBRADA); ?>&usuario=<?= base64_encode($usuario); ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&tipo=<?php if(isset($_GET["tipo"])) echo $_GET["tipo"];?>&busqueda=<?= $busqueda; ?>&estadoM=<?= base64_encode($estadoM); ?>&fecha=<?= base64_encode($fecha); ?>" <?=$estiloResaltadoCobrado;?>>Cobradas</a>
 					<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>">Ver todos</a>
 
 				</div>
