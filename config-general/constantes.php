@@ -86,6 +86,11 @@ define('IDENTIFICAION', 'Identificacion');
 define('USUARIO', 'Usuario');
 define('CORREO', 'Correo');
 
+/* TIPO DE ACCIONES*/
+define('ACCION_CREAR', 'Crear');
+define('ACCION_MODIFICAR', 'Modificar');
+define('ACCION_ELIMINAR', 'Eliminar');
+
 /* TIPOS DE FACTURA o COTIZACIÓn */
 define('TIPO_FACTURA', 'INVOICE');
 define('TIPO_COTIZACION', 'QUOTE');
