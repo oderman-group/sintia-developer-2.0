@@ -188,11 +188,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 										<div class="panel-body">
 											<table style="width: 100%;" align="center">
 												<tr>
-													<td style="padding-right: 20px;">TOTAL:</td>
+													<td style="padding-right: 20px;">TOTAL FACTURAS:</td>
 													<td align="left" id="totalNeto">$0</td>
 												</tr>
 												<tr>
-													<td style="padding-right: 20px;">TOTAL. ABONOS:</td>
+													<td style="padding-right: 20px;">TOTAL COBRADO:</td>
 													<td align="left" id="abonosNeto">$0</td>
 												</tr>
 												<tr style="font-size: 15px; font-weight:bold;">
