@@ -52,6 +52,16 @@
 		$hasta=$_GET["hasta"];
 		$filtro .= " AND (fcu_fecha BETWEEN '" . $_GET["desde"] . "' AND '" . $_GET["hasta"] . "' OR fcu_fecha LIKE '%" . $_GET["hasta"] . "%')";
 	}
+
+	$estiloResaltadoFV = '';
+	if (isset($_GET['tipo']) && $_GET['tipo'] == base64_encode(1)) $estiloResaltadoFV = 'style="color: '.$Plataforma->colorUno.';"';
+	$estiloResaltadoFC = '';
+	if (isset($_GET['tipo']) && $_GET['tipo'] == base64_encode(2)) $estiloResaltadoFC = 'style="color: '.$Plataforma->colorUno.';"';
+
+	$estiloResaltadoCobrado = '';
+	if (isset($_GET['estadoFil']) && $_GET['estadoFil'] == base64_encode(COBRADA)) $estiloResaltadoCobrado = 'style="color: '.$Plataforma->colorUno.';"';
+	$estiloResaltadoPorCobrar = '';
+	if (isset($_GET['estadoFil']) && $_GET['estadoFil'] == base64_encode(POR_COBRAR)) $estiloResaltadoPorCobrar = 'style="color: '.$Plataforma->colorUno.';"';
 ?>
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #41c4c4;">
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +71,7 @@
 		<ul class="navbar-nav mr-auto">
 			<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0105'])){?>
 				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
+					<a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:<?=$Plataforma->colorUno;?>;">
 						Menú movimiento financiero
 						<span class="fa fa-angle-down"></span>
 					</a>
@@ -71,15 +81,18 @@
 					<?php }?>
 					</div>
 				</li>
+
+				<li class="nav-item"> <a class="nav-link" href="javascript:void(0);" style="color:#FFF;">|</a></li>
 			<?php }?>
+
 			<li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
-					Resúmen
+					Filtrar por tipo
 					<span class="fa fa-angle-down"></span>
 				</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">	
-					<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoFil=<?= base64_encode($estadoFil); ?>&usuario=<?= base64_encode($usuario); ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&tipo=<?=base64_encode(1)?>&busqueda=<?= $busqueda; ?>&estadoM=<?= base64_encode($estadoM); ?>&fecha=<?= base64_encode($fecha); ?>">Ingresos</a>
-					<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoFil=<?= base64_encode($estadoFil); ?>&usuario=<?= base64_encode($usuario); ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&tipo=<?=base64_encode(2)?>&busqueda=<?= $busqueda; ?>&estadoM=<?= base64_encode($estadoM); ?>&fecha=<?= base64_encode($fecha); ?>">Egresos</a>
+					<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoFil=<?= base64_encode($estadoFil); ?>&usuario=<?= base64_encode($usuario); ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&tipo=<?=base64_encode(1)?>&busqueda=<?= $busqueda; ?>&estadoM=<?= base64_encode($estadoM); ?>&fecha=<?= base64_encode($fecha); ?>" <?=$estiloResaltadoFV;?>>Fact. Venta</a>
+					<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoFil=<?= base64_encode($estadoFil); ?>&usuario=<?= base64_encode($usuario); ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&tipo=<?=base64_encode(2)?>&busqueda=<?= $busqueda; ?>&estadoM=<?= base64_encode($estadoM); ?>&fecha=<?= base64_encode($fecha); ?>" <?=$estiloResaltadoFC;?>>Fact. Compra</a>
 					<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>">Ver todos</a>
 
 				</div>
@@ -87,12 +100,12 @@
 
 			<li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle" href="javascript:void(0);" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:#FFF;">
-					Filtar por estado
+					Filtrar por estado
 					<span class="fa fa-angle-down"></span>
 				</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">	
-					<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoFil=<?= base64_encode(POR_COBRAR); ?>&usuario=<?= base64_encode($usuario); ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&tipo=<?=base64_encode(1)?>&busqueda=<?= $busqueda; ?>&estadoM=<?= base64_encode($estadoM); ?>&fecha=<?= base64_encode($fecha); ?>">Por Cobrar</a>
-					<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoFil=<?= base64_encode(COBRADA); ?>&usuario=<?= base64_encode($usuario); ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&tipo=<?=base64_encode(2)?>&busqueda=<?= $busqueda; ?>&estadoM=<?= base64_encode($estadoM); ?>&fecha=<?= base64_encode($fecha); ?>">Cobradas</a>
+					<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoFil=<?= base64_encode(POR_COBRAR); ?>&usuario=<?= base64_encode($usuario); ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&tipo=<?=base64_encode(1)?>&busqueda=<?= $busqueda; ?>&estadoM=<?= base64_encode($estadoM); ?>&fecha=<?= base64_encode($fecha); ?>" <?=$estiloResaltadoPorCobrar;?>>Por Cobrar</a>
+					<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?estadoFil=<?= base64_encode(COBRADA); ?>&usuario=<?= base64_encode($usuario); ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&tipo=<?=base64_encode(2)?>&busqueda=<?= $busqueda; ?>&estadoM=<?= base64_encode($estadoM); ?>&fecha=<?= base64_encode($fecha); ?>" <?=$estiloResaltadoCobrado;?>>Cobradas</a>
 					<a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>">Ver todos</a>
 
 				</div>
