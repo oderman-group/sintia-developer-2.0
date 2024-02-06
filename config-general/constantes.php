@@ -86,10 +86,14 @@ define('IDENTIFICAION', 'Identificacion');
 define('USUARIO', 'Usuario');
 define('CORREO', 'Correo');
 
-/* TIPOS DE FACTURA o COTIZACIÓn */
+/* TIPOS DE DOCUMENTO FINANCIERO */
 define('TIPO_FACTURA', 'INVOICE');
 define('TIPO_COTIZACION', 'QUOTE');
 define('TIPO_RECURRING', 'INVOICE_RECURRING');
+
+/* TIPO DE FACTURA*/
+define('FACTURA_VENTA', 1);
+define('FACTURA_COMPRA', 2);
 
 
 /* TIPOS DE PREGUNTAS */
