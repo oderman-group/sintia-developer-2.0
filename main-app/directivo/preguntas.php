@@ -131,6 +131,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																	<?php if( Modulos::validarSubRol(['DT0289']) ){?>
 																		<li><a href="pregunta-editar.php?id=<?=base64_encode($resultado['pregg_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
 																	<?php }?>
+																	<?php if( Modulos::validarSubRol(['DT0316']) ){?>
+																		<li><a href="preguntas-respuestas.php?id=<?=base64_encode($resultado['pregg_id']);?>">Relacionar Respuestas</a></li>
+																	<?php }?>
 																	<?php if( Modulos::validarSubRol(['DT0293']) ){?>
                                                                     	<li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" id="<?=$resultado['pregg_id'];?>" name="pregunta-eliminar.php?id=<?=base64_encode($resultado['pregg_id']);?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
 																	<?php } ?>
