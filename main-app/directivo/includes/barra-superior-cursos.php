@@ -6,6 +6,10 @@
 
   <div class="navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
+ 
+      <?php if(Modulos::validarSubRol(['DT0145'])){?>
+        <li class="nav-item"> <a class="nav-link" href="cursos-promocionar-estudiantes-detalles.php" style="color:<?=$Plataforma->colorUno;?>;">Promocionar Estudiantes</a></li>
+      <?php }?>
 
       <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0063','DT0210','DT0211'])){?>
         <li class="nav-item dropdown">
