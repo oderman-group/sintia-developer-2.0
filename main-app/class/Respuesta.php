@@ -18,7 +18,6 @@ class Respuesta {
     {
         try {
             $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".general_respuestas 
-            INNER JOIN ".BD_ADMIN.".general_preguntas ON pregg_id=resg_id_pregunta AND pregg_institucion = {$config['conf_id_institucion']} AND pregg_year = {$_SESSION["bd"]}
             WHERE resg_eliminado='".NO."' AND resg_institucion = {$config['conf_id_institucion']} AND resg_year = {$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");

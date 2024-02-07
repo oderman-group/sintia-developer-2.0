@@ -68,7 +68,6 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                         <th>#</th>
 														<th><?=$frases[50][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[52][$datosUsuarioActual['uss_idioma']];?></th>
-														<th><?=$frases[139][$datosUsuarioActual['uss_idioma']];?></th>
 														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0311', 'DT0313'])){?>
 															<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
 														<?php }?>
@@ -89,7 +88,6 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado['resg_descripcion'];?></td>
 														<td><?=$resultado['resg_valor'];?></td>
-														<td><?=$resultado['pregg_descripcion'];?></td>
 														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0311', 'DT0313'])){?>
 															<td>
 																<div class="btn-group">
