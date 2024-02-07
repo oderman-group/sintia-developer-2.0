@@ -102,7 +102,7 @@ class EvaluacionGeneral  extends Servicios{
       )
       {
         
-        $sqlInicial="SELECT *, (SELECT COUNT(pregg_id_evaluacion) as preguntas FROM ".BD_ADMIN.".general_preguntas WHERE pregg_id_evaluacion=evag_id) as preguntas FROM ".BD_ADMIN.".general_evaluaciones";
+        $sqlInicial="SELECT *, (SELECT COUNT(gep_id_evaluacion) as preguntas FROM ".BD_ADMIN.".general_evaluaciones_preguntas WHERE gep_id_evaluacion=evag_id) as preguntas FROM ".BD_ADMIN.".general_evaluaciones";
         if($parametrosArray && count($parametrosArray)>0){
           $parametrosValidos=array('evag_descripcion','evag_clave','evag_fecha','evag_editada','evag_institucion','evag_year','evag_visible');
           $sqlInicial=Servicios::concatenarWhereAnd($sqlInicial,$parametrosValidos,$parametrosArray);
