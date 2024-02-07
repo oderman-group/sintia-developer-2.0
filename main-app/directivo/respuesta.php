@@ -80,6 +80,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 												if(!empty($consulta)){
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 
+														$numPreguntas = Respuesta::validarPreguntas($conexion, $resultado['resg_id']);
+
 														$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
 														$arrayDatos = json_encode($arrayEnviar);
 														$objetoEnviar = htmlentities($arrayDatos);
@@ -99,7 +101,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																	<?php if( Modulos::validarSubRol(['DT0311']) ){?>
 																		<li><a href="respuesta-editar.php?id=<?=base64_encode($resultado['resg_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
 																	<?php }?>
-																	<?php if( Modulos::validarSubRol(['DT0313']) ){?>
+																	<?php if( Modulos::validarSubRol(['DT0313']) && $numPreguntas < 1 ){?>
                                                                     	<li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" id="<?=$resultado['resg_id'];?>" name="respuesta-eliminar.php?id=<?=base64_encode($resultado['resg_id']);?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
 																	<?php } ?>
 																	</ul>

@@ -115,4 +115,27 @@ class Respuesta {
             include("../compartido/error-catch-to-report.php");
         }
     }
+
+    /**
+   * Valida si la respuesta ya esta asignada a una pregunta
+   *
+   * @param mysqli $conexion
+   * @param int $idRespuesta
+   *
+   * @return int $num
+   */
+    public static function validarPreguntas(
+        mysqli $conexion,
+        int $idRespuesta
+        ) {
+        try{
+            $consulta = mysqli_query($conexion, "SELECT gpr_id_pregunta FROM ".BD_ADMIN.".general_preguntas_respuestas WHERE gpr_id_respuesta='".$idRespuesta."'");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+        $num = mysqli_num_rows($consulta);
+
+        return $num;
+    }
 }
