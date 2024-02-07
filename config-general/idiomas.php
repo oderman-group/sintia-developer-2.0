@@ -823,6 +823,7 @@ $frases[424][$l] = 'Cliente';
 $frases[425][$l] = 'Impuesto';
 $frases[426][$l] = 'Tarifa';
 $frases[427][$l] = 'Reportes Gráficos';
+$frases[428][$l] = 'Respuestas';
 
 //ENGLISH
 
@@ -1634,3 +1635,4 @@ $frases[424][$l] = 'Client';
 $frases[425][$l] = 'Taxe';
 $frases[426][$l] = 'Fee';
 $frases[427][$l] = 'Graphic Reports';
+$frases[428][$l] = 'Answers';

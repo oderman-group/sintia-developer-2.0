@@ -84,13 +84,13 @@
 								
 								//MÓDULO ACADÉMICO
 								if(!empty($arregloModulos) && array_key_exists(1, $arregloModulos)){
-									if(Modulos::validarSubRol(["DT0102","DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195"])){
+									if(Modulos::validarSubRol(["DT0102","DT0001","DT0062","DT0064","DT0017","DT0020","DT0032","DT0121","DT0195"])){
 							?>
-							<li <?php agregarClass(MENU_PADRE,["DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195","DT0196","DT0197"]) ?>>
+							<li <?php agregarClass(MENU_PADRE,["DT0001","DT0062","DT0064","DT0017","DT0020","DT0032","DT0121","DT0195","DT0196","DT0197"]) ?>>
 	                            <a href="#" class="nav-link nav-toggle"> <i class="material-icons">assignment_ind</i>
 	                                <span class="title"><?=$frases[88][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 	                            </a>
-	                            <ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195","DT0196","DT0197"]) ?> >
+	                            <ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0001","DT0062","DT0064","DT0017","DT0020","DT0032","DT0121","DT0195","DT0196","DT0197"]) ?> >
 									
 									<?php 
 										if(Modulos::validarSubRol(['DT0001'])){
@@ -101,7 +101,7 @@
 									
 										if(Modulos::validarSubRol(['DT0062'])){
 									?>
-										<li <?php agregarClass(MENU,["DT0062"]) ?>><a href="cursos.php" class="nav-link "> <span class="title"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<li <?php agregarClass(MENU,["DT0062","DT0064"]) ?>><a href="cursos.php" class="nav-link "> <span class="title"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									<?php
 										}
 									
@@ -295,20 +295,35 @@
 
 							<?php 
 							//MÓDULO CUESTIONARIO EVALUATIVO
-							if(!empty($arregloModulos) && array_key_exists(18, $arregloModulos)){?>
-								<li <?php agregarClass(MENU_PADRE,["DT0281","DT0283","DT0285","DT0288","DT0289","DT0291"]) ?>>
+							if(!empty($arregloModulos) && array_key_exists(18, $arregloModulos)){
+								if(Modulos::validarSubRol(["DT0281","DT0288","DT0308"])){
+							?>
+								<li <?php agregarClass(MENU_PADRE,["DT0281","DT0283","DT0285","DT0288","DT0289","DT0291","DT0308","DT0309","DT0311"]) ?>>
 									<a href="javascript:void(0);" class="nav-link nav-toggle"> <i class="fa fa-question"></i>
 										<span class="title"><?=$frases[388][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 									</a>
-									<ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0281","DT0283","DT0285","DT0288","DT0289","DT0291"])?>>
+									<ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0281","DT0283","DT0285","DT0288","DT0289","DT0291","DT0308","DT0309","DT0311"])?>>
 										<li ><a href="javascript:void(0);" class="nav-link "> <span class="title"><?=$frases[393][$datosUsuarioActual['uss_idioma']];?></span></a></li>									
-										<li <?php agregarClass(MENU,["DT0288","DT0289","DT0291"]) ?>><a href="preguntas.php" class="nav-link "> <span class="title"><?=$frases[139][$datosUsuarioActual['uss_idioma']];?></span></a></li>
-										<li <?php agregarClass(MENU,["DT0281","DT0283","DT0285"]) ?>><a href="evaluaciones.php" class="nav-link "> <span class="title"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></span></a></li>
-								
-	
+										<?php
+											if(Modulos::validarSubRol(["DT0281"])){
+										?>
+											<li <?php agregarClass(MENU,["DT0281","DT0283","DT0285"]) ?>><a href="evaluaciones.php" class="nav-link "> <span class="title"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<?php
+											}
+											if(Modulos::validarSubRol(["DT0288"])){
+										?>
+											<li <?php agregarClass(MENU,["DT0288","DT0289","DT0291"]) ?>><a href="preguntas.php" class="nav-link "> <span class="title"><?=$frases[139][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<?php
+											}
+											if(Modulos::validarSubRol(["DT0308"])){
+										?>
+											<li <?php agregarClass(MENU,["DT0308","DT0309","DT0311"]) ?>><a href="respuesta.php" class="nav-link "> <span class="title"><?=$frases[428][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<?php
+											}
+										?>
 									</ul>
 								</li>
-								<?php }?>
+							<?php }}?>
 							
 							<?php 
 							//MÓDULO MERCADEO
@@ -548,8 +563,11 @@
 							
 							<?php 
 							//MENÚ ESTUDIANTES
-							if($datosUsuarioActual['uss_tipo'] == TIPO_ESTUDIANTE){?>
-
+							if($datosUsuarioActual['uss_tipo'] == TIPO_ESTUDIANTE){
+								if (empty($datosEstudianteActual)) {
+									include("verificar-usuario.php");
+								}
+							 ?>
 	                        
 							
 							<li class="nav-item">
@@ -557,7 +575,13 @@
 	                                <span class="title"><?=$frases[73][$datosUsuarioActual['uss_idioma']];?></span> 
 	                            </a>
 	                        </li>
-
+							<?php if ($datosEstudianteActual['mat_tipo_matricula'] == GRADO_INDIVIDUAL) {?>
+							<li class="nav-item">
+	                            <a href="cargas-adicionales.php" class="nav-link nav-toggle"> <i class="fa-solid fa-sitemap"></i>
+	                                <span class="title"><?=$frases[428][$datosUsuarioActual['uss_idioma']];?></span> 
+	                            </a>
+	                        </li>
+							<?php }?>
 
 							<?php if((!empty($_COOKIE["cargaE"]) && !empty($_COOKIE["periodoE"])) || (!empty($_GET["carga"]) && !empty($_GET["periodo"]))){?>
 							<li class="nav-item">
