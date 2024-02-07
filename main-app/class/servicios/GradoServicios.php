@@ -23,6 +23,26 @@ class GradoServicios
     }
 
     /**
+     * Lista los cursos académicos teniendo encuenta el nombre.
+     *
+     * @param array|null $parametrosArray Arreglo de parámetros para filtrar la consulta (opcional).
+     *
+     * @return array|mysqli_result|false Arreglo de datos del resultado, objeto mysqli_result o false si hay un error.
+     */
+    public static function listarCursosILike($parametrosArray = null)
+    {
+        $sqlInicial = "SELECT * FROM " . BD_ACADEMICA . ".academico_grados";
+        if ($parametrosArray && count($parametrosArray) > 0) {
+            $parametrosValidos = array('gra_tipo', 'gra_estado', 'institucion', 'year');
+            $sqlInicial = Servicios::concatenarWhereAnd($sqlInicial, $parametrosValidos, $parametrosArray);
+        };
+
+        $sqlFinal = "AND gra_nombre LIKE '%" . $parametrosArray['nombre'] . "%'  ORDER BY gra_nombre";
+        $sql = $sqlInicial . $sqlFinal;
+        return Servicios::SelectSql($sql,'LIMIT 10');
+    }
+
+    /**
      * Consulta la información de un curso específico.
      *
      * @param int $idCurso Identificador del curso.
