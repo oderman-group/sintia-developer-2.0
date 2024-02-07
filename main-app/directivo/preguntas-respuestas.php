@@ -146,7 +146,7 @@ $consultaRespuestas = Respuesta::listarRespuestas($conexion, $config);
                     <div class="form-group">
                         <div class="col-md-9">
                             <a href="javascript:void(0);" name="preguntas.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
-                            <button type="submit" class="btn btn-success"><?= $frases[419][$datosUsuarioActual['uss_idioma']]; ?></button>
+                            <button type="submit" class="btn btn-info"><?= $frases[419][$datosUsuarioActual['uss_idioma']]; ?></button>
                         </div>
                     </div>
                 </div>
