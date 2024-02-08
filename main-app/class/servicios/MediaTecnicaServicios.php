@@ -14,12 +14,32 @@ class MediaTecnicaServicios extends Servicios
       global $baseDatosServicios;
       $sqlInicial="SELECT * FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos";
       if($parametrosArray && count($parametrosArray)>0){
-        $parametrosValidos=array('matcur_id_matricula','matcur_id_institucion','matcur_years');
+        $parametrosValidos=array('matcur_id_curso','matcur_id_matricula','matcur_id_institucion','matcur_years');
         $sqlInicial=Servicios::concatenarWhereAnd($sqlInicial,$parametrosValidos,$parametrosArray);
       };
       $sqlFinal ="";
       $sql=$sqlInicial.$sqlFinal;
       return Servicios::SelectSql($sql);         
+    }
+
+    /**
+     * Realiza un conteo teniendo encuenta los parametros ingresados.
+     *
+     * @param array|null $parametrosArray Arreglo de parámetros para filtrar la consulta (opcional).
+     *
+     * @return array|mysqli_result|false Arreglo de datos del resultado, objeto mysqli_result o false si hay un error.
+     */
+    public static function contar($parametrosArray=null)
+    {
+      global $baseDatosServicios;
+      $sqlInicial="SELECT Count(matcur_id) as cantidad FROM ".$baseDatosServicios.".mediatecnica_matriculas_cursos";
+      if($parametrosArray && count($parametrosArray)>0){
+        $parametrosValidos=array('matcur_id_curso','matcur_id_matricula','matcur_id_institucion','matcur_years');
+        $sqlInicial=Servicios::concatenarWhereAnd($sqlInicial,$parametrosValidos,$parametrosArray);
+      };
+      $sqlFinal ="";
+      $sql=$sqlInicial.$sqlFinal;
+      return Servicios::SelectSql($sql)[0]["cantidad"];         
     }
 
     /**

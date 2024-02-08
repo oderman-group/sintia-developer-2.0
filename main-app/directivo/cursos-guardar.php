@@ -34,8 +34,8 @@ $codGRADO=Utilidades::generateCode("GRAD");
 		if(empty($_POST["minEstudiantes"])) {$_POST["minEstudiantes"] = '0';}
 		if(empty($_POST["maxEstudiantes"])) {$_POST["maxEstudiantes"] = '0';}
 		if(empty($_POST["horas"])) {$_POST["horas"] = '0';}
-		if(empty($_POST["autoenrollment"])) {$_POST["autoenrollment"] = '0';}
-		if(empty($_POST["activo"])) {$_POST["activo"] = '0';}
+		$_POST["autoenrollment"] = empty($_POST["autoenrollment"]) ? 0 : 1;
+		$_POST["activo"] = empty($_POST["activo"]) ? 0 : 1;
 
 	try{
 		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_grados 
