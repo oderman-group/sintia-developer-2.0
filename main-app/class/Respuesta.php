@@ -18,7 +18,6 @@ class Respuesta {
     {
         try {
             $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".general_respuestas 
-            INNER JOIN ".BD_ADMIN.".general_preguntas ON pregg_id=resg_id_pregunta AND pregg_institucion = {$config['conf_id_institucion']} AND pregg_year = {$_SESSION["bd"]}
             WHERE resg_eliminado='".NO."' AND resg_institucion = {$config['conf_id_institucion']} AND resg_year = {$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
@@ -115,5 +114,28 @@ class Respuesta {
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
+    }
+
+    /**
+   * Valida si la respuesta ya esta asignada a una pregunta
+   *
+   * @param mysqli $conexion
+   * @param int $idRespuesta
+   *
+   * @return int $num
+   */
+    public static function validarPreguntas(
+        mysqli $conexion,
+        int $idRespuesta
+        ) {
+        try{
+            $consulta = mysqli_query($conexion, "SELECT gpr_id_pregunta FROM ".BD_ADMIN.".general_preguntas_respuestas WHERE gpr_id_respuesta='".$idRespuesta."'");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+        $num = mysqli_num_rows($consulta);
+
+        return $num;
     }
 }
