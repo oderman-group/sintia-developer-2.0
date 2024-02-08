@@ -578,7 +578,7 @@
 							<?php if ($datosEstudianteActual['mat_tipo_matricula'] == GRADO_INDIVIDUAL) {?>
 							<li class="nav-item">
 	                            <a href="cargas-adicionales.php" class="nav-link nav-toggle"> <i class="fa-solid fa-sitemap"></i>
-	                                <span class="title"><?=$frases[428][$datosUsuarioActual['uss_idioma']];?></span> 
+	                                <span class="title"><?=$frases[429][$datosUsuarioActual['uss_idioma']];?></span> 
 	                            </a>
 	                        </li>
 							<?php }?>
