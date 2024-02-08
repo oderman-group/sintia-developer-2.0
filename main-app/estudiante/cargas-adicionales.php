@@ -224,7 +224,7 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 				<div class="page-bar">
 					<div class="page-title-breadcrumb">
 						<div class=" pull-left">
-							<div class="page-title"><?= $frases[428][$datosUsuarioActual['uss_idioma']]; ?></div>
+							<div class="page-title"><?= $frases[429][$datosUsuarioActual['uss_idioma']]; ?></div>
 							<?php include("../compartido/texto-manual-ayuda.php"); ?>
 
 						</div>
@@ -306,16 +306,33 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 													}
 												}
 												$porcentaje = ($numInscritos / $dato["gra_maximum_quota"]) * 100;
+												if ($numInscritos >= $dato["gra_maximum_quota"]) {
+													$hidden = "hidden";
+												}
 												?>
-												<i class="fas fa-user mr-2"></i>(<?= $numInscritos ?>/<?= $dato["gra_maximum_quota"] ?>)
+												<i class="fas fa-user mr-2"></i>(<label id="label_<?= $dato["gra_id"] ?>"> <?= $numInscritos ?></label>/<?= $dato["gra_maximum_quota"] ?>)
 												<div class="progress">
-													<div class="progress-bar" role="progressbar" style="width: <?= $porcentaje ?>%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+													<?php
+													$color = "#007bff";
+													switch ($porcentaje) {
+														case ($porcentaje) < 60:
+															$color = "#007bff";
+															break;
+														case (($porcentaje) > 60) && (($porcentaje) < 90):
+															$color = "#ffc107";
+															break;
+														case ($porcentaje) > 90:
+															$color = "#dc3545";
+															break;
+													}
+													?>
+													<div class="progress-bar" id="bar_progres_<?= $dato["gra_id"] ?>" role="progressbar" style="background-color:<?= $color ?> ;width: <?= $porcentaje ?>%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
 												</div>
 											</div>
 											<ul class="postcard__tagbox">
 												<li class="tag__item"><i class="fas fa-tag mr-2"></i>$<?= number_format($dato["gra_price"], 0, ",", "."); ?></li>
 												<li class="tag__item"><i class="fas fa-clock mr-2"></i><?= $dato["gra_duration_hours"]; ?> Hrs.</li>
-												<li class="tag__item play btn-success" <?= $hidden ?> onclick="inscribirse('<?=$dato['gra_id']?>')">
+												<li id="btn_iscrito_<?= $dato["gra_id"] ?>" class="tag__item play btn-success" <?= $hidden ?> onclick="confirmar('<?= $dato['gra_id'] ?>','<?= $dato['gra_nombre'] ?>')">
 													<a href="#"><i class="fa-regular fa-pen-to-square"></i>Inscribirme</a>
 												</li>
 											</ul>
@@ -365,11 +382,34 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 					});
 		}
 
+
+		function confirmar(idCurso,nombre) {
+			const swalWithBootstrapButtons = Swal.mixin({
+				customClass: {
+					confirmButton: "btn btn-success",
+					cancelButton: "btn btn-danger"
+				}
+			});
+			swalWithBootstrapButtons.fire({
+				title: "¿Desea registrarse?",
+				text: "Recuerde que al aceptar quedara Pre Inscrito en el curso de "+nombre+"!",
+				icon: "warning",
+				showCancelButton: true,
+				confirmButtonText: "Si, deseo registrarme!",
+				cancelButtonText: "No! talvez más tarde!",
+				reverseButtons: true
+			}).then((result) => {
+				if (result.isConfirmed) {
+					inscribirse(idCurso);
+				} 
+			});
+		}
+
 		function inscribirse(valor) {
 			var url = "fetch-inscribirse-curso.php";
 			var data = {
-				"codigo": (valor),
-				"matricula": <?php echo $datosEstudianteActual['mat_id'] ?>
+				"codigo": valor,
+				"matricula": <?php echo $datosEstudianteActual['mat_id'] ?> + ''
 			};
 			fetch(url, {
 					method: "POST", // or 'PUT'
@@ -378,12 +418,32 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 						"Content-Type": "application/json"
 					},
 				})
-				.then((res) => res.text())
+				.then((res) => res.json())
 				.catch((error) => console.error("Error:", error))
 				.then(
 					function(res) {
-						console.log(res);
-						location.reload();
+						if (res["ok"]) {
+							var btInscribirse = document.getElementById("btn_iscrito_" + res["curso"]);
+							var barraProgreso = document.getElementById("bar_progres_" + res["curso"]);
+							var labelCantidad = document.getElementById("label_" + res["curso"]);
+							btInscribirse.style.display = "none";
+							barraProgreso.style.width = res["porcentage"] + "%";
+							labelCantidad.text = res["cantidad"];
+							Swal.fire({
+								title: "Registro Exitoso!",
+								text:  res["msg"],
+								icon: "success"
+							});
+						} else {
+							Swal.fire({
+								position: "top-end",
+								icon: "error",
+								title: res["msg"],
+								showConfirmButton: false,
+								timer: 3500
+							});
+							location.reload();
+						}
 
 					});
 		}
