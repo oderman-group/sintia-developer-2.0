@@ -167,7 +167,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Descripción general <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
-                                                <textarea name="detalle" cols="70" rows="2" required <?=$disabledPermiso;?>><?=$resultado['detail'];?></textarea>
+                                                <textarea name="detalle" cols="70" rows="2" class="form-control" required <?=$disabledPermiso;?>><?=$resultado['detail'];?></textarea>
                                             </div>
 
                                             <label class="col-sm-2 control-label">Valor adicional <span style="color: red;">(*)</span></label>
