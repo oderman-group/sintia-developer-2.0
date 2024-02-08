@@ -200,6 +200,9 @@ if(!Modulos::validarPermisoEdicion()){
 
 	<script src="../../config-general/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"  charset="UTF-8"></script>
     <script src="../../config-general/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker-init.js"  charset="UTF-8"></script>
+	<!-- notifications -->
+	<script src="../../config-general/assets/plugins/jquery-toast/dist/jquery.toast.min.js"></script>
+	<script src="../../config-general/assets/plugins/jquery-toast/dist/toast.js"></script>
     <!-- end js include path -->
 
 </body>

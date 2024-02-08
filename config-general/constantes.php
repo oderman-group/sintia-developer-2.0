@@ -86,16 +86,27 @@ define('IDENTIFICAION', 'Identificacion');
 define('USUARIO', 'Usuario');
 define('CORREO', 'Correo');
 
+/* TIPO DE ACCIONES*/
+define('ACCION_CREAR', 'Crear');
+define('ACCION_MODIFICAR', 'Modificar');
+define('ACCION_ELIMINAR', 'Eliminar');
+
 /* TIPOS DE FACTURA o COTIZACIÓn */
 define('TIPO_FACTURA', 'INVOICE');
 define('TIPO_COTIZACION', 'QUOTE');
 define('TIPO_RECURRING', 'INVOICE_RECURRING');
 
-
 /* TIPOS DE PREGUNTAS */
 define('TEXT', 'TEXT');
 define('MULTIPLE', 'MULTIPLE');
 define('SINGLE', 'SINGLE');
+
+/* TIPOS DE ESTADO DE MATRICULA MEDIATECNICA */
+define('ESTADO_CURSO_ACTIVO', 'ACTIVO');
+define('ESTADO_CURSO_INACTIVO', 'INACTIVO');
+define('ESTADO_CURSO_PRE_INSCRITO', 'PRE INSCRITO');
+define('ESTADO_CURSO_APROBADO', 'APROBADO');
+define('ESTADO_CURSO_NO_APROBADO', 'NO APROBADO');
 
 define('COBRADA', 'COBRADA');
 define('POR_COBRAR', 'POR_COBRAR');
