@@ -613,7 +613,7 @@ class Movimientos {
         $dias = implode(',',$POST["dias"]);
 
         try {
-            mysqli_query($conexion, "UPDATE ".BD_FINANCIERA.".recurring_invoices SET detail='".$POST["detalle"]."', user=".$POST["usuario"].", days_in_month='".$dias."', payment_method='".$POST["metodoPago"]."', observation='".$POST["obs"]."', invoice_type='".$POST["tipo"]."', additional_value='".$POST["valor"]."' WHERE id='".$POST["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            mysqli_query($conexion, "UPDATE ".BD_FINANCIERA.".recurring_invoices SET detail='".$POST["detalle"]."', user='".$POST["usuario"]."', days_in_month='".$dias."', payment_method='".$POST["metodoPago"]."', observation='".$POST["obs"]."', invoice_type='".$POST["tipo"]."', additional_value='".$POST["valor"]."' WHERE id='".$POST["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
