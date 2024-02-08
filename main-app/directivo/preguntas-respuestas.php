@@ -1,10 +1,10 @@
 <?php
 include("session.php");
-$idPaginaInterna = 'DT0314';
+$idPaginaInterna = 'DT0316';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
-require_once(ROOT_PATH . "/main-app/class/EvaluacionGeneral.php");
-require_once(ROOT_PATH."/main-app/class/PreguntaGeneral.php");
+require_once(ROOT_PATH . "/main-app/class/PreguntaGeneral.php");
+require_once(ROOT_PATH."/main-app/class/Respuesta.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -13,17 +13,15 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 
 $id = !empty($_GET["id"]) ? base64_decode($_GET["id"]) : "";
 
-$resultado = EvaluacionGeneral::consultar($id);
-$preguntasEvaluacion = EvaluacionGeneral::traerPreguntasEvaluacion($conexion, $config, $id);
-$idPreguntas = array();
-foreach ($preguntasEvaluacion as $arrayPreguntas) {
-    $idPreguntas[] = $arrayPreguntas['gep_id_pregunta'];
+$resultado = PreguntaGeneral::consultar($id);
+
+$respuestaPreguntas = PreguntaGeneral::traerRespuestasPreguntas($conexion, $config, $id);
+$idRespuestas = array();
+foreach ($respuestaPreguntas as $arrayRespuestas) {
+    $idRespuestas[] = $arrayRespuestas['gpr_id_respuesta'];
 }
 
-$parametros = [
-    'evag_year'=>$_SESSION['bd']
-];
-$consultaPreguntas = PreguntaGeneral::listar($parametros);
+$consultaRespuestas = Respuesta::listarRespuestas($conexion, $config);
 ?>
 <!-- Theme Styles -->
 <link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
@@ -51,28 +49,28 @@ $consultaPreguntas = PreguntaGeneral::listar($parametros);
                     <div class="page-title-breadcrumb">
                         <?php include("../compartido/texto-manual-ayuda.php");?>
                         <div class=" pull-left">
-                            <div class="page-title">Relacionar Preguntas</div>
+                            <div class="page-title">Relacionar Respuestas</div>
                         </div>
                         <ol class="breadcrumb page-breadcrumb pull-right">
-                            <li><a class="parent-item" href="javascript:void(0);" name="evaluaciones.php" onClick="deseaRegresar(this)">Evaluaciones</a>&nbsp;<i class="fa fa-angle-right"></i></li>
-                            <li class="active">Relacionar Preguntas</li>
+                            <li><a class="parent-item" href="javascript:void(0);" name="preguntas.php" onClick="deseaRegresar(this)">Preguntas</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                            <li class="active">Relacionar Respuestas</li>
                         </ol>
                     </div>
                 </div>
                 <?php include("../../config-general/mensajes-informativos.php"); ?>
                 <div class="panel">
-                    <header class="panel-heading panel-heading-purple">Relacionar Preguntas</header>
+                    <header class="panel-heading panel-heading-purple">Relacionar Respuestas</header>
                     <div class="panel-body">
-                        <form action="evaluaciones-preguntas-actualizar.php" method="post" enctype="multipart/form-data">
-                            <input type="hidden" name="idE" value="<?= $resultado['evag_id']; ?>">
+                        <form action="preguntas-respuestas-actualizar.php" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="idP" value="<?= $resultado['pregg_id']; ?>">
                             <div class="form-group row">
-                                <label class="col-sm-2 ">Evaluacion</label>
+                                <label class="col-sm-2 ">Pregunta</label>
                                 <div class="col-sm-1">
-                                    <input type="text" class="form-control" value="<?= $resultado['evag_id']; ?>" readonly>
+                                    <input type="text" class="form-control" value="<?= $resultado['pregg_id']; ?>" readonly>
                                 </div>
 
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" value="<?= $resultado['evag_nombre']; ?>" readonly>
+                                    <input type="text" class="form-control" value="<?= $resultado['pregg_descripcion']; ?>" readonly>
                                 </div>
                             </div>
 
@@ -80,7 +78,7 @@ $consultaPreguntas = PreguntaGeneral::listar($parametros);
                                 <div class="col-sm-12">
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
-                                            <header>Preguntas ( <label style="font-weight: bold;" id="cantSeleccionadasPreguntas"></label>/<?= mysqli_num_rows($consultaPreguntas) ?> )
+                                            <header>Respuestas ( <label style="font-weight: bold;" id="cantSeleccionadasRespuesta"></label>/<?= mysqli_num_rows($consultaRespuestas) ?> )
                                             </header>
                                         </div>
                                         <div class="card-body">
@@ -97,29 +95,21 @@ $consultaPreguntas = PreguntaGeneral::listar($parametros);
                                                                     </label>
                                                                 </div>
                                                             </th>
-                                                            <th><?=$frases[139][$datosUsuarioActual['uss_idioma']];?></th>
-                                                            <th><?=$frases[294][$datosUsuarioActual['uss_idioma']];?> <?=$frases[139][$datosUsuarioActual['uss_idioma']];?></th>
-                                                            <th>Visible</th>
-                                                            <th>Obligatoria</th>
+                                                            <th><?=$frases[50][$datosUsuarioActual['uss_idioma']];?></th>
+                                                            <th><?=$frases[52][$datosUsuarioActual['uss_idioma']];?></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <?php
                                                         $contReg = 1;
-                                                        while ($preguntas = mysqli_fetch_array($consultaPreguntas, MYSQLI_BOTH)) {
+                                                        while ($datosRespuestas = mysqli_fetch_array($consultaRespuestas, MYSQLI_BOTH)) {
                                                             $cheked = '';
-                                                            if (!empty($idPreguntas)) {
-                                                                $selecionado = in_array($preguntas["pregg_id"], $idPreguntas);
+                                                            if (!empty($idRespuestas)) {
+                                                                $selecionado = in_array($datosRespuestas["resg_id"], $idRespuestas);
                                                                 if ($selecionado) {
                                                                     $cheked = 'checked';
                                                                 }
                                                             }
-
-                                                            
-                                                            $descripcion = !empty($preguntas['pregg_descripcion']) ? $preguntas['pregg_descripcion'] : "";
-                                                            $tipo_pregunta = !empty($preguntas['pregg_tipo_pregunta']) ? $preguntas['pregg_tipo_pregunta'] : "";
-                                                            $visible = !empty($preguntas['pregg_visible']) ? $preguntas['pregg_visible'] : "";
-                                                            $obligatoria = !empty($preguntas['pregg_obligatoria']) ? $preguntas['pregg_obligatoria'] : "";
 
                                                         ?>
                                                             <tr>
@@ -127,39 +117,13 @@ $consultaPreguntas = PreguntaGeneral::listar($parametros);
                                                                 <td>
                                                                     <div class="input-group spinner col-sm-10">
                                                                         <label class="switchToggle">
-                                                                            <input type="checkbox" class="check" onchange="seleccionarPreguntas(this)" value="<?= $preguntas['pregg_id']; ?>" <?= $cheked; ?>>
+                                                                            <input type="checkbox" class="check" onchange="seleccionarRespuesta(this)" value="<?= $datosRespuestas['resg_id']; ?>" <?= $cheked; ?>>
                                                                             <span class="slider green round"></span>
                                                                         </label>
                                                                     </div>
                                                                 </td>
-                                                                <td><?=$descripcion;?></td>
-                                                                <td>
-                                                                <?php 
-                                                                    if($tipo_pregunta === TEXT){?>
-                                                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="<?=$frases[421][$datosUsuarioActual['uss_idioma']];?>"><i class="fa fa-inbox"></i></button>
-                                                                        <?php }elseif($tipo_pregunta === MULTIPLE){?>
-                                                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="<?=$frases[422][$datosUsuarioActual['uss_idioma']];?>"><i class="fa fa-tasks"></i></button>
-                                                                    <?php  }else if($tipo_pregunta === SINGLE){?>
-                                                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="<?=$frases[423][$datosUsuarioActual['uss_idioma']];?>"><i class="fa fa-check"></i></button>
-                                                                <?php }?>
-                                                                </td>
-                                                                <td>
-                                                                <?php 
-                                                                    if($visible == 1){?>
-                                                                        <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta visible"><i class="fa fa-eye"></i></button>
-                                                                    <?php }else{?>
-                                                                        <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="No esta visible"><i class="fa fa-eye-slash"></i></button>
-                                                                <?php }?>
-                                                                </td>
-                                                                <td>
-                                                                <?php 
-                                                                    if($obligatoria == 1){?>
-                                                                        <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Es requerido"><i class="fa fa-lock"></i></button>
-                                                                    <?php }else{?>
-                                                                        <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="No es requerido"><i class="fa fa-unlock" aria-hidden="true"></i></button>
-                                                                <?php }?>
-                                                                </td>
-
+                                                                <td><?=$datosRespuestas['resg_descripcion'];?></td>
+                                                                <td><?=$datosRespuestas['resg_valor'];?></td>
                                                             </tr>
                                                         <?php $contReg++;
                                                         } ?>
@@ -171,17 +135,17 @@ $consultaPreguntas = PreguntaGeneral::listar($parametros);
 
                                 </div>
                             </div>
-                            <select id="preguntasSeleccionadas" name="preguntas[]" multiple hidden>
+                            <select id="respuestasSeleccionadas" name="respuestas[]" multiple hidden>
                                 <?php
-                                foreach ($preguntasEvaluacion as $arrayPreguntas) {
-                                    echo '<option value="' . $arrayPreguntas["pregg_id"] . '"  selected >' . $arrayPreguntas["pregg_id"] . '</option>';
+                                foreach ($respuestaPreguntas as $arrayRespuestas) {
+                                    echo '<option value="' . $arrayRespuestas["resg_id"] . '"  selected >' . $arrayRespuestas["resg_id"] . '</option>';
                                 }
                                 ?>
                             </select>
                     </div>
                     <div class="form-group">
                         <div class="col-md-9">
-                            <a href="javascript:void(0);" name="evaluaciones.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                            <a href="javascript:void(0);" name="preguntas.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                             <button type="submit" class="btn btn-info"><?= $frases[419][$datosUsuarioActual['uss_idioma']]; ?></button>
                         </div>
                     </div>
@@ -194,7 +158,7 @@ $consultaPreguntas = PreguntaGeneral::listar($parametros);
 </div>
 <!-- end page container -->
 <?php include("../compartido/footer.php"); ?>
-<script src="../js/Evaluaciones.js" ></script>
+<script src="../js/Preguntas.js" ></script>
 <!-- start js include path -->
 <script src="../../config-general/assets/plugins/jquery/jquery.min.js"></script>
 <script src="../../config-general/assets/plugins/popper/popper.js"></script>

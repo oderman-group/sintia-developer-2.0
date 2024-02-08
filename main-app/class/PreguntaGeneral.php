@@ -102,4 +102,30 @@ class PreguntaGeneral  extends Servicios{
         return Servicios::SelectSql($sqlInicial,$limite,$esArreglo);         
       }
 
+      /**
+     * Lista las repuestas de una pregunta
+     *
+     * @param mysqli $conexion
+     * @param array $config
+     * @param int $idPregunta
+     *
+     * @return mysqli_result $consulta
+     */
+    public static function traerRespuestasPreguntas(
+        mysqli $conexion,
+        array $config,
+        int $idPregunta
+      ) {
+        try{
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".general_preguntas_respuestas 
+            INNER JOIN ".BD_ADMIN.".general_respuestas ON resg_id=gpr_id_respuesta AND resg_institucion={$config['conf_id_institucion']} AND resg_year={$_SESSION["bd"]}
+            WHERE gpr_id_pregunta='".$idPregunta."'");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $consulta;
+      }
+
 }
