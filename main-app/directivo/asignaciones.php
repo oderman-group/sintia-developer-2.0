@@ -86,11 +86,37 @@ if (!empty($_GET['idE'])) {
 													$contReg = 1;
 												if(!empty($consulta)){
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+														switch ($resultado['epag_tipo']) {
+															case CURSO:
+																$consultaEvaluado = mysqli_query($conexion, "SELECT gra_nombre FROM ".BD_ACADEMICA.".academico_grados
+																WHERE gra_id='".$resultado['epag_id_evaluado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+																$datosEvaluado = mysqli_fetch_array($consultaEvaluado, MYSQLI_BOTH);
+																$nombreEvaluado = $datosEvaluado['gra_nombre'];
+															break;
 
-														$consultaEvaluador = mysqli_query($conexion, "SELECT uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2 FROM ".BD_GENERAL.".usuarios
-														WHERE uss_id='".$resultado['epag_id_evaluador']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-														");
-														$datosEvaluador = mysqli_fetch_array($consultaEvaluador, MYSQLI_BOTH);
+															case AREA:
+																$consultaEvaluado = mysqli_query($conexion, "SELECT ar_nombre FROM ".BD_ACADEMICA.".academico_areas
+																WHERE ar_id='".$resultado['epag_id_evaluado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+																$datosEvaluado = mysqli_fetch_array($consultaEvaluado, MYSQLI_BOTH);
+																$nombreEvaluado = $datosEvaluado['ar_nombre'];
+															break;
+
+															case MATERIA:
+																$consultaEvaluado = mysqli_query($conexion, "SELECT mat_nombre FROM ".BD_ACADEMICA.".academico_materias
+																WHERE mat_id='".$resultado['epag_id_evaluado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+																$datosEvaluado = mysqli_fetch_array($consultaEvaluado, MYSQLI_BOTH);
+																$nombreEvaluado = $datosEvaluado['mat_nombre'];
+															break;
+
+															default:
+																if($resultado['epag_tipo'] == DIRECTIVO || $resultado['epag_tipo'] == DOCENTE) {
+																	$consultaEvaluado = mysqli_query($conexion, "SELECT uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2 FROM ".BD_GENERAL.".usuarios
+																	WHERE uss_id='".$resultado['epag_id_evaluado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+																	$datosEvaluado = mysqli_fetch_array($consultaEvaluado, MYSQLI_BOTH);
+																	$nombreEvaluado = UsuariosPadre::nombreCompletoDelUsuario($datosEvaluado);
+																}
+															break;
+														}
 
 														$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
 														$arrayDatos = json_encode($arrayEnviar);
@@ -99,8 +125,8 @@ if (!empty($_GET['idE'])) {
 													<tr id="reg<?=$resultado['epag_id'];?>">
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado['epag_tipo'];?></td>
+														<td><?=strtoupper($nombreEvaluado);?></td>
 														<td><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></td>
-														<td><?=UsuariosPadre::nombreCompletoDelUsuario($datosEvaluador);?></td>
 														<td><?=$resultado['epag_estado'];?></td>
 														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0321', 'DT0323'])){?>
 															<td>

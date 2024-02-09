@@ -19,8 +19,8 @@ class Asignaciones {
     )
     {
         try {
-            $consulta = mysqli_query($conexion, "SELECT epag_id, uss1.uss_nombre, uss1.uss_nombre2, uss1.uss_apellido1, uss1.uss_apellido2, epag_id_evaluador, epag_estado, epag_tipo FROM ".BD_ADMIN.".general_evaluacion_asignar 
-            INNER JOIN ".BD_GENERAL.".usuarios uss1 ON uss1.uss_id=epag_id_evaluado AND uss1.institucion = {$config['conf_id_institucion']} AND uss1.year = {$_SESSION["bd"]}
+            $consulta = mysqli_query($conexion, "SELECT epag_id, uss1.uss_nombre, uss1.uss_nombre2, uss1.uss_apellido1, uss1.uss_apellido2, epag_id_evaluado, epag_estado, epag_tipo FROM ".BD_ADMIN.".general_evaluacion_asignar 
+            LEFT JOIN ".BD_GENERAL.".usuarios uss1 ON uss1.uss_id=epag_id_evaluador AND uss1.institucion = {$config['conf_id_institucion']} AND uss1.year = {$_SESSION["bd"]}
             WHERE epag_id_evaluacion='".$idEvaluacion."' AND epag_institucion = {$config['conf_id_institucion']} AND epag_year = {$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
