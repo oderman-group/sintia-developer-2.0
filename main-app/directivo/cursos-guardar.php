@@ -1,7 +1,10 @@
 <?php
 include("session.php");
 
+include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
+
 Modulos::validarAccesoDirectoPaginas();
+$archivoSubido = new Archivos;
 $idPaginaInterna = 'DT0188';
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
@@ -34,13 +37,14 @@ $codGRADO=Utilidades::generateCode("GRAD");
 		if(empty($_POST["minEstudiantes"])) {$_POST["minEstudiantes"] = '0';}
 		if(empty($_POST["maxEstudiantes"])) {$_POST["maxEstudiantes"] = '0';}
 		if(empty($_POST["horas"])) {$_POST["horas"] = '0';}
-		if(empty($_POST["autoenrollment"])) {$_POST["autoenrollment"] = '0';}
-		if(empty($_POST["activo"])) {$_POST["activo"] = '0';}
+		$_POST["autoenrollment"] = empty($_POST["autoenrollment"]) ? 0 : 1;
+		$_POST["activo"] = empty($_POST["activo"]) ? 0 : 1;
+
+
 
 	try{
 		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_grados 
 		(gra_id, gra_codigo, gra_nombre, gra_formato_boletin, gra_valor_matricula, gra_valor_pension, gra_estado,gra_grado_siguiente, gra_periodos, gra_tipo, institucion, year,
-		gra_cover_image,
 		gra_overall_description,
 		gra_course_content,
 		gra_price,
@@ -51,7 +55,6 @@ $codGRADO=Utilidades::generateCode("GRAD");
 		gra_active)
 		VALUES
 		('".$codGRADO."', '".$codigoCurso."', '".$_POST["nombreC"]."', '1', ".$_POST["valorM"].", ".$_POST["valorP"].", 1, '".$_POST["graSiguiente"]."', '".$config['conf_periodos_maximos']."', '".$_POST["tipoG"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]},
-		'".$_POST["imagen"]."',
 		'".$_POST["descripcion"]."',
 		'".$_POST["contenido"]."',
 		'".$_POST["precio"]."',
@@ -60,6 +63,20 @@ $codGRADO=Utilidades::generateCode("GRAD");
 		'".$_POST["horas"]."',
 		'".$_POST["autoenrollment"]."',
 		'".$_POST["activo"]."')");
+
+		if (!empty($_FILES['imagenCurso']['name'])) {
+			$archivoSubido->validarArchivo($_FILES['imagenCurso']['size'], $_FILES['imagenCurso']['name']);
+			$explode=explode(".", $_FILES['imagenCurso']['name']);
+			$extension = end($explode);
+			$archivo = $_SESSION["inst"] . '_' . $_SESSION["id"] . '_curso_'.$_POST["id_curso"]. "." . $extension;
+			$destino = "../files/cursos";
+			move_uploaded_file($_FILES['imagenCurso']['tmp_name'], $destino . "/" . $archivo);
+			try{
+				mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_grados SET gra_cover_image = '" . $archivo. "' WHERE gra_id='" . $codigoCurso. "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+			} catch (Exception $e) {
+				include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+			}
+		}
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
 	}
