@@ -139,6 +139,19 @@ define('MEDIA', 4);
 define('ACTIVO', 'ACTIVO');
 define('INACTIVO', 'INACTIVO');
 
+/* TIPOS DE ENCUESTA */
+define('DOCENTE', 'DOCENTE');
+define('ACUDIENTE', 'ACUDIENTE');
+define('ESTUDIANTE', 'ESTUDIANTE');
+define('DIRECTIVO', 'DIRECTIVO');
+define('AREA', 'AREA');
+define('MATERIA', 'MATERIA');
+define('CURSO', 'CURSO');
+
+define('PENDIENTE', 'PENDIENTE');
+define('PROCESO', 'PROCESO');
+define('FINALIZADO', 'FINALIZADO');
+
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':
         define('REDIRECT_ROUTE', 'http://localhost/app-sintia/main-app');
