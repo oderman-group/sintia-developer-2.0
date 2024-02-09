@@ -87,7 +87,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                         <h5> <?= $frases[119][$datosUsuarioActual['uss_idioma']]; ?> </h5>
                                     </a>
                                     <?php if (array_key_exists(10, $arregloModulos)) { ?>
-                                        <a <?= $hidden ?> class="nav-item nav-link" id="nav-configuracion-tab" data-toggle="tab" href="#nav-configuracion" role="tab" aria-controls="nav-configuracion" aria-selected="false">
+                                        <a <?= $hidden ?> class="nav-item nav-link" onclick="habilitarInput()" id="nav-configuracion-tab" data-toggle="tab" href="#nav-configuracion" role="tab" aria-controls="nav-configuracion" aria-selected="false">
                                             <h5> Configuracion del curso </h5>
                                         </a>
 
@@ -97,7 +97,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                     <?php } ?>
                                 </div>
                             </nav>
-                            <form id="miFormulario" name="formularioGuardar" action="cursos-actualizar.php" method="post">
+                            <form id="miFormulario" name="formularioGuardar" action="cursos-actualizar.php" method="post" enctype="multipart/form-data">
                                 <div class="tab-content" id="nav-tabContent">
 
                                     <div class="tab-pane fade show active" id="nav-informacion" role="tabpanel" aria-labelledby="nav-informacion-tab">
@@ -278,8 +278,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                             <?php
                                                             if ($resultadoCargaCurso["cargas_curso"] < 1) {
                                                             ?>
-                                                                <select class="form-control  select2" name="tipoG" id="tipoG" onchange="mostrarEstudiantes(this)">
-                                                                    <option value="">Seleccione una opción</option>
+                                                                <select class="form-control  select2" name="tipoG" id="tipoG" onchange="mostrarEstudiantes(this.value)">
                                                                     <option value=<?= GRADO_GRUPAL; ?> <?php if ($resultadoCurso['gra_tipo'] == GRADO_GRUPAL) {
                                                                                                             echo 'selected';
                                                                                                         } ?>>Grupal</option>
@@ -331,9 +330,19 @@ if (!Modulos::validarPermisoEdicion()) {
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-2 control-label">URL imagen</label>
+                                                    <div class="col-sm-2">
+                                                    </div>
+
+                                                    <div class="col-sm-8">
+                                                        <img id="imagenSelect" class="cursor-mano" src="../files/cursos/<?= empty($resultadoCurso["gra_cover_image"]) ? "curso.png" : $resultadoCurso["gra_cover_image"] ?>" alt="avatar" style="height: 400px;width: 100%;border:3px dashed;padding:10px;border-radius:40px / 30px">
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-2 control-label">Imagen</label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" name="imagen" value="<?= $resultadoCurso["gra_cover_image"]; ?>" class="form-control" <?= $disabledPermiso; ?>>
+                                                        <input type="file" id="imagenCurso" name="imagenCurso" onChange="mostrarImagen('imagenCurso','imagenSelect')" accept=".png, .jpg, .jpeg" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -355,30 +364,67 @@ if (!Modulos::validarPermisoEdicion()) {
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-2 control-label">Precio</label>
-                                                    <div class="col-sm-10">
+                                                    <div class="col-sm-4">
                                                         <input type="number" name="precio" class="form-control" value="<?= $resultadoCurso["gra_price"]; ?>" <?= $disabledPermiso; ?>>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-2 control-label">Minimo de estudiantes</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="number" name="minEstudiantes" class="form-control" value="<?= $resultadoCurso["gra_minimum_quota"]; ?>" <?= $disabledPermiso; ?>>
+
+                                                    <div class="input-group spinner col-sm-2">
+                                                        <span class="input-group-btn">
+                                                            <button class="btn btn-info" data-dir="dwn" type="button">
+                                                                <span class="fa fa-minus"></span>
+                                                            </button>
+                                                        </span>
+                                                        <input type="number" id="minEstudiantes" name="minEstudiantes" disabled class="form-control text-center" value="<?= $resultadoCurso["gra_minimum_quota"]; ?>" <?= $disabledPermiso; ?> min="1">
+                                                        <span class="input-group-btn">
+                                                            <button class="btn btn-danger" data-dir="up" type="button">
+                                                                <span class="fa fa-plus"></span>
+                                                            </button>
+                                                        </span>
                                                     </div>
+
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-2 control-label">Maximo de estudiantes</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="number" name="maxEstudiantes" class="form-control" value="<?= $resultadoCurso["gra_maximum_quota"]; ?>" <?= $disabledPermiso; ?>>
+
+                                                    <div class="input-group spinner col-sm-2">
+                                                        <span class="input-group-btn">
+                                                            <button class="btn btn-info" data-dir="dwn" type="button">
+                                                                <span class="fa fa-minus"></span>
+                                                            </button>
+                                                        </span>
+                                                        <input type="number" id="maxEstudiantes" name="maxEstudiantes" disabled class="form-control text-center" value="<?= $resultadoCurso["gra_maximum_quota"]; ?>" <?= $disabledPermiso; ?> min="1">
+                                                        <span class="input-group-btn">
+                                                            <button class="btn btn-danger" data-dir="up" type="button">
+                                                                <span class="fa fa-plus"></span>
+                                                            </button>
+                                                        </span>
                                                     </div>
+
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-2 control-label">Duracion en horas</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="number" id="horas" name="horas" class="form-control" value="<?= $resultadoCurso["gra_duration_hours"]; ?>" min="1" max="10" <?= $disabledPermiso; ?>>
+                                                    <div class="input-group spinner col-sm-2">
+                                                        <span class="input-group-btn">
+                                                            <button class="btn btn-info" data-dir="dwn" type="button">
+                                                                <span class="fa fa-minus"></span>
+                                                            </button>
+                                                        </span>
+                                                        <input type="number" id="horas" disabled name="horas" class="form-control text-center" value="<?= $resultadoCurso["gra_duration_hours"]; ?>" min="1" <?= $disabledPermiso; ?>>
+                                                        <span class="input-group-btn">
+                                                            <button class="btn btn-danger" data-dir="up" type="button">
+                                                                <span class="fa fa-plus"></span>
+                                                            </button>
+                                                        </span>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-2 control-label">Auto Enrollment</label>
+                                                    <label class="col-sm-2 control-label">
+                                                        <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Los cursos que estén marcado con esta opción permitirán que cualquiera pueda participar del curso"><i class="fa fa-question"></i></button>
+                                                        Auto Matricular
+                                                    </label>
                                                     <div class="col-sm-10">
                                                         <label class="switchToggle">
                                                             <input name="autoenrollment" type="checkbox" <?php if ($resultadoCurso['gra_auto_enrollment'] == 1) {
@@ -389,7 +435,12 @@ if (!Modulos::validarPermisoEdicion()) {
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-2 control-label">Activo</label>
+                                                    <label class="col-sm-2 control-label">
+                                                        <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Los cursos que estén marcados como no activos no podrán ser manipulados"><i class="fa fa-question"></i></button>
+
+                                                        Activo
+
+                                                    </label>
                                                     <div class="col-sm-10">
                                                         <label class="switchToggle">
                                                             <input name="activo" type="checkbox" <?php if ($resultadoCurso['gra_active'] == 1) {
@@ -509,189 +560,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                     <div id="selectsContainer" style="display: none;">
                                                     </div>
                                                 </div>
-                                                <!-- end js include path -->
-                                                <script src="../ckeditor/ckeditor.js"></script>
-                                                <script type="text/javascript">
-                                                    CKEDITOR.replace('editor1');
-                                                    CKEDITOR.replace('editor2');
 
-                                                    function mostrarEstudiantes(data) {
-                                                        const navInfo = document.getElementById("nav-informacion-tab");
-                                                        const navConfig = document.getElementById("nav-configuracion-tab");
-                                                        const contentInfo = document.getElementById("nav-informacion");
-                                                        const contentConfigure = document.getElementById("nav-configuracion");
-                                                        if (data.value == "<?= GRADO_INDIVIDUAL ?>") {
-                                                            navConfig.style.display = "block";
-                                                            contentConfigure.classList.add('show', 'active');
-                                                            contentInfo.classList.remove('show', 'active');
-                                                            navInfo.classList.remove('show', 'active');
-                                                            navConfig.classList.add('show', 'active');
-                                                            document.getElementById("horas").disabled = false;
-                                                        } else {
-                                                            navConfig.style.display = "none";
-                                                            contentInfo.classList.add('show', 'active');
-                                                            contentConfigure.classList.remove('show', 'active');
-                                                            navConfig.classList.remove('show', 'active');
-                                                            navInfo.classList.add('show', 'active');
-                                                            document.getElementById("horas").disabled = true;
-                                                        }
-                                                    }
-
-
-
-                                                    function eliminarFila(button) {
-                                                        var fila = button.parentNode.parentNode; // Obtener la referencia a la fila actual                                                        
-                                                        var tabla = fila.parentNode; // Obtener la referencia a la tabla                                                        
-                                                        tabla.deleteRow(fila.rowIndex); // Eliminar la fila de la tabla
-                                                    }
-
-
-                                                    function agregarEstudainte(dato) {
-                                                        crearFila(dato);
-                                                    };
-
-                                                    function editarEstudainte(id) {
-                                                        var grupoSelect = document.getElementById("grupo-"+id);
-                                                        var estadoSelect = document.getElementById("estado-"+id);
-                                                        var data = {
-                                                            "matricula": id,
-                                                            "grupo": grupoSelect.value,
-                                                            "estado": estadoSelect.value,
-                                                            "curso": '<?php echo base64_decode($_GET["id"]) ?>'
-                                                        };
-                                                        accionCursoMatricula(data, '<?php echo ACCION_MODIFICAR ?>');
-                                                    };
-
-
-
-                                                    function accionCursoMatricula(data, tipo) {
-                                                        data["tipo"] = tipo;
-                                                        var url = "fetch-estudiante-mediatecnica.php";
-
-                                                        console.log(JSON.stringify(data));
-
-                                                        fetch(url, {
-                                                                method: "POST", // or 'PUT'
-                                                                body: JSON.stringify(data), // data can be `string` or {object}!
-                                                                headers: {
-                                                                    "Content-Type": "application/json"
-                                                                },
-                                                            })
-                                                            .then((res) => res.json())
-                                                            .catch(function(error) {
-                                                                console.error("Error:", error)
-                                                            })
-                                                            .then(
-                                                                function(response) {
-                                                                    $.toast({
-                                                                        heading: 'Acción realizada',
-                                                                        text: tipo,
-                                                                        position: 'bottom-right',
-                                                                        showHideTransition: 'slide',
-                                                                        loaderBg: '#26c281',
-                                                                        icon: 'success',
-                                                                        hideAfter: 5000,
-                                                                        stack: 6
-                                                                    });
-
-                                                                });
-                                                    }
-
-                                                    function crearFila(seleccion) {
-                                                        if (seleccion) {
-                                                            var valor = seleccion.id; // El valor de la opción
-                                                            var etiqueta = seleccion.text; // La etiqueta de la opción
-                                                            // se insertan los valores en la tabla
-                                                            var tabla = document.getElementById("estudaintesRegistrados");
-                                                            var filas = tabla.getElementsByTagName("tr");
-
-                                                            // buscamos si ya se encuentra registrado                                                            
-                                                            encontro = false;
-                                                            for (var i = 0; i < filas.length; i++) { // Recorre las filas
-                                                                var celdas = filas[i].getElementsByTagName("td"); // Obtén todas las celdas de la fila actual
-
-                                                                for (var j = 0; j < celdas.length; j++) { // Recorre las celdas
-                                                                    if (celdas[j].innerHTML == valor) {
-                                                                        encontro = true; // cambio el estado de  a tru si encuentra un codigo igual
-                                                                    }
-                                                                }
-                                                            }
-                                                            if (!encontro) {
-                                                                // creamos el select del grupo
-                                                                var select1 = document.createElement("select");
-                                                                select1.id = "grupo-" + valor;
-                                                                select1.classList.add('form-control');
-                                                                var opciones = $('#grupoBase').select2('data');
-                                                                for (var i = 0; i < opciones.length; i++) {
-                                                                    var opcion = document.createElement("option");
-                                                                    opcion.text = opciones[i].text;
-                                                                    opcion.value = opciones[i].id;
-                                                                    select1.add(opcion);
-                                                                }
-                                                                select1.addEventListener('change', function() {
-                                                                    editarEstudainte(valor);
-                                                                });
-                                                                // creamos el select del estado
-                                                                var select2 = document.createElement("select");
-                                                                select2.id = "estado-" + valor;
-                                                                select2.classList.add('form-control');
-                                                                var opciones2 = $('#estadoBase').select2('data');
-                                                                for (var i = 0; i < opciones2.length; i++) {
-                                                                    var opcion = document.createElement("option");
-                                                                    opcion.text = opciones2[i].text;
-                                                                    opcion.value = opciones2[i].id;
-                                                                    select2.add(opcion);
-                                                                }
-                                                                select2.addEventListener('change', function() {
-                                                                    editarEstudainte(valor);
-                                                                });
-
-                                                                // Crea un elemento de botón
-                                                                var boton = document.createElement("button");
-                                                                boton.type = "button";
-                                                                boton.id = valor;
-                                                                boton.title = '{"tipo":1,"descripcionTipo":"Para ocultar fila del registro."}';
-                                                                boton.name = "fetch-estudiante-mediatecnica.php?" +
-                                                                    "tipo=<?php echo base64_encode(ACCION_ELIMINAR) ?>" +
-                                                                    "&matricula=" + btoa(valor) +
-                                                                    "&curso=<?php echo $_GET["id"] ?>";
-                                                                boton.classList.add('btn', 'btn-danger', 'btn-sm');
-                                                                var icon = document.createElement('i'); // se crea la icono
-                                                                icon.classList.add('fa', 'fa-trash');
-                                                                boton.appendChild(icon);
-                                                                // Agregar un evento al botón
-                                                                boton.addEventListener('click', function() {
-                                                                    var fila = document.getElementById("reg" + valor);
-                                                                    fila.classList.remove('animate__animated', 'animate__fadeInDown');
-                                                                    deseaEliminar(boton);
-                                                                });
-
-                                                                // se guarda en la base de datos
-                                                                var data = {
-                                                                    "matricula": valor,
-                                                                    "curso": '<?php echo base64_decode($_GET["id"]) ?>'
-                                                                };
-                                                                accionCursoMatricula(data, '<?php echo ACCION_CREAR ?>');
-                                                                // Crear una nueva fila                                                                
-                                                                var fila = tabla.insertRow();
-                                                                // Agregar datos a las celdas
-                                                                fila.id = "reg" + valor;
-                                                                fila.classList.add('animate__animated', 'animate__fadeInDown');
-                                                                fila.insertCell(0).innerHTML = valor;
-                                                                fila.insertCell(1).innerHTML = etiqueta;
-                                                                fila.insertCell(2).appendChild(select1);
-                                                                fila.insertCell(3).appendChild(select2);
-                                                                fila.insertCell(4).appendChild(boton);
-
-                                                            } else {
-                                                                Swal.fire('Estudiante ya se encuentra registrado');
-                                                            }
-
-                                                        } else {
-                                                            Swal.fire('mo hay opcion selecionada');
-                                                        }
-                                                    }
-                                                </script>
 
                                             </div>
                                         </div>
@@ -699,11 +568,229 @@ if (!Modulos::validarPermisoEdicion()) {
                                     </div>
                                     <a href="javascript:void(0);" name="cursos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     <?php if (Modulos::validarPermisoEdicion()) { ?>
-                                        <button type="button" onclick="enviarDatos()" class="btn  btn-info">
+                                        <button type="submit" class="btn  btn-info">
                                             <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios
                                         </button>
                                     <?php } ?>
                                 </div>
+                                <!-- end js include path -->
+                                <script src="../ckeditor/ckeditor.js"></script>
+                                <script type="text/javascript">
+                                    CKEDITOR.replace('editor1');
+                                    CKEDITOR.replace('editor2');
+
+                                    function habilitarInput() {
+                                        document.getElementById("minEstudiantes").disabled = false;
+                                        document.getElementById("maxEstudiantes").disabled = false;
+                                        document.getElementById("horas").disabled = false;
+                                    }
+
+                                    function mostrarEstudiantes(value) {
+                                        const navInfo = document.getElementById("nav-informacion-tab");
+                                        const navConfig = document.getElementById("nav-configuracion-tab");
+                                        const navEstudiante = document.getElementById("nav-estudiantes-tab");
+                                        const contentInfo = document.getElementById("nav-informacion");
+                                        const contentConfigure = document.getElementById("nav-configuracion");
+                                        const contentEstudiante = document.getElementById("nav-estudiantes");
+                                        if (value == "<?= GRADO_INDIVIDUAL ?>") {
+                                            navInfo.classList.remove('show', 'active');
+                                            contentInfo.classList.remove('show', 'active');
+
+                                            navConfig.hidden = false;
+                                            navConfig.style.display = "";
+                                            navConfig.classList.add('show', 'active');
+                                            contentConfigure.hidden = false;
+                                            contentConfigure.style.display = "";
+                                            contentConfigure.classList.add('show', 'active');
+
+
+
+                                            navEstudiante.hidden = false;
+                                            navEstudiante.style.display = "";
+                                            contentEstudiante.hidden = false;
+                                            contentEstudiante.style.display = "";
+
+
+                                            habilitarInput();
+
+
+                                        } else {
+                                            navConfig.style.display = "none";
+                                            navConfig.classList.remove('show', 'active');
+                                            contentConfigure.style.display = "none";
+                                            contentConfigure.classList.remove('show', 'active');
+
+                                            navEstudiante.style.display = "none";
+                                            contentEstudiante.style.display = "none";
+
+
+                                            navInfo.classList.add('show', 'active');
+                                            contentInfo.classList.add('show', 'active');
+
+                                            document.getElementById("minEstudiantes").disabled = true;
+                                            document.getElementById("maxEstudiantes").disabled = true;
+                                            document.getElementById("horas").disabled = true;
+
+
+
+                                        }
+                                    }
+
+
+
+                                    function eliminarFila(button) {
+                                        var fila = button.parentNode.parentNode; // Obtener la referencia a la fila actual                                                        
+                                        var tabla = fila.parentNode; // Obtener la referencia a la tabla                                                        
+                                        tabla.deleteRow(fila.rowIndex); // Eliminar la fila de la tabla
+                                    }
+
+
+                                    function agregarEstudainte(dato) {
+                                        crearFila(dato);
+                                    };
+
+                                    function editarEstudainte(id) {
+                                        var grupoSelect = document.getElementById("grupo-" + id);
+                                        var estadoSelect = document.getElementById("estado-" + id);
+                                        var data = {
+                                            "matricula": id,
+                                            "grupo": grupoSelect.value,
+                                            "estado": estadoSelect.value,
+                                            "curso": '<?php echo base64_decode($_GET["id"]) ?>'
+                                        };
+                                        accionCursoMatricula(data, '<?php echo ACCION_MODIFICAR ?>');
+                                    };
+
+
+
+                                    function accionCursoMatricula(data, tipo) {
+                                        data["tipo"] = tipo;
+                                        var url = "fetch-estudiante-mediatecnica.php";
+
+                                        console.log(JSON.stringify(data));
+
+                                        fetch(url, {
+                                                method: "POST", // or 'PUT'
+                                                body: JSON.stringify(data), // data can be `string` or {object}!
+                                                headers: {
+                                                    "Content-Type": "application/json"
+                                                },
+                                            })
+                                            .then((res) => res.json())
+                                            .catch(function(error) {
+                                                console.error("Error:", error)
+                                            })
+                                            .then(
+                                                function(response) {
+                                                    $.toast({
+                                                        heading: 'Acción realizada',
+                                                        text: tipo,
+                                                        position: 'bottom-right',
+                                                        showHideTransition: 'slide',
+                                                        loaderBg: '#26c281',
+                                                        icon: 'success',
+                                                        hideAfter: 5000,
+                                                        stack: 6
+                                                    });
+
+                                                });
+                                    }
+
+                                    function crearFila(seleccion) {
+                                        if (seleccion) {
+                                            var valor = seleccion.id; // El valor de la opción
+                                            var etiqueta = seleccion.text; // La etiqueta de la opción
+                                            // se insertan los valores en la tabla
+                                            var tabla = document.getElementById("estudaintesRegistrados");
+                                            var filas = tabla.getElementsByTagName("tr");
+
+                                            // buscamos si ya se encuentra registrado                                                            
+                                            encontro = false;
+                                            for (var i = 0; i < filas.length; i++) { // Recorre las filas
+                                                var celdas = filas[i].getElementsByTagName("td"); // Obtén todas las celdas de la fila actual
+
+                                                for (var j = 0; j < celdas.length; j++) { // Recorre las celdas
+                                                    if (celdas[j].innerHTML == valor) {
+                                                        encontro = true; // cambio el estado de  a tru si encuentra un codigo igual
+                                                    }
+                                                }
+                                            }
+                                            if (!encontro) {
+                                                // creamos el select del grupo
+                                                var select1 = document.createElement("select");
+                                                select1.id = "grupo-" + valor;
+                                                select1.classList.add('form-control');
+                                                var opciones = $('#grupoBase').select2('data');
+                                                for (var i = 0; i < opciones.length; i++) {
+                                                    var opcion = document.createElement("option");
+                                                    opcion.text = opciones[i].text;
+                                                    opcion.value = opciones[i].id;
+                                                    select1.add(opcion);
+                                                }
+                                                select1.addEventListener('change', function() {
+                                                    editarEstudainte(valor);
+                                                });
+                                                // creamos el select del estado
+                                                var select2 = document.createElement("select");
+                                                select2.id = "estado-" + valor;
+                                                select2.classList.add('form-control');
+                                                var opciones2 = $('#estadoBase').select2('data');
+                                                for (var i = 0; i < opciones2.length; i++) {
+                                                    var opcion = document.createElement("option");
+                                                    opcion.text = opciones2[i].text;
+                                                    opcion.value = opciones2[i].id;
+                                                    select2.add(opcion);
+                                                }
+                                                select2.addEventListener('change', function() {
+                                                    editarEstudainte(valor);
+                                                });
+
+                                                // Crea un elemento de botón
+                                                var boton = document.createElement("button");
+                                                boton.type = "button";
+                                                boton.id = valor;
+                                                boton.title = '{"tipo":1,"descripcionTipo":"Para ocultar fila del registro."}';
+                                                boton.name = "fetch-estudiante-mediatecnica.php?" +
+                                                    "tipo=<?php echo base64_encode(ACCION_ELIMINAR) ?>" +
+                                                    "&matricula=" + btoa(valor) +
+                                                    "&curso=<?php echo $_GET["id"] ?>";
+                                                boton.classList.add('btn', 'btn-danger', 'btn-sm');
+                                                var icon = document.createElement('i'); // se crea la icono
+                                                icon.classList.add('fa', 'fa-trash');
+                                                boton.appendChild(icon);
+                                                // Agregar un evento al botón
+                                                boton.addEventListener('click', function() {
+                                                    var fila = document.getElementById("reg" + valor);
+                                                    fila.classList.remove('animate__animated', 'animate__fadeInDown');
+                                                    deseaEliminar(boton);
+                                                });
+
+                                                // se guarda en la base de datos
+                                                var data = {
+                                                    "matricula": valor,
+                                                    "curso": '<?php echo base64_decode($_GET["id"]) ?>'
+                                                };
+                                                accionCursoMatricula(data, '<?php echo ACCION_CREAR ?>');
+                                                // Crear una nueva fila                                                                
+                                                var fila = tabla.insertRow();
+                                                // Agregar datos a las celdas
+                                                fila.id = "reg" + valor;
+                                                fila.classList.add('animate__animated', 'animate__fadeInDown');
+                                                fila.insertCell(0).innerHTML = valor;
+                                                fila.insertCell(1).innerHTML = etiqueta;
+                                                fila.insertCell(2).appendChild(select1);
+                                                fila.insertCell(3).appendChild(select2);
+                                                fila.insertCell(4).appendChild(boton);
+
+                                            } else {
+                                                Swal.fire('Estudiante ya se encuentra registrado');
+                                            }
+
+                                        } else {
+                                            Swal.fire('mo hay opcion selecionada');
+                                        }
+                                    }
+                                </script>
                             </form>
 
                         </div>
