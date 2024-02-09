@@ -51,7 +51,7 @@ if (!empty($resultado)) {
         $consultaInscrito = mysqli_query($conexion, "SELECT mts.* FROM " . BD_ACADEMICA . ".academico_matriculas
     INNER JOIN mobiliar_sintia_admin.mediatecnica_matriculas_cursos mts ON(mat_id=matcur_id_matricula) 
     WHERE mat_documento = '" . $identificacion . "' 
-    AND matcur_id_curso='" . $resultado["gra_codigo"] . "'  
+    AND matcur_id_curso='" . $resultado["gra_id"] . "'  
     AND matcur_id_institucion='" . $resultado["institucion"] . "'
     AND matcur_years='" . $resultado["year"] . "'");
         $matriculaCurso = mysqli_fetch_array($consultaInscrito, MYSQLI_BOTH);
@@ -200,25 +200,25 @@ if (!empty($resultado)) {
                         <!-- Formulario a la izquierda -->
                         <form action="details-guardar.php" method="post">
 
-                            <div class="row m-2">
-                                <div class="col-md-12">
-                                    <h3 class="card-title">INSCRIBIR AL CURSO</h3>
-                                    <input type="text" hidden name="institucion" class="form-control" id="tipoUsuario" value="<?= $resultado["institucion"] ?>">
-                                    <input type="text" hidden name="year" class="form-control" id="tipoUsuario" value="<?= $resultado["year"] ?>">
-                                    <input type="text" hidden name="curso" class="form-control" id="curso" value="<?= $resultado["gra_codigo"] ?>">
-                                    <input type="text" hidden name="curso_id" class="form-control" id="curso_id" value="<?= $_GET["course"] ?>">
+                        <div class="row m-2">
+                            <div class="col-md-12">
+                                <h3 class="card-title">INSCRIBIR AL CURSO</h3>
+                                <input type="text" hidden name="institucion" class="form-control" id="tipoUsuario" value="<?= $resultado["institucion"] ?>">
+                                <input type="text" hidden name="year" class="form-control" id="tipoUsuario" value="<?= $resultado["year"] ?>">
+                                <input type="text" hidden name="curso" class="form-control" id="curso" value="<?= $resultado["gra_id"] ?>">
+                                <input type="text" hidden name="curso_id" class="form-control" id="curso_id" value="<?= $_GET["course"] ?>">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="nombre">Tipo de usuario actual:</label>
+                                    <input type="text" name="tipoUsuario" class="form-control" id="tipoUsuario" placeholder="Ingrese su nombre" value="<?= $tipoUsuario ?>" readonly>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="nombre">Tipo de usuario actual:</label>
-                                        <input type="text" name="tipoUsuario" class="form-control" id="tipoUsuario" placeholder="Ingrese su nombre" value="<?= $tipoUsuario ?>" readonly>
+                                <div class="form-group">
+                                    <label for="nombre">Identificacion:<span style="color: blue; font-size: 15px;" id="nDocu"></span></label>
+                                    <div id="grupo-identificacion" class="input-group mb-3">
+                                        <input type="text" name="identificacion" class="form-control" required id="identificacion" onChange="validarExistencia(this,'<?= IDENTIFICAION ?>','nDocu','grupo-identificacion')" placeholder="Ingrese su Identificacion " value="<?= $identificacion ?>" <?= $readonly; ?>>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="nombre">Identificacion:<span style="color: blue; font-size: 15px;" id="nDocu"></span></label>
-                                        <div id="grupo-identificacion" class="input-group mb-3">
-                                            <input type="text" name="identificacion" class="form-control" required id="identificacion" onChange="validarExistencia(this,'<?= IDENTIFICAION ?>','nDocu','grupo-identificacion')" placeholder="Ingrese su Identificacion " value="<?= $identificacion ?>" <?= $readonly; ?>>
-                                        </div>
-                                    </div>
+                                </div>
 
 
                                     <div class="form-group">

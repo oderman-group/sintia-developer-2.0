@@ -14,7 +14,7 @@ class GradoServicios
     {
     $sqlInicial = "SELECT * FROM " . BD_ACADEMICA . ".academico_grados";
     if ($parametrosArray && count($parametrosArray) > 0) {
-        $parametrosValidos = array('gra_tipo', 'gra_estado', 'institucion', 'year');
+        $parametrosValidos = array('gra_tipo', 'gra_estado', 'institucion', 'year','gra_auto_enrollment','gra_active');
         $sqlInicial = Servicios::concatenarWhereAnd($sqlInicial, $parametrosValidos, $parametrosArray);
     };
     $sqlFinal = " ORDER BY gra_vocal";
@@ -49,10 +49,16 @@ class GradoServicios
      *
      * @return array|false Arreglo con la información del curso o false si hay un error.
      */
-    public static function consultarCurso($idCurso = 1)
+    public static function consultarCurso($idCurso = 1,$institucion=null,$year=null)
     {
         global $config;
-        return Servicios::getSql("SELECT * FROM " . BD_ACADEMICA . ".academico_grados WHERE gra_id='" . $idCurso."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        if($institucion==null){
+            $institucion=$config['conf_id_institucion'];
+        }
+        if($year==null){
+            $year=$_SESSION["bd"];
+        }
+        return Servicios::getSql("SELECT * FROM " . BD_ACADEMICA . ".academico_grados WHERE gra_id='" . $idCurso."' AND institucion={$institucion} AND year={$year}");
     }
 
     /**
