@@ -76,7 +76,9 @@ if (!Modulos::validarPermisoEdicion() || $resultado['epag_estado'] != PENDIENTE)
                                     <input type="hidden" value="<?= $resultado['epag_id']; ?>" name="id">
                                     <input type="hidden" value="<?= $resultado['epag_id_evaluacion']; ?>" name="idE">
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Tipo de Encuesta</label>
+                                        <label class="col-sm-2 control-label">Tipo de Encuesta
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="A que o quien se va a enfocar esta asignación."><i class="fa fa-question"></i></button>
+                                        </label>
                                         <div class="col-sm-4">
                                             <select class="form-control  select2" id="tipoEncuesta" name="tipoEncuesta" data-id-evaluado="<?= $resultado['epag_id_evaluado']; ?>" onchange="selectEvaluado(this)" <?= $disabledPermiso; ?>>
                                                 <option value="">Escoja una opción</option>
@@ -91,7 +93,9 @@ if (!Modulos::validarPermisoEdicion() || $resultado['epag_estado'] != PENDIENTE)
                                             $(document).ready(selectEvaluado(document.getElementById('tipoEncuesta')));
                                         </script>
 
-                                        <label class="col-sm-2 control-label">Evaluado</label>
+                                        <label class="col-sm-2 control-label">Evaluado
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Escoja los usuarios, curso, materia o areas que seran evaluadas."><i class="fa fa-question"></i></button>
+                                        </label>
                                         <div class="col-sm-4">
                                             <select class="form-control  select2" id="evaluado" name="evaluado" <?= $disabledPermiso; ?>>
                                                 <option value="">Escoja una opción</option>
@@ -100,7 +104,9 @@ if (!Modulos::validarPermisoEdicion() || $resultado['epag_estado'] != PENDIENTE)
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Evaluador</label>
+                                        <label class="col-sm-2 control-label">Evaluador
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Usuarios que realizara esta encuesta."><i class="fa fa-question"></i></button>
+                                        </label>
                                         <div class="col-sm-4">
                                             <select class="form-control select2" name="evaluador" <?= $disabledPermiso; ?>>
                                                 <option value="">Escoja una opción</option>

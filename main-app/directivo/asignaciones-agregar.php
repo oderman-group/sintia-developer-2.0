@@ -68,7 +68,9 @@ if (!empty($_GET['idE'])) {
                                 <form name="formularioGuardar" action="asignaciones-guardar.php" method="post">
                                     <input type="hidden" value="<?= $idE; ?>" name="idE">
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Tipo de Encuesta</label>
+                                        <label class="col-sm-2 control-label">Tipo de Encuesta
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="A que o quien se va a enfocar esta asignación."><i class="fa fa-question"></i></button>
+                                        </label>
                                         <div class="col-sm-4">
                                             <select class="form-control  select2" name="tipoEncuesta" data-id-evaluado="0" onchange="selectEvaluado(this)" <?= $disabledPermiso; ?>>
                                                 <option value="">Escoja una opción</option>
@@ -80,7 +82,9 @@ if (!empty($_GET['idE'])) {
                                             </select>
                                         </div>
 
-                                        <label class="col-sm-2 control-label">Evaluado</label>
+                                        <label class="col-sm-2 control-label">Evaluado
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Escoja los usuarios, curso, materia o areas que seran evaluadas."><i class="fa fa-question"></i></button>
+                                        </label>
                                         <div class="col-sm-4">
                                             <select class="form-control  select2-multiple" multiple id="evaluado" name="evaluado[]" <?= $disabledPermiso; ?>>
                                                 <option value="">Escoja una opción</option>
@@ -89,7 +93,9 @@ if (!empty($_GET['idE'])) {
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Evaluador</label>
+                                        <label class="col-sm-2 control-label">Evaluador
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Escoja el tipo de usuarios o cursos que realizaran esta encuesta."><i class="fa fa-question"></i></button>
+                                        </label>
                                         <div class="col-sm-4">
                                             <select class="form-control  select2" name="evaluador" onchange="mostrarSelectCurso(this)" <?= $disabledPermiso; ?>>
                                                 <option value="">Escoja una opción</option>
@@ -102,7 +108,9 @@ if (!empty($_GET['idE'])) {
                                         </div>
 
                                         <div id="elementSelectCurso" style="display: none;">
-                                            <label class="col-sm-2 control-label">Escoje los cursos</label>
+                                            <label class="col-sm-2 control-label">Escoje los cursos
+                                                <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Si el evaluador sera curso, especifique que cursos realizaran la encuesta."><i class="fa fa-question"></i></button>
+                                            </label>
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2-multiple" style="width: 100%;" multiple name="evaluadorCursos[]" <?= $disabledPermiso; ?>>
                                                     <option value="">Escoja una opción</option>
