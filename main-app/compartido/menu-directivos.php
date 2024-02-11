@@ -220,13 +220,31 @@
 									<a href="javascript:void(0);" class="nav-link nav-toggle"> <i class="fa fa-question"></i>
 										<span class="title"><?=$frases[388][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 									</a>
-									<ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0281","DT0283","DT0285","DT0288","DT0289","DT0291"])?>>
+									<li <?php agregarClass(MENU_PADRE,["DT0281","DT0283","DT0285","DT0288","DT0289","DT0291","DT0308","DT0309","DT0311"]) ?>>
+									<a href="javascript:void(0);" class="nav-link nav-toggle"> <i class="fa fa-question"></i>
+										<span class="title"><?=$frases[388][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
+									</a>
+									<ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0281","DT0283","DT0285","DT0288","DT0289","DT0291","DT0308","DT0309","DT0311"])?>>
 										<li ><a href="javascript:void(0);" class="nav-link "> <span class="title"><?=$frases[393][$datosUsuarioActual['uss_idioma']];?></span></a></li>									
-										<li <?php agregarClass(MENU,["DT0288","DT0289","DT0291"]) ?>><a href="preguntas.php" class="nav-link "> <span class="title"><?=$frases[139][$datosUsuarioActual['uss_idioma']];?></span></a></li>
-										<li <?php agregarClass(MENU,["DT0281","DT0283","DT0285"]) ?>><a href="evaluaciones.php" class="nav-link "> <span class="title"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></span></a></li>
-								
-	
+										<?php
+											if(Modulos::validarSubRol(["DT0281"])){
+										?>
+											<li <?php agregarClass(MENU,["DT0281","DT0283","DT0285"]) ?>><a href="evaluaciones.php" class="nav-link "> <span class="title"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<?php
+											}
+											if(Modulos::validarSubRol(["DT0288"])){
+										?>
+											<li <?php agregarClass(MENU,["DT0288","DT0289","DT0291"]) ?>><a href="preguntas.php" class="nav-link "> <span class="title"><?=$frases[139][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<?php
+											}
+											if(Modulos::validarSubRol(["DT0308"])){
+										?>
+											<li <?php agregarClass(MENU,["DT0308","DT0309","DT0311"]) ?>><a href="respuesta.php" class="nav-link "> <span class="title"><?=$frases[428][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<?php
+											}
+										?>
 									</ul>
+								</li>
 								</li>
 								<?php }?>
 							
