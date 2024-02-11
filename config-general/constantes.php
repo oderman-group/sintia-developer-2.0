@@ -81,16 +81,40 @@ define('MODULO_ADMISIONES', 8);
 define('MODULO_RESERVA_CUPO', 9);
 define('MODULO_MEDIA_TECNICA', 10);
 
-/* TIPOS DE FACTURA o COTIZACIÓn */
+/* TIPO DE VALIDACION*/
+define('IDENTIFICAION', 'Identificacion');
+define('USUARIO', 'Usuario');
+define('CORREO', 'Correo');
+
+/* TIPOS DE DOCUMENTO FINANCIERO */
 define('TIPO_FACTURA', 'INVOICE');
 define('TIPO_COTIZACION', 'QUOTE');
 define('TIPO_RECURRING', 'INVOICE_RECURRING');
+
+/* TIPO DE FACTURA*/
+define('FACTURA_VENTA', 1);
+define('FACTURA_COMPRA', 2);
+
+
+/* TIPOS DE PREGUNTAS */
+define('TEXT', 'TEXT');
+define('MULTIPLE', 'MULTIPLE');
+define('SINGLE', 'SINGLE');
 
 define('COBRADA', 'COBRADA');
 define('POR_COBRAR', 'POR_COBRAR');
 
 define('SI', 'SI');
 define('NO', 'NO');
+
+define('INVOICE', 'INVOICE');
+define('ACCOUNT', 'ACCOUNT');
+
+/* Tipos de impuestos */
+define('IVA', 'IVA');
+define('ICO', 'ICO');
+define('ICUI', 'ICUI');
+define('OTRO', 'OTRO');
 
 /* ESTADOS DE MATRICULA */
 define('MATRICULADO', 1);
@@ -104,6 +128,9 @@ define('PREESCOLAR', 1);
 define('BASICA_PRIMARIA', 2);
 define('BASICA_SECUNDARIA', 3);
 define('MEDIA', 4);
+
+define('ACTIVO', 'ACTIVO');
+define('INACTIVO', 'INACTIVO');
 
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':

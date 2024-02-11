@@ -12,7 +12,10 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 $disabledPermiso = "";
 if(!Modulos::validarPermisoEdicion()){
 	$disabledPermiso = "disabled";
-}?>
+}
+
+$codigoUnico=Utilidades::generateCode("ABO");
+?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -52,33 +55,43 @@ if(!Modulos::validarPermisoEdicion()){
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12">
+                        <div class="col-sm-9">
                             <?php require_once(ROOT_PATH."/config-general/mensajes-informativos.php"); ?>
                             <div class="panel">
                                 <header class="panel-heading panel-heading-purple"><?=$frases[56][$datosUsuarioActual['uss_idioma']];?> <?=$frases[413][$datosUsuarioActual['uss_idioma']];?></header>
                                 <div class="panel-body">
 									<form name="formularioGuardar" action="abonos-guardar.php" method="post" enctype="multipart/form-data">
+										<input type="hidden" value="<?=$codigoUnico?>" name="codigoUnico" id="idAbono">
 
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[380][$datosUsuarioActual['uss_idioma']];?> <span style="color: red;">(*)</span>
-                                                <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Puedes buscar por ID de la factura o por el nombre del usuario que realiza el abono."><i class="fa fa-question"></i></button>
-                                            </label>
-                                            <div class="col-sm-9">
-                                                <select class="form-control select2" id="selectFactura" name="idFactura" required <?=$disabledPermiso;?>>
+                                            <label class="col-sm-2 control-label"><?=$frases[424][$datosUsuarioActual['uss_idioma']];?> <span style="color: red;">(*)</span></label>
+                                            <div class="col-sm-10">
+                                                <select class="form-control select2" id="select_cliente" name="cliente" onchange="mostrarTipoTransaccion()" required <?=$disabledPermiso;?>>
                                                 </select>
                                             </div>
                                         </div>
 
                                         <script>
                                             $(document).ready(function() {
-                                                $('#selectFactura').select2({
-                                                placeholder: 'Seleccione la factura...',
+                                                $('#select_cliente').select2({
+                                                placeholder: 'Seleccione el usuario...',
                                                 theme: "bootstrap",
                                                 multiple: false,
                                                     ajax: {
                                                         type: 'GET',
-                                                        url: 'ajax-traer-facturas.php',
+                                                        url: '../compartido/ajax-listar-usuarios.php',
                                                         processResults: function(data) {
+                                                            var radios = document.getElementsByName('tipoTransaccion');
+                                                            
+                                                            for (var i = 0; i < radios.length; i++) {
+                                                                if (radios[i].checked) {
+                                                                    radios[i].checked = false;
+                                                                }
+                                                            }
+                                                            $('#mostrarFacturas').empty().hide().html('').show(1);
+                                                            document.getElementById("divFacturas").style.display="none";
+                                                            document.getElementById("divCuentasContables").style.display="none";
+                                                            document.getElementById("divTipoTransaccion").style.display="none";
                                                             data = JSON.parse(data);
                                                             return {
                                                                 results: $.map(data, function(item) {
@@ -95,11 +108,6 @@ if(!Modulos::validarPermisoEdicion()){
                                         </script>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><?=$frases[52][$datosUsuarioActual['uss_idioma']];?> <span style="color: red;">(*)</span></label>
-                                            <div class="col-sm-4">
-                                                <input type="number" min="0" value="0" name="valor" class="form-control" required <?=$disabledPermiso;?>>
-                                            </div>
-
                                             <label class="col-sm-2 control-label"><?=$frases[414][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-3">
                                                 <select class="form-control select2" id="metodoPago" name="metodoPago" required <?=$disabledPermiso;?>>
@@ -112,27 +120,108 @@ if(!Modulos::validarPermisoEdicion()){
 													<option value="OTROS" >Otras Formas de pago</option>
                                                 </select>
                                             </div>
-										</div>
-										
-										<div class="form-group row">
+                                            
                                             <label class="col-sm-2 control-label"><?=$frases[345][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-4">
                                                 <input type="file" name="comprobante" class="form-control" <?=$disabledPermiso;?>>
                                             </div>
 										</div>
 
-                                        <div class="form-group row">
-                                            <label class="col-sm-12 control-label"><?=$frases[109][$datosUsuarioActual['uss_idioma']];?></label>
-                                            <div class="col-sm-12">
-                                                <textarea cols="80" id="editor1" name="obser" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?=$disabledPermiso;?>></textarea>
+                                        <div id="divTipoTransaccion" style="display: none;">
+                                            <div class="panel">
+                                                <header class="panel-heading panel-heading-blue"> Tipo de Transacción</header>
+                                                <div class="panel-body" style="text-align: center;">
+                                                    <span style="font-size: 17px;">Ajustar este ingreso a una <b>factura de venta</b> existente en el sistema?</span><br>
+                                                    Recuerda que puedes registrar un ingreso sin necesidad de que este asociado a una factura de venta<br>
+                                                
+                                                    <div class="form-group row" style="align-items: center; justify-content: center;">
+                                                        <div class="col-sm-2">
+                                                            <input type="radio" name="tipoTransaccion" id="opt1" value="<?=INVOICE?>" onClick="tipoAbono(1)"> SÍ
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <input type="radio" name="tipoTransaccion" id="opt2" value="<?=ACCOUNT?>" onChange="tipoAbono(2)"> NO
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
+
+                                            <div class="panel" id="divFacturas" style="display: none;">
+                                                <header class="panel-heading panel-heading-blue"> Facturas Pendientes</header>
+                                                <div class="panel-body">
+
+                                                    <div class="table-scrollable">
+                                                        <table class="display" style="width:100%;" id="tablaItems">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Cod</th>
+                                                                    <th><?=$frases[107][$datosUsuarioActual['uss_idioma']];?></th>
+                                                                    <th><?=$frases[417][$datosUsuarioActual['uss_idioma']];?></th>
+                                                                    <th><?=$frases[418][$datosUsuarioActual['uss_idioma']];?></th>
+                                                                    <th>Valor recibido</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="mostrarFacturas"></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="panel" id="divCuentasContables" style="display: none;">
+                                                <header class="panel-heading panel-heading-blue"> A qué cuentas contables pertenece este ingreso?</header>
+                                                <div class="panel-body">
+
+                                                    <div class="table-scrollable">
+                                                        <table class="display" style="width:100%;">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>#</th>
+                                                                    <th>Concepto</th>
+                                                                    <th>Valor</th>
+                                                                    <th>Cant.</th>
+                                                                    <th>Descripción</th>
+                                                                    <th>Total</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td id="idConcepto"></td>
+                                                                    <td>
+                                                                        <div style="padding: 0px;">
+                                                                            <select class="form-control  select2" style="width: 100%;" id="concepto" onchange="guardarNuevoConcepto(this)" <?=$disabledPermiso;?>>
+                                                                                <option value="">Seleccione una opción</option>
+                                                                                <option value="OTROS_INGRESOS" >Otros Ingresos</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="number" min="0" id="precioNuevo" data-precio="0" onchange="actualizarSubtotalConceptos('idNuevo')" value="0" disabled>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="number" min="0" id="cantidadNuevo" data-cantidad="1" onchange="actualizarSubtotalConceptos('idNuevo')" value="1" style="width: 50px;" disabled>
+                                                                    </td>
+                                                                    <td>
+                                                                        <textarea  id="descripNueva" cols="30" rows="1" onchange="guardarDescripcionConcepto('idNuevo')" disabled></textarea>
+                                                                    </td>
+                                                                    <td id="subtotalNuevo">$0</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
                                         </div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-12 control-label"><?=$frases[416][$datosUsuarioActual['uss_idioma']];?>
+                                            <label class="col-sm-2 control-label"><?=$frases[109][$datosUsuarioActual['uss_idioma']];?></label>
+                                            <div class="col-sm-4">
+                                                <textarea cols="80" id="editor1" name="obser" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?=$disabledPermiso;?>></textarea>
+                                            </div>
+                                            
+                                            <label class="col-sm-2 control-label"><?=$frases[416][$datosUsuarioActual['uss_idioma']];?>
                                                 <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Estas notas no se verán reflejadas en el comprobante."><i class="fa fa-question"></i></button>
                                             </label>
-                                            <div class="col-sm-12">
+                                            <div class="col-sm-4">
                                                 <textarea cols="80" id="editor2" name="notas" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?=$disabledPermiso;?>></textarea>
                                             </div>
                                         </div>
@@ -147,12 +236,35 @@ if(!Modulos::validarPermisoEdicion()){
                                 </div>
                             </div>
                         </div>
+						
+						<div class="col-sm-3">
+                            <div class="panel">
+                                <header class="panel-heading panel-heading-blue">TOTAL</header>
+                                <div class="panel-body">
+                                    <table style="width: 100%;" align="center">
+                                        <tr>
+                                            <td style="padding-right: 20px;">TOTAL:</td>
+                                            <td align="left" id="totalNeto">$0</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-right: 20px;">TOTAL. ABONOS:</td>
+                                            <td align="left" id="abonosNeto">$0</td>
+                                        </tr>
+                                        <tr style="font-size: 15px; font-weight:bold;">
+                                            <td style="padding-right: 20px;">TOTAL POR COBRAR:</td>
+                                            <td align="left" id="porCobrarNeto">$0</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
         </div>
         <!-- end page container -->
         <?php require_once(ROOT_PATH."/main-app/compartido/footer.php");?>
     </div>
+    <script src="../js/Movimientos.js" ></script>
     <!-- start js include path -->
     <script src="../../config-general/assets/plugins/jquery/jquery.min.js" ></script>
     <script src="../../config-general/assets/plugins/popper/popper.js" ></script>

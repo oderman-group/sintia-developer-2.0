@@ -26,11 +26,21 @@ try{
 }
 $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
-$fecha = explode ("-", $resultado['fcu_fecha']);
-$dia   = $fecha[2];  
-$mes = $fecha[1];  
-$year  = $fecha[0];
+$fecha        = explode ("-", $resultado['fcu_fecha']);
+$dia          = $fecha[2];  
+$mes          = $fecha[1];  
+$year         = $fecha[0];
 $fechaReplace = $dia.'/'.$mes.'/'.$year;
+
+$tipoFactura    = 'Factura de venta original';
+$tituloContacto = 'Facturar A';
+$tituloGeneral  = 'FACTURA';
+
+if ($resultado["fcu_tipo"] == FACTURA_COMPRA) {
+    $tipoFactura    = 'Comprobante de compra original';
+    $tituloContacto = 'Pagar A';
+    $tituloGeneral  = 'COMPROBANTE';
+}
 ?>
 <!doctype html>
 <html class="no-js" lang="en">
@@ -75,7 +85,7 @@ $fechaReplace = $dia.'/'.$mes.'/'.$year;
                         Tel: <?=$informacion_inst["info_telefono"]?><br><br>
                         <table width="50%">
                             <tr>
-                                <td style="border: 1px solid #000; padding: 5px; width: 35%; background-color: #e3e3e3;">Facturar A:</td>
+                                <td style="border: 1px solid #000; padding: 5px; width: 35%; background-color: #e3e3e3;"><?=$tituloContacto;?>:</td>
                             </tr>
                             <tr>
                                 <td>
@@ -89,10 +99,10 @@ $fechaReplace = $dia.'/'.$mes.'/'.$year;
                         </table>
                     </td>
                     <td align="right" width="45%" style="vertical-align: top;">
-                        <h1 style="margin: 0px; font-size: 50px;">FACTURA</h1>
-                        <h3 style="margin: 0px; font-size: 13px;"><b>Número de factura: <?=$resultado["fcu_id"]?></b></h3>
+                        <h1 style="margin: 0px; font-size: 50px;"><?=$tituloGeneral;?></h1>
+                        <h3 style="margin: 0px; font-size: 13px;"><b>Número: <?=$resultado["fcu_id"];?></b></h3>
                         <h3 style="margin: 0px; font-size: 13px;">No responsable de IVA</h3>
-                        <h3 style="margin: 0px; font-size: 13px;">Factura de venta original</h3>
+                        <h3 style="margin: 0px; font-size: 13px;"><?=$tipoFactura;?></h3>
                     </td>
                 </tr>
             </table>
@@ -106,9 +116,10 @@ $fechaReplace = $dia.'/'.$mes.'/'.$year;
             <table class="table_items" width="100%" style="font-size: 15px;">
                 <thead style="background-color: #e3e3e3;" align="center">
                     <tr>
-                        <th>Item Cod.</th>
-                        <th>Descripción</th>
+                        <th colspan="2">Descripción</th>
                         <th>Precio</th>
+                        <th>Desc %</th>
+                        <th>Impuesto</th>
                         <th  width="10%">Cant.</th>
                         <th>Total</th>
                     </tr>
@@ -119,28 +130,54 @@ $fechaReplace = $dia.'/'.$mes.'/'.$year;
                         $itemsConsulta = Movimientos::listarItemsTransaction($conexion, $config, $id);
 
                         $subtotal=0;
+                        $totalDescuento=0;
+                        $totalImpuesto=0;
+                        $arrayImpuestos = [];
                         $numItems=mysqli_num_rows($itemsConsulta);
                         if($numItems>0){
                             while ($fila = mysqli_fetch_array($itemsConsulta, MYSQLI_BOTH)) {
+
+                                $resultadoTax = Movimientos::traerDatosImpuestos($conexion, $config, $fila['tax']);
+
+                                $impuestoItem = $fila['tax'] != 0 ? $resultadoTax['type_tax']." (".$resultadoTax['fee']."%)" : "NINGUNO (0%)";
                     ?>
                         <tr>
-                            <td><?=$fila['idtx'];?></td>
-                            <td><?=$fila['name'];?><?php if ( !empty($fila['description']) ){ echo "(".$fila['description'].")"; } ?></td>
-                            <td align="right">$<?=number_format($fila['priceTransaction'], 0, ",", ".")?></td>
-                            <td align="right"><?=$fila['cantity'];?></td>
-                            <td align="right">$<?=number_format($fila['subtotal'], 0, ",", ".")?></td>
+                            <td colspan="2"><?=$fila['name'];?><?php if ( !empty($fila['description']) ){ echo "(".$fila['description'].")"; } ?></td>
+                            <td style="text-align: right;">$<?=number_format($fila['priceTransaction'], 0, ",", ".")?></td>
+                            <td style="text-align: center;"><?=$fila['discount']?>%</td>
+                            <td style="text-align: right;"><?=$impuestoItem?></td>
+                            <td style="text-align: center;"><?=$fila['cantity'];?></td>
+                            <td style="text-align: right;">$<?=number_format($fila['subtotal'], 0, ",", ".")?></td>
                         </tr>
                     <?php 
-                            $subtotal += $fila['subtotal'];
+                            $subtotal += $fila['priceTransaction'] * $fila['cantity'];
+
+                            $descuento = ($fila['priceTransaction'] * ($fila['discount'] / 100));
+                            $totalDescuento += $descuento;
+
+                            $tax = !empty($resultadoTax['fee']) ? $resultadoTax['fee'] : 0;
+                            $impuesto = (($fila['priceTransaction'] * $fila['cantity']) - $descuento) * ($tax / 100);
+                            if ($fila['tax'] > 0) {
+                                $datosImpuestos = [
+                                    "name" =>$resultadoTax['type_tax'],
+                                    "fee" =>$resultadoTax['fee'],
+                                    "value" =>$impuesto
+                                ];
+                                $arrayImpuestos[] = $datosImpuestos;
+                            }
+                            $totalImpuesto += $impuesto;
                             }
                         }
                         if(empty($resultado['fcu_valor'])){ $resultado['fcu_valor']=0; }
-                        $total= $subtotal+$resultado['fcu_valor'];
+                        $total= (($subtotal + $resultado['fcu_valor']) - $totalDescuento) + $totalImpuesto ;
+                        $negativo = $totalDescuento > 0 ? "-" : "";
+                        $numImpuesto = count($arrayImpuestos);
+                        $colspan = 4 + $numImpuesto;
                     ?>
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="2" rowspan="3">
+                        <td colspan="4" rowspan="<?=$colspan?>">
                             <table>
                                 <tr style="font-weight:bold;">
                                     <td style="border: 1px solid #000;">
@@ -161,6 +198,20 @@ $fechaReplace = $dia.'/'.$mes.'/'.$year;
                         <td align="right" colspan="2" style="font-weight:bold;">VLR. ADICIONAL:</td>
                         <td align="right" style="background-color: #e3e3e3; border: 1px solid #000; font-weight:bold;"><?="$".number_format($resultado['fcu_valor'], 0, ",", ".");?></td>
                     </tr>
+                    <tr>
+                        <td align="right" colspan="2" style="font-weight:bold;">DESCUENTO:</td>
+                        <td align="right" style="background-color: #e3e3e3; border: 1px solid #000; font-weight:bold;"><?=$negativo."$".number_format($totalDescuento, 0, ",", ".");?></td>
+                    </tr>
+                    <?php
+                    foreach ($arrayImpuestos as $datosImpuestos) {
+                    ?>
+                        <tr>
+                            <td align="right" colspan="2" style="font-weight:bold;"><?=$datosImpuestos['name']." (".$datosImpuestos['fee']."%)";?></td>
+                            <td align="right" style="background-color: #e3e3e3; border: 1px solid #000; font-weight:bold;"><?="$".number_format($datosImpuestos['value'], 0, ",", ".");?></td>
+                        </tr>
+                    <?php
+                    }
+                    ?>
                     <tr style="font-weight:bold;">
                         <td align="right" colspan="2">TOTAL NETO:</td>
                         <td align="right" style="background-color: #e3e3e3; border: 1px solid #000; "><?="$".number_format($total, 0, ",", ".");?></td>
