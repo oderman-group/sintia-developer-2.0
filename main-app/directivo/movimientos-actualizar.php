@@ -63,7 +63,6 @@ try{
     fcu_anulado='".$_POST["anulado"]."',
     fcu_forma_pago='".$_POST["forma"]."',
     fcu_cerrado='".$_POST["cerrado"]."',
-    fcu_status='".$_POST["estado"]."',
     fcu_consecutivo='" . $consecutivo . "'
 
     WHERE fcu_id='".$_POST['idU']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");

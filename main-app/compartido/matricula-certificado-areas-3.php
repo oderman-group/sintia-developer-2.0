@@ -24,6 +24,10 @@ $Plataforma = new Plataforma;
 </head>
 
 <body style="font-family:Arial;">
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
 	<div align="justify" style="margin: auto;">
 		EL SUSCRITO RECTOR DE <b><?= strtoupper($informacion_inst["info_nombre"]) ?></b> DEL MUNICIPIO DE <?= strtoupper($informacion_inst["ciu_nombre"]) ?>, CON
 		RECONOCIMIENTO OFICIAL SEGÚN RESOLUCIÓN <?= strtoupper($informacion_inst["info_resolucion"]) ?>, EMANADA DE LA SECRETARÍA
@@ -87,6 +91,7 @@ $Plataforma = new Plataforma;
 			Institución Educativa, el grado <b><?= strtoupper($matricula["gra_nombre"]); ?></b> en año lectivo <?= $inicio; ?> de Educación <?= $educacion?> en la sede PRINCIPAL, con intensidad horaria de acuerdo al <?= $informacion_inst["info_decreto_plan_estudio"] ?>.
 		</div>
 		<div align="justify" style="margin: auto;"><b><?= strtoupper($matricula["gra_nombre"]); ?> <?= $inicio; ?></b></div>
+		<br>
         <table width="100%" rules="all" border="1" style="font-size: 15px;">
             <thead>
                 <tr style="font-weight:bold; text-align:center;">
@@ -363,16 +368,12 @@ $Plataforma = new Plataforma;
 		<tr>
 
 			<td align="left">
-				<?php
-				$rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
-				$nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
-				if (!empty($rector["uss_firma"]) && file_exists(ROOT_PATH . '/main-app/files/fotos/' . $rector['uss_firma'])) {
-					echo '<img src="../files/fotos/' . $rector["uss_firma"] . '" width="100"><br>';
-				} else {
-					echo '<p>&nbsp;</p>';
-				}
-				?>
+				<p>&nbsp;</p>
 				<p style="height:0px;"></p>_________________________________<br>
+				<?php
+					$rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
+					$nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
+				?>
 				<?= $nombreRector ?><br>
 				Rector(a)
 			</td>
@@ -380,10 +381,6 @@ $Plataforma = new Plataforma;
 		</tr>
 
 	</table>
-	<div align="center" style="font-size:10px; margin-top:10px;">
-		<img src="<?= $Plataforma->logo ?>" height="80"><br>
-		SINTIA - SISTEMA INTEGRAL DE GESTI&Oacute;N INSTITUCIONAL - <?= date("l, d-M-Y"); ?>
-	</div>
 	<?php
 	include(ROOT_PATH . "/main-app/compartido/guardar-historial-acciones.php");
 	?>

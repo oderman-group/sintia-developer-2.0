@@ -114,22 +114,19 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														include("../compartido/error-catch-to-report.php");
 													}
 													$contReg = 1;
-													$estadosCuentas = array("","Ingreso","Egreso","Cobro (CPC)","Deuda (CPP)");
+													$estadosCuentas = array("","Fact. Venta","Fact. Compra");
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$bgColor = '';
 														if($resultado['fcu_anulado']==1) $bgColor = '#ff572238';
 
 														$bgColorEstado = '#eeff0038';
 														$estado = 'Por Cobrar';
-														if($resultado['fcu_status']==COBRADA) { $bgColorEstado = '#00F13A38'; $estado = 'Cobrada'; }
+														if($resultado['fcu_status'] == COBRADA) { $bgColorEstado = '#00F13A38'; $estado = 'Cobrada'; }
 
 														$vlrAdicional = !empty($resultado['fcu_valor']) ? $resultado['fcu_valor'] : 0;
-
-														$totalNeto = Movimientos::calcularTotalNeto($conexion, $config, $resultado['fcu_id'], $vlrAdicional);
-
-														$abonos = Movimientos::calcularTotalAbonado($conexion, $config, $resultado['fcu_id']);
-
-														$porCobrar = $totalNeto - $abonos;
+														$totalNeto    = Movimientos::calcularTotalNeto($conexion, $config, $resultado['fcu_id'], $vlrAdicional);
+														$abonos       = Movimientos::calcularTotalAbonado($conexion, $config, $resultado['fcu_id']);
+														$porCobrar    = $totalNeto - $abonos;
 													?>
 													<tr id="reg<?=$resultado['fcu_id'];?>" style="background-color:<?=$bgColor;?>;">
                                                         <td><?=$contReg;?></td>
@@ -138,7 +135,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 															<a href="<?=$_SERVER['PHP_SELF'];?>?estadoFil=<?= base64_encode($estadoFil); ?>&usuario=<?=base64_encode($usuario)?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&tipo=<?=base64_encode($tipo);?>&fecha=<?=base64_encode($resultado['fcu_fecha']);?>" style="text-decoration: underline;"><?=$resultado['fcu_fecha'];?></a>
 														</td>
 														<td><?=$resultado['fcu_detalle'];?></td>
-														<td data-total-neto="<?=$totalNeto?>">$<?=number_format($totalNeto,0,",",".")?></td>
+														<td id="totalNeto<?=$resultado['fcu_id'];?>" data-tipo="<?=$resultado['fcu_tipo']?>" data-anulado="<?=$resultado['fcu_anulado']?>" data-total-neto="<?=$totalNeto?>">$<?=number_format($totalNeto,0,",",".")?></td>
 														<td data-abonos="<?=$abonos?>">$<?=number_format($abonos,0,",",".")?></td>
 														<td data-por-cobrar="<?=$porCobrar?>">$<?=number_format($porCobrar,0,",",".")?></td>
 														<td>
@@ -160,7 +157,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		<?php if( Modulos::validarSubRol(['DT0128']) ){?>
 																			<li><a href="movimientos-editar.php?id=<?=base64_encode($resultado['fcu_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
 																		<?php }?>
-																		<?php if($resultado['fcu_anulado']!=1 && $resultado['fcu_status']==POR_COBRAR && Modulos::validarSubRol(['DT0089'])){?>
+																		<?php if($resultado['fcu_anulado']!=1 && $abonos <= 0 && $resultado['fcu_status']==POR_COBRAR && Modulos::validarSubRol(['DT0089'])){?>
 																			<li id="anulado<?=$resultado['fcu_id'];?>"><a href="javascript:void(0);" onClick="anularMovimiento(this)" data-id-registro="<?=$resultado['fcu_id'];?>" data-id-usuario="<?=$resultado['uss_id'];?>">Anular</a></li>
 																		<?php } ?>
 																		<?php if( Modulos::validarSubRol(['DT0255']) ){?>
@@ -187,20 +184,40 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											
 								<div class="col-sm-3">
 									<div class="panel">
-										<header class="panel-heading panel-heading-blue">TOTAL</header>
+										<header class="panel-heading panel-heading-blue">TOTAL FACT. VENTA</header>
 										<div class="panel-body">
 											<table style="width: 100%;" align="center">
 												<tr>
-													<td style="padding-right: 20px;">TOTAL:</td>
-													<td align="left" id="totalNeto">$0</td>
+													<td style="padding-right: 20px;">TOTAL FACTURAS:</td>
+													<td align="left" id="totalNetoVenta">$0</td>
 												</tr>
 												<tr>
-													<td style="padding-right: 20px;">TOTAL. ABONOS:</td>
-													<td align="left" id="abonosNeto">$0</td>
+													<td style="padding-right: 20px;">TOTAL COBRADO:</td>
+													<td align="left" id="abonosNetoVenta">$0</td>
 												</tr>
 												<tr style="font-size: 15px; font-weight:bold;">
 													<td style="padding-right: 20px;">TOTAL POR COBRAR:</td>
-													<td align="left" id="porCobrarNeto">$0</td>
+													<td align="left" id="porCobrarNetoVenta">$0</td>
+												</tr>
+											</table>
+										</div>
+									</div>
+
+									<div class="panel">
+										<header class="panel-heading panel-heading-blue">TOTAL FACT. COMPRA</header>
+										<div class="panel-body">
+											<table style="width: 100%;" align="center">
+												<tr>
+													<td style="padding-right: 20px;">TOTAL FACTURAS:</td>
+													<td align="left" id="totalNetoCompra">$0</td>
+												</tr>
+												<tr>
+													<td style="padding-right: 20px;">TOTAL PAGADO:</td>
+													<td align="left" id="abonosNetoCompra">$0</td>
+												</tr>
+												<tr style="font-size: 15px; font-weight:bold;">
+													<td style="padding-right: 20px;">TOTAL POR PAGAR:</td>
+													<td align="left" id="porCobrarNetoCompra">$0</td>
 												</tr>
 											</table>
 										</div>

@@ -331,7 +331,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                         WHERE am.mat_area = '".$datosAreas['ar_id']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
                                         GROUP BY am.mat_area");
                                         $datosAreasPeriodos=mysqli_fetch_array($consultaAreasPeriodos, MYSQLI_BOTH);
-                                        if(!empty($datosAreasPeriodos['notaArea'])) $notaAreasPeriodos=round($datosAreasPeriodos['notaArea'], 1);
+                                        $notaAreasPeriodos = !empty($datosAreasPeriodos['notaArea']) ? round($datosAreasPeriodos['notaArea'], 1) : 0;
                                         $notaAreasPeriodosTotal+=$notaAreasPeriodos;
                                         switch($i){
                                             case 1:
@@ -498,7 +498,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 									$msj = "EL(LA) ESTUDIANTE FUE PROMOVIDO(A) AL GRADO SIGUIENTE.";
 								}
 
-								if ($matriculadosDatos['mat_id'] == CANCELADO && $ultimoPeriodoAreas < $config["conf_periodos_maximos"]) {
+								if ($matriculadosDatos['mat_estado_matricula'] == CANCELADO && $ultimoPeriodoAreas < $config["conf_periodos_maximos"]) {
 									$msj = "EL(LA) ESTUDIANTE FUE RETIRADO SIN FINALIZAR AÑO LECTIVO.";
 								}
 							}
@@ -518,24 +518,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
         <table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
             <tr>
-                <td align="center">
-                    <?php
-                        $secretaria = Usuarios::obtenerDatosUsuario($informacion_inst["info_secretaria_academica"]);
-                        $nombreSecretaria = UsuariosPadre::nombreCompletoDelUsuario($secretaria);
-                        if(!empty($secretaria["uss_firma"]) && file_exists(ROOT_PATH.'/main-app/files/fotos/' . $secretaria['uss_firma'])){
-                            echo '<img src="../files/fotos/'.$secretaria["uss_firma"].'" width="100"><br>';
-                        }else{
-                            echo '<p>&nbsp;</p>
-                                <p>&nbsp;</p>
-                                <p>&nbsp;</p>';
-                        }
-                    ?>
-                    <p style="height:0px;"></p>_________________________________<br>
-                    <p>&nbsp;</p>
-                    <?=$nombreSecretaria?><br>
-                    Secretario(a)
-                </td>
-                <td align="center">
+                <td align="left">
                     <?php
                         $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
                         $nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);

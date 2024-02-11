@@ -124,14 +124,12 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2" name="tipo" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
-													<option value="1" <?php if($resultado['fcu_tipo']==1){ echo "selected";}?>>Ingreso</option>
-													<option value="2" <?php if($resultado['fcu_tipo']==2){ echo "selected";}?>>Egreso</option>
-													<option value="3" <?php if($resultado['fcu_tipo']==3){ echo "selected";}?>>Cobro (CPC)</option>
-													<option value="4" <?php if($resultado['fcu_tipo']==4){ echo "selected";}?>>Deuda (CPP)</option>
+													<option value="1" <?php if($resultado['fcu_tipo']==1){ echo "selected";}?>>Fact. Venta</option>
+													<option value="2" <?php if($resultado['fcu_tipo']==2){ echo "selected";}?>>Fact. Compra</option>
                                                 </select>
                                             </div>
 
-                                            <label class="col-sm-2 control-label">Forma de pago</label>
+                                            <label class="col-sm-2 control-label">Medio de pago</label>
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2" name="forma" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
@@ -169,7 +167,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Estado</label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="estado" required <?=$disabledPermiso;?>>
+                                                <select class="form-control  select2" disabled>
                                                     <option value="">Seleccione una opción</option>
 													<option value="<?=POR_COBRAR?>" <?php if($resultado['fcu_status']==POR_COBRAR){ echo "selected";}?>>Por Cobrar</option>
 													<option value="<?=COBRADA?>" <?php if($resultado['fcu_status']==COBRADA){ echo "selected";}?>>Cobrada</option>

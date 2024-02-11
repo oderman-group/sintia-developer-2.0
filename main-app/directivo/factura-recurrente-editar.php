@@ -145,10 +145,8 @@ if(!Modulos::validarPermisoEdicion()){
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2" name="tipo" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
-                                                    <option value="1" <?php if($resultado['invoice_type']==1){ echo "selected";}?>>Ingreso</option>
-                                                    <option value="2" <?php if($resultado['invoice_type']==2){ echo "selected";}?>>Egreso</option>
-                                                    <option value="3" <?php if($resultado['invoice_type']==3){ echo "selected";}?>>Cobro (CPC)</option>
-                                                    <option value="4" <?php if($resultado['invoice_type']==4){ echo "selected";}?>>Deuda (CPP)</option>
+                                                    <option value="1" <?php if($resultado['invoice_type']==1){ echo "selected";}?>>Fact. Venta</option>
+                                                    <option value="2" <?php if($resultado['invoice_type']==2){ echo "selected";}?>>Fact. Compra</option>
                                                 </select>
                                             </div>
 
@@ -169,7 +167,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Descripción general <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-4">
-                                                <textarea name="detalle" cols="70" rows="2" required <?=$disabledPermiso;?>><?=$resultado['detail'];?></textarea>
+                                                <textarea name="detalle" cols="70" rows="2" class="form-control" required <?=$disabledPermiso;?>><?=$resultado['detail'];?></textarea>
                                             </div>
 
                                             <label class="col-sm-2 control-label">Valor adicional <span style="color: red;">(*)</span></label>

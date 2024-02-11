@@ -473,6 +473,7 @@ function anularMovimiento(datos) {
 
                 document.getElementById("reg"+idR).style.backgroundColor="#ff572238";
                 document.getElementById("anulado"+idR).style.display = "none";
+                document.getElementById("totalNeto"+idR).dataset.anulado = 1;
 
                 $.toast({
                     heading: 'Acción realizada',
@@ -484,6 +485,8 @@ function anularMovimiento(datos) {
                     hideAfter: 5000,
                     stack: 6
                 });
+
+                totalizarMovimientos();
             })
             .catch(error => {
                 // Manejar errores
@@ -974,51 +977,84 @@ function totalizarMovimientos() {
     var tabla = document.getElementById('tablaItems');
 
     // Inicializar variables para almacenar valores totales
-    var totalNeto = 0;
-    var totalAbonos = 0;
-    var totalPorCobrar = 0;
+    var totalNetoVenta = 0;
+    var totalAbonosVenta = 0;
+    var totalPorCobrarVenta = 0;
+
+    var totalNetoCompra = 0;
+    var totalAbonosCompra = 0;
+    var totalPorCobrarCompra = 0;
 
     // Iterar a través de las filas de la tabla, comenzando desde el índice 1
     for (let i = 1; i < tabla.rows.length; i++) {
         // Obtener la fila actual
         var fila = tabla.rows[i];
 
-        // Obtener y acumular el valor neto total del atributo de datos
-        var total = parseFloat(fila.cells[4].getAttribute('data-total-neto'));
-        totalNeto = totalNeto + total;
+        if (fila.cells[4].getAttribute('data-anulado') == 1) { continue; }
 
-        // Obtenga y acumule el valor total de abonos del atributo de datos
+        // Obtener el valor neto total del atributo de datos
+        var total = parseFloat(fila.cells[4].getAttribute('data-total-neto'));
+        // Obtenga el valor total de abonos del atributo de datos
         var abonos = parseFloat(fila.cells[5].getAttribute('data-abonos'));
         // Validar si abonos es un número válido, establecer en 0 si NaN
         if (isNaN(abonos)) {
             abonos = 0;
         }
-        totalAbonos = totalAbonos + abonos;
-
-        // Obtener y acumular el valor total por cobrar del atributo de datos
+        // Obtener el valor total por cobrar del atributo de datos
         var porCobrar = parseFloat(fila.cells[6].getAttribute('data-por-cobrar'));
-        totalPorCobrar = totalPorCobrar + porCobrar;
+
+        if (fila.cells[4].getAttribute('data-tipo') == 1) {
+
+            // Acumular el valor neto total del atributo de datos
+            totalNetoVenta = totalNetoVenta + total;
+            // Acumule el valor total de abonos del atributo de datos
+            totalAbonosVenta = totalAbonosVenta + abonos;
+            // Acumular el valor total por cobrar del atributo de datos
+            totalPorCobrarVenta = totalPorCobrarVenta + porCobrar;
+
+        } else if (fila.cells[4].getAttribute('data-tipo') == 2) {
+
+            // Acumular el valor neto total del atributo de datos
+            totalNetoCompra = totalNetoCompra + total;
+            // Acumule el valor total de abonos del atributo de datos
+            totalAbonosCompra = totalAbonosCompra + abonos;
+            // Acumular el valor total por cobrar del atributo de datos
+            totalPorCobrarCompra = totalPorCobrarCompra + porCobrar;
+
+        }
     }
 
-    // Actualiza los elementos DOM con los valores calculados.
+    // Actualiza total neto ventas
+    var totalNetoVentaFinal = "$" + numberFormat(totalNetoVenta, 0, ',', '.');
+    var elementTotalNetoVenta = document.getElementById('totalNetoVenta');
+    elementTotalNetoVenta.innerHTML = '';
+    elementTotalNetoVenta.appendChild(document.createTextNode(totalNetoVentaFinal));
+    // Actualiza total abonos ventas
+    var totalAbonosVentaFinal = "$" + numberFormat(totalAbonosVenta, 0, ',', '.');
+    var elementAbonosVenta = document.getElementById('abonosNetoVenta');
+    elementAbonosVenta.innerHTML = '';
+    elementAbonosVenta.appendChild(document.createTextNode(totalAbonosVentaFinal));
+    // Actualiza total por cobrar ventas
+    var porCobrarNetoVentaFinal = "$" + numberFormat(totalPorCobrarVenta, 0, ',', '.');
+    var elementPorCobrarNetoVenta = document.getElementById('porCobrarNetoVenta');
+    elementPorCobrarNetoVenta.innerHTML = '';
+    elementPorCobrarNetoVenta.appendChild(document.createTextNode(porCobrarNetoVentaFinal));
 
-    // Actualiza total neto
-    var totalNetoFinal = "$" + numberFormat(totalNeto, 0, ',', '.');
-    var elementTotalNeto = document.getElementById('totalNeto');
-    elementTotalNeto.innerHTML = '';
-    elementTotalNeto.appendChild(document.createTextNode(totalNetoFinal));
-
-    // Actualiza total abonos
-    var totalAbonosFinal = "$" + numberFormat(totalAbonos, 0, ',', '.');
-    var elementAbonos = document.getElementById('abonosNeto');
-    elementAbonos.innerHTML = '';
-    elementAbonos.appendChild(document.createTextNode(totalAbonosFinal));
-
-    // Actualiza total por cobrar
-    var porCobrarNetoFinal = "$" + numberFormat(totalPorCobrar, 0, ',', '.');
-    var elementPorCobrarNeto = document.getElementById('porCobrarNeto');
-    elementPorCobrarNeto.innerHTML = '';
-    elementPorCobrarNeto.appendChild(document.createTextNode(porCobrarNetoFinal));
+    // Actualiza total neto compras
+    var totalNetoCompraFinal = "$" + numberFormat(totalNetoCompra, 0, ',', '.');
+    var elementTotalNetoCompra = document.getElementById('totalNetoCompra');
+    elementTotalNetoCompra.innerHTML = '';
+    elementTotalNetoCompra.appendChild(document.createTextNode(totalNetoCompraFinal));
+    // Actualiza total abonos compras
+    var totalAbonosCompraFinal = "$" + numberFormat(totalAbonosCompra, 0, ',', '.');
+    var elementAbonosCompra = document.getElementById('abonosNetoCompra');
+    elementAbonosCompra.innerHTML = '';
+    elementAbonosCompra.appendChild(document.createTextNode(totalAbonosCompraFinal));
+    // Actualiza total por cobrar compras
+    var porCobrarNetoCompraFinal = "$" + numberFormat(totalPorCobrarCompra, 0, ',', '.');
+    var elementPorCobrarNetoCompra = document.getElementById('porCobrarNetoCompra');
+    elementPorCobrarNetoCompra.innerHTML = '';
+    elementPorCobrarNetoCompra.appendChild(document.createTextNode(porCobrarNetoCompraFinal));
 }
 
 /**
