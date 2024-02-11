@@ -50,7 +50,7 @@ if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
     $consultaInscrito = mysqli_query($conexion, "SELECT mts.* FROM " . BD_ACADEMICA . ".academico_matriculas
     INNER JOIN mobiliar_sintia_admin.mediatecnica_matriculas_cursos mts ON(mat_id=matcur_id_matricula) 
     WHERE mat_documento = '" . $identificacion . "' 
-    AND matcur_id_curso='" . $resultado["gra_codigo"] . "'  
+    AND matcur_id_curso='" . $resultado["gra_id"] . "'  
     AND matcur_id_institucion='" . $resultado["institucion"] . "'
     AND matcur_years='" . $resultado["year"] . "'");
     $matriculaCurso = mysqli_fetch_array($consultaInscrito, MYSQLI_BOTH);
@@ -180,7 +180,7 @@ $datosContactoSintia = Plataforma::infoContactoSintia();
                                 <h3 class="card-title">INSCRIBIR AL CURSO</h3>
                                 <input type="text" hidden name="institucion" class="form-control" id="tipoUsuario" value="<?= $resultado["institucion"] ?>">
                                 <input type="text" hidden name="year" class="form-control" id="tipoUsuario" value="<?= $resultado["year"] ?>">
-                                <input type="text" hidden name="curso" class="form-control" id="curso" value="<?= $resultado["gra_codigo"] ?>">
+                                <input type="text" hidden name="curso" class="form-control" id="curso" value="<?= $resultado["gra_id"] ?>">
                                 <input type="text" hidden name="curso_id" class="form-control" id="curso_id" value="<?= $_GET["course"] ?>">
                             </div>
                             <div class="col-md-6">
