@@ -216,11 +216,7 @@
 							<?php 
 							//MÓDULO CUESTIONARIO EVALUATIVO
 							if(!empty($arregloModulos) && array_key_exists(18, $arregloModulos)){?>
-								<li <?php agregarClass(MENU_PADRE,["DT0281","DT0283","DT0285","DT0288","DT0289","DT0291"]) ?>>
-									<a href="javascript:void(0);" class="nav-link nav-toggle"> <i class="fa fa-question"></i>
-										<span class="title"><?=$frases[388][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
-									</a>
-									<li <?php agregarClass(MENU_PADRE,["DT0281","DT0283","DT0285","DT0288","DT0289","DT0291","DT0308","DT0309","DT0311"]) ?>>
+								<li <?php agregarClass(MENU_PADRE,["DT0281","DT0283","DT0285","DT0288","DT0289","DT0291","DT0308","DT0309","DT0311"]) ?>>
 									<a href="javascript:void(0);" class="nav-link nav-toggle"> <i class="fa fa-question"></i>
 										<span class="title"><?=$frases[388][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 									</a>
@@ -244,7 +240,6 @@
 											}
 										?>
 									</ul>
-								</li>
 								</li>
 								<?php }?>
 							
