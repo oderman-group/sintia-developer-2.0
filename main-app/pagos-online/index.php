@@ -1,5 +1,8 @@
 <?php
     require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+    if(!empty($_GET["guest"])){
+        $_POST=$_GET;
+    }
     $cantidad = 1;
     if( !empty($_POST['cantidad']) && $_POST['cantidad'] > 0 ) {
         $cantidad = $_POST['cantidad']; 
@@ -10,6 +13,7 @@
     if(!empty($_POST['idProducto'])) {
         $idProducto = $_POST['idProducto']; 
     }
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -136,6 +140,7 @@
 <body>
     <div class="preloader flex-column justify-content-center align-items-center">
         <form class="animation__shake">
+            
             <script
                 src="https://checkout.epayco.co/checkout.js"
                 class="epayco-button"
@@ -161,6 +166,7 @@
                 data-epayco-extra8="<?=$cantidad?>"
                 data-epayco-extra9="<?=$_POST['monto']?>"
                 data-epayco-extra10="<?=$montoFinal?>"
+                data-epayco-extra11="<?=$_POST['url_origen']?>"
 
                 data-epayco-response="<?=REDIRECT_ROUTE?>/pagos-online/respuesta.php"
                 data-epayco-methodconfirmation="get"

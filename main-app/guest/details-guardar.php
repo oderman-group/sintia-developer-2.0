@@ -155,7 +155,25 @@ try {
 }
 $mensajeSintia="REGISTRO EXITOSO!";
 include("../compartido/guardar-historial-acciones.php");
-echo '<script type="text/javascript">window.location.href="details.php?course=' .$_POST["curso_id"] .  '&msgsintia=' .$mensajeSintia . '";</script>';
 
+$url = '../pagos-online/index.php';
+// URL de la página a la que deseas enviar los datos POST
 
+// Datos que deseas enviar (en este caso, los datos de $_POST)
+$_POST["guest"]=true;
+$_POST["emailUsuario"]=$_POST["correo"];
+$_POST["documentoUsuario"]=$_POST["identificacion"];
+$_POST["nombreUsuario"]=$_POST["nombre"]." ".$_POST["apellido"];
+$_POST["celularUsuario"]=$_POST["celular"];;
+$_POST["idInstitucion"]=$_POST["institucion"];
+$_POST["nombre"]=$_POST["nombreCurso"];
+
+$_POST["url_origen"]=$_SERVER["HTTP_REFERER"];
+$data = $_POST;
+
+// Crear una cadena de consulta con los datos
+$query_string = http_build_query($data);
+
+// Redirigir a la página de destino con los datos en la URL
+header("Location: $url?$query_string");
 exit();
