@@ -161,6 +161,7 @@ $url = '../pagos-online/index.php';
 
 // Datos que deseas enviar (en este caso, los datos de $_POST)
 $_POST["guest"]=true;
+$_POST["idUsuario"]=$_POST["identificacion"];
 $_POST["emailUsuario"]=$_POST["correo"];
 $_POST["documentoUsuario"]=$_POST["identificacion"];
 $_POST["nombreUsuario"]=$_POST["nombre"]." ".$_POST["apellido"];
