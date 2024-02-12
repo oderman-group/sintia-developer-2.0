@@ -12,6 +12,8 @@ $identificacion = "";
 $hidden = "";
 $inscrito = "";
 $calular = "";
+$aut = empty($_POST["aut"])?'':$_POST["aut"];
+
 
 
 if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
@@ -137,7 +139,7 @@ $datosContactoSintia = Plataforma::infoContactoSintia();
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="container" style="text-align: center;">
-                    <form method="post" action="../controlador/autentico.php" class="needs-validation" novalidate>
+                    <form method="post" id="autenticoFromulario" action="../controlador/autentico.php" class="needs-validation" novalidate>
 
                         <input type="hidden" name="bd" value="<?= $resultado["institucion"] ?>" />
                         <img class="mb-4" src="../../config-general/assets-login-2023/img/logo.png" width="100">
@@ -267,6 +269,39 @@ $datosContactoSintia = Plataforma::infoContactoSintia();
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
     <link href="../../config-general/assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css" rel="stylesheet" media="screen">
     <script type="application/javascript">
+        if ('<?php echo $aut ?>' != '') {
+           autoLogin();
+        }
+
+        function autoLogin() {
+            autenticoFromulario = document.getElementById("autenticoFromulario");
+            usuario = '<?= $_POST["aut"] ?>';
+            pass = '<?= $_POST["documento"] ?>';
+            // Crear un campo de entrada para cada dato a enviar
+            var inputNombre = document.createElement('input');
+            inputNombre.type = 'text';
+            inputNombre.name = 'guest';
+            inputNombre.value = usuario; // Valor de ejemplo
+            // Crear un campo de entrada para cada dato a enviar
+            var inputNombre = document.createElement('input');
+            inputNombre.type = 'text';
+            inputNombre.name = 'Usuario';
+            inputNombre.value = usuario; // Valor de ejemplo
+
+            var inputEdad = document.createElement('input');
+            inputEdad.type = 'password';
+            inputEdad.name = 'Clave';
+            inputEdad.value = pass; // Valor de ejemplo
+
+            var inputEdad = document.createElement('input');
+            inputEdad.type = 'text';
+            inputEdad.name = 'bd';
+            inputEdad.value ='<?= $resultado["institucion"] ?>'; // Valor de ejemplo
+
+
+            autenticoFromulario.submit();
+        }
+
         function asignarValorAntesDeEnviar(event) {
             // Prevenir el envío del formulario para realizar la asignación primero
             event.preventDefault();

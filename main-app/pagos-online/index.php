@@ -167,6 +167,7 @@
                 data-epayco-extra9="<?=$_POST['monto']?>"
                 data-epayco-extra10="<?=$montoFinal?>"
                 data-epayco-extra11="<?=$_POST['url_origen']?>"
+                data-epayco-extra12="<?=$_POST['usuario']?>"
 
                 data-epayco-response="<?=REDIRECT_ROUTE?>/pagos-online/respuesta.php"
                 data-epayco-methodconfirmation="get"
