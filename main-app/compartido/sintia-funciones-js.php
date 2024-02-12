@@ -719,9 +719,16 @@ if($datosUsuarioActual['uss_tipo']==5 || $datosUsuarioActual['uss_tipo']==1){
 	
 			setTimeout('mostrarModalLicencia()', 2000);
 	
+<?php if($numAsignacionesEncuesta > 0 && ($idPaginaInterna != 'DC0146' && $idPaginaInterna != 'AC0038' && $idPaginaInterna != 'ES0062' && $idPaginaInterna != 'DT0324')){ ?>	
+	if(localStorage.getItem("asignaciones")!=1){
+		function mostrarModalAsignaciones() {
+			$("#modalAsignaciones").modal("show");
 		}
-	
-	<?php }?>
+		$(document).ready(function() {
+			mostrarModalAsignaciones();
+		});
+	}
+<?php }?>
 
 /* Mostrar términos y condiciones */
 <?php
