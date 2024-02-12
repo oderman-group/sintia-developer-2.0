@@ -98,7 +98,7 @@
 												<i class="fa fa-angle-down"></i>
 											</button>
 											<ul class="dropdown-menu" role="menu" style="z-index: 10000;">
-													<li><a href="encuestas-realizar.php?id=<?=base64_encode($resultado['evag_id']);?>">Realizar Encuesta</a></li>
+													<li><a href="../compartido/encuestas-realizar.php?id=<?=base64_encode($resultado['evag_id']);?>">Realizar Encuesta</a></li>
 											</ul>
 										</div>
 									</td>
