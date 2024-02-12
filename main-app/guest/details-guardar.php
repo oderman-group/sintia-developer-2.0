@@ -153,8 +153,7 @@ try {
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
-$mensajeSintia="REGISTRO EXITOSO!";
-include("../compartido/guardar-historial-acciones.php");
+
 echo '<script type="text/javascript">window.location.href="details.php?course=' .$_POST["curso_id"] .  '&msgsintia=' .$mensajeSintia . '";</script>';
 
 
