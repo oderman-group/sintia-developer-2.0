@@ -738,7 +738,7 @@ if($datosUsuarioActual['uss_tipo']==5 || $datosUsuarioActual['uss_tipo']==1){
 	
 	<?php }?>
 
-<?php if($numAsignacionesEncuesta > 0 && ($idPaginaInterna != 'DC0146' && $idPaginaInterna != 'AC0038' && $idPaginaInterna != 'ES0062' && $idPaginaInterna != 'DT0324')){ ?>	
+<?php if($numAsignacionesEncuesta > 0 && ($idPaginaInterna != 'DC0146' && $idPaginaInterna != 'AC0038' && $idPaginaInterna != 'ES0062' && $idPaginaInterna != 'DT0324' && $idPaginaInterna != 'CM0060')){ ?>	
 	if(localStorage.getItem("asignaciones")!=1){
 		function mostrarModalAsignaciones() {
 			$("#modalAsignaciones").modal("show");

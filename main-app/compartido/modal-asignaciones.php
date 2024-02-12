@@ -1,5 +1,5 @@
 <?php
-if($numAsignacionesEncuesta > 0  && ($idPaginaInterna != 'DC0146' && $idPaginaInterna != 'AC0038' && $idPaginaInterna != 'ES0062' && $idPaginaInterna != 'DT0324')){
+if($numAsignacionesEncuesta > 0  && ($idPaginaInterna != 'DC0146' && $idPaginaInterna != 'AC0038' && $idPaginaInterna != 'ES0062' && $idPaginaInterna != 'DT0324' && $idPaginaInterna != 'CM0060')){
 ?>
 
 	<div class="modal fade" id="modalAsignaciones" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true" data-backdrop="static" data-keyboard="false">
