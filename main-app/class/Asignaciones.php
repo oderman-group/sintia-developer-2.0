@@ -154,4 +154,29 @@ class Asignaciones {
             include("../compartido/error-catch-to-report.php");
         }
     }
+
+    /**
+     * Consultar asignaciones de un usuario
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idUsuario
+     * 
+     * @return mysqli_result $consulta
+    **/
+    public static function traerAsignacionesUsuario (
+        mysqli $conexion, 
+        array $config,
+        string $idUsuario
+    )
+    {
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".general_evaluacion_asignar 
+            INNER JOIN ".BD_ADMIN.".general_evaluaciones ON evag_id=epag_id_evaluacion AND evag_institucion = {$config['conf_id_institucion']} AND evag_year = {$_SESSION["bd"]}
+            WHERE epag_id_evaluador='{$idUsuario}' AND epag_estado IN ('".PENDIENTE."', '".PROCESO."') AND epag_institucion = {$config['conf_id_institucion']} AND epag_year = {$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        return $consulta;
+    }
 }
