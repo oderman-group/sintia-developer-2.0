@@ -11,6 +11,9 @@ $mensaje = "";
 $identificacion = "";
 $hidden = "";
 $inscrito = "";
+$calular = "";
+$aut = empty($_POST["aut"])?'':$_POST["aut"];
+
 
 
 if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
@@ -28,6 +31,7 @@ if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
     $nombre = $sesionAbierta['uss_nombre'];
     $apellido = $sesionAbierta['uss_apellido1'];
     $correo = $sesionAbierta['uss_email'];
+    $calular = $sesionAbierta['uss_celular'];
 
     if ($sesionAbierta['uss_tipo'] != TIPO_ESTUDIANTE) {
         $usuario = $sesionAbierta['uss_usuario'];
@@ -72,7 +76,7 @@ $datosContactoSintia = Plataforma::infoContactoSintia();
     <title><?= $resultado['gra_nombre']; ?></title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
@@ -135,7 +139,7 @@ $datosContactoSintia = Plataforma::infoContactoSintia();
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="container" style="text-align: center;">
-                    <form method="post" action="../controlador/autentico.php" class="needs-validation" novalidate>
+                    <form method="post" id="autenticoFromulario" action="../controlador/autentico.php" class="needs-validation" novalidate>
 
                         <input type="hidden" name="bd" value="<?= $resultado["institucion"] ?>" />
                         <img class="mb-4" src="../../config-general/assets-login-2023/img/logo.png" width="100">
@@ -173,7 +177,7 @@ $datosContactoSintia = Plataforma::infoContactoSintia();
                 <div class="container">
 
                     <!-- Formulario a la izquierda -->
-                    <form action="details-guardar.php" method="post">
+                    <form id="miFormulario" action="details-guardar.php" method="post">
 
                         <div class="row m-2">
                             <div class="col-md-12">
@@ -182,6 +186,8 @@ $datosContactoSintia = Plataforma::infoContactoSintia();
                                 <input type="text" hidden name="year" class="form-control" id="tipoUsuario" value="<?= $resultado["year"] ?>">
                                 <input type="text" hidden name="curso" class="form-control" id="curso" value="<?= $resultado["gra_id"] ?>">
                                 <input type="text" hidden name="curso_id" class="form-control" id="curso_id" value="<?= $_GET["course"] ?>">
+                                <input type="hidden" class="form-control" name="monto" value="<?= $resultado['gra_price']; ?>">
+                                <input type="hidden" class="form-control" name="nombreCurso" value="<?= $resultado['gra_nombre']; ?>">
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -212,7 +218,11 @@ $datosContactoSintia = Plataforma::infoContactoSintia();
                                     <input type="text" name="apellido" class="form-control" id="apellido" placeholder="Ingrese su apellido" value="<?= $apellido; ?>" <?= $readonly; ?>>
                                 </div>
                                 <div class="form-group">
-                                    <label for="tarjeta">Correo: <span style="color: blue; font-size: 15px;" id="vCorreo"></label>
+                                    <label for="nombre">Celular:</label>
+                                    <input type="text" name="celular" required class="form-control" id="clular" placeholder="Ingrese su Celular" value="<?= $calular; ?>" <?= $readonly; ?>>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tarjeta">Correo: <span name="vCorreo" style="color: blue; font-size: 15px;" id="vCorreo"></label>
                                     <div id="grupo-correo" class="input-group mb-3">
                                         <input type="text" name="correo" required class="form-control" id="correo" onChange="validarExistencia(this,'<?= CORREO ?>','vCorreo','grupo-correo')" placeholder="Ingrese correo Electronico" value="<?= $correo; ?>" <?= $readonly; ?>>
                                     </div>
@@ -234,10 +244,7 @@ $datosContactoSintia = Plataforma::infoContactoSintia();
                                     </div>
 
                                 </div>
-                                <div class="form-group">
-                                    <label for="tarjeta">Número de Tarjeta:</label>
-                                    <input type="text" class="form-control" id="tarjeta" required placeholder="Ingrese el número de tarjeta">
-                                </div>
+
                                 <div class="mx-auto" style="height: 30px;">
 
                                 </div>
@@ -262,6 +269,99 @@ $datosContactoSintia = Plataforma::infoContactoSintia();
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
     <link href="../../config-general/assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css" rel="stylesheet" media="screen">
     <script type="application/javascript">
+        if ('<?php echo $aut ?>' != '') {
+           autoLogin();
+        }
+
+        function autoLogin() {
+            autenticoFromulario = document.getElementById("autenticoFromulario");
+            usuario = '<?= $_POST["aut"] ?>';
+            pass = '<?= $_POST["documento"] ?>';
+            // Crear un campo de entrada para cada dato a enviar
+            var inputNombre = document.createElement('input');
+            inputNombre.type = 'text';
+            inputNombre.name = 'guest';
+            inputNombre.value = usuario; // Valor de ejemplo
+            // Crear un campo de entrada para cada dato a enviar
+            var inputNombre = document.createElement('input');
+            inputNombre.type = 'text';
+            inputNombre.name = 'Usuario';
+            inputNombre.value = usuario; // Valor de ejemplo
+
+            var inputEdad = document.createElement('input');
+            inputEdad.type = 'password';
+            inputEdad.name = 'Clave';
+            inputEdad.value = pass; // Valor de ejemplo
+
+            var inputEdad = document.createElement('input');
+            inputEdad.type = 'text';
+            inputEdad.name = 'bd';
+            inputEdad.value ='<?= $resultado["institucion"] ?>'; // Valor de ejemplo
+
+
+            autenticoFromulario.submit();
+        }
+
+        function asignarValorAntesDeEnviar(event) {
+            // Prevenir el envío del formulario para realizar la asignación primero
+            event.preventDefault();
+
+            // Obtener el valor del input
+            validar = true;
+            validacionDocumento = document.getElementById('nDocu');
+            validacionUsuario = document.getElementById('vUsua');
+            validacionCorreo = document.getElementById('vCorreo');
+            msg = "";
+            if (validacionCorreo.textContent.trim() != "") {
+                validar = false;
+                msg = validacionCorreo.textContent;
+            }
+            if (validacionUsuario.textContent.trim() != "") {
+                validar = false;
+                msg = validacionUsuario.textContent;
+            }
+            if (validacionDocumento.textContent.trim() != "") {
+                validar = false;
+                msg = validacionDocumento.textContent;
+            }
+            if (validar) {
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: "btn btn-success",
+                        cancelButton: "btn btn-danger"
+                    }
+                });
+                swalWithBootstrapButtons.fire({
+                    title: "¿Desea registrarse?",
+                    text: "Recuerde que al aceptar quedara Pre Inscrito en el curso de <?= $resultado['gra_nombre'] ?> !",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Si, deseo registrarme!",
+                    cancelButtonText: "No! talvez más tarde!",
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.submit();
+                    }
+                });
+
+            } else {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "warning",
+                    title: msg,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+
+
+
+
+
+        }
+        document.getElementById("miFormulario").addEventListener("submit", asignarValorAntesDeEnviar);
+
         function validarExistencia(enviada, tipo, span, grupo) {
             var valor = enviada.value;
             if (valor.trim() != '') {
@@ -275,7 +375,7 @@ $datosContactoSintia = Plataforma::infoContactoSintia();
                 if (tipo === '<?php echo CORREO ?>') {
                     var regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     if (!regexCorreo.test(valor)) {
-                        var response = new Array("ok", 2, 3, 4, 5);
+                        var response = new Array("ok");
                         response["ok"] = "false";
                         validar(response, spanMensage, grupo, "El correo no es correcto");
                     } else {
@@ -328,7 +428,7 @@ $datosContactoSintia = Plataforma::infoContactoSintia();
                 subDiv.remove();
             }
             grupo = document.getElementById(grupo); // identificamos el grupo a editar
-            
+
             const nuevoDiv = document.createElement('div'); // se crea el div del grupo
             nuevoDiv.classList.add('input-group-append');
             nuevoDiv.id = idGrupo;
@@ -342,7 +442,7 @@ $datosContactoSintia = Plataforma::infoContactoSintia();
                 nuevaImg.src = "../files/iconos/1363803022_001_05.png";
                 nuevoBoton.appendChild(nuevaImg); // sea agrega la imagen al boton
                 nuevoDiv.name = "formIvalido";
-                nuevoDiv.value= "false";
+                nuevoDiv.value = "false";
                 spanMensage.css("color", "red");
                 spanMensage.empty().hide().html(msgError + "...").show(1);
             } else {

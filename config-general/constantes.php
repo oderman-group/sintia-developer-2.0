@@ -119,6 +119,12 @@ define('POR_COBRAR', 'POR_COBRAR');
 define('SI', 'SI');
 define('NO', 'NO');
 
+/* ESTADO PASARLEA DE PAGO */
+define('TRANSACCION_ACEPTADA', 'Aceptada');
+define('TRANSACCION_PENDIENTE', 'Pendiente');
+define('TRANSACCION_FALLIDA', 'Fallida');
+define('TRANSACCION_RECHAZADA', 'Rechazada');
+
 define('INVOICE', 'INVOICE');
 define('ACCOUNT', 'ACCOUNT');
 
