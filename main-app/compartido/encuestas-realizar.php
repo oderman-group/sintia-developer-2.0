@@ -3,6 +3,7 @@ include("session-compartida.php");
 $idPaginaInterna = 'CM0060';
 require_once(ROOT_PATH . "/main-app/class/EvaluacionGeneral.php");
 require_once(ROOT_PATH . "/main-app/class/PreguntaGeneral.php");
+require_once(ROOT_PATH . "/main-app/class/Asignaciones.php");
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
 
@@ -10,8 +11,14 @@ $id = "";
 if (!empty($_GET["id"])) {
 	$id = base64_decode($_GET["id"]);
 }
-$evaluacion = EvaluacionGeneral::consultar($id);
+
+$asignacion = Asignaciones::traerDatosAsignaciones($conexion, $config, $id);
+
+$evaluacion = EvaluacionGeneral::consultar($asignacion['epag_id_evaluacion']);
+
+Asignaciones::actualizarEstadoAsignacion($conexion, $config, $id, PROCESO);
 ?>
+<script src="../js/Evaluaciones.js"></script>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php"); ?>
@@ -56,11 +63,12 @@ $evaluacion = EvaluacionGeneral::consultar($id);
 						$preguntasConsulta = EvaluacionGeneral::traerPreguntasEvaluacion($conexion, $config, $id);
 						while ($preguntas = mysqli_fetch_array($preguntasConsulta, MYSQLI_BOTH)) {
 							$respuestasConsulta = PreguntaGeneral::traerRespuestasPreguntas($conexion, $config, $preguntas['pregg_id']);
+
+							$existeRespuestas = PreguntaGeneral::existeRespuestaPregunta($conexion, $config, $preguntas['pregg_id'], $id, $datosUsuarioActual['uss_id']);
 						?>
 							<div class="panel">
 								<header class="panel-heading panel-heading-blue"><?=$preguntas['pregg_descripcion']; ?> </header>
 								<div class="panel-body">
-									<input type="hidden" value="<?= $preguntas['pregg_id']; ?>" name="P<?= $contPreguntas; ?>">
 									<?php
 										$contRespuestas = 1;
 										while ($respuestas = mysqli_fetch_array($respuestasConsulta, MYSQLI_BOTH)) {
@@ -68,7 +76,9 @@ $evaluacion = EvaluacionGeneral::consultar($id);
 										<div>
 											<?php if ($preguntas['pregg_tipo_pregunta'] == MULTIPLE || $preguntas['pregg_tipo_pregunta'] == SINGLE) { ?>
 												<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-<?= $contPreguntas; ?><?= $contRespuestas; ?>">
-													<input type="radio" id="option-<?= $contPreguntas; ?><?= $contRespuestas; ?>" class="mdl-radio__button" name="R<?= $contPreguntas; ?>" value="<?=$respuestas['resg_id']; ?>">
+
+													<input type="radio" name="R<?=$contPreguntas;?>" id="option-<?= $contPreguntas; ?><?= $contRespuestas; ?>" data-id-pregunta="<?= $preguntas['pregg_id']; ?>" data-id-evaluacion="<?= $id; ?>" class="mdl-radio__button" value="<?=$respuestas['resg_id']; ?>" <?=!empty($existeRespuestas['resg_respuesta']) && $existeRespuestas['resg_respuesta'] == $respuestas['resg_id'] ? "checked" : "";?> onclick="enviarRespuestaEncuesta(this)">
+
 												</label>
 												<span class="mdl-radio__label"><?=$respuestas['resg_descripcion']; ?></span>
 											<?php } ?>
@@ -80,7 +90,7 @@ $evaluacion = EvaluacionGeneral::consultar($id);
 									?>
 									<?php if ($preguntas['pregg_tipo_pregunta'] == TEXT) { ?>
 										<div>
-											<textarea cols="100" id="option-<?= $contPreguntas; ?><?= $contRespuestas; ?>" name="R<?= $contPreguntas; ?>" rows="8" placeholder="Escribe tu respuesta" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
+											<textarea cols="100" rows="8" placeholder="Escribe tu respuesta" data-id-pregunta="<?= $preguntas['pregg_id']; ?>" data-id-evaluacion="<?= $id; ?>" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"  onchange="enviarRespuestaEncuesta(this)"><?=!empty($existeRespuestas['resg_respuesta']) ? $existeRespuestas['resg_respuesta'] : "";?></textarea>
 										</div>
 									<?php } ?>
 								</div>
@@ -92,7 +102,7 @@ $evaluacion = EvaluacionGeneral::consultar($id);
 						?>
 						<hr>
 						<div align="right">
-							<a href="<?=$enlace?>" style="margin-bottom: 20px;" class="btn btn-primary" onClick="if(!confirm('Te recomendamos verificar que todas las preguntas estén contestadas antes de enviar. Si ya lo hiciste puedes continuar. Deseas terminar con la encuesta?')){return false;}">Terminar Encuesta</a>
+							<a href="javascript:void(0);" style="margin-bottom: 20px;" class="btn btn-primary" onClick="sweetConfirmacion('Terminar Encuesta!','Te recomendamos verificar que todas las preguntas estén contestadas antes de enviar. Si ya lo hiciste puedes continuar. Deseas terminar con la encuesta?','question','<?=$enlace?>?asignacion=<?=base64_encode($id)?>')">Terminar Encuesta</a>
 						</div>
 					</form>
 				</div>
