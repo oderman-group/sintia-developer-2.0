@@ -86,7 +86,12 @@ define('IDENTIFICAION', 'Identificacion');
 define('USUARIO', 'Usuario');
 define('CORREO', 'Correo');
 
-/* TIPOS DE DOCUMENTO FINANCIERO */
+/* TIPO DE ACCIONES*/
+define('ACCION_CREAR', 'Crear');
+define('ACCION_MODIFICAR', 'Modificar');
+define('ACCION_ELIMINAR', 'Eliminar');
+
+/* TIPOS DE FACTURA o COTIZACIÓn */
 define('TIPO_FACTURA', 'INVOICE');
 define('TIPO_COTIZACION', 'QUOTE');
 define('TIPO_RECURRING', 'INVOICE_RECURRING');
@@ -100,6 +105,13 @@ define('FACTURA_COMPRA', 2);
 define('TEXT', 'TEXT');
 define('MULTIPLE', 'MULTIPLE');
 define('SINGLE', 'SINGLE');
+
+/* TIPOS DE ESTADO DE MATRICULA MEDIATECNICA */
+define('ESTADO_CURSO_ACTIVO', 'ACTIVO');
+define('ESTADO_CURSO_INACTIVO', 'INACTIVO');
+define('ESTADO_CURSO_PRE_INSCRITO', 'PRE INSCRITO');
+define('ESTADO_CURSO_APROBADO', 'APROBADO');
+define('ESTADO_CURSO_NO_APROBADO', 'NO APROBADO');
 
 define('COBRADA', 'COBRADA');
 define('POR_COBRAR', 'POR_COBRAR');
@@ -131,6 +143,19 @@ define('MEDIA', 4);
 
 define('ACTIVO', 'ACTIVO');
 define('INACTIVO', 'INACTIVO');
+
+/* TIPOS DE ENCUESTA */
+define('DOCENTE', 'DOCENTE');
+define('ACUDIENTE', 'ACUDIENTE');
+define('ESTUDIANTE', 'ESTUDIANTE');
+define('DIRECTIVO', 'DIRECTIVO');
+define('AREA', 'AREA');
+define('MATERIA', 'MATERIA');
+define('CURSO', 'CURSO');
+
+define('PENDIENTE', 'PENDIENTE');
+define('PROCESO', 'PROCESO');
+define('FINALIZADO', 'FINALIZADO');
 
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':

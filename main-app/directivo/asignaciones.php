@@ -1,13 +1,20 @@
-<?php include("session.php");?>
-<?php $idPaginaInterna = 'DT0289';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");
-require_once(ROOT_PATH."/main-app/class/PreguntaGeneral.php");
+<?php
+include("session.php");
+$idPaginaInterna = 'DT0318';
+include("../compartido/historial-acciones-guardar.php");
+include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Asignaciones.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
-}?>
+}
+
+$idE = '';
+if (!empty($_GET['idE'])) {
+    $idE = base64_decode($_GET['idE']);;
+}
+?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -26,7 +33,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title"><?=$frases[139][$datosUsuarioActual['uss_idioma']];?></div>
+                                <div class="page-title">Asignaciones</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                         </div>
@@ -38,7 +45,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 									<?php include("../compartido/publicidad-lateral.php");?>
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
-                                            <header><?=$frases[139][$datosUsuarioActual['uss_idioma']];?></header>
+                                            <header>Asignaciones</header>
                                             <div class="tools">
                                                 <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
 			                                    <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
@@ -50,8 +57,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<div class="row" style="margin-bottom: 10px;">
 												<div class="col-sm-12">
 													<div class="btn-group">
-														<?php if(Modulos::validarPermisoEdicion() &&  Modulos::validarSubRol(['DT0289']) ) {?>
-															<a href="pregunta-agregar.php" id="addRow" class="btn deepPink-bgcolor">
+														<?php if(Modulos::validarPermisoEdicion() &&  Modulos::validarSubRol(['DT0319']) ) {?>
+															<a href="asignaciones-agregar.php?idE=<?=base64_encode($idE)?>" id="addRow" class="btn deepPink-bgcolor">
 															<?=$frases[231][$datosUsuarioActual['uss_idioma']];?> <i class="fa fa-plus"></i>
 															</a>
 														<?php }?>
@@ -64,63 +71,64 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th><?=$frases[139][$datosUsuarioActual['uss_idioma']];?></th>
-														<th><?=$frases[294][$datosUsuarioActual['uss_idioma']];?> <?=$frases[139][$datosUsuarioActual['uss_idioma']];?></th>
-														<th>Visible</th>
-														<th>Obligatoria</th>
-														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0289', 'DT0293'])){?>
+														<th>Tipo</th>
+														<th>Evaluado</th>
+														<th>Evaluador</th>
+														<th>Estado</th>
+														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0321', 'DT0323'])){?>
 															<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
 														<?php }?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $parametros = [
-														'evag_year'=>$config['conf_agno']
-													];
-													$consulta = PreguntaGeneral::listar($parametros);
+													$consulta = Asignaciones::listarAsignaciones($conexion, $config, $idE);
 													$contReg = 1;
 												if(!empty($consulta)){
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+														switch ($resultado['epag_tipo']) {
+															case CURSO:
+																$consultaEvaluado = mysqli_query($conexion, "SELECT gra_nombre FROM ".BD_ACADEMICA.".academico_grados
+																WHERE gra_id='".$resultado['epag_id_evaluado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+																$datosEvaluado = mysqli_fetch_array($consultaEvaluado, MYSQLI_BOTH);
+																$nombreEvaluado = $datosEvaluado['gra_nombre'];
+															break;
 
-														$descripcion = !empty($resultado['pregg_descripcion']) ? $resultado['pregg_descripcion'] : "";
-														$tipo_pregunta = !empty($resultado['pregg_tipo_pregunta']) ? $resultado['pregg_tipo_pregunta'] : "";
-														$visible = !empty($resultado['pregg_visible']) ? $resultado['pregg_visible'] : "";
-														$obligatoria = !empty($resultado['pregg_obligatoria']) ? $resultado['pregg_obligatoria'] : "";
+															case AREA:
+																$consultaEvaluado = mysqli_query($conexion, "SELECT ar_nombre FROM ".BD_ACADEMICA.".academico_areas
+																WHERE ar_id='".$resultado['epag_id_evaluado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+																$datosEvaluado = mysqli_fetch_array($consultaEvaluado, MYSQLI_BOTH);
+																$nombreEvaluado = $datosEvaluado['ar_nombre'];
+															break;
+
+															case MATERIA:
+																$consultaEvaluado = mysqli_query($conexion, "SELECT mat_nombre FROM ".BD_ACADEMICA.".academico_materias
+																WHERE mat_id='".$resultado['epag_id_evaluado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+																$datosEvaluado = mysqli_fetch_array($consultaEvaluado, MYSQLI_BOTH);
+																$nombreEvaluado = $datosEvaluado['mat_nombre'];
+															break;
+
+															default:
+																if($resultado['epag_tipo'] == DIRECTIVO || $resultado['epag_tipo'] == DOCENTE) {
+																	$consultaEvaluado = mysqli_query($conexion, "SELECT uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2 FROM ".BD_GENERAL.".usuarios
+																	WHERE uss_id='".$resultado['epag_id_evaluado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+																	$datosEvaluado = mysqli_fetch_array($consultaEvaluado, MYSQLI_BOTH);
+																	$nombreEvaluado = UsuariosPadre::nombreCompletoDelUsuario($datosEvaluado);
+																}
+															break;
+														}
+
 														$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
 														$arrayDatos = json_encode($arrayEnviar);
 														$objetoEnviar = htmlentities($arrayDatos);
 													?>
-													<tr id="reg<?=$resultado['pregg_id'];?>">
+													<tr id="reg<?=$resultado['epag_id'];?>">
                                                         <td><?=$contReg;?></td>
-														<td><?=$descripcion;?></td>
-														<td>
-														<?php 
-															if($tipo_pregunta === TEXT){?>
- 															    	<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="<?=$frases[421][$datosUsuarioActual['uss_idioma']];?>"><i class="fa fa-inbox"></i></button>
-																<?php }elseif($tipo_pregunta === MULTIPLE){?>
-																	<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="<?=$frases[422][$datosUsuarioActual['uss_idioma']];?>"><i class="fa fa-tasks"></i></button>
-															<?php  }else if($tipo_pregunta === SINGLE){?>
-																	<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="<?=$frases[423][$datosUsuarioActual['uss_idioma']];?>"><i class="fa fa-check"></i></button>
-														<?php }?>
-														</td>
-														<td>
-														<?php 
-															if($visible == 1){?>
- 														   		<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta visible"><i class="fa fa-eye"></i></button>
-															<?php }else{?>
-																<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="No esta visible"><i class="fa fa-eye-slash"></i></button>
-														<?php }?>
-														</td>
-														<td>
-														<?php 
-															if($obligatoria == 1){?>
- 																<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Es requerido"><i class="fa fa-lock"></i></button>
-															<?php }else{?>
-																<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="No es requerido"><i class="fa fa-unlock" aria-hidden="true"></i></button>
-														<?php }?>
-														</td>
-														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0289', 'DT0293'])){?>
+														<td><?=$resultado['epag_tipo'];?></td>
+														<td><?=strtoupper($nombreEvaluado);?></td>
+														<td><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></td>
+														<td><?=$resultado['epag_estado'];?></td>
+														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0321', 'DT0323'])){?>
 															<td>
 																<div class="btn-group">
 																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
@@ -128,14 +136,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		<i class="fa fa-angle-down"></i>
 																	</button>
 																	<ul class="dropdown-menu" role="menu" style="z-index: 10000;">
-																	<?php if( Modulos::validarSubRol(['DT0289']) ){?>
-																		<li><a href="pregunta-editar.php?id=<?=base64_encode($resultado['pregg_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
+																	<?php if(Modulos::validarSubRol(['DT0321']) ){?>
+																		<li><a href="asignaciones-editar.php?id=<?=base64_encode($resultado['epag_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
 																	<?php }?>
-																	<?php if( Modulos::validarSubRol(['DT0316']) ){?>
-																		<li><a href="preguntas-respuestas.php?id=<?=base64_encode($resultado['pregg_id']);?>">Relacionar Respuestas</a></li>
-																	<?php }?>
-																	<?php if( Modulos::validarSubRol(['DT0293']) ){?>
-                                                                    	<li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" id="<?=$resultado['pregg_id'];?>" name="pregunta-eliminar.php?id=<?=base64_encode($resultado['pregg_id']);?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
+																	<?php if(Modulos::validarSubRol(['DT0323']) && $resultado['epag_estado'] == PENDIENTE){?>
+                                                                    	<li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" id="<?=$resultado['epag_id'];?>" name="asignaciones-eliminar.php?id=<?=base64_encode($resultado['epag_id']);?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
 																	<?php } ?>
 																	</ul>
 																</div>

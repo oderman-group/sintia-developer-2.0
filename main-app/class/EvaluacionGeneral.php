@@ -102,7 +102,7 @@ class EvaluacionGeneral  extends Servicios{
       )
       {
         
-        $sqlInicial="SELECT *, (SELECT COUNT(pregg_id_evaluacion) as preguntas FROM ".BD_ADMIN.".general_preguntas WHERE pregg_id_evaluacion=evag_id) as preguntas FROM ".BD_ADMIN.".general_evaluaciones";
+        $sqlInicial="SELECT *, (SELECT COUNT(gep_id_evaluacion) as preguntas FROM ".BD_ADMIN.".general_evaluaciones_preguntas WHERE gep_id_evaluacion=evag_id) as preguntas FROM ".BD_ADMIN.".general_evaluaciones";
         if($parametrosArray && count($parametrosArray)>0){
           $parametrosValidos=array('evag_descripcion','evag_clave','evag_fecha','evag_editada','evag_institucion','evag_year','evag_visible');
           $sqlInicial=Servicios::concatenarWhereAnd($sqlInicial,$parametrosValidos,$parametrosArray);
@@ -110,6 +110,32 @@ class EvaluacionGeneral  extends Servicios{
         $limite= !empty($parametrosArray['limite']) ? $parametrosArray['limite'] : "";
         $esArreglo= !empty($parametrosArray['arreglo']) ? $parametrosArray['arreglo'] : "";
         return Servicios::SelectSql($sqlInicial,$limite,$esArreglo);         
+      }
+
+      /**
+     * Lista las preguntas de una evaluación
+     *
+     * @param mysqli $conexion
+     * @param array $config
+     * @param int $idEvaluacion
+     *
+     * @return mysqli_result $consulta
+     */
+    public static function traerPreguntasEvaluacion(
+        mysqli $conexion,
+        array $config,
+        int $idEvaluacion
+      ) {
+        try{
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".general_evaluaciones_preguntas 
+            INNER JOIN ".BD_ADMIN.".general_preguntas ON pregg_id=gep_id_pregunta AND pregg_institucion={$config['conf_id_institucion']} AND pregg_year={$_SESSION["bd"]}
+            WHERE gep_id_evaluacion='".$idEvaluacion."'");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $consulta;
       }
 
 }

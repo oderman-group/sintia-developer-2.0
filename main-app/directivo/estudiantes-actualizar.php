@@ -94,17 +94,6 @@ if (!empty($_FILES['fotoMat']['name'])) {
 
 Estudiantes::actualizarEstudiantes($conexionPDO, $_POST, $fechaNacimiento, $procedencia, $pasosMatricula);
 
-if ($esMediaTecnica) { 
-	try{
-		if($_POST["tipoMatricula"] == GRADO_INDIVIDUAL) {
-			MediaTecnicaServicios::editar($_POST["id"],$_POST["cursosAdicionales"],$config,$_POST["grupoMT"]);
-		} else {
-			MediaTecnicaServicios::editar($_POST["id"],$arregloVacio,$config);
-		}
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-}
 
 try {
 	mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET {$fechaNacimientoU} uss_usuario='".$_POST["nDoc"]."' WHERE uss_id='".$_POST["idU"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
