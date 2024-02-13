@@ -96,7 +96,7 @@ if (!empty($resultado)) {
                         $parametros = [
                             'matcur_institucion' => $resultado['institucion'],
                             'matcur_years' => $resultado['year'],
-                            'matcur_id_curso' => $resultado["gra_codigo"]
+                            'matcur_id_curso' => $resultado["gra_id"]
                         ];
                         $listaMatriculados = MediaTecnicaServicios::listar($parametros);
                         $numInscritos = 0;
@@ -157,7 +157,7 @@ if (!empty($resultado)) {
                         <form method="post" action="../controlador/autentico.php" onsubmit="return validarDatos()" class="needs-validation" novalidate>
 
                             <input type="hidden" name="bd" value="<?= $resultado["institucion"] ?>" />
-                            <input type="hidden" name="guest" value="<?= $resultado["gra_codigo"] ?>" />
+                            <input type="hidden" name="guest" value="<?= $resultado["gra_id"] ?>" />
                             <img class="mb-4" src="../../config-general/assets-login-2023/img/logo.png" width="100">
 
 
