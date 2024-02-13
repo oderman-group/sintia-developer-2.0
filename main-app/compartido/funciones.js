@@ -661,3 +661,20 @@ function mensajeGenerarInforme(datos){
         });
     }
 }
+
+function mostrarImagen(idFile, idImg) {
+    var input = document.getElementById(idFile);
+    var imagenSelect = document.getElementById(idImg);
+    // Verificar si se seleccionó un archivo
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            imagenSelect.classList.add('animate__animated', 'animate__fadeIn');
+            imagenSelect.src = e.target.result;
+
+        };
+
+        // Leer el archivo como una URL de datos
+        reader.readAsDataURL(input.files[0]);
+    }
+}
