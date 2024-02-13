@@ -84,3 +84,34 @@ function contarPreguntasSeleccionadas() {
     var cantidadSeleccionadas = select.selectedOptions.length;
     labelCant.textContent = cantidadSeleccionadas;
 }
+
+/**
+ * guarda o actualiza un respuesta de una pregunta.
+ * @param {array} datos - Identificador del elemento o 'idNuevo' para un nuevo item.
+ */
+function enviarRespuestaEncuesta(datos) {
+    var idAsignacion=datos.getAttribute('data-id-asignacion');
+    var idPregunta=datos.getAttribute('data-id-pregunta');
+    var respuesta=datos.value;
+    
+    fetch('../compartido/ajax-guardar-respuesta-encuesta.php?idAsignacion='+(idAsignacion)+'&idPregunta='+(idPregunta)+'&respuesta='+(respuesta), {
+        method: 'GET'
+    })
+    .then(response => response.text()) // Convertir la respuesta a texto
+    .then(data => {
+        $.toast({
+            heading: 'Acción realizada',
+            text: 'La respuesta fue guardada correctamente.',
+            position: 'bottom-right',
+            showHideTransition: 'slide',
+            loaderBg: '#26c281',
+            icon: 'success',
+            hideAfter: 5000,
+            stack: 6
+        });
+    })
+    .catch(error => {
+         // Manejar errores
+        console.error('Error:', error);
+    });
+}
