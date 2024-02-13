@@ -60,7 +60,7 @@ Asignaciones::actualizarEstadoAsignacion($conexion, $config, $id, PROCESO);
 						<input type="hidden" name="id" value="<?= $id; ?>">
 						<?php
 						$contPreguntas = 1;
-						$preguntasConsulta = EvaluacionGeneral::traerPreguntasEvaluacion($conexion, $config, $id);
+						$preguntasConsulta = EvaluacionGeneral::traerPreguntasEvaluacion($conexion, $config, $asignacion['epag_id_evaluacion']);
 						while ($preguntas = mysqli_fetch_array($preguntasConsulta, MYSQLI_BOTH)) {
 							$respuestasConsulta = PreguntaGeneral::traerRespuestasPreguntas($conexion, $config, $preguntas['pregg_id']);
 
@@ -77,7 +77,7 @@ Asignaciones::actualizarEstadoAsignacion($conexion, $config, $id, PROCESO);
 											<?php if ($preguntas['pregg_tipo_pregunta'] == MULTIPLE || $preguntas['pregg_tipo_pregunta'] == SINGLE) { ?>
 												<label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-<?= $contPreguntas; ?><?= $contRespuestas; ?>">
 
-													<input type="radio" name="R<?=$contPreguntas;?>" id="option-<?= $contPreguntas; ?><?= $contRespuestas; ?>" data-id-pregunta="<?= $preguntas['pregg_id']; ?>" data-id-evaluacion="<?= $id; ?>" class="mdl-radio__button" value="<?=$respuestas['resg_id']; ?>" <?=!empty($existeRespuestas['resg_respuesta']) && $existeRespuestas['resg_respuesta'] == $respuestas['resg_id'] ? "checked" : "";?> onclick="enviarRespuestaEncuesta(this)">
+													<input type="radio" name="R<?=$contPreguntas;?>" id="option-<?= $contPreguntas; ?><?= $contRespuestas; ?>" data-id-pregunta="<?= $preguntas['pregg_id']; ?>" data-id-asignacion="<?= $id; ?>" class="mdl-radio__button" value="<?=$respuestas['resg_id']; ?>" <?=!empty($existeRespuestas['resg_respuesta']) && $existeRespuestas['resg_respuesta'] == $respuestas['resg_id'] ? "checked" : "";?> onclick="enviarRespuestaEncuesta(this)">
 
 												</label>
 												<span class="mdl-radio__label"><?=$respuestas['resg_descripcion']; ?></span>
@@ -90,7 +90,7 @@ Asignaciones::actualizarEstadoAsignacion($conexion, $config, $id, PROCESO);
 									?>
 									<?php if ($preguntas['pregg_tipo_pregunta'] == TEXT) { ?>
 										<div>
-											<textarea cols="100" rows="8" placeholder="Escribe tu respuesta" data-id-pregunta="<?= $preguntas['pregg_id']; ?>" data-id-evaluacion="<?= $id; ?>" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"  onchange="enviarRespuestaEncuesta(this)"><?=!empty($existeRespuestas['resg_respuesta']) ? $existeRespuestas['resg_respuesta'] : "";?></textarea>
+											<textarea cols="100" rows="8" placeholder="Escribe tu respuesta" data-id-pregunta="<?= $preguntas['pregg_id']; ?>" data-id-asignacion="<?= $id; ?>" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"  onchange="enviarRespuestaEncuesta(this)"><?=!empty($existeRespuestas['resg_respuesta']) ? $existeRespuestas['resg_respuesta'] : "";?></textarea>
 										</div>
 									<?php } ?>
 								</div>
