@@ -58,47 +58,40 @@ class Utilidades {
      */
     public static function generateCode($index='')
     {
-        $key = "";
-        $pattern = "1234567890";
-        $max = strlen($pattern) - 1;
-
-        // Intentar generar un código único
-        do {
-
-            $key = "";
-            for ($i = 0; $i < 2; $i++) {
-
-                $key .= substr($pattern, mt_rand(0, $max), 1);
-
-            }
-
-            $code = $index . $key . microtime(true);
-            $code = str_replace(['.', ' '], '', $code); // Eliminar punto decimal y espacios
-
-        } while (self::codeExists($code)); // Verificar si el código ya existe
-
-        // Almacenar el código temporalmente
-        self::$codigoTemporal = $code;
-
-        return $code;
+        return $index."-".self::guidv4();
     }
 
     /**
-     * Verifica si el código ya se genero anteriormente.
+     * Generates a version 4 UUID.
      *
-     * @param string $code El código a verificar.
-     * @return bool true si el código ya existe, false en caso contrario.
+     * This function generates a universally unique identifier (UUID) according to RFC 4122,
+     * version 4. The UUID generated is based on random or pseudo-random numbers, depending on
+     * the availability of the `random_bytes` function in PHP. The version 4 UUID is composed of
+     * random digits, with certain bits fixed to indicate the version and variant of the UUID.
+     *
+     * @param string|null $data Optional. Provide 16 bytes of binary data to use for the UUID generation
+     *                          instead of generating random data. Primarily used for testing purposes.
+     *
+     * @return string Returns a string representation of the UUID, which is 36 characters long,
+     *                including four hyphens.
+     *
+     * @throws Exception If generating random bytes fails.
+     *
+     * @example
+     * echo guidv4();
+     * // Output: a randomly generated version 4 UUID, such as "f47ac10b-58cc-4372-a567-0e02b2c3d479".
      */
-    private static function codeExists($code)
-    {
-        // Verificar si el código existe en la variable temporal
-        if ($code === self::$codigoTemporal) {
+    public static function guidv4($data = null) {
+        // Generate 16 bytes (128 bits) of random data or use the data passed into the function.
+        $data = $data ?? random_bytes(16);
+        assert(strlen($data) == 16);
 
-            return true;
+        // Set version to 0100
+        $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
+        // Set bits 6-7 to 10
+        $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
 
-        }
-
-        // Ejemplo: devuelve siempre false, ajusta según tus necesidades.
-        return false;
+        // Output the 36 character UUID.
+        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
     }
 }

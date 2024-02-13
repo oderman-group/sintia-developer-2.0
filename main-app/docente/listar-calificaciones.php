@@ -128,7 +128,7 @@ $porcentajeRestante = 100 - $valores[0];
 				
 				<tr id="reg<?=$resultado['act_id'];?>">
 					<td><?=$contReg;?></td>
-					<td><?=$resultado['act_id'];?></td>
+					<td><?=$resultado['id_nuevo'];?></td>
 					<td><a href="calificaciones-registrar.php?idR=<?=base64_encode($resultado['act_id']);?>" style="text-decoration: underline;" title="Calificar"><?=$resultado['act_descripcion'];?></a></td>
 					<td><?=$resultado['act_fecha'];?></td>
 					<td><?=$resultado['act_valor'];?></td>
