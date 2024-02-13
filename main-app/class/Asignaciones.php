@@ -179,4 +179,25 @@ class Asignaciones {
 
         return $consulta;
     }
+
+    /**
+     * Actualiza la estado de una asignación
+     *
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idAsignacion
+     * @param string $estado
+     */
+    public static function actualizarEstadoAsignacion(
+        mysqli $conexion, 
+        array $config, 
+        string $idAsignacion, 
+        string $estado
+    ) {
+        try {
+            mysqli_query($conexion, "UPDATE ".BD_ADMIN.".general_evaluacion_asignar SET epag_estado='".$estado."' WHERE epag_id='".$idAsignacion."' AND epag_institucion={$config['conf_id_institucion']} AND epag_year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+    }
 }
