@@ -103,7 +103,12 @@ if (!empty($resultado)) {
                         if (!empty($listaMatriculados)) {
                             $numInscritos = count($listaMatriculados);
                         }
+                       
                         $porcentaje = ($numInscritos / $resultado["gra_maximum_quota"]) * 100;
+                        $ocultar="";
+                        if ($numInscritos >= $resultado["gra_maximum_quota"]) {
+                            $ocultar = "hidden";
+                        }
                         ?>
                         Inscritos
                         <i class="fas fa-user mr-2"></i>(<?= $numInscritos ?>/<?= $resultado["gra_maximum_quota"] ?>)
@@ -140,7 +145,7 @@ if (!empty($resultado)) {
                     <div class="card">
                         <div class="card-header text-center">
                             <i class="bi bi-cart-check"></i>
-                            <button type="button" <?= $inscrito ?> class="btn btn-primary" data-toggle="modal" data-target="#Modal2">Inscribirme</button>
+                            <button type="button" <?= $inscrito ?>   <?= $ocultar ?>  class="btn btn-primary" data-toggle="modal" data-target="#Modal2">Inscribirme</button>
                             <h2 class="mb-0" style="color:green" <?= empty($inscrito) ? "hidden" : "" ?>>Estoy inscrito</h2>
                             <button type="button" <?= $hidden ?> class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Iniciar session</button>
                         </div>
