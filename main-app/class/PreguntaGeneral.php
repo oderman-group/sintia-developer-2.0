@@ -128,4 +128,35 @@ class PreguntaGeneral  extends Servicios{
         return $consulta;
       }
 
+    /**
+     * Lista la repuesta guardada de una pregunta
+     *
+     * @param mysqli $conexion
+     * @param array $config
+     * @param int $idPregunta
+     * @param int $idAsignacion
+     * @param string $idUsuario
+     *
+     * @return array $resultado
+     */
+    public static function existeRespuestaPregunta(
+        mysqli $conexion,
+        array $config,
+        int $idPregunta,
+        int $idAsignacion,
+        string $idUsuario
+    ) {
+        $resultado = [];
+        try{
+            $consulta = mysqli_query($conexion, "SELECT resg_respuesta FROM ".BD_ADMIN.".general_resultados WHERE resg_id_pregunta='".$idPregunta."' AND resg_id_asignacion='".$idAsignacion."' AND resg_id_usuario='".$idUsuario."' AND resg_institucion={$config['conf_id_institucion']} AND resg_year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+        if (mysqli_num_rows($consulta) > 0){
+            $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        }
+        return $resultado;
+    }
+
 }
