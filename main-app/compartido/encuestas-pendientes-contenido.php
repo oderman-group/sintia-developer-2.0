@@ -35,6 +35,11 @@
 							</thead>
 							<tbody>
 								<?php
+									if (!empty($_GET['asignacion'])){
+										$idA= base64_decode($_GET['asignacion']);
+										Asignaciones::actualizarEstadoAsignacion($conexion, $config, $idA, FINALIZADO);
+									}
+									
 									$consultaEncuestas = Asignaciones::traerAsignacionesUsuario($conexion, $config, $datosUsuarioActual['uss_id']);
 									if(!empty($consultaEncuestas)){
 										$contReg = 1;
