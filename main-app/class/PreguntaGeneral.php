@@ -128,4 +128,58 @@ class PreguntaGeneral  extends Servicios{
         return $consulta;
       }
 
+    /**
+     * guarda la repuesta de una pregunta
+     *
+     * @param mysqli $conexion
+     * @param array $config
+     * @param int $idPregunta
+     * @param int $idAsignacion
+     * @param string $idUsuario
+     * @param string $respuesta
+     *
+     * @return array $resultado
+     */
+    public static function guardarRespuestaPregunta(
+        mysqli $conexion,
+        array $config,
+        int $idPregunta,
+        int $idAsignacion,
+        string $idUsuario,
+        string $respuesta
+    ) {
+        try{
+            mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".general_resultados(resg_id_pregunta, resg_respuesta, resg_id_usuario, resg_id_asignacion, resg_institucion, resg_year) VALUE ('".$idPregunta."', '".$respuesta."', '".$idUsuario."', '".$idAsignacion."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+    }
+
+    /**
+     * Actualiza la repuesta de una pregunta
+     *
+     * @param mysqli $conexion
+     * @param array $config
+     * @param int $idPregunta
+     * @param int $idAsignacion
+     * @param string $idUsuario
+     * @param string $respuesta
+     */
+    public static function actualizarRespuestaPregunta(
+        mysqli $conexion,
+        array $config,
+        int $idPregunta,
+        int $idAsignacion,
+        string $idUsuario,
+        string $respuesta
+    ) {
+        try{
+            mysqli_query($conexion, "UPDATE ".BD_ADMIN.".general_resultados SET resg_respuesta='".$respuesta."', resg_actualizaciones=resg_actualizaciones+1 WHERE resg_id_pregunta='".$idPregunta."' AND resg_id_asignacion='".$idAsignacion."' AND resg_id_usuario='".$idUsuario."' AND resg_institucion={$config['conf_id_institucion']} AND resg_year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+    }
+
 }
