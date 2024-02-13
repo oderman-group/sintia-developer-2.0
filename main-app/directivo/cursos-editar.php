@@ -461,7 +461,7 @@ if (!Modulos::validarPermisoEdicion()) {
 
                                                 <div class="form-group row">
                                                     <label class="col-sm-2 control-label">Agregar un estudainte:</label>
-                                                    <div class="col-sm-6 ">
+                                                    <div class="col-sm-8">
                                                         <?php
                                                         $selectEctudiante2 = new includeSelectSearch("SeleccionEstudiante", "ajax-listar-estudiantes.php", "buscar estudiante", "agregarEstudainte");
                                                         $selectEctudiante2->generarComponente();
@@ -498,7 +498,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                     <tbody>
                                                         <?php
                                                         $parametros = [
-                                                            'matcur_id_curso' => base64_decode($_GET["id"]),
+                                                            'matcur_id_curso' => base64_decode($_GET["id"]) . '',
                                                             'matcur_id_institucion' => $config['conf_id_institucion'],
                                                             'matcur_years' => $config['conf_agno'],
                                                             'arreglo' => false
@@ -646,25 +646,37 @@ if (!Modulos::validarPermisoEdicion()) {
 
 
                                     function agregarEstudainte(dato) {
-                                        crearFila(dato);
+                                        // se guarda en la base de datos                                        
+                                        accionCursoMatricula(dato, '<?php echo ACCION_CREAR ?>');                                        
                                     };
 
                                     function editarEstudainte(id) {
                                         var grupoSelect = document.getElementById("grupo-" + id);
                                         var estadoSelect = document.getElementById("estado-" + id);
-                                        var data = {
-                                            "matricula": id,
-                                            "grupo": grupoSelect.value,
-                                            "estado": estadoSelect.value,
-                                            "curso": '<?php echo base64_decode($_GET["id"]) ?>'
-                                        };
-                                        accionCursoMatricula(data, '<?php echo ACCION_MODIFICAR ?>');
+                                       
+                                        var dato = {};
+                                        dato.id=id;
+                                        dato.grupo=grupoSelect.value;
+                                        dato.estado=estadoSelect.value;
+                                        accionCursoMatricula(dato, '<?php echo ACCION_MODIFICAR ?>');
                                     };
 
 
 
-                                    function accionCursoMatricula(data, tipo) {
-                                        data["tipo"] = tipo;
+                                    function accionCursoMatricula(dato, tipo, actualizar) {
+                                        if(dato.grupo == undefined){
+                                            dato.grupo="";
+                                        }
+                                        if(dato.estado == undefined){
+                                            dato.estado="";
+                                        }
+                                        var data = {
+                                            "matricula": dato.id,
+                                            "curso": '<?php echo base64_decode($_GET["id"]) ?>',
+                                            "tipo": tipo,
+                                            "grupo": dato.grupo,
+                                            "estado": dato.estado
+                                        };
                                         var url = "fetch-estudiante-mediatecnica.php";
 
                                         console.log(JSON.stringify(data));
@@ -682,16 +694,33 @@ if (!Modulos::validarPermisoEdicion()) {
                                             })
                                             .then(
                                                 function(response) {
-                                                    $.toast({
-                                                        heading: 'Acción realizada',
-                                                        text: tipo,
-                                                        position: 'bottom-right',
-                                                        showHideTransition: 'slide',
-                                                        loaderBg: '#26c281',
-                                                        icon: 'success',
-                                                        hideAfter: 5000,
-                                                        stack: 6
-                                                    });
+                                                    if(tipo == '<?php echo ACCION_CREAR?>' && response["ok"]){
+                                                        crearFila(dato);
+                                                    }
+                                                    if (response["ok"]) {
+                                                        $.toast({
+                                                            heading: 'Acción realizada',
+                                                            text: response["msg"],
+                                                            position: 'bottom-right',
+                                                            showHideTransition: 'slide',
+                                                            loaderBg: '#26c281',
+                                                            icon: 'success',
+                                                            hideAfter: 5000,
+                                                            stack: 6
+                                                        });
+                                                    } else {
+                                                        $.toast({
+                                                            heading: 'Acción no realizada',
+                                                            text: response["msg"],
+                                                            position: 'bottom-right',
+                                                            showHideTransition: 'slide',
+                                                            loaderBg: '#26c281',
+                                                            icon: 'error',
+                                                            hideAfter: 5000,
+                                                            stack: 6
+                                                        });
+                                                    }
+
 
                                                 });
                                     }
@@ -741,6 +770,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                     opcion.value = opciones2[i].id;
                                                     select2.add(opcion);
                                                 }
+                                                select2.value = '<?php echo ESTADO_CURSO_PRE_INSCRITO ?>';
                                                 select2.addEventListener('change', function() {
                                                     editarEstudainte(valor);
                                                 });
@@ -765,12 +795,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                     deseaEliminar(boton);
                                                 });
 
-                                                // se guarda en la base de datos
-                                                var data = {
-                                                    "matricula": valor,
-                                                    "curso": '<?php echo base64_decode($_GET["id"]) ?>'
-                                                };
-                                                accionCursoMatricula(data, '<?php echo ACCION_CREAR ?>');
+
                                                 // Crear una nueva fila                                                                
                                                 var fila = tabla.insertRow();
                                                 // Agregar datos a las celdas
@@ -808,9 +833,7 @@ if (!Modulos::validarPermisoEdicion()) {
         <?php include("../compartido/footer.php"); ?>
     </div>
 </div>
-<!-- bootstrap -->
-<script src="../../config-general/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
-<script src="../../config-general/assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+<!-- start js include path -->
 <script src="../../config-general/assets/plugins/jquery/jquery.min.js"></script>
 <script src="../../config-general/assets/plugins/popper/popper.js"></script>
 <script src="../../config-general/assets/plugins/jquery-blockui/jquery.blockui.min.js"></script>
@@ -818,20 +841,10 @@ if (!Modulos::validarPermisoEdicion()) {
 <!-- bootstrap -->
 <script src="../../config-general/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
 <script src="../../config-general/assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
-<script src="../../config-general/assets/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
-<script src="../../config-general/assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js" charset="UTF-8"></script>
-<script src="../../config-general/assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker-init.js" charset="UTF-8"></script>
-<script src="../../config-general/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-<script src="../../config-general/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker-init.js" charset="UTF-8"></script>
 <!-- data tables -->
 <script src="../../config-general/assets/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.js"></script>
 <script src="../../config-general/assets/js/pages/table/table_data.js"></script>
-<!--select2-->
-<script src="../../config-general/assets/plugins/select2/js/select2.js"></script>
-<script src="../../config-general/assets/js/pages/select2/select2-init.js"></script>
-
-</body>
 <!-- Common js-->
 <script src="../../config-general/assets/js/app.js"></script>
 <script src="../../config-general/assets/js/layout.js"></script>
@@ -841,6 +854,9 @@ if (!Modulos::validarPermisoEdicion()) {
 <script src="../../config-general/assets/plugins/jquery-toast/dist/toast.js"></script>
 <!-- Material -->
 <script src="../../config-general/assets/plugins/material/material.min.js"></script>
+<!--select2-->
+<script src="../../config-general/assets/plugins/select2/js/select2.js"></script>
+<script src="../../config-general/assets/js/pages/select2/select2-init.js"></script>
 <!-- Mirrored from radixtouch.in/templates/admin/smart/source/light/advance_form.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 18 May 2018 17:32:54 GMT -->
 
 </html>
