@@ -60,14 +60,17 @@ Asignaciones::actualizarEstadoAsignacion($conexion, $config, $id, PROCESO);
 						<input type="hidden" name="id" value="<?= $id; ?>">
 						<?php
 						$contPreguntas = 1;
+						$contPreguntasObligatorias = 0;
 						$preguntasConsulta = EvaluacionGeneral::traerPreguntasEvaluacion($conexion, $config, $asignacion['epag_id_evaluacion']);
 						while ($preguntas = mysqli_fetch_array($preguntasConsulta, MYSQLI_BOTH)) {
-							$respuestasConsulta = PreguntaGeneral::traerRespuestasPreguntas($conexion, $config, $preguntas['pregg_id']);
+							if($preguntas['pregg_visible'] != 1) { continue;}
+							if($preguntas['pregg_obligatoria'] == 1) { $contPreguntasObligatorias++;}
 
+							$respuestasConsulta = PreguntaGeneral::traerRespuestasPreguntas($conexion, $config, $preguntas['pregg_id']);
 							$existeRespuestas = PreguntaGeneral::existeRespuestaPregunta($conexion, $config, $preguntas['pregg_id'], $id, $datosUsuarioActual['uss_id']);
 						?>
 							<div class="panel">
-								<header class="panel-heading panel-heading-blue"><?=$preguntas['pregg_descripcion']; ?> </header>
+								<header class="panel-heading panel-heading-blue"><?=$preguntas['pregg_descripcion']; ?> <?=$preguntas['pregg_obligatoria'] == 1 ? '<span style="color: red;">(*)</span>': '<span>(Opcional)</span>'; ?></header>
 								<div class="panel-body">
 									<?php
 										$contRespuestas = 1;
@@ -102,7 +105,7 @@ Asignaciones::actualizarEstadoAsignacion($conexion, $config, $id, PROCESO);
 						?>
 						<hr>
 						<div align="right">
-							<a href="javascript:void(0);" style="margin-bottom: 20px;" class="btn btn-primary" onClick="sweetConfirmacion('Terminar Encuesta!','Te recomendamos verificar que todas las preguntas estén contestadas antes de enviar. Si ya lo hiciste puedes continuar. Deseas terminar con la encuesta?','question','<?=$enlace?>?asignacion=<?=base64_encode($id)?>')">Terminar Encuesta</a>
+							<a href="javascript:void(0);" style="margin-bottom: 20px;" class="btn btn-primary" onClick="sweetConfirmacion('Terminar Encuesta!','Te recomendamos verificar que todas las preguntas estén contestadas antes de enviar. Si ya lo hiciste puedes continuar. Deseas terminar con la encuesta?','question','<?=$enlace?>?asignacion=<?=base64_encode($id)?>&obligatorias=<?=base64_encode($contPreguntasObligatorias)?>')">Terminar Encuesta</a>
 						</div>
 					</form>
 				</div>

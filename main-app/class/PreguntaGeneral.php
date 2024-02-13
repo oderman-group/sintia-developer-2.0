@@ -213,4 +213,34 @@ class PreguntaGeneral  extends Servicios{
         }
     }
 
+    /**
+     * Para verificar si se respondieron todas las preguntas
+     *
+     * @param mysqli $conexion
+     * @param array $config
+     * @param int $idAsignacion
+     * @param string $idUsuario
+     *
+     * @return int $num
+     */
+    public static function terminoEncuesta(
+        mysqli $conexion,
+        array $config,
+        int $idAsignacion,
+        string $idUsuario
+    ) {
+        try{
+            $consulta = mysqli_query($conexion, "SELECT resg_respuesta FROM ".BD_ADMIN.".general_resultados 
+            INNER JOIN ".BD_ADMIN.".general_preguntas ON pregg_id=resg_id_pregunta AND pregg_institucion={$config['conf_id_institucion']} AND pregg_year={$_SESSION["bd"]}
+            WHERE resg_id_asignacion='".$idAsignacion."' AND resg_id_usuario='".$idUsuario."' AND pregg_obligatoria=1 AND pregg_visible=1 AND resg_institucion={$config['conf_id_institucion']} AND resg_year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+        
+        $num = mysqli_num_rows($consulta);
+        
+        return $num;
+    }
+
 }
