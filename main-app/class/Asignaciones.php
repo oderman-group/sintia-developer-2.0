@@ -205,4 +205,38 @@ class Asignaciones {
             include("../compartido/error-catch-to-report.php");
         }
     }
+
+    /**
+    * Este metodo me trae todas las asignaciones finalizadas de una evaluación con sus resultados
+    * @param mysqli $conexion
+    * @param array $config
+    * @param array $idEvaluacion
+    * @param string $filtro
+    * @param string $filtroLimite
+    * 
+    * @return mysqli_result $consulta
+   **/
+    public static function resultadoEncuestasFinalizadas (
+        mysqli  $conexion, 
+        array   $config, 
+        int     $idEvaluacion, 
+        string  $filtro         = "", 
+        string  $filtroLimite   = ""
+    )
+    {
+        try {
+            $consulta = mysqli_query($conexion, "SELECT epag_id, epag_id_evaluado, epag_tipo, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, SUM(respu.resg_valor) AS puntos FROM ".BD_ADMIN.".general_evaluacion_asignar 
+            INNER JOIN ".BD_ADMIN.".general_resultados resul ON resul.resg_id_asignacion=epag_id AND resul.resg_id_usuario=epag_id_evaluador AND resul.resg_institucion = {$config['conf_id_institucion']} AND resul.resg_year = {$_SESSION["bd"]}
+            INNER JOIN ".BD_ADMIN.".general_respuestas respu ON respu.resg_id=resul.resg_respuesta AND respu.resg_institucion = {$config['conf_id_institucion']} AND respu.resg_year = {$_SESSION["bd"]}
+            LEFT JOIN ".BD_GENERAL.".usuarios ON uss_id=epag_id_evaluador AND institucion = {$config['conf_id_institucion']} AND year = {$_SESSION["bd"]}
+            WHERE epag_id_evaluacion='".$idEvaluacion."' AND epag_estado='".FINALIZADO."' ".$filtro." AND epag_institucion = {$config['conf_id_institucion']} AND epag_year = {$_SESSION["bd"]}
+            GROUP BY epag_id
+            ORDER BY puntos DESC
+            ".$filtroLimite."");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        return $consulta;
+    }
 }
