@@ -148,7 +148,7 @@ class PreguntaGeneral  extends Servicios{
     ) {
         $resultado = [];
         try{
-            $consulta = mysqli_query($conexion, "SELECT resg_respuesta FROM ".BD_ADMIN.".general_resultados WHERE resg_id_pregunta='".$idPregunta."' AND resg_id_asignacion='".$idAsignacion."' AND resg_id_usuario='".$idUsuario."' AND resg_institucion={$config['conf_id_institucion']} AND resg_year={$_SESSION["bd"]}");
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".general_resultados WHERE resg_id_pregunta='".$idPregunta."' AND resg_id_asignacion='".$idAsignacion."' AND resg_id_usuario='".$idUsuario."' AND resg_institucion={$config['conf_id_institucion']} AND resg_year={$_SESSION["bd"]}");
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
             exit();
