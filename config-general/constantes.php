@@ -197,7 +197,7 @@ switch (ENVIROMENT) {
 	case 'TEST':
 	include(ROOT_PATH."/conexion-datos-developer.php");
         define('BD_PREFIX', 'mobiliar_');
-        define('EPAYCO_TEST', 'FALSE');
+        define('EPAYCO_TEST', 'TRUE');
 	break;
 
         case 'PROD':
