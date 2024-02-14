@@ -36,8 +36,15 @@
 							<tbody>
 								<?php
 									if (!empty($_GET['asignacion'])){
+										require_once(ROOT_PATH . "/main-app/class/PreguntaGeneral.php");
+										
 										$idA= base64_decode($_GET['asignacion']);
-										Asignaciones::actualizarEstadoAsignacion($conexion, $config, $idA, FINALIZADO);
+										$obligatorias= base64_decode($_GET['obligatorias']);
+										$numPreguntasRespondidas = PreguntaGeneral::terminoEncuesta($conexion, $config, $idA, $datosUsuarioActual['uss_id']);
+
+										if ($numPreguntasRespondidas == $obligatorias){
+											Asignaciones::actualizarEstadoAsignacion($conexion, $config, $idA, FINALIZADO);
+										}
 									}
 									
 									$consultaEncuestas = Asignaciones::traerAsignacionesUsuario($conexion, $config, $datosUsuarioActual['uss_id']);
