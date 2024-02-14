@@ -16,7 +16,7 @@ if (empty($_POST["tipoMatricula"])) {
 	$_POST["tipoMatricula"] = GRADO_INDIVIDUAL;
 }
 if (empty($_POST["va_matricula"]))  $_POST["va_matricula"]  = 0;
-if (empty($_POST["grupo"]))         $_POST["grupo"]         = 4;
+if (empty($_POST["grupo"]))         $_POST["grupo"]         = 1;
 if (empty($_POST["tipoEst"]))       $_POST["tipoEst"]       = 128;
 if (empty($_POST["fNac"]))          $_POST["fNac"]          = '2000-01-01';
 if (empty($_POST["tipoD"]))         $_POST["tipoD"]         = 107;
@@ -153,8 +153,7 @@ try {
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
-$mensajeSintia="REGISTRO EXITOSO!";
-include("../compartido/guardar-historial-acciones.php");
+
 
 $url = '../pagos-online/index.php';
 // URL de la página a la que deseas enviar los datos POST
