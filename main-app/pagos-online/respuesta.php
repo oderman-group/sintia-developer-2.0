@@ -39,15 +39,24 @@ include("../../conexion.php");
   $urlOrigen = $jsonObject['data']['x_extra11'];
   $usuario = $jsonObject['data']['x_extra12'];
   $identificacion = $jsonObject['data']['x_extra3'];
+  $institucion = $jsonObject['data']['x_extra6'];
+  $year = $jsonObject['data']['x_extra13'];
+  $matricula = $jsonObject['data']['x_extra14'];
+  $curso = $jsonObject['data']['x_extra15'];
   $hidden = "";
   if (empty($urlOrigen)) {
     $hidden = "hidden";
+  } else {
+    if ($estado == TRANSACCION_ACEPTADA) {
+      require_once("../class/servicios/MediaTecnicaServicios.php");
+      //Insertamos la matrícula en media tecnica
+      try {
+        MediaTecnicaServicios::editarporCurso($matricula, $curso, 1, ESTADO_CURSO_PRE_INSCRITO, $institucion, $year);
+      } catch (Exception $e) {
+        include("../compartido/error-catch-to-report.php");
+      }
+    }
   }
-
-  if ($estado!=TRANSACCION_ACEPTADA) {
-
-  }
-
 
   mysqli_query($conexion, "INSERT INTO " . $baseDatosServicios . ".pasarela_respuestas(psr_cliente, psr_ref, psr_transaccion,	psr_respuesta_nombre,	psr_respuesta_codigo,	psr_documento, psr_nombre, psr_email,	psr_error_codigo,	psr_error_nombre,	psr_celular, psr_ref_epayco, psr_factura, psr_id_institucion, psr_descripcion) VALUES ('" . $jsonObject['data']['x_extra1'] . "', '" . $jsonObject['data']['x_id_invoice'] . "', '" . $jsonObject['data']['x_transaction_id'] . "', '" . $jsonObject['data']['x_response'] . "', '" . $jsonObject['data']['x_cod_response'] . "', '" . $jsonObject['data']['x_extra3'] . "', '" . $jsonObject['data']['x_extra4'] . "', '" . $jsonObject['data']['x_extra2'] . "', '" . $jsonObject['data']['x_errorcode'] . "', '" . $jsonObject['data']['x_response_reason_text'] . "', '" . $jsonObject['data']['x_extra5'] . "', '" . $jsonObject['data']['x_ref_payco'] . "', '" . $jsonObject['data']['x_id_factura'] . "', '" . $jsonObject['data']['x_extra6'] . "', '" . $jsonObject['data']['x_description'] . "')");
 
