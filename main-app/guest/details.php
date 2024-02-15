@@ -12,8 +12,10 @@ $identificacion = "";
 $hidden = "";
 $inscrito = "";
 $calular = "";
-$aut = empty($_POST["aut"]) ? '' : $_POST["aut"];
-$documento =empty($_POST["documento"]) ? '' : $_POST["documento"];
+$aut = '';
+$documento = empty($_POST["documento"]) ? '' : $_POST["documento"];
+$usuario = empty($_POST["aut"]) ? '' : $_POST["aut"];
+$estado = '';
 
 
 
@@ -34,12 +36,13 @@ if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
     $correo = $sesionAbierta['uss_email'];
     $calular = $sesionAbierta['uss_celular'];
 
+
     if ($sesionAbierta['uss_tipo'] != TIPO_ESTUDIANTE) {
         $usuario = $sesionAbierta['uss_usuario'];
         $mensaje = 'Crearemos tu usuario como estudiante para que puedas tomar el curso';
     }
 } else {
-
+    $aut = empty($_POST["aut"]) ? '' : 'autologin';
     $conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
 }
 
@@ -50,18 +53,26 @@ $resultado = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 // solo mostramos cuando la consulta no venga null 
 if (!empty($resultado)) {
     $page = $resultado['gra_nombre'];
+    require_once("../class/servicios/MatriculaServicios.php");
     require_once("../class/servicios/MediaTecnicaServicios.php");
     // validamos que ademas de estar en session tambien ya este matriculado en el curso
     if (isset($_SESSION["id"]) and $_SESSION["id"] != "") {
-        $consultaInscrito = mysqli_query($conexion, "SELECT mts.* FROM " . BD_ACADEMICA . ".academico_matriculas
-    INNER JOIN mobiliar_sintia_admin.mediatecnica_matriculas_cursos mts ON(mat_id=matcur_id_matricula) 
-    WHERE mat_documento = '" . $identificacion . "' 
-    AND matcur_id_curso='" . $resultado["gra_id"] . "'  
-    AND matcur_id_institucion='" . $resultado["institucion"] . "'
-    AND matcur_years='" . $resultado["year"] . "'");
-        $matriculaCurso = mysqli_fetch_array($consultaInscrito, MYSQLI_BOTH);
-        if ($matriculaCurso != null) {
-            $inscrito = "hidden";
+
+        $matricula = MatriculaServicios::consultarDocumento($identificacion, $resultado['institucion'], $resultado['year']);
+        if (!empty($matricula)) {
+            $parametros = [
+                'matcur_institucion' => $resultado['institucion'],
+                'matcur_years' => $resultado['year'],
+                'matcur_id_curso' => $resultado["gra_id"],
+                'matcur_id_matricula' => $matricula["mat_id"]
+            ];
+            $matriculaCurso = MediaTecnicaServicios::consultar($parametros);
+            if ($matriculaCurso != null) {
+                $estado = $matriculaCurso["matcur_estado"];
+                if ($estado != ESTADO_CURSO_INACTIVO && $estado != ESTADO_CURSO_NO_APROBADO) {
+                    $inscrito = "hidden";
+                }
+            }
         }
     }
     require_once(ROOT_PATH . "/main-app/class/Plataforma.php");
@@ -150,8 +161,8 @@ if (!empty($resultado)) {
                     <div class="card">
                         <div class="card-header text-center">
                             <i class="bi bi-cart-check"></i>
-                            <button type="button" <?= $inscrito ?> class="btn btn-primary" data-toggle="modal" data-target="#Modal2">Inscribirme</button>
-                            <h2 class="mb-0" style="color:green" <?= empty($inscrito) ? "hidden" : "" ?>>Estoy inscrito</h2>
+                            <h2 class="mb-0" style="color:green" <?= (empty($estado) ? 'hidden' : '') ?>>ESTADO <?= $estado ?></h2>
+                            <button type="button" <?= $inscrito ?> <?= $ocultar ?> class="btn btn-primary" data-toggle="modal" data-target="#Modal2">Inscribirme</button>
                             <button type="button" <?= $hidden ?> class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Iniciar session</button>
                         </div>
                     </div>
@@ -177,7 +188,7 @@ if (!empty($resultado)) {
                             </div>
                             <div class=" form-floating mt-3">
                                 <label for="clave">Contraseña</label>
-                                <input type="password" class="form-control input-login" id="calve" name="Clave" placeholder="Password" required>
+                                <input type="password" class="form-control input-login" id="clave" name="Clave" placeholder="Password" required>
 
                                 <div class="invalid-feedback">Por favor ingrese un correo electrónico válido.</div>
                             </div>
@@ -224,7 +235,7 @@ if (!empty($resultado)) {
                                     <div class="form-group">
                                         <label for="nombre">Usuario: <span style="color: blue; font-size: 15px;" id="vUsua"></label>
                                         <div id="grupo-usuario" class="input-group mb-3">
-                                            <input type="text" name="usuario" required class="form-control" id="usuario" onChange="validarExistencia(this,'<?= USUARIO ?>','vUsua','grupo-usuario')" placeholder="Ingrese su nombre" value="<?= $usuario ?>" <?= $readonly; ?>>
+                                            <input type="text" name="usuario1" required class="form-control" id="usuario1" onChange="validarExistencia(this,'<?= USUARIO ?>','vUsua','grupo-usuario')" placeholder="Ingrese su nombre" value="<?= $usuario ?>" <?= $readonly; ?>>
                                         </div>
                                         <span style="font-size: 10px; color:darkblue;"><?= $mensaje; ?></span>
                                     </div>
@@ -278,13 +289,25 @@ if (!empty($resultado)) {
         </div>
         <script type="application/javascript">
             document.getElementById("miFormulario").addEventListener("submit", asignarValorAntesDeEnviar);
-            if ('<?php echo $aut ?>' != '') {
+            if ('<?php echo $aut ?>' == 'autologin') {
+                console.log('esta autologendo..');
                 autoLogin();
+            }
+
+            if ('<?php echo $inscrito ?>' == 'hidden') {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Estoy inscrito! ",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
             }
 
             function autoLogin() {
                 autenticoFromulario = document.getElementById("autenticoFromulario");
-                usuario = '<?= $aut ?>';
+                usuario = '<?= $usuario ?>';
                 pass = '<?= $documento ?>';
                 var inputUsuario = document.getElementById("usuario");
                 inputUsuario.value = usuario;

@@ -69,7 +69,7 @@ if (mysqli_num_rows($consultaExisteUsuario) == 0) {
 			uss_tema_header,
 			uss_tema_logo, institucion, year
 			)VALUES('" . $idEstudianteU . "', 
-			'" .	$_POST["usuario"] . "',
+			'" .	$_POST["usuario1"] . "',
 			SHA1('" . $_POST["identificacion"] . "'),
 			4,
 			'" . $_POST["nombre"] . "',
@@ -146,10 +146,18 @@ if (mysqli_num_rows($consultaExisteMatricula) == 0) {
 }
 //Insertamos la matrícula en media tecnica
 try {
-	$config['conf_id_institucion'] = $_POST["institucion"];
-	$config['conf_agno'] = $_POST["year"];
-	$cursos = array($_POST["curso"]);
-	MediaTecnicaServicios::editar($codigoMAT, $cursos, $config, $grupo);
+	// consultamos si ya existe
+	$parametros = [
+		'matcur_institucion' => $resultado['institucion'],
+		'matcur_years' => $resultado['year'],
+		'matcur_id_curso' => $resultado["gra_id"],
+		'matcur_id_matricula' => $matricula["mat_id"]
+	];
+	$matriculaCurso = MediaTecnicaServicios::consultar($parametros);
+	if(empty($matriculaCurso)){
+		MediaTecnicaServicios::guardarPorCurso($codigoMAT, $_POST["curso"], 1, ESTADO_CURSO_NO_APROBADO,$_POST["institucion"],$_POST["year"]);
+	}
+	
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
@@ -166,7 +174,9 @@ $_POST["documentoUsuario"]=$_POST["identificacion"];
 $_POST["nombreUsuario"]=$_POST["nombre"]." ".$_POST["apellido"];
 $_POST["celularUsuario"]=$_POST["celular"];;
 $_POST["idInstitucion"]=$_POST["institucion"];
-$_POST["nombre"]=$_POST["nombreCurso"];
+$_POST["nombre"]="Cruso de ".$_POST["nombreCurso"];
+$_POST["usuario"]=$_POST["usuario1"];
+$_POST["matricula"]=$codigoMAT;
 
 $_POST["url_origen"]=$_SERVER["HTTP_REFERER"];
 $data = $_POST;
