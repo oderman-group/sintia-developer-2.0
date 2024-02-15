@@ -16,6 +16,20 @@ $idE="";
 
 	$evaluacion = Evaluaciones::consultaEvaluacion($conexion, $config, $idE);
 
+	$actividad=[];
+	$ocultarExportacion="";
+	$id_actividad="";
+	if(!empty($evaluacion["eva_actividad"])){
+		$id_actividad=$evaluacion["eva_actividad"];
+	}
+	if(!empty($_POST["actividad"])){
+		$id_actividad=$evaluacion["eva_actividad"];
+	}
+	if(!empty($id_actividad)){
+		$ocultarExportacion="hidden";
+		$consultaActividad=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id='".$id_actividad."'  AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+		$actividad = mysqli_fetch_array($consultaActividad, MYSQLI_BOTH);
+	}
 	
 	//Cantidad de preguntas de la evaluación
 	$cantPreguntas = Evaluaciones::numeroPreguntasEvaluacion($conexion, $config, $idE);
@@ -122,7 +136,7 @@ $idE="";
 									<div class="col-sm-12">
 										<a href="evaluaciones.php" class="btn btn-secondary"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 										
-										<a href="#" class="btn btn-info" onClick="document.getElementById('exportarNotas').style.display='block';"><i class="fas fa-file-export"></i>Exportar Notas</a>
+										<a href="#" id="btnExportar" <?=$ocultarExportacion?> class="btn btn-info" onClick="document.getElementById('exportarNotas').style.display='block';"><i class="fas fa-file-export"></i>Exportar Notas</a>
 										
 									</div>
 								</div>
@@ -176,7 +190,7 @@ $idE="";
                                             </div>
                                         </div>
                                         <div class="card-body">
-											
+											<p id="pExportada" <?=empty($ocultarExportacion)?"hidden":"" ?> >Esta evaluacion fue exportada a la actividad: <?= $actividad["act_descripcion"]?>.</p>
 											<p><mark>Recuerde que las preguntas abiertas no se están teniendo en cuenta. Esas deben ser calificadas manualmente.</mark></p>
 											
                                         <div class="table-scrollable">
@@ -241,8 +255,13 @@ $idE="";
 															 //Solo actuliza una vez que la actividad fue registrada.
 															 if($registroNotas<1){
 																mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id='".$_POST["actividad"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+																mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_evaluaciones SET eva_actividad='".$_POST["actividad"]."' WHERE eva_id='".$idE."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 																
 															}
+															
+															
+																
+															
 															 
 															 $registroNotas ++;
 															
@@ -289,6 +308,7 @@ $idE="";
 														<script>
 															function enviarRespuesta(){
 																document.getElementById("respuestaNotas").style.display="Block";
+																document.getElementById("btnExportar").style.display="none";
 															}
 															
 															setTimeout(enviarRespuesta, 1000);
