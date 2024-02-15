@@ -44,3 +44,5 @@ $saldoEC = ($resumenEC[0] - $resumenEC[1]) * -1;
 <?php include("../compartido/modal-contrato.php");?>
 
 <?php include("../compartido/modal-asignaciones.php");?>
+
+<?php include("../compartido/modal-comprar-modulo.php");?>

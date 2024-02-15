@@ -31,4 +31,32 @@ function agregarClass(string $tipoMenu, array $paginas = [])
 			break;
 	}
 };
+
+/**
+ * Validates module menu based on module ID and link.
+ *
+ * @param int $idModulo
+ * @param string $enlace
+ * @param string $tipoMenu
+ * 
+ * @return void
+ */
+function validarModuloMenu (
+	int $idModulo,
+	string $enlace,
+	string $tipoMenu
+){
+	$opacity = "";
+	$href = $enlace;
+	$modal = "";
+	if(!empty($_SESSION["modulos"]) && !array_key_exists($idModulo, $_SESSION["modulos"])){
+		$opacity = 'style="opacity: 0.6;" ';
+		$href = "javascript:void(0);";
+		if ($tipoMenu == MENU) {
+			$modal = ' onclick="mostrarModalCompraModulos('.$idModulo.', '.$_SESSION["bd"].')"';
+		}
+	}
+	
+	echo $opacity.'href="'.$href.'"'.$modal;
+};
 ?>
