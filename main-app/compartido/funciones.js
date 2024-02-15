@@ -678,3 +678,37 @@ function mostrarImagen(idFile, idImg) {
         reader.readAsDataURL(input.files[0]);
     }
 }
+
+/**
+ * muestra modal para comprar modulos
+ * @param {int} idModulo
+ */
+function mostrarModalCompraModulos(idModulo, year) {
+
+    fetch('../compartido/ajax-consultar-modulos.php?idModulo='+(idModulo), {
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('tituloModulo').innerHTML = "MÓDULO "+data.nombreModulo;
+        document.getElementById('imgModulo').src = data.imgModulo;
+        if (data.descripcionModulo !== "") {
+            document.getElementById('tituloDescripcion').innerHTML = "DESCRIPCIÓN DEL MÓDULO";
+            document.getElementById('descripcionModulo').innerHTML = data.descripcionModulo;
+        }
+        document.getElementById('enlaceWhatsapp').href = "https://api.whatsapp.com/send?phone=573006075800&text="+data.mensaje;
+        document.getElementById('montoModulo').value = data.montoModulo;
+        document.getElementById('nombreModulo').value = "MÓDULO "+data.nombreModulo;
+
+        socket.emit("enviar_mensajes_modulos_dev", {
+            year: year,
+            asunto: 'Un usuario está interesado en el módulo '+data.nombreModulo,
+            contenido: data.mensaje
+        });
+
+        $("#modalComprarModulo").modal("show");
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
