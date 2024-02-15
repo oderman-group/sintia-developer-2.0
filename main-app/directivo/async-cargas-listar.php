@@ -7,21 +7,28 @@ require_once("../class/CargaAcademica.php");
 
 $config = Plataforma::sesionConfiguracion();
 $_SESSION["configuracion"] = $config;
+
+$docentesProgreso = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas 
+WHERE car_docente='{$_GET["docente"]}' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
+ORDER BY car_periodo");
+$numCargas = mysqli_num_rows($docentesProgreso);
 ?>
 
 <div class="panel">
     <header class="panel-heading panel-heading-blue"><i class="fa fa-list-ul"></i> CARGAS ACADÉMICAS</header>
 
     <div class="panel-body">
-
+    <?php if($numCargas > 0) { ?>
     <p class="lead">
         Este gráfico te muestra qué porcentaje de notas ha registrado el docente, a los estudiantes, en cada una de sus cargas.
     </p>
+    <?php } else { ?>
+    <p class="lead">
+        No hay cargas asignadas para este docente.
+    </p>
+    <?php } ?>
         
         <?php
-        $docentesProgreso = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas 
-        WHERE car_docente='{$_GET["docente"]}' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-        ORDER BY car_periodo");
         $profes = array();
         $profesNombre = array();
         $contP = 1;
