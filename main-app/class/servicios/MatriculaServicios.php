@@ -34,6 +34,21 @@ class MatriculaServicios
         return Servicios::getSql("SELECT * FROM " . BD_ACADEMICA . ".academico_matriculas WHERE mat_id='" . $idDato."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
     }
 
+      /**
+     * Consulta la información de una matrícula específica.
+     *
+     * @param int $documento numero del documento de la matrícula.
+     *
+     * @return array|false Arreglo con la información de la matrícula o false si hay un error.
+     */
+    public static function consultarDocumento($documento = 1,$institucion = null, $year = null)
+    {
+      global $config;
+      $institucion = empty($institucion) ? $config['conf_id_institucion'] : $institucion;
+      $year = empty($year) ? $config['conf_agno'] : $year;
+      return Servicios::getSql("SELECT * FROM " . BD_ACADEMICA . ".academico_matriculas WHERE mat_documento ='" . $documento."' AND institucion={$institucion} AND year={$year} ");
+    }
+
     /**
      * Lista los estudiantes por nombre.
      *

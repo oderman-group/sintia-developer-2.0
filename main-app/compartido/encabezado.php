@@ -183,6 +183,20 @@ $institucionNombre = $institucion['ins_siglas'];
                                         stack: 6
                                     })
                                 });
+
+                                socket.on("recibio_correo_modulos_dev_<?=$datosUsuarioActual['uss_tipo']?>_<?=$_SESSION['idInstitucion']?>",async (data) => {
+                                    mensajes();
+                                    $.toast({
+                                        heading: data['asunto'],  
+                                        text: 'Tienes un mensaje nuevo, Revisalo en el icono del sobre que está en la parte superior.',
+                                        position: 'bottom-right',
+                                        showHideTransition: 'slide',
+                                        loaderBg:'#ff6849',
+                                        icon: 'info',
+                                        hideAfter: 10000, 
+                                        stack: 6
+                                    })
+                                });
                             </script>
                         </li>
                         <!-- end message dropdown -->
