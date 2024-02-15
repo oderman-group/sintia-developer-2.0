@@ -5,3 +5,4 @@ PES-630 Proceso de edicion del Curso
 PES-625 Proceso de Automatriculas
 PES-778 FeedBack Spront 22
 PES-626 Curso payment
+PES-424 Importar notas evaluacion
