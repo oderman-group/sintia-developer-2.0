@@ -128,4 +128,119 @@ class PreguntaGeneral  extends Servicios{
         return $consulta;
       }
 
+    /**
+     * Lista la repuesta guardada de una pregunta
+     *
+     * @param mysqli $conexion
+     * @param array $config
+     * @param int $idPregunta
+     * @param int $idAsignacion
+     * @param string $idUsuario
+     *
+     * @return array $resultado
+     */
+    public static function existeRespuestaPregunta(
+        mysqli $conexion,
+        array $config,
+        int $idPregunta,
+        int $idAsignacion,
+        string $idUsuario
+    ) {
+        $resultado = [];
+        try{
+            $consulta = mysqli_query($conexion, "SELECT resg_respuesta FROM ".BD_ADMIN.".general_resultados WHERE resg_id_pregunta='".$idPregunta."' AND resg_id_asignacion='".$idAsignacion."' AND resg_id_usuario='".$idUsuario."' AND resg_institucion={$config['conf_id_institucion']} AND resg_year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+        if (mysqli_num_rows($consulta) > 0){
+            $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        }
+        return $resultado;
+    }
+
+    /**
+     * guarda la repuesta de una pregunta
+     *
+     * @param mysqli $conexion
+     * @param array $config
+     * @param int $idPregunta
+     * @param int $idAsignacion
+     * @param string $idUsuario
+     * @param string $respuesta
+     *
+     * @return array $resultado
+     */
+    public static function guardarRespuestaPregunta(
+        mysqli $conexion,
+        array $config,
+        int $idPregunta,
+        int $idAsignacion,
+        string $idUsuario,
+        string $respuesta
+    ) {
+        try{
+            mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".general_resultados(resg_id_pregunta, resg_respuesta, resg_id_usuario, resg_id_asignacion, resg_institucion, resg_year) VALUE ('".$idPregunta."', '".$respuesta."', '".$idUsuario."', '".$idAsignacion."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+    }
+
+    /**
+     * Actualiza la repuesta de una pregunta
+     *
+     * @param mysqli $conexion
+     * @param array $config
+     * @param int $idPregunta
+     * @param int $idAsignacion
+     * @param string $idUsuario
+     * @param string $respuesta
+     */
+    public static function actualizarRespuestaPregunta(
+        mysqli $conexion,
+        array $config,
+        int $idPregunta,
+        int $idAsignacion,
+        string $idUsuario,
+        string $respuesta
+    ) {
+        try{
+            mysqli_query($conexion, "UPDATE ".BD_ADMIN.".general_resultados SET resg_respuesta='".$respuesta."', resg_actualizaciones=resg_actualizaciones+1 WHERE resg_id_pregunta='".$idPregunta."' AND resg_id_asignacion='".$idAsignacion."' AND resg_id_usuario='".$idUsuario."' AND resg_institucion={$config['conf_id_institucion']} AND resg_year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+    }
+
+    /**
+     * Para verificar si se respondieron todas las preguntas
+     *
+     * @param mysqli $conexion
+     * @param array $config
+     * @param int $idAsignacion
+     * @param string $idUsuario
+     *
+     * @return int $num
+     */
+    public static function terminoEncuesta(
+        mysqli $conexion,
+        array $config,
+        int $idAsignacion,
+        string $idUsuario
+    ) {
+        try{
+            $consulta = mysqli_query($conexion, "SELECT resg_respuesta FROM ".BD_ADMIN.".general_resultados 
+            INNER JOIN ".BD_ADMIN.".general_preguntas ON pregg_id=resg_id_pregunta AND pregg_institucion={$config['conf_id_institucion']} AND pregg_year={$_SESSION["bd"]}
+            WHERE resg_id_asignacion='".$idAsignacion."' AND resg_id_usuario='".$idUsuario."' AND pregg_obligatoria=1 AND pregg_visible=1 AND resg_institucion={$config['conf_id_institucion']} AND resg_year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+        
+        $num = mysqli_num_rows($consulta);
+        
+        return $num;
+    }
+
 }

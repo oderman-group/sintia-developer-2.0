@@ -11,7 +11,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 
-if (empty($_POST["descripcion"]) || empty($_POST["valor"]) ) {
+if (empty($_POST["descripcion"])) {
     include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
     echo '<script type="text/javascript">window.location.href="respuesta-agregar.php?error=ER_DT_4";</script>';
     exit();

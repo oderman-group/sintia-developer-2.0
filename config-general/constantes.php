@@ -195,21 +195,21 @@ switch($_SERVER['HTTP_HOST']){
 
 switch (ENVIROMENT) {
         case 'LOCAL':
-	include(ROOT_PATH."/conexion-datos.php");
+        include(ROOT_PATH."/conexion-datos.php");
         define('BD_PREFIX', 'odermangroup_');
-        define('EPAYCO_TEST', 'TRUE');
-	break;
+        define('EPAYCO_TEST', 'true');
+        break;
 
-	case 'TEST':
-	include(ROOT_PATH."/conexion-datos-developer.php");
+        case 'TEST':
+        include(ROOT_PATH."/conexion-datos-developer.php");
         define('BD_PREFIX', 'mobiliar_');
-        define('EPAYCO_TEST', 'FALSE');
-	break;
+        define('EPAYCO_TEST', 'true');
+        break;
 
         case 'PROD':
         include(ROOT_PATH."/conexion-datos-production.php");
         define('BD_PREFIX', 'mobiliar_');
-        define('EPAYCO_TEST', 'FALSE');
+        define('EPAYCO_TEST', 'false');
         break;
 
         default:

@@ -2,8 +2,10 @@
 include("session.php");
 require_once("../class/servicios/GradoServicios.php");
 require_once("../class/servicios/MediaTecnicaServicios.php");
+include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 
 Modulos::validarAccesoDirectoPaginas();
+$archivoSubido = new Archivos;
 $idPaginaInterna = 'DT0173';
 
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
@@ -53,11 +55,21 @@ if (empty($_POST["maxEstudiantes"])) {
 if (empty($_POST["horas"])) {
 	$_POST["horas"] = '0';
 }
-if (empty($_POST["autoenrollment"])) {
-	$_POST["autoenrollment"] = 1;
-}
-if (empty($_POST["activo"])) {
-	$_POST["activo"] = 0;
+$_POST["autoenrollment"] = empty($_POST["autoenrollment"]) ? 0 : 1;
+$_POST["activo"] = empty($_POST["activo"]) ? 0 : 1;
+
+if (!empty($_FILES['imagenCurso']['name'])) {
+    $archivoSubido->validarArchivo($_FILES['imagenCurso']['size'], $_FILES['imagenCurso']['name']);
+    $explode=explode(".", $_FILES['imagenCurso']['name']);
+    $extension = end($explode);
+    $archivo = $_SESSION["inst"] . '_' . $_SESSION["id"] . '_curso_'.$_POST["id_curso"]. "." . $extension;
+    $destino = "../files/cursos";
+    move_uploaded_file($_FILES['imagenCurso']['tmp_name'], $destino . "/" . $archivo);
+    try{
+        mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_grados SET gra_cover_image = '" . $archivo. "' WHERE gra_id='" . $_POST["id_curso"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+    } catch (Exception $e) {
+        include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+    }
 }
 
 try {
@@ -74,7 +86,6 @@ try {
 	gra_nivel='" . $_POST["nivel"] . "', 
 	gra_estado='" . $_POST["estado"] . "',
 	gra_tipo='" . $_POST["tipoG"] . "',
-	gra_cover_image = '" . $_POST["imagen"] . "',
 	gra_overall_description = '" . $_POST["descripcion"] . "',
 	gra_course_content = '" . $_POST["contenido"] . "',
 	gra_price = '" . $_POST["precio"] . "',
