@@ -114,8 +114,7 @@ require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");?>
 	}
 
 	//SABER SI EL ESTUDIANTE YA HIZO LA EVALUACION
-	$nume = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados 
-	WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"));
+	$nume = Evaluaciones::verificarEstudianteEvaluacion($conexion, $config, $idE, $datosEstudianteActual['mat_id']);
 	
 	if($nume>0){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=200";</script>';
@@ -123,25 +122,20 @@ require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");?>
 	}
 	
 	//CONSULTAMOS SI YA TIENE UNA SESIÓN ABIERTA EN ESTA EVALUACIÓN
-	$estadoSesionEvaluacion = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes 
-	WHERE epe_id_evaluacion='".$idE."' AND epe_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND epe_inicio IS NOT NULL AND epe_fin IS NULL"));
+	$estadoSesionEvaluacion = Evaluaciones::consultarSessionEstudianteEvaluacion($conexion, $config, $idE, $datosEstudianteActual['mat_id']);
 	if($estadoSesionEvaluacion>0){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=201";</script>';
 		exit();
 	}
-	require_once(ROOT_PATH."/main-app/class/Utilidades.php");
-	$codigo=Utilidades::generateCode("EPE");
-	//BORRAMOS SI EXISTE Y LUEGO INSERTAMOS EL DATO DE QUE EL ESTUDIANTE INICIÓ LA EVALUACIÓN
-	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$idE."' AND epe_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	
-	mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes(epe_id, epe_id_estudiante, epe_id_evaluacion, epe_inicio, institucion, year)VALUES('".$codigo."', '".$datosEstudianteActual['mat_id']."', '".$idE."', now(), {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+	//BORRAMOS SI EXISTE Y LUEGO INSERTAMOS EL DATO DE QUE EL ESTUDIANTE INICIÓ LA EVALUACIÓN
+	Evaluaciones::eliminarIntentos($conexion, $config, $idE, $datosEstudianteActual['mat_id']);
+	
+	Evaluaciones::guardarIntento($conexion, $config, $idE, $datosEstudianteActual['mat_id']);
 	
 
 	//CUANTOS ESTÁN REALIZANDO LA EVALUACIÓN EN ESTE MOMENTO Y CUANTOS TERMINARON
-	$Numerosevaluados = mysqli_fetch_array(mysqli_query($conexion, "SELECT
-	(SELECT count(epe_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$idE."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND epe_fin IS NULL),
-	(SELECT count(epe_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$idE."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND epe_inicio IS NOT NULL AND epe_fin IS NOT NULL)
-	"), MYSQLI_BOTH);
+	$Numerosevaluados = Evaluaciones::consultarEvaluados($conexion, $config, $idE);
 	
 	?>
 
