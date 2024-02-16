@@ -111,7 +111,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 												}
 												if(Modulos::validarSubRol(['DT0223'])){
 											?>
-												<p><a href="../compartido/informes/informe-matriculas-repetidas.php" target="_blank">13. Informe Matriculas repetidas</a></p>
+												<p><a href="../compartido/informe-matriculas-repetidas.php" target="_blank">13. Informe Matriculas repetidas</a></p>
 											<?php 
 												}
 												if(Modulos::validarSubRol(['DT0307'])){
