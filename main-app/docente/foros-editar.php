@@ -5,12 +5,12 @@ include("../compartido/historial-acciones-guardar.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Foros.php");
 
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-$consultaDatosBD=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro WHERE foro_id='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-$datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
+$datosConsultaBD = Foros::consultarDatosForos($conexion, $config, $idR);
 ?>
 
 	<!--bootstrap -->

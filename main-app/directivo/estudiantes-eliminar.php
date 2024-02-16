@@ -1,5 +1,6 @@
 <?php
 include("session.php");
+require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0162';
@@ -15,16 +16,10 @@ if(!empty($_GET["idE"])){ $idE=base64_decode($_GET["idE"]);}
 $idU="";
 if(!empty($_GET["idU"])){ $idU=base64_decode($_GET["idU"]);}
 
-try{
-    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados WHERE res_id_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
-try{
-    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios WHERE com_id_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
+Evaluaciones::eliminarResultadosEstudiante($conexion, $config, $idE);
+
+Foros::eliminarComentarioEstudiante($conexion, $config, $idE);
+
 try{
     mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_respuestas WHERE fore_id_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
