@@ -34,11 +34,7 @@ try{
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }
 
-try{
-    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-    include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-}
+Evaluaciones::eliminarEstudiantesEvaluacion($conexion, $config, $idR);
 
 Evaluaciones::eliminarEvaluacion($conexion, $config, $idR);
 

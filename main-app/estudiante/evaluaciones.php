@@ -86,9 +86,7 @@ require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");?>
 													$cantPreguntas = Evaluaciones::numeroPreguntasEvaluacion($conexion, $config, $resultado['eva_id']);
 													  
 													  //Obtener los datos si ya ha realizado la evaluación
-													  $datosTerminada = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes
-													  WHERE epe_id_evaluacion='".$resultado['eva_id']."' AND epe_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND epe_inicio IS NOT NULL AND epe_fin IS NOT NULL
-													  "), MYSQLI_BOTH);
+													  $datosTerminada = Evaluaciones::traerDatosEvaluacionTerminada($conexion, $config, $resultado['eva_id'], $datosEstudianteActual['mat_id']);
 													  
 													  //respuestas
 													  $respuestasEvaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT

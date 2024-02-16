@@ -75,13 +75,7 @@ while($preguntas = mysqli_fetch_array($preguntasConsulta, MYSQLI_BOTH)){
 	$contPreguntas ++;
 }
 
-//ACTUALIZAR QUE EL ESTUDIANTE TERMINÓ
-try{
-	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes SET epe_fin=now() 
-	WHERE epe_id_estudiante='".$datosEstudianteActual['mat_id']."' AND epe_id_evaluacion='".$_POST["idE"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-}
+Evaluaciones::terminarEvaluacion($conexion, $config, $_POST["idE"], $datosEstudianteActual['mat_id']);
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=103&idE='.base64_encode($_POST["idE"]).'";</script>';
