@@ -49,7 +49,7 @@
                                 	<div class="panel-body">
 
                                    
-									<form name="formularioGuardar" action="importar-info-guardar.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
+									<form name="formularioGuardar" action="importar-info-detalles.php?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" method="post">
 										
 										<p style="color: darkblue;"><?=$frases[376][$datosUsuarioActual['uss_idioma']];?></p>	
 										
@@ -163,7 +163,7 @@
 
 										<p><mark><?=$frases[379][$datosUsuarioActual['uss_idioma']];?></mark></p>
 										
-										<input type="submit" class="btn btn-primary" value="<?=$frases[167][$datosUsuarioActual['uss_idioma']];?>">&nbsp;
+										<input type="submit" class="btn btn-primary" value="Continuar">&nbsp;
 										
                                     </form>
                                 </div>
