@@ -89,16 +89,7 @@ require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");?>
 													  $datosTerminada = Evaluaciones::traerDatosEvaluacionTerminada($conexion, $config, $resultado['eva_id'], $datosEstudianteActual['mat_id']);
 													  
 													  //respuestas
-													  $respuestasEvaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT
-													  (SELECT count(res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res
-													  INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=1 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]}
-													  WHERE res.res_id_evaluacion='".$resultado['eva_id']."' AND res.res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}),
-													  (SELECT count(res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res
-													  INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=0 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]}
-													  WHERE res.res_id_evaluacion='".$resultado['eva_id']."' AND res.res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}),
-													  (SELECT count(res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados 
-													  WHERE res_id_evaluacion='".$resultado['eva_id']."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res_id_respuesta=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})
-													  "), MYSQLI_BOTH);
+														$respuestasEvaluacion = Evaluaciones::traerRespuestaEvaluacion($conexion, $config, $resultado['eva_id'], $datosEstudianteActual['mat_id']);
 												 ?>
 												  <div class="panel panel-default">
 													  <div class="panel-heading panel-heading-gray">

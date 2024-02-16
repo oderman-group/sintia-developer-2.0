@@ -114,8 +114,7 @@ require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");?>
 	}
 
 	//SABER SI EL ESTUDIANTE YA HIZO LA EVALUACION
-	$nume = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados 
-	WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"));
+	$nume = Evaluaciones::verificarEstudianteEvaluacion($conexion, $config, $idE, $datosEstudianteActual['mat_id']);
 	
 	if($nume>0){
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=200";</script>';
