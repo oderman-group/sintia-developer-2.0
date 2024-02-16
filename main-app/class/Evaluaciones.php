@@ -321,4 +321,158 @@ class Evaluaciones{
             exit();
         }
     }
+
+    /**
+     * Este metodo me consulta los evaluados
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idEvaluacion
+     * 
+     * @return array $resultado
+     */
+    public static function consultarEvaluados(mysqli $conexion, array $config, string $idEvaluacion){
+        try{
+            $consulta = mysqli_query($conexion, "SELECT
+            (SELECT count(epe_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$idEvaluacion."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND epe_fin IS NULL),
+            (SELECT count(epe_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$idEvaluacion."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND epe_inicio IS NOT NULL AND epe_fin IS NOT NULL)");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+
+        return $resultado;
+    }
+
+    /**
+     * Este metodo me consulta si un estudiante ya tiene una sessio abierta
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idEvaluacion
+     * @param string $idEstudiante
+     * 
+     * @return int $numDatos
+     */
+    public static function consultarSessionEstudianteEvaluacion(mysqli $conexion, array $config, string $idEvaluacion, string $idEstudiante){
+        try{
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes 
+            WHERE epe_id_evaluacion='".$idEvaluacion."' AND epe_id_estudiante='".$idEstudiante."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND epe_inicio IS NOT NULL AND epe_fin IS NULL");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+        $numDatos = mysqli_num_rows($consulta);
+
+        return $numDatos;
+    }
+
+    /**
+     * Este metodo me elimina el intento de un estudiante
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idEvaluacion
+     * @param string $idEstudiante
+     */
+    public static function eliminarIntentos(mysqli $conexion, array $config, string $idEvaluacion, string $idEstudiante){
+        try{
+            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes 
+            WHERE epe_id_evaluacion='".$idEvaluacion."' AND epe_id_estudiante='".$idEstudiante."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+    }
+
+    /**
+     * Este metodo me elimina la relacion entre los estudiantes y una evaluación
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idE
+     */
+    public static function eliminarEstudiantesEvaluacion(mysqli $conexion, array $config, string $idE){
+        try{
+            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$idE."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+    }
+
+    /**
+     * Este metodo me consulta el tiempo que demoro el estudiante en realizar la evaluacón
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idEvaluacion
+     * @param string $idEstudiante
+     * 
+     * @return array $resultado
+     */
+    public static function consultarTiempoEvaluacion(mysqli $conexion, array $config, string $idEvaluacion, string $idEstudiante){
+        try{
+            $consulta = mysqli_query($conexion, "SELECT epe_inicio, epe_fin, MOD(TIMESTAMPDIFF(MINUTE, epe_inicio, epe_fin),60), MOD(TIMESTAMPDIFF(SECOND, epe_inicio, epe_fin),60) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes 
+            WHERE epe_id_estudiante='".$idEstudiante."' AND epe_id_evaluacion='".$idEvaluacion."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+
+        return $resultado;
+    }
+
+    /**
+     * Este metodo me actualiza el estado de un estudiante al terminar la evaluación
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idEvaluacion
+     * @param string $idEstudiante
+     */
+    public static function terminarEvaluacion(mysqli $conexion, array $config, string $idEvaluacion, string $idEstudiante){
+        try{
+            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes SET epe_fin=now() 
+            WHERE epe_id_estudiante='".$idEstudiante."' AND epe_id_evaluacion='".$idEvaluacion."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+    }
+
+    /**
+     * Este metodo me guarda el intento de un estudiante
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idEvaluacion
+     * @param string $idEstudiante
+     */
+    public static function guardarIntento(mysqli $conexion, array $config, string $idEvaluacion, string $idEstudiante){
+        $codigo=Utilidades::generateCode("EPE");
+        try{
+            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes(epe_id, epe_id_estudiante, epe_id_evaluacion, epe_inicio, institucion, year)VALUES('".$codigo."', '".$idEstudiante."', '".$idEvaluacion."', now(), {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+    }
+
+    /**
+     * Este metodo me trae los datos de una evaluación terminada
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idEvaluacion
+     * @param string $idEstudiante
+     * 
+     * @return array $resultado
+     */
+    public static function traerDatosEvaluacionTerminada(mysqli $conexion, array $config, string $idEvaluacion, string $idEstudiante){
+        try{
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes
+            WHERE epe_id_evaluacion='".$idEvaluacion."' AND epe_id_estudiante='".$idEstudiante."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND epe_inicio IS NOT NULL AND epe_fin IS NOT NULL");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+
+        return $resultado;
+    }
 }
