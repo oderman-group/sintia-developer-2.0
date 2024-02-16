@@ -11,3 +11,6 @@ PES-533 - Opción de ver el listado de los resultados en general de todos los us
 PES-534 - Opción de ver los detalles de un cuestionario de un usuario en particular
 PES-671 - La pestaña de cargas en editar docente debe decir que no hay cargas cuando estas no existan
 PES-581 - DIRECTIVO Ver modulos a comprar
+PES-688 - Paso intermedio al importar información en docentes
+PES-720 - DOCENTES Ver modulos a comprar
+PES-721 - ACUDIENTES Ver modulos a comprar
