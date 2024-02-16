@@ -116,4 +116,105 @@ class Foros{
             exit();
         }
     }
+    
+    /**
+     * Este metodo me consulta los comentarios de un foro
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idForo
+     * @param string $filtro
+     * 
+     * @return mysqli_result $consulta
+     */
+    public static function traerComentariosForos(mysqli $conexion, array $config, string $idForo, string $filtro = ''){
+        try{
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios com
+            INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=com_id_estudiante AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+            WHERE com_id_foro='".$idForo."' AND com.institucion={$config['conf_id_institucion']} AND com.year={$_SESSION["bd"]}
+            $filtro
+            ORDER BY com_id DESC");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $consulta;
+    }
+    
+    /**
+     * Este metodo me elimina un comentario
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idComentario
+     */
+    public static function eliminarComentario(mysqli $conexion, array $config, string $idComentario){
+        try{
+            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios WHERE com_id='" . $idComentario . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+    }
+    
+    /**
+     * Este metodo me elimina un comentario
+     * @param mysqli $conexion
+     * @param array $config
+     */
+    public static function eliminarTodosComentario(mysqli $conexion, array $config){
+        try{
+            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+    }
+    
+    /**
+     * Este metodo me elimina un comentario
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idEstudiante
+     */
+    public static function eliminarComentarioEstudiante(mysqli $conexion, array $config, string $idEstudiante){
+        try{
+            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios WHERE com_id_estudiante='" . $idEstudiante . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+    }
+    
+    /**
+     * Este metodo me elimina un comentario
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idForo
+     */
+    public static function eliminarComentarioForo(mysqli $conexion, array $config, string $idForo){
+        try{
+            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios WHERE com_id_foro='" . $idForo . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+    }
+    
+    /**
+     * Este metodo me guarda un comentario
+     * @param mysqli $conexion
+     * @param array $config
+     * @param array $POST
+     */
+    public static function guardarComentario(mysqli $conexion, array $config, array $POST){
+        $codigo=Utilidades::generateCode("COM");
+        try{
+            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_foro_comentarios(com_id, com_id_foro, com_descripcion, com_id_estudiante, com_fecha, institucion, year)VALUES('".$codigo."', '" . mysqli_real_escape_string($conexion,$POST["foro"]) . "', '" . mysqli_real_escape_string($conexion,$POST["contenido"]) . "', '" . $_SESSION["id"] . "', now(), {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return mysqli_insert_id($conexion);
+    }
 }
