@@ -20,63 +20,51 @@
 								]
 							?>
 							<li <?php agregarClass(MENU_PADRE, $arrayItemsAcademico) ?>>
-	                            <a href="#" class="nav-link nav-toggle"> <i class="material-icons">assignment_ind</i>
+	                            <a <?php validarModuloMenu(1, "#", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="material-icons">assignment_ind</i>
 	                                <span class="title"><?=$frases[88][$datosUsuarioActual['uss_idioma']]?></span> <span class="arrow"></span>
 	                            </a>
 	                            <ul class="sub-menu" <?php agregarClass(SUB_MENU, $arrayItemsAcademico)?>>
 									
 									<?php if(isset($datosCargaActual) && ($datosCargaActual['car_indicador_automatico']==0 or $datosCargaActual['car_indicador_automatico']==null)){?>
-	                                	<li <?php agregarClass(MENU,["DC0034", "DC0019", "DC0028", "DC0077"]) ?>><a href="indicadores.php" class="nav-link "> <span class="title"><?=$frases[63][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+	                                	<li <?php agregarClass(MENU,["DC0034", "DC0019", "DC0028", "DC0077"]) ?>><a <?php validarModuloMenu(1, "indicadores.php", MENU) ?> class="nav-link "> <span class="title"><?=$frases[63][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									<?php }?>
 									
-									<li <?php agregarClass(MENU,["DC0035", "DC0021", "DC0020", "DC0029", "DC0039", "DC0007"]) ?>><a href="calificaciones.php" class="nav-link "> <span class="title"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<li <?php agregarClass(MENU,["DC0035", "DC0021", "DC0020", "DC0029", "DC0039", "DC0007"]) ?>><a <?php validarModuloMenu(1, "calificaciones.php", MENU) ?> class="nav-link "> <span class="title"><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 
-									<?php if(!empty($arregloModulos) && array_key_exists(11, $arregloModulos)){?>
-										<li <?php agregarClass(MENU,["DC0046", "DC0025", "DC0070", "DC0072", "DC0071"]) ?>><a href="clases.php" class="nav-link "> <span class="title"><?=$frases[7][$datosUsuarioActual['uss_idioma']];?></span></a></li>
-									<?php }?>
+									<li <?php agregarClass(MENU,["DC0046", "DC0025", "DC0070", "DC0072", "DC0071"]) ?>><a <?php validarModuloMenu(11, "clases.php", MENU) ?> class="nav-link "> <span class="title"><?=$frases[7][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 
-									<?php if(!empty($arregloModulos) && array_key_exists(15, $arregloModulos)){?>
-										<li <?php agregarClass(MENU,["DC0012", "DC0015"]) ?>><a href="cronograma-calendario.php" class="nav-link "> <span class="title"><?=$frases[111][$datosUsuarioActual['uss_idioma']];?></span></a></li>
-									<?php }?>
+									<li <?php agregarClass(MENU,["DC0012", "DC0015"]) ?>><a <?php validarModuloMenu(15, "cronograma-calendario.php", MENU) ?> class="nav-link "> <span class="title"><?=$frases[111][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									
-									<li <?php agregarClass(MENU,["DC0022"]) ?>><a href="importar-info.php" class="nav-link "> <span class="title"><?=$frases[167][$datosUsuarioActual['uss_idioma']];?></span></a> </li>
+									<li <?php agregarClass(MENU,["DC0022"]) ?>><a <?php validarModuloMenu(21, "importar-info.php", MENU) ?> class="nav-link "> <span class="title"><?=$frases[167][$datosUsuarioActual['uss_idioma']];?></span></a> </li>
 
-									<?php if(!empty($arregloModulos) && array_key_exists(14, $arregloModulos)){?>
-										<li <?php agregarClass(MENU,["DC0018"]) ?>><a href="actividades.php" class="nav-link "> <span class="title"><?=$frases[112][$datosUsuarioActual['uss_idioma']];?></span></a></li>
-									<?php }?>
+									<li <?php agregarClass(MENU,["DC0018"]) ?>><a <?php validarModuloMenu(14, "actividades.php", MENU) ?> class="nav-link "> <span class="title"><?=$frases[112][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									
-									<?php if(!empty($arregloModulos) && array_key_exists(12, $arregloModulos)){?>
-										<li <?php agregarClass(MENU,["DC0043"]) ?>><a href="evaluaciones.php" class="nav-link "> <span class="title"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></span></a></li>
-									<?php }?>
+									<li <?php agregarClass(MENU,["DC0043"]) ?>><a <?php validarModuloMenu(12, "evaluaciones.php", MENU) ?> class="nav-link "> <span class="title"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 
-									<?php if(!empty($arregloModulos) && array_key_exists(13, $arregloModulos)){?>
-										<li <?php agregarClass(MENU,["DC0037"]) ?>><a href="foros.php" class="nav-link "> <span class="title"><?=$frases[113][$datosUsuarioActual['uss_idioma']];?></span></a></li>
-									<?php }?>
+									<li <?php agregarClass(MENU,["DC0037"]) ?>><a <?php validarModuloMenu(13, "foros.php", MENU) ?> class="nav-link "> <span class="title"><?=$frases[113][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 
 	                            </ul>
 	                        </li>
 							<?php }?>
 							
-							<?php if(!empty($arregloModulos) && array_key_exists(3, $arregloModulos)){?>
-								<li class="nav-item">
-									<a href="#" class="nav-link nav-toggle"> <i class="fa fa-gavel"></i>
-										<span class="title"><?=$frases[90][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
-									</a>
-									<ul class="sub-menu">
-										<li class="nav-item"><a href="reportes-crear.php" class="nav-link"> <span class="title"><?=$frases[96][$datosUsuarioActual['uss_idioma']];?></span></a></li>
-										<li class="nav-item"><a href="reportes-lista.php" class="nav-link"> <span class="title"><?=$frases[97][$datosUsuarioActual['uss_idioma']];?></span></a></li>
-									</ul>
-								</li>
-							<?php }?>
+							<li class="nav-item">
+								<a <?php validarModuloMenu(3, "#", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-gavel"></i>
+									<span class="title"><?=$frases[90][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
+								</a>
+								<ul class="sub-menu">
+									<li class="nav-item"><a <?php validarModuloMenu(3, "reportes-crear.php", MENU) ?> class="nav-link"> <span class="title"><?=$frases[96][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<li class="nav-item"><a <?php validarModuloMenu(3, "reportes-lista.php", MENU) ?> class="nav-link"> <span class="title"><?=$frases[97][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+								</ul>
+							</li>
 							
 							<?php if(isset($datosCargaActual) && $datosCargaActual['car_director_grupo']==1){?>
 							<li class="nav-item">
-	                            <a href="comportamiento.php" class="nav-link nav-toggle"> <i class="fa fa-pencil-square-o"></i>
+	                            <a <?php validarModuloMenu(3, "comportamiento.php", MENU) ?> class="nav-link nav-toggle"> <i class="fa fa-pencil-square-o"></i>
 	                                <span class="title"><?=$frases[234][$datosUsuarioActual['uss_idioma']];?></span> 
 	                            </a>
 	                        </li>
 							<li class="nav-item">
-	                            <a href="aspectos.php" class="nav-link nav-toggle"> <i class="fa fa-pencil-square-o"></i>
+	                            <a <?php validarModuloMenu(3, "aspectos.php", MENU) ?> class="nav-link nav-toggle"> <i class="fa fa-pencil-square-o"></i>
 	                                <span class="title">Aspectos</span> 
 	                            </a>
 	                        </li>
@@ -98,13 +86,13 @@
 	                        </li>
 							
 							<li class="nav-item">
-	                            <a href="cargas-carpetas.php" class="nav-link nav-toggle"> <i class="fa fa-folder"></i>
+	                            <a <?php validarModuloMenu(19, "cargas-carpetas.php", MENU) ?> class="nav-link nav-toggle"> <i class="fa fa-folder"></i>
 	                                <span class="title"><?=$frases[216][$datosUsuarioActual['uss_idioma']];?></span> 
 	                            </a>
 	                        </li>
 							
 							<li class="nav-item active" data-step="11" data-intro="<b><?=$frases[175][$datosUsuarioActual['uss_idioma']];?>:</b> Encuentra los mejores productos y servicios complementarios." data-position='left'>
-	                            <a href="marketplace.php" class="nav-link nav-toggle"> <i class="fa fa-shopping-cart"></i>
+	                            <a <?php validarModuloMenu(6, "marketplace.php", MENU) ?> class="nav-link nav-toggle"> <i class="fa fa-shopping-cart"></i>
 	                                <span class="title">Marketplace</span> 
 	                            </a>
 	                        </li>
