@@ -14,3 +14,4 @@ PES-581 - DIRECTIVO Ver modulos a comprar
 PES-688 - Paso intermedio al importar información en docentes
 PES-720 - DOCENTES Ver modulos a comprar
 PES-721 - ACUDIENTES Ver modulos a comprar
+PES-574 - Informe de historial de ingreso
