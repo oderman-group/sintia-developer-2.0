@@ -12,11 +12,7 @@ include("verificar-periodos-diferentes.php");
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-try{
-    $foroC = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios WHERE com_id_foro='".base64_decode($_GET["idR"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-    include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-}
+$foroC = Foros::traerComentariosForos($conexion, $config, $idR);
 
 while($foro=mysqli_fetch_array($foroC, MYSQLI_BOTH)){
     try{
@@ -26,11 +22,7 @@ while($foro=mysqli_fetch_array($foroC, MYSQLI_BOTH)){
     }
 }
 
-try{
-    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios WHERE com_id_foro='".base64_decode($_GET["idR"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-    include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-}
+Foros::eliminarComentarioForo($conexion, $config, $idR);
 
 Foros::eliminarForos($conexion, $config, $idR);
 

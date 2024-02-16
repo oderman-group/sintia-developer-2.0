@@ -106,13 +106,8 @@ $datosConsultaBD = Foros::consultarDatosForos($conexion, $config, $idR);
 											<?php 
 											$filtro = '';
 											if(is_numeric($usuario)){$filtro .= " AND com_id_estudiante='".$usuario."'";}
-									
-											$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios com
-											INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=com_id_estudiante AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-											WHERE com_id_foro='".$idR."' AND com.institucion={$config['conf_id_institucion']} AND com.year={$_SESSION["bd"]}
-											$filtro
-											ORDER BY com_id DESC
-											");
+											
+											$consulta = Foros::traerComentariosForos($conexion, $config, $idR, $filtro);
 											$contReg = 1;
 											while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 												$consultaReacciones = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro_respuestas fore
