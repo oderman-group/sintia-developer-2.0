@@ -124,7 +124,7 @@ if(!empty($_POST["calificaciones"])){
 
 		$datosInsert = '';
 		while($calImpDatos = mysqli_fetch_array($calImpConsulta, MYSQLI_BOTH)){
-			$codigoACT=Utilidades::generateCode("ACT");
+			$codigoACT=null;
 
 			$datosInsert .="('".$codigoACT."', '".mysqli_real_escape_string($conexion,$calImpDatos['act_descripcion'])."', '".$calImpDatos['act_fecha']."', '".$calImpDatos['act_valor']."', '".$idRegInd."', '".$cargaConsultaActual."', 0, now(), 1, '".$periodoConsultaActual."','".$calImpDatos['act_compartir']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
 

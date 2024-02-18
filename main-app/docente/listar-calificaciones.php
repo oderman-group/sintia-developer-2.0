@@ -94,7 +94,7 @@ $porcentajeRestante = 100 - $valores[0];
 			</thead>
 			<tbody>
 				<?php
-					$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades aa
+					$consulta = mysqli_query($conexion, "SELECT aa.id_nuevo AS id_nuevo_act, aa.*, ai.* FROM ".BD_ACADEMICA.".academico_actividades aa
 					INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=aa.act_id_tipo AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
 					WHERE aa.act_id_carga='".$cargaConsultaActual."' AND aa.act_periodo='".$periodoConsultaActual."' AND aa.act_estado=1 AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$_SESSION["bd"]}
 					");
@@ -128,7 +128,7 @@ $porcentajeRestante = 100 - $valores[0];
 				
 				<tr id="reg<?=$resultado['act_id'];?>">
 					<td><?=$contReg;?></td>
-					<td><?=$resultado['act_id'];?></td>
+					<td><?=$resultado['id_nuevo_act'];?></td>
 					<td><a href="calificaciones-registrar.php?idR=<?=base64_encode($resultado['act_id']);?>" style="text-decoration: underline;" title="Calificar"><?=$resultado['act_descripcion'];?></a></td>
 					<td><?=$resultado['act_fecha'];?></td>
 					<td><?=$resultado['act_valor'];?></td>
