@@ -9,7 +9,7 @@ include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
-$codigoACT=Utilidades::generateCode("ACT");
+$codigoACT=null;
 
 try{
 	$consultaIndicadoresDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga 
@@ -48,6 +48,7 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 		//Insertamos la calificación
 		try{
 			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividades(act_id, act_descripcion, act_fecha, act_periodo, act_id_tipo, act_id_carga, act_estado, act_compartir, act_fecha_creacion, act_id_evidencia, institucion, year)"." VALUES('".$codigoACT."', '".mysqli_real_escape_string($conexion,$_POST["contenido"])."', '".$fecha."', '".$periodoConsultaActual."','".$_POST["indicador"]."','".$cargaConsultaActual."', 1, '".$infoCompartir."', now(),'".$_POST["evidencia"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+			$idRegistro = mysqli_insert_id($conexion);
 		} catch (Exception $e) {
 			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 		}
@@ -79,5 +80,5 @@ else{
 }
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
-echo '<script type="text/javascript">window.location.href="calificaciones.php?success=SC_DT_1&id='.base64_encode($codigoACT).'&carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'";</script>';
+echo '<script type="text/javascript">window.location.href="calificaciones.php?success=SC_DT_1&id='.base64_encode($idRegistro).'&carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'";</script>';
 exit();
