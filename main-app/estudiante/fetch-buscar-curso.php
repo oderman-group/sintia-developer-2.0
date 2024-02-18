@@ -6,17 +6,14 @@ require_once("../class/servicios/GradoServicios.php");
 require_once("../class/servicios/MediaTecnicaServicios.php");
 $codigo = $input['codigo'];
 $curso = GradoServicios::consultarCurso($codigo, $input['institucion'], $input['year']);
-if (empty($curso["gra_cover_image"])) {
-    $urlImagen = "https://picsum.photos/50" + $cont + "/500";
-} else {
-    $urlImagen = $curso["gra_cover_image"];
-};
+$urlImagen = $curso["gra_cover_image"];
+
 ?>
 
 <div class="container">
     <div class="course-details">
         <div class="card" style="width:100%">
-            <img class="card-img-top course-image" width="100%" height="200px" src="<?= $urlImagen ?>" alt="Card image cap">
+            <img class="card-img-top course-image" width="100%" height="200px" src="../files/cursos/<?= $urlImagen ?>" alt="Card image cap">
             <div class="card-body">
                 <h5 class="card-title  course-title"><?= $curso["gra_nombre"]; ?></h5>
                 <p class="card-text">

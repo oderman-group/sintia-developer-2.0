@@ -148,9 +148,9 @@ if (mysqli_num_rows($consultaExisteMatricula) == 0) {
 try {
 	// consultamos si ya existe
 	$parametros = [
-		'matcur_institucion' => $resultado['institucion'],
-		'matcur_years' => $resultado['year'],
-		'matcur_id_curso' => $resultado["gra_id"],
+		'matcur_institucion' => $_POST["institucion"],
+		'matcur_years' => $_POST["year"],
+		'matcur_id_curso' => $_POST["curso"],
 		'matcur_id_matricula' => $matricula["mat_id"]
 	];
 	$matriculaCurso = MediaTecnicaServicios::consultar($parametros);

@@ -253,11 +253,7 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 								} else {
 									$direccion = "derecha";
 								};
-								if (empty($dato["gra_cover_image"])) {
-									$urlImagen = "https://picsum.photos/50" + $cont + "/500";
-								} else {
-									$urlImagen = $dato["gra_cover_image"];
-								};
+								$urlImagen = $dato["gra_cover_image"];
 								$limiteCaracteres = 300;
 
 								$textoTruncado = "";
@@ -273,7 +269,7 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 								<div class="col-xl-6 col-md-12 animate__animated animate__fadeIn">
 									<div class="postcard  light <?= $direccion ?>">
 										<a class="postcard__img_link" href="#" onclick="buscarCurso('<?= $dato["gra_id"] ?>')">
-											<img class="postcard__img" src="<?= $urlImagen ?>" alt="Image Title" />
+											<img class="postcard__img" src="../files/cursos/<?= $urlImagen ?>" alt="Image Title" />
 										</a>
 										<div class="postcard__text t-dark ">
 											<h1 class="postcard__title " onclick="buscarCurso('<?= $dato["gra_id"] ?>')"><a href="#"><?= $dato["gra_nombre"]; ?></a></h1>
@@ -383,7 +379,7 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 		}
 
 
-		function confirmar(idCurso,nombre) {
+		function confirmar(idCurso, nombre) {
 			const swalWithBootstrapButtons = Swal.mixin({
 				customClass: {
 					confirmButton: "btn btn-success",
@@ -392,7 +388,7 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 			});
 			swalWithBootstrapButtons.fire({
 				title: "¿Desea registrarse?",
-				text: "Recuerde que al aceptar quedara Pre Inscrito en el curso de "+nombre+"!",
+				text: "Recuerde que al aceptar quedara Pre Inscrito en el curso de " + nombre + "!",
 				icon: "warning",
 				showCancelButton: true,
 				confirmButtonText: "Si, deseo registrarme!",
@@ -401,7 +397,7 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 			}).then((result) => {
 				if (result.isConfirmed) {
 					inscribirse(idCurso);
-				} 
+				}
 			});
 		}
 
@@ -431,7 +427,7 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 							labelCantidad.text = res["cantidad"];
 							Swal.fire({
 								title: "Registro Exitoso!",
-								text:  res["msg"],
+								text: res["msg"],
 								icon: "success"
 							});
 						} else {
@@ -442,7 +438,10 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 								showConfirmButton: false,
 								timer: 3500
 							});
-							location.reload();
+							setTimeout(function() {
+								location.reload();
+							}, 20000);
+							
 						}
 
 					});
