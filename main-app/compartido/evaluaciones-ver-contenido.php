@@ -9,16 +9,7 @@
 				$evaluacion = Evaluaciones::consultaEvaluacion($conexion, $config, $idE);
 
 				//respuestas
-				$respuestasEvaluacion = mysqli_fetch_array(mysqli_query($conexion, "SELECT
-				(SELECT count(res.res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res 
-				INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=1 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]} 
-				WHERE res.res_id_evaluacion='".$idE."' AND res.res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}),
-				(SELECT count(res.res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res 
-				INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=0 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]}
-				WHERE res.res_id_evaluacion='".$idE."' AND res.res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}),
-				(SELECT count(res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados 
-				WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND res_id_respuesta=0)
-				"), MYSQLI_BOTH);
+				$respuestasEvaluacion = Evaluaciones::traerRespuestaEvaluacion($conexion, $config, $idE, $datosEstudianteActual['mat_id']);
 
 				//Cantidad de preguntas de la evaluación
 				$cantPreguntas = Evaluaciones::numeroPreguntasEvaluacion($conexion, $config, $idE);
@@ -30,8 +21,7 @@
 				}
 
 				//SABER SI EL ESTUDIANTE YA HIZO LA EVALUACION
-				$nume = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados 
-				WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"));
+				$nume = Evaluaciones::verificarEstudianteEvaluacion($conexion, $config, $idE, $datosEstudianteActual['mat_id']);
 				
 				if($nume==0){
 					echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=203";</script>';
@@ -39,8 +29,7 @@
 				}
 
 				//CONSULTAMOS SI YA TIENE UNA SESIÓN ABIERTA EN ESTA EVALUACIÓN
-				$estadoSesionEvaluacion = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes 
-				WHERE epe_id_evaluacion='".$idE."' AND epe_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND epe_inicio IS NOT NULL AND epe_fin IS NULL"));
+				$estadoSesionEvaluacion = Evaluaciones::consultarSessionEstudianteEvaluacion($conexion, $config, $idE, $datosEstudianteActual['mat_id']);
 				if($estadoSesionEvaluacion>0){
 					echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=201";</script>';
 					exit();
@@ -101,8 +90,7 @@
 											$evaluacionesEnComun = Evaluaciones::consultaEvaluacionTodas($conexion,$config, $idE, $cargaConsultaActual, $periodoConsultaActual);
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
 												//SABER SI EL ESTUDIANTE YA HIZO LA EVALUACION
-												$nume = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados 
-												WHERE res_id_evaluacion='".$evaComun['eva_id']."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"));
+												$nume = Evaluaciones::verificarEstudianteEvaluacion($conexion, $config, $evaComun['eva_id'], $datosEstudianteActual['mat_id']);
 												
 												if($nume==0){continue;}
 											?>
@@ -142,15 +130,7 @@
 													continue;
 												}
 												
-												$respuestasXpregunta = mysqli_fetch_array(mysqli_query($conexion, "SELECT
-												(SELECT count(res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res
-												INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=1 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]}
-												WHERE res.res_id_evaluacion='".$idE."' AND res.res_id_pregunta='".$preguntas['preg_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}),
-												
-												(SELECT count(res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res
-												INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=0 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]}
-												WHERE res.res_id_evaluacion='".$idE."' AND res.res_id_pregunta='".$preguntas['preg_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]})
-												"), MYSQLI_BOTH);
+												$respuestasXpregunta = Evaluaciones::respuestasXPreguntas($conexion, $config, $idE, $preguntas['preg_id']);
 												
 												$totalPuntos +=$preguntas['preg_valor'];
 												$arrayPreguntas .= '"Pregunta '.$contPreguntas.'",';
@@ -165,9 +145,7 @@
 											<?php 
 												$contRespuestas = 1;
 												while($respuestas = mysqli_fetch_array($respuestasConsulta, MYSQLI_BOTH)){
-													$compararRespuestas = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados
-													WHERE res_id_evaluacion='".$idE."' AND res_id_estudiante='".$datosEstudianteActual['mat_id']."' AND res_id_pregunta='".$preguntas['preg_id']."' AND res_id_respuesta='".$respuestas['resp_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-													"), MYSQLI_BOTH);
+													$compararRespuestas = Evaluaciones::compararRespuestas($conexion, $config, $idE, $datosEstudianteActual['mat_id'], $preguntas['preg_id'], $respuestas['resp_id']);
 													if(!empty($compararRespuestas['res_id'])) $cheked = 'checked'; else $cheked = '';
 													if($respuestas['resp_correcta']==1) {$colorRespuesta = 'green'; $label='(correcta)';} else {$colorRespuesta = 'red'; $label='(incorrecta)';}
 													if($respuestas['resp_correcta']==1 and !empty($compararRespuestas['res_id'])){

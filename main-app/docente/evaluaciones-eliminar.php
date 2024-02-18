@@ -15,11 +15,7 @@ if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 Evaluaciones::eliminarPreguntasEvaluacion($conexion, $config, $idR);
 
 //Eliminamos los archivos de respuestas de las preguntas de esta evaluacion.
-try{
-    $rEntregas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados WHERE res_id_evaluacion='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-    include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-}
+Evaluaciones::traerResultadoEvaluacion($conexion, $config, $idR);
 
 $rutaEntregas = ROOT_PATH."/main-app/files/evaluaciones";
 while($registroEntregas = mysqli_fetch_array($rEntregas, MYSQLI_BOTH)){
@@ -28,17 +24,9 @@ while($registroEntregas = mysqli_fetch_array($rEntregas, MYSQLI_BOTH)){
     }
 }
 
-try{
-    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados WHERE res_id_evaluacion='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-    include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-}
+Evaluaciones::eliminarResultadosEvaluacion($conexion, $config, $idR);
 
-try{
-    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_estudiantes WHERE epe_id_evaluacion='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-    include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-}
+Evaluaciones::eliminarEstudiantesEvaluacion($conexion, $config, $idR);
 
 Evaluaciones::eliminarEvaluacion($conexion, $config, $idR);
 

@@ -4,7 +4,8 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("verificar-carga.php");?>
 <?php include("verificar-pagina-bloqueada.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Foros.php");?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -92,8 +93,7 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro 
-													 WHERE foro_id_carga='".$cargaConsultaActual."' AND foro_periodo='".$periodoConsultaActual."' AND foro_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+													$consulta = Foros::traerForos($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
                                                     $contReg=1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													 ?>

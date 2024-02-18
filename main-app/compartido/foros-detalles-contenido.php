@@ -4,7 +4,9 @@ if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 $usuario="";
 if(!empty($_GET["usuario"])){ $usuario=base64_decode($_GET["usuario"]);}
 require_once("../class/Estudiantes.php");
-$datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro WHERE foro_id='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
+require_once(ROOT_PATH."/main-app/class/Foros.php");
+
+$datosConsultaBD = Foros::consultarDatosForos($conexion, $config, $idR);
 ?>					
 					<div class="page-bar">
                         <div class="page-title-breadcrumb">
@@ -104,13 +106,8 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".B
 											<?php 
 											$filtro = '';
 											if(is_numeric($usuario)){$filtro .= " AND com_id_estudiante='".$usuario."'";}
-									
-											$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios com
-											INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=com_id_estudiante AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-											WHERE com_id_foro='".$idR."' AND com.institucion={$config['conf_id_institucion']} AND com.year={$_SESSION["bd"]}
-											$filtro
-											ORDER BY com_id DESC
-											");
+											
+											$consulta = Foros::traerComentariosForos($conexion, $config, $idR, $filtro);
 											$contReg = 1;
 											while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 												$consultaReacciones = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro_respuestas fore
@@ -222,10 +219,7 @@ $datosConsultaBD = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".B
 										<header class="panel-heading panel-heading-purple"><?=strtoupper($frases[113][$datosUsuarioActual['uss_idioma']]);?> </header>
 										<div class="panel-body">
 											<?php
-											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro 
-											WHERE foro_id_carga='".$cargaConsultaActual."' AND foro_periodo='".$periodoConsultaActual."' AND foro_estado=1 AND foro_id!='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-											ORDER BY foro_id DESC
-											");
+											$registrosEnComun = Foros::traerForosDisintos($conexion, $config, $idR, $cargaConsultaActual, $periodoConsultaActual);
 											while($regComun = mysqli_fetch_array($registrosEnComun, MYSQLI_BOTH)){
 											?>
 												<p><a href="<?=$_SERVER['PHP_SELF'];?>?idR=<?=base64_encode($regComun['foro_id']);?>"><?=$regComun['foro_nombre'];?></a></p>

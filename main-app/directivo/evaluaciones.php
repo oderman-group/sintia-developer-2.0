@@ -123,6 +123,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 																		<?php if( Modulos::validarSubRol(['DT0318']) ){?>
 																			<li><a href="asignaciones.php?idE=<?=base64_encode($resultado['evag_id']);?>">Asignaciones</a></li>
 																		<?php }?>
+																		<?php if( Modulos::validarSubRol(['DT0325']) ){?>
+																			<li><a href="encuestas-resultados.php?idE=<?=base64_encode($resultado['evag_id']);?>">Resultados</a></li>
+																		<?php }?>
 																		<?php if( Modulos::validarSubRol(['DT0287']) && $preguntas==0){?>
                                                                             <li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" id="<?=$resultado['evag_id'];?>" name="evaluacion-eliminar.php?id=<?=base64_encode($resultado['evag_id']);?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
 																		<?php } ?>

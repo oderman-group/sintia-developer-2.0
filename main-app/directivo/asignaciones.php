@@ -41,8 +41,9 @@ if (!empty($_GET['idE'])) {
 
                     <div class="row">
                         <div class="col-md-12">
-                        <?php include("../../config-general/mensajes-informativos.php"); ?>
-									<?php include("../compartido/publicidad-lateral.php");?>
+                        	<?php include("../../config-general/mensajes-informativos.php"); ?>
+							<?php include("../compartido/publicidad-lateral.php");?>
+							<?php include("includes/barra-superior-asignaciones.php"); ?>
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header>Asignaciones</header>
@@ -82,45 +83,47 @@ if (!empty($_GET['idE'])) {
                                                 </thead>
                                                 <tbody>
 													<?php
-													$consulta = Asignaciones::listarAsignaciones($conexion, $config, $idE);
+													include("includes/consulta-paginacion-asignaciones.php");
+													$filtroLimite = 'LIMIT '.$inicio.','.$registros;
+													$consulta = Asignaciones::listarAsignaciones($conexion, $config, $idE, $filtro, $filtroLimite);
 													$contReg = 1;
-												if(!empty($consulta)){
-													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														switch ($resultado['epag_tipo']) {
-															case CURSO:
-																$consultaEvaluado = mysqli_query($conexion, "SELECT gra_nombre FROM ".BD_ACADEMICA.".academico_grados
-																WHERE gra_id='".$resultado['epag_id_evaluado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-																$datosEvaluado = mysqli_fetch_array($consultaEvaluado, MYSQLI_BOTH);
-																$nombreEvaluado = $datosEvaluado['gra_nombre'];
-															break;
-
-															case AREA:
-																$consultaEvaluado = mysqli_query($conexion, "SELECT ar_nombre FROM ".BD_ACADEMICA.".academico_areas
-																WHERE ar_id='".$resultado['epag_id_evaluado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-																$datosEvaluado = mysqli_fetch_array($consultaEvaluado, MYSQLI_BOTH);
-																$nombreEvaluado = $datosEvaluado['ar_nombre'];
-															break;
-
-															case MATERIA:
-																$consultaEvaluado = mysqli_query($conexion, "SELECT mat_nombre FROM ".BD_ACADEMICA.".academico_materias
-																WHERE mat_id='".$resultado['epag_id_evaluado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-																$datosEvaluado = mysqli_fetch_array($consultaEvaluado, MYSQLI_BOTH);
-																$nombreEvaluado = $datosEvaluado['mat_nombre'];
-															break;
-
-															default:
-																if($resultado['epag_tipo'] == DIRECTIVO || $resultado['epag_tipo'] == DOCENTE) {
-																	$consultaEvaluado = mysqli_query($conexion, "SELECT uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2 FROM ".BD_GENERAL.".usuarios
-																	WHERE uss_id='".$resultado['epag_id_evaluado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+													if(!empty($consulta)){
+														while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+															switch ($resultado['epag_tipo']) {
+																case CURSO:
+																	$consultaEvaluado = mysqli_query($conexion, "SELECT gra_nombre FROM ".BD_ACADEMICA.".academico_grados
+																	WHERE gra_id='".$resultado['epag_id_evaluado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 																	$datosEvaluado = mysqli_fetch_array($consultaEvaluado, MYSQLI_BOTH);
-																	$nombreEvaluado = UsuariosPadre::nombreCompletoDelUsuario($datosEvaluado);
-																}
-															break;
-														}
+																	$nombreEvaluado = $datosEvaluado['gra_nombre'];
+																break;
 
-														$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
-														$arrayDatos = json_encode($arrayEnviar);
-														$objetoEnviar = htmlentities($arrayDatos);
+																case AREA:
+																	$consultaEvaluado = mysqli_query($conexion, "SELECT ar_nombre FROM ".BD_ACADEMICA.".academico_areas
+																	WHERE ar_id='".$resultado['epag_id_evaluado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+																	$datosEvaluado = mysqli_fetch_array($consultaEvaluado, MYSQLI_BOTH);
+																	$nombreEvaluado = $datosEvaluado['ar_nombre'];
+																break;
+
+																case MATERIA:
+																	$consultaEvaluado = mysqli_query($conexion, "SELECT mat_nombre FROM ".BD_ACADEMICA.".academico_materias
+																	WHERE mat_id='".$resultado['epag_id_evaluado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+																	$datosEvaluado = mysqli_fetch_array($consultaEvaluado, MYSQLI_BOTH);
+																	$nombreEvaluado = $datosEvaluado['mat_nombre'];
+																break;
+
+																default:
+																	if($resultado['epag_tipo'] == DIRECTIVO || $resultado['epag_tipo'] == DOCENTE) {
+																		$consultaEvaluado = mysqli_query($conexion, "SELECT uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2 FROM ".BD_GENERAL.".usuarios
+																		WHERE uss_id='".$resultado['epag_id_evaluado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+																		$datosEvaluado = mysqli_fetch_array($consultaEvaluado, MYSQLI_BOTH);
+																		$nombreEvaluado = UsuariosPadre::nombreCompletoDelUsuario($datosEvaluado);
+																	}
+																break;
+															}
+
+															$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
+															$arrayDatos = json_encode($arrayEnviar);
+															$objetoEnviar = htmlentities($arrayDatos);
 													?>
 													<tr id="reg<?=$resultado['epag_id'];?>">
                                                         <td><?=$contReg;?></td>
@@ -157,6 +160,7 @@ if (!empty($_GET['idE'])) {
                                             </div>
                                         </div>
                                     </div>
+									<?php include("enlaces-paginacion.php");?>
                                 </div>
 
                             </div>
