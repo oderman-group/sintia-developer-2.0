@@ -121,14 +121,7 @@ if (!Modulos::validarPermisoEdicion() || $resultado['epag_estado'] != PENDIENTE)
                                         </div>
                                         
                                         <label class="col-sm-2 control-label">Estado</label>
-                                        <div class="col-sm-4">
-                                            <select class="form-control select2" disabled>
-                                                <option value="">Escoja una opción</option>
-                                                <option value="<?=PENDIENTE?>" <?=$resultado['epag_estado'] == PENDIENTE ? "selected": "";?>><?=PENDIENTE?></option>
-                                                <option value="<?=PROCESO?>" <?=$resultado['epag_estado'] == PROCESO ? "selected": "";?>><?=PROCESO?></option>
-                                                <option value="<?=FINALIZADO?>" <?=$resultado['epag_estado'] == FINALIZADO ? "selected": "";?>><?=FINALIZADO?></option>
-                                            </select>
-                                        </div>
+                                        <div class="col-sm-4"><?=$resultado['epag_estado'];?></div>
                                     </div>
                                     
                                     <a href="javascript:void(0);" name="asignaciones.php?idE=<?= base64_encode($resultado['epag_id_evaluacion']); ?>" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i><?= $frases[184][$datosUsuarioActual['uss_idioma']]; ?></a>
