@@ -42,7 +42,7 @@ class Respuesta {
     {
 
         try {
-            mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".general_respuestas (resg_descripcion, resg_id_pregunta, resg_valor, resg_institucion, resg_year)VALUES('".$POST["descripcion"]."', '".$POST["pregunta"]."', '".$POST["valor"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
+            mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".general_respuestas (resg_descripcion, resg_valor, resg_institucion, resg_year)VALUES('".$POST["descripcion"]."', '".$POST["valor"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
@@ -90,7 +90,7 @@ class Respuesta {
     {
 
         try {
-            mysqli_query($conexion, "UPDATE ".BD_ADMIN.".general_respuestas SET resg_descripcion='".$POST["descripcion"]."', resg_id_pregunta='".$POST["pregunta"]."', resg_valor='".$POST["valor"]."' WHERE resg_id='".$POST["id"]."' AND resg_institucion={$config['conf_id_institucion']} AND resg_year={$_SESSION["bd"]}");
+            mysqli_query($conexion, "UPDATE ".BD_ADMIN.".general_respuestas SET resg_descripcion='".$POST["descripcion"]."', resg_valor='".$POST["valor"]."' WHERE resg_id='".$POST["id"]."' AND resg_institucion={$config['conf_id_institucion']} AND resg_year={$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
