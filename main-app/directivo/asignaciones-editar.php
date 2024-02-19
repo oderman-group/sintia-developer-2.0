@@ -86,7 +86,7 @@ if (!Modulos::validarPermisoEdicion() || $resultado['epag_estado'] != PENDIENTE)
                                                 <option value="<?=DOCENTE?>" <?=$resultado['epag_tipo'] == DOCENTE ? "selected": "";?>><?=DOCENTE?></option>
                                                 <option value="<?=AREA?>" <?=$resultado['epag_tipo'] == AREA ? "selected": "";?>><?=AREA?></option>
                                                 <option value="<?=MATERIA?>" <?=$resultado['epag_tipo'] == MATERIA ? "selected": "";?>><?=MATERIA?></option>
-                                                <option value="<?=MATERIA?>" <?=$resultado['epag_tipo'] == MATERIA ? "selected": "";?>><?=CURSO?></option>
+                                                <option value="<?=CURSO?>" <?=$resultado['epag_tipo'] == CURSO ? "selected": "";?>><?=CURSO?></option>
                                             </select>
                                         </div>
                                         <script>
