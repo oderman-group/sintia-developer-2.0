@@ -17,7 +17,7 @@ class Respuesta {
     )
     {
         try {
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".general_respuestas 
+            $consulta = mysqli_query($conexion, "SELECT *, (SELECT COUNT(gpr_id_respuesta) as preguntas FROM ".BD_ADMIN.".general_preguntas_respuestas WHERE gpr_id_respuesta=resg_id) as preguntas FROM ".BD_ADMIN.".general_respuestas 
             WHERE resg_eliminado='".NO."' AND resg_institucion = {$config['conf_id_institucion']} AND resg_year = {$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
