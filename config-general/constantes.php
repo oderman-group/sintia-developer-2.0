@@ -163,6 +163,14 @@ define('PENDIENTE', 'PENDIENTE');
 define('PROCESO', 'PROCESO');
 define('FINALIZADO', 'FINALIZADO');
 
+/* TIPOS DE COMPAÑIA */
+define('SCHOOL', 'SCHOOL');
+define('INSTITUTE', 'INSTITUTE');
+define('UNIVERSITY', 'UNIVERSITY');
+define('COMPANY', 'COMPANY');
+define('KINDERGARTEN', 'KINDERGARTEN');
+define('PEOPLE', 'PEOPLE');
+
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':
         define('REDIRECT_ROUTE', 'http://localhost/app-sintia/main-app');
