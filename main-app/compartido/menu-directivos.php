@@ -2,7 +2,7 @@
 								//MENÚ DIRECTIVOS
 								if($datosUsuarioActual['uss_tipo']==TIPO_DIRECTIVO || $datosUsuarioActual['uss_tipo']==TIPO_DEV){
 									//MÓDULO ACADÉMICO
-									if(Modulos::validarSubRol(["DT0102","DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195"])){
+									if(Modulos::validarSubRol(["DT0102","DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195"]) && Modulos::validarModulosActivos($conexion, 1)){
 							?>
 							<li <?php agregarClass(MENU_PADRE,["DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195","DT0196","DT0197"]) ?>>
 	                            <a <?php validarModuloMenu(1, "#", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="material-icons">assignment_ind</i>
@@ -58,7 +58,7 @@
 
 							<?php 
 							//MÓDULO INSCRIPCIONES Y ADMISIONES
-								if(Modulos::validarSubRol(["DT0102", "DT0014"])){
+								if(Modulos::validarSubRol(["DT0102", "DT0014"]) && Modulos::validarModulosActivos($conexion, 9)){
 							?>
 								<li <?php agregarClass(MENU_PADRE,["DT0102", "DT0014"]) ?>>
 									<a <?php validarModuloMenu(9, "#", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-address-book"></i>
@@ -82,7 +82,7 @@
 							
 							<?php 
 							//MÓDULO FINANCIERO
-								if(Modulos::validarSubRol(["DT0104", "DT0258", "DT0264", "DT0273", "DT0275", "DT0294"])){
+								if(Modulos::validarSubRol(["DT0104", "DT0258", "DT0264", "DT0273", "DT0275", "DT0294"]) && Modulos::validarModulosActivos($conexion, 2)){
 							?>
 								<li <?php agregarClass(MENU_PADRE,["DT0104", "DT0106", "DT0128", "DT0105", "DT0258", "DT0259", "DT0261", "DT0264", "DT0265", "DT0267", "DT0273", "DT0275", "DT0276", "DT0278", "DT0294", "DT0295", "DT0297"]) ?>>
 									<a <?php validarModuloMenu(2, "#", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-money"></i>
@@ -130,7 +130,7 @@
 							
 							<?php 
 							//MÓDULO DISCIPLINARIO
-								if(Modulos::validarSubRol(["DT0119","DT0117","DT0069","DT0066"])){
+								if(Modulos::validarSubRol(["DT0119","DT0117","DT0069","DT0066"]) && Modulos::validarModulosActivos($conexion, 3)){
 							?>
 								<li class="nav-item">
 									<a <?php validarModuloMenu(3, "#", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-gavel"></i>
@@ -170,7 +170,7 @@
 							
 							<?php 
 							//MÓDULO ADMINISTRTIVO
-								if(Modulos::validarSubRol(["DT0126","DT0122","DT0011"])){
+								if(Modulos::validarSubRol(["DT0126","DT0122","DT0011"]) && Modulos::validarModulosActivos($conexion, 4)){
 							?>
 							<li <?php agregarClass(MENU_PADRE,["DT0011","DT0122","DT0124","DT0126","DT0204","DT0205"]) ?>>
 	                            <a <?php validarModuloMenu(4, "#", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-tachometer"></i>
@@ -205,14 +205,16 @@
 	                            </ul>
 	                        </li>
 							<?php }?>
-
-							<!-- //MÓDULO CUESTIONARIO EVALUATIVO -->
+							
+							<?php 
+							//MÓDULO CUESTIONARIO EVALUATIVO
+								if(Modulos::validarSubRol(["DT0281","DT0283","DT0285","DT0288","DT0289","DT0291","DT0308","DT0309","DT0311"]) && Modulos::validarModulosActivos($conexion, 18)){
+							?>
 								<li <?php agregarClass(MENU_PADRE,["DT0281","DT0283","DT0285","DT0288","DT0289","DT0291","DT0308","DT0309","DT0311"]) ?>>
 									<a <?php validarModuloMenu(18, "#", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-question"></i>
 										<span class="title"><?=$frases[388][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 									</a>
-									<ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0281","DT0283","DT0285","DT0288","DT0289","DT0291","DT0308","DT0309","DT0311"])?>>
-										<li ><a <?php validarModuloMenu(18, "#", MENU) ?> class="nav-link "> <span class="title"><?=$frases[393][$datosUsuarioActual['uss_idioma']];?></span></a></li>									
+									<ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0281","DT0283","DT0285","DT0288","DT0289","DT0291","DT0308","DT0309","DT0311"])?>>								
 										<?php
 											if(Modulos::validarSubRol(["DT0281"])){
 										?>
@@ -232,17 +234,21 @@
 										?>
 									</ul>
 								</li>
+							<?php }?>
 							
-							<!-- //MÓDULO MERCADEO -->
-							<li class="nav-item">
-	                            <a <?php validarModuloMenu(6, "#", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-phone"></i>
-	                                <span class="title"><?=$frases[210][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
-	                            </a>
-	                            <ul class="sub-menu">
-	                                <li class="nav-item"><a <?php validarModuloMenu(6, "#", MENU) ?> class="nav-link "> <span class="title"><?=$frases[75][$datosUsuarioActual['uss_idioma']];?></span></a></li>
-
-	                            </ul>
-	                        </li>
+							<?php 
+							//MÓDULO MERCADEO
+								if(Modulos::validarModulosActivos($conexion, 6)){
+							?>
+								<li class="nav-item">
+									<a <?php validarModuloMenu(6, "#", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-phone"></i>
+										<span class="title"><?=$frases[210][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
+									</a>
+									<ul class="sub-menu">
+										<li class="nav-item"><a <?php validarModuloMenu(6, "#", MENU) ?> class="nav-link "> <span class="title"><?=$frases[75][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									</ul>
+								</li>
+							<?php }?>
 							
 							<?php
 								if(Modulos::validarSubRol(["DT0057","DT0060"])){
@@ -270,7 +276,7 @@
 							<?php }?>
 							
 							<?php
-								if(Modulos::validarSubRol(["DT0099"])){
+								if(Modulos::validarSubRol(["DT0099"]) && Modulos::validarModulosActivos($conexion, 22)){
 							?>
 							<li class="nav-item">
 	                            <a <?php validarModuloMenu(22, "informes-todos.php", MENU) ?> class="nav-link nav-toggle"> <i class="fa fa-file-text"></i>

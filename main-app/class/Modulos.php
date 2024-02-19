@@ -281,4 +281,28 @@ class Modulos {
         }
         return $paginaActualUsuario;
     }
+
+    /**
+     * Este metodo sirve para validar si un modulo esta activo o no
+     * 
+     * @param int   $modulo
+     * 
+     * @return bool
+    **/
+    public static function validarModulosActivos($conexion, $modulo){
+
+        try{
+            $consultaModulo = mysqli_query($conexion, "SELECT mod_estado FROM ".BD_ADMIN.".modulos WHERE mod_id='".$modulo."'");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        $numDatosModulo=mysqli_num_rows($consultaModulo);
+        if ($numDatosModulo > 0) { 
+            $datosModulo = mysqli_fetch_array($consultaModulo, MYSQLI_BOTH);
+            if ($datosModulo['mod_estado'] == 1) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

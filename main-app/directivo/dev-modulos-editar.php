@@ -15,6 +15,7 @@ try{
     include("../compartido/error-catch-to-report.php");
 }
 $datosModulo=mysqli_fetch_array($consulta, MYSQLI_BOTH);
+$clientes = explode(",", $datosModulo['mod_types_customer']);
 ?>
 
 	<!--bootstrap -->
@@ -68,16 +69,35 @@ $datosModulo=mysqli_fetch_array($consulta, MYSQLI_BOTH);
 									<form name="formularioGuardar" action="dev-modulos-actualizar.php" method="post" enctype="multipart/form-data">
                                         <input type="hidden" name="id" value="<?=base64_decode($_GET["id"])?>">
 										
+                                        <?php 
+                                            $rutaFoto = "../files/modulos/{$datosModulo['mod_imagen']}";
+                                            if(!empty($datosModulo['mod_imagen']) && Utilidades::ArchivoExiste($rutaFoto)) {
+                                        ?>
+                                            <div class="form-group row">
+                                                <div class="col-sm-4">
+                                                    <div class="item">
+                                                        <img src="<?=$rutaFoto;?>" width="100"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php }?>
+                                            
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Modulo<span style="color: red;">(*)</span></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" name="nombreModulo" class="form-control" value="<?=$datosModulo["mod_nombre"]?>" required>
+                                            <label class="col-sm-2 control-label">Portada Módulo</label>
+                                            <div class="col-sm-4">
+                                                <input type="file" name="portada" class="form-control">
                                             </div>
                                         </div>
-										
-										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Modulo Padre</label>
-                                            <div class="col-sm-8">
+                                        <hr>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-1 control-label">Modulo<span style="color: red;">(*)</span></label>
+                                            <div class="col-sm-4">
+                                                <input type="text" name="nombreModulo" class="form-control" value="<?=$datosModulo["mod_nombre"]?>" required>
+                                            </div>
+                                            
+                                            <label class="col-sm-1 control-label">Modulo Padre</label>
+                                            <div class="col-sm-4">
                                                 <select class="form-control  select2" name="moduloPadre">
                                                     <option value="">Seleccione una opción</option>
                                                     <?php
@@ -99,13 +119,52 @@ $datosModulo=mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                         </div>
 										
 										<div class="form-group row">
-                                            <label class="col-sm-2 control-label">Estado</label>
-                                            <div class="col-sm-8">
+                                            <label class="col-sm-1 control-label">Estado</label>
+                                            <div class="col-sm-4">
                                                 <select class="form-control  select2" name="moduloEstado">
                                                     <option value="">Seleccione una opción</option>
                                                     <option value="1" <?php if($datosModulo['mod_estado']==1){echo "selected";}?>>Activo</option>
                                                     <option value="0" <?php if($datosModulo['mod_estado']==0){echo "selected";}?>>Inactivo</option>
                                                 </select>
+                                            </div>
+                                            
+                                            <label class="col-sm-1 control-label">Namespace</label>
+                                            <div class="col-sm-4">
+                                                <input type="text" name="namespace" class="form-control" value="<?=$datosModulo["mod_namespace"]?>" required>
+                                            </div>
+                                        </div>
+										
+										<div class="form-group row">
+                                            <label class="col-sm-1 control-label">Precio</label>
+                                            <div class="col-sm-4">
+                                                <input type="number" min="0" name="precio" class="form-control" value="<?=$datosModulo["mod_precio"]?>" required>
+                                            </div>
+                                            
+                                            <label class="col-sm-1 control-label">Orden</label>
+                                            <div class="col-sm-4">
+                                                <input type="number" min="0" name="order" class="form-control" value="<?=$datosModulo["mod_order"]?>" required>
+                                            </div>
+                                        </div>
+										
+                                        <div class="form-group row">
+                                            <label class="col-sm-1 control-label">Tipos de Clientes</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control  select2-multiple" multiple name="clientes[]">
+                                                    <option value="">Escoja una opción</option>
+                                                    <option value="<?=SCHOOL?>" <?=in_array(SCHOOL, $clientes) ? "selected": "";?>><?=SCHOOL?></option>
+                                                    <option value="<?=INSTITUTE?>" <?=in_array(INSTITUTE, $clientes) ? "selected": "";?>><?=INSTITUTE?></option>
+                                                    <option value="<?=UNIVERSITY?>" <?=in_array(UNIVERSITY, $clientes) ? "selected": "";?>><?=UNIVERSITY?></option>
+                                                    <option value="<?=COMPANY?>" <?=in_array(COMPANY, $clientes) ? "selected": "";?>><?=COMPANY?></option>
+                                                    <option value="<?=KINDERGARTEN?>" <?=in_array(KINDERGARTEN, $clientes) ? "selected": "";?>><?=KINDERGARTEN?></option>
+                                                    <option value="<?=PEOPLE?>" <?=in_array(PEOPLE, $clientes) ? "selected": "";?>><?=PEOPLE?></option>
+                                                </select>
+                                            </div>
+                                        </div>
+										
+                                        <div class="form-group row">
+                                            <label class="col-sm-1 control-label">Descripción</label>
+                                            <div class="col-sm-9">
+                                                <textarea cols="80" id="editor1" name="descripcion" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"><?=$datosModulo['mod_description'];?></textarea>
                                             </div>
                                         </div>
 
@@ -157,6 +216,13 @@ $datosModulo=mysqli_fetch_array($consulta, MYSQLI_BOTH);
     <script src="../../config-general/assets/plugins/select2/js/select2.js" ></script>
     <script src="../../config-general/assets/js/pages/select2/select2-init.js" ></script>
     <!-- end js include path -->
+    <script src="../ckeditor/ckeditor.js"></script>
+
+    <script>
+        // Replace the <textarea id="editor1"> with a CKEditor 4
+        // instance, using default configuration.
+        CKEDITOR.replace( 'editor1' );
+    </script>
 </body>
 
 <!-- Mirrored from radixtouch.in/templates/admin/smart/source/light/advance_form.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 18 May 2018 17:32:54 GMT -->

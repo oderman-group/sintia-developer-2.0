@@ -14,7 +14,7 @@
 							
 							
 							<?php 
-							if((!empty($_COOKIE["carga"]) && !empty($_COOKIE["periodo"])) || (!empty($_GET["carga"]) && !empty($_GET["periodo"]))){
+							if((!empty($_COOKIE["carga"]) && !empty($_COOKIE["periodo"])) || (!empty($_GET["carga"]) && !empty($_GET["periodo"])) && Modulos::validarModulosActivos($conexion, 1)){
 								$arrayItemsAcademico = [
 									"DC0034","DC0080", "DC0035", "DC0011", "DC0079", "DC0039", "DC0022", "DC0043", "DC0046", "DC0012", "DC0037", "DC0018", "DC0015", "DC0021", "DC0020", "DC0007", "DC0029", "DC0025", "DC0070", "DC0072", "DC0071", "DC0019", "DC0028", "DC0077"
 								]
@@ -47,6 +47,7 @@
 	                        </li>
 							<?php }?>
 							
+							<?php if(Modulos::validarModulosActivos($conexion, 3)){ ?>
 							<li class="nav-item">
 								<a <?php validarModuloMenu(3, "#", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-gavel"></i>
 									<span class="title"><?=$frases[90][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
@@ -56,8 +57,9 @@
 									<li class="nav-item"><a <?php validarModuloMenu(3, "reportes-lista.php", MENU) ?> class="nav-link"> <span class="title"><?=$frases[97][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 								</ul>
 							</li>
+							<?php }?>
 							
-							<?php if(isset($datosCargaActual) && $datosCargaActual['car_director_grupo']==1){?>
+							<?php if(isset($datosCargaActual) && $datosCargaActual['car_director_grupo']==1 && Modulos::validarModulosActivos($conexion, 3)){?>
 							<li class="nav-item">
 	                            <a <?php validarModuloMenu(3, "comportamiento.php", MENU) ?> class="nav-link nav-toggle"> <i class="fa fa-pencil-square-o"></i>
 	                                <span class="title"><?=$frases[234][$datosUsuarioActual['uss_idioma']];?></span> 
@@ -85,17 +87,21 @@
 	                            </a>
 	                        </li>
 							
+							<?php if(Modulos::validarModulosActivos($conexion, 19)){ ?>
 							<li class="nav-item">
 	                            <a <?php validarModuloMenu(19, "cargas-carpetas.php", MENU) ?> class="nav-link nav-toggle"> <i class="fa fa-folder"></i>
 	                                <span class="title"><?=$frases[216][$datosUsuarioActual['uss_idioma']];?></span> 
 	                            </a>
 	                        </li>
+							<?php }?>
 							
+							<?php if(Modulos::validarModulosActivos($conexion, 6)){ ?>
 							<li class="nav-item active" data-step="11" data-intro="<b><?=$frases[175][$datosUsuarioActual['uss_idioma']];?>:</b> Encuentra los mejores productos y servicios complementarios." data-position='left'>
 	                            <a <?php validarModuloMenu(6, "marketplace.php", MENU) ?> class="nav-link nav-toggle"> <i class="fa fa-shopping-cart"></i>
 	                                <span class="title">Marketplace</span> 
 	                            </a>
 	                        </li>
+							<?php }?>
 							
 							
 							<li class="nav-item">
