@@ -92,7 +92,6 @@
 				</div>
 			</div>
 			<?php if (array_key_exists(10, $arregloModulos)) {
-				require_once("../compartido/includes/includeSelectSearch.php");
 				require_once("../class/servicios/MediaTecnicaServicios.php");
 				$parametros = ['gra_tipo' => GRADO_INDIVIDUAL, 'gra_estado' => 1, 'institucion' => $config['conf_id_institucion'], 'year' => $_SESSION["bd"]];
 
@@ -136,6 +135,9 @@
 
 			<?php } ?>
 		</div>
+		<?php if (array_key_exists(10, $arregloModulos)) {
+			require_once("../compartido/includes/includeSelectSearch.php");
+		?>
 		<div class="col-sm-12 col-xl-6">
 			<div id="divCursosAdicionales" style="display: none;">
 				<div class="form-group row">
@@ -226,13 +228,9 @@
 						</table>
 					</div>
 				</div>
-
-
-
-
-
 			</div>
 		</div>
+		<?php } ?>
 	</div>
 	<script type="text/javascript">
 		function agregarCurso(dato) {
