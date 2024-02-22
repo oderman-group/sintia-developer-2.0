@@ -64,7 +64,10 @@ if (!empty($_FILES['imagenCurso']['name'])) {
     $extension = end($explode);
     $archivo = $_SESSION["inst"] . '_' . $_SESSION["id"] . '_curso_'.$_POST["id_curso"]. "." . $extension;
     $destino = "../files/cursos";
-    move_uploaded_file($_FILES['imagenCurso']['tmp_name'], $destino . "/" . $archivo);
+	$localFilePath = $_FILES['imagenCurso']['tmp_name'];// Ruta del archivo local que deseas subir	
+	$cloudFilePath = 'cursos/'.$archivo;// Ruta en el almacenamiento en la nube de Firebase donde deseas almacenar el archivo
+	$storage->getBucket()->upload(fopen($localFilePath, 'r'), ['name' => $cloudFilePath	]);
+    // move_uploaded_file($_FILES['imagenCurso']['tmp_name'], $destino . "/" . $archivo);
     try{
         mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_grados SET gra_cover_image = '" . $archivo. "' WHERE gra_id='" . $_POST["id_curso"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
     } catch (Exception $e) {

@@ -334,7 +334,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                     </div>
 
                                                     <div class="col-sm-8">
-                                                        <img id="imagenSelect" class="cursor-mano" src="../files/cursos/<?= empty($resultadoCurso["gra_cover_image"]) ? "curso.png" : $resultadoCurso["gra_cover_image"] ?>" alt="avatar" style="height: 400px;width: 100%;border:3px dashed;padding:10px;border-radius:40px / 30px">
+                                                       <img id="imagenSelect" class="cursor-mano" src="<?= empty($resultadoCurso["gra_cover_image"]) ? "../files/cursos/curso.png" : $storage->getBucket()->object("cursos/".$resultadoCurso["gra_cover_image"])->signedUrl(new DateTime('tomorrow'))?>" alt="avatar" style="height: 400px;width: 100%;border:3px dashed;padding:10px;border-radius:40px / 30px">
                                                     </div>
                                                     <div class="col-sm-2">
                                                     </div>
