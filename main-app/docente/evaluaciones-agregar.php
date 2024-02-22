@@ -126,29 +126,6 @@ require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");?>
 											 </div>
 										</div>
 										
-										<!-- div necesario para el Jscript-->
-										<div id="infoCeroDos"></div>
-										
-										
-										<p style="color: blue;">Ó si quieres puedes usar el <b>banco de datos</b>. Tal vez te sirva algo de lo que ya existe.</p>
-										<div class="form-group row">
-                                            <label class="col-sm-2 control-label"><b>Banco de datos</b></label>
-                                            <div class="col-sm-10">
-												<?php
-												$opcionesConsulta = Evaluaciones::consultaEvaluacionCargas($conexion, $config, $cargaConsultaActual);
-												?>
-                                                <select class="form-control  select2" name="bancoDatos" onChange="avisoBancoDatos(this)">
-                                                    <option value="">Seleccione una opción</option>
-													<option value="0" selected>--Ninguno--</option>
-													<?php
-													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
-													?>
-                                                    	<option value="<?=$opcionesDatos['eva_id'];?>"><?=$opcionesDatos['eva_nombre'];?></option>
-													<?php }?>
-                                                </select>
-                                            </div>
-                                        </div>
-										
 										<a href="#" name="evaluaciones.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 
 										<button type="submit" class="btn  btn-info">
