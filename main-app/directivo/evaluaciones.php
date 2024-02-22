@@ -76,7 +76,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <tbody>
 													<?php
 													 $parametros = [
-														'evag_year'=>$config['conf_agno'],
+														'evag_institucion'=>$config['conf_id_institucion'],
+														'evag_year'=>$_SESSION['bd'],
 														'arreglo'=>false
 													];
 													$consulta = EvaluacionGeneral::listar($parametros);

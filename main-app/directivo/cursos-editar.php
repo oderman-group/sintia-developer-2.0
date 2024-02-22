@@ -314,6 +314,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                         </div>
                                     </div>
 
+                                    <?php if (array_key_exists(10, $arregloModulos)) { ?>
                                     <div <?= $hidden ?> class="tab-pane fade" id="nav-configuracion" role="tabpanel" aria-labelledby="nav-configuracion-tab">
 
                                         <div class="panel">
@@ -412,7 +413,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                                 <span class="fa fa-minus"></span>
                                                             </button>
                                                         </span>
-                                                        <input type="number" id="horas" disabled name="horas" class="form-control text-center" value="<?= $resultadoCurso["gra_duration_hours"]; ?>" min="1" <?= $disabledPermiso; ?>>
+                                                        <input type="number" id="horas" disabled name="horas" class="form-control text-center" value="<?=!empty($resultadoCurso["gra_duration_hours"]) ? $resultadoCurso["gra_duration_hours"] : "1"; ?>" min="1" <?= $disabledPermiso; ?>>
                                                         <span class="input-group-btn">
                                                             <button class="btn btn-danger" data-dir="up" type="button">
                                                                 <span class="fa fa-plus"></span>
@@ -566,6 +567,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                         </div>
 
                                     </div>
+                                    <?php } ?>
                                     <a href="javascript:void(0);" name="cursos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     <?php if (Modulos::validarPermisoEdicion()) { ?>
                                         <button type="submit" class="btn  btn-info">
