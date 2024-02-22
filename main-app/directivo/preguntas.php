@@ -76,7 +76,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <tbody>
 													<?php
 													 $parametros = [
-														'evag_year'=>$config['conf_agno']
+														'pregg_institucion'=>$config['conf_id_institucion'],
+														'pregg_year'=>$_SESSION['bd']
 													];
 													$consulta = PreguntaGeneral::listar($parametros);
 													$contReg = 1;
