@@ -55,6 +55,11 @@ class Archivos {
 		if( !$moved ) { echo "Este archivo no pudo ser subido: ".$archivo."<br>"; exit();}
 
 	}
+	function subirArchivoStorage($destino, $archivo, $nombreInputFile,$storage){			    
+		$localFilePath = $_FILES[$nombreInputFile]['tmp_name'];// Ruta del archivo local que deseas subir	
+		$cloudFilePath =  $destino .$archivo;// Ruta en el almacenamiento en la nube de Firebase donde deseas almacenar el archivo
+		$storage->getBucket()->upload(fopen($localFilePath, 'r'), ['name' => $cloudFilePath	]);
+	}
 
 	
 
