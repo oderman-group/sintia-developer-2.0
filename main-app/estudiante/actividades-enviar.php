@@ -44,7 +44,7 @@ if($num == 0){
 		$extension = end($explode);
 		$archivo = uniqid($_SESSION["inst"].'_'.$_SESSION["id"].'_file1_').".".$extension;
 		@unlink($destino."/".$archivo);
-		$archivoSubido->subirArchivo($destino, $archivo, $nombreInputFile);
+		$archivoSubido->subirArchivoStorage(FILE_TAREAS_ENTREGADAS, $archivo, $nombreInputFile,$storage);
 		$pesoMB1 = round($_FILES['file']['size']/1048576,2);
 	}
 
@@ -57,7 +57,7 @@ if($num == 0){
 		$extension2 = end($explode2);
 		$archivo2 = uniqid($_SESSION["inst"].'_'.$_SESSION["id"].'_file2_').".".$extension2;
 		@unlink($destino."/".$archivo2);
-		$archivoSubido->subirArchivo($destino, $archivo2, $nombreInputFile);
+		$archivoSubido->subirArchivoStorage(FILE_TAREAS_ENTREGADAS, $archivo2, $nombreInputFile,$storage);
 		$pesoMB2 = round($_FILES['file2']['size']/1048576,2);
 	}
 
@@ -70,7 +70,7 @@ if($num == 0){
 		$extension3 = end($explode3);
 		$archivo3 = uniqid($_SESSION["inst"].'_'.$_SESSION["id"].'_file3_').".".$extension3;
 		@unlink($destino."/".$archivo3);
-		$archivoSubido->subirArchivo($destino, $archivo3, $nombreInputFile); 
+		$archivoSubido->subirArchivoStorage(FILE_TAREAS_ENTREGADAS, $archivo3, $nombreInputFile,$storage); 
 		$pesoMB3 = round($_FILES['file3']['size']/1048576,2);
 	}
 
@@ -94,7 +94,7 @@ if($num == 0){
 		$extension = end($explode);
 		$archivo = uniqid($_SESSION["inst"].'_'.$_SESSION["id"].'_file1_').".".$extension;
 		@unlink($destino."/".$archivo);
-		$archivoSubido->subirArchivo($destino, $archivo, $nombreInputFile);
+		$archivoSubido->subirArchivoStorage(FILE_TAREAS_ENTREGADAS, $archivo, $nombreInputFile,$storage);
 
 		try{
 			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas_entregas SET ent_archivo='".$archivo."' WHERE ent_id_estudiante='".$datosEstudianteActual['mat_id']."' AND ent_id_actividad='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
@@ -110,7 +110,7 @@ if($num == 0){
 		$extension2 = end($explode2);
 		$archivo2 = uniqid($_SESSION["inst"].'_'.$_SESSION["id"].'_file2_').".".$extension2;
 		@unlink($destino."/".$archivo2);
-		$archivoSubido->subirArchivo($destino, $archivo2, $nombreInputFile);
+		$archivoSubido->subirArchivoStorage(FILE_TAREAS_ENTREGADAS, $archivo2, $nombreInputFile,$storage);
 		try{
 			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas_entregas SET ent_archivo2='".$archivo2."' WHERE ent_id_estudiante='".$datosEstudianteActual['mat_id']."' AND ent_id_actividad='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		} catch (Exception $e) {
@@ -125,7 +125,7 @@ if($num == 0){
 		$extension3 = end($explode3);
 		$archivo3 = uniqid($_SESSION["inst"].'_'.$_SESSION["id"].'_file3_').".".$extension3;
 		@unlink($destino."/".$archivo3);
-		$archivoSubido->subirArchivo($destino, $archivo3, $nombreInputFile);
+		$archivoSubido->subirArchivoStorage(FILE_TAREAS_ENTREGADAS, $archivo3, $nombreInputFile,$storage);
 		try{
 			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas_entregas SET ent_archivo3='".$archivo3."' WHERE ent_id_estudiante='".$datosEstudianteActual['mat_id']."' AND ent_id_actividad='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		} catch (Exception $e) {
