@@ -315,6 +315,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                         </div>
                                     </div>
 
+                                    <?php if (array_key_exists(10, $arregloModulos)) { ?>
                                     <div <?= $hidden ?> class="tab-pane fade" id="nav-configuracion" role="tabpanel" aria-labelledby="nav-configuracion-tab">
 
                                         <div class="panel">
@@ -374,7 +375,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                 <div class="form-group row">
                                                     <label class="col-sm-2 control-label">Duracion en horas</label>
                                                     <div class="col-sm-10">
-                                                        <input type="number" id="horas" name="horas" class="form-control" value="<?= $resultadoCurso["gra_duration_hours"]; ?>" min="1" max="10" <?= $disabledPermiso; ?>>
+                                                        <input type="number" id="horas" name="horas" class="form-control" value="<?=!empty($resultadoCurso["gra_duration_hours"]) ? $resultadoCurso["gra_duration_hours"] : "1"; ?>" min="1" max="10" <?= $disabledPermiso; ?>>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -697,6 +698,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                         </div>
 
                                     </div>
+                                    <?php } ?>
                                     <a href="javascript:void(0);" name="cursos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     <?php if (Modulos::validarPermisoEdicion()) { ?>
                                         <button type="button" onclick="enviarDatos()" class="btn  btn-info">
