@@ -88,6 +88,13 @@ if(!Modulos::validarPermisoEdicion()){
                                             </div>
                                         </div>
 
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 control-label">T&C  <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Estos T&C se veran reflejados en el pie de la factura."><i class="fa fa-question"></i></button></label>
+                                            <div class="col-sm-9">
+                                                <textarea cols="80" id="editor1" name="pieFactura" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?=$disabledPermiso;?>><?=$cfg['invoice_footer'];?></textarea>
+                                            </div>
+                                        </div>
+
                                         <?php if(Modulos::validarPermisoEdicion()){?>
                                             <button type="submit" class="btn  btn-info">
                                                 <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
@@ -140,8 +147,6 @@ if(!Modulos::validarPermisoEdicion()){
         // Replace the <textarea id="editor1"> with a CKEditor 4
         // instance, using default configuration.
         CKEDITOR.replace( 'editor1' );
-        CKEDITOR.replace( 'editor2' );
-        CKEDITOR.replace( 'editor3' );
     </script>
 </body>
 
