@@ -65,7 +65,7 @@ if (!empty($_FILES['imagenCurso']['name'])) {
     $archivo = $_SESSION["inst"] . '_' . $_SESSION["id"] . '_curso_'.$_POST["id_curso"]. "." . $extension;
     $destino = "../files/cursos";
 	$localFilePath = $_FILES['imagenCurso']['tmp_name'];// Ruta del archivo local que deseas subir	
-	$cloudFilePath = 'cursos/'.$archivo;// Ruta en el almacenamiento en la nube de Firebase donde deseas almacenar el archivo
+	$cloudFilePath = FILE_CURSOS.$archivo;// Ruta en el almacenamiento en la nube de Firebase donde deseas almacenar el archivo
 	$storage->getBucket()->upload(fopen($localFilePath, 'r'), ['name' => $cloudFilePath	]);
     // move_uploaded_file($_FILES['imagenCurso']['tmp_name'], $destino . "/" . $archivo);
     try{

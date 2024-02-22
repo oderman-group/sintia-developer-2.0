@@ -6,14 +6,20 @@ require_once("../class/servicios/GradoServicios.php");
 require_once("../class/servicios/MediaTecnicaServicios.php");
 $codigo = $input['codigo'];
 $curso = GradoServicios::consultarCurso($codigo, $input['institucion'], $input['year']);
-$urlImagen = $curso["gra_cover_image"];
 
 ?>
 
 <div class="container">
     <div class="course-details">
         <div class="card" style="width:100%">
-            <img class="card-img-top course-image" width="100%" height="200px" src="../files/cursos/<?= $urlImagen ?>" alt="Card image cap">
+        <?php  
+			$urlImagen= $storage->getBucket()->object(FILE_CURSOS.$curso["gra_cover_image"])->signedUrl(new DateTime('tomorrow')); 
+			$existe=$storage->getBucket()->object(FILE_CURSOS.$curso["gra_cover_image"])->exists();
+			if(!$existe){
+					$urlImagen= "../files/cursos/curso.png";
+			}
+		?>
+            <img class="card-img-top course-image" width="100%" height="200px" src="<?= $urlImagen?>" alt="Card image cap">
             <div class="card-body">
                 <h5 class="card-title  course-title"><?= $curso["gra_nombre"]; ?></h5>
                 <p class="card-text">
@@ -52,16 +58,31 @@ $urlImagen = $curso["gra_cover_image"];
                                 ];
                                 $listaMatriculados = MediaTecnicaServicios::listar($parametros);
                                 $hidden = '';
+                                $texto = '';
+                                $color = '';
+                                $icon = '';
                                 $numInscritos = 0;
                                 if (!empty($listaMatriculados)) {
                                     $numInscritos = count($listaMatriculados);
                                     foreach ($listaMatriculados as $inscrito) {
                                         if ($inscrito['matcur_id_matricula'] == $datosEstudianteActual['mat_id']) {
                                             $hidden = "hidden";
+                                            $color = 'green';
+                                            $icon = 'fa-eye';
+                                            $texto = 'Estoy inscrito!';
+                                            break;
                                         }
                                     }
-                                }
+                                }                                
                                 $porcentaje = ($numInscritos / $curso["gra_maximum_quota"]) * 100;
+
+                                if ($numInscritos >= $curso["gra_maximum_quota"]  AND  empty($hidden)) {
+                                    $hidden = "hidden";
+                                    $color = 'red';
+                                    $icon = 'fa-battery-full';
+                                    $texto = 'Cupos llenos!';
+                                }
+                               
                                 ?>
 
                             </ul>
@@ -76,9 +97,9 @@ $urlImagen = $curso["gra_cover_image"];
                     </div>
                 </div>
                 <div style="text-align: center;">
-                    <button type="button" <?= $hidden ?>  onclick="inscribirse('<?=$curso['gra_id']?>')" class="btn btn-primary">Inscribirme</button>
-
-                    <p style="color:green" <?= empty($hidden) ? "hidden" : "" ?>><i class="fa fa-check"></i> Estoy inscrito</p>
+                    <button type="button" <?= $hidden ?>  onclick="confirmar('<?=$curso['gra_id']?>','<?= $curso['gra_nombre'] ?>')" class="btn btn-primary">Inscribirme</button>
+                    
+                    <p style="color:<?=$color?>" <?= empty($hidden) ? "hidden" : "" ?>><i class="fa <?php $icon?>"></i> <?=$texto?></p>
                 </div>
 
 
