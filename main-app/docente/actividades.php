@@ -138,7 +138,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 														<td><?php 
 														$url= $storage->getBucket()->object(FILE_TAREAS.$resultado["tar_archivo"])->signedUrl(new DateTime('tomorrow'));
 														$existe=$storage->getBucket()->object(FILE_TAREAS.$resultado["tar_archivo"])->exists();
-														if(!empty($resultado['tar_archivo']) and $existe){?><a href=".<?=$url?>" style="text-decoration: underline;" target="_blank">Descargar</a><?php }?></td>
+														if(!empty($resultado['tar_archivo']) and $existe){?><a href="<?=$url?>" style="text-decoration: underline;" target="_blank">Descargar</a><?php }?></td>
 														<td>
 															
 															<?php

@@ -156,10 +156,10 @@ $porcentajeRestante = round($porcentajeRestante,2);
 																	<?php
 																	$url1= $storage->getBucket()->object(FILE_TAREAS.$actividad["tar_archivo"])->signedUrl(new DateTime('tomorrow'));
 																	$url2= $storage->getBucket()->object(FILE_TAREAS.$actividad["tar_archivo2"])->signedUrl(new DateTime('tomorrow'));
-																	$url3= $storage->getBucket()->object(FILE_TAREAS.$actividad["tar_archivo3"])->signedUrl(new DateTime('tomorrow'));
+																	$url3= $storage->getBucket()->object(FILE_TAREAS.$actividad["ar_archivo3"])->signedUrl(new DateTime('tomorrow'));
 																	$existe1=$storage->getBucket()->object(FILE_TAREAS.$actividad["tar_archivo"])->exists();
 																	$existe2=$storage->getBucket()->object(FILE_TAREAS.$actividad["tar_archivo2"])->exists();
-																	$existe3=$storage->getBucket()->object(FILE_TAREAS.$actividad["tar_archivo3"])->exists();
+																	$existe3=$storage->getBucket()->object(FILE_TAREAS.$actividad["ar_archivo3"])->exists();
 																	?>
 							                                        <?php if(!empty($actividad['tar_archivo'])  and $existe1){?><li><a href="<?=$url1?>" target="_blank"><?=$actividad['tar_archivo'];?></a></li><?php }?>
 																	<?php if(!empty($actividad['tar_archivo2']) and $existe2){?><li><a href="<?=$url2;?>" target="_blank"><?=$actividad['tar_archivo2'];?></a></li><?php }?>
