@@ -88,6 +88,7 @@ if (!Modulos::validarPermisoEdicion()) {
                     </div>
                 </div>
 
+                <?php if (array_key_exists(10, $arregloModulos)) { ?>
                 <div class="tab-pane fade" id="nav-configuracion" role="tabpanel" aria-labelledby="nav-configuracion-tab">
                     <div class="panel">
                         <div class="panel-body">
@@ -131,7 +132,7 @@ if (!Modulos::validarPermisoEdicion()) {
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label">Duracion en horas</label>
                                 <div class="col-sm-10">
-                                    <input type="number" id="horas" name="horas" class="form-control" value="0"  min="1" max="10" <?= $disabledPermiso; ?>>
+                                    <input type="number" id="horas" name="horas" class="form-control" value="1"  min="1" max="10" <?= $disabledPermiso; ?>>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -155,6 +156,7 @@ if (!Modulos::validarPermisoEdicion()) {
                         </div>
                     </div>
                 </div>
+                <?php } ?>
                 <?php if (Modulos::validarPermisoEdicion()) { ?>
                     <button type="submit" class="btn  btn-info">
                         <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios
