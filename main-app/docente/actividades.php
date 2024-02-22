@@ -135,7 +135,10 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 														</td>
 														<td><a href="actividades-entregas.php?idR=<?=base64_encode($resultado['tar_id']);?>" style="text-decoration: underline;"><?=$resultado['tar_titulo'];?></a></td>
 														<td><?=$frases[125][$datosUsuarioActual['uss_idioma']];?>: <?=$resultado['tar_fecha_disponible'];?><br><?=$frases[126][$datosUsuarioActual['uss_idioma']];?>: <?=$resultado['tar_fecha_entrega'];?></td>
-														<td><?php if(!empty($resultado['tar_archivo']) and file_exists('../files/tareas/'.$resultado['tar_archivo'])){?><a href="../files/tareas/<?=$resultado['tar_archivo'];?>" style="text-decoration: underline;" target="_blank">Descargar</a><?php }?></td>
+														<td><?php 
+														$url= $storage->getBucket()->object(FILE_TAREAS.$resultado["tar_archivo"])->signedUrl(new DateTime('tomorrow'));
+														$existe=$storage->getBucket()->object(FILE_TAREAS.$resultado["tar_archivo"])->exists();
+														if(!empty($resultado['tar_archivo']) and $existe){?><a href=".<?=$url?>" style="text-decoration: underline;" target="_blank">Descargar</a><?php }?></td>
 														<td>
 															
 															<?php
