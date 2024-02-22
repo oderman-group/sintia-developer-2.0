@@ -15,6 +15,8 @@ if (!empty($_GET["id"])) {
     $id = base64_decode($_GET["id"]);
 }
 
+$configFinanzas=Movimientos::configuracionFinanzas($conexion, $config);
+
 try{
     $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas fcu
     INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=fcu_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
@@ -186,7 +188,7 @@ if ($resultado["fcu_tipo"] == FACTURA_COMPRA) {
                                 </tr>
                                 <tr>
                                     <td>
-                                        <?=$config['conf_pie_factura']?>
+                                        <?=$configFinanzas['invoice_footer']?>
                                     </td>
                                 </tr>
                             </table>
