@@ -94,7 +94,7 @@ class PreguntaGeneral  extends Servicios{
         
         $sqlInicial = "SELECT * FROM ".BD_ADMIN.".general_preguntas";
         if($parametrosArray && count($parametrosArray)>0){
-          $parametrosValidos = array('pregg_id_evaluacion','pregg_tipo_pregunta','pregg_obligatoria','evag_editada','pregg_id_evaluacion','pregg_year','pregg_visible');
+          $parametrosValidos = array('pregg_id_evaluacion','pregg_tipo_pregunta','pregg_obligatoria','evag_editada','pregg_id_evaluacion','pregg_year','pregg_visible','pregg_institucion');
           $sqlInicial = Servicios::concatenarWhereAnd($sqlInicial,$parametrosValidos,$parametrosArray);
         };
         $limite = !empty($parametrosArray['limite']) ? $parametrosArray['limite'] : "";
