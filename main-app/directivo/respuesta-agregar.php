@@ -75,23 +75,6 @@ if (!Modulos::validarPermisoEdicion()) {
                                         <div class="col-sm-4">
                                             <input type="number" name="valor" required class="form-control" <?= $disabledPermiso; ?>>
                                         </div>
-                                        
-                                        <label class="col-sm-2 control-label"><?=$frases[139][$datosUsuarioActual['uss_idioma']];?></label>
-                                        <div class="col-sm-4">
-                                            <select class="form-control  select2" name="pregunta" <?= $disabledPermiso; ?>>
-                                                <option value="">Escoja una opción</option>
-                                                <?php
-                                                    $parametros = [
-                                                        'pregg_institucion'=>$config['conf_id_institucion'],
-                                                        'pregg_year'=>$_SESSION["bd"]
-                                                    ];
-                                                    $consulta = PreguntaGeneral::listar($parametros);
-													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-                                                ?>
-                                                    <option value="<?=$resultado['pregg_id']?>"><?=$resultado['pregg_descripcion']?></option>
-                                                <?php }?>
-                                            </select>
-                                        </div>
                                     </div>
                                     
                                     <div class="text-right">

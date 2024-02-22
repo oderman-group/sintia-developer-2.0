@@ -17,7 +17,7 @@ class Respuesta {
     )
     {
         try {
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".general_respuestas 
+            $consulta = mysqli_query($conexion, "SELECT *, (SELECT COUNT(gpr_id_respuesta) as preguntas FROM ".BD_ADMIN.".general_preguntas_respuestas WHERE gpr_id_respuesta=resg_id) as preguntas FROM ".BD_ADMIN.".general_respuestas 
             WHERE resg_eliminado='".NO."' AND resg_institucion = {$config['conf_id_institucion']} AND resg_year = {$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
@@ -42,7 +42,7 @@ class Respuesta {
     {
 
         try {
-            mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".general_respuestas (resg_descripcion, resg_id_pregunta, resg_valor, resg_institucion, resg_year)VALUES('".$POST["descripcion"]."', '".$POST["pregunta"]."', '".$POST["valor"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
+            mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".general_respuestas (resg_descripcion, resg_valor, resg_institucion, resg_year)VALUES('".$POST["descripcion"]."', '".$POST["valor"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
@@ -90,7 +90,7 @@ class Respuesta {
     {
 
         try {
-            mysqli_query($conexion, "UPDATE ".BD_ADMIN.".general_respuestas SET resg_descripcion='".$POST["descripcion"]."', resg_id_pregunta='".$POST["pregunta"]."', resg_valor='".$POST["valor"]."' WHERE resg_id='".$POST["id"]."' AND resg_institucion={$config['conf_id_institucion']} AND resg_year={$_SESSION["bd"]}");
+            mysqli_query($conexion, "UPDATE ".BD_ADMIN.".general_respuestas SET resg_descripcion='".$POST["descripcion"]."', resg_valor='".$POST["valor"]."' WHERE resg_id='".$POST["id"]."' AND resg_institucion={$config['conf_id_institucion']} AND resg_year={$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }

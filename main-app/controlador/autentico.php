@@ -116,6 +116,11 @@ if($num>0)
 
 	$urlActual = $_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'];
 
+	
+	if( !empty($_POST['guest']) ) {
+		$url = $_SERVER['HTTP_REFERER'];
+	} 
+
 	mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_estado=1, uss_ultimo_ingreso=now(), uss_intentos_fallidos=0 WHERE uss_id='".$fila['uss_id']."' AND institucion={$_SESSION["idInstitucion"]} AND year={$_SESSION["bd"]}");
 ?>
 <!DOCTYPE html>

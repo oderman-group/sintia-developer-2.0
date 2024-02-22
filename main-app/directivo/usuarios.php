@@ -307,6 +307,11 @@ if (!Modulos::validarPermisoEdicion()) {
 																		<li><a href="../compartido/planilla-docentes.php?docente=<?= base64_encode($resultado['uss_id']); ?>" target="_blank">Planillas de las cargas</a></li>
 																	<?php } ?>
 
+																	<?php if (($datosUsuarioActual['uss_tipo'] == TIPO_DEV && $resultado['uss_tipo'] != TIPO_DEV) ||
+																			($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && $resultado['uss_tipo'] != TIPO_DEV && $resultado['uss_tipo'] != TIPO_DIRECTIVO) && Modulos::validarSubRol(['DT0327'])) { ?>
+																		<li><a href="../compartido/informe-historial-ingreso.php?id=<?= base64_encode($resultado['uss_id']); ?>" target="_blank">Historial de Ingreso</a></li>
+																	<?php } ?>
+
 																</ul>
 															</div>
 														</td>

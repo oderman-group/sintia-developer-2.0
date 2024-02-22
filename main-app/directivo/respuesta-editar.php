@@ -86,23 +86,6 @@ if (!Modulos::validarPermisoEdicion()) {
                                         <div class="col-sm-4">
                                             <input type="number" name="valor" required class="form-control" <?= $disabledPermiso; ?> value="<?= $resultado['resg_valor']; ?>">
                                         </div>
-                                        
-                                        <label class="col-sm-2 control-label"><?=$frases[139][$datosUsuarioActual['uss_idioma']];?></label>
-                                        <div class="col-sm-4">
-                                            <select class="form-control  select2" name="pregunta" <?= $disabledPermiso; ?>>
-                                                <option value="">Escoja una opción</option>
-                                                <?php
-                                                    $parametros = [
-                                                        'pregg_institucion'=>$config['conf_id_institucion'],
-                                                        'pregg_year'=>$_SESSION["bd"]
-                                                    ];
-                                                    $consultaPregunta = PreguntaGeneral::listar($parametros);
-													while($resultadoPregunta = mysqli_fetch_array($consultaPregunta, MYSQLI_BOTH)){
-                                                ?>
-                                                    <option value="<?=$resultadoPregunta['pregg_id']?>" <?=$resultado['resg_id_pregunta'] == $resultadoPregunta['pregg_id'] ? "selected" : "";?>><?=$resultadoPregunta['pregg_descripcion']?></option>
-                                                <?php }?>
-                                            </select>
-                                        </div>
                                     </div>
                                     <div class="text-right">
                                         <a href="javascript:void(0);" name="respuesta.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i><?= $frases[184][$datosUsuarioActual['uss_idioma']]; ?></a>
