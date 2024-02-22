@@ -475,7 +475,7 @@ class Movimientos {
     {
 
         try {
-            mysqli_query($conexion,"INSERT INTO ".BD_FINANCIERA.".configuration(consecutive_start, institucion, year) VALUES('".$POST['consecutivo']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+            mysqli_query($conexion,"INSERT INTO ".BD_FINANCIERA.".configuration(consecutive_start, invoice_footer, institucion, year) VALUES('".$POST['consecutivo']."', '".$POST['pieFactura']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
@@ -496,7 +496,7 @@ class Movimientos {
     {
 
         try {
-            mysqli_query($conexion,"UPDATE ".BD_FINANCIERA.".configuration SET consecutive_start='".$POST['consecutivo']."' WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            mysqli_query($conexion,"UPDATE ".BD_FINANCIERA.".configuration SET consecutive_start='".$POST['consecutivo']."', invoice_footer='".$POST['pieFactura']."' WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
