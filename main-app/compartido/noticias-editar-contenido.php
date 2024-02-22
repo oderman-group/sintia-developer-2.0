@@ -49,13 +49,15 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
                                                 <input type="file" name="imagen" class="form-control">
                                             </div>
 											<?php
-                                                if(!empty($datosConsulta['not_imagen']) &&  file_exists("../files/publicaciones/".$datosConsulta['not_imagen'])){
+                                                $urlImagen= $storage->getBucket()->object(FILE_PUBLICACIONES.$datosConsulta["not_imagen"])->signedUrl(new DateTime('tomorrow')); 
+                                                $existe=$storage->getBucket()->object(FILE_PUBLICACIONES.$datosConsulta["not_imagen"])->exists();                                               
+                                                if(!empty($datosConsulta['not_imagen']) &&  $existe){
                                                 $arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
                                                 $arrayDatos = json_encode($arrayEnviar);
                                                 $objetoEnviar = htmlentities($arrayDatos);
                                             ?>
 												<div class="item col-sm-4" id="reg<?=$datosConsulta['not_id']?>">
-													<img src="../files/publicaciones/<?=$datosConsulta['not_imagen'];?>" alt="<?=$datosConsulta['not_titulo'];?>" width="50">
+													<img src="<?=$urlImagen?>" alt="<?=$datosConsulta['not_titulo'];?>" width="50">
 													<a href="#" title="<?=$objetoEnviar;?>" id="<?=$datosConsulta['not_id'];?>" name="../compartido/noticias-eliminar-imagen.php?idR=<?=base64_encode($datosConsulta['not_id']);?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i></a>
 												</div>
 												<p>&nbsp;</p>
@@ -113,9 +115,12 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
                                             <div class="col-sm-6">
                                                 <input type="file" name="archivo" class="form-control">
                                             </div>
-											<?php if(!empty($datosConsulta['not_archivo']) && file_exists("../files/publicaciones/".$datosConsulta['not_archivo'])){?>
+											<?php 
+                                            $url= $storage->getBucket()->object(FILE_PUBLICACIONES.$datosConsulta["not_archivo"])->signedUrl(new DateTime('tomorrow'));
+                                            $existe=$storage->getBucket()->object(FILE_PUBLICACIONES.$datosConsulta["not_archivo"])->exists();
+                                            if(!empty($datosConsulta['not_archivo']) && $existe){?>
 												<div class="col-sm-4">
-													<a href="../files/publicaciones/<?=$datosConsulta['not_archivo'];?>" target="_blank"><i class="fa fa-download"></i> Descargar Archivo</a>
+													<a href="<?=$url?>" target="_blank"><i class="fa fa-download"></i> Descargar Archivo</a>
 											</div>
 												<p>&nbsp;</p>
 											<?php }?>

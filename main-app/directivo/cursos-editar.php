@@ -334,7 +334,14 @@ if (!Modulos::validarPermisoEdicion()) {
                                                     </div>
 
                                                     <div class="col-sm-8">
-                                                        <img id="imagenSelect" class="cursor-mano" src="../files/cursos/<?= empty($resultadoCurso["gra_cover_image"]) ? "curso.png" : $resultadoCurso["gra_cover_image"] ?>" alt="avatar" style="height: 400px;width: 100%;border:3px dashed;padding:10px;border-radius:40px / 30px">
+                                                        <?php  
+                                                        $urlImagen= $storage->getBucket()->object(FILE_CURSOS.$resultadoCurso["gra_cover_image"])->signedUrl(new DateTime('tomorrow')); 
+                                                        $existe=$storage->getBucket()->object(FILE_CURSOS.$resultadoCurso["gra_cover_image"])->exists();
+                                                        if(!$existe){
+                                                            $urlImagen= "../files/cursos/curso.png";
+                                                        }
+                                                        ?>
+                                                       <img id="imagenSelect" class="cursor-mano" src="<?= $urlImagen?>" alt="avatar" style="height: 400px;width: 100%;border:3px dashed;padding:10px;border-radius:40px / 30px">
                                                     </div>
                                                     <div class="col-sm-2">
                                                     </div>

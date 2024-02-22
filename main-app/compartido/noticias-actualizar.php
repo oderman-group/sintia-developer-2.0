@@ -19,7 +19,10 @@ if (!empty($_FILES['imagen']['name'])) {
     $extension = end($explode);
     $imagen = uniqid($_SESSION["inst"] . '_' . $_SESSION["id"] . '_imgNoti_') . "." . $extension;
     $destino = "../files/publicaciones";
-    move_uploaded_file($_FILES['imagen']['tmp_name'], $destino . "/" . $imagen);
+    $localFilePath = $_FILES['imagen']['tmp_name'];// Ruta del archivo local que deseas subir	
+	$cloudFilePath = FILE_PUBLICACIONES.$imagen;// Ruta en el almacenamiento en la nube de Firebase donde deseas almacenar el archivo
+	$storage->getBucket()->upload(fopen($localFilePath, 'r'), ['name' => $cloudFilePath	]);
+    // move_uploaded_file($_FILES['imagen']['tmp_name'], $destino . "/" . $imagen);
     try{
         mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_imagen='" . $imagen . "' WHERE not_id='" . $_POST["idR"] . "'");
     } catch (Exception $e) {
@@ -32,7 +35,10 @@ if (!empty($_FILES['archivo']['name'])) {
     $extension = end($explode);
     $archivo = uniqid($_SESSION["inst"] . '_' . $_SESSION["id"] . '_fileNoti_') . "." . $extension;
     $destino = "../files/publicaciones";
-    move_uploaded_file($_FILES['archivo']['tmp_name'], $destino . "/" . $archivo);
+    $localFilePath = $_FILES['archivo']['tmp_name'];// Ruta del archivo local que deseas subir	
+	$cloudFilePath = FILE_PUBLICACIONES.$archivo;// Ruta en el almacenamiento en la nube de Firebase donde deseas almacenar el archivo
+	$storage->getBucket()->upload(fopen($localFilePath, 'r'), ['name' => $cloudFilePath	]);
+    // move_uploaded_file($_FILES['archivo']['tmp_name'], $destino . "/" . $archivo);
     try{
         mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".social_noticias SET not_archivo='" . $archivo . "' WHERE not_id='" . $_POST["idR"] . "'");
     } catch (Exception $e) {

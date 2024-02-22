@@ -111,11 +111,13 @@
                                                         <td>
 
                                                         <?php
+                                                        $url= $storage->getBucket()->object(FILE_TAREAS.$resultado["tar_archivo"])->signedUrl(new DateTime('tomorrow'));
+                                                        $existe=$storage->getBucket()->object(FILE_TAREAS.$resultado["tar_archivo"])->exists();
                                                         if($sd[0] <= 0){
-                                                        if($resultado['tar_archivo']!=""  and file_exists('../files/tareas/'.$resultado['tar_archivo'])){
+                                                        if($resultado['tar_archivo']!=""  and $existe){
                                                         ?>
 
-                                                            <a href="../files/tareas/<?=$resultado['tar_archivo'];?>" target="_blank">Descargar </a>
+                                                            <a href="<?=$url?>" target="_blank">Descargar </a>
 
                                                         <?php 
                                                         }
