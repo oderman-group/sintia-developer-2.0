@@ -232,7 +232,7 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 	}
 </style>
 <div id="gifCarga" class="gif-carga">
-	<img  height="100px" width="100px" src="https://codigofuente.io/wp-content/uploads/2018/09/progress.gif" alt="Cargando...">
+	<img  height="200px" width="200px" src="https://i.gifer.com/Vp3R.gif" alt="Cargando...">
 </div>
 <!-- END HEAD -->
 <?php include("../compartido/body.php"); ?>
