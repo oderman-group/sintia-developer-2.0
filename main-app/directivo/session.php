@@ -11,7 +11,7 @@ if (empty($idSession)) {
 	require_once '../class/Utilidades.php';
 	$directory = Utilidades::getDirectoryUserFromUrl($_SERVER['PHP_SELF']);
 	$page      = Utilidades::getPageFromUrl($_SERVER['PHP_SELF']);
-	header("Location:../controlador/salir.php?&urlDefault=".$page."&directory=".$directory);
+	header("Location:../controlador/salir.php?urlDefault=".$page."&directory=".$directory);
 } else {
 	require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 	require_once(ROOT_PATH."/config-general/config.php");
