@@ -47,6 +47,8 @@ define('TIPO_DOCENTE', 2);
 define('TIPO_ACUDIENTE', 3);
 define('TIPO_ESTUDIANTE', 4);
 define('TIPO_DIRECTIVO', 5);
+define('TIPO_CLIENTE', 7);
+define('TIPO_PROVEEDOR', 8);
 
 /* CLIENTES CON CAMBIOS PARTICULARES*/
 define('ICOLVEN', 1);

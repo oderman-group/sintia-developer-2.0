@@ -21,7 +21,8 @@ foreach ($preguntasEvaluacion as $arrayPreguntas) {
 }
 
 $parametros = [
-    'evag_year'=>$_SESSION['bd']
+    'pregg_institucion'=>$config['conf_id_institucion'],
+    'pregg_year'=>$_SESSION['bd']
 ];
 $consultaPreguntas = PreguntaGeneral::listar($parametros);
 ?>
@@ -80,7 +81,7 @@ $consultaPreguntas = PreguntaGeneral::listar($parametros);
                                 <div class="col-sm-12">
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
-                                            <header>Preguntas ( <label style="font-weight: bold;" id="cantSeleccionadasPreguntas"></label>/<?= mysqli_num_rows($consultaPreguntas) ?> )
+                                            <header>Preguntas ( <label style="font-weight: bold;" id="cantSeleccionadasPreguntas"></label>/<?=!empty($consultaPreguntas) ? mysqli_num_rows($consultaPreguntas) : "0"; ?> )
                                             </header>
                                         </div>
                                         <div class="card-body">
@@ -106,6 +107,7 @@ $consultaPreguntas = PreguntaGeneral::listar($parametros);
                                                     <tbody>
                                                         <?php
                                                         $contReg = 1;
+                                                        if (!empty($consultaPreguntas)) {
                                                         while ($preguntas = mysqli_fetch_array($consultaPreguntas, MYSQLI_BOTH)) {
                                                             $cheked = '';
                                                             if (!empty($idPreguntas)) {
@@ -162,7 +164,7 @@ $consultaPreguntas = PreguntaGeneral::listar($parametros);
 
                                                             </tr>
                                                         <?php $contReg++;
-                                                        } ?>
+                                                        }} ?>
                                                     </tbody>
                                                 </table>
                                             </div>
