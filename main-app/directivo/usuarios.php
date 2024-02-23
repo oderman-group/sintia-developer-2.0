@@ -298,7 +298,7 @@ if (!Modulos::validarPermisoEdicion()) {
 																			<li><a href="usuarios-acudidos.php?id=<?= base64_encode($resultado['uss_id']); ?>">Acudidos</a></li>
 																		<?php } ?>
 
-																		<?php if ((!empty($numCarga) && $numCarga == 0 && $resultado['uss_tipo'] == TIPO_DOCENTE) || $resultado['uss_tipo'] == TIPO_ACUDIENTE || ($resultado['uss_tipo'] == TIPO_ESTUDIANTE && empty($tieneMatricula))) { ?>
+																		<?php if ((!empty($numCarga) && $numCarga == 0 && $resultado['uss_tipo'] == TIPO_DOCENTE) || $resultado['uss_tipo'] == TIPO_ACUDIENTE || ($resultado['uss_tipo'] == TIPO_ESTUDIANTE && empty($tieneMatricula)) || $resultado['uss_tipo'] == TIPO_CLIENTE || $resultado['uss_tipo'] == TIPO_PROVEEDOR) { ?>
 																			<li><a href="javascript:void(0);" title="<?= $objetoEnviar; ?>" name="usuarios-eliminar.php?id=<?= base64_encode($resultado['uss_id']); ?>" onClick="deseaEliminar(this)" id="<?= $resultado['uss_id']; ?>">Eliminar</a></li>
 																		<?php } ?>
 																	<?php } ?>
