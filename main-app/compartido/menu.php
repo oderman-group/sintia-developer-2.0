@@ -85,10 +85,6 @@
 							<?php include_once("menu-acudientes.php");?>
 							
 							<?php include_once("menu-estudiantes.php");?>
-							
-							<?php include_once("menu-cliente.php");?>
-							
-							<?php include_once("menu-proveedor.php");?>
 	                    </ul>
 	                </div>
                 </div>
