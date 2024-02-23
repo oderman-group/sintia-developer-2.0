@@ -72,6 +72,7 @@ function agregarPagina(page) {
     nuevaOpcion.selected = true;
     select.appendChild(nuevaOpcion);
     contarPaginasSeleccionadas();
+    actualizarSubRol();
 }
 
 /**
@@ -84,6 +85,7 @@ function eliminarPagina(page) {
         select.removeChild(opcionAEliminar);
     }
     contarPaginasSeleccionadas();
+    actualizarSubRol();
 }
 
 /**
@@ -121,3 +123,84 @@ function validarPaginasDependencia(datosPagina) {
         seleccionarPagina(datosPagina);
     }
 }
+
+/**
+ * Esta función me actualiza un sub rol
+ */
+function actualizarSubRol(datos) {
+    var nombre  = document.getElementById('nombreSubrol').value;
+    var id  = document.getElementById('idSubRol').value;
+    
+    var selectElementDirectivos = document.getElementById('directivos');
+    var selectedOptionsDirectivos = [];
+    for (var i = 0; i < selectElementDirectivos.options.length; i++) {
+        if (selectElementDirectivos.options[i].selected) {
+            selectedOptionsDirectivos.push(selectElementDirectivos.options[i].value);
+        }
+    }
+
+    var directivos = encodeURIComponent(JSON.stringify(selectedOptionsDirectivos));
+    
+    var selectElementPaginas = document.getElementById('paginasSeleccionadas');
+    var selectedOptionsPaginas = [];
+    for (var i = 0; i < selectElementPaginas.options.length; i++) {
+        if (selectElementPaginas.options[i].selected) {
+            selectedOptionsPaginas.push(selectElementPaginas.options[i].value);
+        }
+    }
+
+    var paginas = encodeURIComponent(JSON.stringify(selectedOptionsPaginas));
+
+	fetch('../directivo/sub-roles-actualizar.php?nombre='+nombre+'&directivos='+directivos+'&paginas='+paginas+'&id='+id, {
+		method: 'GET'
+	})
+	.then(response => response.text()) // Convertir la respuesta a texto
+	.then(data => {
+        $.toast({
+
+            heading: 'Proceso completado', 
+            text: 'El Sub Rol se actualizo correctamente...', 
+            position: 'bottom-right',
+            showHideTransition: 'slide',
+            loaderBg:'#26c281', 
+            icon: 'success', 
+            hideAfter: 5000, 
+            stack: 6
+
+        });
+	})
+	.catch(error => {
+		// Manejar errores
+		console.error('Error:', error);
+	});
+}
+
+// /**
+//  * Esta función me los usuarios de una sub rol
+//  */
+// function actualizarUsuariosSubRol(datos) {
+//     var directivos  = datos.value
+//     var id          = datos.getAttribute('data-id-subRol');
+// 	fetch('../directivo/sub-roles-actualizar.php?directivos='+directivos+'&id='+id, {
+// 		method: 'GET'
+// 	})
+// 	.then(response => response.text()) // Convertir la respuesta a texto
+// 	.then(data => {
+//         $.toast({
+
+//             heading: 'Proceso completado', 
+//             text: 'El nombre se actualizo correctamente...', 
+//             position: 'bottom-right',
+//             showHideTransition: 'slide',
+//             loaderBg:'#26c281', 
+//             icon: 'success', 
+//             hideAfter: 5000, 
+//             stack: 6
+
+//         });
+// 	})
+// 	.catch(error => {
+// 		// Manejar errores
+// 		console.error('Error:', error);
+// 	});
+// }
