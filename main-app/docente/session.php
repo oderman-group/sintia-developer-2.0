@@ -1,4 +1,7 @@
 <?php 
+// Configuración de sesión
+ini_set('session.gc_maxlifetime', 43200);
+session_set_cookie_params(43200);
 session_start();
 //Si otro usuario de mayor rango entra como él
 if(isset($_SESSION["idO"]) and $_SESSION["idO"]!=""){$idSession = $_SESSION["idO"];}else{$idSession = $_SESSION["id"];}
