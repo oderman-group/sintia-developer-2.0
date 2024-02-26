@@ -138,7 +138,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
                                     <a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($i);?>&carga=<?=base64_encode($cargaConsultaActual);?>" <?=$atributosA;?>><?=$notasResultadoFinal?></a><br><?=$tipo;?><br>
 
                                     <?php if(!empty($notasResultado['bol_nota']) && $notasResultado['bol_nota']<$config[5]){?>
-                                        <input size="5" name="<?=$i?>/<?=$cargaConsultaActual;?>" id="<?=$resultado['mat_id'];?>" value="" alt="<?=$notasResultado['bol_nota'];?>" onChange="def(this)" tabindex="2" style="text-align: center;"><br>
+                                        <input size="5" name="<?=$i?>_<?=$cargaConsultaActual;?>" id="<?=$resultado['mat_id'];?>" value="" alt="<?=$notasResultado['bol_nota'];?>" onChange="def(this)" tabindex="2" style="text-align: center;"><br>
                                         <span style="font-size:9px; color:rgb(0,0,153);"><?php if(!empty($notasResultado['bol_observaciones'])) echo $notasResultado['bol_observaciones'];?></span>
                                     <?php }?>
 
@@ -203,7 +203,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
                                 <?php
                                 if($n==$datosCargaActual['gra_periodos'] and $definitiva<$config[5]) $e = ''; else $e = 'disabled';
                                 ?>
-                                <input size="5" name="<?=$i?>/<?=$cargaConsultaActual;?>" id="<?=$resultado['mat_id'];?>" value="" onChange="niv(this)" tabindex="2" <?=$e;?> style="font-size: 13px; text-align: center;">
+                                <input size="5" name="<?=$i?>_<?=$cargaConsultaActual;?>" id="<?=$resultado['mat_id'];?>" value="" onChange="niv(this)" tabindex="2" <?=$e;?> style="font-size: 13px; text-align: center;">
                             </td>
                         </tr>
                         <?php
