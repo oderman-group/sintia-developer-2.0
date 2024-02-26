@@ -14,11 +14,13 @@ $request_data_sanitizado = mysqli_real_escape_string($conexion, $request_data);
 require_once(ROOT_PATH."/main-app/class/EnviarEmail.php");
 
 $contenidoMsg = '
-	<p>A user has got an error:</p>
+	<p>An user has got an error:</p>
 	<p>
-		<b>Institution:</b> '.$config['conf_id_institucion'].'<br>
+		<b>Enviroment:</b> '.ENVIROMENT.'<br>
+		<b>Institution:</b> '.$config['conf_id_institucion'].' '.$_SESSION["datosUnicosInstitucion"]["ins_nombre"].'<br>
 		<b>Year:</b> '.$_SESSION["bd"].'<br>
 		<b>User:</b> '.$_SESSION["id"].' - '.$datosUsuarioActual['uss_nombre'].'<br>
+		<b>User contact data:</b> '.$datosUsuarioActual['uss_email'].' - '.$datosUsuarioActual['uss_celular'].' - '.$datosUsuarioActual['uss_telefono'].'<br>
 		<b>Date:</b> '.date("d/m/Y h:i:s").'<br>
 		<b>Cod. Error:</b> '.$numError.'<br>
 		<b>Current URL:</b> '.$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING'].'<br>
