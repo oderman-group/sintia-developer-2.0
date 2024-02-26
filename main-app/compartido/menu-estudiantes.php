@@ -8,12 +8,14 @@
 
 	                        
 							
+							<?php if (array_key_exists(1, $arregloModulos)) { ?>
 							<li class="nav-item">
 	                            <a href="cargas.php" class="nav-link nav-toggle"> <i class="material-icons">class</i>
 	                                <span class="title"><?=$frases[73][$datosUsuarioActual['uss_idioma']];?></span> 
 	                            </a>
 	                        </li>
-							<?php if ($datosEstudianteActual['mat_tipo_matricula'] == GRADO_INDIVIDUAL) {?>
+							<?php } ?>
+							<?php if (array_key_exists(10, $arregloModulos) && $datosEstudianteActual['mat_tipo_matricula'] == GRADO_INDIVIDUAL) {?>
 							<li class="nav-item">
 	                            <a href="cargas-adicionales.php" class="nav-link nav-toggle"> <i class="fa-solid fa-sitemap"></i>
 	                                <span class="title"><?=$frases[429][$datosUsuarioActual['uss_idioma']];?></span> 
@@ -22,6 +24,7 @@
 							<?php }?>
 
 
+							<?php if (array_key_exists(1, $arregloModulos)) { ?>
 							<?php if((!empty($_COOKIE["cargaE"]) && !empty($_COOKIE["periodoE"])) || (!empty($_GET["carga"]) && !empty($_GET["periodo"]))){?>
 							<li class="nav-item">
 	                            <a href="#" class="nav-link nav-toggle"> <i class="material-icons">assignment_ind</i>
@@ -69,54 +72,62 @@
 	                            </ul>
 	                        </li>
 							<?php }?>
+							<?php } ?>
 							
+							<?php if (array_key_exists(19, $arregloModulos)) { ?>
 							<li class="nav-item">
 	                            <a href="cargas-carpetas.php" class="nav-link nav-toggle"> <i class="fa fa-folder"></i>
 	                                <span class="title"><?=$frases[216][$datosUsuarioActual['uss_idioma']];?></span> 
 	                            </a>
 	                        </li>
+							<?php } ?>
 
 							
+							<?php if (array_key_exists(7, $arregloModulos)) { ?>
 							<li class="nav-item">
 	                            <a href="matricula.php" class="nav-link nav-toggle"> <i class="fa fa-pencil-square-o"></i>
 	                                <span class="title"><?=$frases[60][$datosUsuarioActual['uss_idioma']];?></span> 
 	                            </a>
 	                        </li>
+							<?php } ?>
 							
+							<?php if (array_key_exists(2, $arregloModulos)) { ?>
 							<li class="nav-item">
 	                            <a href="estado-de-cuenta.php" class="nav-link nav-toggle"> <i class="material-icons">attach_money</i>
 	                                <span class="title"><?=$frases[104][$datosUsuarioActual['uss_idioma']];?></span> 
 	                            </a>
 	                        </li>
+							<?php } ?>
 							
+							<?php if (array_key_exists(3, $arregloModulos)) { ?>
 							<li class="nav-item">
 	                            <a href="reportes-disciplinarios.php" class="nav-link nav-toggle"> <i class="material-icons">backspace</i>
 	                                <span class="title"><?=$frases[105][$datosUsuarioActual['uss_idioma']];?></span> 
 	                            </a>
 	                        </li>
+							<?php } ?>
 
-							<?php if($config['conf_ver_observador']==1){?>
-
+							<?php if(array_key_exists(3, $arregloModulos) && $config['conf_ver_observador']==1){?>
 							<li class="nav-item">
 	                            <a href="aspectos.php" class="nav-link nav-toggle"> <i class="material-icons">backspace</i>
 	                                <span class="title"><?=$frases[264][$datosUsuarioActual['uss_idioma']];?></span> 
 	                            </a>
 	                        </li>
-
 							<?php }?>
 							
+							<?php if (array_key_exists(1, $arregloModulos)) { ?>
 							<li class="nav-item">
 	                            <a href="estudiantes.php" class="nav-link nav-toggle"> <i class="material-icons">group</i>
 	                                <span class="title"><?=$frases[74][$datosUsuarioActual['uss_idioma']];?></span> 
 	                            </a>
 	                        </li>
+							<?php } ?>
 
+							<?php if (array_key_exists(6, $arregloModulos)) { ?>
 							<li class="nav-item active" data-step="11" data-intro="<b><?=$frases[175][$datosUsuarioActual['uss_idioma']];?>:</b> Encuentra los mejores productos y servicios complementarios." data-position='left'>
 	                            <a href="marketplace.php" class="nav-link nav-toggle bg-warning text-dark"> <i class="fa fa-shopping-cart text-dark"></i>
 	                                <span class="title">Marketplace</span> 
 	                            </a>
 	                        </li>
-
-							
-							
+							<?php }?>
 							<?php }?>
