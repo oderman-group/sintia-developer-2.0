@@ -7,7 +7,7 @@
 							?>
 							
 							<li class="nav-item" data-step="13" data-intro="<b>Cargas académicas:</b> Aquí encontrarás las cargas académicas que los directivos te han asignado para trabajar. Debes seleccionar una carga primero, antes de empezar a llenar cualquier información como calificaciones, actividades, foros, etc." data-position='right' data-scrollTo='tooltip'>
-	                            <a href="cargas.php" class="nav-link nav-toggle"> <i class="material-icons">class</i>
+	                            <a <?php validarModuloMenu(1, "cargas.php", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="material-icons">class</i>
 	                                <span class="title"><?=$frases[12][$datosUsuarioActual['uss_idioma']];?></span> 
 	                            </a>
 	                        </li>
@@ -75,14 +75,14 @@
 							
 							<?php if(isset($datosCargaActual) && !empty($datosCargaActual['car_id'])){?>
 							<li class="nav-item">
-	                            <a href="estudiantes.php" class="nav-link nav-toggle"> <i class="fa fa-group"></i>
+	                            <a <?php validarModuloMenu(1, "estudiantes.php", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-group"></i>
 	                                <span class="title">Mis <?=$frases[55][$datosUsuarioActual['uss_idioma']];?></span> 
 	                            </a>
 	                        </li>
 	                        <?php }?>
 
 	                        <li class="nav-item">
-	                            <a href="estudiantes-todos.php" class="nav-link nav-toggle"> <i class="fa fa-group"></i>
+	                            <a <?php validarModuloMenu(7, "estudiantes-todos.php", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-group"></i>
 	                                <span class="title">Todos los estudiantes</span> 
 	                            </a>
 	                        </li>
