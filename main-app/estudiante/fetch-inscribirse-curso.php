@@ -28,7 +28,7 @@ try {
     // se valida si esta activo el curso
     if (!$curso["gra_active"]) {
         $response["ok"] = false;
-        $response["msg"] = "El curso " + $curso["gra_nombre"] + " no esta activo ";
+        $response["msg"] = "El curso " . $curso["gra_nombre"] . " no esta activo ";
         echo json_encode($response);
         exit();
     }
@@ -49,7 +49,7 @@ try {
     // se valida que tenga disponibilidad el curso
     if (intval($cantidad) >= intval($curso["gra_maximum_quota"])) {
         $response["ok"] = false;
-        $response["msg"] = "El cupo maximo del curso " + $curso["gra_nombre"] + " es de " . $curso["gra_maximum_quota"];
+        $response["msg"] = "El cupo maximo del curso " . $curso["gra_nombre"] . " es de " . $curso["gra_maximum_quota"];
         echo json_encode($response);
         exit();
     }

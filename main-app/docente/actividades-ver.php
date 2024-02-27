@@ -128,9 +128,14 @@ if($fechas[0]>0){
 							                                    <h4 class="font-bold">Archivos adjuntos</h4>
 							                                    <hr>
 							                                    <ul>
-							                                        <?php if($actividad['tar_archivo']!=""){?><li><a href="../files/tareas/<?=$actividad['tar_archivo'];?>" target="_blank"><?=$actividad['tar_archivo'];?></a></li><?php }?>
-																	<?php if($actividad['tar_archivo2']!=""){?><li><a href="../files/tareas/<?=$actividad['tar_archivo2'];?>" target="_blank"><?=$actividad['tar_archivo2'];?></a></li><?php }?>
-																	<?php if($actividad['tar_archivo3']!=""){?><li><a href="../files/tareas/<?=$actividad['tar_archivo3'];?>" target="_blank"><?=$actividad['tar_archivo3'];?></a></li><?php }?>
+																<?php
+																$url1= $storage->getBucket()->object(FILE_TAREAS.$actividad["tar_archivo"])->signedUrl(new DateTime('tomorrow'));
+																$url2= $storage->getBucket()->object(FILE_TAREAS.$actividad["tar_archivo2"])->signedUrl(new DateTime('tomorrow'));
+																$url3= $storage->getBucket()->object(FILE_TAREAS.$actividad["tar_archivo3"])->signedUrl(new DateTime('tomorrow'));
+																?>
+							                                        <?php if($actividad['tar_archivo']!=""){?><li><a href="<?=$url1?>" target="_blank"><?=$actividad['tar_archivo'];?></a></li><?php }?>
+																	<?php if($actividad['tar_archivo2']!=""){?><li><a href="<?=$url2?>" target="_blank"><?=$actividad['tar_archivo2'];?></a></li><?php }?>
+																	<?php if($actividad['tar_archivo3']!=""){?><li><a href="<?=$url3?>" target="_blank"><?=$actividad['tar_archivo3'];?></a></li><?php }?>
 							                                    </ul>
 							                                    
 							                                    <br>
@@ -163,11 +168,14 @@ if($fechas[0]>0){
 																	if($enviada[0]!=""){
 																	?>
 																		<div class="panel">
+																			<?php
+																			$url= $storage->getBucket()->object(FILE_TAREAS.$enviada["ent_archivo"])->signedUrl(new DateTime('tomorrow'));
+																			?>
 																			<h4 class="font-bold">Archivo enviado</h4>
 																			<hr>
 																			<p>Ya has enviado un archivo relacionado a esta actividad. Si lo deseas reemplazar, puedes repetir el proceso inicial.</p>
 																			<p><b>Fecha de envío:</b> <?=$enviada['ent_fecha'];?> </p>
-																			<p><b>Archivo:</b> <a href="../files/tareas/<?=$enviada['ent_archivo'];?>" target="_blank"><?=$enviada['ent_archivo'];?> </a></p>
+																			<p><b>Archivo:</b> <a href="<?=$url?>" target="_blank"><?=$enviada['ent_archivo'];?> </a></p>
 																			<p><b>Comentario:</b><br> <?=$enviada['ent_comentario'];?> </p>
 																		</div>
 																	<?php }?>

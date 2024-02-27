@@ -15,6 +15,10 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 </head>
 <style type="text/css" src="cardStyle.css">
 	/* Cards */
+	.swal2-backdrop-show {
+		z-index: 99991;
+	}
+
 	.postcard {
 		flex-wrap: wrap;
 		display: flex;
@@ -205,7 +209,31 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 			}
 		}
 	}
+
+	.gif-carga {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(255, 255, 255, 0.7);
+		/* Fondo semitransparente */
+		z-index: 9999;
+		/* Asegura que esté por encima de otros elementos */
+		display: none;
+		/* Por defecto oculto */
+	}
+
+	.gif-carga img {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
 </style>
+<div id="gifCarga" class="gif-carga">
+	<img  height="200px" width="200px" src="https://i.gifer.com/Vp3R.gif" alt="Cargando...">
+</div>
 <!-- END HEAD -->
 <?php include("../compartido/body.php"); ?>
 <div class="page-wrapper">
@@ -239,6 +267,7 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 							'gra_active' => 1,
 							'gra_estado' => 1,
 							'gra_auto_enrollment' => 1,
+							'gra_tipo' => GRADO_INDIVIDUAL,
 							'institucion' => $config['conf_id_institucion'],
 							'year' => $config['conf_agno']
 						];
@@ -253,7 +282,6 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 								} else {
 									$direccion = "derecha";
 								};
-								$urlImagen = $dato["gra_cover_image"];
 								$limiteCaracteres = 300;
 
 								$textoTruncado = "";
@@ -268,11 +296,18 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 
 								<div class="col-xl-6 col-md-12 animate__animated animate__fadeIn">
 									<div class="postcard  light <?= $direccion ?>">
-										<a class="postcard__img_link" href="#" onclick="buscarCurso('<?= $dato["gra_id"] ?>')">
-											<img class="postcard__img" src="../files/cursos/<?= $urlImagen ?>" alt="Image Title" />
+										<a class="postcard__img_link" onclick="buscarCurso('<?= $dato["gra_id"] ?>')">
+											<?php
+											$urlImagen = $storage->getBucket()->object(FILE_CURSOS . $dato["gra_cover_image"])->signedUrl(new DateTime('tomorrow'));
+											$existe = $storage->getBucket()->object(FILE_CURSOS . $dato["gra_cover_image"])->exists();
+											if (!$existe) {
+												$urlImagen = "../files/cursos/curso.png";
+											}
+											?>
+											<img class="postcard__img" src="<?= $urlImagen ?>" alt="Image Title" />
 										</a>
 										<div class="postcard__text t-dark ">
-											<h1 class="postcard__title " onclick="buscarCurso('<?= $dato["gra_id"] ?>')"><a href="#"><?= $dato["gra_nombre"]; ?></a></h1>
+											<h1 class="postcard__title " onclick="buscarCurso('<?= $dato["gra_id"] ?>')"><?= $dato["gra_nombre"]; ?></h1>
 											<div class="postcard__subtitle small">
 												<time datetime="2020-05-25 12:00:00">
 													<i class="fas fa-calendar-alt mr-2"></i><?= $dato["gra_id"]; ?>
@@ -353,7 +388,9 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 		?>
 	</div>
 	<script type="application/javascript">
+		
 		function buscarCurso(valor) {
+			document.getElementById("gifCarga").style.display = "block";
 			var url = "fetch-buscar-curso.php";
 			var data = {
 				"codigo": (valor),
@@ -371,7 +408,7 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 				.catch((error) => console.error("Error:", error))
 				.then(
 					function(res) {
-						console.log(res);
+						document.getElementById("gifCarga").style.display = "none";
 						const contenido = document.getElementById('contenidoModal');
 						contenido.innerHTML = res;
 						$('#Modal1').modal('show');
@@ -424,7 +461,7 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 							var labelCantidad = document.getElementById("label_" + res["curso"]);
 							btInscribirse.style.display = "none";
 							barraProgreso.style.width = res["porcentage"] + "%";
-							labelCantidad.text = res["cantidad"];
+							labelCantidad.textContent = res["cantidad"];
 							Swal.fire({
 								title: "Registro Exitoso!",
 								text: res["msg"],
@@ -441,7 +478,7 @@ require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php"); ?>
 							setTimeout(function() {
 								location.reload();
 							}, 20000);
-							
+
 						}
 
 					});

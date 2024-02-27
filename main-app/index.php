@@ -36,7 +36,8 @@ if(!isset($_GET['nodb'])) {
                     <div class="col-md-8 offset-md-2" id="login">
                         <form method="post" action="controlador/autentico.php" class="needs-validation" novalidate>
                             <?php include("../config-general/mensajes-informativos.php"); ?>
-		                        <input type="hidden" name="urlDefault" value="<?php if(isset($_GET["urlDefault"])) echo $_GET["urlDefault"]; ?>" />
+		                        <input type="hidden" name="urlDefault" value="<?php if(isset($_GET["urlDefault"])) echo $_GET["urlDefault"];?>" />
+                                <input type="hidden" name="directory"  value="<?php if(isset($_GET["directory"]))  echo $_GET["directory"]; ?>" />
                             <img class="mb-4" src="../config-general/assets-login-2023/img/logo.png" width="100">
 
                             <div class="form-floating mt-3">

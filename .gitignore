@@ -11,3 +11,4 @@ sensitive.php
 /vendor
 /composer.json
 /composer.lock
+librerias/Firebase/key

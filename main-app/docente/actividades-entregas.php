@@ -146,16 +146,23 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 														<td><?=$datos1['ent_fecha'];?></td>
 														<td><?php if($datos1[1]>0){echo $datos1[1]." Min. y ";} if($datos1[2]>0){echo $datos1[2]." Seg.";}?></td>
 														<td>
-														<?php if(!empty($datos1['ent_archivo']) and file_exists('../files/tareas-entregadas/'.$datos1['ent_archivo'])){?>
-															<a href="../files/tareas-entregadas/<?=$datos1['ent_archivo'];?>" target="_blank">Archivo 1</a><br>
+														<?php 
+														$url= $storage->getBucket()->object(FILE_TAREAS_ENTREGADAS.$datos1["ent_archivo"])->signedUrl(new DateTime('tomorrow')); 
+														$existe=$storage->getBucket()->object(FILE_TAREAS_ENTREGADAS.$datos1["ent_archivo"])->exists();
+														$url2= $storage->getBucket()->object(FILE_TAREAS_ENTREGADAS.$datos1["ent_archivo2"])->signedUrl(new DateTime('tomorrow')); 
+														$existe2=$storage->getBucket()->object(FILE_TAREAS_ENTREGADAS.$datos1["ent_archivo2"])->exists();
+														$url3= $storage->getBucket()->object(FILE_TAREAS_ENTREGADAS.$datos1["ent_archivo3"])->signedUrl(new DateTime('tomorrow')); 
+														$existe3=$storage->getBucket()->object(FILE_TAREAS_ENTREGADAS.$datos1["ent_archivo3"])->exists();
+														if(!empty($datos1['ent_archivo']) and $existe){?>
+															<a href="<?=$url?>" target="_blank">Archivo 1</a><br>
 														<?php }?>
 															
-														<?php if(!empty($datos1['ent_archivo2']) and file_exists('../files/tareas-entregadas/'.$datos1['ent_archivo2'])){?>
-															<a href="../files/tareas-entregadas/<?=$datos1['ent_archivo2'];?>" target="_blank">Archivo 2</a><br>
+														<?php if(!empty($datos1['ent_archivo2']) and $existe2){?>
+															<a href="<?=$url2?>" target="_blank">Archivo 2</a><br>
 														<?php }?>
 															
-														<?php if(!empty($datos1['ent_archivo3']) and file_exists('../files/tareas-entregadas/'.$datos1['ent_archivo3'])){?>
-															<a href="../files/tareas-entregadas/<?=$datos1['ent_archivo3'];?>" target="_blank">Archivo 3</a><br>
+														<?php if(!empty($datos1['ent_archivo3']) and $existe3){?>
+															<a href="<?=$url3?>" target="_blank">Archivo 3</a><br>
 														<?php }?>	
 														
 														</td>

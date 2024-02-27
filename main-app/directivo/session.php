@@ -1,12 +1,18 @@
 <?php
 session_start();
 //Si otro usuario de mayor rango entra como él
-if(isset($_SESSION["idO"]) and $_SESSION["idO"]!=""){$idSession = $_SESSION["idO"];}else{$idSession = $_SESSION["id"];}
-if($idSession==""){
-	header("Location:../controlador/salir.php");
+if (isset($_SESSION["idO"]) and $_SESSION["idO"]!="") {
+	$idSession = $_SESSION["idO"];
+} else {
+	$idSession = $_SESSION["id"];
 }
-else
-{
+
+if (empty($idSession)) {
+	require_once '../class/Utilidades.php';
+	$directory = Utilidades::getDirectoryUserFromUrl($_SERVER['PHP_SELF']);
+	$page      = Utilidades::getPageFromUrl($_SERVER['PHP_SELF']);
+	header("Location:../controlador/salir.php?urlDefault=".$page."&directory=".$directory);
+} else {
 	require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 	require_once(ROOT_PATH."/config-general/config.php");
 	require_once(ROOT_PATH."/config-general/idiomas.php");
@@ -15,9 +21,9 @@ else
 
 	if($datosUsuarioActual['uss_tipo'] != TIPO_DIRECTIVO && $datosUsuarioActual['uss_tipo'] != TIPO_DEV && !strpos($_SERVER['PHP_SELF'], 'page-info.php'))
 	{
-		if(isset($_SESSION["yearAnterior"])){
-			$_SESSION["cambioYear"]=$_SESSION["bd"];
-			$_SESSION["bd"]=$_SESSION["yearAnterior"];
+		if (isset($_SESSION["yearAnterior"])) {
+			$_SESSION["cambioYear"] = $_SESSION["bd"];
+			$_SESSION["bd"]         = $_SESSION["yearAnterior"];
 		}
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=304";</script>';
 		exit();		

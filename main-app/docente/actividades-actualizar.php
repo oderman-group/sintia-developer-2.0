@@ -18,7 +18,7 @@ if(!empty($_FILES['file']['name'])){
 	$archivo = uniqid($_SESSION["inst"].'_'.$_SESSION["id"].'_file_').".".$extension;
 	$destino = ROOT_PATH."/main-app/files/tareas";
 	@unlink($destino."/".$archivoAnterior);
-	$archivoSubido->subirArchivo($destino, $archivo, $nombreInputFile); 
+	$archivoSubido->subirArchivoStorage(FILE_TAREAS, $archivo, $nombreInputFile,$storage); 
 	try{
 		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas SET tar_archivo='".$archivo."' WHERE tar_id='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
