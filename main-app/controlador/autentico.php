@@ -1,4 +1,7 @@
 <?php 
+// Configuración de sesión
+ini_set('session.gc_maxlifetime', 43200);
+session_set_cookie_params(43200);
 session_start();
 $idPaginaInterna = 'GN0001';
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
