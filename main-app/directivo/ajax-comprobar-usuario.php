@@ -1,12 +1,12 @@
 <?php
 include('session.php');
-require_once '../class/UsuariosPadre.php';
+require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 if($_REQUEST['usuario']!=""){
 $usuario = $_REQUEST['usuario'];
+$idUsuario = $_REQUEST['idUsuario'];
 $jsonData = array();
 
-$query         = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_usuario='".$usuario."'");
-$totalCliente  = mysqli_num_rows($query);
+$totalCliente = UsuariosPadre::validarUsuario($conexion, $usuario, $idUsuario);
 
 if( $totalCliente <= 0 ){
     $jsonData['success'] = 0;
