@@ -344,7 +344,7 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 
 														<td>
 
-															<input type="text" style="text-align: center; color:<?=$colorNota;?>" step="<?=$cargaConsultaActual;?>" size="5" maxlength="3" value="<?php if(!empty($notas['cal_nota'])){ echo $notas['cal_nota'];}?>" name="<?=$notas['cal_nota'];?>" id="<?=$resultado['mat_id'];?>" title="<?=$idR;?>" alt="<?=$resultado['mat_nombres'];?>" onChange="notasGuardar(this)" tabindex="<?=$contReg;?>">
+															<input type="text" style="text-align: center; color:<?=$colorNota;?>" step="<?=$cargaConsultaActual;?>" size="5" maxlength="3" value="<?php if(!empty($notas['cal_nota'])){ echo $notas['cal_nota'];}?>" name="<?=$notas['cal_nota'];?>" id="<?=$resultado['mat_id'];?>" data-cod-estudiante="<?=$resultado['mat_id'];?>" title="<?=$idR;?>" alt="<?=$resultado['mat_nombres'];?>" onChange="notasGuardar(this)" tabindex="<?=$contReg;?>">
 
 															<?php if(!empty($notas['cal_nota'])){?>
 
