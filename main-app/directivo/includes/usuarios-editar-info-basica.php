@@ -41,7 +41,7 @@
             <div class="form-group row">
                 <label class="col-sm-2 control-label">Usuario</label>
                 <div class="col-sm-4">
-                    <input type="text" name="usuario" class="form-control" value="<?=$datosEditar['uss_usuario'];?>" <?=$readonlyUsuario;?> <?=$disabledPermiso;?>>
+                    <input type="text" name="usuario" id="usuario" class="form-control" data-id-usuario="<?=$datosEditar['id_nuevo'];?>" oninput="validarUsuario(this)" value="<?=$datosEditar['uss_usuario'];?>" <?=$readonlyUsuario;?> <?=$disabledPermiso;?>>
                 </div>
             </div>
 

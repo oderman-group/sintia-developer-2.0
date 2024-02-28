@@ -22,7 +22,7 @@ if(!empty($_FILES['file']['name'])){
 	$archivo = uniqid($_SESSION["inst"].'_'.$_SESSION["id"].'_file_').".".$extension;
 	$destino = ROOT_PATH."/main-app/files/tareas";
 	@unlink($destino."/".$archivo);
-	$archivoSubido->subirArchivo($destino, $archivo, $nombreInputFile); 
+	$archivoSubido->subirArchivoStorage(FILE_TAREAS, $archivo, $nombreInputFile,$storage); 
 	$pesoMB = round($_FILES['file']['size']/1048576,2);
 }
 
