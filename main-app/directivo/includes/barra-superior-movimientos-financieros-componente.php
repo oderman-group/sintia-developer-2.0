@@ -62,7 +62,7 @@
     if (isset($_GET['estadoFil']) && $_GET['estadoFil'] == base64_encode(COBRADA)) $estiloResaltadoCobrado = 'style="color: '.$Plataforma->colorUno.';"';
     $estiloResaltadoPorCobrar = '';
     if (isset($_GET['estadoFil']) && $_GET['estadoFil'] == base64_encode(POR_COBRAR)) $estiloResaltadoPorCobrar = 'style="color: '.$Plataforma->colorUno.';"';
-    require_once("../compartido/componentes/barra-superior.php");
+    require_once("../class/componentes/barra-superior.php");
 $opciones[0] = [
     'texto' => 'Menú movimiento financiero',
     'url' => 'movimientos-importar.php',
@@ -92,11 +92,11 @@ $filtroTipo = [
 $filtroEstado = [
     [
         'texto' => 'Por Cobrar',
-        'url' => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode(POR_COBRAR) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode(1) . "&busqueda=" . $busqueda . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
+        'url' => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode(POR_COBRAR) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode($tipo) . "&busqueda=" . $busqueda . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
     ],
     [
         'texto' => 'Cobradas',
-        'url' => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode(COBRADA) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode(2) . "&busqueda=" . $busqueda . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
+        'url' => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode(COBRADA) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode($tipo) . "&busqueda=" . $busqueda . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
     ],
     [
         'texto' => 'Ver Todos',
