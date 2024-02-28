@@ -24,6 +24,7 @@ if(empty($_POST["notaMinima"])) {$_POST["notaMinima"] = 3;}
 if(empty($_POST["periodoTrabajar"])) {$_POST["periodoTrabajar"] = 4;}
 if(empty($_POST["porcenAsigan"])) {$_POST["porcenAsigan"] = 'NO';}
 if(empty($_POST["certificado"])) {$_POST["certificado"] = 1;}
+if(empty($_POST["formaNotas"])) {$_POST["formaNotas"] = CUANTITATIVA;}
 
 try {
 	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".configuracion SET 

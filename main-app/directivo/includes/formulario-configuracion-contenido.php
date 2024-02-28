@@ -294,6 +294,7 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                         </div>
                     </div>
 
+                    <?php if (array_key_exists(23, $arregloModulos) && Modulos::validarModulosActivos($conexion, 23)) { ?>
                     <div class="form-group row">
                         <label class="col-sm-2 control-label">Forma para mostrar las notas <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta opción mostrará a los usuarios las notas en formato numérico o con frases de desempeño que corresponden a las notas numéricas, dependiendo la opción que seleccione."><i class="fa fa-question"></i></button> </label>
                         <div class="col-sm-2">
@@ -303,6 +304,7 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                             </select>
                         </div>
                     </div>
+                    <?php }?>
 
 
                     <p class="h3">Permisos</p>
