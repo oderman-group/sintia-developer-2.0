@@ -265,8 +265,11 @@
 
                             <div class="panel-body">
                                 <p><?=$resultado['not_descripcion'];?></p>
-                                <?php if($resultado['not_imagen']!="" and file_exists('../files/publicaciones/'.$resultado['not_imagen'])){?>
-                                <div class="item"><a><img class="imagenes" src="../files/publicaciones/<?=$resultado['not_imagen'];?>"
+                                <?php 
+                                $urlImagen= $storage->getBucket()->object(FILE_PUBLICACIONES.$resultado["not_imagen"])->signedUrl(new DateTime('tomorrow')); 
+                                $existe=$storage->getBucket()->object(FILE_PUBLICACIONES.$resultado["not_imagen"])->exists();
+                                if($resultado['not_imagen']!="" and $existe){?>
+                                <div class="item"><a><img class="imagenes" src="<?=$urlImagen?>"
                                             alt="<?=$resultado['not_titulo'];?>"></ah>
                                 </div>
                                 <p>&nbsp;</p>
@@ -289,9 +292,12 @@
                                     <p>&nbsp;</p>
                                 <?php }?>
 
-                                <?php if($resultado['not_archivo']!="" and file_exists('../files/publicaciones/'.$resultado['not_archivo'])){?>
+                                <?php
+                                $urlArchivo= $storage->getBucket()->object(FILE_PUBLICACIONES.$resultado["not_archivo"])->signedUrl(new DateTime('tomorrow')); 
+                                $existeArchivo=$storage->getBucket()->object(FILE_PUBLICACIONES.$resultado["not_archivo"])->exists();
+                                if($resultado['not_archivo']!="" and $existeArchivo){?>
                                     <div align="right">
-                                        <a href="../files/publicaciones/<?=$resultado['not_archivo'];?>" target="_blank"><i class="fa fa-download"></i> Descargar Archivo</a>
+                                        <a href="<?=$urlArchivo?>" target="_blank"><i class="fa fa-download"></i> Descargar Archivo</a>
                                     </div>
                                     <p>&nbsp;</p>
                                 <?php }?>

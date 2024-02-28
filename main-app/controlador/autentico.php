@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 $idPaginaInterna = 'GN0001';
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
@@ -54,33 +54,54 @@ if($num>0)
 		exit();
 	}
 
-	$URLdefault = 'noticias.php';
-	if($_POST["urlDefault"]!=""){$URLdefault = $_POST["urlDefault"];}	
+	$URLdefault = null;
+	if (!empty($_POST["urlDefault"])) { 
+		$URLdefault = base64_decode($_POST["urlDefault"]); 
+	}
 	
-	switch($fila['uss_tipo']){
-		case 1:
-			$url = '../directivo/'.$URLdefault;
-		break;
-		
-		case 2:
-		  $url = '../docente/noticias.php';
-		break;
-		
-		case 3:
-		  $url = '../acudiente/estudiantes.php';
-		break;
-		
-		case 4:
-		  $url = '../estudiante/matricula.php';
-		break;
-		
-		case 5:
-		  $url = '../directivo/'.$URLdefault;
-		break;
-		
-		default:
-		  $url = 'salir.php';
-		break;
+	$url = null;
+	if (!empty($_POST["directory"])) {
+		$directoriosPorUsuario = [
+			'directivo'  => TIPO_DIRECTIVO,
+			'docente'    => TIPO_DOCENTE,
+			'acudiente'  => TIPO_ACUDIENTE,
+			'estudiante' => TIPO_ESTUDIANTE
+		];
+		$directory      = base64_decode($_POST["directory"]);
+		$tipoDirectorio = $directoriosPorUsuario[$directory];
+
+		if($tipoDirectorio == $fila['uss_tipo'] || ($tipoDirectorio == TIPO_DIRECTIVO && $fila['uss_tipo'] == TIPO_DEV)) {
+			$url = "../".$directory."/".$URLdefault;
+		}
+
+	}
+	
+	if (empty($url)) {
+		switch($fila['uss_tipo']){
+			case 1:
+				$url = '../directivo/noticias.php';
+			break;
+			
+			case 2:
+				$url = '../docente/noticias.php';
+			break;
+			
+			case 3:
+				$url = '../acudiente/estudiantes.php';
+			break;
+			
+			case 4:
+				$url = '../estudiante/matricula.php';
+			break;
+			
+			case 5:
+				$url = '../directivo/noticias.php';
+			break;
+			
+			default:
+				$url = 'salir.php';
+			break;
+		}
 	}
 	
 	$config = Plataforma::sesionConfiguracion();

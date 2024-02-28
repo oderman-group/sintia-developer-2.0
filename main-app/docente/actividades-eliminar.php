@@ -15,17 +15,22 @@ try{
 }
 
 $rutaEntregas = '../files/tareas-entregadas';
+
 while($registroEntregas = mysqli_fetch_array($rEntregas, MYSQLI_BOTH)){
-	if(file_exists($rutaEntregas."/".$registroEntregas['ent_archivo'])){
-		unlink($rutaEntregas."/".$registroEntregas['ent_archivo']);	
+	$url1= $storage->getBucket()->object(FILE_TAREAS_ENTREGADAS.$registroEntregas["ent_archivo"])->signedUrl(new DateTime('tomorrow'));
+	$existe1=$storage->getBucket()->object(FILE_TAREAS_ENTREGADAS.$registroEntregas["ent_archivo"])->exists();
+	if($existe1){
+		unlink($url1);	
 	}
-
-	if(file_exists($rutaEntregas."/".$registroEntregas['ent_archivo2'])){
-		unlink($rutaEntregas."/".$registroEntregas['ent_archivo2']);	
+	$url2= $storage->getBucket()->object(FILE_TAREAS_ENTREGADAS.$registroEntregas["ent_archivo2"])->signedUrl(new DateTime('tomorrow'));
+	$existe2=$storage->getBucket()->object(FILE_TAREAS_ENTREGADAS.$registroEntregas["ent_archivo2"])->exists();
+	if($existe2){
+		unlink($url2);	
 	}
-
-	if(file_exists($rutaEntregas."/".$registroEntregas['ent_archivo3'])){
-		unlink($rutaEntregas."/".$registroEntregas['ent_archivo3']);	
+	$url3= $storage->getBucket()->object(FILE_TAREAS_ENTREGADAS.$registroEntregas["ent_archivo3"])->signedUrl(new DateTime('tomorrow'));
+	$existe3=$storage->getBucket()->object(FILE_TAREAS_ENTREGADAS.$registroEntregas["ent_archivo3"])->exists();
+	if($existe3){
+		unlink($url3);	
 	}
 }
 
@@ -43,16 +48,20 @@ try{
 $registro = mysqli_fetch_array($consultaRegistro, MYSQLI_BOTH);
 
 $ruta = '../files/tareas';
-if(file_exists($ruta."/".$registro['tar_archivo'])){
-	unlink($ruta."/".$registro['tar_archivo']);	
+$url1= $storage->getBucket()->object(FILE_TAREAS.$enviada["ent_archivo"])->signedUrl(new DateTime('tomorrow'));
+$existe1=$storage->getBucket()->object(FILE_TAREAS.$enviada["ent_archivo"])->exists();
+if($existe1){
+	unlink($url1);	
 }
-
-if(file_exists($ruta."/".$registro['tar_archivo2'])){
-	unlink($ruta."/".$registro['tar_archivo2']);	
+$url2= $storage->getBucket()->object(FILE_TAREAS.$enviada["ent_archivo"])->signedUrl(new DateTime('tomorrow'));
+$existe2=$storage->getBucket()->object(FILE_TAREAS.$enviada["ent_archivo"])->exists();
+if($existe2){
+	unlink($url2);	
 }
-
-if(file_exists($ruta."/".$registro['tar_archivo3'])){
-	unlink($ruta."/".$registro['tar_archivo3']);	
+$url3= $storage->getBucket()->object(FILE_TAREAS.$enviada["ent_archivo"])->signedUrl(new DateTime('tomorrow'));
+$existe3=$storage->getBucket()->object(FILE_TAREAS.$enviada["ent_archivo"])->exists();
+if($existe3){
+	unlink($url3);	
 }
 
 try{

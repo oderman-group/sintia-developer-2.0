@@ -3,7 +3,7 @@
 							if($datosUsuarioActual['uss_tipo'] == TIPO_ACUDIENTE){?>
 							
 							<li class="nav-item" data-step="10" data-intro="<b><?=$frases[71][$datosUsuarioActual['uss_idioma']];?>:</b> Aquí verás tus acudidos y toda su información." data-position='left'>
-	                            <a href="estudiantes.php" class="nav-link nav-toggle"> <i class="fa fa-group"></i>
+	                            <a <?php validarModuloMenu(7, "estudiantes.php", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-group"></i>
 	                                <span class="title"><?=$frases[71][$datosUsuarioActual['uss_idioma']];?></span> 
 	                            </a>
 	                        </li>

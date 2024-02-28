@@ -76,7 +76,7 @@ if(!Modulos::validarPermisoEdicion()){
 						
 						
                         <div class="col-sm-12">
-
+                        <span style="color: blue; font-size: 15px;" id="respuestaUsuario"></span>
 						<?php include("../../config-general/mensajes-informativos.php"); ?>
 
 						<nav>
@@ -109,6 +109,7 @@ if(!Modulos::validarPermisoEdicion()){
         <!-- end page container -->
         <?php include("../compartido/footer.php");?>
     </div>
+    <script src="../js/Usuarios.js" ></script>
     <!-- start js include path -->
     <script src="../../config-general/assets/plugins/jquery/jquery.min.js" ></script>
     <script src="../../config-general/assets/plugins/popper/popper.js" ></script>
