@@ -57,7 +57,7 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/app-sintia/config-general/constantes.
 
 <body>
     <div class="container">
-        <h2>Consulta a OpenAI GPT para generar un Adio</h2>
+        <h2>Consulta a OpenAI GPT para generar un Audio</h2>
         <form action="" method="post">
             <textarea name="inputTexto" rows="4" placeholder="Escribe tu mensaje aquí..."><?php echo isset($_POST["inputTexto"]) ? $_POST["inputTexto"] : ''; ?></textarea>
             <button type="submit">Enviar a OpenAI</button>
