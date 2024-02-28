@@ -6,3 +6,4 @@ PES-684 - Subroles - Todo debe suceder en tiempo real al editar los subroles
 PES-814 - Englobar las opciones sueltas dentro de su módulo
 PES-841 - Al crear un usuario directivo este podrá tener acceso a todos los años que tiene la institución.
 PES-731 - Al crear o editar, el usuario de acceso debe ser unico en toda la tabla
+PES-780 - Mantener activa la sesión del usuario aun sin ejecutar alguna acción.
