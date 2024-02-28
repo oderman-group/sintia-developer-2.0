@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 $idPaginaInterna = 'GN0001';
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
