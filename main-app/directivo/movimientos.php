@@ -265,7 +265,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
 	</div>
 </div>
 <script type="text/javascript">
-	function saludar(dato) {
+	function crearDatos(dato) {
 		var tbody = document.getElementById('result');
 		document.getElementById("gifCarga").style.display = "block";
 		tbody.innerHTML = ''; // Limpiar el contenido del tbody

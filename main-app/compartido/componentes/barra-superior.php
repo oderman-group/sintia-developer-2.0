@@ -21,7 +21,8 @@ class componenteFiltro
      */
     private $url;
     /**
-     * @var int metodo por el cual se enviara el resultado obtenido del fetch.
+     * @var int metodo por el cual se enviara el resultado obtenido del fetch. este debe estar en la direccion:
+     * /app-sintia/main-app/compartido/componentes/filter/
      */
     private $metodo;
      /**
@@ -67,7 +68,7 @@ class componenteFiltro
         }
         $this->opciones = $opciones;
         $this->id = $id;
-        $this->url = $protocolo . $_SERVER['HTTP_HOST'] . '/app-sintia/main-app/compartido/includes/filter/' . $url;
+        $this->url = $protocolo . $_SERVER['HTTP_HOST'] . '/app-sintia/main-app/compartido/componentes/filter/' . $url;
         $this->metodo = $metodo;
         $this->filtros = $filtros;
         $this->filtros_get = $filtros_get;

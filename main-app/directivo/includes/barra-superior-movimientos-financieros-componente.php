@@ -62,7 +62,7 @@
     if (isset($_GET['estadoFil']) && $_GET['estadoFil'] == base64_encode(COBRADA)) $estiloResaltadoCobrado = 'style="color: '.$Plataforma->colorUno.';"';
     $estiloResaltadoPorCobrar = '';
     if (isset($_GET['estadoFil']) && $_GET['estadoFil'] == base64_encode(POR_COBRAR)) $estiloResaltadoPorCobrar = 'style="color: '.$Plataforma->colorUno.';"';
-    require_once("../compartido/includes/barra-superior.php");
+    require_once("../compartido/componentes/barra-superior.php");
 $opciones[0] = [
     'texto' => 'Menú movimiento financiero',
     'url' => 'movimientos-importar.php',
@@ -141,6 +141,6 @@ $queryString = $_SERVER['QUERY_STRING'];// Parsear la cadena de consulta y almac
 parse_str($queryString, $parametros);// Convertir el array a JSON
 $filtros_get = json_encode($parametros);
 
-$barraSuperior = new componenteFiltro('movimientos', 'filter-movimientos.php', 'saludar', $opciones, $filtros,$filtros_get);
+$barraSuperior = new componenteFiltro('movimientos', 'filter-movimientos.php', 'crearDatos', $opciones, $filtros,$filtros_get);
 $barraSuperior->generarComponente();
 ?>
