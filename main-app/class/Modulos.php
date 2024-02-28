@@ -292,7 +292,7 @@ class Modulos {
     public static function validarModulosActivos($conexion, $modulo){
 
         try{
-            $consultaModulo = mysqli_query($conexion, "SELECT mod_estado FROM ".BD_ADMIN.".modulos WHERE mod_id='".$modulo."'");
+            $consultaModulo = mysqli_query($conexion, "SELECT mod_estado FROM ".BD_ADMIN.".modulos WHERE mod_id='".$modulo."' AND mod_types_customer LIKE '%".$_SESSION["datosUnicosInstitucion"]['ins_tipo']."%'");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
