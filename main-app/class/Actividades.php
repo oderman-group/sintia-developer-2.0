@@ -1,7 +1,7 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
-include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
+require_once(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 
 class Actividades {
 
