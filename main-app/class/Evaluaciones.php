@@ -834,4 +834,103 @@ class Evaluaciones{
 
         return $resultado;
     }
+
+    /**
+     * Este metodo me trae las respuesta de una pregunta
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idPregunta
+     * 
+     * @return mysqli_result $consulta
+     */
+    public static function traerRespuestaPregunta(mysqli $conexion, array $config, string $idPregunta){
+        try{
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_respuestas
+            WHERE resp_id_pregunta='".$idPregunta."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $consulta;
+    }
+
+    /**
+     * Este metodo guarda una respuesta del banco de datos
+     * @param mysqli $conexion
+     * @param array $config
+     * @param array $datosRespuesta
+     * @param string $idPregunta
+     */
+    public static function guardarRespuestaBD(mysqli $conexion, array $config, array $datosRespuesta, string $idPregunta){
+
+        $codigoR=Utilidades::generateCode("RES");
+        try{
+            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_respuestas(resp_id, resp_descripcion, resp_correcta, resp_id_pregunta, resp_imagen, institucion, year)VALUES('".$codigoR."', '".$datosRespuesta['resp_descripcion']."', '".$datosRespuesta['resp_correcta']."', '".$idPregunta."', '".$datosRespuesta['resp_imagen']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+        } catch (Exception $e) {
+            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+        }
+    }
+
+    /**
+     * Este metodo me actualiza el estado de una respuesta
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idRespuesta
+     * @param int $estado
+     */
+    public static function actualizarEstadoRespuesta(mysqli $conexion, array $config, string $idRespuesta, int $estado){
+
+        try{
+            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_respuestas SET resp_correcta='".$estado."' WHERE resp_id='".$idRespuesta."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+        }
+    }
+
+    /**
+     * Este metodo me actualiza el estado de una respuesta
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idRespuesta
+     */
+    public static function eliminarRespuesta(mysqli $conexion, array $config, string $idRespuesta){
+
+        try{
+            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_respuestas WHERE resp_id='".$idRespuesta."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+        }
+    }
+
+    /**
+     * Este metodo me actualiza una respuesta
+     * @param mysqli $conexion
+     * @param array $config
+     * @param array $POST
+     */
+    public static function actualizarRespuesta(mysqli $conexion, array $config, array $POST){
+
+        try{
+            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_respuestas SET resp_descripcion='".$POST["valor"]."' WHERE resp_id='".$POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+        }
+    }
+
+    /**
+     * Este metodo me guarda una respuesta
+     * @param mysqli $conexion
+     * @param array $config
+     * @param array $POST
+     */
+    public static function guardarRespuesta(mysqli $conexion, array $config, array $POST){
+        $codigo=Utilidades::generateCode("RES");
+
+        try{
+            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_respuestas(resp_id, resp_descripcion, resp_correcta, resp_id_pregunta, institucion, year)VALUES('".$codigo."', '".$POST["valor"]."', 0, '".$POST["pregunta"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+        } catch (Exception $e) {
+            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+        }
+    }
 }
