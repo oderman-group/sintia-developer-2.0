@@ -211,7 +211,7 @@ $porcentajeRestante = round($porcentajeRestante,2);
 																		}?>
 		                                                            </div>
 																	<?php
-																	$enviada = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas_entregas WHERE ent_id_actividad='".$idR."' AND ent_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
+																	$enviada = Actividades::consultarEntregas($conexion, $config, $datosEstudianteActual['mat_id'], $idR);
 																	if(!empty($enviada[0])){
 																	?>
 																		<div class="panel">

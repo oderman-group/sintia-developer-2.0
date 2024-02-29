@@ -130,8 +130,7 @@ $datosConsulta = Actividades::traerDatosActividades($conexion, $config, $idR);
 													 $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														$consultaDatos1=mysqli_query($conexion, "SELECT ent_fecha, MOD(TIMESTAMPDIFF(MINUTE, ent_fecha, now()),60), MOD(TIMESTAMPDIFF(SECOND, ent_fecha, now()),60), ent_archivo, ent_comentario, ent_archivo2, ent_archivo3 FROM ".BD_ACADEMICA.".academico_actividad_tareas_entregas 
-														WHERE ent_id_estudiante='".$resultado['mat_id']."' AND ent_id_actividad='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+														$consultaDatos1 = Actividades::actividadesEntregasEstudiante($conexion,  $config, $resultado['mat_id'], $idR);
 														$numEntregas=mysqli_num_rows($consultaDatos1);
 														if ($numEntregas>0){
 															$datos1 = mysqli_fetch_array($consultaDatos1, MYSQLI_BOTH);
