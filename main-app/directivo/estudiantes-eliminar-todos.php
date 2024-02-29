@@ -2,6 +2,7 @@
 include("session.php");
 require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");
 require_once(ROOT_PATH."/main-app/class/Foros.php");
+require_once(ROOT_PATH."/main-app/class/Actividades.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0161';
@@ -18,11 +19,8 @@ Foros::eliminarTodosComentario($conexion, $config);
 
 Foros::eliminarTodasRespuestas($conexion, $config);
 
-try{
-	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_tareas_entregas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
+Actividades::eliminarActividadesEntregasTodas($conexion, $config);
+
 try{
 	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_ausencias WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
