@@ -94,8 +94,7 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas 
-													 WHERE tar_id_carga='".$cargaConsultaActual."' AND tar_periodo='".$periodoConsultaActual."' AND tar_estado=1  AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+													 $consulta = Actividades::actividadesCargasPeriodos($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 													$contReg=1; 
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$fd = mysqli_fetch_array(mysqli_query($conexion, "SELECT DATEDIFF('".$resultado['tar_fecha_entrega']."','".date("Y-m-d")."')"), MYSQLI_BOTH);

@@ -7,15 +7,11 @@ $idPaginaInterna = 'ES0058';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
+require_once(ROOT_PATH."/main-app/class/Actividades.php");
 
 $archivoSubido = new Archivos;
 
-try{
-	$fechas = mysqli_fetch_array(mysqli_query($conexion, "SELECT DATEDIFF(tar_fecha_disponible, now()), DATEDIFF(tar_fecha_entrega, now()), tar_fecha_entrega, tar_impedir_retrasos FROM ".BD_ACADEMICA.".academico_actividad_tareas 
-	WHERE tar_id='".$_POST["idR"]."' AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
-} catch (Exception $e) {
-	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-}
+$fechas = Actividades::fechaEntregaActividad($conexion, $config, $_POST["idR"]);
 
 if($fechas[1]<0 and $fechas[3]==1){
 	
