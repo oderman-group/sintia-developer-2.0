@@ -4,11 +4,12 @@ Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DC0126';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
-include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
+require_once(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/Cronograma.php");
+require_once(ROOT_PATH."/main-app/class/Clases.php");
 
 //Importar indicadores
 if(!empty($_POST["indicadores"]) and empty($_POST["calificaciones"])){
@@ -155,20 +156,10 @@ if(!empty($_POST["calificaciones"])){
 
 //Importar clases
 if(!empty($_POST["clases"])){	
-	try{
-		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_estado=0
-		WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."'");
-	} catch (Exception $e) {
-		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-	}
+	$calImpConsulta = Clases::eliminarClasesCargas($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 
 	//Consultamos las clases a Importar
-	try{
-		$calImpConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases
-		WHERE cls_id_carga='".$_POST["cargaImportar"]."' AND cls_periodo='".$_POST["periodoImportar"]."' AND cls_estado=1");
-	} catch (Exception $e) {
-		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-	}
+	$calImpConsulta = Clases::traerClasesCargaPeriodo($conexion, $config, $_POST["cargaImportar"], $_POST["periodoImportar"]);
 
 	$datosInsert = '';
 	while($calImpDatos = mysqli_fetch_array($calImpConsulta, MYSQLI_BOTH)){

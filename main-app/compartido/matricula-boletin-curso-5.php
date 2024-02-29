@@ -9,6 +9,7 @@ if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol(
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/Clases.php");
     
 $year=$_SESSION["bd"];
 if(isset($_GET["year"])){
@@ -200,10 +201,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
         WHERE bol_carga='".$datosCargas['car_id']."' AND bol_estudiante='".$datosUsr['mat_id']."' AND bol_periodo='".$periodoActual."' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}");
         $datosBoletin = mysqli_fetch_array($consultaDatosBoletin, MYSQLI_BOTH);
 		
-		$consultaDatosAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) FROM ".BD_ACADEMICA.".academico_clases cls 
-        INNER JOIN ".BD_ACADEMICA.".academico_ausencias aus ON aus.aus_id_clase=cls.cls_id AND aus.aus_id_estudiante='".$datosUsr['mat_id']."' AND aus.institucion={$config['conf_id_institucion']} AND aus.year={$year}
-        WHERE cls.cls_id_carga='".$datosCargas['car_id']."' AND cls.cls_periodo='".$periodoActual."' AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$year}");
-		$datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
+		$datosAusencias = Clases::traerDatosAusencias($conexion, $config, $datosUsr['mat_id'], $datosCargas['car_id'], $periodoActual, $year);
 		
 		$indicadores = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
 		INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$year}

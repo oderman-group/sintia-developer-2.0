@@ -6,6 +6,7 @@ Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DC0091';
 include("../compartido/historial-acciones-guardar.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+require_once(ROOT_PATH."/main-app/class/Clases.php");
 
 $mensajeNot = 'Hubo un error al guardar las cambios';
 
@@ -35,11 +36,8 @@ if($_POST["operacion"]==2){
 }
 //Clase disponible o no
 if($_POST["operacion"]==3){
-	try{
-		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_disponible='".$_POST["valor"]."' WHERE cls_id='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
+	
+	Clases::cambiarEstadoClase($conexion, $config, $_POST);
 
 	include("../compartido/guardar-historial-acciones.php");
 	$mensajeNot = 'La clase ha cambiado de estado correctamente.';
