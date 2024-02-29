@@ -20,11 +20,8 @@ Evaluaciones::eliminarResultadosEstudiante($conexion, $config, $idE);
 
 Foros::eliminarComentarioEstudiante($conexion, $config, $idE);
 
-try{
-    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_respuestas WHERE fore_id_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
+Foros::eliminarRespuestaEstudiante($conexion, $config, $idE);
+
 try{
     mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_tareas_entregas WHERE ent_id_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
