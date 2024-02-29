@@ -15,7 +15,7 @@ else
 	
 	if($datosUsuarioActual['uss_tipo'] != TIPO_ACUDIENTE)
 	{
-		include("../compartido/sintia-funciones.php");
+		require_once("../compartido/sintia-funciones.php");
 		$destinos = validarUsuarioActual($datosUsuarioActual);
 		echo '<script type="text/javascript">window.location.href="'.$destinos.'page-info.php?idmsg=301;</script>';
 		exit();		
