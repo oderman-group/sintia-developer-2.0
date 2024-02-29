@@ -6,16 +6,13 @@ Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DC0091';
 include("../compartido/historial-acciones-guardar.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");
 
 $mensajeNot = 'Hubo un error al guardar las cambios';
 
 //Actualizar respuesta de una pregunta
 if($_POST["operacion"]==1){
-	try{
-		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_respuestas SET resp_descripcion='".$_POST["valor"]."' WHERE resp_id='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
+	Evaluaciones::actualizarRespuesta($conexion, $config, $_POST);
 
 	include("../compartido/guardar-historial-acciones.php");
 	$mensajeNot = 'La respuesta se ha actualizado correctamente.';
@@ -23,12 +20,7 @@ if($_POST["operacion"]==1){
 
 //Agregar respuesta a una pregunta
 if($_POST["operacion"]==2){
-	$codigo=Utilidades::generateCode("RES");
-	try{
-		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_respuestas(resp_id, resp_descripcion, resp_correcta, resp_id_pregunta, institucion, year)VALUES('".$codigo."', '".$_POST["valor"]."', 0, '".$_POST["pregunta"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
+	Evaluaciones::guardarRespuesta($conexion, $config, $_POST);
 
 	include("../compartido/guardar-historial-acciones.php");
 	$mensajeNot = 'La respuesta se ha agregado correctamente.';

@@ -80,19 +80,12 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 
 	Evaluaciones::guardarPreguntasBDEvaluacion($conexion, $config, $preguntaBD, $cargaConsultaActual);
 
-	try{
-		$respuestasPreguntaConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_respuestas WHERE resp_id_pregunta='".$_POST["bancoDatos"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-	} catch (Exception $e) {
-		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-	}
+	$respuestasConsulta = Evaluaciones::traerRespuestaPregunta($conexion, $config, $_POST["bancoDatos"]);
 
 	while($respuestasPreguntaDatos = mysqli_fetch_array($respuestasPreguntaConsulta, MYSQLI_BOTH)){
-		$codigoR=Utilidades::generateCode("RES");
-		try{
-			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_respuestas(resp_id, resp_descripcion, resp_correcta, resp_id_pregunta, resp_imagen, institucion, year)VALUES('".$codigoR."', '".$respuestasPreguntaDatos['resp_descripcion']."', '".$respuestasPreguntaDatos['resp_correcta']."', '".$codigo."', '".$respuestasPreguntaDatos['resp_imagen']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-		} catch (Exception $e) {
-			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-		}
+
+		Evaluaciones::guardarRespuestaBD($conexion, $config, $respuestasPreguntaDatos, $codigo);
+		
 	}
 
 	Evaluaciones::guardarRelacionPreguntaEvaluacion($conexion, $config, $codigo, $_POST);
