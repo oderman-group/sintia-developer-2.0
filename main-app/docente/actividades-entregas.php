@@ -6,12 +6,12 @@ include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 require_once("../class/Estudiantes.php");
 include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Actividades.php");
 
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-$consultaDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas WHERE tar_id='".$idR."' AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-$datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
+$datosConsulta = Actividades::traerDatosActividades($conexion, $config, $idR);
 ?>
 <script src="../../config-general/assets/plugins/chart-js/Chart.bundle.js"></script>
 <!-- data tables -->
@@ -77,11 +77,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 										<header class="panel-heading panel-heading-purple"><?=$frases[112][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											$evaluacionesEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas
-											WHERE tar_id_carga='".$cargaConsultaActual."' AND tar_periodo='".$periodoConsultaActual."' AND tar_id!='".$idR."' 
-											AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-											ORDER BY tar_id DESC
-											");
+											$evaluacionesEnComun = Actividades::actividadesCargasPeriodosDiferente($conexion, $config, $cargaConsultaActual, $periodoConsultaActual, $idR);
 											while($evaComun = mysqli_fetch_array($evaluacionesEnComun, MYSQLI_BOTH)){
 											?>
 												<p><a href="actividades-entregas.php?idR=<?=base64_encode($evaComun['tar_id']);?>"><?=$evaComun['tar_titulo'];?></a></p>
@@ -134,8 +130,7 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 													 $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 													 $contReg = 1;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														$consultaDatos1=mysqli_query($conexion, "SELECT ent_fecha, MOD(TIMESTAMPDIFF(MINUTE, ent_fecha, now()),60), MOD(TIMESTAMPDIFF(SECOND, ent_fecha, now()),60), ent_archivo, ent_comentario, ent_archivo2, ent_archivo3 FROM ".BD_ACADEMICA.".academico_actividad_tareas_entregas 
-														WHERE ent_id_estudiante='".$resultado['mat_id']."' AND ent_id_actividad='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+														$consultaDatos1 = Actividades::actividadesEntregasEstudiante($conexion,  $config, $resultado['mat_id'], $idR);
 														$numEntregas=mysqli_num_rows($consultaDatos1);
 														if ($numEntregas>0){
 															$datos1 = mysqli_fetch_array($consultaDatos1, MYSQLI_BOTH);

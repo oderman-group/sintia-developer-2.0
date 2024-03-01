@@ -47,7 +47,7 @@
 									<?php
 										}
 										
-											if(Modulos::validarSubRol(['DT0121'])){
+											if(Modulos::validarSubRol(['DT0121']) && Modulos::validarModulosActivos($conexion, 9)){
 									?>
 										<li <?php agregarClass(MENU,["DT0121"]) ?>><a <?php validarModuloMenu(9, "reservar-cupo.php", MENU) ?> class="nav-link "> <span class="title"><?=$frases[391][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									<?php }?>
@@ -196,7 +196,7 @@
 									<?php
 										}
 										
-										if( Modulos::validarSubRol(["DT0204"])){
+										if( Modulos::validarSubRol(["DT0204"]) && Modulos::validarModulosActivos($conexion, 16)){
 									?>
 										<li <?php agregarClass(MENU,["DT0204","DT0205"]) ?>><a <?php validarModuloMenu(16, "sub-roles.php", MENU) ?> class="nav-link"> <span class="title">Sub Roles</span></a></li>
 									<?php
