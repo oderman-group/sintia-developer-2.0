@@ -5,6 +5,7 @@ include("../compartido/historial-acciones-guardar.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Clases.php");
 ?>
 
 <!--bootstrap -->
@@ -121,12 +122,7 @@ include("../compartido/head.php");
 									
 									if(!empty($_POST["clases"])){
 										//Consultamos las clases a Importar
-										try{
-											$claImpConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases
-											WHERE cls_id_carga='".$_POST["cargaImportar"]."' AND cls_periodo='".$_POST["periodoImportar"]."' AND cls_estado=1");
-										} catch (Exception $e) {
-											include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-										}
+										$claImpConsulta = Clases::traerClasesCargaPeriodo($conexion, $config, $_POST["cargaImportar"], $_POST["periodoImportar"]);
 
 										$numClases = mysqli_num_rows($claImpConsulta);
 										if ($numClases > 0) {

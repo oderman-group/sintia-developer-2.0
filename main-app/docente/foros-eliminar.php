@@ -15,11 +15,7 @@ if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 $foroC = Foros::traerComentariosForos($conexion, $config, $idR);
 
 while($foro=mysqli_fetch_array($foroC, MYSQLI_BOTH)){
-    try{
-        mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_respuestas WHERE fore_id_comentario='".$foro['com_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-    } catch (Exception $e) {
-        include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-    }
+    Foros::eliminarRespuestaComentario($conexion, $config, $foro['com_id']);
 }
 
 Foros::eliminarComentarioForo($conexion, $config, $idR);
