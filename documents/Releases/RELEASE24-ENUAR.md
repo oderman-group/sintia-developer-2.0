@@ -11,3 +11,4 @@ PES-815 - Englobar los módulos y submodulos sueltos dentro de su módulo.
 PES-717 - Centralizar consultas en métodos - Parte 2.2
 PES-718 - Centralizar consultas en métodos - Parte 2.3
 PES-682 - Informes - Añadir informe parcial por estudiante
+PES-683 - Matriculas - Bloquear y desbloquear al estudiante con el switch.
