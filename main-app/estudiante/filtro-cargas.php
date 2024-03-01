@@ -1,7 +1,7 @@
 <?php require_once("../class/servicios/CargaServicios.php"); ?>
 <?php require_once("../class/servicios/MediaTecnicaServicios.php"); ?>
 <?php require_once("../class/servicios/GradoServicios.php"); ?>
-<?php require_once("../class/servicios/CargaAcademica.php"); ?>
+<?php require_once("../class/CargaAcademica.php"); ?>
 <div class="panel">
 										<header class="panel-heading panel-heading-purple"><?=$frases[73][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
