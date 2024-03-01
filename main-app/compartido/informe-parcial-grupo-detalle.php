@@ -69,7 +69,7 @@ while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH
 										$periodo = $config[2];
 										$estudiante = $matriculadosDatos['mat_id'];
 										include("../definitivas.php");
-										// if($definitiva>=$config[5] or $porcentajeActual==0) continue;
+										if($definitiva>=$config[5] or $porcentajeActual==0) continue;
 										//SOLO SE CUENTAN LAS MATERIAS QUE TIENEN NOTAS.
 										if($porcentajeActual>0){$materiasDividir++;}
 
