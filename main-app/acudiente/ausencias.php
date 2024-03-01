@@ -1,7 +1,8 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'AC0016'; ?>
 <?php include("verificar-carga.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Clases.php");?>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
@@ -116,8 +117,7 @@
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases 
-													 WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_registrada=1 AND cls_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+													$consulta = Clases::traerClasesCargaPeriodo($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$ausencia = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_ausencias 
 														WHERE aus_id_clase='".$resultado['cls_id']."' AND aus_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
