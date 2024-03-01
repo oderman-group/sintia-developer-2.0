@@ -59,7 +59,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 												} 
 												if(Modulos::validarSubRol(['DT0135'])){
 											?>
-												<p><a href="javascript:void(0);"  data-toggle="modal" data-target="#modal4"  >4. Libro final por curso</a></p>
+												<p><a href="javascript:void(0);"  data-toggle="modal" data-target="#modal4"  >4. Libro final</a></p>
 											<?php 
 												$idModal = "modal4"; $contenido  = "informe-libro-cursos-modal.php";  include("../compartido/contenido-modal.php");
 												} 
