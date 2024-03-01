@@ -6,6 +6,7 @@ require_once(ROOT_PATH."/main-app/class/Unidades.php");?>
 <?php include("verificar-periodos-diferentes.php");?>
 <?php include("../compartido/head.php");?>
 <?php
+require_once(ROOT_PATH."/main-app/class/Clases.php");
 if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodoConsultaActual) )
 {
 	
@@ -225,8 +226,7 @@ if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodo
                                             <label class="col-sm-2 control-label"><b>Banco de datos</b></label>
                                             <div class="col-sm-10">
 												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases 
-												WHERE cls_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND ((cls_compartir=1 AND cls_id_carga!='".$cargaConsultaActual."') OR (cls_id_carga='".$cargaConsultaActual."' AND cls_periodo!='".$periodoConsultaActual."'))");
+												$opcionesConsulta = Clases::listarClasesBD($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 												?>
                                                 <select class="form-control  select2" name="bancoDatos" onChange="avisoBancoDatos(this)">
                                                     <option value="">Seleccione una opción</option>

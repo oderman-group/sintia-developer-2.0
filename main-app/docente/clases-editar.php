@@ -6,12 +6,12 @@ include("../compartido/historial-acciones-guardar.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Clases.php");
 
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-$consultaDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases WHERE cls_id='".$idR."' AND cls_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-$datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
+$datosConsulta = Clases::traerDatosClases($conexion, $config, $idR);
 ?>
 
 	<!--bootstrap -->
