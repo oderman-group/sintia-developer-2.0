@@ -216,21 +216,8 @@ $idE="";
 													 $registroNotas = 0; 
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														 $datos1 = Evaluaciones::consultarTiempoEvaluacion($conexion, $config, $idE, $resultado['mat_id']);
-														 $consultaDatos2=mysqli_query($conexion, "SELECT
-														 (SELECT sum(preg_valor) FROM ".BD_ACADEMICA.".academico_actividad_preguntas preg
-														 INNER JOIN ".BD_ACADEMICA.".academico_actividad_evaluacion_preguntas aca_eva_pre ON aca_eva_pre.evp_id_pregunta=preg.preg_id AND aca_eva_pre.evp_id_evaluacion='".$idE."' AND aca_eva_pre.institucion={$config['conf_id_institucion']} AND aca_eva_pre.year={$_SESSION["bd"]}
-														 WHERE preg.institucion={$config['conf_id_institucion']} AND preg.year={$_SESSION["bd"]}),
- 
-														 (SELECT sum(preg_valor) FROM ".BD_ACADEMICA.".academico_actividad_preguntas preg
-														 INNER JOIN ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res ON res.res_id_pregunta=preg.preg_id AND res.res_id_evaluacion='".$idE."' AND res.res_id_estudiante='".$resultado['mat_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}
-														 INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=1 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]}
-														 WHERE preg.institucion={$config['conf_id_institucion']} AND preg.year={$_SESSION["bd"]}),
 														 
-														 (SELECT count(preg_id) FROM ".BD_ACADEMICA.".academico_actividad_preguntas preg
-														 INNER JOIN ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res ON res.res_id_pregunta=preg.preg_id AND res.res_id_evaluacion='".$idE."' AND res.res_id_estudiante='".$resultado['mat_id']."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}
-														 INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=1 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]}
-														 WHERE preg.institucion={$config['conf_id_institucion']} AND preg.year={$_SESSION["bd"]})");
-														 $datos2 = mysqli_fetch_array($consultaDatos2, MYSQLI_BOTH);
+														 $datos2 = Evaluaciones::traerConteoPreguntas($conexion, $config, $idE, $resultado['mat_id']);
 														 
 														 if($datos2[0] > 0){
 															$porcentaje = round(($datos2[1]/$datos2[0])*100,$config['conf_decimales_notas']);

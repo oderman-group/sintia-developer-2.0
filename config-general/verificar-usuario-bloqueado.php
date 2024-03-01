@@ -4,7 +4,7 @@ include(ROOT_PATH."/main-app/class/Asignaciones.php");
 
 if($datosUsuarioActual['uss_bloqueado']==1 && !strpos($_SERVER['PHP_SELF'], 'page-info.php'))
 {
-	include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
+	require_once(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 	$destinos = validarUsuarioActual($datosUsuarioActual);
 	echo $destinos;
 	header("Location:".$destinos."page-info.php?idmsg=221");

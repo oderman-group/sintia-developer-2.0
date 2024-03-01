@@ -6,12 +6,12 @@ include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 include("../compartido/head.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Clases.php");
 
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-$consultaDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases WHERE cls_id='".$idR."' AND cls_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-$datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
+$datosConsulta = Clases::traerDatosClases($conexion, $config, $idR);
 ?>
 <!-- Theme Styles -->
 <link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
@@ -85,10 +85,7 @@ $('#respRA').empty().hide().html("Guardando información, espere por favor...").
 										<div class="panel-body">
 											<p>Puedes cambiar a otra clases rápidamente para registrar la asistencia a tus estudiantes o hacer modificaciones de las mismas.</p>
 											<?php
-											$registrosEnComun = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases 
-											WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND cls_estado=1 AND cls_id!='".$idR."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-											ORDER BY cls_id DESC
-											");
+											$registrosEnComun = Clases::listarClasesDiferentes($conexion, $config, $idR, $cargaConsultaActual, $periodoConsultaActual);
 											while($regComun = mysqli_fetch_array($registrosEnComun, MYSQLI_BOTH)){
 											?>
 												<p><a href="<?=$_SERVER['PHP_SELF'];?>?idR=<?=base64_encode($regComun['cls_id']);?>"><?=$regComun['cls_tema'];?></a></p>

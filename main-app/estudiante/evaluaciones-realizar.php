@@ -231,9 +231,7 @@ require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");?>
 											$contPreguntas = 1;
 											$preguntasConsulta = Evaluaciones::preguntasEvaluacion($conexion, $config, $idE);
 											while($preguntas = mysqli_fetch_array($preguntasConsulta, MYSQLI_BOTH)){
-												$respuestasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_respuestas
-												WHERE resp_id_pregunta='".$preguntas['preg_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-												");
+												$respuestasConsulta = Evaluaciones::traerRespuestaPregunta($conexion, $config, $preguntas['preg_id']);
 												
 												$cantRespuestas = mysqli_num_rows($respuestasConsulta);
 												if($cantRespuestas==0) {

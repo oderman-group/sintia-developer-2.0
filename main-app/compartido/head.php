@@ -151,7 +151,7 @@ if (!empty($datosPaginaActual)) {
 	?>
 
 	<?php 
-	include("sintia-funciones.php");
+	require_once("sintia-funciones.php");
 	//Instancia de Clases generales
 	$usuariosClase = new Usuarios();
 	?>
