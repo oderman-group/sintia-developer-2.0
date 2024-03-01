@@ -344,7 +344,7 @@ function archivoPeso(dato){
 /*
 function notificaciones(){
 
-	var usuario = <?=$_SESSION["id"];?>;
+	var usuario = '<?=$_SESSION["id"];?>';
 
 	var consulta = 1;
 
@@ -823,7 +823,7 @@ function msjMarketplace(datos){
 
 function usuariosChat(){
 
-	var usuario = <?=$_SESSION["id"];?>;
+	var usuario = '<?=$_SESSION["id"];?>';
 
 	var institucion = <?=$config['conf_id_institucion'];?>;
 

@@ -4,7 +4,7 @@
  * @returns 
  */
 function def(enviada){
-    var split = enviada.name.split('-');
+    var split = enviada.name.split('_');
     var nota = enviada.value;
     var codEst = enviada.id;
     var per = split[0];
@@ -43,7 +43,7 @@ function def(enviada){
  * @returns 
  */
 function niv(enviada){
-    var split = enviada.name.split('-');
+    var split = enviada.name.split('_');
     var nota = enviada.value;
     var codEst = enviada.id;
     var per = split[0];
@@ -84,8 +84,7 @@ function notasGuardar(enviada){
 	var nota = enviada.value;
 	var notaAnterior = enviada.name;	
     var input = enviada.id;
-    var split = enviada.id.split('-');
-	var codEst = split[0];
+	var codEst = enviada.getAttribute("data-cod-estudiante");
 	var codNota = enviada.title;	 
 	var nombreEst = enviada.alt;
 
@@ -378,7 +377,7 @@ function observacionesBoletin(enviada){
  * @param enviada //Datos enviados por input
  */
 function recuperarIndicador(enviada){
-    var split = enviada.step.split('-');
+    var split = enviada.step.split('_');
     var carga = split[0];
     var periodo = split[1];
 

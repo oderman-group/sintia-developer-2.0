@@ -312,7 +312,7 @@
 						select1.add(opcion);
 					}
 					select1.addEventListener('change', function() {
-						editarEstudainte(valor);
+						editarCurso(valor);
 					});
 					// creamos el select del estado
 					var select2 = document.createElement("select");
@@ -327,7 +327,7 @@
 					}
 					select2.value='<?php echo ESTADO_CURSO_PRE_INSCRITO ?>';
 					select2.addEventListener('change', function() {
-						editarEstudainte(valor);
+						editarCurso(valor);
 					});
 
 					// Crea un elemento de botón
