@@ -112,6 +112,7 @@ if($config['conf_doble_buscador'] == 1) {
                                                 <thead>
                                                     <tr>
                                                         <th>ID</th>
+														<th>Bloq.</th>
 														<th><?=$frases[246][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[241][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
@@ -133,6 +134,11 @@ if($config['conf_doble_buscador'] == 1) {
 														$acudiente = UsuariosPadre::sesionUsuario($resultado["mat_acudiente"]);
 
 														$bgColor = $resultado['uss_bloqueado'] == 1 ? '#ff572238' : '';
+
+														$cheked = '';
+														if ($resultado['uss_bloqueado'] == 1) {
+															$cheked = 'checked';
+														}
 
 														$color = $resultado["mat_inclusion"] == 1 ? 'blue' : '';
 
@@ -186,7 +192,16 @@ if($config['conf_doble_buscador'] == 1) {
 															<?php }?>
 															<?=$resultado["mat_id"];?>
 														</td>
-                                        				
+														<td>
+															<?php if(!empty($resultado['uss_usuario']) && Modulos::validarSubRol(['DT0087'])) { ?>
+																<div class="input-group spinner col-sm-10" style="padding-top: 5px;">
+																	<label class="switchToggle">
+																		<input type="checkbox" value="1" onChange='cambiarBloqueo(<?=$dataParaJavascript;?>)' <?= $cheked; ?>>
+																		<span class="slider red round"></span>
+																	</label>
+																</div>
+															<?php } ?>
+														</td>
 														<td>
 														<?php 
 															$cambiarEstado='';
@@ -235,10 +250,6 @@ if($config['conf_doble_buscador'] == 1) {
 																			onClick="sweetConfirmacion('Alerta!','Esta seguro que desea transferir este estudiante a SION?','question','estudiantes-crear-sion.php?id=<?=base64_encode($resultado['mat_id']);?>')"
 																			>Transferir a SION</a></li>
 																		<?php } ?>
-																		
-																		<?php if(!empty($resultado['uss_usuario']) && Modulos::validarSubRol(['DT0087'])) {?>
-																			<li><a href="javascript:void(0);" onclick='cambiarBloqueo(<?=$dataParaJavascript;?>)' >Bloquear/Desbloquear</a></li>
-																		<?php }?>
 
 																		<?php if(array_key_exists(4, $arregloModulos) && Modulos::validarModulosActivos($conexion, 4) && !empty($resultado['uss_id']) && Modulos::validarSubRol(['DT0124'])) {?>
 																			<li><a href="usuarios-editar.php?id=<?=base64_encode($resultado['uss_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> usuario</a></li>
