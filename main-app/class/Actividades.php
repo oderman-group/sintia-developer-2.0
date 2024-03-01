@@ -13,6 +13,8 @@ class Actividades {
      * @param array $FILES
      * @param string $idCarga
      * @param string $periodo
+     * 
+     * @return string $codigo
      */
     public static function guardarActividad(mysqli $conexion, array $config, array $POST, array $FILES, $storage, string $idCarga, int $periodo){
         $codigo=Utilidades::generateCode("TAR");
@@ -41,6 +43,8 @@ class Actividades {
         } catch (Exception $e) {
             include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
         }
+
+        return $codigo;
     }
 
     /**
