@@ -12,10 +12,14 @@ require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 $estudiante="";
 if(!empty($_GET["estudiante"])){ $estudiante=base64_decode($_GET["estudiante"]);}
+if(!empty($_POST["estudiante"])){ $estudiante=$_POST["estudiante"];}
 $year=date("Y");
 $cPeriodo=$config[2];
 if(isset($_GET["periodo"])){
   $cPeriodo=$_GET["periodo"];
+}
+if(isset($_POST["periodo"])){
+  $cPeriodo=$_POST["periodo"];
 }
 ?>
 <head>
