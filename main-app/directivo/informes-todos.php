@@ -71,7 +71,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 												} 
 												if(Modulos::validarSubRol(['DT0101'])){
 											?>
-												<p><a href="javascript:void(0);"  data-toggle="modal" data-target="#modal6"  >6. Informe parcial por grupo</a></p>
+												<p><a href="javascript:void(0);"  data-toggle="modal" data-target="#modal6"  >6. Informe parcial</a></p>
 											<?php 
 												$idModal = "modal6"; $contenido  = "informe-parcial-grupo-modal.php";  include("../compartido/contenido-modal.php");
 												}
