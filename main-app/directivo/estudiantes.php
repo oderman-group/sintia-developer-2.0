@@ -235,10 +235,6 @@ if($config['conf_doble_buscador'] == 1) {
 																			onClick="sweetConfirmacion('Alerta!','Esta seguro que desea transferir este estudiante a SION?','question','estudiantes-crear-sion.php?id=<?=base64_encode($resultado['mat_id']);?>')"
 																			>Transferir a SION</a></li>
 																		<?php } ?>
-																		
-																		<?php if(!empty($resultado['uss_usuario']) && Modulos::validarSubRol(['DT0087'])) {?>
-																			<li><a href="javascript:void(0);" onclick='cambiarBloqueo(<?=$dataParaJavascript;?>)' >Bloquear/Desbloquear</a></li>
-																		<?php }?>
 
 																		<?php if(array_key_exists(4, $arregloModulos) && Modulos::validarModulosActivos($conexion, 4) && !empty($resultado['uss_id']) && Modulos::validarSubRol(['DT0124'])) {?>
 																			<li><a href="usuarios-editar.php?id=<?=base64_encode($resultado['uss_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> usuario</a></li>
