@@ -5,17 +5,14 @@
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
 <?php
-$consultaActivad=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas 
-WHERE tar_id='".$_GET["idR"]."' AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-$actividad = mysqli_fetch_array($consultaActivad, MYSQLI_BOTH);
+require_once(ROOT_PATH."/main-app/class/Actividades.php");
+$actividad = Actividades::traerDatosActividades($conexion, $config, $_GET["idR"]);
 
 if($actividad[0]==""){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=105";</script>';
 	exit();
 }
-$consultaFecha=mysqli_query($conexion, "SELECT DATEDIFF(tar_fecha_disponible, now()), DATEDIFF(tar_fecha_entrega, now()) FROM ".BD_ACADEMICA.".academico_actividad_tareas 
-WHERE tar_id='".$_GET["idR"]."' AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-$fechas = mysqli_fetch_array($consultaFecha, MYSQLI_BOTH);
+$fechas = Actividades::traerFechaActividad($conexion, $config, $_GET["idR"]);
 if($fechas[0]>0){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=206&fechaD='.$actividad['tar_fecha_disponible'].'&diasF='.$fechas[0].'";</script>';
 	exit();
@@ -163,8 +160,7 @@ if($fechas[0]>0){
 																		}?>
 		                                                            </div>
 																	<?php
-																	$consultaEntrega=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas_entregas WHERE ent_id_actividad='".$_GET["idR"]."' AND ent_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-																	$enviada = mysqli_fetch_array($consultaEntrega, MYSQLI_BOTH);
+																	$enviada = Actividades::consultarEntregas($conexion, $config, $datosEstudianteActual['mat_id'], $_GET["idR"]);
 																	if($enviada[0]!=""){
 																	?>
 																		<div class="panel">

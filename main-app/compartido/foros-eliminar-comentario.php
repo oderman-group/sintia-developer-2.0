@@ -10,11 +10,7 @@ $usuariosClase = new Usuarios;
 $idCom="";
 if(!empty($_GET["idCom"])){ $idCom=base64_decode($_GET["idCom"]);}
 
-try{
-    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_respuestas WHERE fore_id_comentario='" . base64_decode($_GET["idCom"]) . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-}
+Foros::eliminarRespuestaComentario($conexion, $config, $idCom);
 
 Foros::eliminarComentario($conexion, $config, $idCom);
 

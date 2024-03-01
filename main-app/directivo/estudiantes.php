@@ -112,6 +112,7 @@ if($config['conf_doble_buscador'] == 1) {
                                                 <thead>
                                                     <tr>
                                                         <th>ID</th>
+														<th>Bloq.</th>
 														<th><?=$frases[246][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[241][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
@@ -134,6 +135,11 @@ if($config['conf_doble_buscador'] == 1) {
 
 														$bgColor = $resultado['uss_bloqueado'] == 1 ? '#ff572238' : '';
 
+														$cheked = '';
+														if ($resultado['uss_bloqueado'] == 1) {
+															$cheked = 'checked';
+														}
+
 														$color = $resultado["mat_inclusion"] == 1 ? 'blue' : '';
 
 														$nombreAcudiente = '';
@@ -143,7 +149,7 @@ if($config['conf_doble_buscador'] == 1) {
 														}
 
 														$marcaMediaTecnica = '';
-														if($resultado['mat_tipo_matricula'] == GRADO_INDIVIDUAL && array_key_exists(10,$arregloModulos)) {
+														if($resultado['mat_tipo_matricula'] == GRADO_INDIVIDUAL && array_key_exists(10,$arregloModulos) && Modulos::validarModulosActivos($conexion, 10)) {
 															$marcaMediaTecnica = '<i class="fa fa-bookmark" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Media técnica"></i> ';
 														} 
 
@@ -186,7 +192,16 @@ if($config['conf_doble_buscador'] == 1) {
 															<?php }?>
 															<?=$resultado["mat_id"];?>
 														</td>
-                                        				
+														<td>
+															<?php if(!empty($resultado['uss_usuario']) && Modulos::validarSubRol(['DT0087'])) { ?>
+																<div class="input-group spinner col-sm-10" style="padding-top: 5px;">
+																	<label class="switchToggle">
+																		<input type="checkbox" value="1" onChange='cambiarBloqueo(<?=$dataParaJavascript;?>)' <?= $cheked; ?>>
+																		<span class="slider red round"></span>
+																	</label>
+																</div>
+															<?php } ?>
+														</td>
 														<td>
 														<?php 
 															$cambiarEstado='';
@@ -235,12 +250,8 @@ if($config['conf_doble_buscador'] == 1) {
 																			onClick="sweetConfirmacion('Alerta!','Esta seguro que desea transferir este estudiante a SION?','question','estudiantes-crear-sion.php?id=<?=base64_encode($resultado['mat_id']);?>')"
 																			>Transferir a SION</a></li>
 																		<?php } ?>
-																		
-																		<?php if(!empty($resultado['uss_usuario']) && Modulos::validarSubRol(['DT0087'])) {?>
-																			<li><a href="javascript:void(0);" onclick='cambiarBloqueo(<?=$dataParaJavascript;?>)' >Bloquear/Desbloquear</a></li>
-																		<?php }?>
 
-																		<?php if(array_key_exists(4, $arregloModulos) && !empty($resultado['uss_id']) && Modulos::validarSubRol(['DT0124'])) {?>
+																		<?php if(array_key_exists(4, $arregloModulos) && Modulos::validarModulosActivos($conexion, 4) && !empty($resultado['uss_id']) && Modulos::validarSubRol(['DT0124'])) {?>
 																			<li><a href="usuarios-editar.php?id=<?=base64_encode($resultado['uss_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?> usuario</a></li>
 																		<?php }?>
 
@@ -303,9 +314,9 @@ if($config['conf_doble_buscador'] == 1) {
 																	<?php if(!empty($resultado['uss_usuario'])) {?>
 																		<?php if(Modulos::validarSubRol(['DT0023'])){?>
 																		<li><a href="aspectos-estudiantiles.php?idR=<?=base64_encode($resultado['mat_id_usuario']);?>">Ficha estudiantil</a></li>
-																		<?php } if(array_key_exists(2, $arregloModulos) && Modulos::validarSubRol(['DT0093'])){?>
+																		<?php } if(array_key_exists(2, $arregloModulos) && Modulos::validarModulosActivos($conexion, 2) && Modulos::validarSubRol(['DT0093'])){?>
 																		<li><a href="finanzas-cuentas.php?id=<?=base64_encode($resultado["mat_id_usuario"]);?>" target="_blank">Estado de cuenta</a></li>
-																		<?php } if(array_key_exists(3, $arregloModulos) && Modulos::validarSubRol(['DT0117'])){?>
+																		<?php } if(array_key_exists(3, $arregloModulos) && Modulos::validarModulosActivos($conexion, 3) && Modulos::validarSubRol(['DT0117'])){?>
 																		<li><a href="reportes-lista.php?est=<?=base64_encode($resultado["mat_id_usuario"]);?>&filtros=<?=base64_encode(1);?>" target="_blank">Disciplina</a></li>
 																	<?php }}?>
 																</ul>

@@ -1,12 +1,12 @@
 <?php
+require_once(ROOT_PATH."/main-app/class/Clases.php");
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 $usuario=0;
 if(!empty($_GET["usuario"])){ $usuario=base64_decode($_GET["usuario"]);}
 require_once("../class/Estudiantes.php");
-$consultaDatosBD=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases 
-WHERE cls_id='".$idR."' AND cls_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-$datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
+
+$datosConsultaBD = Clases::traerDatosClases($conexion, $config, $idR);
 ?>
 					<div class="page-bar">
                         <div class="page-title-breadcrumb">
@@ -35,8 +35,7 @@ $datosConsultaBD = mysqli_fetch_array($consultaDatosBD, MYSQLI_BOTH);
 												<p>&nbsp;</p>
 												<ul class="list-group list-group-unbordered">
 													<?php
-													$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases 
-													WHERE cls_id_carga='".$cargaConsultaActual."' AND cls_periodo='".$periodoConsultaActual."' AND  cls_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+													$consulta = Clases::traerClasesCargaPeriodo($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$resaltaItem = $Plataforma->colorDos;
 														if($resultado['cls_id']==$idR){$resaltaItem = $Plataforma->colorUno;}
