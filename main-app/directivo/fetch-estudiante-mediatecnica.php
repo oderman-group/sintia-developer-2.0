@@ -1,6 +1,8 @@
 <?php
 include("session.php");
 require_once("../class/servicios/MediaTecnicaServicios.php");
+require_once("../class/servicios/GradoServicios.php");
+require_once("../class/servicios/MatriculaServicios.php");
 header("Content-type: application/json; charset=utf-8");
 $input = json_decode(file_get_contents("php://input"), true);
 if (empty($input)) {
@@ -15,13 +17,29 @@ if (empty($input)) {
 $response = array();
 require_once($_SERVER['DOCUMENT_ROOT'] . "/app-sintia/config-general/constantes.php");
 
+$cursoActual = GradoServicios::consultarCurso($curso);
+$matricualActual = MatriculaServicios::consultar($matricula);
+
 if (!empty($tipo)) {
     try {
         switch ($tipo) {
             case ACCION_CREAR:
+                $parametros = [
+                    'matcur_id_curso' => $curso,
+                    'matcur_id_institucion' => $config['conf_id_institucion'],
+                    'matcur_years' => $config['conf_agno']
+                ];
+                $cantidad = MediaTecnicaServicios::contar($parametros);
+                // se valida que tenga disponibilidad el curso
+                if (intval($cantidad) >= intval($cursoActual["gra_maximum_quota"])) {
+                    $response["ok"] = false;
+                    $response["msg"] = "El cupo maximo del curso " . $cursoActual["gra_nombre"] . " es de " . $cursoActual["gra_maximum_quota"];
+                    echo json_encode($response);
+                    exit();
+                }
                 MediaTecnicaServicios::guardarPorCurso($matricula, $curso);
                 $response["ok"] = true;
-                $response["msg"] = "El Curso " . $curso . " fue Creado correctamente.";
+                $response["msg"] = "Se Agregó a ".MatriculaServicios::nombreCompleto($matricualActual)." en el cruso ". $cursoActual["gra_nombre"] . " correctamente.";
                 break;
             case ACCION_MODIFICAR:
                 if (empty($input)) {
@@ -33,12 +51,12 @@ if (!empty($tipo)) {
                 }
                 MediaTecnicaServicios::editarporCurso($matricula, $curso, $grupo, $estado);
                 $response["ok"] = true;
-                $response["msg"] = "El Curso " . $curso . " fue Modificado correctamente.";
+                $response["msg"] = "Se modificó a ".MatriculaServicios::nombreCompleto($matricualActual)." del cruso ". $cursoActual["gra_nombre"] . " correctamente.";
                 break;
             case ACCION_ELIMINAR:
                 MediaTecnicaServicios::eliminarPorCurso($matricula, $curso);
                 $response["ok"] = true;
-                $response["msg"] = "El Curso " . $curso . " fue eliminado correctamente.";
+                $response["msg"] = "Se eliminó a ".MatriculaServicios::nombreCompleto($matricualActual)." del cruso ". $cursoActual["gra_nombre"] . " correctamente.";
                 break;
             default:
                 echo "Opción no reconocida";

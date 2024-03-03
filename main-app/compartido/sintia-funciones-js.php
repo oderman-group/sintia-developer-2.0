@@ -641,10 +641,18 @@ $(document).ready(function(){
 
     });
 
+	$('#boton-cerrar-asignaciones').click(function(){                    
+		localStorage.setItem("asignaciones", 1);
+	});
+
+	$('#boton-cerrar-asignaciones-2').click(function(){                    
+		localStorage.setItem("asignaciones", 1);
+	});
+
 });	
 
 
-
+document.addEventListener("DOMContentLoaded", function() {
 <?php
 
 //Mostrar modal de cumpleaños
@@ -657,7 +665,9 @@ if(!empty($cumpleUsuario['agno'])){
 
 		function mostrarModalCumple(){$("#modalCumple").modal("show");}
 
-		setTimeout('mostrarModalCumple()',2000);	
+		$(document).ready(function() {
+			mostrarModalCumple();
+		});
 
 	}
 
@@ -679,7 +689,9 @@ if($datosUsuarioActual['uss_preguntar_animo']==1){
 
 		function mostrarModalComentario(){$("#modalComentario").modal("show");}
 
-		setTimeout('mostrarModalComentario()',60000);
+		$(document).ready(function() {
+			mostrarModalComentario();
+		});
 
 	}
 
@@ -699,7 +711,9 @@ if($config['conf_deuda']==1 and $datosUsuarioActual['uss_tipo']==5){
 
 		function mostrarModalDeuda(){$("#modalDeuda").modal("show");}
 
-		setTimeout('mostrarModalDeuda()',1000);
+		$(document).ready(function() {
+			mostrarModalDeuda();
+		});
 
 	}
 
@@ -716,12 +730,24 @@ if($datosUsuarioActual['uss_tipo']==5 || $datosUsuarioActual['uss_tipo']==1){
 		if(localStorage.getItem("licencia")!=1){
 	
 			function mostrarModalLicencia(){$("#modalLicencia").modal("show");}
-	
-			setTimeout('mostrarModalLicencia()', 2000);
+			$(document).ready(function() {
+				mostrarModalLicencia();
+			});
 	
 		}
 	
 	<?php }?>
+
+<?php if($numAsignacionesEncuesta > 0 && ($idPaginaInterna != 'DC0146' && $idPaginaInterna != 'AC0038' && $idPaginaInterna != 'ES0062' && $idPaginaInterna != 'DT0324' && $idPaginaInterna != 'CM0060')){ ?>	
+	if(localStorage.getItem("asignaciones")!=1){
+		function mostrarModalAsignaciones() {
+			$("#modalAsignaciones").modal("show");
+		}
+		$(document).ready(function() {
+			mostrarModalAsignaciones();
+		});
+	}
+<?php }?>
 
 /* Mostrar términos y condiciones */
 <?php
@@ -751,8 +777,9 @@ if($datosUsuarioActual['uss_tipo']==5 || $datosUsuarioActual['uss_tipo']==1){
 ?>
 	if(localStorage.getItem("<?=$modal;?>")!=1){
 		function mostrar<?=$modal;?>(){$("#<?=$modal;?>").modal("show");}
-
-		setTimeout('mostrar<?=$modal;?>()', 2000);
+		$(document).ready(function() {
+			mostrar<?=$modal;?>();
+		});
 	}
 <?php }}} ?>
 
@@ -764,9 +791,12 @@ if($datosUsuarioActual['uss_tipo']==5){
 		function mostrarModalContrato(){
 			$("#modalContrato").modal("show");
 		}
-		setTimeout('mostrarModalContrato()', 2000);
+		$(document).ready(function() {
+			mostrarModalContrato();
+		});
 	}
 <?php }?>
+});
 
 
 	

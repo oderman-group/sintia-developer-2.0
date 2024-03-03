@@ -1,6 +1,10 @@
 <?php 
 							//MENÚ ESTUDIANTES
-							if($datosUsuarioActual['uss_tipo'] == TIPO_ESTUDIANTE){?>
+							if($datosUsuarioActual['uss_tipo'] == TIPO_ESTUDIANTE){
+								if (empty($datosEstudianteActual)) {
+									include("verificar-usuario.php");
+								}								
+							?>
 
 	                        
 							
@@ -9,6 +13,13 @@
 	                                <span class="title"><?=$frases[73][$datosUsuarioActual['uss_idioma']];?></span> 
 	                            </a>
 	                        </li>
+							<?php if ($datosEstudianteActual['mat_tipo_matricula'] == GRADO_INDIVIDUAL) {?>
+							<li class="nav-item">
+	                            <a href="cargas-adicionales.php" class="nav-link nav-toggle"> <i class="fa-solid fa-sitemap"></i>
+	                                <span class="title"><?=$frases[429][$datosUsuarioActual['uss_idioma']];?></span> 
+	                            </a>
+	                        </li>
+							<?php }?>
 
 
 							<?php if((!empty($_COOKIE["cargaE"]) && !empty($_COOKIE["periodoE"])) || (!empty($_GET["carga"]) && !empty($_GET["periodo"]))){?>
