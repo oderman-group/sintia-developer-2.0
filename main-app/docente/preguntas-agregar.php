@@ -153,8 +153,7 @@ $cantPreguntas = Evaluaciones::numeroPreguntasEvaluacion($conexion, $config, $id
                                             <label class="col-sm-2 control-label"><b>Banco de datos</b></label>
                                             <div class="col-sm-10">
 												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_preguntas 
-												WHERE preg_id_carga='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+												$opcionesConsulta = Evaluaciones::traerPreguntasCargas($conexion, $config, $cargaConsultaActual);
 												?>
                                                 <select class="form-control  select2" name="bancoDatos" onChange="avisoBancoDatos(this)">
                                                     <option value="">Seleccione una opción</option>

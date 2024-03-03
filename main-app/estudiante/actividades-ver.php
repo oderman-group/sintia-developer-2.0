@@ -8,18 +8,17 @@
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
 <?php
+require_once(ROOT_PATH."/main-app/class/Actividades.php");
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
-$actividad = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas 
-WHERE tar_id='".$idR."' AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
+$actividad = Actividades::traerDatosActividades($conexion, $config, $idR);
 
 if($actividad[0]==""){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=105";</script>';
 	exit();
 }
 
-$fechas = mysqli_fetch_array(mysqli_query($conexion, "SELECT TIMESTAMPDIFF(MINUTE, tar_fecha_disponible, now()), TIMESTAMPDIFF(MINUTE, tar_fecha_entrega, now()) FROM ".BD_ACADEMICA.".academico_actividad_tareas 
-WHERE tar_id='".$idR."' AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
+$fechas = Actividades::traerFechaActividad($conexion, $config, $idR);
 if($fechas[0]<0){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=206&fechaD='.$actividad['tar_fecha_disponible'].'&diasF='.$fechas[0].'";</script>';
 	exit();
@@ -153,9 +152,17 @@ $porcentajeRestante = round($porcentajeRestante,2);
 							                                    <h4 class="font-bold"><?=$frases[198][$datosUsuarioActual['uss_idioma']];?></h4>
 							                                    <hr>
 							                                    <ul>
-							                                        <?php if(!empty($actividad['tar_archivo'])  and file_exists('../files/tareas/'.$actividad['tar_archivo'])){?><li><a href="../files/tareas/<?=$actividad['tar_archivo'];?>" target="_blank"><?=$actividad['tar_archivo'];?></a></li><?php }?>
-																	<?php if(!empty($actividad['tar_archivo2']) and file_exists('../files/tareas/'.$actividad['tar_archivo2'])){?><li><a href="../files/tareas/<?=$actividad['tar_archivo2'];?>" target="_blank"><?=$actividad['tar_archivo2'];?></a></li><?php }?>
-																	<?php if(!empty($actividad['tar_archivo3']) and file_exists('../files/tareas/'.$actividad['tar_archivo3'])){?><li><a href="../files/tareas/<?=$actividad['tar_archivo3'];?>" target="_blank"><?=$actividad['tar_archivo3'];?></a></li><?php }?>
+																	<?php
+																	$url1= $storage->getBucket()->object(FILE_TAREAS.$actividad["tar_archivo"])->signedUrl(new DateTime('tomorrow'));
+																	$url2= $storage->getBucket()->object(FILE_TAREAS.$actividad["tar_archivo2"])->signedUrl(new DateTime('tomorrow'));
+																	$url3= $storage->getBucket()->object(FILE_TAREAS.$actividad["ar_archivo3"])->signedUrl(new DateTime('tomorrow'));
+																	$existe1=$storage->getBucket()->object(FILE_TAREAS.$actividad["tar_archivo"])->exists();
+																	$existe2=$storage->getBucket()->object(FILE_TAREAS.$actividad["tar_archivo2"])->exists();
+																	$existe3=$storage->getBucket()->object(FILE_TAREAS.$actividad["ar_archivo3"])->exists();
+																	?>
+							                                        <?php if(!empty($actividad['tar_archivo'])  and $existe1){?><li><a href="<?=$url1?>" target="_blank"><?=$actividad['tar_archivo'];?></a></li><?php }?>
+																	<?php if(!empty($actividad['tar_archivo2']) and $existe2){?><li><a href="<?=$url2;?>" target="_blank"><?=$actividad['tar_archivo2'];?></a></li><?php }?>
+																	<?php if(!empty($actividad['tar_archivo3']) and $existe3){?><li><a href="<?=$url3;?>" target="_blank"><?=$actividad['tar_archivo3'];?></a></li><?php }?>
 							                                    </ul>
 							                                    
 							                                    <br>
@@ -204,7 +211,7 @@ $porcentajeRestante = round($porcentajeRestante,2);
 																		}?>
 		                                                            </div>
 																	<?php
-																	$enviada = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas_entregas WHERE ent_id_actividad='".$idR."' AND ent_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
+																	$enviada = Actividades::consultarEntregas($conexion, $config, $datosEstudianteActual['mat_id'], $idR);
 																	if(!empty($enviada[0])){
 																	?>
 																		<div class="panel">
@@ -214,21 +221,29 @@ $porcentajeRestante = round($porcentajeRestante,2);
 																			
 																			<p><b><?=$frases[202][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$enviada['ent_fecha'];?> </p>
 																			
-																			<?php if(!empty($enviada['ent_archivo']) and file_exists('../files/tareas-entregadas/'.$enviada['ent_archivo'])){?>
+																			<?php 
+																			$url1= $storage->getBucket()->object(FILE_TAREAS_ENTREGADAS.$enviada["ent_archivo"])->signedUrl(new DateTime('tomorrow'));
+																			$url2= $storage->getBucket()->object(FILE_TAREAS_ENTREGADAS.$enviada["ent_archivo2"])->signedUrl(new DateTime('tomorrow'));
+																			$url3= $storage->getBucket()->object(FILE_TAREAS_ENTREGADAS.$enviada["ent_archivo3"])->signedUrl(new DateTime('tomorrow'));
+																			$existe1=$storage->getBucket()->object(FILE_TAREAS_ENTREGADAS.$enviada["ent_archivo"])->exists();
+																			$existe2=$storage->getBucket()->object(FILE_TAREAS_ENTREGADAS.$enviada["ent_archivo2"])->exists();
+																			$existe3=$storage->getBucket()->object(FILE_TAREAS_ENTREGADAS.$enviada["ent_archivo3"])->exists();
+																			
+																			if(!empty($enviada['ent_archivo']) and $existe1){?>
 																			<p><b><?=$frases[128][$datosUsuarioActual['uss_idioma']];?> 1:</b> 
-																				<a href="../files/tareas-entregadas/<?=$enviada['ent_archivo'];?>" target="_blank"><?=$enviada['ent_archivo'];?> </a>
+																				<a href="<?=$url1?>" target="_blank"><?=$enviada['ent_archivo'];?> </a>
 																			</p>
 																			<?php }?>
 																			
-																			<?php if(!empty($enviada['ent_archivo2']) and file_exists('../files/tareas-entregadas/'.$enviada['ent_archivo2'])){?>
+																			<?php if(!empty($enviada['ent_archivo2']) and $existe2){?>
 																			<p><b><?=$frases[128][$datosUsuarioActual['uss_idioma']];?> 2:</b> 
-																				<a href="../files/tareas-entregadas/<?=$enviada['ent_archivo2'];?>" target="_blank"><?=$enviada['ent_archivo2'];?> </a>
+																				<a href="<?=$url2?>"" target="_blank"><?=$enviada['ent_archivo2'];?> </a>
 																			</p>
 																			<?php }?>
 																			
-																			<?php if(!empty($enviada['ent_archivo3']) and file_exists('../files/tareas-entregadas/'.$enviada['ent_archivo3'])){?>
+																			<?php if(!empty($enviada['ent_archivo3']) and $existe3){?>
 																			<p><b><?=$frases[128][$datosUsuarioActual['uss_idioma']];?> 3:</b> 
-																				<a href="../files/tareas-entregadas/<?=$enviada['ent_archivo3'];?>" target="_blank"><?=$enviada['ent_archivo3'];?> </a>
+																				<a href="<?=$url3?>" target="_blank"><?=$enviada['ent_archivo3'];?> </a>
 																			</p>
 																			<?php }?>
 																			

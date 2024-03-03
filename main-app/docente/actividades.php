@@ -2,7 +2,8 @@
 <?php $idPaginaInterna = 'DC0018';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("verificar-carga.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Actividades.php");?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 <!-- Theme Styles -->
@@ -110,8 +111,7 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas 
-													 WHERE tar_id_carga='".$cargaConsultaActual."' AND tar_periodo='".$periodoConsultaActual."' AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+													 $consulta = Actividades::actividadesCargasPeriodos($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 													$contReg=1; 
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$consultafd=mysqli_query($conexion, "SELECT DATEDIFF('".$resultado['tar_fecha_entrega']."','".date("Y-m-d")."')");
@@ -135,7 +135,10 @@ $('#respuestaGuardar').empty().hide().html("").show(1);
 														</td>
 														<td><a href="actividades-entregas.php?idR=<?=base64_encode($resultado['tar_id']);?>" style="text-decoration: underline;"><?=$resultado['tar_titulo'];?></a></td>
 														<td><?=$frases[125][$datosUsuarioActual['uss_idioma']];?>: <?=$resultado['tar_fecha_disponible'];?><br><?=$frases[126][$datosUsuarioActual['uss_idioma']];?>: <?=$resultado['tar_fecha_entrega'];?></td>
-														<td><?php if(!empty($resultado['tar_archivo']) and file_exists('../files/tareas/'.$resultado['tar_archivo'])){?><a href="../files/tareas/<?=$resultado['tar_archivo'];?>" style="text-decoration: underline;" target="_blank">Descargar</a><?php }?></td>
+														<td><?php 
+														$url= $storage->getBucket()->object(FILE_TAREAS.$resultado["tar_archivo"])->signedUrl(new DateTime('tomorrow'));
+														$existe=$storage->getBucket()->object(FILE_TAREAS.$resultado["tar_archivo"])->exists();
+														if(!empty($resultado['tar_archivo']) and $existe){?><a href="<?=$url?>" style="text-decoration: underline;" target="_blank">Descargar</a><?php }?></td>
 														<td>
 															
 															<?php

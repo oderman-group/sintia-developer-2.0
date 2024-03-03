@@ -24,6 +24,7 @@ if(empty($_POST["notaMinima"])) {$_POST["notaMinima"] = 3;}
 if(empty($_POST["periodoTrabajar"])) {$_POST["periodoTrabajar"] = 4;}
 if(empty($_POST["porcenAsigan"])) {$_POST["porcenAsigan"] = 'NO';}
 if(empty($_POST["certificado"])) {$_POST["certificado"] = 1;}
+if(empty($_POST["formaNotas"])) {$_POST["formaNotas"] = CUANTITATIVA;}
 
 try {
 	mysqli_query($conexion, "UPDATE ".$baseDatosServicios.".configuracion SET 
@@ -63,7 +64,6 @@ try {
 	conf_mostrar_pasos_matricula='" . $_POST["pasosMatricula"] . "',
 	conf_reporte_sabanas_nota_indocador='" . $_POST["notasReporteSabanas"] . "',
 	conf_doble_buscador='" . $_POST["dobleBuscador"] . "',
-	conf_pie_factura='" . $_POST["pieFactura"] . "',
 	conf_libro_final='" . $_POST["libroFinal"] . "',
 	conf_estampilla_certificados='" . $_POST["estampilla"] . "'
 

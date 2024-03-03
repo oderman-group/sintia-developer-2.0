@@ -294,6 +294,7 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                         </div>
                     </div>
 
+                    <?php if (array_key_exists(23, $arregloModulos) && Modulos::validarModulosActivos($conexion, 23)) { ?>
                     <div class="form-group row">
                         <label class="col-sm-2 control-label">Forma para mostrar las notas <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta opción mostrará a los usuarios las notas en formato numérico o con frases de desempeño que corresponden a las notas numéricas, dependiendo la opción que seleccione."><i class="fa fa-question"></i></button> </label>
                         <div class="col-sm-2">
@@ -303,6 +304,7 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                             </select>
                         </div>
                     </div>
+                    <?php }?>
 
 
                     <p class="h3">Permisos</p>
@@ -539,14 +541,6 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                                 <option value="1" <?php if($datosConfiguracion['conf_firma_estudiante_informe_asistencia']==1){ echo "selected";} ?>>SI</option>
                                 <option value="0" <?php if($datosConfiguracion['conf_firma_estudiante_informe_asistencia']==0){ echo "selected";} ?>>NO</option>
                             </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-2 control-label">Texto para pie de factura
-                        <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este texto se vera reflejado el final de la factura."><i class="fa fa-question"></i></button> </label>
-                        <div class="col-sm-10">
-                            <textarea cols="80" id="editor2" name="pieFactura" rows="10" <?=$disabledPermiso;?>><?=$datosConfiguracion['conf_pie_factura'];?></textarea>
                         </div>
                     </div>
 

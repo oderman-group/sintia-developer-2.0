@@ -94,4 +94,57 @@ class Utilidades {
         // Output the 36 character UUID.
         return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
     }
+
+    /**
+     * Obtiene el nombre de la página desde una URL y devuelve su versión codificada en base64.
+     *
+     * Esta función extrae el nombre de la página PHP de una URL dada. Si el nombre de la página
+     * se encuentra, se codifica en base64 antes de devolverlo. Esto puede ser útil para manejar
+     * referencias a páginas de manera segura o discreta.
+     *
+     * @param string $url La URL completa desde la cual extraer el nombre de la página.
+     * @return string|null El nombre de la página codificado en base64 si se encuentra un archivo .php, 
+     *                     de lo contrario, null si la URL está vacía o no contiene un archivo .php.
+     */
+    public static function getPageFromUrl($url) {
+        if (!empty($url)) {
+            $urlArray = explode("/", $url);
+            $page     = end($urlArray);
+
+            if(strpos($page, '.php')) {
+                return base64_encode($page);
+            }
+        }
+    }
+
+    /**
+     * Obtiene el directorio de usuario codificado en base64 desde una URL.
+     *
+     * Analiza la URL proporcionada para determinar si contiene uno de los directorios válidos
+     * especificados. Si se encuentra un directorio válido, se devuelve su nombre codificado en base64.
+     * Los directorios válidos están definidos en la lista $directoriosValidos. Si la URL no contiene
+     * un directorio válido o si está vacía, la función no devuelve nada.
+     *
+     * @param string $url La URL de la cual extraer el directorio de usuario.
+     * @return string|null El directorio de usuario codificado en base64 si es válido, o null si no lo es.
+     */
+    public static function getDirectoryUserFromUrl($url) {
+        if (!empty($url)) {
+            $directoriosValidos = [
+                'directivo', 'docente', 'acudiente', 'estudiante'
+            ];
+            $urlArray     = explode("/", $url);
+            $cantElements = count($urlArray);
+
+            if ($cantElements > 2) {
+                $cantElements = $cantElements  - 2;
+            }
+
+            $directorio = $urlArray[$cantElements];
+
+            if (in_array($directorio, $directoriosValidos)) {
+                return base64_encode($directorio);
+            }
+        }
+    }
 }

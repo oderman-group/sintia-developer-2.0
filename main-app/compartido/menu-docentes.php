@@ -7,7 +7,7 @@
 							?>
 							
 							<li class="nav-item" data-step="13" data-intro="<b>Cargas académicas:</b> Aquí encontrarás las cargas académicas que los directivos te han asignado para trabajar. Debes seleccionar una carga primero, antes de empezar a llenar cualquier información como calificaciones, actividades, foros, etc." data-position='right' data-scrollTo='tooltip'>
-	                            <a href="cargas.php" class="nav-link nav-toggle"> <i class="material-icons">class</i>
+	                            <a <?php validarModuloMenu(1, "cargas.php", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="material-icons">class</i>
 	                                <span class="title"><?=$frases[12][$datosUsuarioActual['uss_idioma']];?></span> 
 	                            </a>
 	                        </li>
@@ -33,15 +33,25 @@
 
 									<li <?php agregarClass(MENU,["DC0046", "DC0025", "DC0070", "DC0072", "DC0071"]) ?>><a <?php validarModuloMenu(11, "clases.php", MENU) ?> class="nav-link "> <span class="title"><?=$frases[7][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 
+									<?php if(Modulos::validarModulosActivos($conexion, 15)){ ?>
 									<li <?php agregarClass(MENU,["DC0012", "DC0015"]) ?>><a <?php validarModuloMenu(15, "cronograma-calendario.php", MENU) ?> class="nav-link "> <span class="title"><?=$frases[111][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php }?>
 									
+									<?php if(Modulos::validarModulosActivos($conexion, 21)){ ?>
 									<li <?php agregarClass(MENU,["DC0022"]) ?>><a <?php validarModuloMenu(21, "importar-info.php", MENU) ?> class="nav-link "> <span class="title"><?=$frases[167][$datosUsuarioActual['uss_idioma']];?></span></a> </li>
+									<?php }?>
 
+									<?php if(Modulos::validarModulosActivos($conexion, 14)){ ?>
 									<li <?php agregarClass(MENU,["DC0018"]) ?>><a <?php validarModuloMenu(14, "actividades.php", MENU) ?> class="nav-link "> <span class="title"><?=$frases[112][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php }?>
 									
+									<?php if(Modulos::validarModulosActivos($conexion, 12)){ ?>
 									<li <?php agregarClass(MENU,["DC0043"]) ?>><a <?php validarModuloMenu(12, "evaluaciones.php", MENU) ?> class="nav-link "> <span class="title"><?=$frases[114][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php }?>
 
+									<?php if(Modulos::validarModulosActivos($conexion, 13)){ ?>
 									<li <?php agregarClass(MENU,["DC0037"]) ?>><a <?php validarModuloMenu(13, "foros.php", MENU) ?> class="nav-link "> <span class="title"><?=$frases[113][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<?php }?>
 
 	                            </ul>
 	                        </li>
@@ -73,19 +83,21 @@
 							<?php }?>
 							
 							
-							<?php if(isset($datosCargaActual) && !empty($datosCargaActual['car_id'])){?>
+							<?php if(isset($datosCargaActual) && !empty($datosCargaActual['car_id']) && Modulos::validarModulosActivos($conexion, 1)){?>
 							<li class="nav-item">
-	                            <a href="estudiantes.php" class="nav-link nav-toggle"> <i class="fa fa-group"></i>
+	                            <a <?php validarModuloMenu(1, "estudiantes.php", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-group"></i>
 	                                <span class="title">Mis <?=$frases[55][$datosUsuarioActual['uss_idioma']];?></span> 
 	                            </a>
 	                        </li>
 	                        <?php }?>
 
+							<?php if(Modulos::validarModulosActivos($conexion, 7)){ ?>
 	                        <li class="nav-item">
-	                            <a href="estudiantes-todos.php" class="nav-link nav-toggle"> <i class="fa fa-group"></i>
+	                            <a <?php validarModuloMenu(7, "estudiantes-todos.php", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-group"></i>
 	                                <span class="title">Todos los estudiantes</span> 
 	                            </a>
 	                        </li>
+							<?php }?>
 							
 							<?php if(Modulos::validarModulosActivos($conexion, 19)){ ?>
 							<li class="nav-item">

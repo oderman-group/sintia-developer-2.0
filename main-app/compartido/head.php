@@ -151,7 +151,7 @@ if (!empty($datosPaginaActual)) {
 	?>
 
 	<?php 
-	include("sintia-funciones.php");
+	require_once("sintia-funciones.php");
 	//Instancia de Clases generales
 	$usuariosClase = new Usuarios();
 	?>
@@ -249,7 +249,13 @@ if (!empty($datosPaginaActual)) {
 	$(window).load(function() {
 		$(".loader").fadeOut("slow");
 	});
-	</script>
+	
+	setInterval(function() {
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', '../compartido/session-start.php', true);
+		xhr.send();
+	}, 1200000);
+</script>
 
 	
 	
