@@ -24,10 +24,10 @@ if(!empty($cargaE)){
 	
 	$enlaceNext = 'calificaciones.php';
 	if($config['conf_sin_nota_numerica']==1){
-		$enlaceNext = 'calificaciones.php';
+		$enlaceNext = 'matricula.php';
 	}
 	if($config['conf_mostrar_calificaciones_estudiantes']!=1){
-		$enlaceNext = 'ausencias.php';
+		$enlaceNext = 'matricula.php';
 	}
 	echo '<script type="text/javascript">window.location.href="'.$enlaceNext.'?carga='.base64_encode($cargaE).'&periodo='.base64_encode($periodoE).'";</script>';
 	exit();
