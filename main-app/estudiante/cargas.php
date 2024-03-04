@@ -24,7 +24,7 @@ if(!empty($cargaE)){
 	
 	$enlaceNext = 'calificaciones.php';
 	if($config['conf_sin_nota_numerica']==1){
-		$enlaceNext = 'calificaciones.php';
+		$enlaceNext = 'matricula.php';
 	}
 	if($config['conf_mostrar_calificaciones_estudiantes']!=1){
 		$enlaceNext = 'ausencias.php';
