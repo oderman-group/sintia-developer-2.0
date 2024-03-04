@@ -11,11 +11,10 @@ require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");
 
 $archivoSubido = new Archivos;
-$codigo=Utilidades::generateCode("PRE");
 
 if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 	
-	Evaluaciones::guardarPreguntasEvaluacion($conexion, $config, $_POST, $_FILES);
+	$codigo = Evaluaciones::guardarPreguntasEvaluacion($conexion, $config, $_POST, $_FILES);
 
 	Evaluaciones::guardarRelacionPreguntaEvaluacion($conexion, $config, $codigo, $_POST);
 
@@ -78,9 +77,9 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 }else{
 	$preguntaBD = Evaluaciones::traerDatosPreguntas($conexion, $config, $_POST["bancoDatos"]);
 
-	Evaluaciones::guardarPreguntasBDEvaluacion($conexion, $config, $preguntaBD, $cargaConsultaActual);
+	$codigo = Evaluaciones::guardarPreguntasBDEvaluacion($conexion, $config, $preguntaBD, $cargaConsultaActual);
 
-	$respuestasConsulta = Evaluaciones::traerRespuestaPregunta($conexion, $config, $_POST["bancoDatos"]);
+	$respuestasPreguntaConsulta = Evaluaciones::traerRespuestaPregunta($conexion, $config, $_POST["bancoDatos"]);
 
 	while($respuestasPreguntaDatos = mysqli_fetch_array($respuestasPreguntaConsulta, MYSQLI_BOTH)){
 
