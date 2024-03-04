@@ -26,7 +26,7 @@ if(!empty($cargaE)){
 	if($config['conf_sin_nota_numerica']==1){
 		$enlaceNext = 'matricula.php';
 	}
-	if($config['conf_mostrar_calificaciones_estudiantes']!=1){
+	if($config['conf_mostrar_calificaciones_estudiantes']!=1 && (!empty($arregloModulos) && array_key_exists(11, $arregloModulos))){
 		$enlaceNext = 'ausencias.php';
 	}
 	echo '<script type="text/javascript">window.location.href="'.$enlaceNext.'?carga='.base64_encode($cargaE).'&periodo='.base64_encode($periodoE).'";</script>';
