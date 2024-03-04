@@ -6,7 +6,7 @@ $tienePermiso = Modulos::verificarPermisosPaginas($idPaginaInterna);
 
 if (!$tienePermiso && $idPaginaInterna!='DT0107') {
 	if (empty($usuariosClase)) {
-		include("sintia-funciones.php");
+		require_once("sintia-funciones.php");
 		$usuariosClase = new Usuarios;
 	}
 	$url= $usuariosClase->verificarTipoUsuario($datosUsuarioActual['uss_tipo'],'page-info.php');
