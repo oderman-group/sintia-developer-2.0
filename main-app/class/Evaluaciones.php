@@ -721,6 +721,8 @@ class Evaluaciones{
      * @param array $config
      * @param array $POST
      * @param array $FILES
+     * 
+     * @return string $codigo
      */
     public static function guardarPreguntasEvaluacion(mysqli $conexion, array $config, array $POST, array $FILES){
 
@@ -741,6 +743,8 @@ class Evaluaciones{
         } catch (Exception $e) {
             include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
         }
+
+        return $codigo;
     }
 
     /**
@@ -749,6 +753,8 @@ class Evaluaciones{
      * @param array $config
      * @param array $datosPregunta
      * @param string $idCarga
+     * 
+     * @return string $codigo
      */
     public static function guardarPreguntasBDEvaluacion(mysqli $conexion, array $config, array $datosPregunta, string $idCarga){
 
@@ -758,6 +764,8 @@ class Evaluaciones{
         } catch (Exception $e) {
             include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
         }
+
+        return $codigo;
     }
 
     /**
