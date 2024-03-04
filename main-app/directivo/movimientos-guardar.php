@@ -67,9 +67,31 @@ if (!empty($_POST["abonoAutomatico"]) && $_POST["abonoAutomatico"] == 1) {
     $totalNeto    = Movimientos::calcularTotalNeto($conexion, $config, $idInsercion, $_POST["valor"]);
 
     if ($totalNeto > 0) {
+        switch ($_POST["forma"]) {
+            case 1:
+                $formaPago = 'EFECTIVO';
+            break;
+            case 2:
+                $formaPago = 'CHEQUE';
+            break;
+            case 3:
+                $formaPago = 'T_DEBITO';
+            break;
+            case 4:
+                $formaPago = 'T_CREDITO';
+            break;
+            case 5:
+                $formaPago = 'TRANSFERENCIA';
+            break;
+            case 6:
+                $formaPago = 'OTROS';
+            break;
+        }
+
         $codigoUnico=Utilidades::generateCode("ABO");
+
         try {
-            mysqli_query($conexion, "INSERT INTO ".BD_FINANCIERA.".payments (responsible_user, invoiced, cod_payment, type_payments, payment_method, observation, institucion, year)VALUES('{$_SESSION["id"]}', '".$_POST["usuario"]."', '".$codigoUnico."', '".INVOICE."', 'TRANSFERENCIA', 'Abono automatico', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
+            mysqli_query($conexion, "INSERT INTO ".BD_FINANCIERA.".payments (responsible_user, invoiced, cod_payment, type_payments, payment_method, observation, institucion, year)VALUES('{$_SESSION["id"]}', '".$_POST["usuario"]."', '".$codigoUnico."', '".INVOICE."', '".$formaPago."', 'Abono automatico', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
