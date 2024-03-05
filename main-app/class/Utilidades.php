@@ -58,7 +58,8 @@ class Utilidades {
      */
     public static function generateCode($index='')
     {
-        return $index."-".self::guidv4();
+        return uniqid($index.'-');
+        //return $index."-".self::guidv4();
     }
 
     /**
