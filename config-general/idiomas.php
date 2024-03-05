@@ -666,7 +666,7 @@ $frases[323][$l] = 'Estrato';
 
 $frases[324][$l] = 'Sistema';
 
-$frases[325][$l] = 'Si necesita hacer un cambio de acudiente debe comunicarse vía WhatsApp, al número 318 347 9394.';
+$frases[325][$l] = 'Si necesita hacer un cambio de acudiente debe comunicarse con la secretaria de la institución.';
 
 $frases[326][$l] = 'Documento';
 
