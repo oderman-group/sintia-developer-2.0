@@ -58,23 +58,23 @@
 
 							<?php 
 							//MÓDULO INSCRIPCIONES Y ADMISIONES
-								if(Modulos::validarSubRol(["DT0102", "DT0014"]) && Modulos::validarModulosActivos($conexion, 9)){
+								if(Modulos::validarSubRol(["DT0102", "DT0014"]) && Modulos::validarModulosActivos($conexion, 8)){
 							?>
 								<li <?php agregarClass(MENU_PADRE,["DT0102", "DT0014"]) ?>>
-									<a <?php validarModuloMenu(9, "#", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-address-book"></i>
+									<a <?php validarModuloMenu(8, "#", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-address-book"></i>
 										<span class="title"><?=$frases[390][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 									</a>
 									<ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0102", "DT0014"]) ?>>
 										<?php
 											if(Modulos::validarSubRol(["DT0102"])){
 										?>
-											<li <?php agregarClass(MENU,["DT0102"]) ?>><a <?php validarModuloMenu(9, "inscripciones.php", MENU) ?> class="nav-link "> <span class="title"><?=$frases[392][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+											<li <?php agregarClass(MENU,["DT0102"]) ?>><a <?php validarModuloMenu(8, "inscripciones.php", MENU) ?> class="nav-link "> <span class="title"><?=$frases[392][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 										<?php }?>
 
 										<?php
 											if(Modulos::validarSubRol(["DT0014"])){
 										?>
-											<li <?php agregarClass(MENU,["DT0014"]) ?>><a <?php validarModuloMenu(9, "configuracion-admisiones.php", MENU) ?> class="nav-link "> <span class="title"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+											<li <?php agregarClass(MENU,["DT0014"]) ?>><a <?php validarModuloMenu(8, "configuracion-admisiones.php", MENU) ?> class="nav-link "> <span class="title"><?=$frases[17][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 										<?php }?>
 									</ul>
 								</li>
