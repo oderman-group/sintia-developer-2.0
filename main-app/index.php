@@ -5,11 +5,16 @@ if(!isset($_GET['nodb'])) {
     require_once("index-logica.php");
 
     if (!empty($_GET['inst']) && !empty($_GET['year'])) {
-        $informacionInstConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".general_informacion WHERE info_institucion='" . $_GET['inst'] . "' AND info_year=".$_GET['year']);
-        $informacion_inst = mysqli_fetch_array($informacionInstConsulta, MYSQLI_BOTH);
-        if (!empty($informacion_inst["info_logo"]) && file_exists("files/images/logo/".$informacion_inst["info_logo"])) {
-            $logoIndex = "files/images/logo/".$informacion_inst["info_logo"];
-            $logoWidth = 300;
+        try {
+            $informacionInstConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".general_informacion WHERE info_institucion='" . base64_decode($_GET['inst']) . "' AND info_year=".base64_decode($_GET['year']));
+            $informacion_inst = mysqli_fetch_array($informacionInstConsulta, MYSQLI_BOTH);
+            if (!empty($informacion_inst["info_logo"]) && file_exists("files/images/logo/".$informacion_inst["info_logo"])) {
+                $logoIndex = "files/images/logo/".$informacion_inst["info_logo"];
+                $logoWidth = 300;
+            }
+            $inst = base64_decode($_GET['inst']);
+        } catch(Exception $e){
+            header("Location:".REDIRECT_ROUTE."?error=".$e->getMessage());
         }
     }
 }
@@ -57,7 +62,7 @@ if(!isset($_GET['nodb'])) {
                                     <option value="">Seleccione una institución</option>
                                     <?php
                                     while($instituciones = mysqli_fetch_array($institucionesConsulta, MYSQLI_BOTH)){
-                                      $selected = (isset($_GET['inst']) and $_GET['inst']==$instituciones['ins_id']) ? 'selected' : '';
+                                      $selected = (isset($_GET['inst']) && $inst == $instituciones['ins_id']) ? 'selected' : '';
                                     ?>
                                       <option value="<?=$instituciones['ins_id'];?>" <?=$selected;?>><?=$instituciones['ins_siglas'];?></option>
                                     <?php }?>
