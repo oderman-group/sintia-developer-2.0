@@ -1,6 +1,17 @@
 <?php
+$logoIndex = "../config-general/assets-login-2023/img/logo.png";
+$logoWidth = 100;
 if(!isset($_GET['nodb'])) {
     require_once("index-logica.php");
+
+    if (!empty($_GET['inst']) && !empty($_GET['year'])) {
+        $informacionInstConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".general_informacion WHERE info_institucion='" . $_GET['inst'] . "' AND info_year=".$_GET['year']);
+        $informacion_inst = mysqli_fetch_array($informacionInstConsulta, MYSQLI_BOTH);
+        if (!empty($informacion_inst["info_logo"]) && file_exists("files/images/logo/".$informacion_inst["info_logo"])) {
+            $logoIndex = "files/images/logo/".$informacion_inst["info_logo"];
+            $logoWidth = 300;
+        }
+    }
 }
 ?>
 
@@ -38,7 +49,7 @@ if(!isset($_GET['nodb'])) {
                             <?php include("../config-general/mensajes-informativos.php"); ?>
 		                        <input type="hidden" name="urlDefault" value="<?php if(isset($_GET["urlDefault"])) echo $_GET["urlDefault"];?>" />
                                 <input type="hidden" name="directory"  value="<?php if(isset($_GET["directory"]))  echo $_GET["directory"]; ?>" />
-                            <img class="mb-4" src="../config-general/assets-login-2023/img/logo.png" width="100">
+                            <img class="mb-4" src="<?=$logoIndex;?>" width="<?=$logoWidth;?>">
 
                             <div class="form-floating mt-3">
                                 <select class="form-select select2" id="institution" name="bd"
