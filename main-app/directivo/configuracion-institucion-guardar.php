@@ -17,7 +17,9 @@ include("../compartido/historial-acciones-guardar.php");
 		exit();
 	}
 	if ($_FILES['logo']['name'] != "") {
-		$archivo = $_FILES['logo']['name'];
+		$explode = explode(".", $_FILES['logo']['name']);
+		$extension = end($explode);
+		$archivo = uniqid('logo_') . "." . $extension;
 		$archivoAnt = $_POST["logoAnterior"];
 		$destino = "../files/images/logo/";
 		@unlink($destino . "/" . $archivoAnt);

@@ -15,6 +15,16 @@ try {
 
 	mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_estado=0, uss_ultima_salida=now() WHERE uss_id='".$_SESSION["id"]."' AND institucion={$_SESSION["idInstitucion"]} AND year={$_SESSION["bd"]}");
 
+	$urlRedirect = REDIRECT_ROUTE."?inst=".$_SESSION["idInstitucion"]."&year=".$_SESSION["bd"];
+
+	setcookie("carga","",time()-3600);
+	setcookie("periodo","",time()-3600);
+	setcookie("cargaE","",time()-3600);
+	setcookie("periodoE","",time()-3600);
+	session_destroy();
+
+	header("Location:".$urlRedirect);
+
 } catch (Exception $e) {
 
 	setcookie("carga","",time()-3600);
@@ -26,11 +36,3 @@ try {
 	header("Location:".REDIRECT_ROUTE."?error=".$e->getMessage());
 
 }
-
-setcookie("carga","",time()-3600);
-setcookie("periodo","",time()-3600);
-setcookie("cargaE","",time()-3600);
-setcookie("periodoE","",time()-3600);
-session_destroy();
-
-header("Location:".REDIRECT_ROUTE);
