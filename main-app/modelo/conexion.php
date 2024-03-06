@@ -49,11 +49,11 @@ if (empty($_SESSION["inst"])) {
 
 		switch($e->getCode()){
 			case 1044:
-				$exception = "error=7&inst=".$_POST["bd"];
+				$exception = "error=7&inst=".base64_encode($_POST["bd"]);
 			break;
 
 			default:
-				$exception = "error=".$e->getMessage()."&inst=".$_POST["bd"];
+				$exception = "error=".$e->getMessage()."&inst=".base64_encode($_POST["bd"]);
 			break;	
 		}
 
