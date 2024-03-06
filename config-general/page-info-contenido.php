@@ -305,7 +305,7 @@ switch($_GET["idmsg"]){
 	case 302:
 		$color = 'red';
 		$titulo = 'MÓDULO NO ASIGNADO';
-		$texto = 'La institución no tiene este módulo asignado.';
+		$texto = 'La institución no tiene asignado el módulo, al cual pertenence la pagina que intentaste acceder ['.$_GET["idPagina"].'].';
 		$url1 = 'index.php';
 		$boton1 = 'IR AL INICIO';
 	break;
