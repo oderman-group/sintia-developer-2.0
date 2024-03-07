@@ -124,6 +124,15 @@ if (!empty($_GET['idE'])) {
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Limite
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Con este campo determinas cuantos usuarios pueden realizar la encuesta."><i class="fa fa-question"></i></button>
+                                        </label>
+                                        <div class="col-sm-4">
+                                            <input type="number" min="0" name="limiteEvaluadores" class="form-control" autocomplete="off" value="0" <?=$disabledPermiso;?>>
+                                        </div>
+                                    </div>
                                     
                                     <a href="javascript:void(0);" name="asignaciones.php?idE=<?= base64_encode($idE); ?>" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i><?= $frases[184][$datosUsuarioActual['uss_idioma']]; ?></a>
                                     <?php if (Modulos::validarPermisoEdicion()) { ?>
