@@ -306,8 +306,7 @@ $(document).ready(function() {
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Celular</label>
                                         <div class="col-sm-4">
-                                            <input type="text" name="celular" class="form-control"
-                                                value="<?=$datosUsuario['celular'];?>" <?=$disabledPermiso;?>>
+                                            <input type="text" name="celular" class="form-control" data-mask="(999) 999-9999" value="<?=$datosUsuario['celular'];?>" <?=$disabledPermiso;?>>
                                         </div>
                                     </div>
 
