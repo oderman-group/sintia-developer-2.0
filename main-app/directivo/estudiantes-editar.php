@@ -18,6 +18,7 @@ if(!empty($_GET["id"])){
 } else if(!empty($_GET["idUsuario"])){ 
 	$idUsuario=base64_decode($_GET["idUsuario"]);
 	$datosEstudianteActual = Estudiantes::obtenerDatosEstudiantePorIdUsuario($idUsuario);
+	$id=$datosEstudianteActual["mat_id"];
 }
 
 if( empty($datosEstudianteActual) ){
