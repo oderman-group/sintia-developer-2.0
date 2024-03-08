@@ -140,7 +140,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 										    <div class="form-group row">
 												<label class="col-sm-2 control-label">Telefono</label>
 												<div class="col-sm-4">
-                                                    <input name="telI" class="form-control" type="text" required value="<?=$datosinf["info_telefono"]?>">
+                                                    <input name="telI" class="form-control" type="text" data-mask="999-9999" required value="<?=$datosinf["info_telefono"]?>">
 												</div>
 											</div>
 											
@@ -343,6 +343,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	<script src="../../config-general/assets/plugins/jquery-validation/js/jquery.validate.min.js"></script>
     <!-- bootstrap -->
     <script src="../../config-general/assets/plugins/bootstrap/js/bootstrap.min.js" ></script>
+    <script src="../../config-general/assets/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js" ></script>
     <!-- steps -->
     <script src="../../config-general/assets/plugins/steps/jquery.steps.js" ></script>
     <script src="../../config-general/assets/js/pages/steps/steps-data.js" ></script>

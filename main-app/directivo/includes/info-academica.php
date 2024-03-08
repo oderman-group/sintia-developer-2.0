@@ -180,7 +180,7 @@
 							<tbody>
 								<?php
 								$parametros = [
-									'matcur_id_matricula' => base64_decode($_GET["id"]),
+									'matcur_id_matricula' => $id,
 									'matcur_id_institucion' => $config['conf_id_institucion'],
 									'matcur_years' => $config['conf_agno'],
 									'arreglo' => false
@@ -219,7 +219,7 @@
 												</select>
 											</td>
 											<td>
-												<button type="button" title="<?= $objetoEnviar; ?>" name="fetch-estudiante-mediatecnica.php?tipo=<?= base64_encode(ACCION_ELIMINAR) ?>&curso=<?= base64_encode($idCurso["gra_id"]) ?>&matricula=<?= $_GET["id"] ?>" id="<?= $idCurso["gra_id"]; ?>" onClick="deseaEliminar(this)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+												<button type="button" title="<?= $objetoEnviar; ?>" name="fetch-estudiante-mediatecnica.php?tipo=<?= base64_encode(ACCION_ELIMINAR) ?>&curso=<?= base64_encode($idCurso["gra_id"]) ?>&matricula=<?= $id?>" id="<?= $idCurso["gra_id"]; ?>" onClick="deseaEliminar(this)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
 											</td>
 										</tr>
 								<?php  }
@@ -244,7 +244,7 @@
 				"curso": id,
 				"grupo": grupoSelect.value,
 				"estado": estadoSelect.value,
-				"matricula": '<?php echo base64_decode($_GET["id"]) ?>'
+				"matricula": '<?=$id?>'
 			};
 			accionCursoMatricula(data, '<?php echo ACCION_MODIFICAR ?>');
 		};
@@ -338,7 +338,7 @@
 					boton.name = "fetch-estudiante-mediatecnica.php?" +
 						"tipo=<?php echo base64_encode(ACCION_ELIMINAR) ?>" +
 						"&curso=" + btoa(valor) +
-						"&matricula=<?php echo $_GET["id"] ?>";
+						"&matricula=<?=$id?>";
 					boton.classList.add('btn', 'btn-danger', 'btn-sm');
 					var icon = document.createElement('i'); // se crea la icono
 					icon.classList.add('fa', 'fa-trash');
@@ -353,7 +353,7 @@
 					// se guarda en la base de datos
 					var data = {
 						"curso": valor,
-						"matricula": '<?php echo base64_decode($_GET["id"]) ?>'
+						"matricula": '<?=$id?>'
 					};
 					accionCursoMatricula(data, '<?php echo ACCION_CREAR ?>');
 					// Crear una nueva fila                                                                
