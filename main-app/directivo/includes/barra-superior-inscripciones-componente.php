@@ -1,35 +1,4 @@
 <?php
-$busqueda = '';
-if (!empty($_GET['busqueda'])) {
-  $busqueda = $_GET['busqueda'];
-  $filtro .= " AND (
-  mat_id LIKE '%" . $busqueda . "%' 
-  OR mat_nombres LIKE '%" . $busqueda . "%' 
-  OR mat_nombre2 LIKE '%" . $busqueda . "%' 
-  OR mat_primer_apellido LIKE '%" . $busqueda . "%' 
-  OR mat_segundo_apellido LIKE '%" . $busqueda . "%' 
-  OR mat_documento LIKE '%" . $busqueda . "%' 
-  OR mat_email LIKE '%" . $busqueda . "%'
-  OR CONCAT(TRIM(mat_primer_apellido), ' ', TRIM(mat_segundo_apellido), ' ', TRIM(mat_nombres)) LIKE '%" . $busqueda . "%'
-  OR CONCAT(TRIM(mat_primer_apellido), TRIM(mat_segundo_apellido), TRIM(mat_nombres)) LIKE '%" . $busqueda . "%'
-  OR CONCAT(TRIM(mat_primer_apellido), ' ', TRIM(mat_nombres)) LIKE '%" . $busqueda . "%'
-  OR CONCAT(TRIM(mat_primer_apellido), TRIM(mat_nombres)) LIKE '%" . $busqueda . "%'
-  OR CONCAT(TRIM(mat_nombres), ' ', TRIM(mat_primer_apellido)) LIKE '%".$busqueda."%'
-  OR CONCAT(TRIM(mat_nombres), '', TRIM(mat_primer_apellido)) LIKE '%".$busqueda."%'
-  OR CONCAT(TRIM(mat_primer_apellido), '', TRIM(mat_nombres)) LIKE '%".$busqueda."%'
-  OR CONCAT(TRIM(mat_nombres), ' ', TRIM(mat_nombre2)) LIKE '%".$busqueda."%'
-  OR CONCAT(TRIM(mat_nombres), ' ', TRIM(mat_segundo_apellido)) LIKE '%".$busqueda."%'
-  OR CONCAT(TRIM(mat_nombre2), ' ', TRIM(mat_nombres)) LIKE '%".$busqueda."%'
-  OR CONCAT(TRIM(mat_segundo_apellido), ' ', TRIM(mat_nombres)) LIKE '%".$busqueda."%'
-  OR CONCAT(TRIM(mat_segundo_apellido), ' ', TRIM(mat_nombre2)) LIKE '%".$busqueda."%'
-  OR CONCAT(TRIM(mat_nombre2), ' ', TRIM(mat_segundo_apellido)) LIKE '%".$busqueda."%'
-  OR gra_nombre LIKE '%" . $busqueda . "%'
-  OR asp_email_acudiente LIKE '%" . $busqueda . "%'
-  OR asp_nombre_acudiente LIKE '%" . $busqueda . "%'
-  OR asp_nombre LIKE '%" . $busqueda . "%'
-  OR asp_documento_acudiente LIKE '%" . $busqueda . "%'
-  )";
-}
 $curso = '';
 if (!empty($_GET['curso'])) {
   $curso = base64_decode($_GET['curso']);
@@ -46,25 +15,27 @@ $count=0;
 while ($grado = mysqli_fetch_array($grados, MYSQLI_BOTH)) {
   $filtroCurso[$count] = [
     'texto' => $grado['gra_nombre'],
-    'url' => $_SERVER['PHP_SELF']."?estado=".base64_encode($estado)."&curso=".base64_encode($grado['gra_id'])."&busqueda=".$busqueda
+    'url' => $_SERVER['PHP_SELF']."?estado=".base64_encode($estado)."&curso=".base64_encode($grado['gra_id'])
   ];
   $count++;
 }
 $filtroCurso[$count] = [
   'texto' => 'VER TODOS',
-  'url' => $_SERVER['PHP_SELF']
+  'url' => $_SERVER['PHP_SELF'],
+  'style' => 'font-weight: bold; text-align: center;'
 ];
 $count=0;
 foreach($ordenReal as $clave) {
   $filtroEstado[$count] = [
     'texto' => $estadosSolicitud[$clave],
-    'url' => $_SERVER['PHP_SELF']."?estado=".base64_encode($clave)."&curso=".base64_encode($curso)."&busqueda=".$busqueda
+    'url' => $_SERVER['PHP_SELF']."?estado=".base64_encode($clave)."&curso=".base64_encode($curso)
   ];
   $count++;
 }
 $filtroEstado[$count] = [
   'texto' => 'VER TODOS',
-  'url' => $_SERVER['PHP_SELF']
+  'url' => $_SERVER['PHP_SELF'],
+  'style' => 'font-weight: bold; text-align: center;'
 ];
 $filtros[0] = [
   'get' => 'curso',
