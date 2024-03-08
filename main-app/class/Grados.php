@@ -1,6 +1,8 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 require_once(ROOT_PATH."/main-app/class/servicios/GradoServicios.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+require_once ROOT_PATH."/main-app/class/Conexion.php";
 class Grados {
 
     /**
@@ -116,6 +118,90 @@ class Grados {
         try {
             $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
             WHERE gvp_grado='" . $grado . "' AND gvp_periodo='" . $periodo . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+        return $resultado;
+    }
+
+    /**
+     * Me elimina la intensidad de una materia en un curso
+     *
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $curso
+     * @param string $materia
+     *
+     */
+    public static function eliminarIntensidadMateriaCurso(
+        mysqli $conexion,
+        array $config,
+        string $curso,
+        string $materia
+    ){
+
+        try {
+            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_intensidad_curso WHERE ipc_curso='".$curso."' AND ipc_materia='".$materia."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+    }
+
+    /**
+     * Me guarda la intensidad de una materia en un curso
+     *
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $curso
+     * @param string $materia
+     * @param string $ih
+     *
+     */
+    public static function guardarIntensidadMateriaCurso(
+        mysqli $conexion,
+        array $config,
+        string $curso,
+        string $materia,
+        string $ih
+    ){
+        $conexionPDOInstance = new Conexion;
+        $conexionPDO         = $conexionPDOInstance->conexionPDO(SERVER, USUARIO, PASSWORD, BD_ADMIN);
+
+        $codigo=Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_intensidad_curso');
+
+        try {
+            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_intensidad_curso(ipc_id, ipc_curso, ipc_materia, ipc_intensidad, institucion, year)VALUES('".$codigo."', '".$curso."','".$materia."','".$ih."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+    }
+
+    /**
+     * Me trae la intensidad de una materia en un curso
+     *
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $curso
+     * @param string $materia
+     * 
+     * @return array $resultado
+     *
+     */
+    public static function traerIntensidadMateriaCurso(
+        mysqli $conexion,
+        array $config,
+        string $curso,
+        string $materia
+    ){
+        
+        $resultado = [];
+
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_intensidad_curso WHERE ipc_curso='".$curso."' AND ipc_materia='".$materia."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
             $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
