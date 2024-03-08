@@ -1,6 +1,7 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+require_once ROOT_PATH."/main-app/class/Conexion.php";
 
 class Indicadores {
 
@@ -56,7 +57,10 @@ class Indicadores {
         array   $indicadorCopiado   = NULL
     )
     {
-        $codigo             = Utilidades::generateCode("IPC");
+        $conexionPDOInstance = new Conexion;
+        $conexionPDO         = $conexionPDOInstance->conexionPDO(SERVIDOR_CONEXION, USUARIO_CONEXION, CLAVE_CONEXION, BD_ADMIN);
+
+        $codigo             = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores_carga');
         $copiado            = NULL;
         $evaluacion         = NULL;
         $valorIndicador     = NULL;
