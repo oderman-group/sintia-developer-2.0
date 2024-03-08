@@ -1,12 +1,7 @@
 <?php
-$input = json_decode(file_get_contents("php://input"), true);
-$data = $input['data'];
-$filtros = !empty($input['filtros']) ? $input['filtros'] : "";;
-if (!empty($data)) {
-	include("session.php");
-	require_once("../class/Movimientos.php");
-	require_once("../class/UsuariosPadre.php");
-	require_once("../class/Modulos.php");
+	require_once("../Movimientos.php");
+	require_once("../UsuariosPadre.php");
+	require_once("../Modulos.php");
 	$contReg = 1;
 	$estadosCuentas = array("", "Fact. Venta", "Fact. Compra");
 	$estadoFil = !empty($filtros["estado"]) ? $filtros["estado"] : "";
@@ -66,9 +61,5 @@ if (!empty($data)) {
 					</div>
 				</td>
 			<?php } ?>
-
 		</tr>
-
-<?php $contReg++;
-	}
-} ?>
+<?php $contReg++;} ?>
