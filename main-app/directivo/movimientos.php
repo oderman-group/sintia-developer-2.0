@@ -12,28 +12,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
 } ?>
 <!-- data tables -->
 <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-<style>
-	.gif-carga {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background-color: rgba(255, 255, 255, 0.7);
-		/* Fondo semitransparente */
-		z-index: 9999;
-		/* Asegura que esté por encima de otros elementos */
-		display: none;
-		/* Por defecto oculto */
-	}
-
-	.gif-carga img {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-	}
-</style>
+<link href="../../config-general/assets/css/cargando.css" rel="stylesheet" type="text/css"/>
 
 </head>
 
@@ -113,7 +92,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
 
 								<table class="display" style="width:100%;" id="tablaItems">
 									<div id="gifCarga" class="gif-carga">
-										<img height="100px" width="100px" src="https://i.gifer.com/Vp3R.gif" alt="Cargando...">
+										<img  alt="Cargando...">
 									</div>
 									<thead>
 										<tr>
@@ -132,7 +111,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
 											<?php } ?>
 										</tr>
 									</thead>
-									<tbody id="result">
+									<tbody id="tbodyresult">
 										<?php
 										include("includes/consulta-paginacion-movimientos.php");
 
@@ -265,28 +244,9 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
 	</div>
 </div>
 <script type="text/javascript">
-	function crearDatos(dato) {
-		var tbody = document.getElementById('result');
-		document.getElementById("gifCarga").style.display = "block";
-		tbody.innerHTML = ''; // Limpiar el contenido del tbody
+	function mostrarResultado(dato) {
 		console.log(dato);
-		var data = {
-			"data": (dato)
-		};
-		var nuevoOjecto = JSON.parse('<?php echo $filtros_json?>');
-		data.filtros = nuevoOjecto;
-		fetch('movimientos-tbody.php', {
-				method: 'POST', // or 'PUT'
-				body: JSON.stringify(data), // data can be `string` or {object}!
-				headers: {
-					"Content-Type": "text/html"
-				},
-			}).then((res) => res.text()).catch((error) => console.error('Error:', error))
-			.then(function(response) {
-				tbody.innerHTML = response;
-				document.getElementById("gifCarga").style.display = "none";
-				$(document).ready(totalizarMovimientos);
-			});
+		$(document).ready(totalizarMovimientos);
 	};
 </script>
 <!-- end page content -->

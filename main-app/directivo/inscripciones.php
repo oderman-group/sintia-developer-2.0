@@ -17,6 +17,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 ?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
+    <link href="../../config-general/assets/css/cargando.css" rel="stylesheet" type="text/css"/>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
@@ -66,7 +67,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                     $filtro="";
                                     include(ROOT_PATH."/config-general/config-admisiones.php");
                                     include(ROOT_PATH."/config-general/mensajes-informativos.php");
-                                    include("includes/barra-superior-inscripciones.php");
+                                    include("includes/barra-superior-inscripciones-componente.php");
                                 ?>
 
                                     <?php if (isset($_GET["msg"]) and base64_decode($_GET["msg"]) == 1) { ?>
@@ -94,6 +95,9 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                         
                                         <div class="table">
                                     		<table class="display" style="width:100%;">
+                                            <div id="gifCarga" class="gif-carga">
+										        <img   alt="Cargando...">
+									        </div>
 												<thead>
 													<tr>
                                                         <th>ID</th>
@@ -108,7 +112,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                                         <th>Acciones</th>
 													</tr>
 												</thead>
-                                                <tbody>
+                                                <tbody id="tbodyresult">
                                                 <?php
 												include("includes/consulta-paginacion-inscripciones.php");
                                                 try{
@@ -193,12 +197,18 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                     </div>
                 </div>
             </div>
+            <script type="text/javascript">
+                function crearDatos(dato) {
+                    console.log(dato);
+            };
+            </script>
             <!-- end page content -->
              <?php // include("../compartido/panel-configuracion.php");?>
         </div>
         <!-- end page container -->
         <?php include("../compartido/footer.php");?>
     </div>
+    
     <!-- start js include path -->
     <script src="../../config-general/assets/plugins/jquery/jquery.min.js" ></script>
     <script src="../../config-general/assets/plugins/popper/popper.js" ></script>
