@@ -128,9 +128,9 @@ if($config['conf_doble_buscador'] == 1) {
                                                 </thead>
                                                 <tbody id="tbodyresult">
 													<?php
+													
 													include("includes/consulta-paginacion-estudiantes.php");
-													$filtroLimite = 'LIMIT '.$inicio.','.$registros;
-													$cursoActual=GradoServicios::consultarCurso($curso);
+													$filtroLimite = 'LIMIT '.$inicio.','.$registros;													
 													$consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite,$cursoActual);
 													$contReg = 1;
 
