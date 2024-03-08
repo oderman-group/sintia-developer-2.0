@@ -176,6 +176,7 @@ class Asignaciones {
     {
         try {
             $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".general_evaluacion_asignar 
+            INNER JOIN general_limite_asignacion ON gal_id=epag_id_limite
             INNER JOIN ".BD_ADMIN.".general_evaluaciones ON evag_id=epag_id_evaluacion AND evag_institucion = {$config['conf_id_institucion']} AND evag_year = {$_SESSION["bd"]}
             WHERE epag_id_evaluador='{$idUsuario}' AND epag_estado IN ('".PENDIENTE."', '".PROCESO."') AND epag_institucion = {$config['conf_id_institucion']} AND epag_year = {$_SESSION["bd"]}");
         } catch (Exception $e) {
