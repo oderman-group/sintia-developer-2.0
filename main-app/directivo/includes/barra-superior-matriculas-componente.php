@@ -15,6 +15,7 @@ $opciones[0] = [
   'url' => 'estudiantes-promedios.php',
   'permiso' => Modulos::validarSubRol(['DT0002'])
 ];
+$cursoActual=GradoServicios::consultarCurso($curso);
 $opciones[1] = [
   'texto' => 'Menú matriculas',
   'permiso' => Modulos::validarSubRol(['DT0077', 'DT0080', 'DT0075']),
