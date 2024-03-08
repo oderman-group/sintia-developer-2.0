@@ -9,6 +9,7 @@ if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol(
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/Grados.php");
 
 $year=$_SESSION["bd"];
 if(isset($_GET["year"])){
@@ -107,12 +108,14 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
             
             <?php  
 			for($j=1;$j<=$periodoActual;$j++){
-			$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
-			WHERE gvp_grado='".$datosUsr['gra_id']."' AND gvp_periodo='".$j."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-			$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
-			$periodosCursos['gvp_valor'] = 25;
+				$periodosCursos = Grados::traerPorcentajePorPeriodosGrados($conexion, $config, $datosUsr['gra_id'], $j);
+				
+				$porcentajeGrado=25;
+				if(!empty($periodosCursos['gvp_valor'])){
+					$porcentajeGrado=$periodosCursos['gvp_valor'];
+				}
 			?>
-                <td width="3%" colspan="2"><a href="<?=$_SERVER['PHP_SELF'];?>?id=<?=$datosUsr['mat_id'];?>&periodo=<?=$j?>" style="color:#000; text-decoration:none;">Periodo <?=$j."<br>(".$periodosCursos['gvp_valor']."%)"?></a></td>
+                <td width="3%" colspan="2"><a href="<?=$_SERVER['PHP_SELF'];?>?id=<?=$datosUsr['mat_id'];?>&periodo=<?=$j?>" style="color:#000; text-decoration:none;">Periodo <?=$j."<br>(".$porcentajeGrado."%)"?></a></td>
             <?php }?>
             <td width="3%" colspan="2">Acumulado</td>
         </tr> 
@@ -167,13 +170,14 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 			$promedioMateria = 0;
 			$sumaPorcentaje = 0;
 			for($j=1;$j<=$periodoActual;$j++){
-				$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
-				WHERE gvp_grado='".$datosUsr['gra_id']."' AND gvp_periodo='".$j."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-				$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
+				$periodosCursos = Grados::traerPorcentajePorPeriodosGrados($conexion, $config, $datosUsr['gra_id'], $j);
 				
-				$periodosCursos['gvp_valor'] = 25;
+				$porcentajeGrado=25;
+				if(!empty($periodosCursos['gvp_valor'])){
+					$porcentajeGrado=$periodosCursos['gvp_valor'];
+				}
 
-				$decimal = $periodosCursos['gvp_valor']/100;
+				$decimal = $porcentajeGrado/100;
 				
 				$consultaBoletin=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin bol 
                 INNER JOIN ".BD_ACADEMICA.".academico_notas_tipos ntp ON ntp.notip_categoria='".$config["conf_notas_categoria"]."' AND bol_nota>=ntp.notip_desde AND bol_nota<=ntp.notip_hasta AND ntp.institucion={$config['conf_id_institucion']} AND ntp.year={$year}
