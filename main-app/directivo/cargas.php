@@ -16,6 +16,7 @@ if($config['conf_doble_buscador'] == 1) {
 ?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
+	<link href="../../config-general/assets/css/cargando.css" rel="stylesheet" type="text/css"/>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
@@ -58,7 +59,7 @@ if($config['conf_doble_buscador'] == 1) {
 								<div class="col-md-12">
 								<?php
 									include("../../config-general/mensajes-informativos.php");
-									include("includes/barra-superior-cargas.php");
+									include("includes/barra-superior-cargas-componente.php");									
 								?>
 
                                     <div class="card card-topline-purple">
@@ -90,6 +91,9 @@ if($config['conf_doble_buscador'] == 1) {
 											
                                         <div>
                                     		<table <?php echo $jQueryTable;?> class="display" style="width:100%;">
+												<div id="gifCarga" class="gif-carga">
+													<img  alt="Cargando...">
+												</div>
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
@@ -103,7 +107,7 @@ if($config['conf_doble_buscador'] == 1) {
 														<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
 														</tr>
 													</thead>
-													<tbody>
+													<tbody id="tbodyresult">
 													<?php
 													include("includes/consulta-paginacion-cargas.php");	
 													try{										       
