@@ -93,4 +93,35 @@ class Grados {
             return mysqli_fetch_array(Grados::obtenerDatosGrados($grado));
     }
 
+    /**
+     * Obtiene el porcentaje por periodo de un curso.
+     *
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $grado
+     * @param int $periodo
+     * 
+     * @return array $resultado
+     *
+     */
+    public static function traerPorcentajePorPeriodosGrados(
+        mysqli $conexion,
+        array $config,
+        string $grado,
+        int $periodo,
+    ){
+        
+        $resultado = [];
+
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
+            WHERE gvp_grado='" . $grado . "' AND gvp_periodo='" . $periodo . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+        return $resultado;
+    }
+
 }
