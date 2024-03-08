@@ -12,10 +12,9 @@
                 <input type="submit" class="btn btn-primary" value="Guardar cambios" <?=$disabled;?>>
             </form>
             <?php
-            $consultaPclase=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_pclase 
-            WHERE pc_id_carga='".$cargaConsultaActual."' AND pc_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-            $pclase = mysqli_fetch_array($consultaPclase, MYSQLI_BOTH);
-            if(isset($pclase) && $pclase['pc_plan']!=""){
+            require_once(ROOT_PATH."/main-app/class/Clases.php");
+            $pclase = Clases::traerPlanClase($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
+            if(!empty($pclase) && file_exists(ROOT_PATH.'/main-app/files/pclase/' . $pclase['pc_plan'])){
             ?>
             <hr>
             <a href="../files/pclase/<?=$pclase['pc_plan'];?>" target="_blank"><i class="fa fa-download"></i> <?=$pclase['pc_plan'];?></a>
