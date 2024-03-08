@@ -18,6 +18,7 @@ if($config['conf_doble_buscador'] == 1) {
 ?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
+	<link href="../../config-general/assets/css/cargando.css" rel="stylesheet" type="text/css"/>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php"); //6 consultas para optmizar: Enuar ?>
@@ -48,7 +49,7 @@ if($config['conf_doble_buscador'] == 1) {
 								<?php include("../../config-general/mensajes-informativos.php"); ?>
 								<span id="respuestaCambiarEstado"></span>
 
-								<?php include("includes/barra-superior-matriculas.php"); ?>
+								<?php include("includes/barra-superior-matriculas-componente.php");	?>
 
 									<?php
 									if($config['conf_id_institucion'] == ICOLVEN){
@@ -109,6 +110,9 @@ if($config['conf_doble_buscador'] == 1) {
                                         <div>
 											
                                     		<table <?php echo $jQueryTable;?> class="display" style="width:100%;">
+											<div id="gifCarga" class="gif-carga">
+													<img  alt="Cargando...">
+												</div>
                                                 <thead>
                                                     <tr>
                                                         <th>ID</th>
@@ -122,10 +126,11 @@ if($config['conf_doble_buscador'] == 1) {
 														<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody id="tbodyresult">
 													<?php
 													include("includes/consulta-paginacion-estudiantes.php");
 													$filtroLimite = 'LIMIT '.$inicio.','.$registros;
+													$cursoActual=GradoServicios::consultarCurso($curso);
 													$consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite,$cursoActual);
 													$contReg = 1;
 

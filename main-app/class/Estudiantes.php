@@ -12,6 +12,7 @@ class Estudiantes {
      * @param string $filtroAdicional - Filtros adicionales para la consulta SQL.
      * @param string $filtroLimite - Límite de resultados para la consulta SQL.
      * @param mixed $cursoActual - Información sobre el curso actual (puede ser nulo).
+     * @param string $valueIlike - Valor String que se utilizara para biuscar por cualuqier parametro definido (puede ser nulo).
      *
      * @return mysqli_result - Un array con los resultados de la consulta.
      */
@@ -19,13 +20,39 @@ class Estudiantes {
         int    $eliminados      = 0, 
         string $filtroAdicional = '', 
         string $filtroLimite    = 'LIMIT 0, 2000',
-        $cursoActual=null
+        $cursoActual=null,
+        $valueIlike=null
     )
     {
         global $conexion, $baseDatosServicios, $config, $arregloModulos;
         $tipoGrado = $cursoActual ? $cursoActual["gra_tipo"] : GRADO_GRUPAL;
         $resultado = [];
-        
+        if(!empty($valueIlike)){
+            $busqueda=$valueIlike;
+            $filtroAdicional .= " AND (
+                mat_id LIKE '%".$busqueda."%' 
+                OR mat_nombres LIKE '%".$busqueda."%' 
+                OR mat_nombre2 LIKE '%".$busqueda."%' 
+                OR mat_primer_apellido LIKE '%".$busqueda."%' 
+                OR mat_segundo_apellido LIKE '%".$busqueda."%' 
+                OR mat_documento LIKE '%".$busqueda."%' 
+                OR mat_email LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(mat_primer_apellido), ' ', TRIM(mat_segundo_apellido), ' ', TRIM(mat_nombres)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(mat_primer_apellido), TRIM(mat_segundo_apellido), TRIM(mat_nombres)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(mat_primer_apellido), ' ', TRIM(mat_nombres)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(mat_primer_apellido), TRIM(mat_nombres)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(mat_nombres), ' ', TRIM(mat_primer_apellido)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(mat_nombres), '', TRIM(mat_primer_apellido)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(mat_primer_apellido), '', TRIM(mat_nombres)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(mat_nombres), ' ', TRIM(mat_nombre2)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(mat_nombres), ' ', TRIM(mat_segundo_apellido)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(mat_nombre2), ' ', TRIM(mat_nombres)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(mat_segundo_apellido), ' ', TRIM(mat_nombres)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(mat_segundo_apellido), ' ', TRIM(mat_nombre2)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(mat_segundo_apellido), ' ', TRIM(mat_primer_apellido)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(mat_nombre2), ' ', TRIM(mat_segundo_apellido)) LIKE '%".$busqueda."%'
+            )";
+        }
         try {
             if( $tipoGrado == GRADO_GRUPAL || !array_key_exists(10, $arregloModulos) ){
                 $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
