@@ -13,7 +13,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 include("../compartido/historial-acciones-guardar.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
-$codGRADO=Utilidades::generateCode("GRAD");
+$codGRADO = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_grados');
 
 	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
 	if(trim($_POST["nombreC"])==""){
