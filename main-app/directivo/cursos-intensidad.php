@@ -3,6 +3,7 @@ include("session.php");
 $idPaginaInterna = 'DT0063';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Grados.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -128,12 +129,7 @@ if(!Modulos::validarPermisoEdicion()){
 															include("../compartido/error-catch-to-report.php");
 														}
 														while($c = mysqli_fetch_array($curso, MYSQLI_BOTH)){
-															try{
-																$consultaIpc=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_intensidad_curso WHERE ipc_curso='".$c['gra_id']."' AND ipc_materia='".$m['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-															} catch (Exception $e) {
-																include("../compartido/error-catch-to-report.php");
-															}
-															$ipc = mysqli_fetch_array($consultaIpc, MYSQLI_BOTH); 
+															$ipc = Grados::traerPorcentajePorPeriodosGrados($conexion, $config, $c['gra_id'], $m['mat_id']);; 
 														?>
 															<td><input type="text" style="width:20px; text-align:center;" maxlength="2" value="<?php if(!empty($ipc['ipc_intensidad'])) echo $ipc['ipc_intensidad'];?>" id="<?=$c['gra_id'];?>" name="<?=$m['mat_id'];?>" onChange="ipc(this)" title="<?=$c['gra_nombre'];?>" <?=$disabledPermiso;?>></td>
 														<?php
