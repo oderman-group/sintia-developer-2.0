@@ -5,22 +5,20 @@
 										<header class="panel-heading panel-heading-purple"><?=$frases[106][$datosUsuarioActual['uss_idioma']];?> </header>
                                         <div class="panel-body">
 											<?php
+											require_once(ROOT_PATH."/main-app/class/Grados.php");
 											for($i=1; $i<=$datosCargaActual['gra_periodos']; $i++){
-												$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
-												WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-												");
-												$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
-												$numPeriodosCursos=mysqli_num_rows($consultaPeriodosCursos);
-												$porcentaje=25;
-												if($numPeriodosCursos>0){
-													$porcentaje=$periodosCursos['gvp_valor'];
+												$periodosCursos = Grados::traerPorcentajePorPeriodosGrados($conexion, $config, $datosCargaActual['car_curso'], $i);
+												
+												$porcentajeGrado=25;
+												if(!empty($periodosCursos['gvp_valor'])){
+													$porcentajeGrado=$periodosCursos['gvp_valor'];
 												}
 
 												if($i==$datosCargaActual['car_periodo']) $msjPeriodoActual = '- ACTUAL'; else $msjPeriodoActual = '';
 												if($i==$periodoConsultaActual) $estiloResaltadoP = 'style="color: orange;"'; else $estiloResaltadoP = '';
 											?>
 												<p>
-													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($i);?>&get=<?=base64_encode(100);?>" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$porcentaje;?>%) <?=$msjPeriodoActual;?></a>
+													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($i);?>&get=<?=base64_encode(100);?>" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$porcentajeGrado;?>%) <?=$msjPeriodoActual;?></a>
 											
 												</p>
 											<?php }?>

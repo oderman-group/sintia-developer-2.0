@@ -6,11 +6,11 @@ if(trim($_POST["ih"])==""){
 	exit();
 }
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
-$codigo=Utilidades::generateCode("IPC");
+require_once(ROOT_PATH."/main-app/class/Grados.php");
 
-mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_intensidad_curso WHERE ipc_curso='".$_POST["curso"]."' AND ipc_materia='".$_POST["materia"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+Grados::eliminarIntensidadMateriaCurso($conexion, $config, $_POST["curso"], $_POST["materia"]);
 
-mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_intensidad_curso(ipc_id, ipc_curso, ipc_materia, ipc_intensidad, institucion, year)VALUES('".$codigo."', '".$_POST["curso"]."','".$_POST["materia"]."','".$_POST["ih"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+Grados::guardarIntensidadMateriaCurso($conexion, $config, $_POST["curso"], $_POST["materia"], $_POST["ih"]);
 
 mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_cargas SET car_ih='".$_POST["ih"]."' WHERE car_curso='".$_POST["curso"]."' AND car_materia='".$_POST["materia"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 
