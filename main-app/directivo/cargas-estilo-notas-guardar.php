@@ -10,20 +10,23 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 include("../compartido/historial-acciones-guardar.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
-$codigo=Utilidades::generateCode("CAT");
 
-	if (trim($_POST["nombre"]) == "") {
-		include("../compartido/guardar-historial-acciones.php");
-		echo "<span style='font-family:Arial; color:red;'>Debe llenar todos los campos.<br>
-		<a href='javascript:history.go(-1)'>[Volver al formulario]</a></samp>";
-		exit();
-	}
-	try{
-		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_categorias_notas (catn_id, catn_nombre, institucion, year)VALUES('".$codigo."', '" . $_POST["nombre"] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
+$codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_categorias_notas');
 
+if (trim($_POST["nombre"]) == "") {
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="cargas-estilo-notas.php"</script>';
+	echo "<span style='font-family:Arial; color:red;'>Debe llenar todos los campos.<br>
+	<a href='javascript:history.go(-1)'>[Volver al formulario]</a></samp>";
 	exit();
+}
+
+try {
+	mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_categorias_notas (catn_id, catn_nombre, institucion, year)VALUES('".$codigo."', '" . $_POST["nombre"] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
+
+include("../compartido/guardar-historial-acciones.php");
+
+echo '<script type="text/javascript">window.location.href="cargas-estilo-notas.php?success=SC_DT_1&id='.base64_encode($codigo).'"</script>';
+exit();

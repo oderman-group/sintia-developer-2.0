@@ -9,22 +9,23 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
-$codigo=Utilidades::generateCode("NOT");
+$codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_notas_tipos');
 include("../compartido/historial-acciones-guardar.php");
 
-	//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
-	if (trim($_POST["nombreCN"]) == "" or trim($_POST["ndesdeCN"]) == "" or trim($_POST["nhastaCN"]) == "" or trim($_POST["idCN"]) == "") {
-		include("../compartido/guardar-historial-acciones.php");
-		echo "<span style='font-family:Arial; color:red;'>Debe llenar todos los campos.<br>
-			<a href='javascript:history.go(-1)'>[Volver al formulario]</a></samp>";
-		exit();
-	}
-	try{
-		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_notas_tipos (notip_id, notip_nombre, notip_desde, notip_hasta,notip_categoria, institucion, year)VALUES('".$codigo."', '" . $_POST["nombreCN"] . "'," . $_POST["ndesdeCN"] . "," . $_POST["nhastaCN"] . ",'" . $_POST["idCN"] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-
+//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
+if (trim($_POST["nombreCN"]) == "" or trim($_POST["ndesdeCN"]) == "" or trim($_POST["nhastaCN"]) == "" or trim($_POST["idCN"]) == "") {
 	include("../compartido/guardar-historial-acciones.php");
-	echo '<script type="text/javascript">window.location.href="cargas-estilo-notas-especifica.php?id=' . base64_encode($_POST["idCN"]) . '";</script>';
+	echo "<span style='font-family:Arial; color:red;'>Debe llenar todos los campos.<br>
+		<a href='javascript:history.go(-1)'>[Volver al formulario]</a></samp>";
 	exit();
+}
+try{
+	mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_notas_tipos (notip_id, notip_nombre, notip_desde, notip_hasta,notip_categoria, institucion, year)VALUES('".$codigo."', '" . $_POST["nombreCN"] . "'," . $_POST["ndesdeCN"] . "," . $_POST["nhastaCN"] . ",'" . $_POST["idCN"] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
+} catch (Exception $e) {
+	include("../compartido/error-catch-to-report.php");
+}
+
+include("../compartido/guardar-historial-acciones.php");
+
+echo '<script type="text/javascript">window.location.href="cargas-estilo-notas-especifica.php?id=' . base64_encode($_POST["idCN"]) . '";</script>';
+exit();

@@ -112,7 +112,7 @@ if(
 												//Si no existe el indicador definitivo en la carga lo asociamos.
 												if(!empty($indicadorDefitnivo[0])){
 													require_once(ROOT_PATH."/main-app/class/Utilidades.php");
-													$codigo=Utilidades::generateCode("IPC");
+													$codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores_carga');
 
 													mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_carga (ipc_id, ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, institucion, year)VALUES('".$codigo."', '".$cargaConsultaActual."', '".$indDef['ind_id']."', '".$indDef['ind_valor']."', '".$periodoConsultaActual."', 1, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");	
 												}

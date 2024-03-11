@@ -283,7 +283,7 @@ try{
                                                 
                                                 <label class="col-sm-2 control-label">Celular</label>
                                                 <div class="col-sm-4">
-                                                    <input type="text" name="celular" id="celular" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['celular'];?>">
+                                                    <input type="text" name="celular" id="celular" data-mask="(999) 999-9999" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['celular'];?>">
                                                 </div>
                                             </div>
 

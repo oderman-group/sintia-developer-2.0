@@ -16,7 +16,7 @@ while($cgs = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
 	if($ipc[0]==""){
 		$p=1;
 		while($p<=$config['conf_periodos_maximos']){
-			$codigo=Utilidades::generateCode("IPC");
+			$codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores_carga');
 			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_carga(ipc_id, ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, institucion, year)VALUES('".$codigo."', '".$cgs['car_id']."','".$_POST["indicador"]."','".$indicadorObg['ind_valor']."','".$p."',0, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 			
 			$p++;
