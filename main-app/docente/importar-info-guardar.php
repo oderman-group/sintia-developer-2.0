@@ -44,7 +44,7 @@ if(!empty($_POST["indicadores"]) and empty($_POST["calificaciones"])){
 
 		//Si el indicador NO es de los obligatorios lo REcreamos.
 		if($indImpDatos['ind_obligatorio']==0){
-			$idRegInd=Utilidades::generateCode("IND");
+			$idRegInd = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores');
 			try{
 				mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores(ind_id, ind_nombre, ind_periodo, ind_carga, ind_publico, institucion, year)VALUES('".$idRegInd."', '".mysqli_real_escape_string($conexion,$indImpDatos['ind_nombre'])."', '".$periodoConsultaActual."', '".$cargaConsultaActual."', '".$indImpDatos['ind_publico']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 			} catch (Exception $e) {
@@ -54,7 +54,7 @@ if(!empty($_POST["indicadores"]) and empty($_POST["calificaciones"])){
 
 		$copiado = 0;
 		if($indImpDatos['ipc_copiado']!=0) $copiado = $indImpDatos['ipc_copiado'];
-		$codigo=Utilidades::generateCode("IPC");
+		$codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores_carga');
 
 		$datosInsert .="('".$codigo."', '".$cargaConsultaActual."', '".$idRegInd."', '".$indImpDatos['ipc_valor']."', '".$periodoConsultaActual."', 1, '".$copiado."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";	
 	}
@@ -101,7 +101,7 @@ if(!empty($_POST["calificaciones"])){
 
 		//Si el indicador NO es de los obligatorios lo REcreamos.
 		if($indImpDatos['ind_obligatorio']==0){
-			$idRegInd=Utilidades::generateCode("IND");
+			$idRegInd = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores');
 			try{
 				mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores(ind_id, ind_nombre, ind_periodo, ind_carga, ind_publico, institucion, year)VALUES('".$idRegInd."', '".mysqli_real_escape_string($conexion,$indImpDatos['ind_nombre'])."', '".$periodoConsultaActual."', '".$cargaConsultaActual."', '".$indImpDatos['ind_publico']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 			} catch (Exception $e) {
@@ -111,7 +111,7 @@ if(!empty($_POST["calificaciones"])){
 
 		$copiado = 0;
 		if($indImpDatos['ipc_copiado']!=0) $copiado = $indImpDatos['ipc_copiado'];
-		$codigo=Utilidades::generateCode("IPC");
+		$codigo=Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores_carga');
 
 		$datosInsertInd .="('".$codigo."', '".$cargaConsultaActual."', '".$idRegInd."', '".$indImpDatos['ipc_valor']."', '".$periodoConsultaActual."', 1, '".$copiado."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
 

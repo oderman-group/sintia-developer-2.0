@@ -399,13 +399,13 @@ if(!Modulos::validarPermisoEdicion()){
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Contactos</label>
 												<div class="col-sm-2">
-													<input type="text" name="telefono" class="form-control" placeholder="Telefono" autocomplete="off" value="<?=$datosMatricula['telefono'];?>" <?=$disabledPermiso;?>>
+													<input type="text" name="telefono" class="form-control" placeholder="Telefono" data-mask="999-9999" autocomplete="off" value="<?=$datosMatricula['telefono'];?>" <?=$disabledPermiso;?>>
 												</div>
 												<div class="col-sm-2">
-													<input type="text" name="celular" class="form-control" placeholder="celular" autocomplete="off" value="<?=$datosMatricula['celular'];?>" <?=$disabledPermiso;?>>
+													<input type="text" name="celular" class="form-control" placeholder="celular" data-mask="(999) 999-9999" autocomplete="off" value="<?=$datosMatricula['celular'];?>" <?=$disabledPermiso;?>>
 												</div>
 												<div class="col-sm-2">
-													<input type="text" name="celular2" class="form-control" placeholder="celular #2" autocomplete="off" value="<?=$datosMatricula['celular2'];?>" <?=$disabledPermiso;?>>
+													<input type="text" name="celular2" class="form-control" placeholder="celular #2" data-mask="(999) 999-9999" autocomplete="off" value="<?=$datosMatricula['celular2'];?>" <?=$disabledPermiso;?>>
 												</div>
 											</div>								   
 									       
@@ -740,6 +740,7 @@ if(!Modulos::validarPermisoEdicion()){
 	<script src="../../config-general/assets/plugins/jquery-validation/js/jquery.validate.min.js"></script>
     <!-- bootstrap -->
     <script src="../../config-general/assets/plugins/bootstrap/js/bootstrap.min.js" ></script>
+    <script src="../../config-general/assets/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js" ></script>
     <!-- steps -->
     <script src="../../config-general/assets/plugins/steps/jquery.steps.js" ></script>
     <script src="../../config-general/assets/js/pages/steps/steps-data.js" ></script>

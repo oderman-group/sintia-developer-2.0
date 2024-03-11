@@ -30,7 +30,7 @@ require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 		echo "<span style='font-family:Arial; color:red;'>Los valores de los indicadores no deben superar el 100%.</samp>";
 		exit();
 	}
-	$codigo=Utilidades::generateCode("IND");
+	$codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores');
 
 	try{
 		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores(ind_id, ind_nombre, ind_valor, ind_obligatorio, institucion, year)VALUES('".$codigo."', '" . $_POST["nombre"] . "','" . $_POST["valor"] . "',1, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");

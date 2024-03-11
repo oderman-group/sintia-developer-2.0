@@ -16,7 +16,7 @@ if (trim($_POST["nombreG"]) == "" || trim($_POST["codigoG"]) == "") {
 	exit();
 }
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
-$codigo=Utilidades::generateCode("GRU");
+$codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_grupos');
 
 try {
 		mysqli_query(
