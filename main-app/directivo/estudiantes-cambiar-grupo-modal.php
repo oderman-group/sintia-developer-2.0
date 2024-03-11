@@ -1,5 +1,5 @@
 <?php
-
+require_once(ROOT_PATH."/main-app/class/Grupos.php");
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
     echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
     exit();
@@ -68,18 +68,12 @@ require_once("../class/Estudiantes.php");
 
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Grupo</label>
-                    <?php
-                    try {
-                        $consulta_cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                    } catch (Exception $e) {
-                        include("../compartido/error-catch-to-report.php");
-                    }
-                    ?>
                     <div class="col-sm-9">
                         <select class="form-control  select2" name="grupoNuevo" required>
                             <option value="0"></option>
                             <?php
-                            while ($c = mysqli_fetch_array($consulta_cargas, MYSQLI_BOTH)) {
+                            $opcionesConsulta = Grupos::traerGrupos($conexion, $config);
+                            while ($c = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)) {
                                 if ($c["gru_id"] == $e['mat_grupo'])
                                     echo '<option value="' . $c["gru_id"] . '" selected style="color:blue; font-weight:bold;">Actual: ' . $c["gru_nombre"] . '</option>';
                                 else

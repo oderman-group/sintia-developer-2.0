@@ -1,4 +1,5 @@
 <?php
+require_once(ROOT_PATH."/main-app/class/Grupos.php");
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
     echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
     exit();
@@ -39,16 +40,10 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
             <div class="form-group row">
                 <label class="col-sm-2 control-label"><?= $frases[250][$datosUsuarioActual['uss_idioma']]; ?></label>
                 <div class="col-sm-10">
-                    <?php
-                    try {
-                        $datosConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                    } catch (Exception $e) {
-                        include("../compartido/error-catch-to-report.php");
-                    }
-                    ?>
                     <select class="form-control  select2" style="width: 100%;" name="grupo" required>
                         <option value="">Seleccione una opción</option>
                         <?php
+                        $datosConsulta = Grupos::traerGrupos($conexion, $config);
                         while ($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)) {
                         ?>
                             <option value="<?= $datos['gru_id']; ?>"><?= $datos['gru_nombre'] ?></option>
