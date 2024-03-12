@@ -4,6 +4,7 @@ include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 $Plataforma = new Plataforma;
 
 $curso='';
@@ -54,7 +55,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 				$nombresMat = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='" . $mat1['car_materia']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 				$Mat = mysqli_fetch_array($nombresMat, MYSQLI_BOTH);
 
-				$consultaActividades=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga='" . $mat1['car_id'] . "' AND ipc_periodo='" . $per . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+				$consultaActividades = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $mat1['car_id'], $per);
 				$activivdadesNum = mysqli_num_rows($consultaActividades);
 				if ($activivdadesNum == 0) {
 					$activivdadesNum = 1;
@@ -70,9 +71,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 			<?php
 			$cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='" . $curso . "' AND car_grupo='" . $grupo . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			while ($car = mysqli_fetch_array($cargas, MYSQLI_BOTH)) {
-				$activivdades = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc.
-				INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
-				WHERE ipc.ipc_carga='" . $car['car_id'] . "' AND ipc.ipc_periodo='" . $per . "' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
+				$activivdades = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $car['car_id'], $per);
 
 				$activivdadesNum = mysqli_num_rows($activivdades);
 				if ($activivdadesNum == 0) {
@@ -106,8 +105,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 				while ($mat1 = mysqli_fetch_array($materias1, MYSQLI_BOTH)) {
 
 
-					$activivdades = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-					WHERE ipc_carga='" . $mat1['car_id'] . "' AND ipc_periodo='" . $per . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+					$activivdades = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $mat1['car_id'], $per);
 					$activivdadesNum = mysqli_num_rows($activivdades);
 					if ($activivdadesNum == 0) {
 						echo '<td align="center">-</td>';

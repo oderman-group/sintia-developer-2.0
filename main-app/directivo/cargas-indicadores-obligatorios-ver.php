@@ -2,10 +2,15 @@
 <?php $idPaginaInterna = 'DT0036';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
+}
+$ind = "";
+if (!empty($_GET['ind'])) {
+    $ind = base64_decode($_GET['ind']);
 }
 
 $disabledPermiso = "";
@@ -123,12 +128,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                         }
                                                         $carga = mysqli_fetch_array($consultaCarga, MYSQLI_BOTH);
                                                         if(!empty($carga['car_id'])){
-                                                            try{
-                                                                $consultaIpc=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga='".$carga['car_id']."' AND ipc_indicador='".base64_decode($_GET["ind"])."' AND ipc_creado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                                                            } catch (Exception $e) {
-                                                                include("../compartido/error-catch-to-report.php");
-                                                            }
-                                                            $ipc = mysqli_fetch_array($consultaIpc, MYSQLI_BOTH);
+                                                            $ipc = Indicadores::traerRelacionCargaIndicador($conexion, $config, $carga['car_id'], $ind);
                                                         }
                                                         
                                                         try{

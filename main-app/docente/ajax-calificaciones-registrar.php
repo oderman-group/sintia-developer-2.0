@@ -4,6 +4,7 @@ require_once("../class/Estudiantes.php");
 include("verificar-carga.php");
 require_once("../class/CargaAcademica.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 
 $operacionesPermitidas = [9, 10];
 
@@ -277,9 +278,7 @@ if($_POST["operacion"]==9){
 	
 	
 	if($caso == 1){
-		$consultaIndicador=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-		WHERE ipc_indicador='".$_POST["codNota"]."' AND ipc_carga='".$_POST["carga"]."' AND ipc_periodo='".$_POST["periodo"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		$indicador = mysqli_fetch_array($consultaIndicador, MYSQLI_BOTH);
+		$indicador = Indicadores::consultaIndicadorPeriodo($conexion, $config, $_POST['codNota'], $_POST["carga"], $_POST["periodo"]);
 		$valorIndicador = ($indicador['ipc_valor']/100);
 		$rindNotaActual = ($_POST["nota"] * $valorIndicador);
 		$consultaNum=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion 
