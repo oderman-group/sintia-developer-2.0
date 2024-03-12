@@ -10,7 +10,7 @@ require_once(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 $asignacion = Asignaciones::traerDatosAsignaciones($conexion, $config, $_GET['idAsignacion']);
 
 $iniciadas = Asignaciones::consultarCantAsignacionesEmpezadas($conexion, $config, $asignacion['gal_id']);
-if ($iniciadas >= $asignacion['gal_limite_evaluadores'] ) { 
+if ($asignacion['gal_limite_evaluadores'] != 0 && $iniciadas >= $asignacion['gal_limite_evaluadores'] ) { 
 	$enlace = UsuariosPadre::verificarTipoUsuario($datosUsuarioActual['uss_tipo'], "encuestas-pendientes.php");
 
 	echo $enlace.'?error=ER_DT_21';
