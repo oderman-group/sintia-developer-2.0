@@ -1,13 +1,20 @@
 <?php
-require_once("../Estudiantes.php");
-require_once("../Modulos.php");
+if(!empty($data["dataTotal"])){
+	require_once("../Estudiantes.php");
+	require_once("../Modulos.php");
+}
+
 $contReg = 1;
 foreach ($data["data"] as $resultado) {
 
 	//Para calcular el porcentaje de actividades en las cargas
 	$cargaSP = $resultado['car_id'];
 	$periodoSP = $resultado['car_periodo'];
-	include("../../suma-porcentajes.php");
+	if(!empty($data["dataTotal"])){
+		include("../../suma-porcentajes.php");
+	}else{
+		include("../suma-porcentajes.php");
+	}
 
 	$marcaMediaTecnica = '';
 	$filtroDocentesParaListarEstudiantes = " AND mat_grado='" . $resultado['car_curso'] . "' AND mat_grupo='" . $resultado['car_grupo'] . "'";

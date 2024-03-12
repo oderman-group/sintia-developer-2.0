@@ -1,8 +1,11 @@
 <?php
-require_once("../UsuariosPadre.php");
-require_once("../Estudiantes.php");
-require_once("../Modulos.php");
-include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
+if (!empty($data["dataTotal"])) {
+	require_once("../UsuariosPadre.php");
+	require_once("../Estudiantes.php");
+	require_once("../Modulos.php");
+	include(ROOT_PATH . "/main-app/compartido/sintia-funciones.php");
+}
+
 $contReg = 1;
 $usuariosClase = new Usuarios;
 foreach ($data["data"] as $resultado) {
@@ -195,12 +198,21 @@ foreach ($data["data"] as $resultado) {
 	if (!empty($resultado['gra_nombre'])) {
 		$idModal = "cambiarGrupoModal" . $resultado['mat_id'];
 		$contenido = "../directivo/estudiantes-cambiar-grupo-modal.php";
-		include("../../compartido/contenido-modal.php");
+		if (!empty($data["dataTotal"])) {
+			include("../../compartido/contenido-modal.php");
+		}else{
+			include("../compartido/contenido-modal.php");
+		}
+		
 	}
 
 	$idModal = "retirarModal" . $resultado['mat_id'];
 	$contenido = "../directivo/estudiantes-retirar-modal.php";
-	include("../../compartido/contenido-modal.php");
+	if (!empty($data["dataTotal"])) {
+		include("../../compartido/contenido-modal.php");
+	}else{
+		include("../compartido/contenido-modal.php");
+	}
 
 	$contReg++;
 }

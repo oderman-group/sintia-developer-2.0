@@ -1,6 +1,8 @@
 <?php
-include(ROOT_PATH . "/config-general/config-admisiones.php");
-require_once("../Estudiantes.php");
+if (!empty($data["dataTotal"])) {
+	include(ROOT_PATH . "/config-general/config-admisiones.php");
+	require_once("../Estudiantes.php");
+}
 $contReg = 1;
 foreach ($data["data"] as $resultado) {
 	$observacion = strip_tags($resultado['asp_observacion']);

@@ -76,7 +76,7 @@ class componenteFiltro
         $this->opciones = $opciones;
         $this->id = $id;
         $this->urlFilter = 'filter/' . $urlFilter;
-        $this->urlHtml = 'result/' . $urlHtml;
+        $this->urlHtml =  'result/' . $urlHtml;
         $this->urlBase = $protocolo . $_SERVER['HTTP_HOST'] . '/app-sintia/main-app/class/componentes/barra-builder.php';
         $this->metodo = $metodo;
         $this->filtros = $filtros;
@@ -86,8 +86,24 @@ class componenteFiltro
         $this->filtrosGet = $filtrosGet;
     }
 
-    private $accion;
-
+    /**
+     * Construye un array a partir de los resultados de una consulta SQL.
+     *
+     * @param mysqli_result $resultSql El resultado de la consulta SQL.
+     * @return array El array construido a partir de los resultados de la consulta.
+     */
+    public function  builderArray($resultSql)
+    {
+        $index = 0;
+        $arraysDatos = array();
+        while ($fila = $resultSql->fetch_assoc()) {
+            $arraysDatos[$index] = $fila;
+            $index++;
+        }
+        $lista = $arraysDatos;
+        $data["data"] = $lista;
+        return $data;
+    }
 
     public function generarComponente()
     {
@@ -99,7 +115,7 @@ class componenteFiltro
         if (!empty($this->opciones)) {
             foreach ($this->opciones as $opcion) {
                 if ($opcion) {
-                    
+
                     if (!empty($opcion["paginas"])) {
                         $html .= "
                         <li class='nav-item dropdown'>
@@ -109,20 +125,19 @@ class componenteFiltro
                         </a>";
                         $html .= "<div class='dropdown-menu' aria-labelledby='navbarDropdown'>";
                         foreach ($opcion["paginas"] as $pagina) {
-                            $dataModal = !empty($pagina["data-target"])?"data-toggle='modal'  data-target='{$pagina["data-target"]}' ":"";
-                            $action = !empty($pagina["action"])?"onClick='{$pagina["action"]}' ": "";
-                            $permiso=!empty($pagina["permiso"])?$pagina["permiso"]:true;
-                            if($permiso){
+                            $dataModal = !empty($pagina["data-target"]) ? "data-toggle='modal'  data-target='{$pagina["data-target"]}' " : "";
+                            $action = !empty($pagina["action"]) ? "onClick='{$pagina["action"]}' " : "";
+                            $permiso = !empty($pagina["permiso"]) ? $pagina["permiso"] : true;
+                            if ($permiso) {
                                 $html .= "<a class='dropdown-item' href='{$pagina["url"]}' {$dataModal} {$action} >{$pagina["texto"]}</a>";
-                            } 
-                            $divider=!empty($pagina["divider"])?true:false;  
-                            if($divider){ 
+                            }
+                            $divider = !empty($pagina["divider"]) ? true : false;
+                            if ($divider) {
                                 $html .= "<div class='dropdown-divider'></div>  ";
-                            } 
-                                                 
+                            }
                         }
                         $html .= "</div>";
-                    }else {
+                    } else {
                         $html .= "
                         <li class='nav-item'>
                         <a class='nav-link' href='{$opcion["url"]}' style='color:{$Plataforma->colorUno};'>
@@ -157,8 +172,8 @@ class componenteFiltro
                 ";
                 if (!empty($filtro["opciones"])) {
                     $html .= "<div class='dropdown-menu' aria-labelledby='navbarDropdown'>";
-                    foreach ($filtro["opciones"] as $opcion) {  
-                        $style = !empty($opcion["style"])?"style='{$opcion["style"]}'": "";                      
+                    foreach ($filtro["opciones"] as $opcion) {
+                        $style = !empty($opcion["style"]) ? "style='{$opcion["style"]}'" : "";
                         $html .= "<a class='dropdown-item' href='{$opcion["url"]}'  {$style}>{$opcion["texto"]}</a>";
                     }
                     $html .= "</div>";
@@ -182,14 +197,14 @@ class componenteFiltro
         $html .= "   </ul> 
             <div class='form-inline my-2 my-lg-0'>
                 <input id='input_{$this->id}' class='form-control mr-sm-2' type='search' placeholder='{$frases[386][$datosUsuarioActual['uss_idioma']]}..' aria-label='Search' name='busqueda' >
-                <button id='btn_{$this->id}' onclick='buscar(true)' class='btn deepPink-bgcolor my-2 my-sm-0' type='buttom'>{$frases[8][$datosUsuarioActual['uss_idioma']]}</button>
+                <button id='btn_{$this->id}' onclick='{$this->id}_buscar(true)' class='btn deepPink-bgcolor my-2 my-sm-0' type='buttom'>{$frases[8][$datosUsuarioActual['uss_idioma']]}</button>
             </div>
         </nav>
         <script type='text/javascript'>
         input_{$this->id}.addEventListener('keyup', function(event) {
-            buscar()
+            {$this->id}_buscar()
           });
-        function buscar(buscar){
+        function {$this->id}_buscar(buscar){
             var valor = document.getElementById('input_{$this->id}').value;
             var urlbase = '{$this->urlBase}'; 
             if(valor.length > 2){
@@ -198,27 +213,27 @@ class componenteFiltro
                     'url': '{$this->urlFilter}'
                 };
                 data.filtros =JSON.parse('{$this->filtrosGet}');
-                ejecutarFetch(urlbase,data);
+                {$this->id}_ejecutarFetch(urlbase,data);
             }else if(valor.length == 0){
                 var data = {
                     'valor': (valor),
                     'url': '{$this->urlFilter}'
                 };
                 data.filtros =JSON.parse('{$this->filtrosGet}');
-                ejecutarFetch(urlbase,data);
+                {$this->id}_ejecutarFetch(urlbase,data);
             }else if(buscar){
                 var data = {
                     'valor': (valor),
                     'url': '{$this->urlFilter}'
                 };
                 data.filtros =JSON.parse('{$this->filtrosGet}');
-                ejecutarFetch(urlbase,data);
+                {$this->id}_ejecutarFetch(urlbase,data);
 
             }
             
            
         }
-        function ejecutarFetch(url,data){
+        function {$this->id}_ejecutarFetch(url,data){
             fetch(url, {
                 method: 'POST', // or 'PUT'
                 body: JSON.stringify(data), // data can be `string` or {object}!
@@ -230,11 +245,11 @@ class componenteFiltro
             .catch((error) => console.error('Error:', error))
             .then(
                 function(response) {
-                    responseHtml(response);
+                    {$this->id}_responseHtml(response);
                 });
         }
-        function responseHtml(dato){
-            var tbody = document.getElementById('tbodyresult');
+        function {$this->id}_responseHtml(dato){
+            var tbody = document.getElementById('{$this->id}_result');
             document.getElementById('gifCarga').style.display = 'block';
             tbody.innerHTML = ''; 
             var data = {
