@@ -27,6 +27,7 @@ if(!empty($_POST["indicadores"]) and empty($_POST["calificaciones"])){
 	$indImpConsulta = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $_POST["cargaImportar"], $_POST["periodoImportar"]);
 
 	$datosInsert = '';
+	$sumCod = 1;
 
 	while($indImpDatos = mysqli_fetch_array($indImpConsulta, MYSQLI_BOTH)){
 		$idRegInd = $indImpDatos['ind_id'];
@@ -44,8 +45,11 @@ if(!empty($_POST["indicadores"]) and empty($_POST["calificaciones"])){
 		$copiado = 0;
 		if($indImpDatos['ipc_copiado']!=0) $copiado = $indImpDatos['ipc_copiado'];
 		$codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores_carga');
+		$codigo .= $sumCod;
 
 		$datosInsert .="('".$codigo."', '".$cargaConsultaActual."', '".$idRegInd."', '".$indImpDatos['ipc_valor']."', '".$periodoConsultaActual."', 1, '".$copiado."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";	
+
+		$sumCod ++;
 	}
 
 	if(!empty($datosInsert)){
@@ -70,6 +74,7 @@ if(!empty($_POST["calificaciones"])){
 	$indImpConsulta = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $_POST["cargaImportar"], $_POST["periodoImportar"]);
 
 	$datosInsertInd = '';
+	$sumCodInd = 1;
 	while($indImpDatos = mysqli_fetch_array($indImpConsulta, MYSQLI_BOTH)){
 		$idRegInd = $indImpDatos['ind_id'];
 
@@ -86,6 +91,7 @@ if(!empty($_POST["calificaciones"])){
 		$copiado = 0;
 		if($indImpDatos['ipc_copiado']!=0) $copiado = $indImpDatos['ipc_copiado'];
 		$codigo=Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores_carga');
+		$codigo .= $sumCodInd;
 
 		$datosInsertInd .="('".$codigo."', '".$cargaConsultaActual."', '".$idRegInd."', '".$indImpDatos['ipc_valor']."', '".$periodoConsultaActual."', 1, '".$copiado."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
 
@@ -115,11 +121,13 @@ if(!empty($_POST["calificaciones"])){
 				include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 			}
 		}
+
+		$sumCodInd ++;
 	}		
 
 	if(!empty($datosInsertInd)){
 		$datosInsertInd = substr($datosInsertInd,0,-1);
-		Indicadores::guardarIndicadorCargaMaxivo($conexion, $datosInsert);
+		Indicadores::guardarIndicadorCargaMaxivo($conexion, $datosInsertInd);
 	}
 	$ULR = 'calificaciones.php';
 }
