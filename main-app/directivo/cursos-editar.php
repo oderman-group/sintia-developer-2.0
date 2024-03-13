@@ -375,7 +375,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                     <div class="form-group row">
                                                         <label class="col-sm-2 control-label">
                                                             Imagen
-                                                            <button type="button" data-toggle="tooltip" data-placement="left" title="Genera una imagen con inteligencia artificial tenienedo en cuenta el nombre del curso" onclick="generarImagen()" class="btn btn-sm btn-info"><i class="fa-regular fa-image"></i></button>
+                                                            <button type="button" data-toggle="tooltip" data-placement="left" title="Genera una imagen con inteligencia artificial teniendo en cuenta el nombre del curso" onclick="generarImagen()" class="btn btn-sm btn-info"><i class="fa-regular fa-image"></i></button>
 
                                                         </label>
                                                         <div class="col-sm-5">
@@ -385,7 +385,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                     <div class="form-group row">
                                                         <label class="col-sm-2 control-label">
                                                             Descripcion
-                                                            <button type="button" data-toggle="tooltip" data-placement="left" title="Genera una descripcion con inteligencia artificial tenienedo en cuenta el nombre del curso" onclick="generarDescripcion()" class="btn btn-sm btn-info"><i class="far fa-comment-alt"></i></button>
+                                                            <button type="button" data-toggle="tooltip" data-placement="left" title="Genera una descripcion con inteligencia artificial teniendo en cuenta el nombre del curso" onclick="generarDescripcion()" class="btn btn-sm btn-info"><i class="far fa-comment-alt"></i></button>
 
                                                         </label>
                                                         <div class="col-sm-10">
@@ -400,7 +400,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                     </div>
                                                     <div class="form-group row">
                                                         <label class="col-sm-2 control-label">Contenido
-                                                        <button type="button" data-toggle="tooltip" data-placement="left" title="Genera una descripcion con inteligencia artificial tenienedo en cuenta el nombre del curso" onclick="generarContenido()" class="btn btn-sm btn-info"><i class="far fa-comment-alt"></i></button>
+                                                        <button type="button" data-toggle="tooltip" data-placement="left" title="Genera un contenido con inteligencia artificial teniendo en cuenta el nombre del curso" onclick="generarContenido()" class="btn btn-sm btn-info"><i class="far fa-comment-alt"></i></button>
                                                         </label>
                                                         <div class="col-sm-10">
                                                             <textarea cols="80" id="editor2" name="contenido" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?= $disabledPermiso; ?>>
