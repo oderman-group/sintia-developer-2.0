@@ -197,14 +197,14 @@ class Asignaciones {
                     (
                         asignar.epag_id_limite IN (
                             SELECT epag_id_limite FROM ".BD_ADMIN.".general_evaluacion_asignar
-                            WHERE epag_estado != '".PENDIENTE."' AND epag_institucion = {$config['conf_id_institucion']} AND epag_year = {$_SESSION["bd"]}
+                            WHERE epag_estado != '".PENDIENTE."' AND epag_id_evaluador!={$_SESSION["id"]} AND epag_institucion = {$config['conf_id_institucion']} AND epag_year = {$_SESSION["bd"]}
                             GROUP BY epag_id_limite
                             HAVING COUNT(*) < gal_limite_evaluadores
                         ) 
                     ) OR (
                         asignar.epag_id_limite NOT IN (
                             SELECT epag_id_limite FROM ".BD_ADMIN.".general_evaluacion_asignar
-                            WHERE epag_estado != '".PENDIENTE."' AND epag_institucion = {$config['conf_id_institucion']} AND epag_year = {$_SESSION["bd"]}
+                            WHERE epag_estado != '".PENDIENTE."' AND epag_id_evaluador!={$_SESSION["id"]} AND epag_institucion = {$config['conf_id_institucion']} AND epag_year = {$_SESSION["bd"]}
                             GROUP BY epag_id_limite
                         )
                     ) OR (gal_limite_evaluadores = 0)
@@ -286,7 +286,7 @@ class Asignaciones {
     )
     {
         try {
-            $consulta = mysqli_query($conexion, "SELECT epag_estado FROM ".BD_ADMIN.".general_evaluacion_asignar WHERE epag_estado!='".PENDIENTE."' AND epag_id_limite='{$idLimite}' AND epag_institucion = {$config['conf_id_institucion']} AND epag_year = {$_SESSION["bd"]}");
+            $consulta = mysqli_query($conexion, "SELECT epag_estado FROM ".BD_ADMIN.".general_evaluacion_asignar WHERE epag_estado!='".PENDIENTE."' AND epag_id_limite='{$idLimite}' AND epag_id_evaluador!={$_SESSION["id"]} AND epag_institucion = {$config['conf_id_institucion']} AND epag_year = {$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }

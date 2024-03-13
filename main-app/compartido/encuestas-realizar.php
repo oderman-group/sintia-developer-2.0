@@ -23,8 +23,6 @@ if ($asignacion['gal_limite_evaluadores'] != 0 && $iniciadas >= $asignacion['gal
 }
 
 $evaluacion = EvaluacionGeneral::consultar($asignacion['epag_id_evaluacion']);
-
-Asignaciones::actualizarEstadoAsignacion($conexion, $config, $id, PROCESO);
 ?>
 <script src="../js/Evaluaciones.js"></script>
 </head>

@@ -17,6 +17,10 @@ if ($asignacion['gal_limite_evaluadores'] != 0 && $iniciadas >= $asignacion['gal
 	exit();
 }
 
+if ($asignacion['epag_estado'] == PENDIENTE) { 
+	Asignaciones::actualizarEstadoAsignacion($conexion, $config, $_GET['idAsignacion'], PROCESO);
+}
+
 $existeRespuestas = PreguntaGeneral::existeRespuestaPregunta($conexion, $config, $_GET['idPregunta'], $_GET['idAsignacion'], $datosUsuarioActual['uss_id']);
 if(empty($existeRespuestas)) {
     PreguntaGeneral::guardarRespuestaPregunta($conexion, $config, $_GET['idPregunta'], $_GET['idAsignacion'], $datosUsuarioActual['uss_id'], $_GET['respuesta']);
