@@ -52,6 +52,9 @@
 										$contReg = 1;
 										while($resultado = mysqli_fetch_array($consultaEncuestas, MYSQLI_BOTH)){
 
+											$iniciadas = Asignaciones::consultarCantAsignacionesEmpezadas($conexion, $config, $resultado['gal_id']);
+											if ($resultado['gal_limite_evaluadores'] != 0 && $iniciadas >= $resultado['gal_limite_evaluadores'] ) { continue; }
+
 											$fechaBD = new DateTime($resultado['evag_fecha']);
 											$fecha = $fechaBD->format('d/m/Y');
 											$nombre = !empty($resultado['evag_nombre']) ? $resultado['evag_nombre'] : "";
