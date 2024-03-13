@@ -10,6 +10,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 require_once(ROOT_PATH."/main-app/class/Clases.php");
+require_once(ROOT_PATH."/main-app/class/Indicadores.php");
     
 $year=$_SESSION["bd"];
 if(isset($_GET["year"])){
@@ -203,9 +204,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 		
 		$datosAusencias = Clases::traerDatosAusencias($conexion, $config, $datosUsr['mat_id'], $datosCargas['car_id'], $periodoActual, $year);
 		
-		$indicadores = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-		INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$year}
-		WHERE ipc.ipc_carga='".$datosCargas['car_id']."' AND ipc.ipc_periodo='".$periodoActual."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$year}");
+		$indicadores = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $datosCargas['car_id'], $periodoActual, $year);
 		
 		//INDICADORES PERDIDOS DEL PERIODO ANTERIOR
 		$indicadoresPeridos = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion rind

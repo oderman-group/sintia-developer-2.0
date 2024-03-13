@@ -3,6 +3,7 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 require_once(ROOT_PATH."/main-app/class/Grados.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
@@ -139,29 +140,22 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $filtro = '';
-													 if(!empty($_GET["periodo"])){$filtro .= " AND ipc.ipc_periodo='".$periodoConsultaActual."'";}
-													try{
-														$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-														INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
-														WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]} $filtro
-														ORDER BY ipc.ipc_periodo");
-													} catch (Exception $e) {
-														include("../compartido/error-catch-to-report.php");
-													}
-													 $contReg = 1;
-													 $sino = array("NO","SI");
-													 $sumaPorcentaje = 0;
-													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+													$filtro = '';
+													if(!empty($_GET["periodo"])){$filtro .= " AND ipc.ipc_periodo='".$periodoConsultaActual."'";}
+													$consulta = Indicadores::consultarIndicador($conexion, $config, $cargaConsultaActual, $filtro);
+													$contReg = 1;
+													$sino = array("NO","SI");
+													$sumaPorcentaje = 0;
+													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														try{
 															$consultaNumActividades=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id_carga='".$cargaConsultaActual."' AND act_id_tipo='".$resultado['ipc_indicador']."' AND act_periodo='".$resultado['ipc_periodo']."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 														} catch (Exception $e) {
 															include("../compartido/error-catch-to-report.php");
 														}
-														 $numActividades = mysqli_num_rows($consultaNumActividades);
-														 
-														 $sumaPorcentaje += $resultado['ipc_valor'];
-													 ?>
+														$numActividades = mysqli_num_rows($consultaNumActividades);
+														
+														$sumaPorcentaje += $resultado['ipc_valor'];
+													?>
 													<tr>
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado['ipc_indicador'];?></td>

@@ -4,6 +4,7 @@ $idPaginaInterna = 'DT0076';
 include("../compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Grupos.php");
 $disabledPermiso = "";
 if (!Modulos::validarPermisoEdicion()) {
 	$disabledPermiso = "disabled";
@@ -118,11 +119,8 @@ $curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 			include("../compartido/error-catch-to-report.php");
 		}
 		$curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
-		try {
-			$consultaGrupo = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE gru_id='" . $_REQUEST["grupo"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
+		
+		$consultaGrupo = Grupos::obtenerDatosGrupos($_REQUEST["grupo"]);
 		$grupo = mysqli_fetch_array($consultaGrupo, MYSQLI_BOTH);
 		?>
 		<div class="row">

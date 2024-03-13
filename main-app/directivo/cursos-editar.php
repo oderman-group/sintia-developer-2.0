@@ -8,6 +8,7 @@ require_once("../class/servicios/GradoServicios.php");
 require_once("../class/servicios/CargaServicios.php");
 require_once("../class/servicios/MatriculaServicios.php");
 require_once("../compartido/includes/includeSelectSearch.php");
+require_once(ROOT_PATH."/main-app/class/Grupos.php");
 
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
     echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -475,14 +476,15 @@ if (!Modulos::validarPermisoEdicion()) {
                                                         $selectEctudiante2->generarComponente();
                                                         ?>
                                                     </div>
-                                                    <?php
-                                                    $cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM " . BD_ACADEMICA . ".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                                                    ?>
+                                                    
                                                     <div style="display: none;">
                                                         <select id="grupoBase" multiple class="form-control select2-multiple">
-                                                            <?php while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
-                                                                echo '<option value="' . $rv[0] . '" selected >' . $rv[1] . '</option>';
-                                                            } ?>
+                                                            <?php 
+                                                                $cv = Grupos::traerGrupos($conexion, $config);
+                                                                while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
+                                                                    echo '<option value="' . $rv['gru_id'] . '" selected >' . $rv['gru_nombre'] . '</option>';
+                                                                }
+                                                            ?>
                                                         </select>
                                                         <select id="estadoBase" multiple class="form-control select2-multiple">
                                                             <option value="<?= ESTADO_CURSO_ACTIVO ?>" selected><?= ESTADO_CURSO_ACTIVO ?></option>
@@ -527,22 +529,19 @@ if (!Modulos::validarPermisoEdicion()) {
                                                                     <td><?= $idEstudiante["matcur_id_matricula"]; ?></td>
                                                                     <td><?= $nombre; ?></td>
                                                                     <td>
-                                                                        <?php
-                                                                        $cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM " . BD_ACADEMICA . ".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                                                                        ?>
                                                                         <select id="grupo-<?= $idEstudiante["matcur_id_matricula"]; ?>" class="form-control" onchange="editarEstudainte('<?= $idEstudiante['matcur_id_matricula']; ?>')" <?= $disabledPermiso; ?>>
-                                                                            <?php while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
-                                                                                if ($rv[0] == $idEstudiante['matcur_id_grupo'])
-                                                                                    echo '<option value="' . $rv[0] . '" selected>' . $rv[1] . '</option>';
-                                                                                else
-                                                                                    echo '<option value="' . $rv[0] . '">' . $rv[1] . '</option>';
-                                                                            } ?>
+                                                                            <?php 
+                                                                                $cv = Grupos::traerGrupos($conexion, $config);
+                                                                                while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
+                                                                                    if ($rv['gru_id'] == $idEstudiante['matcur_id_grupo'])
+                                                                                        echo '<option value="' . $rv['gru_id'] . '" selected>' . $rv['gru_nombre'] . '</option>';
+                                                                                    else
+                                                                                        echo '<option value="' . $rv['gru_id'] . '">' . $rv['gru_nombre'] . '</option>';
+                                                                                }
+                                                                            ?>
                                                                         </select>
                                                                     </td>
                                                                     <td>
-                                                                        <?php
-                                                                        $cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM " . BD_ACADEMICA . ".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                                                                        ?>
                                                                         <select id="estado-<?= $idEstudiante["matcur_id_matricula"]; ?>" class="form-control" onchange="editarEstudainte('<?= $idEstudiante['matcur_id_matricula']; ?>')" <?= $disabledPermiso; ?>>
                                                                             <option value="<?= ESTADO_CURSO_ACTIVO ?>" <?php echo $idEstudiante['matcur_estado'] == ESTADO_CURSO_ACTIVO ? 'selected' : ''; ?>>
                                                                                 <?= ESTADO_CURSO_ACTIVO ?></option>
