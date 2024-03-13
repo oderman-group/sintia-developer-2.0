@@ -119,7 +119,7 @@ class Asignaciones {
         $resultado = [];
         try {
             $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".general_evaluacion_asignar 
-            INNER JOIN general_limite_asignacion ON gal_id=epag_id_limite
+            INNER JOIN ".BD_ADMIN.".general_limite_asignacion ON gal_id=epag_id_limite
             WHERE epag_id='{$idAsignacion}' AND epag_institucion = {$config['conf_id_institucion']} AND epag_year = {$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
@@ -190,9 +190,25 @@ class Asignaciones {
     )
     {
         try {
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".general_evaluacion_asignar 
-            INNER JOIN ".BD_ADMIN.".general_evaluaciones ON evag_id=epag_id_evaluacion AND evag_institucion = {$config['conf_id_institucion']} AND evag_year = {$_SESSION["bd"]}
-            WHERE epag_id_evaluador='{$idUsuario}' AND epag_estado IN ('".PENDIENTE."', '".PROCESO."') AND epag_institucion = {$config['conf_id_institucion']} AND epag_year = {$_SESSION["bd"]}");
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".general_evaluacion_asignar  AS asignar
+            INNER JOIN ".BD_ADMIN.".general_limite_asignacion ON gal_id=asignar.epag_id_limite
+            INNER JOIN ".BD_ADMIN.".general_evaluaciones ON evag_id=asignar.epag_id_evaluacion AND evag_institucion = {$config['conf_id_institucion']} AND evag_year = {$_SESSION["bd"]} 
+            WHERE asignar.epag_id_evaluador='{$idUsuario}' AND asignar.epag_estado IN ('".PENDIENTE."', '".PROCESO."') AND asignar.epag_institucion = {$config['conf_id_institucion']} AND asignar.epag_year = {$_SESSION["bd"]} AND (
+                    (
+                        asignar.epag_id_limite IN (
+                            SELECT epag_id_limite FROM ".BD_ADMIN.".general_evaluacion_asignar
+                            WHERE epag_estado != '".PENDIENTE."' AND epag_id_evaluador!={$_SESSION["id"]} AND epag_institucion = {$config['conf_id_institucion']} AND epag_year = {$_SESSION["bd"]}
+                            GROUP BY epag_id_limite
+                            HAVING COUNT(*) < gal_limite_evaluadores
+                        ) 
+                    ) OR (
+                        asignar.epag_id_limite NOT IN (
+                            SELECT epag_id_limite FROM ".BD_ADMIN.".general_evaluacion_asignar
+                            WHERE epag_estado != '".PENDIENTE."' AND epag_id_evaluador!={$_SESSION["id"]} AND epag_institucion = {$config['conf_id_institucion']} AND epag_year = {$_SESSION["bd"]}
+                            GROUP BY epag_id_limite
+                        )
+                    ) OR (gal_limite_evaluadores = 0)
+            )");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
@@ -270,7 +286,7 @@ class Asignaciones {
     )
     {
         try {
-            $consulta = mysqli_query($conexion, "SELECT epag_estado FROM ".BD_ADMIN.".general_evaluacion_asignar WHERE epag_estado!='".PENDIENTE."' AND epag_id_limite='{$idLimite}' AND epag_institucion = {$config['conf_id_institucion']} AND epag_year = {$_SESSION["bd"]}");
+            $consulta = mysqli_query($conexion, "SELECT epag_estado FROM ".BD_ADMIN.".general_evaluacion_asignar WHERE epag_estado!='".PENDIENTE."' AND epag_id_limite='{$idLimite}' AND epag_id_evaluador!={$_SESSION["id"]} AND epag_institucion = {$config['conf_id_institucion']} AND epag_year = {$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
