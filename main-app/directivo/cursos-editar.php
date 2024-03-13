@@ -39,6 +39,28 @@ if (!Modulos::validarPermisoEdicion()) {
 <!--select2-->
 <link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
 <link href="../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
+<style>
+    .gif-carga {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.7);
+        /* Fondo semitransparente */
+        z-index: 9999;
+        /* Asegura que esté por encima de otros elementos */
+        display: none;
+        /* Por defecto oculto */
+    }
+
+    .gif-carga img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+</style>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php"); ?>
@@ -115,7 +137,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                 <div class="form-group row">
                                                     <label class="col-sm-2 control-label">Nombre Curso</label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" name="nombreC" class="form-control" required value="<?= $resultadoCurso["gra_nombre"]; ?>" <?= $disabledPermiso; ?>>
+                                                        <input type="text" id="nombreC" name="nombreC" class="form-control" required value="<?= $resultadoCurso["gra_nombre"]; ?>" <?= $disabledPermiso; ?>>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -315,265 +337,284 @@ if (!Modulos::validarPermisoEdicion()) {
                                     </div>
 
                                     <?php if (array_key_exists(10, $arregloModulos)) { ?>
-                                    <div <?= $hidden ?> class="tab-pane fade" id="nav-configuracion" role="tabpanel" aria-labelledby="nav-configuracion-tab">
+                                        <div <?= $hidden ?> class="tab-pane fade" id="nav-configuracion" role="tabpanel" aria-labelledby="nav-configuracion-tab">
 
-                                        <div class="panel">
-                                            <div class="panel-body">
+                                            <div class="panel">
+                                                <div class="panel-body">
 
-                                                <div class="form-group row">
-                                                    <label class="col-sm-10 control-label"></label>
-                                                    <label class="col-sm-1 control-label">Vista Previa</label>
-                                                    <div class="col-sm-1">
-                                                        <a href="../guest/details.php?course=<?= $resultadoCurso["id_nuevo"] ?>" target="_blank">
-                                                            <button type="button" titlee="Ver vista previsa" class="btn btn-sm btn-info"><i class="fa fa-eye"></i></button>
-                                                        </a>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-10 control-label"></label>
+                                                        <label class="col-sm-1 control-label">Vista Previa</label>
+                                                        <div class="col-sm-1">
+                                                            <a href="../guest/details.php?course=<?= $resultadoCurso["id_nuevo"] ?>" target="_blank">
+                                                                <button type="button" titlee="Ver vista previsa" class="btn btn-sm btn-info"><i class="fa fa-eye"></i></button>
+                                                            </a>
 
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <div class="col-sm-2">
-                                                    </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-sm-2">
+                                                        </div>
 
-                                                    <div class="col-sm-8">
-                                                        <?php  
-                                                        $urlImagen= $storage->getBucket()->object(FILE_CURSOS.$resultadoCurso["gra_cover_image"])->signedUrl(new DateTime('tomorrow')); 
-                                                        $existe=$storage->getBucket()->object(FILE_CURSOS.$resultadoCurso["gra_cover_image"])->exists();
-                                                        if(!$existe){
-                                                            $urlImagen= "../files/cursos/curso.png";
-                                                        }
-                                                        ?>
-                                                       <img id="imagenSelect" class="cursor-mano" src="<?= $urlImagen?>" alt="avatar" style="height: 400px;width: 100%;border:3px dashed;padding:10px;border-radius:40px / 30px">
+                                                        <div class="col-sm-8">
+                                                            <?php
+                                                            $urlImagen = $storage->getBucket()->object(FILE_CURSOS . $resultadoCurso["gra_cover_image"])->signedUrl(new DateTime('tomorrow'));
+                                                            $existe = $storage->getBucket()->object(FILE_CURSOS . $resultadoCurso["gra_cover_image"])->exists();
+                                                            if (!$existe) {
+                                                                $urlImagen = "../files/cursos/curso.png";
+                                                            }
+                                                            ?>
+                                                            <div id="gifCarga" class="gif-carga">
+                                                                <img height="100px" width="100px" src="https://i.gifer.com/Vp3R.gif" alt="Cargando...">
+                                                            </div>
+                                                            <img id="imagenSelect" class="cursor-mano" src="<?= $urlImagen ?>" alt="avatar" style="height: 400px;width: 100%;border:3px dashed;padding:10px;border-radius:40px / 30px">
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                        </div>
                                                     </div>
-                                                    <div class="col-sm-2">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 control-label">
+                                                            Imagen
+                                                            <button type="button" data-toggle="tooltip" data-placement="left" title="Genera una imagen con inteligencia artificial tenienedo en cuenta el nombre del curso" onclick="generarImagen()" class="btn btn-sm btn-info"><i class="fa-regular fa-image"></i></button>
+
+                                                        </label>
+                                                        <div class="col-sm-5">
+                                                            <input type="file" id="imagenCurso" name="imagenCurso" onChange="mostrarImagen('imagenCurso','imagenSelect')" accept=".png, .jpg, .jpeg" class="form-control">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-2 control-label">Imagen</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="file" id="imagenCurso" name="imagenCurso" onChange="mostrarImagen('imagenCurso','imagenSelect')" accept=".png, .jpg, .jpeg" class="form-control">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-2 control-label">Descripcion</label>
-                                                    <div class="col-sm-10">
-                                                        <textarea cols="80" id="editor1" name="descripcion" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?= $disabledPermiso; ?>>
-                                                        <?= $resultadoCurso["gra_overall_description"]; ?>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 control-label">
+                                                            Descripcion
+                                                            <button type="button" data-toggle="tooltip" data-placement="left" title="Genera una descripcion con inteligencia artificial tenienedo en cuenta el nombre del curso" onclick="generarDescripcion()" class="btn btn-sm btn-info"><i class="far fa-comment-alt"></i></button>
+
+                                                        </label>
+                                                        <div class="col-sm-10">
+                                                            <textarea cols="80" id="editor1" name="descripcion" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?= $disabledPermiso; ?>>
+
+                                                            <?= $resultadoCurso["gra_overall_description"]; ?>
                                                         </textarea>
-
+                                                            <div id="gifCarga2" class="gif-carga">
+                                                                <img height="100px" width="100px" src="https://i.gifer.com/Vp3R.gif" alt="Cargando...">
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-2 control-label">Contenido</label>
-                                                    <div class="col-sm-10">
-                                                        <textarea cols="80" id="editor2" name="contenido" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?= $disabledPermiso; ?>>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 control-label">Contenido
+                                                        <button type="button" data-toggle="tooltip" data-placement="left" title="Genera una descripcion con inteligencia artificial tenienedo en cuenta el nombre del curso" onclick="generarContenido()" class="btn btn-sm btn-info"><i class="far fa-comment-alt"></i></button>
+                                                        </label>
+                                                        <div class="col-sm-10">
+                                                            <textarea cols="80" id="editor2" name="contenido" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?= $disabledPermiso; ?>>
                                                         <?= $resultadoCurso["gra_course_content"]; ?>
                                                         </textarea>
+                                                            <div id="gifCarga3" class="gif-carga">
+                                                                <img height="100px" width="100px" src="https://i.gifer.com/Vp3R.gif" alt="Cargando...">
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-2 control-label">Precio</label>
-                                                    <div class="col-sm-4">
-                                                        <input type="number" name="precio" class="form-control" value="<?= $resultadoCurso["gra_price"]; ?>" <?= $disabledPermiso; ?>>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 control-label">Precio</label>
+                                                        <div class="col-sm-4">
+                                                            <input type="number" name="precio" class="form-control" value="<?= $resultadoCurso["gra_price"]; ?>" <?= $disabledPermiso; ?>>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-2 control-label">Minimo de estudiantes</label>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 control-label">Minimo de estudiantes</label>
 
-                                                    <div class="input-group spinner col-sm-2">
-                                                        <span class="input-group-btn">
-                                                            <button class="btn btn-info" data-dir="dwn" type="button">
-                                                                <span class="fa fa-minus"></span>
-                                                            </button>
-                                                        </span>
-                                                        <input type="number" id="minEstudiantes" name="minEstudiantes" disabled class="form-control text-center" value="<?= $resultadoCurso["gra_minimum_quota"]; ?>" <?= $disabledPermiso; ?> min="1">
-                                                        <span class="input-group-btn">
-                                                            <button class="btn btn-danger" data-dir="up" type="button">
-                                                                <span class="fa fa-plus"></span>
-                                                            </button>
-                                                        </span>
-                                                    </div>
+                                                        <div class="input-group spinner col-sm-2">
+                                                            <span class="input-group-btn">
+                                                                <button class="btn btn-info" data-dir="dwn" type="button">
+                                                                    <span class="fa fa-minus"></span>
+                                                                </button>
+                                                            </span>
+                                                            <input type="number" id="minEstudiantes" name="minEstudiantes" disabled class="form-control text-center" value="<?= $resultadoCurso["gra_minimum_quota"]; ?>" <?= $disabledPermiso; ?> min="1">
+                                                            <span class="input-group-btn">
+                                                                <button class="btn btn-danger" data-dir="up" type="button">
+                                                                    <span class="fa fa-plus"></span>
+                                                                </button>
+                                                            </span>
+                                                        </div>
 
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-2 control-label">Maximo de estudiantes</label>
-
-                                                    <div class="input-group spinner col-sm-2">
-                                                        <span class="input-group-btn">
-                                                            <button class="btn btn-info" data-dir="dwn" type="button">
-                                                                <span class="fa fa-minus"></span>
-                                                            </button>
-                                                        </span>
-                                                        <input type="number" id="maxEstudiantes" name="maxEstudiantes" disabled class="form-control text-center" value="<?= $resultadoCurso["gra_maximum_quota"]; ?>" <?= $disabledPermiso; ?> min="1">
-                                                        <span class="input-group-btn">
-                                                            <button class="btn btn-danger" data-dir="up" type="button">
-                                                                <span class="fa fa-plus"></span>
-                                                            </button>
-                                                        </span>
                                                     </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 control-label">Maximo de estudiantes</label>
 
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-2 control-label">Duracion en horas</label>
-                                                    <div class="input-group spinner col-sm-2">
-                                                        <span class="input-group-btn">
-                                                            <button class="btn btn-info" data-dir="dwn" type="button">
-                                                                <span class="fa fa-minus"></span>
-                                                            </button>
-                                                        </span>
-                                                        <input type="number" id="horas" disabled name="horas" class="form-control text-center" value="<?=!empty($resultadoCurso["gra_duration_hours"]) ? $resultadoCurso["gra_duration_hours"] : "1"; ?>" min="1" <?= $disabledPermiso; ?>>
-                                                        <span class="input-group-btn">
-                                                            <button class="btn btn-danger" data-dir="up" type="button">
-                                                                <span class="fa fa-plus"></span>
-                                                            </button>
-                                                        </span>
+                                                        <div class="input-group spinner col-sm-2">
+                                                            <span class="input-group-btn">
+                                                                <button class="btn btn-info" data-dir="dwn" type="button">
+                                                                    <span class="fa fa-minus"></span>
+                                                                </button>
+                                                            </span>
+                                                            <input type="number" id="maxEstudiantes" name="maxEstudiantes" disabled class="form-control text-center" value="<?= $resultadoCurso["gra_maximum_quota"]; ?>" <?= $disabledPermiso; ?> min="1">
+                                                            <span class="input-group-btn">
+                                                                <button class="btn btn-danger" data-dir="up" type="button">
+                                                                    <span class="fa fa-plus"></span>
+                                                                </button>
+                                                            </span>
+                                                        </div>
+
                                                     </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-2 control-label">
-                                                        <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Los cursos que estén marcado con esta opción permitirán que cualquiera pueda participar del curso"><i class="fa fa-question"></i></button>
-                                                        Auto Matricular
-                                                    </label>
-                                                    <div class="col-sm-10">
-                                                        <label class="switchToggle">
-                                                            <input name="autoenrollment" type="checkbox" <?php if ($resultadoCurso['gra_auto_enrollment'] == 1) {
-                                                                                                                echo "checked";
-                                                                                                            } ?>>
-                                                            <span class="slider green round"></span>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 control-label">Duracion en horas</label>
+                                                        <div class="input-group spinner col-sm-2">
+                                                            <span class="input-group-btn">
+                                                                <button class="btn btn-info" data-dir="dwn" type="button">
+                                                                    <span class="fa fa-minus"></span>
+                                                                </button>
+                                                            </span>
+                                                            <input type="number" id="horas" disabled name="horas" class="form-control text-center" value="<?= !empty($resultadoCurso["gra_duration_hours"]) ? $resultadoCurso["gra_duration_hours"] : "1"; ?>" min="1" <?= $disabledPermiso; ?>>
+                                                            <span class="input-group-btn">
+                                                                <button class="btn btn-danger" data-dir="up" type="button">
+                                                                    <span class="fa fa-plus"></span>
+                                                                </button>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 control-label">
+                                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Los cursos que estén marcado con esta opción permitirán que cualquiera pueda participar del curso"><i class="fa fa-question"></i></button>
+                                                            Auto Matricular
                                                         </label>
+                                                        <div class="col-sm-10">
+                                                            <label class="switchToggle">
+                                                                <input name="autoenrollment" type="checkbox" <?php if ($resultadoCurso['gra_auto_enrollment'] == 1) {
+                                                                                                                    echo "checked";
+                                                                                                                } ?>>
+                                                                <span class="slider green round"></span>
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-2 control-label">
-                                                        <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Los cursos que estén marcados como no activos no podrán ser manipulados"><i class="fa fa-question"></i></button>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 control-label">
+                                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Los cursos que estén marcados como no activos no podrán ser manipulados"><i class="fa fa-question"></i></button>
 
-                                                        Activo
+                                                            Activo
 
-                                                    </label>
-                                                    <div class="col-sm-10">
-                                                        <label class="switchToggle">
-                                                            <input name="activo" type="checkbox" <?php if ($resultadoCurso['gra_active'] == 1) {
-                                                                                                        echo "checked";
-                                                                                                    } ?>>
-                                                            <span class="slider green round"></span>
                                                         </label>
+                                                        <div class="col-sm-10">
+                                                            <label class="switchToggle">
+                                                                <input name="activo" type="checkbox" <?php if ($resultadoCurso['gra_active'] == 1) {
+                                                                                                            echo "checked";
+                                                                                                        } ?>>
+                                                                <span class="slider green round"></span>
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
+
                                         </div>
+                                        <div <?= $hidden ?> class="tab-pane fade" id="nav-estudiantes" role="tabpanel" aria-labelledby="nav-estudiantes-tab">
 
-                                    </div>
-                                    <div <?= $hidden ?> class="tab-pane fade" id="nav-estudiantes" role="tabpanel" aria-labelledby="nav-estudiantes-tab">
+                                            <div class="panel">
+                                                <div class="panel-body">
 
-                                        <div class="panel">
-                                            <div class="panel-body">
-
-                                                <div class="form-group row">
-                                                    <label class="col-sm-2 control-label">Agregar un estudainte:</label>
-                                                    <div class="col-sm-8">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-2 control-label">Agregar un estudainte:</label>
+                                                        <div class="col-sm-8">
+                                                            <?php
+                                                            $selectEctudiante2 = new includeSelectSearch("SeleccionEstudiante", "ajax-listar-estudiantes.php", "buscar estudiante", "agregarEstudainte");
+                                                            $selectEctudiante2->generarComponente();
+                                                            ?>
+                                                        </div>
                                                         <?php
-                                                        $selectEctudiante2 = new includeSelectSearch("SeleccionEstudiante", "ajax-listar-estudiantes.php", "buscar estudiante", "agregarEstudainte");
-                                                        $selectEctudiante2->generarComponente();
+                                                        $cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM " . BD_ACADEMICA . ".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                         ?>
+                                                        <div style="display: none;">
+                                                            <select id="grupoBase" multiple class="form-control select2-multiple">
+                                                                <?php while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
+                                                                    echo '<option value="' . $rv[0] . '" selected >' . $rv[1] . '</option>';
+                                                                } ?>
+                                                            </select>
+                                                            <select id="estadoBase" multiple class="form-control select2-multiple">
+                                                                <option value="<?= ESTADO_CURSO_ACTIVO ?>" selected><?= ESTADO_CURSO_ACTIVO ?></option>
+                                                                <option value="<?= ESTADO_CURSO_INACTIVO ?>" selected><?= ESTADO_CURSO_INACTIVO ?></option>
+                                                                <option value="<?= ESTADO_CURSO_PRE_INSCRITO ?>" selected><?= ESTADO_CURSO_PRE_INSCRITO ?></option>
+                                                                <option value="<?= ESTADO_CURSO_NO_APROBADO ?>" selected><?= ESTADO_CURSO_NO_APROBADO ?></option>
+                                                                <option value="<?= ESTADO_CURSO_APROBADO ?>" selected><?= ESTADO_CURSO_APROBADO ?></option>
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                    <?php
-                                                    $cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM " . BD_ACADEMICA . ".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                                                    ?>
-                                                    <div style="display: none;">
-                                                        <select id="grupoBase" multiple class="form-control select2-multiple">
-                                                            <?php while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
-                                                                echo '<option value="' . $rv[0] . '" selected >' . $rv[1] . '</option>';
+                                                    <table class="table" id="estudaintesRegistrados">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">#</th>
+                                                                <th scope="col">Nombre</th>
+                                                                <th scope="col" width="100px">Grupo</th>
+                                                                <th scope="col" width="200px">Estado</th>
+                                                                <th scope="col">Acciones</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php
+                                                            $parametros = [
+                                                                'matcur_id_curso' => base64_decode($_GET["id"]) . '',
+                                                                'matcur_id_institucion' => $config['conf_id_institucion'],
+                                                                'matcur_years' => $config['conf_agno'],
+                                                                'arreglo' => false
+                                                            ];
+                                                            $ListaEstudiantes = MediaTecnicaServicios::listarEstudiantes($parametros);
+                                                            if (!is_null($ListaEstudiantes)) {
+                                                                foreach ($ListaEstudiantes as $idEstudiante) {
+                                                                    $matricualaEstudiante = MatriculaServicios::consultar($idEstudiante["matcur_id_matricula"]);
+                                                                    $nombre = "";
+                                                                    $arrayEnviar = array("tipo" => 1, "descripcionTipo" => "Para ocultar fila del registro.");
+                                                                    $arrayDatos = json_encode($arrayEnviar);
+                                                                    $objetoEnviar = htmlentities($arrayDatos);
+                                                                    if (!is_null($matricualaEstudiante)) {
+                                                                        $nombre = Estudiantes::NombreCompletoDelEstudiante($matricualaEstudiante);
+                                                                    }
+                                                            ?>
+                                                                    <tr id="reg<?= $idEstudiante["matcur_id_matricula"]; ?>">
+                                                                        <td><?= $idEstudiante["matcur_id_matricula"]; ?></td>
+                                                                        <td><?= $nombre; ?></td>
+                                                                        <td>
+                                                                            <?php
+                                                                            $cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM " . BD_ACADEMICA . ".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                                                                            ?>
+                                                                            <select id="grupo-<?= $idEstudiante["matcur_id_matricula"]; ?>" class="form-control" onchange="editarEstudainte('<?= $idEstudiante['matcur_id_matricula']; ?>')" <?= $disabledPermiso; ?>>
+                                                                                <?php while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
+                                                                                    if ($rv[0] == $idEstudiante['matcur_id_grupo'])
+                                                                                        echo '<option value="' . $rv[0] . '" selected>' . $rv[1] . '</option>';
+                                                                                    else
+                                                                                        echo '<option value="' . $rv[0] . '">' . $rv[1] . '</option>';
+                                                                                } ?>
+                                                                            </select>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?php
+                                                                            $cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM " . BD_ACADEMICA . ".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                                                                            ?>
+                                                                            <select id="estado-<?= $idEstudiante["matcur_id_matricula"]; ?>" class="form-control" onchange="editarEstudainte('<?= $idEstudiante['matcur_id_matricula']; ?>')" <?= $disabledPermiso; ?>>
+                                                                                <option value="<?= ESTADO_CURSO_ACTIVO ?>" <?php echo $idEstudiante['matcur_estado'] == ESTADO_CURSO_ACTIVO ? 'selected' : ''; ?>>
+                                                                                    <?= ESTADO_CURSO_ACTIVO ?></option>
+                                                                                <option value="<?= ESTADO_CURSO_INACTIVO ?>" <?php echo $idEstudiante['matcur_estado'] == ESTADO_CURSO_INACTIVO ? 'selected' : ''; ?>><?= ESTADO_CURSO_INACTIVO ?></option>
+                                                                                <option value="<?= ESTADO_CURSO_PRE_INSCRITO ?>" <?php echo $idEstudiante['matcur_estado'] == ESTADO_CURSO_PRE_INSCRITO ? 'selected' : ''; ?>><?= ESTADO_CURSO_PRE_INSCRITO ?></option>
+                                                                                <option value="<?= ESTADO_CURSO_NO_APROBADO ?>" <?php echo $idEstudiante['matcur_estado'] == ESTADO_CURSO_NO_APROBADO ? 'selected' : ''; ?>><?= ESTADO_CURSO_NO_APROBADO ?></option>
+                                                                                <option value="<?= ESTADO_CURSO_APROBADO ?>" <?php echo $idEstudiante['matcur_estado'] == ESTADO_CURSO_APROBADO ? 'selected' : ''; ?>><?= ESTADO_CURSO_APROBADO ?></option>
+                                                                            </select>
+                                                                        </td>
+                                                                        <td>
+                                                                            <button type="button" title="<?= $objetoEnviar; ?>" name="fetch-estudiante-mediatecnica.php?tipo=<?= base64_encode(ACCION_ELIMINAR) ?>&matricula=<?= base64_encode($idEstudiante["matcur_id_matricula"]) ?>&curso=<?= $_GET["id"] ?>" id="<?= $idEstudiante["matcur_id_matricula"]; ?>" onClick="deseaEliminar(this)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                                                        </td>
+                                                                    </tr>
+                                                            <?php  }
                                                             } ?>
-                                                        </select>
-                                                        <select id="estadoBase" multiple class="form-control select2-multiple">
-                                                            <option value="<?= ESTADO_CURSO_ACTIVO ?>" selected><?= ESTADO_CURSO_ACTIVO ?></option>
-                                                            <option value="<?= ESTADO_CURSO_INACTIVO ?>" selected><?= ESTADO_CURSO_INACTIVO ?></option>
-                                                            <option value="<?= ESTADO_CURSO_PRE_INSCRITO ?>" selected><?= ESTADO_CURSO_PRE_INSCRITO ?></option>
-                                                            <option value="<?= ESTADO_CURSO_NO_APROBADO ?>" selected><?= ESTADO_CURSO_NO_APROBADO ?></option>
-                                                            <option value="<?= ESTADO_CURSO_APROBADO ?>" selected><?= ESTADO_CURSO_APROBADO ?></option>
-                                                        </select>
+
+                                                        </tbody>
+                                                    </table>
+
+                                                    <div id="escogerEstudiantes">
+
+
+                                                        <div id="selectsContainer" style="display: none;">
+                                                        </div>
                                                     </div>
+
+
                                                 </div>
-                                                <table class="table" id="estudaintesRegistrados">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">#</th>
-                                                            <th scope="col">Nombre</th>
-                                                            <th scope="col" width="100px">Grupo</th>
-                                                            <th scope="col" width="200px">Estado</th>
-                                                            <th scope="col">Acciones</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <?php
-                                                        $parametros = [
-                                                            'matcur_id_curso' => base64_decode($_GET["id"]) . '',
-                                                            'matcur_id_institucion' => $config['conf_id_institucion'],
-                                                            'matcur_years' => $config['conf_agno'],
-                                                            'arreglo' => false
-                                                        ];
-                                                        $ListaEstudiantes = MediaTecnicaServicios::listarEstudiantes($parametros);
-                                                        if (!is_null($ListaEstudiantes)) {
-                                                            foreach ($ListaEstudiantes as $idEstudiante) {
-                                                                $matricualaEstudiante = MatriculaServicios::consultar($idEstudiante["matcur_id_matricula"]);
-                                                                $nombre = "";
-                                                                $arrayEnviar = array("tipo" => 1, "descripcionTipo" => "Para ocultar fila del registro.");
-                                                                $arrayDatos = json_encode($arrayEnviar);
-                                                                $objetoEnviar = htmlentities($arrayDatos);
-                                                                if (!is_null($matricualaEstudiante)) {
-                                                                    $nombre = Estudiantes::NombreCompletoDelEstudiante($matricualaEstudiante);
-                                                                }
-                                                        ?>
-                                                                <tr id="reg<?= $idEstudiante["matcur_id_matricula"]; ?>">
-                                                                    <td><?= $idEstudiante["matcur_id_matricula"]; ?></td>
-                                                                    <td><?= $nombre; ?></td>
-                                                                    <td>
-                                                                        <?php
-                                                                        $cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM " . BD_ACADEMICA . ".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                                                                        ?>
-                                                                        <select id="grupo-<?= $idEstudiante["matcur_id_matricula"]; ?>" class="form-control" onchange="editarEstudainte('<?= $idEstudiante['matcur_id_matricula']; ?>')" <?= $disabledPermiso; ?>>
-                                                                            <?php while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
-                                                                                if ($rv[0] == $idEstudiante['matcur_id_grupo'])
-                                                                                    echo '<option value="' . $rv[0] . '" selected>' . $rv[1] . '</option>';
-                                                                                else
-                                                                                    echo '<option value="' . $rv[0] . '">' . $rv[1] . '</option>';
-                                                                            } ?>
-                                                                        </select>
-                                                                    </td>
-                                                                    <td>
-                                                                        <?php
-                                                                        $cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM " . BD_ACADEMICA . ".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                                                                        ?>
-                                                                        <select id="estado-<?= $idEstudiante["matcur_id_matricula"]; ?>" class="form-control" onchange="editarEstudainte('<?= $idEstudiante['matcur_id_matricula']; ?>')" <?= $disabledPermiso; ?>>
-                                                                            <option value="<?= ESTADO_CURSO_ACTIVO ?>" <?php echo $idEstudiante['matcur_estado'] == ESTADO_CURSO_ACTIVO ? 'selected' : ''; ?>>
-                                                                                <?= ESTADO_CURSO_ACTIVO ?></option>
-                                                                            <option value="<?= ESTADO_CURSO_INACTIVO ?>" <?php echo $idEstudiante['matcur_estado'] == ESTADO_CURSO_INACTIVO ? 'selected' : ''; ?>><?= ESTADO_CURSO_INACTIVO ?></option>
-                                                                            <option value="<?= ESTADO_CURSO_PRE_INSCRITO ?>" <?php echo $idEstudiante['matcur_estado'] == ESTADO_CURSO_PRE_INSCRITO ? 'selected' : ''; ?>><?= ESTADO_CURSO_PRE_INSCRITO ?></option>
-                                                                            <option value="<?= ESTADO_CURSO_NO_APROBADO ?>" <?php echo $idEstudiante['matcur_estado'] == ESTADO_CURSO_NO_APROBADO ? 'selected' : ''; ?>><?= ESTADO_CURSO_NO_APROBADO ?></option>
-                                                                            <option value="<?= ESTADO_CURSO_APROBADO ?>" <?php echo $idEstudiante['matcur_estado'] == ESTADO_CURSO_APROBADO ? 'selected' : ''; ?>><?= ESTADO_CURSO_APROBADO ?></option>
-                                                                        </select>
-                                                                    </td>
-                                                                    <td>
-                                                                        <button type="button" title="<?= $objetoEnviar; ?>" name="fetch-estudiante-mediatecnica.php?tipo=<?= base64_encode(ACCION_ELIMINAR) ?>&matricula=<?= base64_encode($idEstudiante["matcur_id_matricula"]) ?>&curso=<?= $_GET["id"] ?>" id="<?= $idEstudiante["matcur_id_matricula"]; ?>" onClick="deseaEliminar(this)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
-                                                                    </td>
-                                                                </tr>
-                                                        <?php  }
-                                                        } ?>
-
-                                                    </tbody>
-                                                </table>
-
-                                                <div id="escogerEstudiantes">
-
-
-                                                    <div id="selectsContainer" style="display: none;">
-                                                    </div>
-                                                </div>
-
-
                                             </div>
-                                        </div>
 
-                                    </div>
+                                        </div>
                                     <?php } ?>
                                     <a href="javascript:void(0);" name="cursos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
                                     <?php if (Modulos::validarPermisoEdicion()) { ?>
@@ -585,6 +626,95 @@ if (!Modulos::validarPermisoEdicion()) {
                                 <!-- end js include path -->
                                 <script src="../ckeditor/ckeditor.js"></script>
                                 <script type="text/javascript">
+                                    function generarImagen() {
+                                        var valor = document.getElementById('nombreC').value;
+                                        document.getElementById("gifCarga").style.display = "block";
+                                        imagenSelect = document.getElementById('imagenSelect');
+                                        var data = {
+                                            'metodo': '<?php echo TEXT_TO_IMAGE ?>',
+                                            'valor': 'Crear una imagen llamativa para un curso que haga referencia al nombre de ' +valor
+                                        };
+                                        fetch('../openAi/metodos.php', {
+                                                method: 'POST', // or 'PUT'
+                                                body: JSON.stringify(data), // data can be `string` or {object}!
+                                                headers: {
+                                                    'Content-Type': 'application/json'
+                                                },
+                                            })
+                                            .then((res) => res.json())
+                                            .catch((error) => console.error('Error:', error))
+                                            .then(
+                                                function(response) {
+                                                    {
+                                                        document.getElementById("gifCarga").style.display = "none";
+                                                        console.log(response);
+                                                        if (response["ok"]) {
+                                                            url = response["url"];
+                                                            imagenSelect.src = url;
+                                                            imagenSelect.classList.add('animate__animated', 'animate__fadeIn');
+                                                            fetch(url)
+                                                                .then(response => response.blob()) // Convertir la respuesta a un objeto Blob
+                                                                .then(blob => {
+                                                                    // Crear un objeto File a partir del Blob
+                                                                    var file = new File([blob], 'imagen.jpg', {
+                                                                        type: 'image/jpeg'
+                                                                    });
+                                                                    if (file) {
+                                                                        var fileList = new DataTransfer(); // Crear un objeto FileList que contenga el archivo
+                                                                        fileList.items.add(file);
+                                                                        var imagenCursoAi = document.getElementById('imagenCurso'); // Establecer el objeto FileList en el campo de entrada de tipo 'file'
+                                                                        imagenCursoAi.files = fileList.files;
+                                                                    }
+                                                                });
+
+                                                        }
+                                                    };
+                                                });
+                                    }
+
+                                    function generarDescripcion() {
+                                        var valor = document.getElementById('nombreC').value;
+                                        var buscar = "Creame un descripcion para  realizar un curso con el nombre de " + valor + " el resultado en formato html solamente la etiqueta body";
+                                        var editor = CKEDITOR.instances.editor1;
+                                        ejecutarFetch(buscar, "gifCarga2", editor);
+                                    }
+
+                                    function generarContenido() {
+                                        var valor = document.getElementById('nombreC').value;
+                                        var buscar = "Creame una lista de contenido para  realizar un curso con el nombre de " + valor + " el resultado en formato html solamente el contenido la etiqueta body";
+                                        var editor = CKEDITOR.instances.editor2;
+                                        ejecutarFetch(buscar, "gifCarga3", editor);
+                                    }
+
+                                    function ejecutarFetch(valor, carangando, editor) {
+                                        var data = {
+                                            'metodo': '<?php echo TEXT_TO_TEXT ?>',
+                                            'valor': valor
+                                        };
+                                        document.getElementById(carangando).style.display = "block";
+                                        fetch('../openAi/metodos.php', {
+                                                method: 'POST', // or 'PUT'
+                                                body: JSON.stringify(data), // data can be `string` or {object}!
+                                                headers: {
+                                                    'Content-Type': 'application/json'
+                                                },
+                                            })
+                                            .then((res) => res.json())
+                                            .catch((error) => console.error('Error:', error))
+                                            .then(
+                                                function(response) {
+                                                    {
+                                                        document.getElementById(carangando).style.display = "none";
+                                                        console.log(response);
+                                                        if (response["ok"]) {
+                                                            editor.setData(response["valor"]);
+
+                                                        }
+
+
+                                                    };
+                                                });
+                                    }
                                     CKEDITOR.replace('editor1');
                                     CKEDITOR.replace('editor2');
 
@@ -656,28 +786,28 @@ if (!Modulos::validarPermisoEdicion()) {
 
                                     function agregarEstudainte(dato) {
                                         // se guarda en la base de datos                                        
-                                        accionCursoMatricula(dato, '<?php echo ACCION_CREAR ?>');                                        
+                                        accionCursoMatricula(dato, '<?php echo ACCION_CREAR ?>');
                                     };
 
                                     function editarEstudainte(id) {
                                         var grupoSelect = document.getElementById("grupo-" + id);
                                         var estadoSelect = document.getElementById("estado-" + id);
-                                       
+
                                         var dato = {};
-                                        dato.id=id;
-                                        dato.grupo=grupoSelect.value;
-                                        dato.estado=estadoSelect.value;
+                                        dato.id = id;
+                                        dato.grupo = grupoSelect.value;
+                                        dato.estado = estadoSelect.value;
                                         accionCursoMatricula(dato, '<?php echo ACCION_MODIFICAR ?>');
                                     };
 
 
 
                                     function accionCursoMatricula(dato, tipo, actualizar) {
-                                        if(dato.grupo == undefined){
-                                            dato.grupo="";
+                                        if (dato.grupo == undefined) {
+                                            dato.grupo = "";
                                         }
-                                        if(dato.estado == undefined){
-                                            dato.estado="";
+                                        if (dato.estado == undefined) {
+                                            dato.estado = "";
                                         }
                                         var data = {
                                             "matricula": dato.id,
@@ -703,7 +833,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                             })
                                             .then(
                                                 function(response) {
-                                                    if(tipo == '<?php echo ACCION_CREAR?>' && response["ok"]){
+                                                    if (tipo == '<?php echo ACCION_CREAR ?>' && response["ok"]) {
                                                         crearFila(dato);
                                                     }
                                                     if (response["ok"]) {
