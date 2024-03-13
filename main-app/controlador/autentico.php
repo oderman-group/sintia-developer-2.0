@@ -4,6 +4,13 @@ $idPaginaInterna = 'GN0001';
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 //include(ROOT_PATH."/conexion-datos.php");
 $conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
+
+$sql="SELECT id_nuevo, uss_usuario, uss_id,institucion, uss_intentos_fallidos FROM ".BD_GENERAL.".usuarios 
+WHERE uss_usuario='".trim($_POST["Usuario"])."' AND TRIM(uss_usuario)!='' AND uss_clave=SHA1('".$_POST["Clave"]."')  AND uss_usuario IS NOT NULL  ORDER BY uss_ultimo_ingreso DESC LIMIT 1";
+$rst_usrE = mysqli_query($conexionBaseDatosServicios, $sql);
+$usrE = mysqli_fetch_array($rst_usrE, MYSQLI_BOTH);
+
+$_POST["bd"]=$usrE["institucion"];
 $institucionConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".instituciones 
 WHERE ins_id='".$_POST["bd"]."' AND ins_enviroment='".ENVIROMENT."'");
 
