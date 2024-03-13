@@ -129,7 +129,7 @@ if(!Modulos::validarPermisoEdicion()){
 															include("../compartido/error-catch-to-report.php");
 														}
 														while($c = mysqli_fetch_array($curso, MYSQLI_BOTH)){
-															$ipc = Grados::traerPorcentajePorPeriodosGrados($conexion, $config, $c['gra_id'], $m['mat_id']);; 
+															$ipc = Grados::traerIntensidadMateriaCurso($conexion, $config, $c['gra_id'], $m['mat_id']); 
 														?>
 															<td><input type="text" style="width:20px; text-align:center;" maxlength="2" value="<?php if(!empty($ipc['ipc_intensidad'])) echo $ipc['ipc_intensidad'];?>" id="<?=$c['gra_id'];?>" name="<?=$m['mat_id'];?>" onChange="ipc(this)" title="<?=$c['gra_nombre'];?>" <?=$disabledPermiso;?>></td>
 														<?php
