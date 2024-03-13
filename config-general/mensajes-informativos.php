@@ -153,6 +153,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'Ya existe una carga con esta misma información, verifica la información suministrada y vuelve a intentarlo.';
             break;
 
+            case 'ER_DT_21':
+                $tipo = 'warning';
+                $mensaje = 'La encuesta escogida ya llego al limite y no puede ser respondida, porfavor escoja otra.';
+            break;
+
             default:
                 $tipo = 'secondary';
                 $mensaje = 'Error desconocido: '.$_GET['error'];

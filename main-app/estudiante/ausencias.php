@@ -5,7 +5,8 @@
 <?php include("verificar-carga.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
 <?php //include("verificar-pagina-bloqueada.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Grados.php");?>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
@@ -40,12 +41,11 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
 											<?php
 											$porcentaje = 0;
 											for($i=1; $i<=$datosEstudianteActual['gra_periodos']; $i++){
-												$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
-												WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-												"), MYSQLI_BOTH);
+												$periodosCursos = Grados::traerPorcentajePorPeriodosGrados($conexion, $config, $datosEstudianteActual['mat_grado'], $i);
+												
 												$porcentajeGrado=25;
 												if(!empty($periodosCursos['gvp_valor'])){
-												  $porcentajeGrado=$periodosCursos['gvp_valor'];
+													$porcentajeGrado=$periodosCursos['gvp_valor'];
 												}
 												
 												$notapp = mysqli_fetch_array(mysqli_query($conexion, "SELECT bol_nota FROM ".BD_ACADEMICA.".academico_boletin 

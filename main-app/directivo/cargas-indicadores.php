@@ -4,6 +4,7 @@
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
+require_once(ROOT_PATH."/main-app/class/Grados.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -51,18 +52,18 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                         <div class="panel-body">
 											<?php
 											for($i=1; $i<=$datosCargaActual['gra_periodos']; $i++){
-												try{
-													$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos WHERE gvp_grado='".$datosCargaActual['car_curso']."' AND gvp_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-												} catch (Exception $e) {
-													include("../compartido/error-catch-to-report.php");
+												$periodosCursos = Grados::traerPorcentajePorPeriodosGrados($conexion, $config, $datosCargaActual['car_curso'], $i);
+												
+												$porcentajeGrado=25;
+												if(!empty($periodosCursos['gvp_valor'])){
+													$porcentajeGrado=$periodosCursos['gvp_valor'];
 												}
-												$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
 
 												if($i==$datosCargaActual['car_periodo']) $msjPeriodoActual = '- ACTUAL'; else $msjPeriodoActual = '';
 												if($i==$periodoConsultaActual) $estiloResaltadoP = 'style="color: orange;"'; else $estiloResaltadoP = '';
 											?>
 												<p>
-													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=$_GET['carga'];?>&periodo=<?=base64_encode($i);?>&docente=<?=$_GET["docente"];?>&get=<?=base64_encode(100);?>" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$periodosCursos['gvp_valor'];?>%) <?=$msjPeriodoActual;?></a>
+													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=$_GET['carga'];?>&periodo=<?=base64_encode($i);?>&docente=<?=$_GET["docente"];?>&get=<?=base64_encode(100);?>" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$porcentajeGrado;?>%) <?=$msjPeriodoActual;?></a>
 											
 												</p>
 											<?php }?>
