@@ -186,6 +186,7 @@ if(!Modulos::validarPermisoEdicion()){
 	<script src="../../config-general/assets/plugins/jquery-validation/js/jquery.validate.min.js"></script>
     <!-- bootstrap -->
     <script src="../../config-general/assets/plugins/bootstrap/js/bootstrap.min.js" ></script>
+    <script src="../../config-general/assets/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js" ></script>
     <!-- steps -->
     <script src="../../config-general/assets/plugins/steps/jquery.steps.js" ></script>
     <script src="../../config-general/assets/js/pages/steps/steps-data.js" ></script>

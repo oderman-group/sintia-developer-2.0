@@ -209,14 +209,14 @@
             <div class="form-group row">
                 <label class="col-sm-2 control-label">Celular</label>
                 <div class="col-sm-4">
-                    <input type="text" name="celular" class="form-control" value="<?=$datosEditar['uss_celular'];?>" <?=$disabledPermiso;?>>
+                    <input type="text" name="celular" class="form-control" data-mask="(999) 999-9999" value="<?=$datosEditar['uss_celular'];?>" <?=$disabledPermiso;?>>
                 </div>
             </div>
 
             <div class="form-group row">
                 <label class="col-sm-2 control-label">Teléfono</label>
                 <div class="col-sm-4">
-                    <input type="text" name="telefono" class="form-control" value="<?=$datosEditar['uss_telefono'];?>" <?=$disabledPermiso;?>>
+                    <input type="text" name="telefono" class="form-control"  data-mask="999-9999"value="<?=$datosEditar['uss_telefono'];?>" <?=$disabledPermiso;?>>
                 </div>
             </div>
 
