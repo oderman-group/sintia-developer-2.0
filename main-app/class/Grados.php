@@ -162,14 +162,12 @@ class Grados {
      */
     public static function guardarIntensidadMateriaCurso(
         mysqli $conexion,
+        PDO     $conexionPDO,
         array $config,
         string $curso,
         string $materia,
         string $ih
     ){
-        $conexionPDOInstance = new Conexion;
-        $conexionPDO         = $conexionPDOInstance->conexionPDO(SERVER, USUARIO, PASSWORD, BD_ADMIN);
-
         $codigo=Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_intensidad_curso');
 
         try {

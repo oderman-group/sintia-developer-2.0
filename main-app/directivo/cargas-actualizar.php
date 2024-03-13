@@ -45,7 +45,7 @@ include("../compartido/historial-acciones-guardar.php");
 
 		Grados::eliminarIntensidadMateriaCurso($conexion, $config, $_POST["curso"], $_POST["asignatura"]);
 		
-		Grados::guardarIntensidadMateriaCurso($conexion, $config, $_POST["curso"], $_POST["asignatura"], $_POST["ih"]);
+		Grados::guardarIntensidadMateriaCurso($conexion, $conexionPDO, $config, $_POST["curso"], $_POST["asignatura"], $_POST["ih"]);
 
 		if($_POST["periodo"] != $_POST["periodoActual"]){
 			$parametros = array(

@@ -21,7 +21,7 @@ try{
 
 		Grados::eliminarIntensidadMateriaCurso($conexion, $config, $c['car_curso'], $c['car_materia']);
 		
-		Grados::guardarIntensidadMateriaCurso($conexion, $config, $c['car_curso'], $c['car_materia'], $c['car_ih']);
+		Grados::guardarIntensidadMateriaCurso($conexion, $conexionPDO, $config, $c['car_curso'], $c['car_materia'], $c['car_ih']);
 		
 	}
 	include("../compartido/guardar-historial-acciones.php");
