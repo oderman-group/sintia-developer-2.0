@@ -6,6 +6,7 @@ if(($datosUsuarioActual['uss_tipo']==3 or $datosUsuarioActual['uss_tipo']==4) an
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 require_once(ROOT_PATH."/main-app/class/Grados.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 ?>
 <?php require_once("../class/servicios/MediaTecnicaServicios.php"); ?>
 <div class="page-content">
@@ -171,7 +172,7 @@ require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 															if(!empty($sumaPorcentaje)){
 																$definitiva = ($definitiva / $sumaPorcentaje);
 															}
-															$consultaN = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante='".$datosEstudianteActual['mat_id']."' AND niv_id_asg='".$rCargas['car_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+															$consultaN = Calificaciones::nivelacionEstudianteCarga($conexion, $config, $datosEstudianteActual['mat_id'], $rCargas['car_id']);
 															
 															$numN = mysqli_num_rows($consultaN);
 															$rN = mysqli_fetch_array($consultaN, MYSQLI_BOTH);

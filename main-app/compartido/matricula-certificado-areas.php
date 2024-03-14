@@ -12,6 +12,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 require_once(ROOT_PATH."/main-app/class/Usuarios.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 
 $modulo = 1;
 
@@ -370,17 +371,7 @@ include("../compartido/head-informes.php") ?>
 			<p>&nbsp;</p>
 
 			<?php
-
-			$nivelaciones = mysqli_query($conexion, "SELECT niv_definitiva, niv_acta, niv_fecha_nivelacion, mat_nombre FROM ".BD_ACADEMICA.".academico_nivelaciones niv 
-
-									INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car_id=niv.niv_id_asg AND car.institucion={$config['conf_id_institucion']} AND car.year={$inicio}
-
-									INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
-
-									WHERE niv.niv_cod_estudiante='" . $_POST["id"] . "' AND niv.institucion={$config['conf_id_institucion']} AND niv.year={$inicio}");
-
-
-
+			$nivelaciones = Calificaciones::consultarNivelacionesEstudiante($conexion, $config, $_POST["id"], $inicio);
 			$numNiv = mysqli_num_rows($nivelaciones);
 
 			if ($numNiv > 0) {
@@ -422,7 +413,7 @@ include("../compartido/head-informes.php") ?>
 				$m = 0;
 				$niveladas = 0;
 				while ($m < $materiasPerdidas) {
-					$nMP = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante='" . $_POST["id"] . "' AND niv_id_asg='" . $vectorMP[$m] . "' AND niv_definitiva>='" . $config[5] . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
+					$nMP = Calificaciones::validarMateriaNivelada($conexion, $config, $_POST["id"], $vectorMP[$m], $inicio);
 					$numNivMP = mysqli_num_rows($nMP);
 					if ($numNivMP > 0) {
 						$niveladas++;

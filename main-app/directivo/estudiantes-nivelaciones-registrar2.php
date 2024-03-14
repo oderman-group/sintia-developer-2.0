@@ -6,6 +6,7 @@ require_once("../class/Estudiantes.php");
 include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Grupos.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 $disabledPermiso = "";
 if (!Modulos::validarPermisoEdicion()) {
 	$disabledPermiso = "disabled";
@@ -254,11 +255,7 @@ $curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 												}
 												$defPorMateria = round($defPorMateria / $config[19], 2);
 												//CONSULTAR NIVELACIONES
-												try {
-													$consultaNiv = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante='" . $resultado['mat_id'] . "' AND niv_id_asg='" . $carga['car_id'] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-												} catch (Exception $e) {
-													include("../compartido/error-catch-to-report.php");
-												}
+												$consultaNiv = Calificaciones::nivelacionEstudianteCarga($conexion, $config, $resultado['mat_id'], $carga['car_id']);
 												$cNiv = mysqli_fetch_array($consultaNiv, MYSQLI_BOTH);
 												if (!empty($cNiv['niv_definitiva']) && $cNiv['niv_definitiva'] > $defPorMateria) {
 													$defPorMateria = $cNiv['niv_definitiva'];

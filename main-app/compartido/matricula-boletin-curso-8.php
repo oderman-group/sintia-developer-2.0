@@ -11,6 +11,7 @@ require_once("../class/Estudiantes.php");
 require_once("../class/Usuarios.php");
 require_once("../class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 
 $year=$_SESSION["bd"];
 if(isset($_GET["year"])){
@@ -238,7 +239,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                         }
                         $promedioMateria = round($promedioMateria / ($j - 1), 1);
                         $promedioMateriaFinal = $promedioMateria;
-                        $consultaNivelacion=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id_asg='" . $datosCargas['car_id'] . "' AND niv_cod_estudiante='" . $datosUsr['mat_id'] . "' AND institucion={$config['conf_id_institucion']} AND year={$year}");
+                        $consultaNivelacion = Calificaciones::nivelacionEstudianteCarga($conexion, $config, $datosUsr['mat_id'], $datosCargas['car_id'], $year);
                         $nivelacion = mysqli_fetch_array($consultaNivelacion, MYSQLI_BOTH);
 
                         // SI PERDIÓ LA MATERIA A FIN DE AÑO

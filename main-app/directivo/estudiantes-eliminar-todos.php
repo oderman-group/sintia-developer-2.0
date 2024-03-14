@@ -42,11 +42,8 @@ try{
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
-try{
-	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
+
+Calificaciones::eliminarTodasNivelaciones($conexion, $config);
 
 Calificaciones::eliminarTodasNotaRecuperacion($conexion, $config);
 

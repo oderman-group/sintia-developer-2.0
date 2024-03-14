@@ -2,7 +2,8 @@
 session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
-require_once(ROOT_PATH."/main-app/class/Asignaturas.php");?>
+require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");?>
 <head>
 	<title>RESUMEN POR PERIODOS</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -64,8 +65,7 @@ require_once(ROOT_PATH."/main-app/class/Asignaturas.php");?>
                                             </td>
                                         <?php		
 										 }
-											$consultaN = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante='".$_GET["estudiante"]."' AND niv_id_asg='".$rCargas['car_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-											
+											$consultaN = Calificaciones::nivelacionEstudianteCarga($conexion, $config, $_GET["estudiante"], $rCargas['car_id']);
 											$numN = mysqli_num_rows($consultaN);
 											$rN = mysqli_fetch_array($consultaN, MYSQLI_BOTH);
 											if($numN==0){

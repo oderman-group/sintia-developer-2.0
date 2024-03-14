@@ -13,6 +13,7 @@ require_once("../class/Usuarios.php");
 require_once("../class/UsuariosPadre.php");
 require_once("../class/servicios/GradoServicios.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 $Plataforma = new Plataforma;
 
 $year=$_SESSION["bd"];
@@ -259,7 +260,7 @@ while($fila2=mysqli_fetch_array($consultaAMat, MYSQLI_BOTH)){
 	   //if($totalPromedio2<$rDesempeno["desbasdesde"]){$materiasPerdidas++;}
 	    $msj='';
 	   if($totalPromedio2<$config[5]){
-			$consultaNivelaciones=mysqli_query($conexion, "SELECT * FROM  ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id_asg='".$fila2['car_id']."' AND niv_cod_estudiante='".$matriculadosDatos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
+			$consultaNivelaciones = Calificaciones::nivelacionEstudianteCarga($conexion, $config, $matriculadosDatos['mat_id'], $fila2['car_id'], $year);
 			$numNiv=mysqli_num_rows($consultaNivelaciones);
 			if($numNiv>0){
 				$nivelaciones = mysqli_fetch_array($consultaNivelaciones, MYSQLI_BOTH);
@@ -408,7 +409,7 @@ if($totalPromedio2==1)	$totalPromedio2="1.0";	if($totalPromedio2==2)	$totalProme
 //if($totalPromedio2<$rDesempeno["desbasdesde"]){$materiasPerdidas++;}
 $msj='';
 if($totalPromedio2<$config[5]){
-	$consultaNivelaciones=mysqli_query($conexion, "SELECT * FROM  ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id_asg='".$fila2['car_id']."' AND niv_cod_estudiante='".$matriculadosDatos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
+	$consultaNivelaciones = Calificaciones::nivelacionEstudianteCarga($conexion, $config, $matriculadosDatos['mat_id'], $fila2['car_id'], $year);
 	$numNiv=mysqli_num_rows($consultaNivelaciones);
 	if($numNiv>0){
 		$nivelaciones = mysqli_fetch_array($consultaNivelaciones, MYSQLI_BOTH);

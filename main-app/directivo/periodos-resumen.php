@@ -5,6 +5,7 @@
 <?php include("../compartido/head.php");?>
 <?php
 require_once(ROOT_PATH."/main-app/class/Grados.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -223,12 +224,7 @@ function niv(enviada){
 															</td>
 														<?php		
 														 }
-														try{
-															$consultaN = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante='".$resultado['mat_id']."' AND niv_id_asg='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
-														}
-															
+															$consultaN = Calificaciones::nivelacionEstudianteCarga($conexion, $config, $resultado['mat_id'], $cargaConsultaActual);
 															$numN = mysqli_num_rows($consultaN);
 															$rN = mysqli_fetch_array($consultaN, MYSQLI_BOTH);
 															if($numN==0){
