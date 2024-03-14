@@ -54,7 +54,7 @@ $contadorPeriodos=0;
 <body style="font-family:Arial;">
 <?php
 //CONSULTA QUE ME TRAE EL DESEMPEÑO
-$consultaDesempeno=mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria=".$config["conf_notas_categoria"]." AND institucion={$config['conf_id_institucion']} AND year={$year};");	
+$consultaDesempeno = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $year);
 //CONSULTA QUE ME TRAE LAS areas DEL ESTUDIANTE
 $consultaMatAreaEst=mysqli_query($conexion, "SELECT ar_id, car_ih FROM ".BD_ACADEMICA.".academico_cargas car
 INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car.car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
@@ -183,13 +183,16 @@ while($fila3=mysqli_fetch_array($consultaMatPer, MYSQLI_BOTH)){
 <?php for($l=1;$l<=$numeroPeriodos;$l++){ ?>
 			
 
-			<td class=""  align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;"><?php $desempenoNotaP = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$notas[$l].">=notip_desde AND ".$notas[$l]."<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}"));
-			 echo $notas[$l]."<br>".$desempenoNotaP['notip_nombre'];
-			
-			
-			$promedios[$l]=$promedios[$l]+$notas[$l];
-			$contpromedios[$l]=$contpromedios[$l]+1;
-			?></td>
+			<td class=""  align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;">
+			<?php 
+				$desempenoNotaP = Boletin::obtenerDatosTipoDeNotas($config[22], $notas[$l], $year);
+
+				echo $notas[$l]."<br>".$desempenoNotaP['notip_nombre'];
+				
+				$promedios[$l]=$promedios[$l]+$notas[$l];
+				$contpromedios[$l]=$contpromedios[$l]+1;
+			?>
+			</td>
             
         <?php }?>
       <?php 
@@ -271,8 +274,7 @@ if(@mysqli_num_rows($cndisiplina)>0){
         <td>Observaciones</td>
     </tr>
 <?php while($rndisiplina=mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)){
-$consultaDesempenoND=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$rndisiplina["dn_nota"].">=notip_desde AND ".$rndisiplina["dn_nota"]."<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
-$desempenoND = mysqli_fetch_array($consultaDesempenoND, MYSQLI_BOTH);
+$desempenoND = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $rndisiplina["dn_nota"], $year);
 ?>
     <tr align="center" style="font-weight:bold; font-size:12px; height:20px;">
         <td><?=$rndisiplina["dn_periodo"]?></td>

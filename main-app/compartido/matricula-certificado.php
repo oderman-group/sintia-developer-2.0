@@ -394,8 +394,7 @@ $modulo = 1;
                     $periodoFinal = $boletin['periodo'];
                 }
 
-                    $consultaDesempeno = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $nota . ">=notip_desde AND " . $nota . "<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
-                    $desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
+                    $desempeno = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota, $inicio);
 
                 ?>
 
@@ -470,8 +469,7 @@ $modulo = 1;
                     $nota = round($boletin[0],1);
                 }
 
-                    $consultaDesempeno = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $nota . ">=notip_desde AND " . $nota . "<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
-                    $desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
+                    $desempeno = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota, $inicio);
 
                 ?>
 

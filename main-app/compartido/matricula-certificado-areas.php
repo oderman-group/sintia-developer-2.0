@@ -213,8 +213,7 @@ include("../compartido/head-informes.php") ?>
 					for ($n = 0; $n <= 5; $n++) {
 						if ($nota == $n) $nota = $nota . ".0";
 					}
-					$consultaDesempeno = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND notip_desde<='" . $nota . "' AND notip_hasta>='" . $nota . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
-					$desempenoA = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
+					$desempenoA = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota, $inicio);
 
 				?>
 
@@ -243,8 +242,7 @@ include("../compartido/head-informes.php") ?>
 						if ($notaDefMateria < $config[5]) {
 							$materiasPerdidas++;
 						}
-						$consultaDesempeno = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND notip_desde<='" . $notaDefMateria . "' AND notip_hasta>='" . $notaDefMateria . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
-						$desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
+						$desempeno = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaDefMateria, $inicio);
 						//PARA PREESCOLARES
 						if ($matricula["gra_id"] >= 12 and $matricula["gra_id"] <= 15) {
 							$nota = ceil($nota);
@@ -309,8 +307,7 @@ include("../compartido/head-informes.php") ?>
 					for ($n = 0; $n <= 5; $n++) {
 						if ($nota == $n) $nota = $nota . ".0";
 					}
-					$consultaDesempeno = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND notip_desde<='" . $nota . "' AND notip_hasta>='" . $nota . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
-					$desempenoA = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
+					$desempenoA = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota, $inicio);
 
 					$desempenoA['notip_nombre'] = $nota == 0 ? "Bajo" : $desempenoA['notip_nombre'];
 
@@ -337,8 +334,7 @@ include("../compartido/head-informes.php") ?>
 						for ($n = 0; $n <= 5; $n++) {
 							if ($notaDefMateria == $n) $notaDefMateria = $notaDefMateria . ".0";
 						}
-						$consultaDesempeno = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND notip_desde<='" . $notaDefMateria . "' AND notip_hasta>='" . $notaDefMateria . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
-						$desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
+						$desempeno = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaDefMateria, $inicio);
 						//PARA PREESCOLARES
 						if ($matricula["gra_id"] >= 12 and $matricula["gra_id"] <= 15) {
 							$nota = ceil($nota);
@@ -504,8 +500,7 @@ include("../compartido/head-informes.php") ?>
 						$periodoFinal = $boletin['periodo'];
 					}
 
-					$consultaDesempeno = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $nota . ">=notip_desde AND " . $nota . "<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
-					$desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
+					$desempeno = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota, $inicio);
 
 				?>
 
@@ -579,8 +574,7 @@ include("../compartido/head-informes.php") ?>
 
 					$nota = round($boletin[0], 1);
 
-					$consultaDesempeno = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND " . $nota . ">=notip_desde AND " . $nota . "<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
-					$desempeno = mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH);
+					$desempeno = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota, $inicio);
 
 				?>
 

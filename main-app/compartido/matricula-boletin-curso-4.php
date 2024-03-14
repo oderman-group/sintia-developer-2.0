@@ -485,9 +485,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                 <?php
 
                 while ($rndisiplina = mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)) {
-
-                    $consultaDesempenoND=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $config[22] . "' AND '" . $rndisiplina["dn_nota"] . "'>=notip_desde AND '" . $rndisiplina["dn_nota"] . "'<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
-                    $desempenoND = mysqli_fetch_array($consultaDesempenoND, MYSQLI_BOTH);
+                    $desempenoND = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $rndisiplina["dn_nota"], $year);
 
                 ?>
 
