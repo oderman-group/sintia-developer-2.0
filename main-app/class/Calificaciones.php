@@ -64,4 +64,42 @@ class Calificaciones {
         }	
     }
 
+    /**
+     * Este metodo me elimina la nota de recuperación de un estudiante
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idE
+    **/
+    public static function eliminarNotaRecuperacionEstudiante (
+        mysqli $conexion, 
+        array $config, 
+        string $idE
+    )
+    {
+
+        try {
+            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_recuperaciones_notas WHERE rec_cod_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+    }
+
+    /**
+     * Este metodo me elimina todas las notas de recuperacion
+     * @param mysqli $conexion
+     * @param array $config
+    **/
+    public static function eliminarTodasNotaRecuperacion (
+        mysqli $conexion, 
+        array $config
+    )
+    {
+
+        try {
+            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_recuperaciones_notas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+    }
+
 }
