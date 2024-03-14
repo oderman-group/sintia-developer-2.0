@@ -13,6 +13,16 @@
     if(!empty($_POST['idProducto'])) {
         $idProducto = $_POST['idProducto']; 
     }
+
+    $curso = '';
+    if(!empty($_POST['curso'])) {
+        $curso = $_POST['curso']; 
+    }
+
+    $idModulo = '';
+    if(!empty($_POST['idModulo'])) {
+        $idModulo = $_POST['idModulo']; 
+    }
     
 ?>
 <!DOCTYPE html>
@@ -170,7 +180,8 @@
                 data-epayco-extra12="<?=$_POST['usuario']?>"
                 data-epayco-extra13="<?=$_POST['year']?>"
                 data-epayco-extra14="<?=$_POST['matricula']?>"
-                data-epayco-extra15="<?=$_POST['curso']?>"
+                data-epayco-extra15="<?=$curso?>"
+                data-epayco-extra16="<?=$idModulo?>"
 
                 data-epayco-response="<?=REDIRECT_ROUTE?>/pagos-online/respuesta.php"
                 data-epayco-methodconfirmation="get"
