@@ -12,6 +12,7 @@ require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH . "/main-app/class/Boletin.php");
 require_once(ROOT_PATH . "/main-app/class/Usuarios.php");
 require_once(ROOT_PATH . "/main-app/class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 $Plataforma = new Plataforma;
 ?>
 <!doctype html>
@@ -103,12 +104,8 @@ $Plataforma = new Plataforma;
             </thead>
             <tbody>
                 <?php
-                    $consultaAreas= mysqli_query($conexion,"SELECT ar_id, ar_nombre, count(*) AS numMaterias, car_curso, car_grupo FROM ".BD_ACADEMICA.".academico_materias am
-                    INNER join ".BD_ACADEMICA.".academico_areas a ON a.ar_id = am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$inicio}
-                    INNER JOIN ".BD_ACADEMICA.".academico_cargas car on car_materia = am.mat_id and car_curso = '".$gradoActual."' AND car_grupo = '".$grupoActual."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$inicio}
-                    WHERE am.institucion={$config['conf_id_institucion']} AND am.year={$inicio}
-                    GROUP by am.mat_area
-                    ORDER BY a.ar_posicion");
+					$consultaAreas = Asignaturas::consultarAsignaturasCurso($conexion, $config, $gradoActual, $grupoActual, $inicio);
+					
                     $numAreas=mysqli_num_rows($consultaAreas);
                     $sumaPromedioGeneral=0;
 					$materiasPerdidas = 0;

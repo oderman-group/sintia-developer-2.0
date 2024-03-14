@@ -1,7 +1,8 @@
 <?php
 session_start();
 include("../../config-general/config.php");
-include("../../config-general/consulta-usuario-actual.php");?>
+include("../../config-general/consulta-usuario-actual.php");
+require_once(ROOT_PATH."/main-app/class/Asignaturas.php");?>
 <head>
 	<title>RESUMEN POR PERIODOS</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -36,8 +37,7 @@ include("../../config-general/consulta-usuario-actual.php");?>
                                     <?php
 									$cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso=5 AND car_grupo=3 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 									while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
-										$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_grados gra, ".BD_GENERAL.".usuarios uss WHERE am.mat_id='".$rCargas['car_materia']."' AND gra_id='".$rCargas['car_curso']."' AND uss_id='".$rCargas['car_docente']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
-										$rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);
+										$rDatos = Asignaturas::consultarAsignaturaCursoUsuario($conexion, $config, $rCargas['car_curso'], $rCargas['car_materia'], $rCargas['car_docente']);
 									?>
                                     <tr id="data1" class="odd gradeX">
                                         <td style="text-align:center;"><?=$rCargas['car_id'];?></td>

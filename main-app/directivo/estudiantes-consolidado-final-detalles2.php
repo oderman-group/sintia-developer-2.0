@@ -4,6 +4,7 @@
 <?php include("../compartido/head.php"); ?>
 <?php
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 $year = $agnoBD;
 ?>
 
@@ -202,8 +203,7 @@ if (!Modulos::validarPermisoEdicion()) {
 										//SACAMOS EL NUMERO DE CARGAS O MATERIASQUE TIENE UN CURSO PARAQUE SIRVA DE DIVISOR EN LA DEFINITIVA POR ESTUDIANTE
 										$numCargasPorCurso = mysqli_num_rows($cargas);
 										while ($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)) {
-											$consultaMateria = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='" . $carga['car_materia'] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-											$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
+											$materia = Asignaturas::consultarDatosAsignatura($conexion, $config, $carga['car_materia']);
 										?>
 											<th width="<?= ($config[19] + 1) * 50; ?>px" style="font-size:9px; text-align:center; border:groove;" colspan="<?= $config[19] + 1; ?>"><?= $materia['mat_nombre']; ?></th>
 										<?php
@@ -255,10 +255,7 @@ if (!Modulos::validarPermisoEdicion()) {
 											$cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='" . $_POST["curso"] . "' AND car_grupo='" . $_POST["grupo"] . "' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 
 											while ($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)) {
-
-												$consultaMateria = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='" . $carga['car_materia'] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-
-												$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
+												$materia = Asignaturas::consultarDatosAsignatura($conexion, $config, $carga['car_materia']);
 												$p = 1;
 												$defPorMateria = 0;
 												//PERIODOS DE CADA MATERIA

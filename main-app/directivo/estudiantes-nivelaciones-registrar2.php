@@ -5,6 +5,7 @@ include("../compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Grupos.php");
+require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 $disabledPermiso = "";
 if (!Modulos::validarPermisoEdicion()) {
 	$disabledPermiso = "disabled";
@@ -188,12 +189,7 @@ $curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 										//SACAMOS EL NUMERO DE CARGAS O MATERIAS QUE TIENE UN CURSO PARA QUE SIRVA DE DIVISOR EN LA DEFINITIVA POR ESTUDIANTE
 										$numCargasPorCurso = mysqli_num_rows($cargas);
 										while ($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)) {
-											try {
-												$consultaMateria = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='" . $carga['car_materia'] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-											} catch (Exception $e) {
-												include("../compartido/error-catch-to-report.php");
-											}
-											$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
+											$materia = Asignaturas::consultarDatosAsignatura($conexion, $config, $carga['car_materia']);
 										?>
 											<th style="font-weight:bold;background:<?= $Plataforma->colorUno; ?>; color:#FFF;" colspan="3" width="5%"><?= $materia['mat_nombre']; ?></th>
 										<?php
@@ -238,12 +234,7 @@ $curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 												include("../compartido/error-catch-to-report.php");
 											}
 											while ($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)) {
-												try {
-													$consultaMateria = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='" . $carga['car_materia'] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-												} catch (Exception $e) {
-													include("../compartido/error-catch-to-report.php");
-												}
-												$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
+												$materia = Asignaturas::consultarDatosAsignatura($conexion, $config, $carga['car_materia']);
 												$p = 1;
 												$defPorMateria = 0;
 												//PERIODOS DE CADA MATERIA
