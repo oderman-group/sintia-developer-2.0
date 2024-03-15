@@ -375,8 +375,8 @@ if (!Modulos::validarPermisoEdicion()) {
                                                     <div class="form-group row">
                                                         <label class="col-sm-2 control-label">
                                                             Imagen
-                                                            <button type="button" data-toggle="tooltip" data-placement="left" title="Genera una imagen con inteligencia artificial teniendo en cuenta el nombre del curso" onclick="generarImagen()" class="btn btn-sm btn-info"><i class="fa-regular fa-image"></i></button>
-
+                                                            <button type="button" data-toggle="tooltip" data-placement="left" title="Genera una imagen con inteligencia artificial teniendo en cuenta el nombre del curso" onclick="generar('imagen')" class="btn btn-sm btn-info"><i class="fa-regular fa-image"></i></button>
+                                                            <button id="descargarImagen">Descargar Imagen</button>
                                                         </label>
                                                         <div class="col-sm-5">
                                                             <input type="file" id="imagenCurso" name="imagenCurso" onChange="mostrarImagen('imagenCurso','imagenSelect')" accept=".png, .jpg, .jpeg" class="form-control">
@@ -385,7 +385,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                     <div class="form-group row">
                                                         <label class="col-sm-2 control-label">
                                                             Descripcion
-                                                            <button type="button" data-toggle="tooltip" data-placement="left" title="Genera una descripcion con inteligencia artificial teniendo en cuenta el nombre del curso" onclick="generarDescripcion()" class="btn btn-sm btn-info"><i class="far fa-comment-alt"></i></button>
+                                                            <button type="button" data-toggle="tooltip" data-placement="left" title="Genera una descripcion con inteligencia artificial teniendo en cuenta el nombre del curso" onclick="generar('descripcion')" class="btn btn-sm btn-info"><i class="far fa-comment-alt"></i></button>
 
                                                         </label>
                                                         <div class="col-sm-10">
@@ -400,7 +400,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                     </div>
                                                     <div class="form-group row">
                                                         <label class="col-sm-2 control-label">Contenido
-                                                        <button type="button" data-toggle="tooltip" data-placement="left" title="Genera un contenido con inteligencia artificial teniendo en cuenta el nombre del curso" onclick="generarContenido()" class="btn btn-sm btn-info"><i class="far fa-comment-alt"></i></button>
+                                                            <button type="button" data-toggle="tooltip" data-placement="left" title="Genera un contenido con inteligencia artificial teniendo en cuenta el nombre del curso" onclick="generar('contenido')" class="btn btn-sm btn-info"><i class="far fa-comment-alt"></i></button>
                                                         </label>
                                                         <div class="col-sm-10">
                                                             <textarea cols="80" id="editor2" name="contenido" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?= $disabledPermiso; ?>>
@@ -626,13 +626,40 @@ if (!Modulos::validarPermisoEdicion()) {
                                 <!-- end js include path -->
                                 <script src="../ckeditor/ckeditor.js"></script>
                                 <script type="text/javascript">
-                                    function generarImagen() {
+                                    function generar(tipo) {
                                         var valor = document.getElementById('nombreC').value;
+                                        if (valor) {
+
+                                            switch (tipo) {
+                                                case 'imagen':
+                                                    generarImagen(valor);
+                                                    break;
+                                                case 'descripcion':
+                                                    generarDescripcion(valor);
+                                                    break;
+                                                case 'contenido':
+                                                    generarContenido(valor)
+                                                    break;
+                                            }
+
+                                        } else {
+                                            Swal.fire({
+                                                position: "top-end",
+                                                icon: "warning",
+                                                title: 'Ingrese el nombre del Curso',
+                                                showConfirmButton: false,
+                                                timer: 150000
+                                            });
+                                        }
+
+                                    }
+
+                                    function generarImagen(valor) {
                                         document.getElementById("gifCarga").style.display = "block";
                                         imagenSelect = document.getElementById('imagenSelect');
                                         var data = {
                                             'metodo': '<?php echo TEXT_TO_IMAGE ?>',
-                                            'valor': 'Crear una imagen llamativa para un curso que haga referencia al nombre de ' +valor
+                                            'valor': 'Crear una imagen llamativa para un curso que haga referencia al nombre de ' + valor
                                         };
                                         fetch('../openAi/metodos.php', {
                                                 method: 'POST', // or 'PUT'
@@ -672,15 +699,13 @@ if (!Modulos::validarPermisoEdicion()) {
                                                 });
                                     }
 
-                                    function generarDescripcion() {
-                                        var valor = document.getElementById('nombreC').value;
+                                    function generarDescripcion(valor) {
                                         var buscar = "Creame un descripcion para  realizar un curso con el nombre de " + valor + " el resultado en formato html solamente la etiqueta body";
                                         var editor = CKEDITOR.instances.editor1;
                                         ejecutarFetch(buscar, "gifCarga2", editor);
                                     }
 
-                                    function generarContenido() {
-                                        var valor = document.getElementById('nombreC').value;
+                                    function generarContenido(valor) {
                                         var buscar = "Creame una lista de contenido para  realizar un curso con el nombre de " + valor + " el resultado en formato html solamente el contenido la etiqueta body";
                                         var editor = CKEDITOR.instances.editor2;
                                         ejecutarFetch(buscar, "gifCarga3", editor);
