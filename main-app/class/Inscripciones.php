@@ -1,9 +1,71 @@
 <?php
+require_once("servicios/Servicios.php");
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
 class Inscripciones {
 
+
+        /**
+     * Lista todas  las Inscripciones con información adicional.
+     *
+     * @param array|null $parametrosArray Arreglo de parámetros para filtrar la consulta (opcional).
+     *
+     * @return array|mysqli_result|false Arreglo de datos del resultado, objeto mysqli_result o false si hay un error.
+     */
+    public static function listarTodos($parametrosArray = null)
+    {
+        global $config;
+        if(empty($parametrosArray["institucion"])){
+            $institucion=$config['conf_id_institucion'];
+        }
+        if(empty($parametrosArray["year"])){
+            $year=$_SESSION["bd"];
+        }
+        $busqueda='';
+        $sqlFinal ='';
+        if(!empty($parametrosArray["valor"])){
+            $busqueda=$parametrosArray["valor"];
+            $sqlFinal = " AND (
+                mat_id LIKE '%" . $busqueda . "%' 
+                OR mat_nombres LIKE '%" . $busqueda . "%' 
+                OR mat_nombre2 LIKE '%" . $busqueda . "%' 
+                OR mat_primer_apellido LIKE '%" . $busqueda . "%' 
+                OR mat_segundo_apellido LIKE '%" . $busqueda . "%' 
+                OR mat_documento LIKE '%" . $busqueda . "%' 
+                OR mat_email LIKE '%" . $busqueda . "%'
+                OR CONCAT(TRIM(mat_primer_apellido), ' ', TRIM(mat_segundo_apellido), ' ', TRIM(mat_nombres)) LIKE '%" . $busqueda . "%'
+                OR CONCAT(TRIM(mat_primer_apellido), TRIM(mat_segundo_apellido), TRIM(mat_nombres)) LIKE '%" . $busqueda . "%'
+                OR CONCAT(TRIM(mat_primer_apellido), ' ', TRIM(mat_nombres)) LIKE '%" . $busqueda . "%'
+                OR CONCAT(TRIM(mat_primer_apellido), TRIM(mat_nombres)) LIKE '%" . $busqueda . "%'
+                OR CONCAT(TRIM(mat_nombres), ' ', TRIM(mat_primer_apellido)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(mat_nombres), '', TRIM(mat_primer_apellido)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(mat_primer_apellido), '', TRIM(mat_nombres)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(mat_nombres), ' ', TRIM(mat_nombre2)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(mat_nombres), ' ', TRIM(mat_segundo_apellido)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(mat_nombre2), ' ', TRIM(mat_nombres)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(mat_segundo_apellido), ' ', TRIM(mat_nombres)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(mat_segundo_apellido), ' ', TRIM(mat_nombre2)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(mat_nombre2), ' ', TRIM(mat_segundo_apellido)) LIKE '%".$busqueda."%'
+                OR gra_nombre LIKE '%" . $busqueda . "%'
+                OR asp_email_acudiente LIKE '%" . $busqueda . "%'
+                OR asp_nombre_acudiente LIKE '%" . $busqueda . "%'
+                OR asp_nombre LIKE '%" . $busqueda . "%'
+                OR asp_documento_acudiente LIKE '%" . $busqueda . "%'              
+            )";
+        }
+      $sqlFiltro ='';
+      if(!empty($parametrosArray["filtro"])){
+        $sqlFiltro =$parametrosArray["filtro"];
+      }
+      $sqlInicial ="SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
+                    INNER JOIN ".BD_ADMISIONES.".aspirantes ON asp_id=mat_solicitud_inscripcion
+                    LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=asp_grado AND gra.institucion={$institucion} AND gra.year={$year}
+                    WHERE mat_estado_matricula=5 AND mat.institucion={$institucion} AND mat.year={$year} ".$sqlFinal." ".$sqlFiltro." 
+                    ORDER BY mat_primer_apellido";     
+      $sql = $sqlInicial ;
+      return Servicios::SelectSql($sql);
+    }
     /**
      * Este metodo me busca la configuración de la institución para admisiones
      * @param mysqli $conexion
