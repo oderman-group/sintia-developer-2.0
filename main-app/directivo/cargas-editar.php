@@ -4,6 +4,7 @@
 <?php include("../compartido/head.php");?>
 <?php
 require_once(ROOT_PATH."/main-app/class/Grupos.php");
+require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -154,19 +155,10 @@ require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Asignatura (Área) <span style="color: red;">(*)</span></label>
                                             <div class="col-sm-8">
-												<?php
-												try{
-													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias am 
-													INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id=am.mat_area AND ar.institucion={$config['conf_id_institucion']} AND ar.year={$_SESSION["bd"]}
-													AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
-													ORDER BY am.mat_nombre");
-												} catch (Exception $e) {
-													include("../compartido/error-catch-to-report.php");
-												}
-												?>
                                                 <select class="form-control  select2" name="asignatura" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
 													<?php
+													$opcionesConsulta = Asignaturas::consultarTodasAsignaturas($conexion, $config);
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 														$select = '';
 														if($opcionesDatos['mat_id']==$datosEditar['car_materia']) $select = 'selected';

@@ -4,6 +4,8 @@ $idPaginaInterna = 'DT0081';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -126,12 +128,7 @@ if(!Modulos::validarPermisoEdicion()){
 													//SACAMOS EL NUMERO DE CARGAS O MATERIAS QUE TIENE UN CURSO PARA QUE SIRVA DE DIVISOR EN LA DEFINITIVA POR ESTUDIANTE
 													$numCargasPorCurso = mysqli_num_rows($cargas); 
 													while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
-														try{
-															$consultaMateria=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$carga['car_materia']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
-														}
-														$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
+														$materia = Asignaturas::consultarDatosAsignatura($conexion, $config, $carga['car_materia']);
 													?>
 														<th style="font-size:9px; text-align:center; border:groove;" colspan="<?=$config[19]+1;?>" width="5%"><?=$materia['mat_nombre'];?></th>
 													<?php
@@ -189,12 +186,7 @@ if(!Modulos::validarPermisoEdicion()){
 														include("../compartido/error-catch-to-report.php");
 													}
 													while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
-														try{
-															$consultaMateria=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$carga['car_materia']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
-														}
-														$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
+														$materia = Asignaturas::consultarDatosAsignatura($conexion, $config, $carga['car_materia']);
 														$p = 1;
 														$defPorMateria = 0;
 														//PERIODOS DE CADA MATERIA
@@ -228,7 +220,7 @@ if(!Modulos::validarPermisoEdicion()){
 															//DEFINITIVA DE CADA MATERIA
 															if($defPorMateria<$config[5] and $defPorMateria!="")$color = $config[6]; elseif($defPorMateria>=$config[5]) $color = $config[7];
 															//CONSULTAR NIVELACIONES
-															$consultaNiv=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante='".$resultado['mat_id']."' AND niv_id_asg='".$carga['car_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+															$consultaNiv = Calificaciones::nivelacionEstudianteCarga($conexion, $config, $resultado['mat_id'], $carga['car_id']);
 															$cNiv = mysqli_fetch_array($consultaNiv, MYSQLI_BOTH);
 															if(isset($cNiv['niv_definitiva']) and $cNiv['niv_definitiva']>$defPorMateria){$defPorMateria=$cNiv['niv_definitiva']; $msj = 'Nivelación';}else{$defPorMateria=$defPorMateria; $msj = '';}
 														?>

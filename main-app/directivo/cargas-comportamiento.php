@@ -3,6 +3,7 @@ include("session.php");
 $idPaginaInterna = 'DT0051';
 include("../compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 include("../compartido/head.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
@@ -107,15 +108,6 @@ if(!empty($_POST['carga'])){
 											</div>
 
 											<div class="table-scrollable">
-												
-												<?php
-												try{
-													$TablaNotas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-												} catch (Exception $e) {
-													include("../compartido/error-catch-to-report.php");
-												}
-												?>
-
 												<table class="display" style="width:100%;">
 													<thead>
 														<tr>
@@ -126,6 +118,7 @@ if(!empty($_POST['carga'])){
 													</thead>
 													<tbody>
 														<?php
+														$TablaNotas = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $year);
 														while($tabla = mysqli_fetch_array($TablaNotas, MYSQLI_BOTH)){
 														?>
 														<tr>

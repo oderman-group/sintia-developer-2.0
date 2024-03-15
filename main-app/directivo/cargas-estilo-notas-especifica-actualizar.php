@@ -1,5 +1,6 @@
 <?php
 include("session.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0168';
@@ -17,11 +18,8 @@ if (trim($_POST["nombreCN"]) == "" or trim($_POST["ndesdeCN"]) == "" or trim($_P
 	exit();
 }
 
-try{
-	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_notas_tipos SET notip_nombre='" . $_POST["nombreCN"] . "', notip_desde=" . $_POST["ndesdeCN"] . ", notip_hasta=" . $_POST["nhastaCN"] . " WHERE notip_id='" . $_POST["idN"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]};");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
+CargaAcademica::actualizarTipoNota($conexion, $config, $_POST);
+
 	include("../compartido/guardar-historial-acciones.php");
 
 	echo '<script type="text/javascript">window.location.href="cargas-estilo-notas-especifica.php?id=' . $_POST["idCN"] . '";</script>';

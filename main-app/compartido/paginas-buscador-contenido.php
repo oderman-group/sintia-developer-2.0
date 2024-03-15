@@ -61,9 +61,9 @@
                                         }
                                         $numDatos=mysqli_num_rows($consulta);
                                         if ($numDatos<=0) {
+                                            require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
                                             $dato = 3;
-                                            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias 
-                                            WHERE mat_nombre LIKE '%".$_GET["query"]."%' OR mat_siglas LIKE '%".$_GET["query"]."%' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                                            $consulta = Asignaturas::buscadorAsignatura($conexion, $config, $_GET["query"]);
                                         }
                                         $numDatos=mysqli_num_rows($consulta);
                                         if ($numDatos<=0) {

@@ -5,7 +5,8 @@
 <?php include("../compartido/head.php");?>
 <?php require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
-require_once(ROOT_PATH."/main-app/class/Grados.php");?>
+require_once(ROOT_PATH."/main-app/class/Grados.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");?>
 
 </head>
 
@@ -167,9 +168,7 @@ require_once(ROOT_PATH."/main-app/class/Grados.php");?>
                                 if($sumaPorcentaje > 0){
                                     $definitiva = ($definitiva / $sumaPorcentaje);
                                 }
-                                
-                                $consultaN = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante='".$resultado['mat_id']."' AND niv_id_asg='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                                
+                                $consultaN = Calificaciones::nivelacionEstudianteCarga($conexion, $config, $resultado['mat_id'], $cargaConsultaActual);
                                 $numN = mysqli_num_rows($consultaN);
                                 $rN = mysqli_fetch_array($consultaN, MYSQLI_BOTH);
                                 if($numN==0){

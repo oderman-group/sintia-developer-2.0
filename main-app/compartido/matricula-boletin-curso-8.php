@@ -11,6 +11,8 @@ require_once("../class/Estudiantes.php");
 require_once("../class/Usuarios.php");
 require_once("../class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 $year=$_SESSION["bd"];
 if(isset($_GET["year"])){
@@ -238,7 +240,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                         }
                         $promedioMateria = round($promedioMateria / ($j - 1), 1);
                         $promedioMateriaFinal = $promedioMateria;
-                        $consultaNivelacion=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id_asg='" . $datosCargas['car_id'] . "' AND niv_cod_estudiante='" . $datosUsr['mat_id'] . "' AND institucion={$config['conf_id_institucion']} AND year={$year}");
+                        $consultaNivelacion = Calificaciones::nivelacionEstudianteCarga($conexion, $config, $datosUsr['mat_id'], $datosCargas['car_id'], $year);
                         $nivelacion = mysqli_fetch_array($consultaNivelacion, MYSQLI_BOTH);
 
                         // SI PERDIÓ LA MATERIA A FIN DE AÑO
@@ -250,9 +252,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                             }
                         }
 
-                        $consultaPromediosMateriaEstiloNota=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
-                        WHERE notip_categoria='" . $config["conf_notas_categoria"] . "' AND '" . $promedioMateriaFinal . "'>=notip_desde AND '" . $promedioMateriaFinal . "'<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
-                        $promediosMateriaEstiloNota = mysqli_fetch_array($consultaPromediosMateriaEstiloNota, MYSQLI_BOTH);
+                        $promediosMateriaEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioMateriaFinal, $year);
 
                             if($promedioMateriaFinal == '0'){$promedioMateriaFinal='0.0';}
                             if($promedioMateriaFinal == 1){$promedioMateriaFinal='1.0';}
@@ -298,9 +298,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                         WHERE cls.cls_periodo='" . $j . "' AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$year}");
                         $sumaAusencias = mysqli_fetch_array($consultaSumaAusencias, MYSQLI_BOTH);
 
-                        $consultaPromedioEstiloNota=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
-                        WHERE notip_categoria='" . $config["conf_notas_categoria"] . "' AND '" . $promediosPeriodos['promedio'] . "'>=notip_desde AND '" . $promediosPeriodos['promedio'] . "'<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
-                        $promediosEstiloNota = mysqli_fetch_array($consultaPromedioEstiloNota, MYSQLI_BOTH);
+                        $promediosEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promediosPeriodos['promedio'], $year);
 
                         $promediosPeriodosTotal=$promediosPeriodos['promedio'];
                         if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
@@ -315,9 +313,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                     } 
 
                         $promedioFinal = round($promedioFinal/$periodoActual,2);
-                        $consultaPromedioFinalEstiloNota=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
-                        WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND '".$promedioFinal."'>=notip_desde AND '".$promedioFinal."'<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
-                        $promedioFinalEstiloNota = mysqli_fetch_array($consultaPromedioFinalEstiloNota, MYSQLI_BOTH);
+                        $promedioFinalEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioFinal, $year);
 
                         $promedioFinalTotal=$promedioFinal;
                         if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
