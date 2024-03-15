@@ -32,7 +32,7 @@ $urlOrigen = $explode[1];
 				<input type="hidden" class="form-control" name="monto" id="montoModulo" value="">
 				<input type="hidden" class="form-control" name="nombre" id="nombreModulo" value="">
 				<input type="hidden" class="form-control" name="idModulo" id="idModulo" value="">
-				<input type="hidden" class="form-control" name="url_origen" id="url_origen" value="<?=REDIRECT_ROUTE.$urlOrigen;?>">
+				<input type="hidden" class="form-control" name="url_origen" id="url_origen" value="<?=REDIRECT_ROUTE."/".$urlOrigen;?>">
 
 				<button type="submit" class="btn btn-info"><i class="fa fa-credit-card" aria-hidden="true"></i>ADQUIRIR MÓDULO</button>
 			</form>
