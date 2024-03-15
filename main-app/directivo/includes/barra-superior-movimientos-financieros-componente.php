@@ -1,25 +1,6 @@
 <?php
     $filtro = '';
-    $busqueda = '';
-    if (!empty($_GET['busqueda'])) {
-        $busqueda = $_GET['busqueda'];
-        $filtro .= " AND (
-            uss_id LIKE '%".$busqueda."%' 
-            OR uss_nombre LIKE '%".$busqueda."%' 
-            OR uss_nombre2 LIKE '%".$busqueda."%' 
-            OR uss_apellido1 LIKE '%".$busqueda."%' 
-            OR uss_apellido2 LIKE '%".$busqueda."%' 
-            OR uss_usuario LIKE '%".$busqueda."%' 
-            OR uss_email LIKE '%".$busqueda."%'
-            OR CONCAT(TRIM(uss_nombre), ' ',TRIM(uss_apellido1), ' ', TRIM(uss_apellido2)) LIKE '%".$busqueda."%'
-            OR CONCAT(TRIM(uss_nombre), TRIM(uss_apellido1), TRIM(uss_apellido2)) LIKE '%".$busqueda."%'
-            OR CONCAT(TRIM(uss_nombre), ' ', TRIM(uss_apellido1)) LIKE '%".$busqueda."%'
-            OR CONCAT(TRIM(uss_nombre), TRIM(uss_apellido1)) LIKE '%".$busqueda."%'
-            OR fcu_detalle LIKE '%".$busqueda."%' 
-            OR fcu_observaciones LIKE '%".$busqueda."%'
-            OR fcu_id LIKE '%".$busqueda."%'
-        )";
-    }
+    $busqueda='';
     $usuario = '';
     if (!empty($_GET['usuario'])) {
         $usuario = base64_decode($_GET['usuario']);
@@ -77,11 +58,11 @@ $opciones[0] = [
 $filtroTipo = [
     [
         'texto' => 'Fact. Venta',
-        'url' => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode($estadoFil) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode(1) . "&busqueda=" . $busqueda . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
+        'url' => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode($estadoFil) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode(1) . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
     ],
     [
         'texto' => 'Fact. Compra',
-        'url' => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode($estadoFil) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode(2) . "&busqueda=" . $busqueda . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
+        'url' => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode($estadoFil) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode(2) . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
     ],
     [
         'texto' => 'Ver Todos',
@@ -92,11 +73,11 @@ $filtroTipo = [
 $filtroEstado = [
     [
         'texto' => 'Por Cobrar',
-        'url' => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode(POR_COBRAR) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode($tipo) . "&busqueda=" . $busqueda . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
+        'url' => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode(POR_COBRAR) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode($tipo) . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
     ],
     [
         'texto' => 'Cobradas',
-        'url' => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode(COBRADA) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode($tipo) . "&busqueda=" . $busqueda . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
+        'url' => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode(COBRADA) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode($tipo) . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
     ],
     [
         'texto' => 'Ver Todos',
@@ -137,10 +118,8 @@ $filtros[2] = [
     'texto' => 'Filtrar por Fecha',
     'html' => $html,
 ];
-$queryString = $_SERVER['QUERY_STRING'];// Parsear la cadena de consulta y almacenar los parámetros en un array
-parse_str($queryString, $parametros);// Convertir el array a JSON
-$filtros_get = json_encode($parametros);
 
-$barraSuperior = new componenteFiltro('movimientos', 'filter-movimientos.php', 'crearDatos', $opciones, $filtros,$filtros_get);
+
+$barraSuperior = new componenteFiltro('movimientos', 'filter-movimientos.php','movimientos-tbody.php', $filtros, $opciones,'mostrarResultado');
 $barraSuperior->generarComponente();
 ?>
