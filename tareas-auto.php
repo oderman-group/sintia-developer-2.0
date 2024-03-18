@@ -5,9 +5,9 @@ $year=date("Y");
 
 
 //=====CORREOS PARA LOS INTERESADOS EN SINTIA - DEMO=====//
-$correosDemo = mysqli_query($conexion,"SELECT demo_id, DATEDIFF(now(), demo_fecha_ingreso) AS fecha, demo_usuario, demo_correo_enviado, uss_nombre, uss_apellido1, uss_email, uss_ultimo_ingreso FROM demo
+$correosDemo = mysqli_query($conexion,"SELECT demo_id, DATEDIFF(now(), demo_fecha_ingreso) AS fecha, demo_usuario, demo_correo_enviado, demo_institucion, uss_nombre, uss_apellido1, uss_email, uss_ultimo_ingreso FROM demo
 INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=demo_usuario AND uss.institucion=demo_institucion AND uss.year={$year} 
-WHERE demo_correo_enviado<5 AND demo_nocorreos=0");
+WHERE demo_correo_enviado<=5 AND demo_nocorreos=0");
 
 
 
