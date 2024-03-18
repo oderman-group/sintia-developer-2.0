@@ -1,7 +1,6 @@
 <?php
-if(!isset($_GET['nodb'])) {
-    require_once("index-logica.php");
-}
+session_start();
+require_once("../conexion.php");
 ?>
 
 <!DOCTYPE html>
@@ -34,81 +33,123 @@ if(!isset($_GET['nodb'])) {
             <div class="container">
                 <div class="row">
                     <div class="col-md-8 offset-md-2" id="login">
-                        <form method="post" action="controlador/autentico.php" class="needs-validation" novalidate>
+                        <form method="post" action="registro-guardar.php" class="needs-validation" novalidate>
                             <?php include("../config-general/mensajes-informativos.php"); ?>
-		                        <input type="hidden" name="urlDefault" value="<?php if(isset($_GET["urlDefault"])) echo $_GET["urlDefault"]; ?>" />
+                            <input type="hidden" name="urlDefault" value="<?= !empty($_GET["urlDefault"]) ? $_GET["urlDefault"] : ""; ?>" />
                             <img class="mb-4" src="../config-general/assets-login-2023/img/logo.png" width="100">
 
                             <div class="form-floating mt-3">
-                                <select class="form-select select2" id="institution" name="bd"
-                                    aria-label="Default select example" required>
+                                <select class="form-select select2" id="institucion" name="institucion" aria-label="Default select example" required>
                                     <option value="">Tipo de Institución</option>
-                                    <option value="1">Colegio</option>
-                                    <option value="2">Universidad</option>
-                                    <option value="3">Instituto</option>
-                                    <option value="4">Jardin infantil</option>
+                                    <option value="<?=SCHOOL?>" <?= !empty($_GET["institucion"]) && $_GET["institucion"] == SCHOOL ? "selected" : ""; ?>>Colegio</option>
+                                    <option value="<?=UNIVERSITY?>" <?= !empty($_GET["institucion"]) && $_GET["institucion"] == UNIVERSITY ? "selected" : ""; ?>>Universidad</option>
+                                    <option value="<?=INSTITUTE?>" <?= !empty($_GET["institucion"]) && $_GET["institucion"] == INSTITUTE ? "selected" : ""; ?>>Instituto</option>
+                                    <option value="<?=KINDERGARTEN?>" <?= !empty($_GET["institucion"]) && $_GET["institucion"] == KINDERGARTEN ? "selected" : ""; ?>>Jardin infantil</option>
                                 </select>
-                                <label for="institution">Institucion</label>
+                                <label for="institucion">Institucion</label>
                                 <div class="invalid-feedback">Por favor seleccione una institución.</div>
                             </div>
+
+                            <div class="form-floating mt-3">
+                                <input type="text" class="form-control input-login" name="nombreIns" placeholder="Institución" onchange="generarSiglas(this)" value="<?= !empty($_GET["nombreIns"]) ? $_GET["nombreIns"] : ""; ?>" required>
+                                <input type="hidden" name="siglasInst" id="siglasInst">
+                                <label for="emailInput">Institución</label>
+                                <div class="invalid-feedback">Por favor ingrese el nombre de su institución.</div>
+                            </div>
+
+                            <script type="text/javascript">
+                                function obtenerPrimerasLetras(frase) {
+                                    // Divide la frase en palabras
+                                    var palabras = frase.split(" ");
+                                    var primerasLetras = "";
+
+                                    // Itera sobre cada palabra y obtén la primera letra
+                                    for (var i = 0; i < palabras.length; i++) {
+                                        // Asegúrate de que la palabra no esté vacía antes de obtener la primera letra
+                                        if (palabras[i].length > 0) {
+                                            primerasLetras += palabras[i][0]+palabras[i][1]; // Añade la primera letra de la palabra
+                                        }
+                                    }
+
+                                    return primerasLetras;
+                                }
+
+                                function generarSiglas(datos){
+                                    var institucion = datos.value;
+                                    var siglas = obtenerPrimerasLetras(institucion);
+                                    document.getElementById("siglasInst").value = siglas.toUpperCase();
+                                }
+                            </script> 
+
+                            <div class="form-floating mt-3">
+                                <select class="form-select select2" id="plan" name="plan" aria-label="Default select example" required>
+                                    <option value="">Escoge un plan</option>
+                                    <?php
+                                        $consultaPlanes = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".planes_sintia");
+                                        while ($planes = mysqli_fetch_array($consultaPlanes, MYSQLI_BOTH)) {
+                                    ?>
+                                    <option value="<?=$planes['plns_id']?>" <?= !empty($_GET["plan"]) && $_GET["plan"] == $planes['plns_id'] ? "selected" : ""; ?>><?=$planes['plns_nombre']?></option>
+                                    <?php } ?>
+                                </select>
+                                <label for="plan">Escoja un plan</label>
+                                <div class="invalid-feedback">Por favor seleccione un plan.</div>
+                            </div>
                             
-                            <div class=" form-floating mt-3">
-                                <input type="text" class="form-control input-login" id="emailInput" name="Usuario"
-                                    placeholder="Usuario" required>
-                                <label for="emailInput">Usuario</label>
-                                <div class="invalid-feedback">Por favor ingrese un correo electrónico válido.</div>
+                            <div class="form-floating mt-3">
+                                <input type="text" class="form-control input-login" id="emailInput" name="usuario" value="<?= !empty($_GET["usuario"]) ? $_GET["usuario"] : ""; ?>" placeholder="documento" required>
+                                <label for="emailInput">Documento</label>
+                                <div class="invalid-feedback">Por favor ingrese su numero de documento sin puntos.</div>
                             </div>
 
                             <div class="form-floating input-group mt-3">
-                                <input type="password" class="form-control input-login" id="password" name="Clave"
-                                    placeholder="Password" required>
-                                <button class="btn btn-outline-secondary input-group-text toggle-password"
-                                    type="button">
+                                <input type="password" class="form-control input-login" id="password" name="clave" value="<?= !empty($_GET["clave"]) ? $_GET["clave"] : ""; ?>" placeholder="Password" required>
+                                <button class="btn btn-outline-secondary input-group-text toggle-password" type="button">
                                     <i class="bi bi-eye-slash"></i>
                                 </button>
                                 <label for="password">Contraseña</label>
                                 <div class="invalid-feedback">usuario y/o contraseña invalido</div>
-                                <div class="form-text" id="caps-lock-message" style="display: none;">Mayúsculas
-                                    activadas</div>
+                                <div class="form-text" id="caps-lock-message" style="display: none;">Mayúsculas activadas</div>
                             </div>
 
-                            <div class=" form-floating mt-3">
-                                <input type="text" class="form-control input-login" id="emailInput" name="Usuario"
-                                    placeholder="Usuario" required>
+                            <div class="form-floating mt-3">
+                                <input type="text" class="form-control input-login" name="nombre" value="<?= !empty($_GET["nombre"]) ? $_GET["nombre"] : ""; ?>" placeholder="Nombres" required>
                                 <label for="emailInput">Nombres</label>
-                                <div class="invalid-feedback">Por favor ingrese un correo electrónico válido.</div>
+                                <div class="invalid-feedback">Por favor ingrese su nombre.</div>
                             </div>
 
-                            <div class=" form-floating mt-3">
-                                <input type="text" class="form-control input-login" id="emailInput" name="Usuario"
-                                    placeholder="Usuario" required>
+                            <div class="form-floating mt-3">
+                                <input type="text" class="form-control input-login" name="apellidos" value="<?= !empty($_GET["apellidos"]) ? $_GET["apellidos"] : ""; ?>" placeholder="Apellidos" required>
                                 <label for="emailInput">Apellidos</label>
-                                <div class="invalid-feedback">Por favor ingrese un correo electrónico válido.</div>
+                                <div class="invalid-feedback">Por favor ingrese sus apellidos.</div>
                             </div>
 
-                            <div class=" form-floating mt-3">
-                                <input type="text" class="form-control input-login" id="emailInput" name="Usuario"
-                                    placeholder="Usuario" required>
+                            <div class="form-floating mt-3">
+                                <input type="email" class="form-control input-login" name="email" value="<?= !empty($_GET["email"]) ? $_GET["email"] : ""; ?>" placeholder="email" required>
                                 <label for="emailInput">Email</label>
                                 <div class="invalid-feedback">Por favor ingrese un correo electrónico válido.</div>
                             </div>
 
-                            <div class=" form-floating mt-3">
-                                <input type="text" class="form-control input-login" id="emailInput" name="Usuario"
-                                    placeholder="Usuario" required>
+                            <div class="form-floating mt-3">
+                                <input type="text" data-mask="(999) 999-9999" data-mask-reverse="true" class="form-control input-login" name="celular" value="<?= !empty($_GET["celular"]) ? $_GET["celular"] : ""; ?>" placeholder="Celular" required>
                                 <label for="emailInput">Celular</label>
-                                <div class="invalid-feedback">Por favor ingrese un correo electrónico válido.</div>
+                                <div class="invalid-feedback">Por favor ingrese un numero celular válido.</div>
+                            </div>
+
+                            <div class="form-floating mt-3">
+                                <?php
+                                    if(!empty($_GET['error']) && $_GET['error']==1){
+                                        echo '<p class="text-center text-danger fs-12px mb-30">La validación ha sido incorrecta.</p>';
+                                    }
+                                    $numA1 = rand(1, 10);
+                                    $numA2 = rand(1, 10);
+                                    $resultadoA = $numA1 + $numA2;
+                                ?>
+                                <input type="hidden" name="sumaReal" value="<?= md5($resultadoA); ?>" />
+                                <input type="text" class="form-control input-login" name="suma" value="<?= !empty($_GET["suma"]) ? $_GET["suma"] : ""; ?>" placeholder="Valida que no eres un Robot. ¿Cuánto es <?= $numA1 . "+" . $numA2; ?>?" required>
+                                <label for="emailInput">Valida que no eres un Robot. ¿Cuánto es <?= $numA1 . "+" . $numA2; ?>?</label>
+                                <div class="invalid-feedback">Por favor ingrese el resultado de la suma.</div>
                             </div>
                             
-                            <div class="form-floating mt-3" style="display: none;">
-                                <select class="form-select select-invalid" id="year" name="year"
-                                    aria-label="Default select example">
-                                    <option value="" disabled selected>Seleccione un año</option>
-                                    <option value="2022" selected>2022</option>
-                                </select>
-                                <label for="year">Año</label>
-                                <div class="invalid-feedback">Por favor seleccione un año.</div>
-                            </div>
                             <button class="w-75 btn btn-lg btn-primary btn-rounded mt-3" type="submit">Registrarme</button>
                             <div class="d-flex justify-content-center mt-5">
                                 <p><a href="index.php" class="text-body">Login</a></p>
@@ -126,6 +167,7 @@ if(!isset($_GET['nodb'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
     <script src="../config-general/assets-login-2023/js/pages/login.js"></script>
+    <script src="../config-general/assets/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js" ></script>
     <script>
         $(document).ready(function () {
             $('.form-select').select2({
