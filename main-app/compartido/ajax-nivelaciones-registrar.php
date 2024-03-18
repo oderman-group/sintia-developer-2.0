@@ -2,6 +2,7 @@
 session_start();
 include("../../config-general/config.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 
 if(trim($_POST["nota"])==""){
     echo "<span style='color:red; font-size:16px;'>Digite una nota correcta</span>";
@@ -12,30 +13,29 @@ if($_POST["op"]==1){
 	if($_POST["nota"]>$config[4]){ $_POST["nota"] = $config[4];} if($_POST["nota"]<1){ $_POST["nota"] = 1;}
 }
 
-$consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante='".$_POST["codEst"]."' AND niv_id_asg='".$_POST["carga"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+$consulta = Calificaciones::nivelacionEstudianteCarga($conexion, $config, $_POST["codEst"], $_POST["carga"]);
 
 $num = mysqli_num_rows($consulta);
 $rB = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 if($num==0 and $_POST["op"]==1){
-	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id='".$rB['niv_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-	$codigo=Utilidades::generateCode("NIV");
+	Calificaciones::eliminarNivelacion($conexion, $config, $rB['niv_id']);
 	
-	mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_nivelaciones(niv_id, niv_id_asg, niv_cod_estudiante, niv_definitiva, niv_fecha, institucion, year)VALUES('".$codigo."', '".$_POST["carga"]."','".$_POST["codEst"]."','".$_POST["nota"]."',now(), {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+	Calificaciones::guardarNivelacion($conexion, $conexionPDO, $config, $_POST);
 	
 }else{
 	switch($_POST["op"]){
 		case 1:
-			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_nivelaciones SET niv_definitiva='".$_POST["nota"]."' WHERE niv_id='".$rB['niv_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+			Calificaciones::actualizarDefinitivaNivelacion($conexion, $config, $_POST["nota"], $rB['niv_id']);
 			
 		break;
 		
 		case 2:
-			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_nivelaciones SET niv_acta='".$_POST["nota"]."' WHERE niv_id='".$rB['niv_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+			Calificaciones::actualizarActaNivelacion($conexion, $config, $_POST["nota"], $rB['niv_id']);
 			
 		break;
 		
 		case 3:
-			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_nivelaciones SET niv_fecha_nivelacion='".$_POST["nota"]."' WHERE niv_id='".$rB['niv_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+			Calificaciones::actualizarFechaNivelacion($conexion, $config, $_POST["nota"], $rB['niv_id']);
 			
 		break;
 	}

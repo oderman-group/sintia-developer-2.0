@@ -9,12 +9,10 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 include("../compartido/historial-acciones-guardar.php");
+require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 
-try{
-	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".base64_decode($_GET["id"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]};");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
+Asignaturas::eliminarAsignatura($conexion, $config, base64_decode($_GET["id"]));
+
 	include("../compartido/guardar-historial-acciones.php");
 	
 	echo '<script type="text/javascript">window.location.href="asignaturas.php?error=ER_DT_3";</script>';
