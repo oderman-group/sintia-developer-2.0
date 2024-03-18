@@ -380,7 +380,8 @@ if (!Modulos::validarPermisoEdicion()) {
                                                             
                                                         </label>
                                                         <div class="col-sm-5">
-                                                            <input type="file" id="imagenCurso" name="imagenCurso" onChange="mostrarImagen('imagenCurso','imagenSelect')" accept=".png, .jpg, .jpeg" class="form-control">
+                                                            <input hidden id="imagenCursoAi" name="imagenCursoAi" value="">
+                                                            <input type="file" id="imagenCurso" name="imagenCurso" onChange="mostrarImagen('imagenCurso','imagenSelect'),limpiarImagenOpenAi()" accept=".png, .jpg, .jpeg" class="form-control">
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
@@ -523,7 +524,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                         <div style="display: none;">
                                                             <select id="grupoBase" multiple class="form-control select2-multiple">
                                                                 <?php while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
-                                                                    echo '<option value="' . $rv[0] . '" selected >' . $rv[1] . '</option>';
+                                                                    echo '<option value="' . $rv['gru_id'] . '" selected >' . $rv['gru_nombre'] . '</option>';
                                                                 } ?>
                                                                 
                                                             </select>
@@ -618,6 +619,9 @@ if (!Modulos::validarPermisoEdicion()) {
                                 <!-- end js include path -->
                                 <script src="../ckeditor/ckeditor.js"></script>
                                 <script type="text/javascript">
+                                    function limpiarImagenOpenAi(){
+                                        document.getElementById("imagenCursoAi").value = '';
+                                    }
                                     function generar(tipo) {
                                         var valor = document.getElementById('nombreC').value;
                                         if (valor) {
@@ -671,21 +675,8 @@ if (!Modulos::validarPermisoEdicion()) {
                                                             url = response["url"];
                                                             imagenSelect.src = url;
                                                             imagenSelect.classList.add('animate__animated', 'animate__fadeIn');
-                                                            fetch(url)
-                                                                .then(response => response.blob()) // Convertir la respuesta a un objeto Blob
-                                                                .then(blob => {
-                                                                    // Crear un objeto File a partir del Blob
-                                                                    var file = new File([blob], 'imagen.jpg', {
-                                                                        type: 'image/jpeg'
-                                                                    });
-                                                                    if (file) {
-                                                                        var fileList = new DataTransfer(); // Crear un objeto FileList que contenga el archivo
-                                                                        fileList.items.add(file);
-                                                                        var imagenCursoAi = document.getElementById('imagenCurso'); // Establecer el objeto FileList en el campo de entrada de tipo 'file'
-                                                                        imagenCursoAi.files = fileList.files;
-                                                                    }
-                                                                });
-
+                                                            document.getElementById("imagenCursoAi").value = url;
+                                                            document.getElementById("imagenCurso").value = '';
                                                         }
                                                     };
                                                 });
