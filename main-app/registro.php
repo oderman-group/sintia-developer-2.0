@@ -166,7 +166,7 @@ require_once("../conexion.php");
 
                                 <div class="form-floating mt-3">
                                     <select class="form-select select2" id="modAdicional" name="modAdicional[]" multiple aria-label="Default select example">
-                                        <option value="">Escoge un modulo</option>
+                                        <option value="">Escoge los modulos adicionales</option>
                                         <?php
                                             $consultaModulos = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".modulos WHERE mod_estado=1");
                                             while ($modulos = mysqli_fetch_array($consultaModulos, MYSQLI_BOTH)) {
@@ -174,19 +174,19 @@ require_once("../conexion.php");
                                         <option value="<?=$modulos['mod_id']?>"><?=$modulos['mod_nombre']?></option>
                                         <?php } ?>
                                     </select>
-                                    <label for="modAdicional">Escoja un modulo</label>
+                                    <label for="modAdicional">Escoge los modulos adicionales</label>
                                     <div class="invalid-feedback">Por favor seleccione un modulo.</div>
                                 </div>
 
                                 <!-- Cambiar por consulta a paquetes -->
                                 <div class="form-floating mt-3">
                                     <select class="form-select select2" id="paquetes" name="paquetes[]" multiple aria-label="Default select example">
-                                        <option value="">Escoge un paquete</option>
+                                        <option value="">Escoge los paquetes adicionales</option>
                                         <option value="1"<?= !empty($_REQUEST["paquetes"]) && $_REQUEST["paquetes"] == 1 ? "selected" : ""; ?>>Paquete #1</option>
                                         <option value="2"<?= !empty($_REQUEST["paquetes"]) && $_REQUEST["paquetes"] == 2 ? "selected" : ""; ?>>Paquete #2</option>
                                         <option value="3"<?= !empty($_REQUEST["paquetes"]) && $_REQUEST["paquetes"] == 3 ? "selected" : ""; ?>>Paquete #3</option>
                                     </select>
-                                    <label for="paquetes">Escoja un paquete</label>
+                                    <label for="paquetes">Escoge los paquetes adicionales</label>
                                     <div class="invalid-feedback">Por favor seleccione un paquete.</div>
                                 </div>
 
