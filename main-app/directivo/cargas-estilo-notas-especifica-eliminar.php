@@ -1,5 +1,6 @@
 <?php 
 include("session.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0155';
@@ -10,11 +11,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 include("../compartido/historial-acciones-guardar.php");
 
-try{
-	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_id='" . base64_decode($_GET["idN"]) . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]};");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
+CargaAcademica::eliminarTiposNotas($conexion, $config, base64_decode($_GET["idN"]));
 
 include("../compartido/guardar-historial-acciones.php");
 
