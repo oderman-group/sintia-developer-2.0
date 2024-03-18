@@ -217,6 +217,14 @@ try {
 		exit();
 	}
 
+	//DEMO
+	try{
+		mysqli_query($conexion, "INSERT INTO demo(demo_fecha_ingreso, demo_usuario, demo_ip, demo_cantidad, demo_correo_enviado, demo_fecha_ultimo_correo, demo_nocorreos, demo_plan, demo_institucion)VALUES(now(), '2', '" . $_SERVER["REMOTE_ADDR"] . "', 0, 1, now(), 0, '" . $_POST["plan"] . "', '".$idInsti."')");
+	} catch (Exception $e) {
+		echo $e->getMessage();
+		exit();
+	}
+
 	mysqli_query($conexion, "COMMIT");
 
 } catch(Exception $e){
