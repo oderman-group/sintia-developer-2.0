@@ -3,6 +3,7 @@ include("session.php");
 require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");
 require_once(ROOT_PATH."/main-app/class/Foros.php");
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0161';
@@ -41,16 +42,11 @@ try{
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
-try{
-	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
-try{
-	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_recuperaciones_notas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
+
+Calificaciones::eliminarTodasNivelaciones($conexion, $config);
+
+Calificaciones::eliminarTodasNotaRecuperacion($conexion, $config);
+
 try{
 	mysqli_query($conexion, "DELETE FROM ".BD_DISCIPLINA.".disciplina_matricula_condicional WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {

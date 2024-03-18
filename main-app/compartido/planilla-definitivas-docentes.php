@@ -4,6 +4,7 @@ require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 require_once(ROOT_PATH."/main-app/class/Grados.php");
 require_once(ROOT_PATH."/main-app/class/Grupos.php");
+require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 $curso='';
 if(!empty($_GET["curso"])) {
   $curso = base64_decode($_GET["curso"]);
@@ -97,8 +98,7 @@ if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
         <?php
 		$materias1=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$curso."' AND car_grupo='".$grupo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 		while($mat1=mysqli_fetch_array($materias1, MYSQLI_BOTH)){
-			$nombresMat=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$mat1['car_materia']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-			$Mat=mysqli_fetch_array($nombresMat, MYSQLI_BOTH);
+      $Mat = Asignaturas::consultarDatosAsignatura($conexion, $config, $mat1['car_materia']);
 		?>
         	<td align="center" colspan="<?=$colspan?>"><?=strtoupper($Mat['mat_siglas']);?></td>      
   		<?php

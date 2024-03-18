@@ -10,6 +10,7 @@
                                 	</div>
 									
 									<?php
+									require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 									try{
 										$consultaEstadisticaCarga=mysqli_query($conexion, "SELECT (SELECT count(car_id) FROM ".BD_ACADEMICA.".academico_cargas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})");
 									} catch (Exception $e) {
@@ -129,13 +130,7 @@
 										<header class="panel-heading panel-heading-purple"><?=$frases[73][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											try{
-												$docentes = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-												ORDER BY mat_nombre
-												");
-											} catch (Exception $e) {
-												include("../compartido/error-catch-to-report.php");
-											}
+											$docentes = Asignaturas::consultarTodasAsignaturas($conexion, $config);
 											while($docente = mysqli_fetch_array($docentes, MYSQLI_BOTH)){
 												try{
 													$consultaCargaDocente=mysqli_query($conexion, "SELECT count(car_id) FROM ".BD_ACADEMICA.".academico_cargas WHERE car_materia='".$docente['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
