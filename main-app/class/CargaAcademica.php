@@ -380,6 +380,7 @@ class CargaAcademica {
      * @param string $filtro
      * @param string $order
      * @param string $limit
+     * @param string $valueIlike - Valor String que se utilizara para biuscar por cualuqier parametro definido (puede ser nulo).
      *
      */
     public static function listarCargas(
@@ -388,18 +389,36 @@ class CargaAcademica {
         string $filtroMT = "", 
         string $filtro = "", 
         string $order = "car_id", 
-        string $limit = "LIMIT 0, 2000"
+        string $limit = "LIMIT 0, 2000",
+        string $valueIlike = "" 
 
     ){
+        if(!empty($valueIlike)){
+            $busqueda=$valueIlike;
+            $filtro .= " AND (
+                 car_id LIKE '%" . $busqueda . "%' 
+                OR uss_nombre LIKE '%".$busqueda."%' 
+                OR uss_nombre2 LIKE '%".$busqueda."%' 
+                OR uss_apellido1 LIKE '%".$busqueda."%' 
+                OR uss_apellido2 LIKE '%".$busqueda."%' 
+                OR gra_nombre LIKE '%" . $busqueda . "%' 
+                OR mat_nombre LIKE '%" . $busqueda . "%'
+                OR CONCAT(TRIM(uss_nombre), ' ',TRIM(uss_apellido1), ' ', TRIM(uss_apellido2)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(uss_nombre), TRIM(uss_apellido1), TRIM(uss_apellido2)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(uss_nombre), ' ', TRIM(uss_apellido1)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(uss_nombre), TRIM(uss_apellido1)) LIKE '%".$busqueda."%'
+            )";
+        }
         try {
-            $consulta=mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
+            $sql="SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
             INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} {$filtroMT}
             LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
             LEFT JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
             LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
             WHERE car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]} {$filtro}
             ORDER BY {$order}
-            {$limit};");
+            {$limit};";
+            $consulta=mysqli_query($conexion,$sql);
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }

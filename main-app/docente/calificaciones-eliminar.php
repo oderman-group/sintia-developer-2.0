@@ -6,16 +6,16 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
+require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 
-try{
-	$consultaIndicadoresDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-	WHERE ipc_indicador='".base64_decode($_GET["idIndicador"])."' AND ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+$idIndicador = "";
+if (!empty($_GET['idIndicador'])) {
+	$idIndicador = base64_decode($_GET['idIndicador']);
 }
-$indicadoresDatos = mysqli_fetch_array($consultaIndicadoresDatos, MYSQLI_BOTH);
+
+$indicadoresDatos = Indicadores::consultaIndicadorPeriodo($conexion, $config, $idIndicador, $cargaConsultaActual, $periodoConsultaActual);
 
 //"Borramos" la actividad
 try{
