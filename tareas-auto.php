@@ -1,14 +1,13 @@
 <?php
 include("conexion.php");
 require_once(ROOT_PATH."/main-app/class/EnviarEmail.php");
-$idInstitucion=22;
 $year=date("Y");
 
 
 //=====CORREOS PARA LOS INTERESADOS EN SINTIA - DEMO=====//
-$correosDemo = mysqli_query($conexion,"SELECT DATEDIFF(now(), demo_fecha_ingreso), demo_usuario, uss_nombre, uss_email, uss_ultimo_ingreso FROM demo
-INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=demo_usuario AND uss.institucion={$idInstitucion} AND uss.year={$year} 
-WHERE (demo_correo_enviado<5 AND demo_nocorreos=0)");
+$correosDemo = mysqli_query($conexion,"SELECT demo_id, DATEDIFF(now(), demo_fecha_ingreso) AS fecha, demo_usuario, demo_correo_enviado, uss_nombre, uss_apellido1, uss_email, uss_ultimo_ingreso FROM demo
+INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=demo_usuario AND uss.institucion=demo_institucion AND uss.year={$year} 
+WHERE demo_correo_enviado<5 AND demo_nocorreos=0");
 
 
 
@@ -16,12 +15,12 @@ WHERE (demo_correo_enviado<5 AND demo_nocorreos=0)");
 $paraEnviar = 0;
 while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 	//Correo 2/ 1er día/ ¿Necesitas Ayuda?
-	if($cDemo[0]==1){
+	if($cDemo['fecha']==1){
 		$tituloMsj = "¿Requiere una cita virtual para aclarar dudas?";
 		$bgTitulo = "#31a952";
 		$contenidoMsj = '
 			<p>
-				Hola <b>'.strtoupper($cDemo[2]).'</b><br>
+				Hola <b>'.UsuariosPadre::nombreCompletoDelUsuario($cDemo).'</b><br>
 				Mi nombre es Jhon Mejía, su asesor personal.<br>
 				Si lo requiere podemos hacer una demostración virtual de la plataforma.<br>
 				Sólo tiene que responder a este correo o escribir directamente a mi Whatsapp para programar la cita.<br><br>
@@ -43,14 +42,14 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 	}
 	
 	//Si ya ha ingresado a la plataforma
-	if(!empty($cDemo[4])){
+	if(!empty($cDemo['uss_ultimo_ingreso'])){
 		//Correo 3/ 5 días/ ¿Cómo te ha ido?
-		if($cDemo[0]==5){
+		if($cDemo['fecha']==5){
 			$tituloMsj = "¿Cómo le ha ido con la plataforma SINTIA?";
 			$bgTitulo = "#31a952";
 			$contenidoMsj = '
 				<p>
-					Hola <b>'.strtoupper($cDemo[2]).'</b><br>
+					Hola <b>'.UsuariosPadre::nombreCompletoDelUsuario($cDemo).'</b><br>
 					Como ya lo sabe, mi nombre es Jhon Mejía, soy su asesor personal.<br>
 					Quería preguntarle cómo le ha ido con la plataforma, y recordarle que estoy a su disposición.<br>
 					Cualquier cosa que requiera me puede escribir a este correo o directamente a mi Whatsapp.<br><br>
@@ -69,12 +68,12 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 		}
 
 		//Correo 4/ 10 días/ Pronto vence, llamada a la acción
-		if($cDemo[0]==10){
+		if($cDemo['fecha']==10){
 			$tituloMsj = "En 5 días terminará la versión de prueba.";
 			$bgTitulo = "#31a952";
 			$contenidoMsj = '
 				<p>
-					Hola <b>'.strtoupper($cDemo[2]).'</b><br>
+					Hola <b>'.UsuariosPadre::nombreCompletoDelUsuario($cDemo).'</b><br>
 					Esperamos que haya podido disfrutar la versión de prueba de la plataforma SINTIA<br>
 					Por ahora quedan sólo 5 días para que la versión de prueba termine.<br>
 					¿Ha podido tomar usted o la Institución alguna decisión sobre el plan que desean?<br>
@@ -97,12 +96,12 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 		}
 
 		//Correo 5/ 10 días/ Hoy cence, llamada a la acción más fuerte
-		if($cDemo[0]==14){
+		if($cDemo['fecha']==14){
 			$tituloMsj = "Hoy termina la versión de prueba";
 			$bgTitulo = "#31a952";
 			$contenidoMsj = '
 				<p>
-					Hola <b>'.strtoupper($cDemo[2]).'</b><br>
+					Hola <b>'.UsuariosPadre::nombreCompletoDelUsuario($cDemo).'</b><br>
 					Esperamos que haya podido disfrutar estos días de prueba con la plataforma SINTIA<br>
 					Hoy es el último día para usar la versión gratuita. Pero no se preocupe, tenemos un plan para que la puedan seguir utilizando.<br>
 					Si le interesa puede contactarme, ya sabe que estoy a su servicio.<br>
@@ -126,12 +125,12 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 	//Si no han ingresado a la plataforma
 	else{
 		//Correo 3/ 5 días/ ¿Cómo te ha ido?
-		if($cDemo[0]==5){
+		if($cDemo['fecha']==5){
 			$tituloMsj = "¿Alguna dificultad para usar la plataforma SINTIA?";
 			$bgTitulo = "#31a952";
 			$contenidoMsj = '
 				<p>
-					Hola <b>'.strtoupper($cDemo[2]).'</b><br>
+					Hola <b>'.UsuariosPadre::nombreCompletoDelUsuario($cDemo).'</b><br>
 					Como ya lo sabe, mi nombre es Jhon Mejía, soy su asesor personal.<br>
 					Quería preguntarle si ha tenido alguna dificultad para ingresar a la plataforma.<br>
 					Cualquier cosa sabe que puede contactarme.
@@ -150,12 +149,12 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 		}
 
 		//Correo 4/ 10 días/ Pronto vence, llamada a la acción
-		if($cDemo[0]==10){
+		if($cDemo['fecha']==10){
 			$tituloMsj = "En 5 días terminará la versión de prueba y aún no la has disfrutado";
 			$bgTitulo = "#31a952";
 			$contenidoMsj = '
 				<p>
-					Hola <b>'.strtoupper($cDemo[2]).'</b><br>
+					Hola <b>'.UsuariosPadre::nombreCompletoDelUsuario($cDemo).'</b><br>
 					Aún no has podido disfrutar la versión de prueba de la plataforma SINTIA<br>
 					Por ahora quedan sólo 5 días para que la versión de prueba termine.<br>
 					¿Ha podido tomar usted o la Institución alguna decisión sobre el plan que desean?<br>
@@ -178,12 +177,12 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 		}
 
 		//Correo 5/ 10 días/ Hoy vence, llamada a la acción más fuerte
-		if($cDemo[0]==14){
+		if($cDemo['fecha']==14){
 			$tituloMsj = "Hoy termina la versión de prueba";
 			$bgTitulo = "#31a952";
 			$contenidoMsj = '
 				<p>
-					Hola <b>'.strtoupper($cDemo[2]).'</b><br>
+					Hola <b>'.UsuariosPadre::nombreCompletoDelUsuario($cDemo).'</b><br>
 					Finalmente no has podido disfrutar estos días de prueba con la plataforma SINTIA<br>
 					Hoy es el último día para usar la versión gratuita. Pero no se preocupe, tenemos un plan para que la puedan seguir utilizando.<br>
 					Si le interesa puede contactarme, ya sabe que estoy a su servicio.<br>
@@ -210,7 +209,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 		
 		$data = [
 			'contenido_msj'   => $contenidoMsj,
-			'usuario_email'    => $cDemo[3],
+			'usuario_email'    => $cDemo['uss_email'],
 			'usuario_nombre'   => UsuariosPadre::nombreCompletoDelUsuario($cDemo)
 		  ];
 		  $asunto = $tituloMsj;
@@ -218,6 +217,11 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 
 		  EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute,null,null);
 
+	}
+	if (($cDemo['demo_correo_enviado']+1) < 5) {
+		mysqli_query($conexion, "UPDATE ".BD_ADMIN.".demo SET demo_correo_enviado=demo_correo_enviado+1 WHERE demo_id='".$cDemo['demo_id']."'");
+	} else {
+		mysqli_query($conexion, "UPDATE ".BD_ADMIN.".demo SET demo_correo_enviado=demo_correo_enviado+1, demo_nocorreos=1 WHERE demo_id='".$cDemo['demo_id']."'");
 	}
 }
 
