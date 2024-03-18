@@ -83,14 +83,24 @@ try {
 	foreach ($arrayModulos as $idModulo) {
 		$modulosInsertar .= '('.$idInsti.','.$idModulo.'),';
 	}
+
+	//AÑADIMOS MODULOS ADICIONALES
+	if (!empty($_POST['modAdicional'])){
+		foreach ($_POST['modAdicional'] as $idModuloAdicional) {
+			$modulosInsertar .= '('.$idInsti.','.$idModuloAdicional.'),';
+		}
+	}
 	$modulosInsertar = substr($modulosInsertar,0,-1);
 
+	//GUADAMOS LOS MODULOS
 	try{
 		mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".instituciones_modulos (ipmod_institucion,ipmod_modulo) VALUES $modulosInsertar");
 	} catch (Exception $e) {
 		echo $e->getMessage();
 		exit();
 	}
+
+	//AÑADIR AQUI CONSULTA PARA GUARDAR PAQUETES
 
 	//CREAMOS CONFIGURACIÓN DE LA INSTITUCIÓN
 	try{
