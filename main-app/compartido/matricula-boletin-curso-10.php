@@ -206,9 +206,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 			$colorFondoPromedioM = '';
 			if($promedioMateria!="" and $promedioMateria<$config["conf_nota_minima_aprobar"]){$colorFondoPromedioM = 'tomato'; $materiasPerdidas++;}
 			
-			$consultaPromediosMateriasEstiloNotas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
-			WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND '".$promedioMateria."'>=notip_desde AND '".$promedioMateria."'<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
-			$promediosMateriaEstiloNota = mysqli_fetch_array($consultaPromediosMateriasEstiloNotas, MYSQLI_BOTH);
+			$promediosMateriaEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioMateria, $year);
 			?>
             <td align="center" style="background-color: <?=$colorFondoPromedioM;?>"><?=$promedioMateria;?></td>
             <td align="center"><?=$promediosMateriaEstiloNota['notip_nombre'];?></td>
@@ -273,9 +271,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
                 WHERE bol_estudiante='".$datosUsr['mat_id']."' AND bol_periodo='".$j."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 				$promediosPeriodos = mysqli_fetch_array($consultaPromediosPeriodos, MYSQLI_BOTH);
 				
-				$consultaPromediosEstiloNota=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
-				WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND '".$promediosPeriodos['promedio']."'>=notip_desde AND '".$promediosPeriodos['promedio']."'<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
-				$promediosEstiloNota = mysqli_fetch_array($consultaPromediosEstiloNota, MYSQLI_BOTH);
+				$promediosEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promediosPeriodos['promedio'], $year);
             ?>
                 <td><?=$promediosPeriodos['promedio'];?></td>
                 <td><?=$promediosEstiloNota['notip_nombre'];?></td>
@@ -308,9 +304,7 @@ if($periodoActual==$datosUsr['gra_periodos']){
         	<table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1">
             	<?php
 				$contador=1;
-				$estilosNota = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
-				WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND institucion={$config['conf_id_institucion']} AND year={$year}
-				ORDER BY notip_desde DESC");
+				$estilosNota = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $year);
 				while($eN = mysqli_fetch_array($estilosNota, MYSQLI_BOTH)){
 					if($contador%2==1){$fondoFila = '#EAEAEA';}else{$fondoFila = '#FFF';}
 				?>

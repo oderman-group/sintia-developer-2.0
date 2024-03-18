@@ -447,4 +447,109 @@ class CargaAcademica {
         return $num;
     }
 
+    /**
+     * Este metodo me elimina un tipo de nota
+     * @param mysqli    $conexion
+     * @param array     $config
+     * @param string    $idTipoNota
+    **/
+    public static function eliminarTiposNotas (
+        mysqli  $conexion, 
+        array   $config, 
+        string  $idTipoNota
+    )
+    {
+        try {
+            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_id='" . $idTipoNota . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+    }
+
+    /**
+     * Este metodo me elimina todos los tipos de nota de una categoria
+     * @param mysqli    $conexion
+     * @param array     $config
+     * @param string    $idCategoria
+    **/
+    public static function eliminarTiposNotasCategoria (
+        mysqli  $conexion, 
+        array   $config, 
+        string  $idCategoria
+    )
+    {
+        try {
+            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $idCategoria . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+    }
+
+    /**
+     * Este metodo me guarda un tipo de nota
+     * @param mysqli    $conexion
+     * @param PDO       $conexionPDO
+     * @param array     $config
+     * @param array     $POST
+    **/
+    public static function guardarTipoNota (
+        mysqli $conexion,
+        PDO    $conexionPDO, 
+        array  $config, 
+        array  $POST
+    )
+    {
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_notas_tipos');
+
+        try {
+            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_notas_tipos (notip_id, notip_nombre, notip_desde, notip_hasta,notip_categoria, institucion, year)VALUES('".$codigo."', '" . $POST["nombreCN"] . "'," . $POST["ndesdeCN"] . "," . $POST["nhastaCN"] . ",'" . $POST["idCN"] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+    }
+
+    /**
+     * Este metodo me actualiza un tipo de nota
+     * @param mysqli    $conexion
+     * @param array     $config
+     * @param array     $POST
+    **/
+    public static function actualizarTipoNota (
+        mysqli $conexion,
+        array  $config, 
+        array  $POST
+    )
+    {
+
+        try {
+            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_notas_tipos SET notip_nombre='" . $POST["nombreCN"] . "', notip_desde=" . $POST["ndesdeCN"] . ", notip_hasta=" . $POST["nhastaCN"] . " WHERE notip_id='" . $POST["idN"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+    }
+
+    /**
+     * Este metodo me trae los datos de un tipo de nota
+     * @param mysqli    $conexion
+     * @param array     $config
+     * @param string    $idTipoNota
+     * 
+     * @return array    $resultado
+    **/
+    public static function traerDatosNotasTipo (
+        mysqli  $conexion, 
+        array   $config,  
+        string  $idTipoNota
+    )
+    {
+        try{
+            $consulta=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_id='".$idTipoNota."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+        }
+        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+
+        return $resultado;
+    }
+
 }
