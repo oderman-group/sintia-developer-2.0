@@ -48,11 +48,11 @@ password.addEventListener('input', function (event) {
   }
 });
 
-institution.addEventListener('change', function (event) {
-  if (institution.value !== "") {
-    institution.classList.remove('is-invalid');
-  }
-});
+// institution.addEventListener('change', function (event) {
+//   if (institution.value !== "") {
+//     institution.classList.remove('is-invalid');
+//   }
+// });
 
 year.addEventListener('change', function (event) {
   if (year.value !== "") {
