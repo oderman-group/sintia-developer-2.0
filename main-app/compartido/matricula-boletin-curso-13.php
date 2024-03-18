@@ -100,7 +100,7 @@ while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
 $consulta_desempeno = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $year);	
 //CONSULTA QUE ME TRAE LAS areas DEL ESTUDIANTE
 $consulta_mat_area_est=mysqli_query($conexion, "SELECT ar_id, car_ih FROM ".BD_ACADEMICA.".academico_cargas car
-INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=ac.car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
+INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id= am.mat_area AND ar.institucion={$config['conf_id_institucion']} AND ar.year={$year}
 WHERE  car_curso='".$datosUsr["mat_grado"]."' AND car_grupo='".$datosUsr["mat_grupo"]."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year} GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
 //$numero_periodos=$config["conf_periodos_maximos"];

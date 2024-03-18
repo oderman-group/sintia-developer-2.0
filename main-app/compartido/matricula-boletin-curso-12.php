@@ -12,6 +12,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
     require_once("../class/Usuarios.php");
     require_once("../class/UsuariosPadre.php");
     require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
+    require_once(ROOT_PATH."/main-app/class/Indicadores.php");
     $Plataforma = new Plataforma;
 
     $year=$_SESSION["bd"];
@@ -425,7 +426,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                         } //FIN WHILE DE LAS AREAS
 
                         //PROMEDIO DE LAS AREAS
-                        $promedioGeneral+=($sumaPromedioGeneral/$numAreas);
+                        $promedioGeneral += !empty($sumaPromedioGeneral) && !empty($numAreas) ? ($sumaPromedioGeneral/$numAreas) : 0;
                         $promedioGeneral= round($promedioGeneral,1);
                         $estiloNotaPromedioGeneral = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioGeneral,$year);
                         if($promedioGeneral<10){
@@ -453,7 +454,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                             }
 
                             //PROMEDIO DE LAS AREAS PERIODOS ANTERIORES
-                            $promedioGeneralPeriodos=($sumaPromedioGeneralPeriodos/$numAreas);
+                            $promedioGeneralPeriodos = !empty($sumaPromedioGeneralPeriodos) && !empty($numAreas) ? ($sumaPromedioGeneralPeriodos/$numAreas) : 0;
                             $promedioGeneralPeriodos= round($promedioGeneralPeriodos,1);
 
                             $promedioGeneralPeriodosFinal=$promedioGeneralPeriodos;

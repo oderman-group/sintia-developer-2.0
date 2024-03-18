@@ -162,7 +162,7 @@ $consultaMat = Boletin::obtenerDefinitivaYnombrePorMateria($matriculadosDatos['m
 $consultaMatPer = Boletin::obtenerDefinitivaPorPeriodo($matriculadosDatos['mat_id'], $fila["ar_id"], $condicion, $year);
 
 //CONSULTA QUE ME TRAE LOS INDICADORES DE CADA MATERIA
-$consulta_a_mat_indicadores = Boletin::obtenerIndicadoresPorMateria($datosUsr["mat_grado"], $datosUsr["mat_grupo"], $fila["ar_id"], $condicion, $matriculadosDatos['mat_id'], $condicion2, $year);
+$consultaMatIndicadores = Boletin::obtenerIndicadoresPorMateria($datosUsr["mat_grado"], $datosUsr["mat_grupo"], $fila["ar_id"], $condicion, $matriculadosDatos['mat_id'], $condicion2, $year);
 
 $numIndicadores=mysqli_num_rows($consultaMatIndicadores);
 

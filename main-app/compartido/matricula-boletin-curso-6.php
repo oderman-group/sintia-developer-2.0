@@ -377,13 +377,12 @@ if($numIndicadores>0){
 		$nota_indicador=round($fila4["nota"],1);
 		 if($nota_indicador==1)	$nota_indicador="1.0";	if($nota_indicador==2)	$nota_indicador="2.0";		if($nota_indicador==3)	$nota_indicador="3.0";	if($nota_indicador==4)	$nota_indicador="4.0";	if($nota_indicador==5)	$nota_indicador="5.0";
 		 
-		$desempenoNotaIndNombre2 = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota_indicador, $year);
+		$desempenoNotaInd = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota_indicador, $year);
 	?>
 <tr bgcolor="#FFF" style="font-size:12px;">
             <td style="font-size:12px; height:15px;"><?php echo $contador_indicadores.".".$fila4["ind_nombre"];?></td> 
             <td align="center" style="font-weight:bold; font-size:12px;"></td>
             <?php for($m=1;$m<=$numero_periodos;$m++){ 
-			$desempenoNotaInd = mysqli_fetch_array($consultaDesmpenoNotaInd, MYSQLI_BOTH);
 			?>
 			<td class=""  align="center" style="font-weight:bold;"><?php if($periodoActual==$m){
 				if($datosUsr["mat_grado"]>11){
