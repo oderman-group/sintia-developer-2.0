@@ -321,7 +321,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 		}
 
 		try{
-			mysqli_query($conexion, "UPDATE ".BD_ADMIN.".demo SET demo_correo_enviado=demo_correo_enviado+1 WHERE demo_id='".$cDemo['demo_id']."'");
+			mysqli_query($conexion, "UPDATE ".BD_ADMIN.".demo SET demo_correo_enviado=demo_correo_enviado+1, demo_nocorreos=1 WHERE demo_id='".$cDemo['demo_id']."'");
 		} catch (Exception $e) {
 			echo $e->getMessage();
 			exit();
@@ -342,10 +342,8 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 
 	}
 
-	if (($cDemo['demo_correo_enviado']+1) < 5) {
+	if (($cDemo['demo_correo_enviado']+1) <= 5) {
 		mysqli_query($conexion, "UPDATE ".BD_ADMIN.".demo SET demo_correo_enviado=demo_correo_enviado+1 WHERE demo_id='".$cDemo['demo_id']."'");
-	} elseif (($cDemo['demo_correo_enviado']+1) == 5) {
-		mysqli_query($conexion, "UPDATE ".BD_ADMIN.".demo SET demo_correo_enviado=demo_correo_enviado+1, demo_nocorreos=1 WHERE demo_id='".$cDemo['demo_id']."'");
 	}
 }
 
