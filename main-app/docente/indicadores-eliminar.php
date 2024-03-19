@@ -10,6 +10,10 @@ require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 
+$idR = "";
+if (!empty($_GET['idR'])) {
+    $idR = base64_decode($_GET['idR']);
+}
 try{
     $actividadesRelacionadasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades 
     WHERE act_id_tipo='".base64_decode($_GET["idIndicador"])."' AND act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
@@ -25,11 +29,7 @@ while($actividadesRelacionadasDatos = mysqli_fetch_array($actividadesRelacionada
     }
 }
 
-try{
-    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_id='".base64_decode($_GET["idR"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-    include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-}
+Indicadores::eliminarIndicador($conexion, $config, $idR);
 
 $sumaIndicadores = Indicadores::consultarSumaIndicadores($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 $porcentajePermitido = 100 - $sumaIndicadores[0];

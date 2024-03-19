@@ -11,6 +11,8 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
     require_once("../class/Boletin.php");
     require_once("../class/Usuarios.php");
     require_once("../class/UsuariosPadre.php");
+    require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
+    require_once(ROOT_PATH."/main-app/class/Indicadores.php");
     $Plataforma = new Plataforma;
 
     $year=$_SESSION["bd"];
@@ -194,12 +196,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
             </thead>
             <tbody>
                 <?php
-                    $consultaAreas= mysqli_query($conexion,"SELECT ar_id, ar_nombre, count(*) AS numMaterias, car_curso, car_grupo FROM ".BD_ACADEMICA.".academico_materias am
-                    INNER join ".BD_ACADEMICA.".academico_areas a ON a.ar_id = am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
-                    INNER JOIN ".BD_ACADEMICA.".academico_cargas car on car_materia = am.mat_id and car_curso = '".$gradoActual."' AND car_grupo = '".$grupoActual."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
-                    WHERE am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-                    GROUP by am.mat_area
-                    ORDER BY a.ar_posicion");
+                    $consultaAreas = Asignaturas::consultarAsignaturasArea($conexion, $config, $gradoActual, $grupoActual, $year);
                     $numAreas=mysqli_num_rows($consultaAreas);
                     $sumaPromedioGeneral=0;
                     $sumaPromedioGeneralPeriodo1=0;
@@ -429,7 +426,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                         } //FIN WHILE DE LAS AREAS
 
                         //PROMEDIO DE LAS AREAS
-                        $promedioGeneral+=($sumaPromedioGeneral/$numAreas);
+                        $promedioGeneral += !empty($sumaPromedioGeneral) && !empty($numAreas) ? ($sumaPromedioGeneral/$numAreas) : 0;
                         $promedioGeneral= round($promedioGeneral,1);
                         $estiloNotaPromedioGeneral = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioGeneral,$year);
                         if($promedioGeneral<10){
@@ -457,7 +454,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                             }
 
                             //PROMEDIO DE LAS AREAS PERIODOS ANTERIORES
-                            $promedioGeneralPeriodos=($sumaPromedioGeneralPeriodos/$numAreas);
+                            $promedioGeneralPeriodos = !empty($sumaPromedioGeneralPeriodos) && !empty($numAreas) ? ($sumaPromedioGeneralPeriodos/$numAreas) : 0;
                             $promedioGeneralPeriodos= round($promedioGeneralPeriodos,1);
 
                             $promedioGeneralPeriodosFinal=$promedioGeneralPeriodos;
@@ -599,9 +596,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                         
                             <?php
                             //INDICADORES
-                            $indicadores = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga aic
-		                    INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=aic.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$year}
-		                    WHERE aic.ipc_carga='" . $datosCargasDos['car_id'] . "' AND aic.ipc_periodo='" . $periodoActual . "' AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$year}");
+		                    $indicadores = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $datosCargasDos['car_id'], $periodoActual, $year);
                             while ($indicador = mysqli_fetch_array($indicadores, MYSQLI_BOTH)) {
                             ?>
                    

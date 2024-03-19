@@ -9,15 +9,10 @@ include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
+require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 $codigoACT=null;
 
-try{
-	$consultaIndicadoresDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-	WHERE ipc_indicador='".$_POST["indicador"]."' AND ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-}
-$indicadoresDatos = mysqli_fetch_array($consultaIndicadoresDatos, MYSQLI_BOTH);
+$indicadoresDatos = Indicadores::consultaIndicadorPeriodo($conexion, $config, $_POST['indicador'], $cargaConsultaActual, $periodoConsultaActual);
 
 try{
 	$consultaValores=mysqli_query($conexion, "SELECT

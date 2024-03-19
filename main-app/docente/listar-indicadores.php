@@ -82,9 +82,7 @@ $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
             <tbody>
                 <?php
                     $saberes = array("","Saber saber (55%)","Saber hacer (35%)","Saber ser (10%)");
-                    $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-                    INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
-                    WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.ipc_periodo='".$periodoConsultaActual."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
+					$consulta = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
                     $contReg = 1; 
                     $porcentajeActual = 0;
                     while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
