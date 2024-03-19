@@ -37,7 +37,7 @@
             break;
         }
     } else {
-        $ext = "-".$_POST["certificado"];
+        $ext = $_POST["certificado"] != 1 ? "-".$_POST["certificado"] : "";
     }
 
     $ruta="informes-todos.php?error=ER_DT_9";
