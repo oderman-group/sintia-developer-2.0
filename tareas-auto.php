@@ -5,7 +5,8 @@ $year=date("Y");
 
 
 //=====CORREOS PARA LOS INTERESADOS EN SINTIA - DEMO=====//
-$correosDemo = mysqli_query($conexion,"SELECT demo_id, DATEDIFF(now(), demo_fecha_ingreso) AS fecha, demo_usuario, demo_correo_enviado, demo_institucion, uss_nombre, uss_apellido1, uss_email, uss_ultimo_ingreso FROM demo
+$correosDemo = mysqli_query($conexion,"SELECT demo_id, DATEDIFF(now(), demo_fecha_ingreso) AS fecha, demo_usuario, demo_correo_enviado, demo_institucion, uss_nombre, uss_apellido1, uss_email, uss_ultimo_ingreso, ins_fecha_renovacion FROM demo
+INNER JOIN ".BD_ADMIN.".instituciones ON ins_id=demo_institucion
 INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=demo_usuario AND uss.institucion=demo_institucion AND uss.year={$year} 
 WHERE demo_correo_enviado<=5 AND demo_nocorreos=0");
 
@@ -203,7 +204,129 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 			$paraEnviar = 1;
 		}
 	}
+
+	//15 días/ Si no se a realizado ningun pago se desactiva la institución
+	if($cDemo['fecha']==15 && is_null($cDemo['ins_fecha_renovacion'])){
+		mysqli_query($conexion, "UPDATE ".BD_ADMIN.".instituciones SET ins_estado=0 WHERE ins_id='".$cDemo['demo_institucion']."'");
+	}	
+
+	//Al mes si no se a realizado ningun pago se elimina todo lo relacionado con la institución
+	if($cDemo['fecha']==45 && is_null($cDemo['ins_fecha_renovacion'])){
+		try{
+			mysqli_query($conexion, "DELETE FROM ".BD_ADMIN.".instituciones_modulos WHERE ipmod_institucion='".$cDemo['demo_institucion']."'");
+		} catch (Exception $e) {
+			echo $e->getMessage();
+			exit();
+		}
+		
+		try{
+			mysqli_query($conexion, "DELETE FROM ".BD_ADMIN.".configuracion WHERE conf_id_institucion='".$cDemo['demo_institucion']."'");
+		} catch (Exception $e) {
+			echo $e->getMessage();
+			exit();
+		}
 	
+		try{
+			mysqli_query($conexion, "DELETE FROM ".BD_ADMIN.".general_informacion WHERE info_institucion='".$cDemo['demo_institucion']."'");
+		} catch (Exception $e) {
+			echo $e->getMessage();
+			exit();
+		}
+	
+		//CURSOS
+		try{
+			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_grados WHERE institucion='".$cDemo['demo_institucion']."'");
+		} catch (Exception $e) {
+			echo $e->getMessage();
+			exit();
+		}
+	
+		//GRUPOS
+		try{
+			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion='".$cDemo['demo_institucion']."'");
+		} catch (Exception $e) {
+			echo $e->getMessage();
+			exit();
+		}
+	
+		//CATEGORIA NOTAS
+		try{
+			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_categorias_notas WHERE institucion='".$cDemo['demo_institucion']."'");
+		} catch (Exception $e) {
+			echo $e->getMessage();
+			exit();
+		}
+	
+		//TIPOS DE NOTAS
+		try{
+			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE institucion='".$cDemo['demo_institucion']."'");
+		} catch (Exception $e) {
+			echo $e->getMessage();
+			exit();
+		}
+		
+		//AREAS
+		try{
+			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_areas WHERE institucion='".$cDemo['demo_institucion']."'");
+		} catch (Exception $e) {
+			echo $e->getMessage();
+			exit();
+		}
+		
+		//MATERIAS
+		try{
+			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_materias WHERE institucion='".$cDemo['demo_institucion']."'");
+		} catch (Exception $e) {
+			echo $e->getMessage();
+			exit();
+		}
+		
+		//TODOS LOS USUARIOS
+		try{
+			mysqli_query($conexion, "DELETE FROM ".BD_GENERAL.".usuarios_por_estudiantes WHERE institucion='".$cDemo['demo_institucion']."'");
+		} catch (Exception $e) {
+			echo $e->getMessage();
+			exit();
+		}
+		
+		//TODOS LOS USUARIOS
+		try{
+			mysqli_query($conexion, "DELETE FROM ".BD_GENERAL.".usuarios WHERE institucion='".$cDemo['demo_institucion']."'");
+		} catch (Exception $e) {
+			echo $e->getMessage();
+			exit();
+		}
+		
+		//TODOS LAS MATRICULAS
+		try{
+			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_matriculas WHERE institucion='".$cDemo['demo_institucion']."'");
+		} catch (Exception $e) {
+			echo $e->getMessage();
+			exit();
+		}
+	
+		//CARGAS
+		try{
+			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_cargas WHERE institucion='".$cDemo['demo_institucion']."'");
+		} catch (Exception $e) {
+			echo $e->getMessage();
+			exit();
+		}
+
+		try{
+			mysqli_query($conexion, "DELETE FROM ".BD_ADMIN.".instituciones WHERE ins_id='".$cDemo['demo_institucion']."'");
+		} catch (Exception $e) {
+			echo $e->getMessage();
+			exit();
+		}
+
+		try{
+			mysqli_query($conexion, "UPDATE ".BD_ADMIN.".demo SET demo_correo_enviado=demo_correo_enviado+1 WHERE demo_id='".$cDemo['demo_id']."'");
+		} catch (Exception $e) {
+			echo $e->getMessage();
+			exit();
+		}
+	}
 	
 	if($paraEnviar==1){
 		
@@ -218,9 +341,10 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 		  EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute,null,null);
 
 	}
+
 	if (($cDemo['demo_correo_enviado']+1) < 5) {
 		mysqli_query($conexion, "UPDATE ".BD_ADMIN.".demo SET demo_correo_enviado=demo_correo_enviado+1 WHERE demo_id='".$cDemo['demo_id']."'");
-	} else {
+	} elseif (($cDemo['demo_correo_enviado']+1) == 5) {
 		mysqli_query($conexion, "UPDATE ".BD_ADMIN.".demo SET demo_correo_enviado=demo_correo_enviado+1, demo_nocorreos=1 WHERE demo_id='".$cDemo['demo_id']."'");
 	}
 }
