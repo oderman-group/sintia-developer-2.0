@@ -45,7 +45,7 @@ try {
 			'ins_years' => $year . "," . $year,
 			'ins_notificaciones_acudientes' => 0,
 			'ins_siglas' => $siglasInst,
-			'ins_fecha_renovacion' => $fechaCompleta,
+			'ins_fecha_renovacion' => NULL,
 			'ins_id_plan' => $_POST['plan'],
 			'ins_year_default' => $year,
 			'ins_tipo' => $_POST['institucion']
