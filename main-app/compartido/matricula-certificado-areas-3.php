@@ -15,6 +15,15 @@ require_once(ROOT_PATH . "/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 $Plataforma = new Plataforma;
+
+$id="";
+if(isset($_REQUEST["id"])){$id=base64_decode($_REQUEST["id"]);}
+$desde="";
+if(isset($_REQUEST["desde"])){$desde=base64_decode($_REQUEST["desde"]);}
+$hasta="";
+if(isset($_REQUEST["hasta"])){$hasta=base64_decode($_REQUEST["hasta"]);}
+$estampilla="";
+if(isset($_REQUEST["estampilla"])){$estampilla=base64_decode($_REQUEST["estampilla"]);}
 ?>
 <!doctype html>
 
@@ -49,18 +58,18 @@ $Plataforma = new Plataforma;
 	$horas[8] = 'OCHO';
 	$horas[9] = 'NUEVE';
 	$horas[10] = 'DIEZ';
-	$restaAgnos = ($_POST["hasta"] - $_POST["desde"]) + 1;
+	$restaAgnos = ($hasta - $desde) + 1;
 	$i = 1;
 
-	$inicio = $_POST["desde"];
+	$inicio = $desde;
 	?>
 	<?php
-	$restaAgnos = ($_POST["hasta"] - $_POST["desde"]) + 1;
+	$restaAgnos = ($hasta - $desde) + 1;
 	$i = 1;
-	$inicio = $_POST["desde"];
+	$inicio = $desde;
 	while ($i <= $restaAgnos) {
 		//SELECCIONO EL ESTUDIANTE, EL GRADO Y EL GRUPO
-		$matricula = Estudiantes::obtenerDatosEstudiante($_POST["id"], $inicio);
+		$matricula = Estudiantes::obtenerDatosEstudiante($id, $inicio);
 		$nombre = Estudiantes::NombreCompletoDelEstudiante($matricula);
 
         $gradoActual = $matricula['mat_grado'];
@@ -287,7 +296,7 @@ $Plataforma = new Plataforma;
         </table>
 
 		<?php
-		$nivelaciones = Calificaciones::consultarNivelacionesEstudiante($conexion, $config, $_POST["id"], $inicio);
+		$nivelaciones = Calificaciones::consultarNivelacionesEstudiante($conexion, $config, $id, $inicio);
 		$numNiv = mysqli_num_rows($nivelaciones);
 		if ($numNiv > 0) {
 			echo "El(la) Estudiante niveló las siguientes materias:<br>";
@@ -302,7 +311,7 @@ $Plataforma = new Plataforma;
 		$periodoFinal = $config['conf_periodos_maximos'];
 		while ($cargasC = mysqli_fetch_array($cargasAcademicasC, MYSQLI_BOTH)) {
 			//OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
-			$consultaBoletinC = mysqli_query($conexion, "SELECT avg(bol_nota) AS promedio, MAX(bol_periodo) AS periodo FROM " . BD_ACADEMICA . ".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargasC["car_id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
+			$consultaBoletinC = mysqli_query($conexion, "SELECT avg(bol_nota) AS promedio, MAX(bol_periodo) AS periodo FROM " . BD_ACADEMICA . ".academico_boletin WHERE bol_estudiante='" . $id . "' AND bol_carga='" . $cargasC["car_id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
 			$boletinC = mysqli_fetch_array($consultaBoletinC, MYSQLI_BOTH);
 			$notaC = round($boletinC['promedio'], 1);
 			if ($notaC < $config[5]) {
@@ -319,7 +328,7 @@ $Plataforma = new Plataforma;
 			$m = 0;
 			$niveladas = 0;
 			while ($m < $materiasPerdidas) {
-				$nMP = Calificaciones::validarMateriaNivelada($conexion, $config, $_POST["id"], $vectorMP[$m], $inicio);
+				$nMP = Calificaciones::validarMateriaNivelada($conexion, $config, $id, $vectorMP[$m], $inicio);
 				$numNivMP = mysqli_num_rows($nMP);
 				if ($numNivMP > 0) {
 					$niveladas++;
@@ -353,7 +362,7 @@ $Plataforma = new Plataforma;
 	} ?>
 	<span style="font-size:16px; text-align:justify;">
 		Se expide en <?= ucwords(strtolower($informacion_inst["ciu_nombre"])) ?> el <?= date("d"); ?> de <?= $meses[$mes]; ?> de <?= date("Y"); ?>, con destino al
-		interesado. <?php if ($config['conf_estampilla_certificados'] == SI) { echo "Se anula estampilla número <mark>".$_REQUEST["estampilla"]."</mark>, según ordenanza 012/05 y decreto 005/06."; } ?>
+		interesado. <?php if ($config['conf_estampilla_certificados'] == SI) { echo "Se anula estampilla número <mark>".$estampilla."</mark>, según ordenanza 012/05 y decreto 005/06."; } ?>
 	</span>
 
 	<p>&nbsp;</p>
