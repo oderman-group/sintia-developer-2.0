@@ -14,6 +14,12 @@ $_POST["bd"]=$usrE["institucion"];
 $institucionConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".instituciones 
 WHERE ins_estado = 1 AND ins_id='".$_POST["bd"]."' AND ins_enviroment='".ENVIROMENT."'");
 
+$numInsti = mysqli_num_rows($institucionConsulta);
+if($numInsti==0){
+	header("Location:".REDIRECT_ROUTE."/index.php?error=9&inst=".base64_encode($_POST["bd"]));
+	exit();
+}
+
 $institucion = mysqli_fetch_array($institucionConsulta, MYSQLI_BOTH);
 $yearArray = explode(",", $institucion['ins_years']);
 $yearStart = $yearArray[0];
