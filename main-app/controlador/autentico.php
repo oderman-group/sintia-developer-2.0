@@ -12,7 +12,7 @@ $usrE = mysqli_fetch_array($rst_usrE, MYSQLI_BOTH);
 
 $_POST["bd"]=$usrE["institucion"];
 $institucionConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".instituciones 
-WHERE ins_id='".$_POST["bd"]."' AND ins_enviroment='".ENVIROMENT."'");
+WHERE ins_estado = 1 AND ins_id='".$_POST["bd"]."' AND ins_enviroment='".ENVIROMENT."'");
 
 $institucion = mysqli_fetch_array($institucionConsulta, MYSQLI_BOTH);
 $yearArray = explode(",", $institucion['ins_years']);
