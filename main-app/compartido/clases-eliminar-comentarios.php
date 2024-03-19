@@ -1,16 +1,14 @@
 <?php
 include("session-compartida.php");
+require_once(ROOT_PATH."/main-app/class/Clases.php");
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'CM0015';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 $usuariosClase = new Usuarios;
+$idCom = !empty($_GET['idCom']) ? base64_decode($_GET['idCom']) : "";
 
-try{
-    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_clases_preguntas WHERE cpp_id='" . base64_decode($_GET["idCom"]) . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-}
+Clases::eliminarPreguntasClases($conexion, $config, $idCom);
 
 $url= $usuariosClase->verificarTipoUsuario($datosUsuarioActual['uss_tipo'],'clases-ver.php?idR='.$_GET["idR"]);
 

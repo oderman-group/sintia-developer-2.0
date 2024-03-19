@@ -82,34 +82,6 @@ if(!Modulos::validarPermisoEdicion()){
 <script src="https://code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
 <script type="application/javascript">
 $(document).ready(function() {
-    $("#usuario").on("blur", function() {
-        var usuario = $("#usuario").val();
-        var dataString = 'usuario=' + usuario;
-		
-      if(usuario!=""){
-
-        $.ajax({
-            url: 'ajax-comprobar-usuario.php',
-            type: "GET",
-            data: dataString,
-            dataType: "JSON",
-
-            success: function(datos) {
-                if (datos.success == 1) {
-                    $("#respuestaUsuario").html(datos.message);
-                    $("input").attr('disabled', true); 
-                    $("input#usuario").attr('disabled',false); 
-                    $("#btnEnviar").attr('disabled', true); 
-                } else {
-                    $("#respuestaUsuario").html(datos.message);
-                    $("input").attr('disabled', false); 
-                    $("#btnEnviar").attr('disabled', false); 
-                }
-            }
-        });
-	 }
-    });
-
     /*
     Comentado temporalmente mientras se coloca configurable
 
@@ -220,9 +192,7 @@ $(document).ready(function() {
                                     <div class="form-group row">
                                         <label id="" class="col-sm-2 control-label">Usuario de acceso <span style="color: red;">(*)</span></label>
                                         <div class="col-sm-4">
-                                            <input type="text" name="usuario" id="usuario" autofocus
-                                                class="form-control" value="<?=$datosUsuario['usuario'];?>" required pattern="[A-Za-z0-9]+" <?=$disabledPermiso;?>>
-                                                <i class="fa fa-info"></i> <span style="color: #6017dc;">Puedes usar letras, números o combinarlos. Pero no se permiten caracteres especiales o espacios en blanco.</span>
+                                            <input type="text" name="usuario" id="usuario" data-id-usuario="0" oninput="validarUsuario(this)" autofocus class="form-control" value="<?=$datosUsuario['usuario'];?>" required pattern="[A-Za-z0-9]+" <?=$disabledPermiso;?>> <i class="fa fa-info"></i> <span style="color: #6017dc;">Puedes usar letras, números o combinarlos. Pero no se permiten caracteres especiales o espacios en blanco.</span>
                                         </div>
                                     </div>
 
@@ -361,6 +331,7 @@ $(document).ready(function() {
         <!-- end page container -->
         <?php include("../compartido/footer.php");?>
     </div>
+    <script src="../js/Usuarios.js" ></script>
     <!-- start js include path -->
     <script src="../../config-general/assets/plugins/jquery/jquery.min.js"></script>
     <script src="../../config-general/assets/plugins/popper/popper.js"></script>

@@ -5,12 +5,12 @@ include("../compartido/historial-acciones-guardar.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Actividades.php");
 
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-$consultaDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas WHERE tar_id='".$idR."' AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-$datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
+$datosConsulta = Actividades::traerDatosActividades($conexion, $config, $idR);
 ?>
 
 	<!--bootstrap -->
@@ -120,7 +120,10 @@ $datosConsulta = mysqli_fetch_array($consultaDatos, MYSQLI_BOTH);
 													<input type="file" name="file" class="form-control" onChange="archivoPeso(this)">
 												</div>
 												<div class="col-sm-4">
-													<?php if($datosConsulta['tar_archivo']!="" and file_exists('../files/tareas/'.$datosConsulta['tar_archivo'])){?><a href="../files/tareas/<?=$datosConsulta['tar_archivo'];?>" target="_blank"><?=$datosConsulta['tar_archivo'];?></a><?php }?>
+													<?php 
+													$url= $storage->getBucket()->object(FILE_TAREAS.$datosConsulta["tar_archivo"])->signedUrl(new DateTime('tomorrow')); 
+													$existe=$storage->getBucket()->object(FILE_TAREAS.$datosConsulta["tar_archivo"])->exists();
+													if($datosConsulta['tar_archivo']!="" and $existe){?><a href="<?=$url?>" target="_blank"><?=$datosConsulta['tar_archivo'];?></a><?php }?>
 												</div>
 											</div>
 											

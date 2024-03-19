@@ -65,14 +65,14 @@ $listaPaginas = SubRoles::listarPaginas($id, "5", $activasTodas);
                             <div class="form-group row">
                                 <label class="col-sm-2 "><?= $frases[187][$datosUsuarioActual['uss_idioma']]; ?> Sub Rol:</label>
                                 <div class="col-sm-1">
-                                    <input type="text" name="subr_id" class="form-control" value="<?= $rolActual['subr_id']; ?>" readonly>
+                                    <input type="text" name="subr_id" id="idSubRol" class="form-control" value="<?= $rolActual['subr_id']; ?>" readonly>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="material-icons">group</i></span>
                                         </div>
-                                        <input type="text" class="form-control" name="nombre" value="<?= $rolActual['subr_nombre']; ?>">
+                                        <input type="text" class="form-control" name="nombre" id="nombreSubrol" value="<?= $rolActual['subr_nombre']; ?>" onchange="actualizarSubRol()">
                                     </div>
                                 </div>
                             </div>
@@ -80,7 +80,7 @@ $listaPaginas = SubRoles::listarPaginas($id, "5", $activasTodas);
                             <div class="form-group row">
                                 <label class="col-sm-2">Usuarios:</label>
                                 <div class="col-sm-6">
-                                    <select class="form-control select2" name="directivos[]" multiple>
+                                    <select class="form-control select2" name="directivos[]" id="directivos" multiple onchange="actualizarSubRol()">
                                         <option value="">Seleccione una opción</option>
                                         <?php 
                                             $consultaDirectivos = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_tipo=".TIPO_DIRECTIVO." AND uss_bloqueado=0");
@@ -95,10 +95,6 @@ $listaPaginas = SubRoles::listarPaginas($id, "5", $activasTodas);
                                             }
                                         ?>
                                     </select>
-                                </div>
-                                
-                                <div class="col-sm-3">
-                                    <button type="submit" class="btn btn-success"><?=$frases[331][$datosUsuarioActual['uss_idioma']];?> </button>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -182,7 +178,7 @@ $listaPaginas = SubRoles::listarPaginas($id, "5", $activasTodas);
                     </div>
                     <div class="form-group">
                         <div class="col-md-9">
-                            <button type="submit" class="btn btn-warning"><?= $frases[331][$datosUsuarioActual['uss_idioma']]; ?></button>
+                            <a href="javascript:void(0);" name="sub-roles.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i><?= $frases[184][$datosUsuarioActual['uss_idioma']]; ?></a>
                         </div>
                     </div>
                 </div>

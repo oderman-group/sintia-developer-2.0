@@ -25,7 +25,10 @@ if (!empty($_FILES['imagen']['name'])) {
     $extension = end($explode);
     $imagen = uniqid($_SESSION["inst"] . '_' . $_SESSION["id"] . '_img_') . "." . $extension;
     $destino = "../files/publicaciones";
-    move_uploaded_file($_FILES['imagen']['tmp_name'], $destino . "/" . $imagen);
+    $localFilePath = $_FILES['imagen']['tmp_name'];// Ruta del archivo local que deseas subir	
+	$cloudFilePath = FILE_PUBLICACIONES.$archivo;// Ruta en el almacenamiento en la nube de Firebase donde deseas almacenar el archivo
+	$storage->getBucket()->upload(fopen($localFilePath, 'r'), ['name' => $cloudFilePath	]);
+    // move_uploaded_file($_FILES['imagen']['tmp_name'], $destino . "/" . $imagen);
 }
 $archivo = '';
 if (!empty($_FILES['archivo']['name'])) {
@@ -34,7 +37,10 @@ if (!empty($_FILES['archivo']['name'])) {
     $extension = end($explode);
     $archivo = uniqid($_SESSION["inst"] . '_' . $_SESSION["id"] . '_fileNoti_') . "." . $extension;
     $destino = "../files/publicaciones";
-    move_uploaded_file($_FILES['archivo']['tmp_name'], $destino . "/" . $archivo);
+    $localFilePath = $_FILES['archivo']['tmp_name'];// Ruta del archivo local que deseas subir	
+	$cloudFilePath = FILE_PUBLICACIONES.$archivo;// Ruta en el almacenamiento en la nube de Firebase donde deseas almacenar el archivo
+	$storage->getBucket()->upload(fopen($localFilePath, 'r'), ['name' => $cloudFilePath	]);
+    // move_uploaded_file($_FILES['archivo']['tmp_name'], $destino . "/" . $archivo);
 }
 
 $findme   = '?v=';

@@ -1,11 +1,10 @@
 <?php
 include("session-compartida.php");
+require_once(ROOT_PATH."/main-app/class/Clases.php");
 Modulos::validarAccesoDirectoPaginas();
 $filtro="";
 if(!empty($_POST["usuario"]) && $_POST["usuario"]!=0){ $filtro= "AND cpp.cpp_usuario = '".$_POST["usuario"]."'";}
-$preguntasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases_preguntas cpp
-INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=cpp.cpp_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-WHERE cpp.cpp_id_clase='" . $_POST["claseId"] . "' AND cpp.institucion={$config['conf_id_institucion']} AND cpp.year={$_SESSION["bd"]} $filtro ORDER BY cpp.cpp_fecha DESC");
+$preguntasConsulta = Clases::traerPreguntasClases($conexion, $config, $_POST["claseId"], $filtro);
 $usuarioActual= $_POST["usuarioActual"];
 ?>
 <?php while ($preguntasDatos = mysqli_fetch_array($preguntasConsulta, MYSQLI_BOTH)) { ?>

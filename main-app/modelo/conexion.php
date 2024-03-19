@@ -1,5 +1,5 @@
 <?php 
-if (strpos($_SERVER['PHP_SELF'], 'salir.php')) {
+if (strpos($_SERVER['PHP_SELF'], 'salir.php') !== false) {
     session_start();
 }
 
@@ -9,14 +9,15 @@ if(isset($_SESSION["id"]) and $_SESSION["id"]!=""){
 	$_SESSION["id"] = $_SESSION["id"];
 }
 
-//include(ROOT_PATH."/conexion-datos.php");
-
 //seleccionamos la base de datos
-if($_SESSION["inst"]==""){
+if (empty($_SESSION["inst"])) {
 	session_destroy();
-	header("Location:".REDIRECT_ROUTE."?error=4&ref=".$_SERVER["PHP_SELF"]);
+	require_once '../class/Utilidades.php';
+	$directory = Utilidades::getDirectoryUserFromUrl($_SERVER['PHP_SELF']);
+	$page      = Utilidades::getPageFromUrl($_SERVER['PHP_SELF']);
+	header("Location:".REDIRECT_ROUTE."?error=4&urlDefault=".$page."&directory=".$directory);
 	exit();
-}else{
+} else {
 	
 	//seleccionamos el año de la base de datos
 	$agnoBD = date("Y");
@@ -24,8 +25,6 @@ if($_SESSION["inst"]==""){
 		$agnoBD = $_SESSION["bd"];
 	}
 
-	/*$bdActual = $_SESSION["inst"]."_".$agnoBD;
-	$bdApasar = $_SESSION["inst"]."_".($agnoBD+1);*/
 	$bdActual = $baseDatosServicios;
 	$bdApasar = $baseDatosServicios;
 	require_once ROOT_PATH."/main-app/class/Conexion.php";
@@ -50,11 +49,11 @@ if($_SESSION["inst"]==""){
 
 		switch($e->getCode()){
 			case 1044:
-				$exception = "error=7&inst=".$_POST["bd"];
+				$exception = "error=7&inst=".base64_encode($_POST["bd"]);
 			break;
 
 			default:
-				$exception = "error=".$e->getMessage()."&inst=".$_POST["bd"];
+				$exception = "error=".$e->getMessage()."&inst=".base64_encode($_POST["bd"]);
 			break;	
 		}
 

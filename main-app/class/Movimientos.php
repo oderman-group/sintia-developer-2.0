@@ -1,9 +1,89 @@
 <?php
+require_once("servicios/Servicios.php");
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
 class Movimientos {
 
+
+    /**
+     * Lista todas  matrículas académicas con información adicional.
+     *
+     * @param array|null $parametrosArray Arreglo de parámetros para filtrar la consulta (opcional).
+     *
+     * @return array|mysqli_result|false Arreglo de datos del resultado, objeto mysqli_result o false si hay un error.
+     */
+    public static function listarTodos($parametrosArray = null)
+    {
+        global $config;
+        if(empty($parametrosArray["institucion"])){
+            $institucion=$config['conf_id_institucion'];
+        }
+        if(empty($parametrosArray["year"])){
+            $year=$_SESSION["bd"];
+        }
+        $busqueda='';
+        $sqlFinal ='';
+        if(!empty($parametrosArray["valor"])){
+            $busqueda=$parametrosArray["valor"];
+            $sqlFinal = " AND (
+                uss_id LIKE '%".$busqueda."%' 
+                OR uss_nombre LIKE '%".$busqueda."%' 
+                OR uss_nombre2 LIKE '%".$busqueda."%' 
+                OR uss_apellido1 LIKE '%".$busqueda."%' 
+                OR uss_apellido2 LIKE '%".$busqueda."%' 
+                OR uss_usuario LIKE '%".$busqueda."%' 
+                OR uss_email LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(uss_nombre), ' ',TRIM(uss_apellido1), ' ', TRIM(uss_apellido2)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(uss_nombre), TRIM(uss_apellido1), TRIM(uss_apellido2)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(uss_nombre), ' ', TRIM(uss_apellido1)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(uss_nombre), TRIM(uss_apellido1)) LIKE '%".$busqueda."%'
+                OR fcu_detalle LIKE '%".$busqueda."%' 
+                OR fcu_observaciones LIKE '%".$busqueda."%'
+                OR fcu_id LIKE '%".$busqueda."%'
+            )";
+        }
+      $sqlFiltro ='';
+      if(!empty($parametrosArray["filtro"])){
+        $sqlFiltro =$parametrosArray["filtro"];
+      }
+      $sqlInicial = "SELECT * FROM " . BD_FINANCIERA . ".finanzas_cuentas fc
+      INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=fcu_usuario AND uss.institucion='$institucion' AND uss.year='$year'
+	  WHERE fcu_id=fcu_id AND fc.institucion='$institucion' AND fc.year='$year' ".$sqlFinal." ".$sqlFiltro." 
+      ORDER BY fcu_id";     
+      $sql = $sqlInicial ;
+      return Servicios::SelectSql($sql);
+    }
+  
+    /**
+     * Lista todas  matrículas académicas con información adicional.
+     *
+     * @param array|null $parametrosArray Arreglo de parámetros para filtrar la consulta (opcional).
+     *
+     * @return array|mysqli_result|false Arreglo de datos del resultado, objeto mysqli_result o false si hay un error.
+     */
+    public static function calcuarValores($parametrosArray = null)
+    {
+        global $config;
+        if(empty($parametrosArray["institucion"])){
+            $institucion=$config['conf_id_institucion'];
+        }
+        if(empty($parametrosArray["year"])){
+            $year=$_SESSION["bd"];
+        }
+        if(empty($parametrosArray["year"])){
+            $year=$_SESSION["bd"];
+        }
+        if(empty($parametrosArray["tipo"])){
+            $tipo='1';
+        }else{
+            $tipo=$parametrosArray["tipo"];   
+        }
+           
+      $sqlInicial = "SELECT sum(fcu_valor)  as valor FROM ".BD_FINANCIERA.".finanzas_cuentas WHERE fcu_tipo='$tipo' AND fcu_anulado='0' AND institucion='$institucion' AND year='$year' ";     
+      $sql = $sqlInicial ;
+      return Servicios::SelectSql($sql);
+    }
     /**
      * Este metodo me calcula el total neto de un Movimiento
      * @param mysqli $conexion
@@ -475,7 +555,7 @@ class Movimientos {
     {
 
         try {
-            mysqli_query($conexion,"INSERT INTO ".BD_FINANCIERA.".configuration(consecutive_start, institucion, year) VALUES('".$POST['consecutivo']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+            mysqli_query($conexion,"INSERT INTO ".BD_FINANCIERA.".configuration(consecutive_start, invoice_footer, institucion, year) VALUES('".$POST['consecutivo']."', '".$POST['pieFactura']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
@@ -496,7 +576,7 @@ class Movimientos {
     {
 
         try {
-            mysqli_query($conexion,"UPDATE ".BD_FINANCIERA.".configuration SET consecutive_start='".$POST['consecutivo']."' WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            mysqli_query($conexion,"UPDATE ".BD_FINANCIERA.".configuration SET consecutive_start='".$POST['consecutivo']."', invoice_footer='".$POST['pieFactura']."' WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }

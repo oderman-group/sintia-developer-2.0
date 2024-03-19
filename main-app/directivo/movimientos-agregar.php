@@ -95,7 +95,7 @@ $codigoUnico=Utilidades::generateCode("FCN");
 										</div>
 
                                         <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Tipo de movimiento</label>
+                                            <label class="col-sm-2 control-label">Tipo de movimiento</label>
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2" name="tipo" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opción</option>
@@ -115,6 +115,17 @@ $codigoUnico=Utilidades::generateCode("FCN");
 													<option value="5" >Transferencia</option>
 													<option value="6" >No aplica</option>
                                                 </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row"> 
+                                            <label class="col-sm-2 control-label">Añadir Abono Automático</label>                                       
+                                            <div class="col-sm-4">
+                                                <header>
+                                                    <label class="switchToggle">
+                                                        <input name="abonoAutomatico" type="checkbox" value="1">
+                                                        <span class="slider green round"></span>
+                                                    </label>
+                                                </header>
                                             </div>
                                         </div>
 

@@ -241,4 +241,33 @@ class UsuariosPadre {
 		return $url;
 	}
 
+    /**
+     * Valida la existencia de un usuario en toda la tabla.
+     *
+     * @param mysqli $conexion
+     * @param string $usuario
+     * @param int $idUsuario
+     *
+     * @return int Número de filas que coinciden con la consulta.
+     */
+    public static function validarUsuario(
+        mysqli $conexion,
+        string $usuario,
+        int $idUsuario = 0
+    ){
+        $filtro = "";
+        if (!empty($idUsuario) && $idUsuario != 0) {
+            $filtro = "AND id_nuevo != '".$idUsuario."'";
+        }
+        $num = 0;
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM " . BD_GENERAL . ".usuarios WHERE uss_usuario='" . $usuario . "' {$filtro}");
+            $num = mysqli_num_rows($consulta);
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        return $num;
+    }
+
 }   

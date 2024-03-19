@@ -58,7 +58,8 @@ class Utilidades {
      */
     public static function generateCode($index='')
     {
-        return $index."-".self::guidv4();
+        return !empty($index) ? uniqid($index.'-') : uniqid();
+        //return $index."-".self::guidv4();
     }
 
     /**
@@ -93,5 +94,128 @@ class Utilidades {
 
         // Output the 36 character UUID.
         return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+    }
+
+    /**
+     * Obtiene el nombre de la página desde una URL y devuelve su versión codificada en base64.
+     *
+     * Esta función extrae el nombre de la página PHP de una URL dada. Si el nombre de la página
+     * se encuentra, se codifica en base64 antes de devolverlo. Esto puede ser útil para manejar
+     * referencias a páginas de manera segura o discreta.
+     *
+     * @param string $url La URL completa desde la cual extraer el nombre de la página.
+     * @return string|null El nombre de la página codificado en base64 si se encuentra un archivo .php, 
+     *                     de lo contrario, null si la URL está vacía o no contiene un archivo .php.
+     */
+    public static function getPageFromUrl($url) {
+        if (!empty($url)) {
+            $urlArray = explode("/", $url);
+            $page     = end($urlArray);
+
+            if(strpos($page, '.php')) {
+                return base64_encode($page);
+            }
+        }
+    }
+
+    /**
+     * Obtiene el directorio de usuario codificado en base64 desde una URL.
+     *
+     * Analiza la URL proporcionada para determinar si contiene uno de los directorios válidos
+     * especificados. Si se encuentra un directorio válido, se devuelve su nombre codificado en base64.
+     * Los directorios válidos están definidos en la lista $directoriosValidos. Si la URL no contiene
+     * un directorio válido o si está vacía, la función no devuelve nada.
+     *
+     * @param string $url La URL de la cual extraer el directorio de usuario.
+     * @return string|null El directorio de usuario codificado en base64 si es válido, o null si no lo es.
+     */
+    public static function getDirectoryUserFromUrl($url) {
+        if (!empty($url)) {
+            $directoriosValidos = [
+                'directivo', 'docente', 'acudiente', 'estudiante'
+            ];
+            $urlArray     = explode("/", $url);
+            $cantElements = count($urlArray);
+
+            if ($cantElements > 2) {
+                $cantElements = $cantElements  - 2;
+            }
+
+            $directorio = $urlArray[$cantElements];
+
+            if (in_array($directorio, $directoriosValidos)) {
+                return base64_encode($directorio);
+            }
+        }
+    }
+
+    /**
+     * Obtiene el próximo valor AUTO_INCREMENT de una tabla específica en una base de datos.
+     *
+     * Este método consulta la tabla `information_schema.tables` para obtener el próximo
+     * valor AUTO_INCREMENT de la tabla especificada en la base de datos dada. Es útil para
+     * prever el próximo ID que se generará al insertar un nuevo registro en una tabla que
+     * utiliza AUTO_INCREMENT.
+     *
+     * @param mysqli $conexion Objeto de conexión a la base de datos MySQLi.
+     * @param string $bd Nombre de la base de datos donde se encuentra la tabla.
+     * @param string $table Nombre de la tabla para la cual se desea obtener el próximo AUTO_INCREMENT.
+     * @return int|null El próximo valor AUTO_INCREMENT de la tabla, o null si no se encuentra o hay un error.
+     */
+    public static function getNextIdSequence($conexionPDO, $bd, $table) {
+
+        global $config;
+
+        $query = "SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_schema = :bd AND table_name = :table";
+    
+        // Preparamos la consulta
+        $stmt = $conexionPDO->prepare($query);
+
+        if ($stmt) {
+            // Ejecutamos la consulta pasando los parámetros necesarios
+            $stmt->execute(['bd' => $bd, 'table' => $table]);
+            
+            // Obtenemos el primer (y único) resultado
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            $idInstitution = !empty($config['conf_id_institucion']) ? $config['conf_id_institucion'] : null;
+            $idUser        = !empty($_SESSION["id"])                ? $_SESSION["id"]                : null;
+
+            $tablePrefix = self::getPrefixFromTableName($table);
+            
+            // Devolvemos el valor AUTO_INCREMENT o null si no se encontró
+            return !empty($row['AUTO_INCREMENT']) ? $tablePrefix . $row['AUTO_INCREMENT'] . $idInstitution . $idUser : self::generateCode(null);
+        } else {
+            return self::generateCode(null);
+        }
+    }
+
+    /**
+     * Obtiene un prefijo basado en el nombre de una tabla.
+     *
+     * Este método analiza el nombre de una tabla proporcionada como argumento para extraer
+     * un prefijo. El prefijo se deriva de la primera parte del nombre de la tabla (asumiendo
+     * que el nombre de la tabla sigue un formato que incluye al menos un guion bajo "_"). Si
+     * el nombre de la tabla contiene guiones bajos, el método devuelve las primeras tres letras
+     * de la segunda palabra en el nombre de la tabla. Si el nombre de la tabla no contiene
+     * guiones bajos, simplemente devuelve las primeras tres letras del nombre de la tabla.
+     * El prefijo se devuelve en mayúsculas.
+     *
+     * @param string $table El nombre de la tabla de la cual se desea obtener el prefijo.
+     * @return string|null El prefijo derivado del nombre de la tabla en mayúsculas, o null si el nombre de la tabla está vacío.
+     */
+    public static function getPrefixFromTableName($table) {
+
+        if (empty($table)) {
+            return null;
+        }
+    
+        // Divide el nombre de la tabla en partes basado en "_" y toma la palabra relevante.
+        $parts = explode("_", $table);
+        $word  = count($parts) > 1 ? $parts[1] : $parts[0];
+    
+        // Retorna las primeras tres letras de la palabra seleccionada en mayúsculas.
+        return strtoupper(substr($word, 0, 3));
+
     }
 }

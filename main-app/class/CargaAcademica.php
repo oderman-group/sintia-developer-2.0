@@ -405,5 +405,27 @@ class CargaAcademica {
         }
         return $consulta;
     }
+    
+    /**
+     * Este metodo verifica si el estudiante está matriculado en cursos de extensión o complementarios
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idEstudiante
+     * @param string $idCarga
+     * 
+     * @return int $num
+     */
+    public static function validarCursosComplementario(mysqli $conexion, array $config, string $idEstudiante, string $idCarga){
+        $num=0;
+        try{
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas_estudiantes WHERE carpest_carga='".$idCarga."' AND carpest_estudiante='".$idEstudiante."' AND carpest_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+        $num = mysqli_num_rows($consulta);
+
+        return $num;
+    }
 
 }

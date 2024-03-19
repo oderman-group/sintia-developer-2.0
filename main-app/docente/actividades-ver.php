@@ -5,17 +5,14 @@
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
 <?php
-$consultaActivad=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas 
-WHERE tar_id='".$_GET["idR"]."' AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-$actividad = mysqli_fetch_array($consultaActivad, MYSQLI_BOTH);
+require_once(ROOT_PATH."/main-app/class/Actividades.php");
+$actividad = Actividades::traerDatosActividades($conexion, $config, $_GET["idR"]);
 
 if($actividad[0]==""){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=105";</script>';
 	exit();
 }
-$consultaFecha=mysqli_query($conexion, "SELECT DATEDIFF(tar_fecha_disponible, now()), DATEDIFF(tar_fecha_entrega, now()) FROM ".BD_ACADEMICA.".academico_actividad_tareas 
-WHERE tar_id='".$_GET["idR"]."' AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-$fechas = mysqli_fetch_array($consultaFecha, MYSQLI_BOTH);
+$fechas = Actividades::traerFechaActividad($conexion, $config, $_GET["idR"]);
 if($fechas[0]>0){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=206&fechaD='.$actividad['tar_fecha_disponible'].'&diasF='.$fechas[0].'";</script>';
 	exit();
@@ -128,9 +125,14 @@ if($fechas[0]>0){
 							                                    <h4 class="font-bold">Archivos adjuntos</h4>
 							                                    <hr>
 							                                    <ul>
-							                                        <?php if($actividad['tar_archivo']!=""){?><li><a href="../files/tareas/<?=$actividad['tar_archivo'];?>" target="_blank"><?=$actividad['tar_archivo'];?></a></li><?php }?>
-																	<?php if($actividad['tar_archivo2']!=""){?><li><a href="../files/tareas/<?=$actividad['tar_archivo2'];?>" target="_blank"><?=$actividad['tar_archivo2'];?></a></li><?php }?>
-																	<?php if($actividad['tar_archivo3']!=""){?><li><a href="../files/tareas/<?=$actividad['tar_archivo3'];?>" target="_blank"><?=$actividad['tar_archivo3'];?></a></li><?php }?>
+																<?php
+																$url1= $storage->getBucket()->object(FILE_TAREAS.$actividad["tar_archivo"])->signedUrl(new DateTime('tomorrow'));
+																$url2= $storage->getBucket()->object(FILE_TAREAS.$actividad["tar_archivo2"])->signedUrl(new DateTime('tomorrow'));
+																$url3= $storage->getBucket()->object(FILE_TAREAS.$actividad["tar_archivo3"])->signedUrl(new DateTime('tomorrow'));
+																?>
+							                                        <?php if($actividad['tar_archivo']!=""){?><li><a href="<?=$url1?>" target="_blank"><?=$actividad['tar_archivo'];?></a></li><?php }?>
+																	<?php if($actividad['tar_archivo2']!=""){?><li><a href="<?=$url2?>" target="_blank"><?=$actividad['tar_archivo2'];?></a></li><?php }?>
+																	<?php if($actividad['tar_archivo3']!=""){?><li><a href="<?=$url3?>" target="_blank"><?=$actividad['tar_archivo3'];?></a></li><?php }?>
 							                                    </ul>
 							                                    
 							                                    <br>
@@ -158,16 +160,18 @@ if($fechas[0]>0){
 																		}?>
 		                                                            </div>
 																	<?php
-																	$consultaEntrega=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas_entregas WHERE ent_id_actividad='".$_GET["idR"]."' AND ent_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-																	$enviada = mysqli_fetch_array($consultaEntrega, MYSQLI_BOTH);
+																	$enviada = Actividades::consultarEntregas($conexion, $config, $datosEstudianteActual['mat_id'], $_GET["idR"]);
 																	if($enviada[0]!=""){
 																	?>
 																		<div class="panel">
+																			<?php
+																			$url= $storage->getBucket()->object(FILE_TAREAS.$enviada["ent_archivo"])->signedUrl(new DateTime('tomorrow'));
+																			?>
 																			<h4 class="font-bold">Archivo enviado</h4>
 																			<hr>
 																			<p>Ya has enviado un archivo relacionado a esta actividad. Si lo deseas reemplazar, puedes repetir el proceso inicial.</p>
 																			<p><b>Fecha de envío:</b> <?=$enviada['ent_fecha'];?> </p>
-																			<p><b>Archivo:</b> <a href="../files/tareas/<?=$enviada['ent_archivo'];?>" target="_blank"><?=$enviada['ent_archivo'];?> </a></p>
+																			<p><b>Archivo:</b> <a href="<?=$url?>" target="_blank"><?=$enviada['ent_archivo'];?> </a></p>
 																			<p><b>Comentario:</b><br> <?=$enviada['ent_comentario'];?> </p>
 																		</div>
 																	<?php }?>

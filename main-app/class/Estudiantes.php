@@ -718,7 +718,7 @@ class Estudiantes {
     public static function insertarEstudiantes($conexionPDO, $POST, $idEstudianteU, $result_numMat = '', $procedencia = '', $idAcudiente = '')
     {
         global $config;
-        $codigoMAT=Utilidades::generateCode("MAT");
+        $codigoMAT = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_matriculas');
 
         $tipoD = isset($POST["tipoD"]) ? $POST["tipoD"] : "";
         $nDoc = isset($POST["nDoc"]) ? $POST["nDoc"] : "";

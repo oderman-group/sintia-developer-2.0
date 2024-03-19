@@ -1,6 +1,7 @@
 <?php
 include("session.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+require_once(ROOT_PATH."/main-app/class/Movimientos.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0094';
@@ -60,6 +61,53 @@ try{
     mysqli_query($conexion, "UPDATE ".BD_FINANCIERA.".transaction_items SET id_transaction='" .$idInsercion . "' WHERE id_transaction='" . $_POST["idU"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+}
+
+if (!empty($_POST["abonoAutomatico"]) && $_POST["abonoAutomatico"] == 1) {
+    $totalNeto    = Movimientos::calcularTotalNeto($conexion, $config, $idInsercion, $_POST["valor"]);
+
+    if ($totalNeto > 0) {
+        switch ($_POST["forma"]) {
+            case 1:
+                $formaPago = 'EFECTIVO';
+            break;
+            case 2:
+                $formaPago = 'CHEQUE';
+            break;
+            case 3:
+                $formaPago = 'T_DEBITO';
+            break;
+            case 4:
+                $formaPago = 'T_CREDITO';
+            break;
+            case 5:
+                $formaPago = 'TRANSFERENCIA';
+            break;
+            case 6:
+                $formaPago = 'OTROS';
+            break;
+        }
+
+        $codigoUnico=Utilidades::generateCode("ABO");
+
+        try {
+            mysqli_query($conexion, "INSERT INTO ".BD_FINANCIERA.".payments (responsible_user, invoiced, cod_payment, type_payments, payment_method, observation, institucion, year)VALUES('{$_SESSION["id"]}', '".$_POST["usuario"]."', '".$codigoUnico."', '".INVOICE."', '".$formaPago."', 'Abono automatico', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        try {
+            mysqli_query($conexion, "INSERT INTO ".BD_FINANCIERA.".payments_invoiced (invoiced, payments, payment, institucion, year)VALUES('".$idInsercion."', '".$codigoUnico."', '".$totalNeto."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        try{
+            mysqli_query($conexion, "UPDATE ".BD_FINANCIERA.".finanzas_cuentas SET fcu_status='" .COBRADA. "' WHERE fcu_id='" . $idInsercion . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+        }
+    }
 }
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");

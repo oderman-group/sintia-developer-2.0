@@ -5,14 +5,13 @@ $idPaginaInterna = 'DC0138';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
+require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");
 include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 
-try{
-    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_respuestas WHERE resp_id='".base64_decode($_GET["idR"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-    include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-}
+$idR = !empty($_GET["idR"]) ? base64_decode($_GET["idR"]) : "";
+
+Evaluaciones::eliminarRespuesta($conexion, $config, $idR);
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 echo '<script type="text/javascript">window.location.href="evaluaciones-preguntas.php?error=ER_DT_3&idE='.$_GET["idE"].'";</script>';

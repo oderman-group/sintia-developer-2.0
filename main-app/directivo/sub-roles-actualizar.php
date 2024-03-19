@@ -12,21 +12,14 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 
 require_once("../class/SubRoles.php");
 
-//COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
-if (empty($_POST["paginas"])) {
-	include("../compartido/guardar-historial-acciones.php");
-	$msj = 'Seleccione al menos una página para el rol';
-	$url = $_SERVER["HTTP_REFERER"] . '&error=ER_DT_15&msj=' . base64_encode($msj);
-	echo '<script type="text/javascript">window.location.href="' . $url . '";</script>';
-	exit();
-}
-
-$directivos= !empty($_POST["directivos"]) ? $_POST["directivos"] : "";
+$nombre= !empty($_GET["nombre"]) ? $_GET["nombre"] : "";
+$paginas= !empty($_GET["paginas"]) ? json_decode($_GET['paginas'], true) : "";
+$directivos= !empty($_GET["directivos"]) ? json_decode($_GET['directivos'], true) : "";
 
 $datos = array(
-	"id" =>$_POST["subr_id"],
-    "nombre" =>$_POST["nombre"],
-    "paginas" => $_POST["paginas"],
+	"id" =>$_GET["id"],
+    "nombre" =>$nombre,
+    "paginas" => $paginas,
     "usuarios" => $directivos
 	
 );
@@ -34,5 +27,5 @@ $datos = array(
 SubRoles::actualizar($datos);	
 
 include("../compartido/guardar-historial-acciones.php");
-echo '<script type="text/javascript">window.location.href="sub-roles-editar.php?success=SC_DT_2&id=' . base64_encode($_POST["subr_id"]) . '";</script>';
+echo '<script type="text/javascript">window.location.href="sub-roles-editar.php?success=SC_DT_2&id=' . base64_encode($_GET["id"]) . '";</script>';
 exit();

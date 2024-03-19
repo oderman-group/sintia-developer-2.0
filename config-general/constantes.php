@@ -41,12 +41,21 @@ define('CHAT_TIPO_DOCUMENTO', 3);
 define('CHAT_TIPO_AUDIO', 4);
 
 
+/* Nombres de carpetas  */
+define('FILE_CURSOS', "cursos/");
+define('FILE_PUBLICACIONES', "publicaciones/");
+define('FILE_TAREAS', "tareas/");
+define('FILE_TAREAS_ENTREGADAS', "tareas-entregadas/");
+
+
 /* TIPOS DE USUARIO DE LA PLATAFORMA */
 define('TIPO_DEV', 1);
 define('TIPO_DOCENTE', 2);
 define('TIPO_ACUDIENTE', 3);
 define('TIPO_ESTUDIANTE', 4);
 define('TIPO_DIRECTIVO', 5);
+define('TIPO_CLIENTE', 7);
+define('TIPO_PROVEEDOR', 8);
 
 /* CLIENTES CON CAMBIOS PARTICULARES*/
 define('ICOLVEN', 1);

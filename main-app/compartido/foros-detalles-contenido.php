@@ -110,11 +110,7 @@ $datosConsultaBD = Foros::consultarDatosForos($conexion, $config, $idR);
 											$consulta = Foros::traerComentariosForos($conexion, $config, $idR, $filtro);
 											$contReg = 1;
 											while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-												$consultaReacciones = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro_respuestas fore
-												INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=fore.fore_id_estudiante AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-												WHERE fore.fore_id_comentario='".$resultado['com_id']."' AND fore.institucion={$config['conf_id_institucion']} AND fore.year={$_SESSION["bd"]}
-												ORDER BY fore.fore_id ASC
-												");
+												$consultaReacciones = Foros::consultarRespuestas($conexion, $config, $resultado['com_id']);
 												$numReacciones = mysqli_num_rows($consultaReacciones);
 	
 											?>

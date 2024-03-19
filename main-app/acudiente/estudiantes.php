@@ -174,15 +174,17 @@ require_once("../class/Estudiantes.php");
 																		  
 																	  		<?php 
 																			if(!empty($resultado['mat_id_usuario'])) {
-																				if( $config['conf_calificaciones_acudientes']==1 ){?>
+																				if(array_key_exists(1, $arregloModulos) && Modulos::validarModulosActivos($conexion, 1) && $config['conf_calificaciones_acudientes']==1 ){?>
 																					<?php if($config['conf_sin_nota_numerica']!=1){?>
 																							<li><a href="periodos-resumen.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>"><?=$frases[84][$datosUsuarioActual['uss_idioma']];?></a></li>
 																					<?php }?>
 																					<li><a href="notas-actuales.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>"><?=$frases[242][$datosUsuarioActual['uss_idioma']];?></a></li>
 																				<?php }?>
 
+																			<?php if (array_key_exists(3, $arregloModulos) && Modulos::validarModulosActivos($conexion, 3)) { ?>
 																			<li><a href="reportes-disciplinarios.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>"><?=$frases[105][$datosUsuarioActual['uss_idioma']];?></a></li>
 																			<li><a href="aspectos.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($config[2]);?>"><?=$frases[264][$datosUsuarioActual['uss_idioma']];?></a></li>
+																			<?php }?>
 																		  <?php }?>
 																		  
 																		<?php 

@@ -3,7 +3,8 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("verificar-carga.php");?>
 <?php include("verificar-periodos-diferentes.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Actividades.php");?>
 
 	<!--bootstrap -->
     <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
@@ -156,9 +157,7 @@
                                             <label class="col-sm-2 control-label"><b>Banco de datos</b></label>
                                             <div class="col-sm-10">
 												<?php
-												$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas 
-												WHERE tar_id_carga='".$cargaConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-												");
+												$opcionesConsulta = Actividades::actividadesCargas($conexion, $config, $cargaConsultaActual);
 												?>
                                                 <select class="form-control  select2" name="bancoDatos" onChange="avisoBancoDatos(this)">
                                                     <option value="">Seleccione una opción</option>

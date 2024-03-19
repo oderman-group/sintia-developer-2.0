@@ -90,7 +90,7 @@ if($config['conf_activar_encuesta']==1){
 									while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
 										//Verificar si el estudiante está matriculado en cursos de extensión o complementarios
 										if($rCargas['car_curso_extension']==1){
-											$cursoExt = mysqli_num_rows(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas_estudiantes WHERE carpest_carga='".$rCargas['car_id']."' AND carpest_estudiante='".$datosEstudianteActual['mat_id']."' AND carpest_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"));
+											$cursoExt = CargaAcademica::validarCursosComplementario($conexion, $config, $datosEstudianteActual['mat_id'], $rCargas['car_id']);
 											if($cursoExt==0){continue;}
 										}
 									    

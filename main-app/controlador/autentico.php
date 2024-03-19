@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 $idPaginaInterna = 'GN0001';
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
@@ -33,13 +33,13 @@ WHERE uss_usuario='".trim($_POST["Usuario"])."' AND TRIM(uss_usuario)!='' AND us
 
 $numE = mysqli_num_rows($rst_usrE);
 if($numE==0){
-	header("Location:".REDIRECT_ROUTE."/index.php?error=1&inst=".$_POST["bd"]);
+	header("Location:".REDIRECT_ROUTE."/index.php?error=1&inst=".base64_encode($_POST["bd"]));
 	exit();
 }
 $usrE = mysqli_fetch_array($rst_usrE, MYSQLI_BOTH);
 
 if($usrE['uss_intentos_fallidos']>3 and md5($_POST["suma"])<>$_POST["sumaReal"]){
-	header("Location:".REDIRECT_ROUTE."/index.php?error=3&msg=varios-intentos-fallidos:".$usrE['uss_intentos_fallidos']."&inst=".$_POST["bd"]);
+	header("Location:".REDIRECT_ROUTE."/index.php?error=3&msg=varios-intentos-fallidos:".$usrE['uss_intentos_fallidos']."&inst=".base64_encode($_POST["bd"]));
 	exit();
 }
 
@@ -50,37 +50,58 @@ $fila = mysqli_fetch_array($rst_usr, MYSQLI_BOTH);
 if($num>0)
 {	
 	if($fila['uss_bloqueado'] == 1){
-		header("Location:".REDIRECT_ROUTE."/index.php?error=6&inst=".$_POST["bd"]);
+		header("Location:".REDIRECT_ROUTE."/index.php?error=6&inst=".base64_encode($_POST["bd"]));
 		exit();
 	}
 
-	$URLdefault = 'noticias.php';
-	if($_POST["urlDefault"]!=""){$URLdefault = $_POST["urlDefault"];}	
+	$URLdefault = null;
+	if (!empty($_POST["urlDefault"])) { 
+		$URLdefault = base64_decode($_POST["urlDefault"]); 
+	}
 	
-	switch($fila['uss_tipo']){
-		case 1:
-			$url = '../directivo/'.$URLdefault;
-		break;
-		
-		case 2:
-		  $url = '../docente/noticias.php';
-		break;
-		
-		case 3:
-		  $url = '../acudiente/estudiantes.php';
-		break;
-		
-		case 4:
-		  $url = '../estudiante/matricula.php';
-		break;
-		
-		case 5:
-		  $url = '../directivo/'.$URLdefault;
-		break;
-		
-		default:
-		  $url = 'salir.php';
-		break;
+	$url = null;
+	if (!empty($_POST["directory"])) {
+		$directoriosPorUsuario = [
+			'directivo'  => TIPO_DIRECTIVO,
+			'docente'    => TIPO_DOCENTE,
+			'acudiente'  => TIPO_ACUDIENTE,
+			'estudiante' => TIPO_ESTUDIANTE
+		];
+		$directory      = base64_decode($_POST["directory"]);
+		$tipoDirectorio = $directoriosPorUsuario[$directory];
+
+		if($tipoDirectorio == $fila['uss_tipo'] || ($tipoDirectorio == TIPO_DIRECTIVO && $fila['uss_tipo'] == TIPO_DEV)) {
+			$url = "../".$directory."/".$URLdefault;
+		}
+
+	}
+	
+	if (empty($url)) {
+		switch($fila['uss_tipo']){
+			case 1:
+				$url = '../directivo/noticias.php';
+			break;
+			
+			case 2:
+				$url = '../docente/noticias.php';
+			break;
+			
+			case 3:
+				$url = '../acudiente/estudiantes.php';
+			break;
+			
+			case 4:
+				$url = '../estudiante/matricula.php';
+			break;
+			
+			case 5:
+				$url = '../directivo/noticias.php';
+			break;
+			
+			default:
+				$url = 'salir.php';
+			break;
+		}
 	}
 	
 	$config = Plataforma::sesionConfiguracion();
@@ -221,6 +242,6 @@ if($num>0)
 	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".usuarios_intentos_fallidos(uif_usuarios, uif_ip, uif_clave, uif_institucion, uif_year)VALUES('".$usrE['uss_id']."', '".$_SERVER['REMOTE_ADDR']."', '".$_POST["Clave"]."', '".$_POST["bd"]."', '".$_SESSION["bd"]."')");
 
 
-	header("Location:".REDIRECT_ROUTE."/index.php?error=2&inst=".$_POST["bd"]);
+	header("Location:".REDIRECT_ROUTE."/index.php?error=2&inst=".base64_encode($_POST["bd"]));
 	exit();
 }
