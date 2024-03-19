@@ -206,12 +206,12 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 	}
 
 	//15 días/ Si no se a realizado ningun pago se desactiva la institución
-	if($cDemo['fecha']==15 && is_null($cDemo['ins_fecha_renovacion'])){
+	if($cDemo['fecha']==15 && $cDemo['ins_fecha_renovacion'] == "0000-00-00 00:00:00"){
 		mysqli_query($conexion, "UPDATE ".BD_ADMIN.".instituciones SET ins_estado=0 WHERE ins_id='".$cDemo['demo_institucion']."'");
 	}	
 
 	//Al mes si no se a realizado ningun pago se elimina todo lo relacionado con la institución
-	if($cDemo['fecha']==45 && is_null($cDemo['ins_fecha_renovacion'])){
+	if($cDemo['fecha']==45 && $cDemo['ins_fecha_renovacion'] == "0000-00-00 00:00:00"){
 		try{
 			mysqli_query($conexion, "DELETE FROM ".BD_ADMIN.".instituciones_modulos WHERE ipmod_institucion='".$cDemo['demo_institucion']."'");
 		} catch (Exception $e) {
