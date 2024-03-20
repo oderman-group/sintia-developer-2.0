@@ -307,7 +307,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
 
                         //Calculo
-                        if(!empty($datosBoletin['bol_nota'])) $sumaNotasPorArea += $datosBoletin['bol_nota'] * ($fila2["mat_valor"] / 100);
+                        $sumaNotasPorArea += !empty($datosBoletin['bol_nota']) && !empty($fila2["mat_valor"]) ? $datosBoletin['bol_nota'] * ($fila2["mat_valor"] / 100) : 0;
 
                         $notaBoletin=$datosBoletin['bol_nota'];
                         $notaDefFinal=$notaFinal['def'];

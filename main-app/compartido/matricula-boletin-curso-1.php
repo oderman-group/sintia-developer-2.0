@@ -255,10 +255,12 @@ while($fila3=mysqli_fetch_array($consultaMatPer, MYSQLI_BOTH)){
 			if (!isset($contpromedios[$l])) {
 				$contpromedios[$l] = 0;
 			}
-			if (isset($notas[$l])) {
-				$promedios[$l] += $notas[$l];
+			if ($fila2["mat_sumar_promedio"] == SI) {
+				if (isset($notas[$l])) {
+					$promedios[$l] += $notas[$l];
+				}
+				$contpromedios[$l]++;
 			}
-			$contpromedios[$l]++;
 			?></td>
         <?php }?>
       <?php 

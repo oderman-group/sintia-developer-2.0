@@ -262,8 +262,19 @@ while($fila2=mysqli_fetch_array($consulta_a_mat, MYSQLI_BOTH)){
 					echo $notaDelEstudiante['bol_nota']."<br>".$desempenoNotaP['notip_nombre'];
 					//echo $notas[$l]."<br>".$desempenoNotaP['notip_nombre'];
 				}
-				$promedios[$l]=$promedios[$l]+$notaDelEstudiante['bol_nota'];
-				$contpromedios[$l]=$contpromedios[$l]+1;
+
+				if (!isset($promedios[$l])) {
+					$promedios[$l] = 0;
+				}
+				if (!isset($contpromedios[$l])) {
+					$contpromedios[$l] = 0;
+				}
+				if ($fila2["mat_sumar_promedio"] == SI) {
+					if (isset($notaDelEstudiante['bol_nota'])) {
+						$promedios[$l] += $notaDelEstudiante['bol_nota'];
+					}
+					$contpromedios[$l]++;
+				}
 			}else{
 					echo "-";
 			}

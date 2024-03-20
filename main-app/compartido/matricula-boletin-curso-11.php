@@ -149,6 +149,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                 </tr>
             <?php
             $contador = 1;
+            $matPromedio = 0;
             $ausPer1Total=0;
             $ausPer2Total=0;
             $ausPer3Total=0;
@@ -271,24 +272,29 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                     $desempenoNotaPFinal= !empty($desempenoNotaP['notip_nombre']) ? $desempenoNotaP['notip_nombre'] : "";
 
                                     $promedioMateria += $notaEstudiante;
-                                    switch($j){
-                                        case 1:
-                                            $sumaNotaP1 += $notaEstudiante;
-                                            break;
-                                        case 2:
-                                            $sumaNotaP2 += $notaEstudiante;
-                                            break;
-                                        case 3:
-                                            $sumaNotaP3 += $notaEstudiante;
-                                            break;
-                                        case 4:
-                                            $sumaNotaP4 += $notaEstudiante;
-                                            break;
+                                    if ($materia["mat_sumar_promedio"] == SI) {
+                                        switch($j){
+                                            case 1:
+                                                $sumaNotaP1 += $notaEstudiante;
+                                                break;
+                                            case 2:
+                                                $sumaNotaP2 += $notaEstudiante;
+                                                break;
+                                            case 3:
+                                                $sumaNotaP3 += $notaEstudiante;
+                                                break;
+                                            case 4:
+                                                $sumaNotaP4 += $notaEstudiante;
+                                                break;
+                                        }
                                     }
                             ?>
                                 <td align="center" style=" font-size:12px;"><?=$notaEstudiante;?></td>
                                 <td align="center" style=" font-size:12px;"><?=$desempenoNotaPFinal;?></td>
                             <?php
+                                }
+                                if ($materia["mat_sumar_promedio"] == SI) {
+                                    $matPromedio ++;
                                 }
                                 $promedioMateria = round($promedioMateria / ($j - 1), 2);
                                 $promedioMateriaFinal = $promedioMateria;
@@ -391,16 +397,16 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                 for ($j = 1; $j <= $periodoActual; $j++) {
                     switch($j){
                         case 1:
-                            $promediosPeriodos = ($sumaNotaP1/($contador-1));
+                            $promediosPeriodos = ($sumaNotaP1/$matPromedio);
                             break;
                         case 2:
-                            $promediosPeriodos = ($sumaNotaP2/($contador-1));
+                            $promediosPeriodos = ($sumaNotaP2/$matPromedio);
                             break;
                         case 3:
-                            $promediosPeriodos = ($sumaNotaP3/($contador-1));
+                            $promediosPeriodos = ($sumaNotaP3/$matPromedio);
                             break;
                         case 4:
-                            $promediosPeriodos = ($sumaNotaP4/($contador-1));
+                            $promediosPeriodos = ($sumaNotaP4/$matPromedio);
                             break;
                     }
                     $promediosPeriodos = round($promediosPeriodos, 2);

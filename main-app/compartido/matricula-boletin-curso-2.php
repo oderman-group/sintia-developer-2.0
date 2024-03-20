@@ -249,7 +249,7 @@ for($l=1;$l<=$numero_periodos;$l++){
 ?>
 			<td class=""  align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;">
 			<?php 
-			if($notaDelEstudiante['bol_nota']!=""){
+			if(!empty($notaDelEstudiante['bol_nota'])){
 				if($datosUsr["mat_grado"]>11){
 					$notaF = ceil($notaDelEstudiante['bol_nota']);
 					/*
@@ -277,10 +277,12 @@ for($l=1;$l<=$numero_periodos;$l++){
 				if (!isset($contpromedios[$l])) {
 					$contpromedios[$l] = 0;
 				}
-				if (!empty($notaDelEstudiante['bol_nota'])) {
-					$promedios[$l] += $notaDelEstudiante['bol_nota'];
+				if ($fila2["mat_sumar_promedio"] == SI) {
+					if (isset($notaDelEstudiante['bol_nota'])) {
+						$promedios[$l] += $notaDelEstudiante['bol_nota'];
+					}
+					$contpromedios[$l]++;
 				}
-				$contpromedios[$l]+=1;
 			}else{
 					echo "-";
 			}
@@ -457,7 +459,7 @@ if($numIndicadores>0){
 		?>
         <td style="font-size:16px;">
         	<?php 
-		if($promedios[$n]!=0){
+		if(!empty($promedios[$n])){
 			if($datosUsr["mat_grado"]>11){
 				$notaFF = ceil(round(($promedios[$n]/$contpromedios[$n]),1));
 				echo $desempenoNotaProm['notip_nombre'];
@@ -479,7 +481,7 @@ if($numIndicadores>0){
     
 </table>
 
-<?php for($n=1;$n<=$numero_periodos;$n++){if($promedios[$n]!=0){$promedios[$n]=0; $contpromedios[$n]=0;} } ?>
+<?php for($n=1;$n<=$numero_periodos;$n++){if(!empty($promedios[$n])){$promedios[$n]=0; $contpromedios[$n]=0;} } ?>
 
 <p>&nbsp;</p>
 <?php 
