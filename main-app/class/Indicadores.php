@@ -58,7 +58,7 @@ class Indicadores {
     )
     {
         $conexionPDOInstance = new Conexion;
-        $conexionPDO         = $conexionPDOInstance->conexionPDO(SERVIDOR_CONEXION, USUARIO_CONEXION, CLAVE_CONEXION, BD_ADMIN);
+        $conexionPDO         = $conexionPDOInstance->conexionPDO(SERVER, USER, PASSWORD, BD_ADMIN);
 
         $codigo             = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores_carga');
         $copiado            = NULL;
