@@ -398,7 +398,7 @@ class Asignaturas {
         array  $POST
     )
     {
-        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_areas');
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_materias');
     
         if(empty($POST["siglasM"])) {$POST["siglasM"] = substr($POST["nombreM"], 0, 3);}
         if(empty($POST["porcenAsigna"])) {$POST["porcenAsigna"] = '';}
