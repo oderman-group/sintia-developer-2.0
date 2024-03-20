@@ -551,11 +551,13 @@ if (!Modulos::validarPermisoEdicion()) {
                                                                         <td><?= $nombre; ?></td>
                                                                         <td>
                                                                             <select id="grupo-<?= $idEstudiante["matcur_id_matricula"]; ?>" class="form-control" onchange="editarEstudainte('<?= $idEstudiante['matcur_id_matricula']; ?>')" <?= $disabledPermiso; ?>>
-                                                                                <?php while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
+                                                                                <?php
+                                                                                $cv = Grupos::traerGrupos($conexion, $config);
+                                                                                while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
                                                                                     if ($rv[0] == $idEstudiante['matcur_id_grupo'])
-                                                                                        echo '<option value="' . $rv[0] . '" selected>' . $rv[1] . '</option>';
+                                                                                        echo '<option value="' . $rv['gru_id'] . '" selected>' . $rv['gru_nombre'] . '</option>';
                                                                                     else
-                                                                                        echo '<option value="' . $rv[0] . '">' . $rv[1] . '</option>';
+                                                                                        echo '<option value="' . $rv['gru_id'] . '">' . $rv['gru_nombre'] . '</option>';
                                                                                 } ?>
                                                                             </select>
                                                                         </td>
