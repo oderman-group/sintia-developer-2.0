@@ -5,6 +5,7 @@
 <?php include("verificar-periodos-diferentes.php");?>
 <?php include("../compartido/head.php");?>
 <?php
+require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 $consultaValores=mysqli_query($conexion, "SELECT
 (SELECT sum(act_valor) FROM ".BD_ACADEMICA.".academico_actividades 
 WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
@@ -103,18 +104,11 @@ if(
 												$indDef = mysqli_fetch_array($consultaIndDef, MYSQLI_BOTH);
 												$indicadorAuto = !empty($indDef['ind_id']) ? $indDef['ind_id'] : null;
 												
-												$consultaIndicadorDefinitivo=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-												INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.ind_definitivo=1 AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
-												WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.ipc_periodo='".$periodoConsultaActual."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
-												");
-												$indicadorDefitnivo = mysqli_fetch_array($consultaIndicadorDefinitivo, MYSQLI_BOTH);
+												$indicadorDefitnivo = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 
 												//Si no existe el indicador definitivo en la carga lo asociamos.
 												if(!empty($indicadorDefitnivo[0])){
-													require_once(ROOT_PATH."/main-app/class/Utilidades.php");
-													$codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores_carga');
-
-													mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_carga (ipc_id, ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, institucion, year)VALUES('".$codigo."', '".$cargaConsultaActual."', '".$indDef['ind_id']."', '".$indDef['ind_valor']."', '".$periodoConsultaActual."', 1, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");	
+													Indicadores::guardarIndicadorCarga($conexion, $conexionPDO, $config, $cargaConsultaActual, $indDef['ind_id'], $periodoConsultaActual, NULL, $indDef, 1);
 												}
 											?>
 											<input type="hidden" name="indicador" class="form-control" value="<?=$indicadorAuto;?>">
@@ -123,10 +117,7 @@ if(
                                             <label class="col-sm-2 control-label">Indicador</label>
                                             <div class="col-sm-10">
 												<?php
-												$indicadoresConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-												INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
-												WHERE ipc.ipc_carga='".$cargaConsultaActual."' AND ipc.ipc_periodo='".$periodoConsultaActual."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
-												");
+												$indicadoresConsulta = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 												?>
                                                 <select class="form-control  select2" name="indicador" required>
                                                     <option value="">Seleccione una opción</option>

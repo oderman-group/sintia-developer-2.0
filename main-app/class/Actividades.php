@@ -191,6 +191,26 @@ class Actividades {
     }
 
     /**
+     * Este metodo me trae las fechas de una actividad para los estudiantes
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idActividad
+     * 
+     * @return array $resultado
+     */
+    public static function traerFechaActividadEstudiante(mysqli $conexion, array $config, string $idActividad){
+        try{
+            $consulta = mysqli_query($conexion, "SELECT TIMESTAMPDIFF(MINUTE, tar_fecha_disponible, now()), TIMESTAMPDIFF(MINUTE, tar_fecha_entrega, now()) FROM ".BD_ACADEMICA.".academico_actividad_tareas WHERE tar_id='".$idActividad."' AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+
+        return $resultado;
+    }
+
+    /**
      * Este metodo me trae las fechas de una actividad
      * @param mysqli $conexion
      * @param array $config

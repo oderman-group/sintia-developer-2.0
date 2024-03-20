@@ -14,9 +14,15 @@ if (!empty($_GET["id"])) {
 
 $asignacion = Asignaciones::traerDatosAsignaciones($conexion, $config, $id);
 
-$evaluacion = EvaluacionGeneral::consultar($asignacion['epag_id_evaluacion']);
+$iniciadas = Asignaciones::consultarCantAsignacionesEmpezadas($conexion, $config, $asignacion['gal_id']);
+if ($asignacion['gal_limite_evaluadores'] != 0 && $iniciadas >= $asignacion['gal_limite_evaluadores'] ) { 
+	$enlace = UsuariosPadre::verificarTipoUsuario($datosUsuarioActual['uss_tipo'], "encuestas-pendientes.php");
 
-Asignaciones::actualizarEstadoAsignacion($conexion, $config, $id, PROCESO);
+	echo '<script type="text/javascript">window.location.href="'.$enlace.'?error=ER_DT_21";</script>';
+	exit();
+}
+
+$evaluacion = EvaluacionGeneral::consultar($asignacion['epag_id_evaluacion']);
 ?>
 <script src="../js/Evaluaciones.js"></script>
 </head>
