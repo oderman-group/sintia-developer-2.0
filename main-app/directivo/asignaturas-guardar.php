@@ -21,6 +21,7 @@ include("../compartido/historial-acciones-guardar.php");
 
     if(empty($_POST["siglasM"])) {$_POST["siglasM"] = substr($_POST["nombreM"], 0, 3);}
     if(empty($_POST["porcenAsigna"])) {$_POST["porcenAsigna"] = '';}
+    $_POST["sumarPromedio"] = !empty($_POST["sumarPromedio"]) ? $_POST["sumarPromedio"] : SI;
 	$codigoAsignatura = "ASG".strtotime("now");
 
     try{
@@ -32,6 +33,7 @@ include("../compartido/historial-acciones-guardar.php");
             mat_area, 
             mat_oficial, 
             mat_valor, 
+            mat_sumar_promedio, 
             institucion, 
             year
         )
@@ -43,6 +45,7 @@ include("../compartido/historial-acciones-guardar.php");
             '".$_POST["areaM"]."', 
             1, 
             '".$_POST["porcenAsigna"]."', 
+            '".$_POST["sumarPromedio"]."', 
             {$config['conf_id_institucion']}, 
             {$_SESSION["bd"]}
         )");
