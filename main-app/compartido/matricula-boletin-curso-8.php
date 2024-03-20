@@ -288,8 +288,10 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                     <?php
                     $promedioFinal = 0;
                     for ($j = 1; $j <= $periodoActual; $j++) {
-                        $consultaPromedioPeriodoTodos=mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota), 1) as promedio FROM ".BD_ACADEMICA.".academico_boletin 
-                        WHERE bol_estudiante='" . $datosUsr['mat_id'] . "' AND bol_periodo='" . $j . "' AND institucion={$config['conf_id_institucion']} AND year={$year}");
+                        $consultaPromedioPeriodoTodos=mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota), 1) as promedio FROM ".BD_ACADEMICA.".academico_boletin bol
+                        INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car_id=bol_carga AND car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
+                        INNER JOIN ".BD_ACADEMICA.".academico_materias mat ON mat_id=car_materia AND mat_sumar_promedio='SI' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year} 
+                        WHERE bol_estudiante='" . $datosUsr['mat_id'] . "' AND bol_periodo='" . $j . "' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}");
                         $promediosPeriodos = mysqli_fetch_array($consultaPromedioPeriodoTodos, MYSQLI_BOTH);
 
                         $consultaSumaAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) FROM ".BD_ACADEMICA.".academico_clases cls 
