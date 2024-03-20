@@ -32,7 +32,8 @@
     }
 
     if($_GET['tipoEncuesta'] == MATERIA){
-        $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
+        $consulta = Asignaturas::consultarTodasAsignaturas($conexion, $config);
         while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
             $selected = !empty($_GET['idEvaluado']) && $_GET['idEvaluado'] == $resultado['mat_id'] ? "selected": "";
             echo '<option value="'.$resultado['mat_id'].'" '.$selected.'>'.$resultado['mat_nombre'].'</option>';

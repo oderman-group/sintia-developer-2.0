@@ -1,0 +1,4 @@
+# RELEASE SPRINT 26
+PES-813 - Permitir escoger el formato del boletin y el certificado al momento de imprimir.
+PES-902 - Autoinstalar los módulos acorde al plan escogido
+PES-906 - Después de un tiempo limite pedirle que pague o se desactiva la institución

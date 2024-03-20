@@ -216,9 +216,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
         WHERE bol_carga='".$datosCargas['car_id']."' AND bol_estudiante='".$datosUsr['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
 		$acumulado = mysqli_fetch_array($consultaAcumulado, MYSQLI_BOTH);
 		
-		$consultaAcumuladoDesempeno=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
-		WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND notip_desde<='".$acumulado[0]."' AND notip_hasta>='".$acumulado[0]."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-		$acumuladoDesempeno = mysqli_fetch_array($consultaAcumuladoDesempeno, MYSQLI_BOTH);
+		$acumuladoDesempeno = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $acumulado[0], $year);
 
 		$ausencias=0;
 		if(!empty($datosAusencias[0])){
@@ -321,9 +319,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
                 WHERE cls.cls_periodo='".$j."' AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$year}");
 				$sumaAusencias = mysqli_fetch_array($consultaSumaAusencias, MYSQLI_BOTH);
 				
-				$consultaPromedioEstiloNota=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
-				WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND '".$promediosPeriodos['promedio']."'>=notip_desde AND '".$promediosPeriodos['promedio']."'<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
-				$promediosEstiloNota = mysqli_fetch_array($consultaPromedioEstiloNota, MYSQLI_BOTH);
+				$promediosEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promediosPeriodos['promedio'], $year);
             ?>
                 <td><?php //echo $sumaAusencias[0];?></td>
                 <td><?=$promediosPeriodos['promedio'];?></td>
@@ -340,9 +336,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 
         	<?php
 				$contador=1;
-				$estilosNota = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
-				WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND institucion={$config['conf_id_institucion']} AND year={$year}
-				ORDER BY notip_desde DESC");
+				$estilosNota = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $year);
 				while($eN = mysqli_fetch_array($estilosNota, MYSQLI_BOTH)){
 				?>
 

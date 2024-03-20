@@ -58,6 +58,17 @@ if (empty($_POST["horas"])) {
 $_POST["autoenrollment"] = empty($_POST["autoenrollment"]) ? 0 : 1;
 $_POST["activo"] = empty($_POST["activo"]) ? 0 : 1;
 
+
+if (!empty($_POST["imagenCursoAi"])) {
+	$rutaImagen=$_POST["imagenCursoAi"];
+	$imagen = file_get_contents($rutaImagen);
+	$archivo = $_SESSION["inst"] . '_' . $_SESSION["id"] . '_curso_'.$_POST["id_curso"]. ".png";
+	$destino = "../files/cursos/".$archivo;
+	$cloudFilePath = FILE_CURSOS.$archivo;// Ruta en el almacenamiento en la nube de Firebase donde deseas almacenar el archivo
+	file_put_contents($destino, $imagen);
+	$storage->getBucket()->upload(fopen($destino, 'r'), ['name' => $cloudFilePath	]);
+	unlink($destino);
+}
 if (!empty($_FILES['imagenCurso']['name'])) {
     $archivoSubido->validarArchivo($_FILES['imagenCurso']['size'], $_FILES['imagenCurso']['name']);
     $explode=explode(".", $_FILES['imagenCurso']['name']);

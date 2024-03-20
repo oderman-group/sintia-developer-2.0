@@ -24,14 +24,29 @@ include("head.php");
 </style>
   </head>
   <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="font-family:Arial, Helvetica, sans-serif;">
-  <?php
-  $filtroAdicional= "AND mat_grado='".base64_decode($_REQUEST["curso"])."'";
-  $curso = Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"");
-  while($c = mysqli_fetch_array($curso, MYSQLI_BOTH)){
-  $resultado = Estudiantes::obtenerDatosEstudiante($c['mat_id']);
-  $consultaTipo=mysqli_query($conexion, "SELECT * FROM $baseDatosServicios.opciones_generales WHERE ogen_id='".$resultado['mat_tipo']."'");
-  $tipo = mysqli_fetch_array($consultaTipo, MYSQLI_BOTH);
-  ?>
+<?php
+    $year=$_SESSION["bd"];
+    if(!empty($_POST["year"])){
+        $year=$_POST["year"];
+    }
+
+    $curso="";
+    if(!empty($_GET["curso"])){
+        $curso=base64_decode($_GET["curso"]);
+    }
+    if(!empty($_POST["curso"])){
+        $curso=$_POST["curso"];
+    }
+    
+    $filtroAdicional= "AND mat_grado='".$curso."'";
+    if(!empty($_REQUEST["grupo"])){$filtroAdicional .= " AND mat_grupo='".$_REQUEST["grupo"]."'";}
+
+    $curso = Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"", NULL, NULL, $year);
+    while($c = mysqli_fetch_array($curso, MYSQLI_BOTH)){
+    $resultado = Estudiantes::obtenerDatosEstudiante($c['mat_id']);
+    $consultaTipo=mysqli_query($conexion, "SELECT * FROM $baseDatosServicios.opciones_generales WHERE ogen_id='".$resultado['mat_tipo']."'");
+    $tipo = mysqli_fetch_array($consultaTipo, MYSQLI_BOTH);
+?>
 <table width="80%" cellpadding="5" cellspacing="0" border="0" align="center" style="font-size:15px;">
  	<tr>
     	<td colspan="4" align="center">
