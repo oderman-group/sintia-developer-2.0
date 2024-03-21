@@ -306,7 +306,7 @@
 
                         </div>
 
-                        <div class="card-body">
+                        <div class="card-body" id="car-body-<?= $resultado['not_id']; ?>">
                                 <?php
 								 $rName = array("","Me gusta","Me encanta","Me divierte","Me entristece");
 								 $rIcons = array("","fa-thumbs-o-up","fa-heart","fa-smile-o","fa-frown-o");
@@ -324,14 +324,14 @@
 								 while($i<=4){
 									if(!empty($usrReacciones['npr_reaccion']) && $i==$usrReacciones['npr_reaccion']){$estilos1='style="background:#6d84b4;"'; $estilos2='style="color:#FFF;"';}else{$estilos1=''; $estilos2='';}
 								  ?>
-                                    <li class="mdl-menu__item"><a
-                                            href="../compartido/noticias-reaccionar.php?r=<?=base64_encode($i);?>&idR=<?=base64_encode($resultado['not_id']);?>&postname=<?=base64_encode($resultado['not_titulo']);?>&usrname=<?=base64_encode($datosUsuarioActual['uss_nombre']);?>&postowner=<?=base64_encode($resultado['not_usuario']);?>"><i
-                                                class="fa <?=$rIcons[$i];?>"></i><?=$rName[$i];?></a></li>
+                                    <li class="mdl-menu__item" onclick="reaccionar('<?= base64_encode($resultado['not_id']); ?>','<?= base64_encode($i) ?>','<?= base64_encode($resultado['not_titulo']); ?>','<?= base64_encode($datosUsuarioActual['uss_nombre']); ?>','<?= base64_encode($resultado['not_usuario']) ?>')">
+                                                <i class="fa <?= $rIcons[$i]; ?>"></i><?= $rName[$i]; ?></a>
+                                            </li>
                                     <?php $i++;}?>
                                 </ul>
                                 <?php if($numReacciones>0){?>
-                                <a class="pull-right" onClick="mostrarDetalles(this)"
-                                    id="<?=base64_encode($resultado['not_id']);?>"><?=number_format($numReacciones,0,",",".");?>
+                                <a id="reacciones-<?= $resultado['not_id']; ?>" class="pull-right" onClick="mostrarDetalles(this)"
+                                    name="<?=base64_encode($resultado['not_id']);?>"><?=number_format($numReacciones,0,",",".");?>
                                     reacciones</a>
                                 <?php }?>
                             </div>
@@ -339,7 +339,7 @@
                         </div>
                         <script type="application/javascript">
                         function mostrarDetalles(dato) {
-                            var id = 'pub' + dato.id;
+                            var id = 'pub' + dato.name;
                             document.getElementById(id).style.display = "block";
                         }
 
@@ -385,7 +385,7 @@
                 <div class="panel" data-hint="Se muestran las personas que están de cumpleaños en este día."
                     id="../compartido/cumplimentados.php" title="cumplimentados" onClick="axiosAjax(this)">
                     <header class="panel-heading panel-heading-red">
-                        <?php echo $frases[215][$datosUsuarioActual['uss_idioma']];?></header>
+                        <?php echo $frases[215][$datosUsuarioActual['uss_idioma']]; ?></header>
 
                     <div id="RESP_cumplimentados" class="panel-body"></div>
                 </div>
@@ -393,7 +393,61 @@
 
             </div>-->
 
+            <script type="text/javascript">
+                function reaccionar(id, reaccion, postname, usrname, postowner) {
+                    var url = "../compartido/noticias-reaccionar-fetch.php";
+                    var data = {
+                        "id": id,
+                        "reaccion": reaccion,
+                        "postname": postname,
+                        "usrname": usrname,
+                        "postowner": postowner
+                    };
+                    metodoFetch(url, data, 'json', false, 'respuesta');
+                }
 
+                function respuesta(response) {
+
+                    if (response["ok"]) {
+                        reaccionesNombre = ["", " Me gusta ", " Me encanta ", " Me divierte ", " Me entristece "];
+                        reaccionesIconos = ["", "fa-thumbs-o-up", "fa-heart", "fa-smile-o", "fa-frown-o"];
+                        index = parseInt(response["reaccion"]);
+
+                        reacion = document.getElementById("reacciones-" + response["id"]);
+                        carBody = document.getElementById("car-body-" + response["id"]);
+                        panel = document.getElementById("panel-" + response["id"] + "1");
+
+                        if (reacion) {
+                            reacion.innerText = response["cantidad"] + " reacciones";
+                        }else{
+                            var reacionNueva = document.createElement('a'); // se crea la etiqueta a
+                            reacionNueva.id="reacciones-" + response["id"]
+                            reacionNueva.classList.add('pull-right');
+                            reacionNueva.innerText = response["cantidad"] + " reacciones";
+                            carBody.appendChild(reacionNueva);
+                        }
+
+                        panel.innerText = '';
+                        var icon = document.createElement('i'); // se crea la icono
+                        icon.classList.add('fa', reaccionesIconos[index]);
+                        panel.appendChild(icon);
+                        var texto = document.createTextNode(reaccionesNombre[index]);
+                        panel.appendChild(texto);
+                        panel.classList.add('animate__animated', 'animate__fadeInDown');
+
+                        $.toast({
+                            heading: 'Acción realizada',
+                            text: response["msg"],
+                            position: 'bottom-right',
+                            showHideTransition: 'slide',
+                            loaderBg: '#26c281',
+                            icon: 'success',
+                            hideAfter: 5000,
+                            stack: 6
+                        });
+                    }
+                }
+            </script>
         </div>
     </div>
 </div>
