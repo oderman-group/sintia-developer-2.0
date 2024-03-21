@@ -1,6 +1,10 @@
 <?php
 $_SERVER['DOCUMENT_ROOT'] = dirname(dirname(dirname(dirname(__FILE__))));
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+require_once ROOT_PATH."/main-app/class/Conexion.php";
+
+$conexionPDOInstance = new Conexion;
+$conexionPDO         = $conexionPDOInstance->conexionPDO(SERVER, USER, PASSWORD, BD_ADMIN);
 $conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion);
 
 /**
