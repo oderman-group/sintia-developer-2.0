@@ -21,11 +21,11 @@ if(!empty($_REQUEST['idInst'])){
 	$configConsulta = "SELECT * FROM configuracion
 	INNER JOIN {$baseDatosAdmisiones}.config_instituciones ON cfgi_id_institucion=conf_id_institucion AND cfgi_inscripciones_activas=1 AND cfgi_year = conf_agno
 	WHERE conf_id_institucion = ".$idInsti." AND conf_agno = ".date("Y");
-	$config = $pdoAdmin->prepare($configConsulta);
-	$config->execute();
-	$datosConfig = $config->fetch();
+	$configuracion = $pdoAdmin->prepare($configConsulta);
+	$configuracion->execute();
+	$config = $configuracion->fetch();
 
-	if(empty($datosConfig['conf_id_institucion']) || empty($datosConfig['conf_agno'])) {
+	if(empty($config['conf_id_institucion']) || empty($config['conf_agno'])) {
 		header("Location:".REDIRECT_ROUTE."/admisiones");
 		exit();
 	}
