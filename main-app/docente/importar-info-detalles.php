@@ -6,6 +6,7 @@ include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Clases.php");
+require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 ?>
 
 <!--bootstrap -->
@@ -59,13 +60,7 @@ require_once(ROOT_PATH."/main-app/class/Clases.php");
 									$numImportación = 0;
 									if(!empty($_POST["indicadores"]) && empty($_POST["calificaciones"])){
 										//Consultamos los indicadores a importar
-										try{
-											$indImpConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-											INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
-											WHERE ipc.ipc_carga='".$_POST["cargaImportar"]."' AND ipc.ipc_periodo='".$_POST["periodoImportar"]."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
-										} catch (Exception $e) {
-											include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-										}
+										$indImpConsulta = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $_POST["cargaImportar"], $_POST["periodoImportar"]);
 										$numIndicadores = mysqli_num_rows($indImpConsulta);
 										if ($numIndicadores > 0) {
 											echo "<b>Indicadores a importar:</b><br>";
@@ -80,13 +75,7 @@ require_once(ROOT_PATH."/main-app/class/Clases.php");
 									
 									if(!empty($_POST["calificaciones"])){
 										//Consultamos los indicadores a importar
-										try{
-											$indImpConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-											INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
-											WHERE ipc.ipc_carga='".$_POST["cargaImportar"]."' AND ipc.ipc_periodo='".$_POST["periodoImportar"]."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
-										} catch (Exception $e) {
-											include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-										}
+										$indImpConsulta = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $_POST["cargaImportar"], $_POST["periodoImportar"]);
 										$numIndicadores = mysqli_num_rows($indImpConsulta);
 										if ($numIndicadores > 0) {
 											echo "<b>Indicadores y calificaciones a importar:</b><br>";

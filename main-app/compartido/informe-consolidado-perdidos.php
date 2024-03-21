@@ -9,6 +9,7 @@ if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol(
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/Grados.php");
+require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 ?>
 
 <head>
@@ -43,8 +44,7 @@ include("../compartido/head-informes.php") ?>
 			//SACAMOS EL NUMERO DE CARGAS O MATERIAS QUE TIENE UN CURSO PARA QUE SIRVA DE DIVISOR EN LA DEFINITIVA POR ESTUDIANTE
 			$numCargasPorCurso = mysqli_num_rows($cargas); 
 			while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
-				$consultaMaterias=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$carga['car_materia']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-				$materia = mysqli_fetch_array($consultaMaterias, MYSQLI_BOTH);
+				$materia = Asignaturas::consultarDatosAsignatura($conexion, $config, $carga['car_materia']);
 			?>
             <th style="font-size:9px; text-align:center; border:groove;" width="5%"><?=$materia['mat_nombre'];?></th>
             <?php
@@ -69,8 +69,7 @@ include("../compartido/head-informes.php") ?>
 			$cargasPromdio=0;
 			while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
 				//PRUEBA CONSULTA PHP 8
-				$consultaMaterias= mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$carga['car_materia']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-				$materia = mysqli_fetch_array($consultaMaterias, MYSQLI_BOTH);
+				$materia = Asignaturas::consultarDatosAsignatura($conexion, $config, $carga['car_materia']);
 				$p = 1;
 				$porcPeriodo = array("",0.25,0.25,0.25,0.25);
 				$defPorMateria = 0;

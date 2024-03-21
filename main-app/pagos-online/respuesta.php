@@ -1,4 +1,5 @@
 <?php
+session_start();
 include("../../conexion.php");
 ?>
 <!DOCTYPE html>
@@ -48,19 +49,35 @@ include("../../conexion.php");
     $hidden = "hidden";
   } else {
     if ($estado == TRANSACCION_ACEPTADA) {
-      require_once("../class/servicios/MediaTecnicaServicios.php");
-      //Insertamos la matrícula en media tecnica
-      try {
-        MediaTecnicaServicios::editarporCurso($matricula, $curso, 1, ESTADO_CURSO_PRE_INSCRITO, $institucion, $year);
-      } catch (Exception $e) {
-        include("../compartido/error-catch-to-report.php");
+      if (!empty($jsonObject['data']['x_extra15'])) {
+        require_once("../class/servicios/MediaTecnicaServicios.php");
+        //Insertamos la matrícula en media tecnica
+        try {
+          MediaTecnicaServicios::editarporCurso($matricula, $curso, 1, ESTADO_CURSO_PRE_INSCRITO, $institucion, $year);
+        } catch (Exception $e) {
+          include("../compartido/error-catch-to-report.php");
+        }
+      }
+
+      if (!empty($jsonObject['data']['x_extra16'])) {
+        mysqli_query($conexion, "INSERT INTO " . BD_ADMIN . ".instituciones_modulos(ipmod_institucion, ipmod_modulo) VALUES ('" . $jsonObject['data']['x_extra6'] . "', '" . $jsonObject['data']['x_extra16'] . "')");
+    
+        $arregloModulos = array();
+        $modulosSintia = mysqli_query($conexion, "SELECT mod_id, mod_nombre FROM ".BD_ADMIN.".modulos
+        INNER JOIN ".BD_ADMIN.".instituciones_modulos ON ipmod_institucion='".$jsonObject['data']['x_extra6']."' AND ipmod_modulo=mod_id
+        WHERE mod_estado=1");
+        while($modI = mysqli_fetch_array($modulosSintia, MYSQLI_BOTH)){
+            $arregloModulos [$modI['mod_id']] = $modI['mod_nombre'];
+        }
+        
+        $_SESSION["modulos"] = $arregloModulos;
       }
     }
   }
 
   mysqli_query($conexion, "INSERT INTO " . $baseDatosServicios . ".pasarela_respuestas(psr_cliente, psr_ref, psr_transaccion,	psr_respuesta_nombre,	psr_respuesta_codigo,	psr_documento, psr_nombre, psr_email,	psr_error_codigo,	psr_error_nombre,	psr_celular, psr_ref_epayco, psr_factura, psr_id_institucion, psr_descripcion) VALUES ('" . $jsonObject['data']['x_extra1'] . "', '" . $jsonObject['data']['x_id_invoice'] . "', '" . $jsonObject['data']['x_transaction_id'] . "', '" . $jsonObject['data']['x_response'] . "', '" . $jsonObject['data']['x_cod_response'] . "', '" . $jsonObject['data']['x_extra3'] . "', '" . $jsonObject['data']['x_extra4'] . "', '" . $jsonObject['data']['x_extra2'] . "', '" . $jsonObject['data']['x_errorcode'] . "', '" . $jsonObject['data']['x_response_reason_text'] . "', '" . $jsonObject['data']['x_extra5'] . "', '" . $jsonObject['data']['x_ref_payco'] . "', '" . $jsonObject['data']['x_id_factura'] . "', '" . $jsonObject['data']['x_extra6'] . "', '" . $jsonObject['data']['x_description'] . "')");
 
-  if (!empty($jsonObject['data']['x_extra7'])) {
+  if ($estado == TRANSACCION_ACEPTADA && !empty($jsonObject['data']['x_extra7'])) {
     mysqli_query($conexion, "INSERT INTO " . $baseDatosMarketPlace . ".mis_compras(misc_fecha, misc_institucion, misc_usuario,	misc_producto,	misc_cantidad,	misc_precio_producto, misc_valor_final, misc_estado_compra,	misc_estado_pago) VALUES (now(), '" . $jsonObject['data']['x_extra6'] . "', '" . $jsonObject['data']['x_extra1'] . "', '" . $jsonObject['data']['x_extra7'] . "', '" . $jsonObject['data']['x_extra8'] . "', '" . $jsonObject['data']['x_extra9'] . "', '" . $jsonObject['data']['x_extra10'] . "', 2, '" . $jsonObject['data']['x_response'] . "')");
   }
   ?>
@@ -124,7 +141,7 @@ include("../../conexion.php");
                   <form method="post" id="autenticoFromulario" action="<?= $urlOrigen ?>" class="needs-validation" novalidate>
                     <input type="hidden" class="form-control" name="aut" value="<?= $usuario ?>">
                     <input type="hidden" class="form-control" name="documento" value="<?= $identificacion ?>">
-                    <button class="w-75 btn btn-lg btn-primary btn-rounded mt-3" type="submit">Regresar al curso</button>
+                    <button class="w-75 btn btn-lg btn-primary btn-rounded mt-3" type="submit">Regresar a SINTIA</button>
                   </form>
                 </td>
               </tr>

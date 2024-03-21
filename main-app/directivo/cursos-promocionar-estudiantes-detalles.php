@@ -10,6 +10,7 @@ include("../compartido/historial-acciones-guardar.php");
     }
     require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
     require_once(ROOT_PATH."/main-app/class/Grados.php");
+    require_once(ROOT_PATH."/main-app/class/Grupos.php");
     require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 
     $disabledPermiso = "";
@@ -144,16 +145,10 @@ if(!empty($_POST['relacionCargas']) && $_POST['relacionCargas'] == 1){
                                     <div class="form-group row" id="elementGroup" style="display: <?=$display?>;">
                                         <label class="col-sm-2">Desde El Grupo:</label>
                                         <div class="col-sm-3">
-                                            <?php
-                                                try{
-                                                    $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                                                } catch (Exception $e) {
-                                                    include("../compartido/error-catch-to-report.php");
-                                                }
-                                            ?>
                                             <select class="form-control  select2" style="width: 100%;" name="grupoDesde" id="grupoDesde" <?=$disabledPermiso;?> <?=$disabled;?>>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
+                                                    $opcionesConsulta = Grupos::traerGrupos($conexion, $config);
                                                     while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
                                                         if(!empty($_POST['grupoDesde']) && $opcionesDatos['gru_id']==$_POST['grupoDesde'])
                                                             echo '<option value="'.$opcionesDatos['gru_id'].'" selected>'.$opcionesDatos['gru_nombre'].'</option>';
@@ -166,16 +161,10 @@ if(!empty($_POST['relacionCargas']) && $_POST['relacionCargas'] == 1){
                                         
                                         <label class="col-sm-2">Se Moverán Al Grupo:</label>
                                         <div class="col-sm-3">
-                                            <?php
-                                                try{
-                                                    $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                                                } catch (Exception $e) {
-                                                    include("../compartido/error-catch-to-report.php");
-                                                }
-                                            ?>
                                             <select class="form-control  select2" style="width: 100%;" name="grupoPara" id="grupoPara" <?=$disabledPermiso;?> <?=$disabled;?>>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
+                                                    $opcionesConsulta = Grupos::traerGrupos($conexion, $config);
                                                     while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
                                                         if(!empty($_POST['grupoPara']) && $opcionesDatos['gru_id']==$_POST['grupoPara'])
                                                             echo '<option value="'.$opcionesDatos['gru_id'].'" selected>'.$opcionesDatos['gru_nombre'].'</option>';
@@ -375,16 +364,10 @@ if(!empty($_POST['relacionCargas']) && $_POST['relacionCargas'] == 1){
                                                                                 <td>
                                                                                     <div class="form-group row">
                                                                                         <div class="col-sm-4">
-                                                                                            <?php
-                                                                                            try{
-                                                                                                $opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                                                                                            } catch (Exception $e) {
-                                                                                                include("../compartido/error-catch-to-report.php");
-                                                                                            }
-                                                                                            ?>
                                                                                             <select class="form-control  select2" onchange="crearInputGrupoEstudiante(this, '<?=$datosEstudiante['mat_id'];?>', 'noGrupo')" id="grupo<?=$datosEstudiante['mat_id'];?>" <?=$disabledPermiso;?>>
                                                                                                 <option value="">Seleccione una opción</option>
                                                                                                 <?php
+                                                                                                $opcionesConsulta = Grupos::traerGrupos($conexion, $config);
                                                                                                 while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
                                                                                                     $selected="";
                                                                                                     if($datosEstudiante['mat_grupo']==$opcionesDatos['gru_id']){

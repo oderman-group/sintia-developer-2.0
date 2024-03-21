@@ -120,6 +120,12 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<?php 
 												$idModal = "modal14"; $contenido = "matriculas-retiradas-modal.php";  include("../compartido/contenido-modal.php");
 												}
+												if(Modulos::validarSubRol(['DT0249','DT0251'])){
+											?>
+												<p><a href="javascript:void(0);"  data-toggle="modal" data-target="#modal15">15. Hoja de Matricula</a></p>
+											<?php 
+												$idModal = "modal15"; $contenido = "hoja-matricula-modal.php";  include("../compartido/contenido-modal.php");
+												}
 											?>
 										</div>
                                 	</div>

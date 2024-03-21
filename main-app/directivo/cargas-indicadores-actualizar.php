@@ -1,5 +1,6 @@
 <?php
 include("session.php");
+require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0096';
@@ -12,18 +13,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 
 	include("verificar-carga.php");
 	//include("verificar-periodos-diferentes.php");
-	try{
-		$consultaSumaIndicadores=mysqli_query($conexion, "SELECT
-		(SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-		WHERE ipc_carga='" . $cargaConsultaActual . "' AND ipc_periodo='" . $periodoConsultaActual . "' AND ipc_creado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
-		(SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-		WHERE ipc_carga='" . $cargaConsultaActual . "' AND ipc_periodo='" . $periodoConsultaActual . "' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
-		(SELECT count(*) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-		WHERE ipc_carga='" . $cargaConsultaActual . "' AND ipc_periodo='" . $periodoConsultaActual . "' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})");
-	} catch (Exception $e) {
-		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-	}
-	$sumaIndicadores = mysqli_fetch_array($consultaSumaIndicadores, MYSQLI_BOTH);
+	$sumaIndicadores = Indicadores::consultarSumaIndicadores($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 	$porcentajePermitido = 100 - $sumaIndicadores[0];
 	$porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
 	$porcentajeRestante = ($porcentajeRestante + $_POST["valorIndicador"]);

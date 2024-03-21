@@ -163,6 +163,16 @@ $institucionNombre = $institucion['ins_siglas'];
                         <!-- end notification dropdown -->
 				
                         <!-- start message dropdown -->
+                        <?php
+                            if($numAsignacionesEncuesta > 0  && ($idPaginaInterna != 'DC0146' && $idPaginaInterna != 'AC0038' && $idPaginaInterna != 'ES0062' && $idPaginaInterna != 'DT0324' && $idPaginaInterna != 'CM0060')){
+                        ?>
+ 						<li class="dropdown dropdown-extended dropdown-inbox" data-step="5" data-intro="<b>Encuestas:</b> Aquí se te redireccionara a las encuestas pendientes." data-position='bottom'>
+                            <a href="encuestas-pendientes.php" class="dropdown-toggle">
+                                <i class="fa fa-question"></i>
+                                <span class="badge headerBadgeColor2" style="right: -12px; top: 5px;"><?=$numAsignacionesEncuesta?></span>
+                            </a>
+                        </li>
+                        <?php } ?>
  						<li class="dropdown dropdown-extended dropdown-inbox" id="header_inbox_bar" data-step="5" data-intro="<b>Mensajes:</b> Aquí verás los mensajes directos que te envíen otros usuarios de la plataforma." data-position='bottom' data-scrollTo='tooltip'>
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                 <i class="fa fa-envelope-o"></i>

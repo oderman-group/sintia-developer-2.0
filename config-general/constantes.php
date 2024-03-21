@@ -168,6 +168,10 @@ define('AREA', 'AREA');
 define('MATERIA', 'MATERIA');
 define('CURSO', 'CURSO');
 
+/* METODOS PARA OPEN AI*/
+define('TEXT_TO_IMAGE', 'TEXT_TO_IMAGE');
+define('TEXT_TO_TEXT', 'TEXT_TO_TEXT');
+
 define('PENDIENTE', 'PENDIENTE');
 define('PROCESO', 'PROCESO');
 define('FINALIZADO', 'FINALIZADO');

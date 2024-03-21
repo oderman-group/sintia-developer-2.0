@@ -4,6 +4,7 @@ $idPaginaInterna = 'DT0318';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Asignaciones.php");
+require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -105,9 +106,8 @@ if (!empty($_GET['idE'])) {
 																break;
 
 																case MATERIA:
-																	$consultaEvaluado = mysqli_query($conexion, "SELECT mat_nombre FROM ".BD_ACADEMICA.".academico_materias
-																	WHERE mat_id='".$resultado['epag_id_evaluado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-																	$datosEvaluado = mysqli_fetch_array($consultaEvaluado, MYSQLI_BOTH);
+																	require_once(ROOT_PATH . "/main-app/class/Asignaturas.php");
+																	$datosEvaluado = Asignaturas::consultarDatosAsignatura($conexion, $config, $resultado['epag_id_evaluado']);
 																	$nombreEvaluado = $datosEvaluado['mat_nombre'];
 																break;
 
