@@ -1,7 +1,7 @@
 <?php
-$valorInscripcion = !empty($datosConfig['cfgi_valor_inscripcion'])     ? $datosConfig['cfgi_valor_inscripcion']    : 0;
-$fondoBarra       = !empty($datosConfig['cfgi_color_barra_superior'])  ? $datosConfig['cfgi_color_barra_superior'] : '#6017dc';
-$colorTexto       = !empty($datosConfig['cfgi_color_texto'])           ? $datosConfig['cfgi_color_texto']          : '#FFF';
+$valorInscripcion = !empty($config['cfgi_valor_inscripcion'])     ? $config['cfgi_valor_inscripcion']    : 0;
+$fondoBarra       = !empty($config['cfgi_color_barra_superior'])  ? $config['cfgi_color_barra_superior'] : '#6017dc';
+$colorTexto       = !empty($config['cfgi_color_texto'])           ? $config['cfgi_color_texto']          : '#FFF';
 ?>
 
 
