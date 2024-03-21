@@ -97,7 +97,7 @@
 										var asignatura = document.getElementById('asignatura').value;
 										var curso = document.getElementById('curso').value;
 										if (parseInt(cantidad) > 0 && parseInt(cantidad) < 8) {
-											var buscar = "regalame una lista de " + cantidad + " indicadores para el la asignatura " + asignatura + " del curso " + curso + " en colombia el resultado en formato JSON, con un nodo con nombre indicadores y cada indicador en un nodo con nombre descripcion";
+											var buscar = "regalame una lista de " + cantidad + " indicadores para la asignatura " + asignatura + " del curso " + curso + " en colombia el resultado en formato JSON, con un nodo con nombre indicadores y cada indicador en un nodo con nombre descripcion";
 											document.getElementById("gifCarga").style.display = "block";
 											var data = {
 												'metodo': '<?php echo TEXT_TO_TEXT ?>',
