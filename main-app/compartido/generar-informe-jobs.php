@@ -1,6 +1,10 @@
 <?php
 $_SERVER['DOCUMENT_ROOT'] = dirname(dirname(dirname(dirname(__FILE__))));
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+require_once ROOT_PATH."/main-app/class/Conexion.php";
+
+$conexionPDOInstance = new Conexion;
+$conexionPDO         = $conexionPDOInstance->conexionPDO(SERVER, USER, PASSWORD, BD_ADMIN);
 $conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion);
 
 require_once(ROOT_PATH."/main-app/class/Sysjobs.php");
@@ -79,6 +83,7 @@ $mensaje="";
 	}
 
 	if($finalizado){
+		$contBol=1;
 		while($estudianteResultado = mysqli_fetch_array($consultaListaEstudante, MYSQLI_BOTH)){
 			$estudiante = $estudianteResultado["mat_id"];
 			include(ROOT_PATH."/main-app/definitivas.php");
@@ -136,6 +141,7 @@ $mensaje="";
 			WHERE aac.cal_id_estudiante='".$estudiante."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$anio}
 			GROUP BY aa.act_id_tipo");
 			$sumaNotaIndicador = 0; 
+			$cont=1;
 			while($notInd = mysqli_fetch_array($notasPorIndicador, MYSQLI_BOTH)){
 				$consultaNum=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion 
 				WHERE rind_carga='".$carga."' AND rind_estudiante='".$estudiante."' AND rind_periodo='".$periodo."' AND rind_indicador='".$notInd[1]."' AND institucion={$config['conf_id_institucion']} AND year={$anio}");
@@ -145,13 +151,14 @@ $mensaje="";
 				$sumaNotaIndicador  += $notInd[0];
 				
 				if($num==0){
-					$codigo=Utilidades::generateCode("RIN").$idNumericoEstudiante;
+					$codigo=Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores_recuperacion').$cont;
 
 					mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_carga='".$carga."' AND rind_estudiante='".$estudiante."' AND rind_periodo='".$periodo."' AND rind_indicador='".$notInd[1]."' AND institucion={$config['conf_id_institucion']} AND year={$anio}");
 					
 					
 					mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_recuperacion(rind_id, rind_fecha_registro, rind_estudiante, rind_carga, rind_nota, rind_indicador, rind_periodo, rind_actualizaciones, rind_nota_original, rind_nota_actual, rind_valor_indicador_registro, institucion, year)VALUES('".$codigo."', now(), '".$estudiante."', '".$carga."', '".$notInd[0]."', '".$notInd[1]."', '".$periodo."', 0, '".$notInd[0]."', '".$notInd[0]."', '".$notInd[2]."', {$config['conf_id_institucion']}, {$anio})");
 					
+					$cont++;
 				}else{
 					mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_indicadores_recuperacion SET rind_nota_anterior=rind_nota, rind_nota='".$notInd[0]."', rind_actualizaciones=rind_actualizaciones+1, rind_ultima_actualizacion=now(), rind_nota_actual='".$notInd[0]."', rind_tipo_ultima_actualizacion=1, rind_valor_indicador_actualizacion='".$notInd[2]."' WHERE rind_carga='".$carga."' AND rind_estudiante='".$estudiante."' AND rind_periodo='".$periodo."' AND rind_indicador='".$notInd[1]."' AND institucion={$config['conf_id_institucion']} AND year={$anio}");
 					
@@ -184,9 +191,10 @@ $mensaje="";
 				mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_boletin 
 				WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$estudiante."' AND institucion={$config['conf_id_institucion']} AND year={$anio}");			
 				//INSERTAR LOS DATOS EN LA TABLA BOLETIN
-				$codigoBOL=Utilidades::generateCode("BOL").$idNumericoEstudiante;
-				mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_boletin(bol_id, bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_fecha_registro, bol_actualizaciones, bol_nota_indicadores, bol_porcentaje, institucion, year)VALUES('".$codigoBOL."', '".$carga."', '".$estudiante."', '".$periodo."', '".$definitiva."', 1, now(), 0, '".$sumaNotaIndicador."', '".$porcentajeActual."', {$config['conf_id_institucion']}, {$anio})");	
-					
+				$codigoBOL=Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_boletin').$contBol;
+				mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_boletin(bol_id, bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_fecha_registro, bol_actualizaciones, bol_nota_indicadores, bol_porcentaje, institucion, year)VALUES('".$codigoBOL."', '".$carga."', '".$estudiante."', '".$periodo."', '".$definitiva."', 1, now(), 0, '".$sumaNotaIndicador."', '".$porcentajeActual."', {$config['conf_id_institucion']}, {$anio})");
+				
+				$contBol++;
 			}
 			
 			$numEstudiantes++;
