@@ -64,7 +64,7 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 	$indicadorBD = mysqli_fetch_array($consultaIndicadorBD, MYSQLI_BOTH);
 
 	try{
-		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores(ind_id, ind_nombre, ind_obligatorio, ind_publico, institucion, year) VALUES('".$idRegistro."', '".$indicadorBD['ind_nombre']."', 0, 1, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores(ind_id, ind_nombre, ind_obligatorio, ind_publico, institucion, year) VALUES('".$idRegistro."', '".mysqli_real_escape_string($conexion,$indicadorBD['ind_nombre'])."', 0, 1, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}
