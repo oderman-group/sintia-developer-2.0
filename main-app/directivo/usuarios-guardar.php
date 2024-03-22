@@ -38,7 +38,7 @@ try{
         '" . $_POST["usuario"] . "',
         SHA1('" . $_POST["clave"] . "'),
         " . $_POST["tipoUsuario"] . ",
-        '" . $_POST["nombre"] . "',
+        '" . mysqli_real_escape_string($conexion,$_POST["nombre"]) . "',
         0,
         '" . strtolower($_POST["email"]) . "',
         '" . $_POST["celular"] . "',
@@ -56,9 +56,9 @@ try{
         'header-indigo',
         'logo-indigo', 
         '" . $_POST["tipoD"] . "',
-        '" . $_POST["apellido1"] . "',
-        '" . $_POST["apellido2"] . "',
-        '" . $_POST["nombre2"] . "',
+        '" . mysqli_real_escape_string($conexion,$_POST["apellido1"]) . "',
+        '" . mysqli_real_escape_string($conexion,$_POST["apellido2"]) . "',
+        '" . mysqli_real_escape_string($conexion,$_POST["nombre2"]) . "',
         '" . $_POST["documento"] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]}
         )");
 } catch (Exception $e) {

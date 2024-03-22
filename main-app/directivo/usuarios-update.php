@@ -42,7 +42,7 @@ try{
 	mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET 
 	uss_usuario=           '" . $_POST["usuario"] . "', 
 	uss_tipo=              " . $_POST["tipoUsuario"] . ", 
-	uss_nombre=            '" . $_POST["nombre"] . "',
+	uss_nombre=            '" . mysqli_real_escape_string($conexion,$_POST["nombre"]) . "',
 	uss_email=             '" . strtolower($_POST["email"]) . "', 
 	uss_genero=            '" . $_POST["genero"] . "',
 	uss_celular=           '" . $_POST["celular"] . "',
@@ -52,9 +52,9 @@ try{
 	uss_telefono=          '" . $_POST["telefono"] . "',
 	uss_intentos_fallidos= '" . $_POST["intentosFallidos"] . "',
 	uss_tipo_documento=    '" . $_POST["tipoD"] . "', 
-	uss_apellido1=         '" . $_POST["apellido1"] . "', 
-	uss_apellido2=         '" . $_POST["apellido2"] . "', 
-	uss_nombre2=           '" . $_POST["nombre2"] . "', 
+	uss_apellido1=         '" . mysqli_real_escape_string($conexion,$_POST["apellido1"]) . "', 
+	uss_apellido2=         '" . mysqli_real_escape_string($conexion,$_POST["apellido2"]) . "', 
+	uss_nombre2=           '" . mysqli_real_escape_string($conexion,$_POST["nombre2"]) . "', 
 	uss_documento=         '" . $_POST["documento"] . "',
 
 	uss_ultima_actualizacion=now()
