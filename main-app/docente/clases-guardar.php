@@ -10,7 +10,7 @@ include("verificar-periodos-diferentes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/Clases.php");
 
-Clases::guardarClases($conexion, $config, $_POST, $_FILES, $cargaConsultaActual, $periodoConsultaActual);
+$codigo = Clases::guardarClases($conexion, $config, $_POST, $_FILES, $cargaConsultaActual, $periodoConsultaActual);
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 echo base64_encode($codigo);

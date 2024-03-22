@@ -1,6 +1,7 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 class CargaAcademica {
 
     /**
@@ -195,7 +196,7 @@ class CargaAcademica {
      * @param string $idCarga Identificador de la carga académica.
      * @param string $idEstudiante Identificador del estudiante.
      *
-     * @return mysqli_result|false Devuelve el objeto de la consulta preparada o false en caso de error.
+     * @return mysqli_result Devuelve el objeto de la consulta preparada o false en caso de error.
      */
     public static function accesoCargasEstudiante(
         mysqli $conexion, 
@@ -203,31 +204,13 @@ class CargaAcademica {
         string $idCarga, 
         string $idEstudiante
     ) {
-        try {
-            // Preparar la consulta SQL con marcadores de posición
-            $consulta = mysqli_prepare($conexion, "SELECT * FROM " . BD_ACADEMICA . ".academico_cargas_acceso WHERE carpa_id_carga=? AND carpa_id_estudiante=? AND institucion=? AND year=?");
+        $sql = "SELECT * FROM " . BD_ACADEMICA . ".academico_cargas_acceso WHERE carpa_id_carga=? AND carpa_id_estudiante=? AND institucion=? AND year=?";
 
-            if ($consulta) {
-                // Vincular los valores de las variables a los marcadores de posición
-                mysqli_stmt_bind_param($consulta, "ssii", $idCarga, $idEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]);
+        $parametros = [$idCarga, $idEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
 
-                // Ejecutar la consulta preparada
-                mysqli_stmt_execute($consulta);
-                
-                // Obtener el resultado de la consulta
-                $consulta = mysqli_stmt_get_result($consulta);
-
-                // Devolver el objeto de la consulta preparada
-                return $consulta;
-            } else {
-                // Si la preparación de la consulta falla, devuelve false
-                return false;
-            }
-        } catch (Exception $e) {
-            // Manejar la excepción
-            echo "Excepción capturada: " . $e->getMessage();
-            exit();
-        }
+        return $resultado;
     }
     
     /**
@@ -249,26 +232,11 @@ class CargaAcademica {
     ){
         $idInsercion = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_cargas_acceso');
 
-        try {
-            // Preparar la consulta SQL con marcadores de posición
-            $consulta = mysqli_prepare($conexion, "INSERT INTO " . BD_ACADEMICA . ".academico_cargas_acceso (carpa_id, carpa_id_carga, carpa_id_estudiante, carpa_primer_acceso, carpa_ultimo_acceso, carpa_cantidad, institucion, year) VALUES (?, ?, ?, NOW(), NOW(), 1, ?, ?)");
+        $sql = "INSERT INTO " . BD_ACADEMICA . ".academico_cargas_acceso (carpa_id, carpa_id_carga, carpa_id_estudiante, carpa_primer_acceso, carpa_ultimo_acceso, carpa_cantidad, institucion, year) VALUES (?, ?, ?, NOW(), NOW(), 1, ?, ?)";
 
-            if ($consulta) {
-                // Vincular los valores de las variables a los marcadores de posición
-                mysqli_stmt_bind_param($consulta, "ssiii", $idInsercion, $idCarga, $idEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]);
-
-                // Ejecutar la consulta preparada
-                mysqli_stmt_execute($consulta);
-            } else {
-                // Si la preparación de la consulta falla, mostrar un mensaje de error
-                echo "Error al preparar la consulta.";
-                exit();
-            }
-        } catch (Exception $e) {
-            // Manejar la excepción
-            echo "Excepción capturada: " . $e->getMessage();
-            exit();
-        }
+        $parametros = [$idInsercion, $idCarga, $idEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
     
     /**
@@ -286,26 +254,11 @@ class CargaAcademica {
         string $idCarga, 
         string $idEstudiante
     ){
-        try {
-            // Preparar la consulta SQL con marcadores de posición
-            $consulta = mysqli_prepare($conexion, "UPDATE " . BD_ACADEMICA . ".academico_cargas_acceso SET carpa_ultimo_acceso=NOW(), carpa_cantidad=carpa_cantidad+1 WHERE carpa_id_carga=? AND carpa_id_estudiante=? AND institucion=? AND year=?");
+        $sql = "UPDATE " . BD_ACADEMICA . ".academico_cargas_acceso SET carpa_ultimo_acceso=NOW(), carpa_cantidad=carpa_cantidad+1 WHERE carpa_id_carga=? AND carpa_id_estudiante=? AND institucion=? AND year=?";
 
-            if ($consulta) {
-                // Vincular los valores de las variables a los marcadores de posición
-                mysqli_stmt_bind_param($consulta, "ssii", $idCarga, $idEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]);
-
-                // Ejecutar la consulta preparada
-                mysqli_stmt_execute($consulta);
-            } else {
-                // Si la preparación de la consulta falla, mostrar un mensaje de error
-                echo "Error al preparar la consulta.";
-                exit();
-            }
-        } catch (Exception $e) {
-            // Manejar la excepción
-            echo "Excepción capturada: " . $e->getMessage();
-            exit();
-        }
+        $parametros = [$idCarga, $idEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
     
     /**
@@ -321,30 +274,13 @@ class CargaAcademica {
         array $config, 
         string $idCarga
     ){
-        try {
-            // Preparar la consulta SQL con marcadores de posición
-            $consulta = mysqli_prepare($conexion, "SELECT * FROM " . BD_ACADEMICA . ".academico_horarios WHERE hor_id_carga=? AND hor_estado=1 AND institucion=? AND year=?");
-            
-            if ($consulta) {
-                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
-                mysqli_stmt_bind_param($consulta, "sii", base64_decode($idCarga), $config['conf_id_institucion'], $_SESSION["bd"]);
-                
-                // Ejecutar la consulta preparada
-                mysqli_stmt_execute($consulta);
+        $sql = "SELECT * FROM " . BD_ACADEMICA . ".academico_horarios WHERE hor_id_carga=? AND hor_estado=1 AND institucion=? AND year=?";
 
-                // Obtener el resultado de la consulta
-                $consulta = mysqli_stmt_get_result($consulta);
-            } else {
-                // Si la preparación de la consulta falla, mostrar un mensaje de error
-                echo "Error al preparar la consulta.";
-                exit();
-            }
-        } catch (Exception $e) {
-            // Manejar la excepción
-            echo "Excepción capturada: " . $e->getMessage();
-            exit();
-        }
-        return $consulta;
+        $parametros = [base64_decode($idCarga), $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
     }
     
     /**
@@ -365,26 +301,12 @@ class CargaAcademica {
     ){
         $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_horarios');
 
-        try {
-            // Preparar la consulta SQL con marcadores de posición
-            $consulta = mysqli_prepare($conexion, "INSERT INTO " . BD_ACADEMICA . ".academico_horarios(hor_id, hor_id_carga, hor_dia, hor_desde, hor_hasta, institucion, year) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $sql = "INSERT INTO " . BD_ACADEMICA . ".academico_horarios(hor_id, hor_id_carga, hor_dia, hor_desde, hor_hasta, institucion, year) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-            if ($consulta) {
-                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
-                mysqli_stmt_bind_param($consulta, "sisssii", $codigo, $POST["idH"], $dia, $POST["inicioH"], $POST["finH"], $config['conf_id_institucion'], $_SESSION["bd"]);
-                
-                // Ejecutar la consulta preparada
-                mysqli_stmt_execute($consulta);
-            } else {
-                // Si la preparación de la consulta falla, mostrar un mensaje de error
-                echo "Error al preparar la consulta.";
-                exit();
-            }
-        } catch (Exception $e) {
-            // Manejar la excepción
-            echo "Excepción capturada: " . $e->getMessage();
-            exit();
-        }
+        $parametros = [$codigo, $POST["idH"], $dia, $POST["inicioH"], $POST["finH"], $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        
         return $codigo;
     }
     
@@ -402,29 +324,12 @@ class CargaAcademica {
         array $config, 
         string $idHorario
     ){
-        try {
-            // Preparar la consulta SQL con marcadores de posición
-            $consulta = mysqli_prepare($conexion, "SELECT hor_id_carga, hor_dia, hor_desde, hor_hasta FROM " . BD_ACADEMICA . ".academico_horarios WHERE hor_id=? AND institucion=? AND year=?");
+        $sql = "SELECT hor_id_carga, hor_dia, hor_desde, hor_hasta FROM " . BD_ACADEMICA . ".academico_horarios WHERE hor_id=? AND institucion=? AND year=?";
 
-            if ($consulta) {
-                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
-                mysqli_stmt_bind_param($consulta, "sii", base64_decode($idHorario), $config['conf_id_institucion'], $_SESSION["bd"]);
-                
-                // Ejecutar la consulta preparada
-                mysqli_stmt_execute($consulta);
-                
-                // Obtener el resultado de la consulta
-                $resultado = mysqli_stmt_get_result($consulta);
-            } else {
-                // Si la preparación de la consulta falla, mostrar un mensaje de error
-                echo "Error al preparar la consulta.";
-                exit();
-            }
-        } catch (Exception $e) {
-            // Manejar la excepción
-            echo "Excepción capturada: " . $e->getMessage();
-            exit();
-        }
+        $parametros = [base64_decode($idHorario), $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        
         return $resultado;
     }
     
@@ -441,26 +346,11 @@ class CargaAcademica {
         array $config, 
         array $POST
     ){
-        try {
-            // Preparar la consulta SQL con marcadores de posición
-            $consulta = mysqli_prepare($conexion, "UPDATE " . BD_ACADEMICA . ".academico_horarios SET hor_dia=?, hor_desde=?, hor_hasta=? WHERE hor_id=? AND institucion=? AND year=?");
+        $sql = "UPDATE " . BD_ACADEMICA . ".academico_horarios SET hor_dia=?, hor_desde=?, hor_hasta=? WHERE hor_id=? AND institucion=? AND year=?";
 
-            if ($consulta) {
-                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
-                mysqli_stmt_bind_param($consulta, "ssssii", $POST["diaH"], $POST["inicioH"], $POST["finH"], $POST["idH"], $config['conf_id_institucion'], $_SESSION["bd"]);
-                
-                // Ejecutar la consulta preparada
-                mysqli_stmt_execute($consulta);
-            } else {
-                // Si la preparación de la consulta falla, mostrar un mensaje de error
-                echo "Error al preparar la consulta.";
-                exit();
-            }
-        } catch (Exception $e) {
-            // Manejar la excepción
-            echo "Excepción capturada: " . $e->getMessage();
-            exit();
-        }
+        $parametros = [$POST["diaH"], $POST["inicioH"], $POST["finH"], $POST["idH"], $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
     
     /**
@@ -476,26 +366,11 @@ class CargaAcademica {
         array $config, 
         string $idHorario
     ){
-        try {
-            // Preparar la consulta SQL con marcadores de posición
-            $consulta = mysqli_prepare($conexion, "UPDATE " . BD_ACADEMICA . ".academico_horarios SET hor_estado=0 WHERE hor_id=? AND institucion=? AND year=?");
+        $sql = "UPDATE " . BD_ACADEMICA . ".academico_horarios SET hor_estado=0 WHERE hor_id=? AND institucion=? AND year=?";
 
-            if ($consulta) {
-                // Vincular el valor de la variable al marcador de posición en la consulta preparada
-                mysqli_stmt_bind_param($consulta, "sii", base64_decode($idHorario), $config['conf_id_institucion'], $_SESSION["bd"]);
-                
-                // Ejecutar la consulta preparada
-                mysqli_stmt_execute($consulta);
-            } else {
-                // Si la preparación de la consulta falla, mostrar un mensaje de error
-                echo "Error al preparar la consulta.";
-                exit();
-            }
-        } catch (Exception $e) {
-            // Manejar la excepción
-            echo "Excepción capturada: " . $e->getMessage();
-            exit();
-        }
+        $parametros = [base64_decode($idHorario), $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
     
     /**

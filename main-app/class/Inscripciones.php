@@ -297,23 +297,10 @@ class Inscripciones {
     **/
     public static function eliminarDocumentos(mysqli $conexion, array $config, string $id)
     {
-        try {
-            // Preparar la consulta SQL con marcadores de posición
-            $consulta = mysqli_prepare($conexion, "UPDATE " . BD_ACADEMICA . ".academico_matriculas_documentos SET matd_fecha_eliminados=now(), matd_usuario_elimados=? WHERE matd_matricula=? AND institucion=? AND year=?");
+        $sql = "UPDATE " . BD_ACADEMICA . ".academico_matriculas_documentos SET matd_fecha_eliminados=now(), matd_usuario_elimados=? WHERE matd_matricula=? AND institucion=? AND year=?";
 
-            if ($consulta) {
-                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
-                mysqli_stmt_bind_param($consulta, "issi", $_SESSION["id"], $id, $config['conf_id_institucion'], $_SESSION["bd"]);
-                
-                // Ejecutar la consulta preparada
-                mysqli_stmt_execute($consulta);
-            } else {
-                // Si la preparación de la consulta falla, incluir un archivo de manejo de errores
-                include("../compartido/error-catch-to-report.php");
-            }
-        } catch (Exception $e) {
-            // Manejar la excepción
-            include("../compartido/error-catch-to-report.php");
-        }
+        $parametros = [$_SESSION["id"], $id, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 }
