@@ -322,9 +322,26 @@ class CargaAcademica {
         string $idCarga
     ){
         try {
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_horarios WHERE hor_id_carga='".base64_decode($idCarga)."' AND hor_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            // Preparar la consulta SQL con marcadores de posición
+            $consulta = mysqli_prepare($conexion, "SELECT * FROM " . BD_ACADEMICA . ".academico_horarios WHERE hor_id_carga=? AND hor_estado=1 AND institucion=? AND year=?");
+            
+            if ($consulta) {
+                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
+                mysqli_stmt_bind_param($consulta, "sii", base64_decode($idCarga), $config['conf_id_institucion'], $_SESSION["bd"]);
+                
+                // Ejecutar la consulta preparada
+                mysqli_stmt_execute($consulta);
+
+                // Obtener el resultado de la consulta
+                $consulta = mysqli_stmt_get_result($consulta);
+            } else {
+                // Si la preparación de la consulta falla, mostrar un mensaje de error
+                echo "Error al preparar la consulta.";
+                exit();
+            }
         } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
+            // Manejar la excepción
+            echo "Excepción capturada: " . $e->getMessage();
             exit();
         }
         return $consulta;
@@ -341,15 +358,31 @@ class CargaAcademica {
      */
     public static function guardarHorariosCargas(
         mysqli $conexion, 
+        PDO $conexionPDO, 
         array $config, 
         string $dia, 
         array $POST
     ){
-        $codigo = "HOR".$dia.strtotime("now");
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_horarios');
+
         try {
-            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_horarios(hor_id, hor_id_carga, hor_dia, hor_desde, hor_hasta, institucion, year)VALUES('" . $codigo . "'," . $POST["idH"] . ",'" . $dia . "','" . $POST["inicioH"] . "','" . $POST["finH"] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
+            // Preparar la consulta SQL con marcadores de posición
+            $consulta = mysqli_prepare($conexion, "INSERT INTO " . BD_ACADEMICA . ".academico_horarios(hor_id, hor_id_carga, hor_dia, hor_desde, hor_hasta, institucion, year) VALUES (?, ?, ?, ?, ?, ?, ?)");
+
+            if ($consulta) {
+                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
+                mysqli_stmt_bind_param($consulta, "sisssii", $codigo, $POST["idH"], $dia, $POST["inicioH"], $POST["finH"], $config['conf_id_institucion'], $_SESSION["bd"]);
+                
+                // Ejecutar la consulta preparada
+                mysqli_stmt_execute($consulta);
+            } else {
+                // Si la preparación de la consulta falla, mostrar un mensaje de error
+                echo "Error al preparar la consulta.";
+                exit();
+            }
         } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
+            // Manejar la excepción
+            echo "Excepción capturada: " . $e->getMessage();
             exit();
         }
         return $codigo;
@@ -362,6 +395,7 @@ class CargaAcademica {
      * @param array $config Configuraciones de la aplicación.
      * @param string $idHorario Identificador del horario.
      *
+     * @return mysqli_result|false Devuelve el resultado de la consulta o false en caso de error.
      */
     public static function traerDatosHorarios(
         mysqli $conexion, 
@@ -369,12 +403,29 @@ class CargaAcademica {
         string $idHorario
     ){
         try {
-            $consulta=mysqli_query($conexion, "SELECT hor_id_carga, hor_dia, hor_desde, hor_hasta FROM ".BD_ACADEMICA.".academico_horarios WHERE hor_id='".base64_decode($idHorario)."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            // Preparar la consulta SQL con marcadores de posición
+            $consulta = mysqli_prepare($conexion, "SELECT hor_id_carga, hor_dia, hor_desde, hor_hasta FROM " . BD_ACADEMICA . ".academico_horarios WHERE hor_id=? AND institucion=? AND year=?");
+
+            if ($consulta) {
+                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
+                mysqli_stmt_bind_param($consulta, "sii", base64_decode($idHorario), $config['conf_id_institucion'], $_SESSION["bd"]);
+                
+                // Ejecutar la consulta preparada
+                mysqli_stmt_execute($consulta);
+                
+                // Obtener el resultado de la consulta
+                $resultado = mysqli_stmt_get_result($consulta);
+            } else {
+                // Si la preparación de la consulta falla, mostrar un mensaje de error
+                echo "Error al preparar la consulta.";
+                exit();
+            }
         } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
+            // Manejar la excepción
+            echo "Excepción capturada: " . $e->getMessage();
             exit();
         }
-        return $consulta;
+        return $resultado;
     }
     
     /**
@@ -391,9 +442,23 @@ class CargaAcademica {
         array $POST
     ){
         try {
-            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_horarios SET hor_dia=" . $POST["diaH"] . ", hor_desde='" . $POST["inicioH"] . "', hor_hasta='" . $POST["finH"] . "' WHERE hor_id='" . $POST["idH"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            // Preparar la consulta SQL con marcadores de posición
+            $consulta = mysqli_prepare($conexion, "UPDATE " . BD_ACADEMICA . ".academico_horarios SET hor_dia=?, hor_desde=?, hor_hasta=? WHERE hor_id=? AND institucion=? AND year=?");
+
+            if ($consulta) {
+                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
+                mysqli_stmt_bind_param($consulta, "ssssii", $POST["diaH"], $POST["inicioH"], $POST["finH"], $POST["idH"], $config['conf_id_institucion'], $_SESSION["bd"]);
+                
+                // Ejecutar la consulta preparada
+                mysqli_stmt_execute($consulta);
+            } else {
+                // Si la preparación de la consulta falla, mostrar un mensaje de error
+                echo "Error al preparar la consulta.";
+                exit();
+            }
         } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
+            // Manejar la excepción
+            echo "Excepción capturada: " . $e->getMessage();
             exit();
         }
     }
@@ -412,9 +477,23 @@ class CargaAcademica {
         string $idHorario
     ){
         try {
-            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_horarios SET hor_estado=0 WHERE hor_id='" . base64_decode($idHorario) . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            // Preparar la consulta SQL con marcadores de posición
+            $consulta = mysqli_prepare($conexion, "UPDATE " . BD_ACADEMICA . ".academico_horarios SET hor_estado=0 WHERE hor_id=? AND institucion=? AND year=?");
+
+            if ($consulta) {
+                // Vincular el valor de la variable al marcador de posición en la consulta preparada
+                mysqli_stmt_bind_param($consulta, "sii", base64_decode($idHorario), $config['conf_id_institucion'], $_SESSION["bd"]);
+                
+                // Ejecutar la consulta preparada
+                mysqli_stmt_execute($consulta);
+            } else {
+                // Si la preparación de la consulta falla, mostrar un mensaje de error
+                echo "Error al preparar la consulta.";
+                exit();
+            }
         } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
+            // Manejar la excepción
+            echo "Excepción capturada: " . $e->getMessage();
             exit();
         }
     }
