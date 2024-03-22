@@ -40,7 +40,7 @@ if (empty($_SESSION["inst"])) {
 
 	// Crear una instancia de PDO
     $conexionPDO = new PDO("mysql:host=$servidorConexion;dbname=$bdActual", $usuarioConexion, $claveConexion);
-	$conexionPDO->exec("SET NAMES 'utf8'");
+	$conexionPDO->exec("SET NAMES 'utf8mb4'");
 
     // Establecer el modo de error PDO a excepciones
     $conexionPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -61,9 +61,9 @@ if (empty($_SESSION["inst"])) {
 		header("Location:".REDIRECT_ROUTE."/index.php?".$exception);
 		exit();
 	}
-	if (!mysqli_set_charset($conexion, "utf8")) 
+	if (!mysqli_set_charset($conexion, "utf8mb4")) 
     {
-      printf("Error cargando el conjunto de caracteres utf8: %s\n", mysqli_error($link));
+      printf("Error cargando el conjunto de caracteres utf8mb4: %s\n", mysqli_error($link));
       exit();
     }
 
