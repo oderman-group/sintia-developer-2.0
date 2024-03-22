@@ -72,7 +72,7 @@ if(isset($_POST["periodo"])){
 									$materiasDividir = 0;
 									$promedioG = 0;
 									while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
-										$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_grados gra, ".BD_GENERAL.".usuarios uss WHERE am.mat_id='".$rCargas['car_materia']."' AND gra_id='".$rCargas['car_curso']."' AND uss_id='".$rCargas['car_docente']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
+										$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, mat_sumar_promedio, gra_codigo, gra_nombre, uss_id, uss_nombre FROM ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_grados gra, ".BD_GENERAL.".usuarios uss WHERE am.mat_id='".$rCargas['car_materia']."' AND gra_id='".$rCargas['car_curso']."' AND uss_id='".$rCargas['car_docente']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
 										$rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);
 										//DEFINITIVAS
 										$carga = $rCargas['car_id'];
@@ -80,7 +80,7 @@ if(isset($_POST["periodo"])){
 										$periodo = $cPeriodo;
 										include("../definitivas.php");
 										//SOLO SE CUENTAN LAS MATERIAS QUE TIENEN NOTAS.
-										if($porcentajeActual>0){$materiasDividir++;}
+										if($porcentajeActual>0 && $rDatos['mat_sumar_promedio'] == SI){$materiasDividir++;}
 
                     $definitivaFinal=$definitiva;
                     if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
@@ -96,7 +96,9 @@ if(isset($_POST["periodo"])){
                                         <td style="color:<?=$colorDefinitiva;?>; text-align:center; font-weight:bold;"><?=$definitivaFinal;?></td>
                                       </tr>
                                    <?php 
-								   		$promedioG += $definitiva;
+                      if($rDatos['mat_sumar_promedio'] == SI){
+                        $promedioG += $definitiva;
+                      }	
 								   }
 								   		if($materiasDividir>0){
 											$promedioG = round(($promedioG / $materiasDividir),1);

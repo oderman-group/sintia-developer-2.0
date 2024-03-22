@@ -2,7 +2,7 @@
 include("bd-conexion.php");
 
 $gradosConsulta = "SELECT * FROM ".BD_ACADEMICA.".academico_grados
-WHERE gra_estado = 1 AND gra_tipo='".GRADO_GRUPAL."' AND institucion={$datosConfig['conf_id_institucion']} AND year={$datosConfig["conf_agno"]}";
+WHERE gra_estado = 1 AND gra_tipo='".GRADO_GRUPAL."' AND institucion={$config['conf_id_institucion']} AND year={$config["conf_agno"]}";
 $grados = $pdoI->prepare($gradosConsulta);
 $grados->execute();
 $num = $grados->rowCount();
@@ -38,7 +38,7 @@ $num = $grados->rowCount();
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <?=$datosConfig['cfgi_politicas_texto'];?>
+                                <?=$config['cfgi_politicas_texto'];?>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -52,14 +52,14 @@ $num = $grados->rowCount();
                         El formulario de inscripción tiene un costo de $<?= number_format($valorInscripcion, 0, ".", "."); ?>.
                     </p>
                     <hr class="my-4">
-                    <p><?=$datosConfig['cfgi_texto_inicial'];?></p>
+                    <p><?=$config['cfgi_texto_inicial'];?></p>
                 </div>
 
                 <?php
-                if($datosConfig['cfgi_mostrar_banner']==1 && !empty($datosConfig['cfgi_banner_inicial']) && file_exists('../files/imagenes-generales/'.$datosConfig['cfgi_banner_inicial'])){?>
+                if($config['cfgi_mostrar_banner']==1 && !empty($config['cfgi_banner_inicial']) && file_exists('../files/imagenes-generales/'.$config['cfgi_banner_inicial'])){?>
                     <div class="row mb-1 mt-1">
                         <div class="col-sm-12">
-                            <img class="img-responsive" src="<?='../files/imagenes-generales/'.$datosConfig['cfgi_banner_inicial'];?>" width="100%">
+                            <img class="img-responsive" src="<?='../files/imagenes-generales/'.$config['cfgi_banner_inicial'];?>" width="100%">
                         </div>
                     </div>
                 <?php }?>
@@ -137,10 +137,10 @@ $num = $grados->rowCount();
                             <label class="form-check-label" for="gridCheck">
                                 Autorizo al tratamiento de datos personales. 
                                 <?php
-                                    if(!empty($datosConfig['cfgi_politicas_adjunto']) && file_exists('../files/imagenes-generales/'.$datosConfig['cfgi_politicas_adjunto']) || $datosConfig['cfgi_mostrar_politicas'] == 2){
-                                        switch($datosConfig['cfgi_mostrar_politicas']){
+                                    if(!empty($config['cfgi_politicas_adjunto']) && file_exists('../files/imagenes-generales/'.$config['cfgi_politicas_adjunto']) || $config['cfgi_mostrar_politicas'] == 2){
+                                        switch($config['cfgi_mostrar_politicas']){
                                             case 1:
-                                                $enlace='target="_blank" href="../files/imagenes-generales/'.$datosConfig['cfgi_politicas_adjunto'].'"';
+                                                $enlace='target="_blank" href="../files/imagenes-generales/'.$config['cfgi_politicas_adjunto'].'"';
                                             break;
 
                                             case 2:
@@ -148,7 +148,7 @@ $num = $grados->rowCount();
                                             break;
 
                                             default:
-                                            $enlace='target="_blank" href="../files/imagenes-generales/'.$datosConfig['cfgi_politicas_adjunto'].'"';
+                                            $enlace='target="_blank" href="../files/imagenes-generales/'.$config['cfgi_politicas_adjunto'].'"';
                                             break;
                                         }
                                 ?>

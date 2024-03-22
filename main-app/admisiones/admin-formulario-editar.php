@@ -22,21 +22,21 @@ LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=mat.mat_acudiente AND uss.instit
 WHERE mat.mat_solicitud_inscripcion = :id AND mat.institucion= :idInstitucion AND mat.year= :year";
 $est = $pdoI->prepare($estQuery);
 $est->bindParam(':id', $id, PDO::PARAM_INT);
-$est->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
-$est->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
+$est->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
+$est->bindParam(':year', $config['conf_agno'], PDO::PARAM_STR);
 $est->execute();
 $num = $est->rowCount();
 $datos = $est->fetch();
 
 //Documentos
-$datosDocumentos = Inscripciones::traerDocumentos($pdoI, $datosConfig, $datos['mat_id']);
+$datosDocumentos = Inscripciones::traerDocumentos($pdoI, $config, $datos['mat_id']);
 
 //Padre
 $padreQuery = "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id = :id AND institucion= :idInstitucion AND year= :year";
 $padre = $pdoI->prepare($padreQuery);
 $padre->bindParam(':id', $datos['mat_padre'], PDO::PARAM_STR);
-$padre->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
-$padre->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
+$padre->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
+$padre->bindParam(':year', $config['conf_agno'], PDO::PARAM_STR);
 $padre->execute();
 $datosPadre = $padre->fetch();
 
@@ -44,8 +44,8 @@ $datosPadre = $padre->fetch();
 $madreQuery = "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id = :id AND institucion= :idInstitucion AND year= :year";
 $madre = $pdoI->prepare($madreQuery);
 $madre->bindParam(':id', $datos['mat_madre'], PDO::PARAM_STR);
-$madre->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
-$madre->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
+$madre->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
+$madre->bindParam(':year', $config['conf_agno'], PDO::PARAM_STR);
 $madre->execute();
 $datosMadre = $madre->fetch();
 
