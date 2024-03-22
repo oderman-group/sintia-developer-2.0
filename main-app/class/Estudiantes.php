@@ -503,20 +503,34 @@ class Estudiantes {
     }
 
     /**
-     * Este metodo me registra las matriculas retiradas o restauradas
+     * Este método registra las matrículas retiradas o restauradas
      * @param string $idEstudiante
      * @param string $motivo
      * @param array $config
      * @param mysqli $conexion
      */
-    public static function retirarRestaurarEstudiante($idEstudiante, $motivo, $config, $conexion)
+    public static function retirarRestaurarEstudiante($idEstudiante, $motivo, $config, $conexion, $conexionPDO)
     {
-        $codigo=Utilidades::generateCode("MRT");
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_matriculas_retiradas');
 
         try {
-            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_matriculas_retiradas (matret_id, matret_estudiante, matret_fecha, matret_motivo, matret_responsable, institucion, year)VALUES('".$codigo."', '".$idEstudiante."', now(), '".$motivo."', '".$_SESSION["id"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+            // Preparar la consulta SQL con marcadores de posición
+            $consulta = mysqli_prepare($conexion, "INSERT INTO " . BD_ACADEMICA . ".academico_matriculas_retiradas (matret_id, matret_estudiante, matret_fecha, matret_motivo, matret_responsable, institucion, year) VALUES (?, ?, NOW(), ?, ?, ?, ?)");
+
+            if ($consulta) {
+                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
+                mysqli_stmt_bind_param($consulta, "ssssii", $codigo, $idEstudiante, $motivo, $_SESSION["id"], $config['conf_id_institucion'], $_SESSION["bd"]);
+                
+                // Ejecutar la consulta preparada
+                mysqli_stmt_execute($consulta);
+            } else {
+                // Si la preparación de la consulta falla, mostrar un mensaje de error
+                echo "Error en la preparación de la consulta.";
+                exit();
+            }
         } catch (Exception $e) {
-            echo "Excepción capturada: ".$e->getMessage();
+            // Manejar la excepción
+            echo "Excepción capturada: " . $e->getMessage();
             exit();
         }
     }
@@ -1062,21 +1076,38 @@ class Estudiantes {
      */
     public static function traerDatosEstudiantesretirados(mysqli $conexion, array $config, string $id)
     {
-        $resultado=[];
+        $resultado = [];
 
         try {
-            $consulta=mysqli_query($conexion, "SELECT MAX(tabla_retiradas.id_nuevo), mat_id, mat_estado_matricula, mat_documento, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2, matret_motivo, matret_fecha, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, uss_usuario FROM ".BD_ACADEMICA.".academico_matriculas mat
-            LEFT JOIN (SELECT * FROM ".BD_ACADEMICA.".academico_matriculas_retiradas matret WHERE matret.institucion={$config['conf_id_institucion']} AND matret.year={$_SESSION["bd"]} ORDER BY matret.id_nuevo DESC) AS tabla_retiradas ON tabla_retiradas.matret_estudiante=mat.mat_id
-            LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=matret_responsable AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-            WHERE mat_id='".$id."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}");
+            // Preparar la consulta SQL con marcadores de posición
+            $consulta = mysqli_prepare($conexion, "SELECT MAX(tabla_retiradas.id_nuevo), mat_id, mat_estado_matricula, mat_documento, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2, matret_motivo, matret_fecha, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, uss_usuario FROM " . BD_ACADEMICA . ".academico_matriculas mat
+                LEFT JOIN (SELECT * FROM " . BD_ACADEMICA . ".academico_matriculas_retiradas matret WHERE matret.institucion=? AND matret.year=? ORDER BY matret.id_nuevo DESC) AS tabla_retiradas ON tabla_retiradas.matret_estudiante=mat.mat_id
+                LEFT JOIN " . BD_GENERAL . ".usuarios uss ON uss_id=matret_responsable AND uss.institucion=? AND uss.year=?
+                WHERE mat_id=? AND mat.institucion=? AND mat.year=?");
+            
+            if ($consulta) {
+                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
+                mysqli_stmt_bind_param($consulta, "iiiiisi", $config['conf_id_institucion'], $_SESSION["bd"], $config['conf_id_institucion'], $_SESSION["bd"], $id, $config['conf_id_institucion'], $_SESSION["bd"]);
+                
+                // Ejecutar la consulta preparada
+                mysqli_stmt_execute($consulta);
+                
+                // Obtener el resultado de la consulta preparada
+                $resultadoC = mysqli_stmt_get_result($consulta);
+                $resultado = mysqli_fetch_array($resultadoC, MYSQLI_BOTH);
+            } else {
+                // Si la preparación de la consulta falla, mostrar un mensaje de error
+                echo "Error en la preparación de la consulta.";
+                exit();
+            }
         } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
+            // Manejar la excepción
+            echo "Excepción capturada: " . $e->getMessage();
             exit();
         }
-        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
+        // Devolver el resultado
         return $resultado;
-
     }
 
     /**
@@ -1091,24 +1122,41 @@ class Estudiantes {
         mysqli $conexion, 
         array $config, 
         string $id, 
-        string $yearBd    = ''
+        string $yearBd = ''
     )
     {
+        $year = !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
         try {
-            $consulta=mysqli_query($conexion, "SELECT mat_id, mat_estado_matricula, mat_documento, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2, matret_motivo, matret_fecha, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, uss_usuario FROM ".BD_ACADEMICA.".academico_matriculas mat
-            INNER JOIN (SELECT * FROM ".BD_ACADEMICA.".academico_matriculas_retiradas matret WHERE matret.institucion={$config['conf_id_institucion']} AND matret.year={$year}) AS tabla_retiradas ON tabla_retiradas.matret_estudiante=mat.mat_id
-            INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=matret_responsable AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$year}
-            WHERE mat_id='".$id."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year}
-            ORDER BY tabla_retiradas.id_nuevo DESC");
+            // Preparar la consulta SQL con marcadores de posición
+            $consulta = mysqli_prepare($conexion, "SELECT mat_id, mat_estado_matricula, mat_documento, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2, matret_motivo, matret_fecha, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, uss_usuario FROM " . BD_ACADEMICA . ".academico_matriculas mat
+                INNER JOIN (SELECT * FROM " . BD_ACADEMICA . ".academico_matriculas_retiradas matret WHERE matret.institucion=? AND matret.year=?) AS tabla_retiradas ON tabla_retiradas.matret_estudiante=mat.mat_id
+                INNER JOIN " . BD_GENERAL . ".usuarios uss ON uss_id=matret_responsable AND uss.institucion=? AND uss.year=?
+                WHERE mat_id=? AND mat.institucion=? AND mat.year=?
+                ORDER BY tabla_retiradas.id_nuevo DESC");
+
+            if ($consulta) {
+                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
+                mysqli_stmt_bind_param($consulta, "iiiiisi", $config['conf_id_institucion'], $year, $config['conf_id_institucion'], $year, $id, $config['conf_id_institucion'], $year);
+
+                // Ejecutar la consulta preparada
+                mysqli_stmt_execute($consulta);
+
+                // Obtener el resultado de la consulta preparada
+                $resultado = mysqli_stmt_get_result($consulta);
+            } else {
+                // Si la preparación de la consulta falla, mostrar un mensaje de error
+                echo "Error en la preparación de la consulta.";
+                exit();
+            }
         } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
+            // Manejar la excepción
+            echo "Excepción capturada: " . $e->getMessage();
             exit();
         }
 
-        return $consulta;
-
+        // Devolver el resultado
+        return $resultado;
     }
 
 }
