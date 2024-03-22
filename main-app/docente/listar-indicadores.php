@@ -120,7 +120,7 @@ $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
                 <tfoot>
                     <tr style="font-weight:bold;">
                         <td colspan="3"><?= strtoupper($frases[107][$datosUsuarioActual['uss_idioma']]); ?></td>
-                        <td><?= $porcentajeActual; ?>%</td>
+                        <td id="porcentajeActual"><?= $porcentajeActual; ?>%</td>
                         <td></td>
                     </tr>
                 </tfoot>

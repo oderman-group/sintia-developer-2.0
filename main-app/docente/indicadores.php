@@ -131,6 +131,8 @@
 																	function(response) {
 																		console.log(response);
 																		recargarInclude();
+																																			
+																		document.getElementById("porcentajeActual").innerText= "100%";
 																		document.getElementById("gifCarga").style.display = "none";
 																	}
 																);
