@@ -1,8 +1,10 @@
-
+<link href="../compartido/comentarios.css" rel="stylesheet" type="text/css"/>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <div class="row">
 
     <div class="col-md-12">
-        <?php include("../compartido/barra-superior-noticias.php");?>
+        <?php include("../compartido/barra-superior-noticias.php");
+            include("../class/SocialComentarios.php");?>
         <div class="row">
 
             <div class="col-md-4 col-lg-3">
@@ -306,14 +308,14 @@
 
                         </div>
 
-                        <div class="card-body" id="car-body-<?= $resultado['not_id']; ?>">
+                        <div id="car-body-<?= $resultado['not_id']; ?>" class="card-body" >
                                 <?php
 								 $rName = array("","Me gusta","Me encanta","Me divierte","Me entristece");
 								 $rIcons = array("","fa-thumbs-o-up","fa-heart","fa-smile-o","fa-frown-o");
 								 if(isset($usrReacciones['npr_reaccion']) AND $usrReacciones['npr_reaccion']!=""){$reaccionP = $usrReacciones['npr_reaccion'];}
 								 else{$reaccionP = 1;}
 								?>
-                                <a id="panel-<?=$resultado['not_id'];?>1" class="pull-left"><i
+                                <a id="panel-<?=$resultado['not_id'];?>1" style="margin-right: 10px;" class="pull-left"><i
                                         class="fa <?=$rIcons[$reaccionP];?>"></i> <?=$rName[$reaccionP];?></a>
 
 
@@ -330,10 +332,41 @@
                                     <?php $i++;}?>
                                 </ul>
                                 <?php if($numReacciones>0){?>
-                                <a id="reacciones-<?= $resultado['not_id']; ?>" class="pull-right" onClick="mostrarDetalles(this)"
+                                
+                                <a id="reacciones-<?= $resultado['not_id']; ?>" class="pull-left" onClick="mostrarDetalles(this)"
                                     name="<?=base64_encode($resultado['not_id']);?>"><?=number_format($numReacciones,0,",",".");?>
                                     reacciones</a>
                                 <?php }?>
+                                <?php  
+                                $parametros =["ncm_noticia"=>$resultado['not_id'],"ncm_padre"=>0];
+                                $numcomentarios = SocialComentarios::contar($parametros); 
+                                ?>
+                                <a id="comentarios-<?= $resultado['not_id']; ?>" class="pull-right" data-bs-toggle="collapse" data-bs-target="#collapseExample-<?= $resultado['not_id']; ?>" aria-expanded="false" aria-controls="collapseExample-<?= $resultado['not_id']; ?>">
+                                
+                                <?php if($numcomentarios>0){?> <?=$numcomentarios?> <?php }?> Comentarios
+                                <i class="fa fa-comments-o" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                            <div class="collapse" id="collapseExample-<?= $resultado['not_id']; ?>">
+                                    <div class="card-body">
+                                        <div class="input-group">
+
+                                            <textarea id="comentario-<?= $resultado['not_id']; ?>" class="form-control" rows="2" placeholder="<?= UsuariosPadre::nombreCompletoDelUsuario($datosUsuarioActual); ?> DICE..." style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;"></textarea>
+
+                                            <button class="input-group-text btn btn-primary " type="button" onclick="enviarComentario('<?= $resultado['not_id'] ?>','comentario')"><i class="fa fa-send" aria-hidden="true"></i></button>
+                                        </div>
+                                        <ul id="comments-list-<?=$resultado['not_id']?>" class="comments-list">
+                                            <?php
+                                            $parametros =["ncm_noticia"=> $resultado['not_id'],"ncm_padre"=> 0];
+                                            $comentarios = SocialComentarios::listar($parametros);
+                                            if ($comentarios) {
+                                                foreach ($comentarios as $comentario) {
+                                                    include '../compartido/comentario-li.php';
+                                                };
+                                            } ?>
+                                        </ul>
+
+                                    </div>
                             </div>
 
                         </div>
@@ -404,10 +437,8 @@
                         "postowner": postowner
                     };
                     metodoFetch(url, data, 'json', false, 'respuesta');
-                }
-
+                }                
                 function respuesta(response) {
-
                     if (response["ok"]) {
                         reaccionesNombre = ["", " Me gusta ", " Me encanta ", " Me divierte ", " Me entristece "];
                         reaccionesIconos = ["", "fa-thumbs-o-up", "fa-heart", "fa-smile-o", "fa-frown-o"];
@@ -416,14 +447,17 @@
                         reacion = document.getElementById("reacciones-" + response["id"]);
                         carBody = document.getElementById("car-body-" + response["id"]);
                         panel = document.getElementById("panel-" + response["id"] + "1");
+                        
 
                         if (reacion) {
-                            reacion.innerText = response["cantidad"] + " reacciones";
+                            reacion.classList=[];
+                            reacion.innerText = response["cantidad"] + " Reacciones";
+                            reacion.classList.add('pull-left','animate__animated', 'animate__fadeInDown');
                         }else{
                             var reacionNueva = document.createElement('a'); // se crea la etiqueta a
                             reacionNueva.id="reacciones-" + response["id"]
-                            reacionNueva.classList.add('pull-right');
-                            reacionNueva.innerText = response["cantidad"] + " reacciones";
+                            reacionNueva.classList.add('pull-left','animate__animated', 'animate__fadeInDown');
+                            reacionNueva.innerText = response["cantidad"] + " Reacciones";
                             carBody.appendChild(reacionNueva);
                         }
 
@@ -446,6 +480,91 @@
                             stack: 6
                         });
                     }
+                }
+                function enviarComentario(id, tipo, padre) {
+                    if (tipo == "comentario") {
+                        comentario = document.getElementById(tipo + "-" + id).value;
+                    } else {
+                        comentario = document.getElementById(tipo + "-" + id + "-" + padre).value;
+                    }
+                    var url = "../compartido/noticias-comentario-fetch.php";
+                    var data = {
+                        "id": id,
+                        "comentario": comentario,
+                        "padre": padre,
+                        "tipo": tipo
+                    };
+
+                    metodoFetch(url, data, 'json', false, 'respuestaComentario');
+                }
+
+                function respuestaComentario(response) {                    
+                    if (response["tipo"] == "comentario") {
+                        var url = "../compartido/comentario-li.php";
+                        metodoFetch(url, response, 'html', false, 'pintarComentarioLi');
+                        document.getElementById("comentario-" + response["idNotica"]).value = "";
+                    } else {
+                        var url = "../compartido/respuesta-li.php";
+                        metodoFetch(url, response, 'html', false, 'pintarRespuestaLi');
+                        document.getElementById("respuesta-" + response["idNotica"] + "-" + response["padre"]).value = "";
+                    }
+                }
+
+                function pintarComentarioLi(response, data) {                  
+                    var lista = document.getElementById("comments-list-" + data["idNotica"]);
+                    var i = document.createElement('li');
+                    i.innerHTML = response;
+                    lista.insertBefore(i, lista.firstChild);
+                    // cambiar el valor de los comentarios
+                    comentarios = document.getElementById("comentarios-" + data["idNotica"]);
+                    comentarios.classList = [];
+                    comentarios.innerText = data["cantidad"] + " Comentarios ";
+                    var icon = document.createElement('i'); 
+                    icon.classList.add('fa', 'fa-comments-o');
+                    comentarios.appendChild(icon);
+                    comentarios.classList.add('pull-right', 'animate__animated', 'animate__fadeInDown');
+                    //notificacion de registro exitoso
+                    $.toast({
+                        heading: 'Acción realizada',
+                        text: data["msg"],
+                        position: 'bottom-right',
+                        showHideTransition: 'slide',
+                        loaderBg: '#26c281',
+                        icon: 'success',
+                        hideAfter: 5000,
+                        stack: 6
+                    });
+                }
+
+                function pintarRespuestaLi(response, data) {
+                    console.log(response);
+                    console.log(data);
+                    var lista = document.getElementById("lista-respuesta-" + data["padre"]);
+                    var miDiv = document.getElementById("div-respuesta-" + data["padre"]);
+                    miDiv.classList.remove('show');
+                    lista.classList.add('show');
+                    var i = document.createElement('li');
+                    i.innerHTML = response;
+                    lista.insertBefore(i, lista.firstChild);
+                     // cambiar el valor de los comentarios
+                    respuestasCanatidad = document.getElementById("cantidad-respuestas-" + data["padre"]);
+                    respuestasCanatidad.classList = [];
+                    respuestasCanatidad.innerText = data["cantidad"] + " Respuestas ";
+                    var icon = document.createElement('i'); 
+                    icon.classList.add('fa', 'fa-comments-o');
+                    respuestasCanatidad.appendChild(icon);
+                    respuestasCanatidad.classList.add('pull-right', 'animate__animated', 'animate__fadeInDown');
+                    //notificacion de registro exitoso
+                    $.toast({
+                        heading: 'Acción realizada',
+                        text: data["msg"],
+                        position: 'bottom-right',
+                        showHideTransition: 'slide',
+                        loaderBg: '#26c281',
+                        icon: 'success',
+                        hideAfter: 5000,
+                        stack: 6
+                    });
                 }
             </script>
         </div>
