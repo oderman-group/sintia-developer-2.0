@@ -195,27 +195,46 @@ class CargaAcademica {
      * @param string $idCarga Identificador de la carga académica.
      * @param string $idEstudiante Identificador del estudiante.
      *
-     * @return mysqli_result|false Devuelve el resultado de la consulta o false en caso de error.
+     * @return mysqli_result|false Devuelve el objeto de la consulta preparada o false en caso de error.
      */
     public static function accesoCargasEstudiante(
         mysqli $conexion, 
         array $config, 
         string $idCarga, 
         string $idEstudiante
-    ){
+    ) {
         try {
-            $consulta = mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_cargas_acceso WHERE carpa_id_carga='".$idCarga."' AND carpa_id_estudiante='".$idEstudiante."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            // Preparar la consulta SQL con marcadores de posición
+            $consulta = mysqli_prepare($conexion, "SELECT * FROM " . BD_ACADEMICA . ".academico_cargas_acceso WHERE carpa_id_carga=? AND carpa_id_estudiante=? AND institucion=? AND year=?");
+
+            if ($consulta) {
+                // Vincular los valores de las variables a los marcadores de posición
+                mysqli_stmt_bind_param($consulta, "ssii", $idCarga, $idEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]);
+
+                // Ejecutar la consulta preparada
+                mysqli_stmt_execute($consulta);
+                
+                // Obtener el resultado de la consulta
+                $consulta = mysqli_stmt_get_result($consulta);
+
+                // Devolver el objeto de la consulta preparada
+                return $consulta;
+            } else {
+                // Si la preparación de la consulta falla, devuelve false
+                return false;
+            }
         } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
+            // Manejar la excepción
+            echo "Excepción capturada: " . $e->getMessage();
             exit();
         }
-        return $consulta;
     }
     
     /**
      * Guardar el acceso de un estudiante a una carga académica.
      *
      * @param mysqli $conexion Objeto de conexión a la base de datos.
+     * @param PDO $conexionPDO Objeto de conexión a la base de datos.
      * @param array $config Configuraciones de la aplicación.
      * @param string $idCarga Identificador de la carga académica.
      * @param string $idEstudiante Identificador del estudiante.
@@ -223,16 +242,31 @@ class CargaAcademica {
      */
     public static function guardarAccesoCargasEstudiante(
         mysqli $conexion, 
+        PDO $conexionPDO, 
         array $config, 
         string $idCarga, 
         string $idEstudiante
     ){
-        $idInsercion=Utilidades::generateCode("ACC");
+        $idInsercion = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_cargas_acceso');
 
         try {
-            mysqli_query($conexion,"INSERT INTO ".BD_ACADEMICA.".academico_cargas_acceso(carpa_id, carpa_id_carga, carpa_id_estudiante, carpa_primer_acceso, carpa_ultimo_acceso, carpa_cantidad, institucion, year) VALUES ('" .$idInsercion . "', '".$idCarga."', '".$idEstudiante."', now(), now(), 1, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+            // Preparar la consulta SQL con marcadores de posición
+            $consulta = mysqli_prepare($conexion, "INSERT INTO " . BD_ACADEMICA . ".academico_cargas_acceso (carpa_id, carpa_id_carga, carpa_id_estudiante, carpa_primer_acceso, carpa_ultimo_acceso, carpa_cantidad, institucion, year) VALUES (?, ?, ?, NOW(), NOW(), 1, ?, ?)");
+
+            if ($consulta) {
+                // Vincular los valores de las variables a los marcadores de posición
+                mysqli_stmt_bind_param($consulta, "ssiii", $idInsercion, $idCarga, $idEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]);
+
+                // Ejecutar la consulta preparada
+                mysqli_stmt_execute($consulta);
+            } else {
+                // Si la preparación de la consulta falla, mostrar un mensaje de error
+                echo "Error al preparar la consulta.";
+                exit();
+            }
         } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
+            // Manejar la excepción
+            echo "Excepción capturada: " . $e->getMessage();
             exit();
         }
     }
@@ -253,9 +287,23 @@ class CargaAcademica {
         string $idEstudiante
     ){
         try {
-            mysqli_query($conexion,"UPDATE ".BD_ACADEMICA.".academico_cargas_acceso SET carpa_ultimo_acceso=now(), carpa_cantidad=carpa_cantidad+1 WHERE carpa_id_carga='".$idCarga."' AND carpa_id_estudiante='".$idEstudiante."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            // Preparar la consulta SQL con marcadores de posición
+            $consulta = mysqli_prepare($conexion, "UPDATE " . BD_ACADEMICA . ".academico_cargas_acceso SET carpa_ultimo_acceso=NOW(), carpa_cantidad=carpa_cantidad+1 WHERE carpa_id_carga=? AND carpa_id_estudiante=? AND institucion=? AND year=?");
+
+            if ($consulta) {
+                // Vincular los valores de las variables a los marcadores de posición
+                mysqli_stmt_bind_param($consulta, "ssii", $idCarga, $idEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]);
+
+                // Ejecutar la consulta preparada
+                mysqli_stmt_execute($consulta);
+            } else {
+                // Si la preparación de la consulta falla, mostrar un mensaje de error
+                echo "Error al preparar la consulta.";
+                exit();
+            }
         } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
+            // Manejar la excepción
+            echo "Excepción capturada: " . $e->getMessage();
             exit();
         }
     }
