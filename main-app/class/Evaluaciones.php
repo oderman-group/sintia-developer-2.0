@@ -185,16 +185,31 @@ class Evaluaciones{
      * 
      * @return int $horas
      */
-    public static function horasEvaluacion(mysqli $conexion, array $config, string $idEvaluacion){
-        $horas=0;
-        try{
-            $consulta=mysqli_query($conexion, "SELECT TIMESTAMPDIFF(HOUR, NOW(), eva_hasta) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
-            WHERE eva_id='".$idEvaluacion."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+    public static function horasEvaluacion(mysqli $conexion, array $config, string $idEvaluacion)
+    {
+        $horas = 0;
+        try {
+            // Preparar la consulta SQL con marcadores de posición
+            $consulta = mysqli_prepare($conexion, "SELECT TIMESTAMPDIFF(HOUR, NOW(), eva_hasta) FROM " . BD_ACADEMICA . ".academico_actividad_evaluaciones WHERE eva_id=? AND eva_estado=1 AND institucion=? AND year=?");
+
+            if ($consulta) {
+                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
+                mysqli_stmt_bind_param($consulta, "sii", $idEvaluacion, $config['conf_id_institucion'], $_SESSION["bd"]);
+
+                // Ejecutar la consulta preparada
+                mysqli_stmt_execute($consulta);
+                $resultadoC = mysqli_stmt_get_result($consulta);
+                $horas = mysqli_fetch_array($resultadoC, MYSQLI_BOTH);
+            } else {
+                // Si la preparación de la consulta falla, mostrar un mensaje de error
+                echo "Error en la preparación de la consulta.";
+                exit();
+            }
         } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
+            // Manejar la excepción
+            echo "Excepción capturada: " . $e->getMessage();
             exit();
         }
-        $horas = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
         return $horas;
     }
@@ -207,16 +222,31 @@ class Evaluaciones{
      * 
      * @return int $minutos
      */
-    public static function minutosEvaluacion(mysqli $conexion, array $config, string $idEvaluacion){
-        $minutos=0;
-        try{
-            $consulta=mysqli_query($conexion, "SELECT TIMESTAMPDIFF(SECOND, NOW(), eva_hasta),60) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
-            WHERE eva_id='".$idEvaluacion."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+    public static function minutosEvaluacion(mysqli $conexion, array $config, string $idEvaluacion)
+    {
+        $minutos = 0;
+        try {
+            // Preparar la consulta SQL con marcadores de posición
+            $consulta = mysqli_prepare($conexion, "SELECT TIMESTAMPDIFF(SECOND, NOW(), eva_hasta) / 60 FROM " . BD_ACADEMICA . ".academico_actividad_evaluaciones WHERE eva_id=? AND eva_estado=1 AND institucion=? AND year=?");
+
+            if ($consulta) {
+                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
+                mysqli_stmt_bind_param($consulta, "sii", $idEvaluacion, $config['conf_id_institucion'], $_SESSION["bd"]);
+
+                // Ejecutar la consulta preparada
+                mysqli_stmt_execute($consulta);
+                $resultadoC = mysqli_stmt_get_result($consulta);
+                $minutos = mysqli_fetch_array($resultadoC, MYSQLI_BOTH);
+            } else {
+                // Si la preparación de la consulta falla, mostrar un mensaje de error
+                echo "Error en la preparación de la consulta.";
+                exit();
+            }
         } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
+            // Manejar la excepción
+            echo "Excepción capturada: " . $e->getMessage();
             exit();
         }
-        $minutos = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
         return $minutos;
     }
@@ -229,16 +259,31 @@ class Evaluaciones{
      * 
      * @return int $segundos
      */
-    public static function segundosEvaluacion(mysqli $conexion, array $config, string $idEvaluacion){
-        $segundos=0;
-        try{
-            $consulta=mysqli_query($conexion, "SELECT TIMESTAMPDIFF(HOUR, NOW(), eva_hasta) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
-            WHERE eva_id='".$idEvaluacion."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+    public static function segundosEvaluacion(mysqli $conexion, array $config, string $idEvaluacion)
+    {
+        $segundos = 0;
+        try {
+            // Preparar la consulta SQL con marcadores de posición
+            $consulta = mysqli_prepare($conexion, "SELECT TIMESTAMPDIFF(SECOND, NOW(), eva_hasta) FROM " . BD_ACADEMICA . ".academico_actividad_evaluaciones WHERE eva_id=? AND eva_estado=1 AND institucion=? AND year=?");
+
+            if ($consulta) {
+                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
+                mysqli_stmt_bind_param($consulta, "sii", $idEvaluacion, $config['conf_id_institucion'], $_SESSION["bd"]);
+
+                // Ejecutar la consulta preparada
+                mysqli_stmt_execute($consulta);
+                $resultadoC = mysqli_stmt_get_result($consulta);
+                $segundos = mysqli_fetch_array($resultadoC, MYSQLI_BOTH);
+            } else {
+                // Si la preparación de la consulta falla, mostrar un mensaje de error
+                echo "Error en la preparación de la consulta.";
+                exit();
+            }
         } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
+            // Manejar la excepción
+            echo "Excepción capturada: " . $e->getMessage();
             exit();
         }
-        $segundos = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
         return $segundos;
     }
@@ -251,16 +296,31 @@ class Evaluaciones{
      * 
      * @return array $fecha
      */
-    public static function fechaEvaluacion(mysqli $conexion, array $config, string $idEvaluacion){
-        $fecha=0;
-        try{
-            $consulta=mysqli_query($conexion, "SELECT DATEDIFF(eva_desde, now()), DATEDIFF(eva_hasta, now()), TIMESTAMPDIFF(SECOND, NOW(), eva_desde), TIMESTAMPDIFF(SECOND, NOW(), eva_hasta) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
-            WHERE eva_id='".$idEvaluacion."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+    public static function fechaEvaluacion(mysqli $conexion, array $config, string $idEvaluacion)
+    {
+        $fecha = [];
+        try {
+            // Preparar la consulta SQL con marcadores de posición
+            $consulta = mysqli_prepare($conexion, "SELECT DATEDIFF(eva_desde, now()), DATEDIFF(eva_hasta, now()), TIMESTAMPDIFF(SECOND, NOW(), eva_desde), TIMESTAMPDIFF(SECOND, NOW(), eva_hasta) FROM " . BD_ACADEMICA . ".academico_actividad_evaluaciones WHERE eva_id=? AND eva_estado=1 AND institucion=? AND year=?");
+
+            if ($consulta) {
+                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
+                mysqli_stmt_bind_param($consulta, "sii", $idEvaluacion, $config['conf_id_institucion'], $_SESSION["bd"]);
+
+                // Ejecutar la consulta preparada
+                mysqli_stmt_execute($consulta);
+                $resultadoC = mysqli_stmt_get_result($consulta);
+                $fecha = mysqli_fetch_array($resultadoC, MYSQLI_BOTH);
+            } else {
+                // Si la preparación de la consulta falla, mostrar un mensaje de error
+                echo "Error en la preparación de la consulta.";
+                exit();
+            }
         } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
+            // Manejar la excepción
+            echo "Excepción capturada: " . $e->getMessage();
             exit();
         }
-        $fecha = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
         return $fecha;
     }
@@ -273,16 +333,31 @@ class Evaluaciones{
      * 
      * @return array $resultado
      */
-    public static function consultaEvaluacion(mysqli $conexion, array $config, string $idEvaluacion){
-        $resultado=[];
-        try{
-            $consulta=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
-            WHERE eva_id='".$idEvaluacion."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+    public static function consultaEvaluacion(mysqli $conexion, array $config, string $idEvaluacion)
+    {
+        $resultado = [];
+        try {
+            // Preparar la consulta SQL con marcadores de posición
+            $consulta = mysqli_prepare($conexion, "SELECT * FROM " . BD_ACADEMICA . ".academico_actividad_evaluaciones WHERE eva_id=? AND eva_estado=1 AND institucion=? AND year=?");
+
+            if ($consulta) {
+                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
+                mysqli_stmt_bind_param($consulta, "sii", $idEvaluacion, $config['conf_id_institucion'], $_SESSION["bd"]);
+
+                // Ejecutar la consulta preparada
+                mysqli_stmt_execute($consulta);
+                $resultadoC = mysqli_stmt_get_result($consulta);
+                $resultado = mysqli_fetch_array($resultadoC, MYSQLI_BOTH);
+            } else {
+                // Si la preparación de la consulta falla, mostrar un mensaje de error
+                echo "Error en la preparación de la consulta.";
+                exit();
+            }
         } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
+            // Manejar la excepción
+            echo "Excepción capturada: " . $e->getMessage();
             exit();
         }
-        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
 
         return $resultado;
     }
@@ -297,13 +372,26 @@ class Evaluaciones{
      * 
      * @return mysqli_result $consulta
      */
-    public static function consultaEvaluacionTodas(mysqli $conexion, array $config, string $idEvaluacion, string $idCarga, int $periodo){
-        try{
-            $consulta=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones
-            WHERE eva_id_carga='".$idCarga."' AND eva_periodo='".$periodo."' AND eva_id!='".$idEvaluacion."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-            ORDER BY eva_id DESC");
+    public static function consultaEvaluacionTodas(mysqli $conexion, array $config, string $idEvaluacion, string $idCarga, int $periodo)
+    {
+        try {
+            // Preparar la consulta SQL con marcadores de posición
+            $consulta = mysqli_prepare($conexion, "SELECT * FROM " . BD_ACADEMICA . ".academico_actividad_evaluaciones WHERE eva_id_carga=? AND eva_periodo=? AND eva_id!=? AND eva_estado=1 AND institucion=? AND year=? ORDER BY eva_id DESC");
+
+            if ($consulta) {
+                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
+                mysqli_stmt_bind_param($consulta, "siiii", $idCarga, $periodo, $idEvaluacion, $config['conf_id_institucion'], $_SESSION["bd"]);
+
+                // Ejecutar la consulta preparada
+                mysqli_stmt_execute($consulta);
+            } else {
+                // Si la preparación de la consulta falla, mostrar un mensaje de error
+                echo "Error en la preparación de la consulta.";
+                exit();
+            }
         } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
+            // Manejar la excepción
+            echo "Excepción capturada: " . $e->getMessage();
             exit();
         }
 
@@ -318,12 +406,26 @@ class Evaluaciones{
      * 
      * @return mysqli_result $consulta
      */
-    public static function consultaEvaluacionCargas(mysqli $conexion, array $config, string $idCarga){
-        try{
-            $consulta=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
-            WHERE eva_id_carga='".$idCarga."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+    public static function consultaEvaluacionCargas(mysqli $conexion, array $config, string $idCarga)
+    {
+        try {
+            // Preparar la consulta SQL con marcadores de posición
+            $consulta = mysqli_prepare($conexion, "SELECT * FROM " . BD_ACADEMICA . ".academico_actividad_evaluaciones WHERE eva_id_carga=? AND institucion=? AND year=?");
+
+            if ($consulta) {
+                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
+                mysqli_stmt_bind_param($consulta, "sii", $idCarga, $config['conf_id_institucion'], $_SESSION["bd"]);
+
+                // Ejecutar la consulta preparada
+                mysqli_stmt_execute($consulta);
+            } else {
+                // Si la preparación de la consulta falla, mostrar un mensaje de error
+                echo "Error en la preparación de la consulta.";
+                exit();
+            }
         } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
+            // Manejar la excepción
+            echo "Excepción capturada: " . $e->getMessage();
             exit();
         }
 
@@ -339,13 +441,26 @@ class Evaluaciones{
      * 
      * @return mysqli_result $consulta
      */
-    public static function consultaEvaluacionCargasPeriodos(mysqli $conexion, array $config, string $idCarga, string $periodo){
-        try{
-            $consulta=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones 
-            WHERE eva_id_carga='".$idCarga."' AND eva_periodo='".$periodo."' AND eva_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-            ORDER BY eva_id DESC");
+    public static function consultaEvaluacionCargasPeriodos(mysqli $conexion, array $config, string $idCarga, string $periodo)
+    {
+        try {
+            // Preparar la consulta SQL con marcadores de posición
+            $consulta = mysqli_prepare($conexion, "SELECT * FROM " . BD_ACADEMICA . ".academico_actividad_evaluaciones WHERE eva_id_carga=? AND eva_periodo=? AND eva_estado=1 AND institucion=? AND year=? ORDER BY eva_id DESC");
+
+            if ($consulta) {
+                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
+                mysqli_stmt_bind_param($consulta, "sisi", $idCarga, $periodo, $config['conf_id_institucion'], $_SESSION["bd"]);
+
+                // Ejecutar la consulta preparada
+                mysqli_stmt_execute($consulta);
+            } else {
+                // Si la preparación de la consulta falla, mostrar un mensaje de error
+                echo "Error en la preparación de la consulta.";
+                exit();
+            }
         } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
+            // Manejar la excepción
+            echo "Excepción capturada: " . $e->getMessage();
             exit();
         }
 
@@ -360,14 +475,29 @@ class Evaluaciones{
      * @param int $periodo
      * @param array $POST
      * 
-     * @return string $consulta
+     * @return string $codigo
      */
-    public static function guardarEvaluacion(mysqli $conexion, array $config, string $idCarga, string $periodo, array $POST){
-        $codigo=Utilidades::generateCode("EVA");
-        try{
-            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_evaluaciones(eva_id, eva_nombre, eva_descripcion, eva_id_carga, eva_periodo, eva_estado, eva_desde, eva_hasta, eva_clave, institucion, year)"." VALUES('".$codigo."', '".mysqli_real_escape_string($conexion,$POST["titulo"])."', '".mysqli_real_escape_string($conexion,$POST["contenido"])."', '".$idCarga."', '".$periodo."', 1, '".$POST["desde"]."', '".$POST["hasta"]."', '".mysqli_real_escape_string($conexion,$POST["clave"])."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+    public static function guardarEvaluacion(mysqli $conexion, PDO $conexionPDO, array $config, string $idCarga, string $periodo, array $POST)
+    {
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_actividad_evaluaciones');
+        try {
+            // Preparar la consulta SQL con marcadores de posición
+            $consulta = mysqli_prepare($conexion, "INSERT INTO " . BD_ACADEMICA . ".academico_actividad_evaluaciones (eva_id, eva_nombre, eva_descripcion, eva_id_carga, eva_periodo, eva_estado, eva_desde, eva_hasta, eva_clave, institucion, year) VALUES (?, ?, ?, ?, ?, 1, ?, ?, ?, ?, ?)");
+
+            if ($consulta) {
+                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
+                mysqli_stmt_bind_param($consulta, "ssssisssii", $codigo, $POST["titulo"], $POST["contenido"], $idCarga, $periodo, $POST["desde"], $POST["hasta"], $POST["clave"], $config['conf_id_institucion'], $_SESSION["bd"]);
+
+                // Ejecutar la consulta preparada
+                mysqli_stmt_execute($consulta);
+            } else {
+                // Si la preparación de la consulta falla, mostrar un mensaje de error
+                echo "Error en la preparación de la consulta.";
+                exit();
+            }
         } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
+            // Manejar la excepción
+            echo "Excepción capturada: " . $e->getMessage();
             exit();
         }
         return $codigo;
@@ -379,11 +509,26 @@ class Evaluaciones{
      * @param array $config
      * @param array $POST
      */
-    public static function actualizarEvaluacion(mysqli $conexion, array $config, array $POST){
-        try{
-            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_evaluaciones SET eva_nombre='".mysqli_real_escape_string($conexion,$POST["titulo"])."', eva_descripcion='".mysqli_real_escape_string($conexion,$POST["contenido"])."', eva_desde='".$POST["desde"]."', eva_hasta='".$POST["hasta"]."', eva_clave='".mysqli_real_escape_string($conexion,$POST["clave"])."' WHERE eva_id='".$POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+    public static function actualizarEvaluacion(mysqli $conexion, array $config, array $POST)
+    {
+        try {
+            // Preparar la consulta SQL con marcadores de posición
+            $consulta = mysqli_prepare($conexion, "UPDATE " . BD_ACADEMICA . ".academico_actividad_evaluaciones SET eva_nombre=?, eva_descripcion=?, eva_desde=?, eva_hasta=?, eva_clave=? WHERE eva_id=? AND institucion=? AND year=?");
+
+            if ($consulta) {
+                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
+                mysqli_stmt_bind_param($consulta, "ssssssii", mysqli_real_escape_string($conexion,$POST["titulo"]), mysqli_real_escape_string($conexion,$POST["contenido"]), $POST["desde"], $POST["hasta"], mysqli_real_escape_string($conexion,$POST["clave"]), $POST["idR"], $config['conf_id_institucion'], $_SESSION["bd"]);
+
+                // Ejecutar la consulta preparada
+                mysqli_stmt_execute($consulta);
+            } else {
+                // Si la preparación de la consulta falla, mostrar un mensaje de error
+                echo "Error en la preparación de la consulta.";
+                exit();
+            }
         } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
+            // Manejar la excepción
+            echo "Excepción capturada: " . $e->getMessage();
             exit();
         }
     }
@@ -394,11 +539,26 @@ class Evaluaciones{
      * @param array $config
      * @param string $idE
      */
-    public static function eliminarEvaluacion(mysqli $conexion, array $config, string $idE){
-        try{
-            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones WHERE eva_id='".$idE."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+    public static function eliminarEvaluacion(mysqli $conexion, array $config, string $idE)
+    {
+        try {
+            // Preparar la consulta SQL con marcadores de posición
+            $consulta = mysqli_prepare($conexion, "DELETE FROM " . BD_ACADEMICA . ".academico_actividad_evaluaciones WHERE eva_id=? AND institucion=? AND year=?");
+
+            if ($consulta) {
+                // Vincular los valores de las variables a los marcadores de posición en la consulta preparada
+                mysqli_stmt_bind_param($consulta, "sii", $idE, $config['conf_id_institucion'], $_SESSION["bd"]);
+
+                // Ejecutar la consulta preparada
+                mysqli_stmt_execute($consulta);
+            } else {
+                // Si la preparación de la consulta falla, mostrar un mensaje de error
+                echo "Error en la preparación de la consulta.";
+                exit();
+            }
         } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
+            // Manejar la excepción
+            echo "Excepción capturada: " . $e->getMessage();
             exit();
         }
     }
