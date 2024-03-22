@@ -5,6 +5,10 @@ include("../../config-general/config.php");
 require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/servicios/GradoServicios.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+require_once ROOT_PATH."/main-app/class/Conexion.php";
+
+$conexionPDOInstance = new Conexion;
+$conexionPDO         = $conexionPDOInstance->conexionPDO(SERVER, USER, PASSWORD, BD_ADMIN);
 
 $config = Plataforma::sesionConfiguracion();
 $_SESSION["configuracion"] = $config;
@@ -30,7 +34,7 @@ include("../docente/verificar-carga.php");
 //Consultamos los estudiantes del grado y grupo
 $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
 
-
+$contBol=1;
  while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 	 
 	//DEFINITIVAS
@@ -92,6 +96,7 @@ $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datos
 	WHERE aac.cal_id_estudiante='".$resultado['mat_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]}
 	GROUP BY aa.act_id_tipo");
 	$sumaNotaIndicador = 0; 
+	$cont=1;
 	while($notInd = mysqli_fetch_array($notasPorIndicador, MYSQLI_BOTH)){
 		$consultaNum=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion 
 		WHERE rind_carga='".$carga."' AND rind_estudiante='".$resultado['mat_id']."' AND rind_periodo='".$periodo."' AND rind_indicador='".$notInd[1]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
@@ -102,7 +107,7 @@ $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datos
 		$sumaNotaIndicador  += $notInd[0];
 		
 		if($num==0){
-			$codigo=Utilidades::generateCode("RIN").$idNumericoEstudiante;
+			$codigo=Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores_recuperacion').$cont;
 			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_carga='".$carga."' AND rind_estudiante='".$resultado['mat_id']."' AND rind_periodo='".$periodo."' AND rind_indicador='".$notInd[1]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			$lineaError = __LINE__;
 			include("../compartido/reporte-errores.php");
@@ -110,6 +115,8 @@ $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datos
 			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_recuperacion(rind_id, rind_fecha_registro, rind_estudiante, rind_carga, rind_nota, rind_indicador, rind_periodo, rind_actualizaciones, rind_nota_original, rind_nota_actual, rind_valor_indicador_registro, institucion, year)VALUES('".$codigo."', now(), '".$resultado['mat_id']."', '".$carga."', '".$notInd[0]."', '".$notInd[1]."', '".$periodo."', 0, '".$notInd[0]."', '".$notInd[0]."', '".$notInd[2]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 			$lineaError = __LINE__;
 			include("../compartido/reporte-errores.php");
+
+			$cont++;
 		}else{
 			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_indicadores_recuperacion SET rind_nota_anterior=rind_nota, rind_nota='".$notInd[0]."', rind_actualizaciones=rind_actualizaciones+1, rind_ultima_actualizacion=now(), rind_nota_actual='".$notInd[0]."', rind_tipo_ultima_actualizacion=1, rind_valor_indicador_actualizacion='".$notInd[2]."' WHERE rind_carga='".$carga."' AND rind_estudiante='".$resultado['mat_id']."' AND rind_periodo='".$periodo."' AND rind_indicador='".$notInd[1]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 			$lineaError = __LINE__;
@@ -150,10 +157,12 @@ $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datos
 		include("../compartido/reporte-errores.php");
 			
 		//INSERTAR LOS DATOS EN LA TABLA BOLETIN
-		$codigoBOL=Utilidades::generateCode("BOL").$idNumericoEstudiante;
+		$codigoBOL=Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_boletin').$contBol;
 		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_boletin(bol_id, bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_fecha_registro, bol_actualizaciones, bol_nota_indicadores, bol_porcentaje, institucion, year)VALUES('".$codigoBOL."', '".$carga."', '".$resultado['mat_id']."', '".$periodo."', '".$definitiva."', 1, now(), 0, '".$sumaNotaIndicador."', '".$porcentajeActual."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");	
 		$lineaError = __LINE__;
-		include("../compartido/reporte-errores.php");		
+		include("../compartido/reporte-errores.php");	
+		
+		$contBol++;
 	}
 	 
 		 	

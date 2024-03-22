@@ -744,7 +744,7 @@ class Estudiantes {
      */
     public static function insertarEstudiantes($conexionPDO, $POST, $idEstudianteU, $result_numMat = '', $procedencia = '', $idAcudiente = '')
     {
-        global $config;
+        global $config, $conexion;
         $codigoMAT = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_matriculas');
 
         $tipoD = isset($POST["tipoD"]) ? $POST["tipoD"] : "";
@@ -757,9 +757,9 @@ class Estudiantes {
         $celular = isset($POST["celular"]) ? $POST["celular"] : "";
         $estrato = isset($POST["estrato"]) ? $POST["estrato"] : "";
         $genero = isset($POST["genero"]) ? $POST["genero"] : "";
-        $apellido1 = isset($POST["apellido1"]) ? $POST["apellido1"] : "";
-        $apellido2 = isset($POST["apellido2"]) ? $POST["apellido2"] : "";
-        $nombres = isset($POST["nombres"]) ? $POST["nombres"] : "";
+        $apellido1 = isset($POST["apellido1"]) ? mysqli_real_escape_string($conexion,$POST["apellido1"]) : "";
+        $apellido2 = isset($POST["apellido2"]) ? mysqli_real_escape_string($conexion,$POST["apellido2"]) : "";
+        $nombres = isset($POST["nombres"]) ? mysqli_real_escape_string($conexion,$POST["nombres"]) : "";
         $grado = isset($POST["grado"]) ? $POST["grado"] : "";
         $grupo = isset($POST["grupo"]) ? $POST["grupo"] : "";
         $tipoEst = isset($POST["tipoEst"]) ? $POST["tipoEst"] : "";
@@ -774,7 +774,7 @@ class Estudiantes {
         $eps = isset($POST["eps"]) ? $POST["eps"] : "";
         $celular2 = isset($POST["celular2"]) ? $POST["celular2"] : "";
         $ciudadR = isset($POST["ciudadR"]) ? $POST["ciudadR"] : "";
-        $nombre2 = isset($POST["nombre2"]) ? $POST["nombre2"] : "";
+        $nombre2 = isset($POST["nombre2"]) ? mysqli_real_escape_string($conexion,$POST["nombre2"]) : "";
         $fNac = isset($POST["fNac"]) ? $POST["fNac"] : "";
         $tipoMatricula = isset($_POST["tipoMatricula"]) ? $POST["tipoMatricula"] : "";
 
@@ -881,7 +881,7 @@ class Estudiantes {
      */
     public static function actualizarEstudiantes($conexionPDO, $POST, $fechaNacimiento = '', $procedencia = '', $pasosMatricula = '')
     {
-        global $config;
+        global $config, $conexion;
 
         $tipoD = isset($POST["tipoD"]) ? $POST["tipoD"] : "";
         $nDoc = isset($POST["nDoc"]) ? $POST["nDoc"] : "";
@@ -893,9 +893,9 @@ class Estudiantes {
         $celular = isset($POST["celular"]) ? $POST["celular"] : "";
         $estrato = isset($POST["estrato"]) ? $POST["estrato"] : "";
         $genero = isset($POST["genero"]) ? $POST["genero"] : "";
-        $apellido1 = isset($POST["apellido1"]) ? $POST["apellido1"] : "";
-        $apellido2 = isset($POST["apellido2"]) ? $POST["apellido2"] : "";
-        $nombres = isset($POST["nombres"]) ? $POST["nombres"] : "";
+        $apellido1 = isset($POST["apellido1"]) ? mysqli_real_escape_string($conexion,$POST["apellido1"]) : "";
+        $apellido2 = isset($POST["apellido2"]) ? mysqli_real_escape_string($conexion,$POST["apellido2"]) : "";
+        $nombres = isset($POST["nombres"]) ? mysqli_real_escape_string($conexion,$POST["nombres"]) : "";
         $grado = isset($POST["grado"]) ? $POST["grado"] : "";
         $grupo = isset($POST["grupo"]) ? $POST["grupo"] : "";
         $tipoEst = isset($POST["tipoEst"]) ? $POST["tipoEst"] : "";
@@ -913,7 +913,7 @@ class Estudiantes {
         $eps = isset($POST["eps"]) ? $POST["eps"] : "";
         $celular2 = isset($POST["celular2"]) ? $POST["celular2"] : "";
         $ciudadR = isset($POST["ciudadR"]) ? $POST["ciudadR"] : "";
-        $nombre2 = isset($POST["nombre2"]) ? $POST["nombre2"] : "";
+        $nombre2 = isset($POST["nombre2"]) ? mysqli_real_escape_string($conexion,$POST["nombre2"]) : "";
         $id = isset($POST["id"]) ? $POST["id"] : "";
         $tipoMatricula = isset($POST["tipoMatricula"]) ? $_POST["tipoMatricula"] : GRADO_GRUPAL;
 

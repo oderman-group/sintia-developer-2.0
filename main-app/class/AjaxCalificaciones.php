@@ -135,13 +135,14 @@ class AjaxCalificaciones {
      * Este metodo sirve para registrar una nota masiva a los estudiantes
      * 
      * @param mysqli    $conexion 
+     * @param PDO       $conexionPDO 
      * @param array     $datosCargaActual
      * @param string    $codNota
      * @param string    $nota
      * 
      * @return array // se retorna mensaje de confirmación
     **/
-    public static function ajaxGuardarNotasMasiva($conexion, $datosCargaActual, $codNota, $nota)
+    public static function ajaxGuardarNotasMasiva($conexion, $conexionPDO, $datosCargaActual, $codNota, $nota)
     {
         global $config;
         if(trim($nota)==""){
@@ -151,12 +152,7 @@ class AjaxCalificaciones {
 
         $consultaE = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
         
-        $insertBD = 0;
-        $updateBD = 0;
-        $datosInsert = '';
-        $datosUpdate = '';
-        $datosDelete = '';
-        
+        $cont = 1;
         while($estudiantes = mysqli_fetch_array($consultaE, MYSQLI_BOTH)){
             
             try{
@@ -167,46 +163,30 @@ class AjaxCalificaciones {
             $numE = mysqli_num_rows($consultaNumE);
             
             if($numE==0){
-                $codigo=Utilidades::generateCode("CAL".$estudiantes['mat_id']);
-                $insertBD = 1;
-                $datosDelete .="cal_id_estudiante='".$estudiantes['mat_id']."' OR ";
-                $datosInsert .="('".$codigo."', '".$estudiantes['mat_id']."','".$nota."','".$codNota."', now(), 0, {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
-            }else{
-                $updateBD = 1;
-                $datosUpdate .="cal_id_estudiante='".$estudiantes['mat_id']."' OR ";
-            }
-        }
-        
-        if($insertBD==1){
-            $datosInsert = substr($datosInsert,0,-1);
-            $datosDelete = substr($datosDelete,0,-4);  
+                $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_calificaciones').$cont; 
 		
-            try{
-                mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='".$codNota."' AND (".$datosDelete.") AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"); 
-            } catch (Exception $e) {
-                include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-            }         
+                try{
+                    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='".$codNota."' AND cal_id_estudiante='".$estudiantes['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"); 
+                } catch (Exception $e) {
+                    include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+                }        
             
-            try{
-                mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_calificaciones(cal_id, cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones, institucion, year)VALUES
-                ".$datosInsert."
-                ");
-            } catch (Exception $e) {
-                include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-            }
-            
-        }
-        
-        if($updateBD==1){
-            $datosUpdate = substr($datosUpdate,0,-4);
-            
-            try{
-                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_calificaciones SET cal_nota='".$nota."', cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1 
-                WHERE cal_id_actividad='".$codNota."' AND (".$datosUpdate.") AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-            } catch (Exception $e) {
-                include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-            }
+                try{
+                    mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_calificaciones(cal_id, cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones, institucion, year)VALUES('".$codigo."', '".$estudiantes['mat_id']."','".$nota."','".$codNota."', now(), 0, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+                } catch (Exception $e) {
+                    include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+                }
 
+                $cont ++;
+            }else{
+            
+                try{
+                    mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_calificaciones SET cal_nota='".$nota."', cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1 
+                    WHERE cal_id_actividad='".$codNota."' AND cal_id_estudiante='".$estudiantes['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                } catch (Exception $e) {
+                    include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+                }
+            }
         }
         
         try{
@@ -361,14 +341,15 @@ class AjaxCalificaciones {
      * Este metodo sirve para registrar una nota de comportamiento masiva a los estudiantes
      * 
      * @param mysqli    $conexion 
+     * @param PDO       $conexionPDO 
      * @param array     $datosCargaActual
-     * @param string       $carga
+     * @param string    $carga
      * @param int       $periodo
      * @param string    $nota
      * 
      * @return array // se retorna mensaje de confirmación
     **/
-    public static function ajaxGuardarNotasDisciplinaMasiva($conexion, $datosCargaActual, $carga, $periodo, $nota)
+    public static function ajaxGuardarNotasDisciplinaMasiva($conexion, $conexionPDO, $datosCargaActual, $carga, $periodo, $nota)
     {
         global $config;
         if(trim($nota)==""){
@@ -377,44 +358,23 @@ class AjaxCalificaciones {
         }
 
         $consultaE = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
-	
-        $accionBD = 0;
-        $datosInsert = '';
-        $datosUpdate = '';
-        $datosDelete = '';
     
+        $cont = 1;
         while($estudiantes = mysqli_fetch_array($consultaE, MYSQLI_BOTH)){
             $consultaNumE=mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='".$estudiantes['mat_id']."' AND dn_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
             $numE = mysqli_num_rows($consultaNumE);
             
             if($numE==0){
-                $idInsercion=Utilidades::generateCode("DN");
-                $accionBD = 1;
-                $datosDelete .="dn_cod_estudiante='".$estudiantes['mat_id']."' OR ";
-                $datosInsert .="('" .$idInsercion . "', '".$estudiantes['mat_id']."','".$carga."','".$nota."', now(),'".$periodo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
+                $idInsercion = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'disiplina_nota').$cont; 
+            
+                mysqli_query($conexion, "DELETE FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND dn_cod_estudiante='".$estudiantes['mat_id']."'");
+            
+                mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disiplina_nota(dn_id, dn_cod_estudiante, dn_id_carga, dn_nota, dn_fecha, dn_periodo, institucion, year)VALUES('" .$idInsercion . "', '".$estudiantes['mat_id']."','".$carga."','".$nota."', now(),'".$periodo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+
+                $cont++;
             }else{
-                $accionBD = 2;
-                $datosUpdate .="dn_cod_estudiante='".$estudiantes['mat_id']."' OR ";
+                mysqli_query($conexion, "UPDATE ".BD_DISCIPLINA.".disiplina_nota SET dn_nota='".$nota."', dn_fecha=now() WHERE dn_periodo='".$periodo."' AND dn_cod_estudiante='".$estudiantes['mat_id']."' AND (institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})");
             }
-        }
-        
-        if($accionBD==1){
-            $datosInsert = substr($datosInsert,0,-1);
-            $datosDelete = substr($datosDelete,0,-4);
-            
-            mysqli_query($conexion, "DELETE FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND (".$datosDelete.")");
-            
-            
-            mysqli_query($conexion, "INSERT INTO ".BD_DISCIPLINA.".disiplina_nota(dn_id, dn_cod_estudiante, dn_id_carga, dn_nota, dn_fecha, dn_periodo, institucion, year)VALUES
-            ".$datosInsert."
-            ");
-                
-        }
-        
-        if($accionBD==2){
-            $datosUpdate = substr($datosUpdate,0,-4);
-            $datosUpdate .= " AND (institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})"; 
-            mysqli_query($conexion, "UPDATE ".BD_DISCIPLINA.".disiplina_nota SET dn_nota='".$nota."', dn_fecha=now() WHERE dn_periodo='".$periodo."' AND (".$datosUpdate.")");
         }
 
         $datosMensaje=["heading"=>"Cambios guardados","estado"=>"success","mensaje"=>'Se ha guardado la misma nota de comportamiento para todos los estudiantes en esta actividad. La página se actualizará en unos segundos para que vea los cambios...'];

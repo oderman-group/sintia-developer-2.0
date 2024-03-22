@@ -33,12 +33,12 @@ $opciones[0] = [
             'url' => 'cargas-comportamiento-filtros.php'
         ],
         [
-            'texto' => 'Indicadores obligatorios',
+            'texto' => 'Transferir cargas',
             'url' => 'javascript:void(0);',
             'data-target' => '#modalTranferirCargas'
         ],
         [
-            'texto' => 'Transferir cargas',
+            'texto' => 'Estilo de notas',
             'url' => 'cargas-estilo-notas.php'
         ]
     ]

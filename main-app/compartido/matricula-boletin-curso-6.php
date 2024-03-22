@@ -277,10 +277,12 @@ for($l=1;$l<=$numero_periodos;$l++){
 				if (!isset($contpromedios[$l])) {
 					$contpromedios[$l] = 0;
 				}
-				if (!empty($notaDelEstudiante['bol_nota'])) {
-					$promedios[$l] += $notaDelEstudiante['bol_nota'];
+				if ($fila2["mat_sumar_promedio"] == SI) {
+					if (isset($notaDelEstudiante['bol_nota'])) {
+						$promedios[$l] += $notaDelEstudiante['bol_nota'];
+					}
+					$contpromedios[$l]++;
 				}
-				$contpromedios[$l]+=1;
 			}else{
 					echo "-";
 			}
