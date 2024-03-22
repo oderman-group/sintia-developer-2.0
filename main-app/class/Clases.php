@@ -340,6 +340,8 @@ class Clases {
                 include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
             }
         }
+
+        return $codigo;
     }
     
     /**
