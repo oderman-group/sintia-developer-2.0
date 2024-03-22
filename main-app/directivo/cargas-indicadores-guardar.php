@@ -27,7 +27,7 @@ if ($sumaIndicadores[2] >= $datosCargaActual['car_maximos_indicadores']) {
 
 $codigoAI = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores');
 try{
-    mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores(ind_id, ind_nombre, ind_obligatorio, ind_publico, institucion, year) VALUES('".$codigoAI."', '" . $_POST["contenido"] . "', '" . $_POST["creado"] . "', 0, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+    mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores(ind_id, ind_nombre, ind_obligatorio, ind_publico, institucion, year) VALUES('".$codigoAI."', '" . mysqli_real_escape_string($conexion,$_POST["contenido"]) . "', '" . $_POST["creado"] . "', 0, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 } catch (Exception $e) {
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }

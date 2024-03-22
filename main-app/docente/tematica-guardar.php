@@ -30,7 +30,7 @@ if($numTema>0){
 	$codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores');
 
 	try{
-		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores(ind_id, ind_nombre, ind_obligatorio, ind_periodo, ind_carga, ind_fecha_creacion, ind_tematica, institucion, year) VALUES('".$codigo."', '".$_POST["contenido"]."', 0, '".$periodoConsultaActual."', '".$cargaConsultaActual."', now(), 1, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores(ind_id, ind_nombre, ind_obligatorio, ind_periodo, ind_carga, ind_fecha_creacion, ind_tematica, institucion, year) VALUES('".$codigo."', '".mysqli_real_escape_string($conexion,$_POST["contenido"])."', 0, '".$periodoConsultaActual."', '".$cargaConsultaActual."', now(), 1, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 	} catch (Exception $e) {
 		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 	}
