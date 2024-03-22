@@ -710,7 +710,7 @@ function metodoFetch(url,data,tipo,get,metodoresponse) {
 				.catch((error) => console.error("Error:", error))
 				.then(
 					function(res) {
-                        window[metodoresponse](res);
+                        window[metodoresponse](res,data);
 					});
 
 }
