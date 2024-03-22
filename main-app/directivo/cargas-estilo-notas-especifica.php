@@ -80,7 +80,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 <tbody>
 													<?php
 													$contReg = 1;
-                                                    $consulta = Boletin::listarTipoDeNotas(base64_decode($_GET["id"]), $year);
+                                                    $consulta = Boletin::listarTipoDeNotas(base64_decode($_GET["id"]));
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 													?>
 													<tr>
