@@ -72,7 +72,7 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 												</thead>
 												<tbody>
 												 <?php
-												 $TablaNotas = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $year);
+												 $TablaNotas = Boletin::listarTipoDeNotas($config["conf_notas_categoria"]);
 												 while($tabla = mysqli_fetch_array($TablaNotas, MYSQLI_BOTH)){
 												 ?>
 												  <tr id="data1" class="odd grade">
