@@ -118,7 +118,7 @@ if(!empty($_POST['carga'])){
 													</thead>
 													<tbody>
 														<?php
-														$TablaNotas = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $year);
+														$TablaNotas = Boletin::listarTipoDeNotas($config["conf_notas_categoria"]);
 														while($tabla = mysqli_fetch_array($TablaNotas, MYSQLI_BOTH)){
 														?>
 														<tr>
