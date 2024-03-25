@@ -278,23 +278,17 @@ if($_POST["operacion"]==9){
 		$indicador = Indicadores::consultaIndicadorPeriodo($conexion, $config, $_POST['codNota'], $_POST["carga"], $_POST["periodo"]);
 		$valorIndicador = ($indicador['ipc_valor']/100);
 		$rindNotaActual = ($_POST["nota"] * $valorIndicador);
-		$consultaNum=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion 
-		WHERE rind_carga='".$_POST["carga"]."' AND rind_estudiante='".$_POST["codEst"]."' AND rind_periodo='".$_POST["periodo"]."' AND rind_indicador='".$_POST["codNota"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+		$consultaNum = Indicadores::consultaRecuperacionIndicadorPeriodo($config, $_POST["codNota"], $_POST["codEst"], $_POST["carga"], $_POST["periodo"]);
 		$num = mysqli_num_rows($consultaNum);
 		
 
 		if($num==0){
-			$codigo=Utilidades::generateCode("RIN");
-			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_carga='".$_POST["carga"]."' AND rind_estudiante='".$_POST["codEst"]."' AND rind_periodo='".$_POST["periodo"]."' AND rind_indicador='".$_POST["codNota"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+			Indicadores::eliminarRecuperacionIndicadorPeriodo($config, $_POST["codNota"], $_POST["codEst"], $_POST["carga"], $_POST["periodo"]);				
 			
-
-			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_recuperacion(rind_id, rind_fecha_registro, rind_estudiante, rind_carga, rind_nota, rind_indicador, rind_periodo, rind_actualizaciones, rind_nota_actual, rind_valor_indicador_registro, institucion, year)VALUES('".$codigo."', now(), '".$_POST["codEst"]."', '".$_POST["carga"]."', '".$_POST["nota"]."', '".$_POST["codNota"]."', '".$_POST["periodo"]."', 1, '".$rindNotaActual."', '".$indicador['ipc_valor']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-			
+			Indicadores::guardarRecuperacionIndicador($conexionPDO, $config, $_POST["codEst"], $_POST["carga"], $_POST["nota"], $_POST["codNota"], $_POST["periodo"], $indicador['ipc_valor']);
 		}else{
 			if($_POST["notaAnterior"]==""){$_POST["notaAnterior"] = "0.0";}
-			
-			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_indicadores_recuperacion SET rind_nota='".$_POST["nota"]."', rind_nota_anterior='".$_POST["notaAnterior"]."', rind_actualizaciones=rind_actualizaciones+1, rind_ultima_actualizacion=now(), rind_nota_actual='".$rindNotaActual."', rind_tipo_ultima_actualizacion=2, rind_valor_indicador_actualizacion='".$indicador['ipc_valor']."' WHERE rind_carga='".$_POST["carga"]."' AND rind_estudiante='".$_POST["codEst"]."' AND rind_periodo='".$_POST["periodo"]."' AND rind_indicador='".$_POST["codNota"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-			
+			Indicadores::actualizarRecuperacionIndicador($config, $_POST["codEst"], $_POST["carga"], $_POST["nota"], $_POST["codNota"], $_POST["periodo"], $indicador['ipc_valor']);
 		}
 		
 		//Actualizamos la nota actual a los que la tengan nula.
