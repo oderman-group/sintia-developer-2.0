@@ -16,42 +16,9 @@ include("../compartido/historial-acciones-guardar.php");
         echo '<script type="text/javascript">window.location.href="asignaturas-agregar.php?error=ER_DT_4";</script>';
         exit();
     }
-    require_once(ROOT_PATH."/main-app/class/Utilidades.php");
-    $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_areas');
-
-    if(empty($_POST["siglasM"])) {$_POST["siglasM"] = substr($_POST["nombreM"], 0, 3);}
-    if(empty($_POST["porcenAsigna"])) {$_POST["porcenAsigna"] = '';}
-    $_POST["sumarPromedio"] = !empty($_POST["sumarPromedio"]) ? $_POST["sumarPromedio"] : SI;
-	$codigoAsignatura = "ASG".strtotime("now");
-
-    try{
-        mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_materias(
-            mat_id, 
-            mat_codigo, 
-            mat_nombre, 
-            mat_siglas, 
-            mat_area, 
-            mat_oficial, 
-            mat_valor, 
-            mat_sumar_promedio, 
-            institucion, 
-            year
-        )
-        VALUES (
-            '".$codigo."', 
-            '".$codigoAsignatura."', 
-            '".$_POST["nombreM"]."', 
-            '".strtoupper($_POST["siglasM"])."', 
-            '".$_POST["areaM"]."', 
-            1, 
-            '".$_POST["porcenAsigna"]."', 
-            '".$_POST["sumarPromedio"]."', 
-            {$config['conf_id_institucion']}, 
-            {$_SESSION["bd"]}
-        )");
-    } catch (Exception $e) {
-        include("../compartido/error-catch-to-report.php");
-    }
+    require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
+    
+    $codigo = Asignaturas::guardarAsignatura($conexion, $conexionPDO, $config, $_POST);
     
 	include("../compartido/guardar-historial-acciones.php");
 	echo '<script type="text/javascript">window.location.href="asignaturas.php?success=SC_DT_1&id='.base64_encode($codigo).'";</script>';

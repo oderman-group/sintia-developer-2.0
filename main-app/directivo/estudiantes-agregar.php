@@ -3,6 +3,7 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
 <?php include("includes/variables-estudiantes-agregar.php");
+require_once(ROOT_PATH."/main-app/class/Grupos.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -437,13 +438,10 @@ if(!Modulos::validarPermisoEdicion()){
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Grupo</label>
 												<div class="col-sm-2">
-													<?php
-													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-													");
-													?>
 													<select class="form-control" name="grupo" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
+                        								$opcionesConsulta = Grupos::traerGrupos($conexion, $config);
 														while($rv = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 															if($rv['gru_id']==$datosMatricula['grupo'])
 																echo '<option value="'.$rv['gru_id'].'" selected>'.$rv['gru_nombre'].'</option>';
@@ -542,11 +540,10 @@ if(!Modulos::validarPermisoEdicion()){
 														<div class="form-group row" >
 															<label class="col-sm-2 control-label">Grupo Cursos Adicionales</label>
 															<div class="col-sm-4">
-																<?php
-																$cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-																?>
 																<select class="form-control" name="grupoMT">
-																<?php while($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)){
+																<?php
+                        										$cv = Grupos::traerGrupos($conexion, $config); 
+																while($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)){
 																	echo '<option value="'.$rv['gru_id'].'">'.$rv['gru_nombre'].'</option>';
 																}?>
 																</select>

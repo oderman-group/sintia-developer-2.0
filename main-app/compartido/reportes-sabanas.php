@@ -11,6 +11,7 @@ require_once("../class/Estudiantes.php");
 require_once("../class/Boletin.php");
 require_once("../class/servicios/GradoServicios.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 
 $year=$_SESSION["bd"];
 if(isset($_POST["year"])){
@@ -52,9 +53,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 		$materias1 = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas 
 		WHERE car_curso='".$_REQUEST["curso"]."' AND institucion={$config['conf_id_institucion']} AND year={$year} AND car_grupo='".$_REQUEST["grupo"]."'");
 		while($mat1 = mysqli_fetch_array($materias1, MYSQLI_BOTH)){
-			$nombresMat = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias 
-			WHERE mat_id='".$mat1['car_materia']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-			$Mat = mysqli_fetch_array($nombresMat, MYSQLI_BOTH);
+			$Mat = Asignaturas::consultarDatosAsignatura($conexion, $config, $mat1['car_materia']);
 		?>
         	<td align="center"><?=$Mat['mat_siglas'];?></td>      
   		<?php
@@ -101,17 +100,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 						}
 					}else{
 						//CONSULTA QUE ME TRAE LOS INDICADORES DE CADA MATERIA POR PERIODO
-						$consultaNotaMateriaIndicadoresxPeriodo = mysqli_query($conexion, "SELECT mat_nombre,mat_area,mat_id,ind_nombre,ipc_periodo,
-						ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) as nota, ind_id FROM ".BD_ACADEMICA.".academico_materias am
-						INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
-						INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car.car_materia=am.mat_id AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
-						INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga aic ON aic.ipc_carga=car.car_id AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$year}
-						INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON aic.ipc_indicador=ai.ind_id AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$year}
-						INNER JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id_tipo=aic.ipc_indicador AND act_id_carga=car_id AND act_estado=1 AND act_registrada=1 AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$year}
-						INNER JOIN ".BD_ACADEMICA.".academico_calificaciones aac ON aac.cal_id_actividad=aa.act_id AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$year}
-						WHERE car_curso='".$_REQUEST["curso"]."'  and car_grupo='".$_REQUEST["grupo"]."' and mat_id='".$mat1['car_materia']."'  AND ipc_periodo='".$_REQUEST["per"]."' AND cal_id_estudiante='".$fila['mat_id']."' and act_periodo='".$_REQUEST["per"]."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-						group by act_id_tipo, act_id_carga
-						order by mat_id,ipc_periodo,ind_id;");
+						$consultaNotaMateriaIndicadoresxPeriodo = Asignaturas::obtenerIndicadoresPorMateriaPeriodo($_REQUEST["curso"], $_REQUEST["grupo"], $mat1['car_materia'], $_REQUEST["per"], $fila['mat_id'], $year);
 
 						$numIndicadoresPorPeriodo=mysqli_num_rows($consultaNotaMateriaIndicadoresxPeriodo);
 						$sumaNotaEstudiante=0;
