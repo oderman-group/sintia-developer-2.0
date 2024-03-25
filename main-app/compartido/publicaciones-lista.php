@@ -81,37 +81,28 @@ while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
             <div id="PANEL<?= $resultado['not_id']; ?>" class="panel <?= $clasesNoticiaGlobal; ?>" <?= $colorFondo; ?>>
 
                 <div class="card-head">
-                   
+
                     <header><?= $resultado['not_titulo']; ?></header>
 
                     <?php if ($_SESSION["id"] == $resultado['not_usuario'] || $datosUsuarioActual['uss_tipo'] == 1 || $datosUsuarioActual['uss_tipo'] == 5) { ?>
 
-                        <button id="panel-<?= $resultado['not_id']; ?>" class="mdl-button mdl-js-button mdl-button--icon pull-right" data-upgraded=",MaterialButton">
-                            <i class="material-icons">more_vert</i>
-                        </button>
-
-                        <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" data-mdl-for="panel-<?= $resultado['not_id']; ?>">
-
-                            <li class="mdl-menu__item">
-                                <a href="javascript:void(0);" id="<?= $resultado['not_id']; ?>|1" name="../compartido/noticias-gestionar.php?e=<?= base64_encode(1) ?>&idR=<?= base64_encode($resultado['not_id']); ?>" onClick="ocultarNoticia(this)">
+                        <div class="dropdown  pull-right">
+                            <button type="button" id="panel-<?= $resultado['not_id']; ?>" class="dropdown-toggle mdl-button mdl-js-button mdl-button--icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">more_vert</i>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="panel-<?= $resultado['not_id']; ?>">
+                                <a class="dropdown-item" href="javascript:void(0);" id="<?= $resultado['not_id']; ?>|1" name="../compartido/noticias-gestionar.php?e=<?= base64_encode(1) ?>&idR=<?= base64_encode($resultado['not_id']); ?>" onClick="ocultarNoticia(this)">
                                     <i class="fa fa-eye"></i><?= $frases[172][$datosUsuarioActual['uss_idioma']]; ?></a>
-                            </li>
-                            <li class="mdl-menu__item">
-                                <a href="javascript:void(0);" id="<?= $resultado['not_id']; ?>|2" name="../compartido/noticias-gestionar.php?e=<?= base64_encode(0) ?>&idR=<?= base64_encode($resultado['not_id']); ?>" onClick="ocultarNoticia(this)">
+                                <a class="dropdown-item" href="javascript:void(0);" id="<?= $resultado['not_id']; ?>|2" name="../compartido/noticias-gestionar.php?e=<?= base64_encode(0) ?>&idR=<?= base64_encode($resultado['not_id']); ?>" onClick="ocultarNoticia(this)">
                                     <i class="fa fa-eye-slash"></i><?= $frases[173][$datosUsuarioActual['uss_idioma']]; ?>
                                 </a>
-                            </li>
+                                <?php if ($_SESSION["id"] == $resultado['not_usuario'] || $datosUsuarioActual['uss_tipo'] == 1) { ?>
+                                    <a class="dropdown-item" href="noticias-editar.php?idR=<?= base64_encode($resultado['not_id']); ?>"><i class="fa fa-pencil-square-o"></i><?= $frases[165][$datosUsuarioActual['uss_idioma']]; ?></a>
+                                    <a class="dropdown-item" href="javascript:void(0);" title="<?= $objetoEnviar; ?>" id="<?= $resultado['not_id']; ?>" name="../compartido/noticias-gestionar.php?e=<?= base64_encode(2) ?>&idR=<?= base64_encode($resultado['not_id']); ?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i><?= $frases[174][$datosUsuarioActual['uss_idioma']]; ?></a>
+                                <?php } ?>
+                            </div>
+                        </div>
 
-                            <?php if ($_SESSION["id"] == $resultado['not_usuario'] || $datosUsuarioActual['uss_tipo'] == 1) { ?>
-                                <li class="mdl-menu__item"><a href="noticias-editar.php?idR=<?= base64_encode($resultado['not_id']); ?>"><i class="fa fa-pencil-square-o"></i><?= $frases[165][$datosUsuarioActual['uss_idioma']]; ?></a>
-                                </li>
-
-                                <li class="mdl-menu__item"><a href="javascript:void(0);" title="<?= $objetoEnviar; ?>" id="<?= $resultado['not_id']; ?>" name="../compartido/noticias-gestionar.php?e=<?= base64_encode(2) ?>&idR=<?= base64_encode($resultado['not_id']); ?>" onClick="deseaEliminar(this)"><i class="fa fa-trash"></i><?= $frases[174][$datosUsuarioActual['uss_idioma']]; ?></a>
-                                </li>
-                            <?php } ?>
-
-
-                        </ul>
                     <?php } ?>
                 </div>
 
@@ -204,10 +195,9 @@ while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
                         $reaccionP = 1;
                     }
                     ?>
-                    <a id="panel-<?= $resultado['not_id']; ?>1" style="margin-right: 10px;" class="pull-left"><i class="fa <?= $rIcons[$reaccionP]; ?>"></i> <?= $rName[$reaccionP]; ?></a>
+                    <a id="panel-<?= $resultado['not_id']; ?>-reaccion" style="margin-right: 10px;" class="pull-left"><i class="fa <?= $rIcons[$reaccionP]; ?>"></i> <?= $rName[$reaccionP]; ?></a>
 
-
-                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" data-mdl-for="panel-<?= $resultado['not_id']; ?>1">
+                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" data-mdl-for="panel-<?= $resultado['not_id']; ?>-reaccion">
                         <?php
                         $i = 1;
                         while ($i <= 4) {
@@ -219,7 +209,7 @@ while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
                                 $estilos2 = '';
                             }
                         ?>
-                            <li class="mdl-menu__item" onclick="reaccionar('<?= $resultado['not_id']; ?>','<?= $i ?>','<?= $resultado['not_titulo']; ?>','<?= $datosUsuarioActual['uss_nombre']; ?>','<?= $resultado['not_usuario']?>')">
+                            <li class="mdl-menu__item" onclick="reaccionar('<?= $resultado['not_id']; ?>','<?= $i ?>','<?= $resultado['not_titulo']; ?>','<?= $datosUsuarioActual['uss_nombre']; ?>','<?= $resultado['not_usuario'] ?>')">
                                 <i class="fa <?= $rIcons[$i]; ?>"></i><?= $rName[$i]; ?></a>
                             </li>
                         <?php $i++;
