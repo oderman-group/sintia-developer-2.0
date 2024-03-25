@@ -2,6 +2,7 @@
 include("session.php");
 require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
+require_once(ROOT_PATH."/main-app/class/Foros.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 
 Modulos::validarAccesoDirectoPaginas();
