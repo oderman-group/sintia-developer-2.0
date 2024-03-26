@@ -123,7 +123,7 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 												<tbody>
 
 												 <?php
-												 $TablaNotas = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $year);
+												 $TablaNotas = Boletin::listarTipoDeNotas($config["conf_notas_categoria"]);
 												 while($tabla = mysqli_fetch_array($TablaNotas, MYSQLI_BOTH)){
 
 												 ?>
