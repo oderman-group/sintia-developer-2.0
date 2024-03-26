@@ -113,6 +113,19 @@ if(!Modulos::validarPermisoEdicion()){
                                             </div>
                                         </div>
 
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Sumar en promedio general?
+                                                <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Deseas que esta asignatura cuente en la suma del promedio general en los informes?."><i class="fa fa-question"></i></button> 
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control  select2" name="sumarPromedio" <?= $disabledPermiso; ?>>
+                                                    <option value="">Seleccione una opción</option>
+                                                    <option value="<?=SI?>" <?=$rMateria["mat_sumar_promedio"] == SI ? "selected": "";?>><?=SI?></option>
+                                                    <option value="<?=NO?>" <?=$rMateria["mat_sumar_promedio"] == NO ? "selected": "";?>><?=NO?></option>
+                                                </select>
+                                            </div>
+                                        </div>
+
 										<?php if($config['conf_agregar_porcentaje_asignaturas']=='SI'){ ?>
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Porcentaje</label>

@@ -18,7 +18,7 @@ if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $period
 $idPaginaInterna = 'DC0106';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
-$datosMensaje = AjaxCalificaciones::ajaxGuardarNotasDisciplinaMasiva($conexion,$datosCargaActual,$_POST["carga"],$_POST["periodo"],$_POST["nota"]);
+$datosMensaje = AjaxCalificaciones::ajaxGuardarNotasDisciplinaMasiva($conexion, $conexionPDO, $datosCargaActual, $_POST["carga"], $_POST["periodo"], $_POST["nota"]);
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 ?>

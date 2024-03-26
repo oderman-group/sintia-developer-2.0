@@ -54,7 +54,7 @@ try {
         hil_usuario_autologin)
     VALUES(
         '".$_SESSION['id']."', 
-        '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."".$post."', 
+        '".$_SERVER['PHP_SELF']."?".mysqli_real_escape_string($conexion,$_SERVER['QUERY_STRING'])."".mysqli_real_escape_string($conexion,$post)."', 
         '".$idPaginaInterna."', 
         '".$ip."', 
         '".$_SERVER['HTTP_USER_AGENT']."', 

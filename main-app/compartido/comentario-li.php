@@ -1,5 +1,5 @@
 <?php
-
+$animate ="";
 if (empty($_SESSION["id"])) {
     include_once("session-compartida.php");
     require_once(ROOT_PATH . "/main-app/compartido/sintia-funciones.php");

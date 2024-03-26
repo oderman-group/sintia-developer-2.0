@@ -336,7 +336,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                         bol_estudiante, bol_periodo, bol_nota,
                                         SUM(bol_nota * (mat_valor/100)) AS notaArea
                                         FROM ".BD_ACADEMICA.".academico_cargas car
-                                        INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id = car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
+                                        INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id = car_materia AND mat_sumar_promedio='SI' AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
                                         INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol_carga=car_id AND bol_periodo='".$i."' AND bol_estudiante = '".$matriculadosDatos['mat_id']."' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
                                         WHERE am.mat_area = '".$datosAreas['ar_id']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
                                         GROUP BY am.mat_area");

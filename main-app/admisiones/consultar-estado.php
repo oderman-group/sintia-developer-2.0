@@ -119,7 +119,7 @@ include("bd-conexion.php");
 
                             <p class="h6 text-info">
                                 El formulario de inscripción tiene un costo de $<?= number_format($valorInscripcion,0,".","."); ?>.<br>
-                                <?=$datosConfig['cfgi_texto_info_cuenta'];?>
+                                <?=$config['cfgi_texto_info_cuenta'];?>
                             </p>
 
                             <form action="enviar-comprobante.php" method="post" enctype="multipart/form-data">
@@ -136,8 +136,8 @@ include("bd-conexion.php");
                             </form>
                         <?php } ?>
 
-                        <?php if ($datos['asp_estado_solicitud'] == 6 && $datosConfig['cfgi_activar_boton_pagar_prematricula'] == 1) { ?>
-                            <a href="<?=$datosConfig['cfgi_link_boton_pagar_prematricula'];?>" class="btn" style="background-color:<?=$fondoBarra;?>; color:<?=$colorTexto;?>;" target="_blank">Pagar prematricula</a>
+                        <?php if ($datos['asp_estado_solicitud'] == 6 && $config['cfgi_activar_boton_pagar_prematricula'] == 1) { ?>
+                            <a href="<?=$config['cfgi_link_boton_pagar_prematricula'];?>" class="btn" style="background-color:<?=$fondoBarra;?>; color:<?=$colorTexto;?>;" target="_blank">Pagar prematricula</a>
                         <?php } ?>
 
                     <?php

@@ -398,10 +398,11 @@ class Asignaturas {
         array  $POST
     )
     {
-        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_areas');
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_materias');
     
         if(empty($POST["siglasM"])) {$POST["siglasM"] = substr($POST["nombreM"], 0, 3);}
         if(empty($POST["porcenAsigna"])) {$POST["porcenAsigna"] = '';}
+        $POST["sumarPromedio"] = !empty($POST["sumarPromedio"]) ? $POST["sumarPromedio"] : SI;
         $codigoAsignatura = "ASG".strtotime("now");
 
         try {
@@ -413,6 +414,7 @@ class Asignaturas {
                 mat_area, 
                 mat_oficial, 
                 mat_valor, 
+                mat_sumar_promedio,
                 institucion, 
                 year
             )
@@ -424,6 +426,7 @@ class Asignaturas {
                 '".$POST["areaM"]."', 
                 1, 
                 '".$POST["porcenAsigna"]."', 
+                '".$POST["sumarPromedio"]."', 
                 {$config['conf_id_institucion']}, 
                 {$_SESSION["bd"]}
             )");
@@ -447,9 +450,10 @@ class Asignaturas {
     )
     {
         if(empty($POST["porcenAsigna"])) {$POST["porcenAsigna"] = '';}
+        $POST["sumarPromedio"] = !empty($POST["sumarPromedio"]) ? $POST["sumarPromedio"] : SI;
 
         try {
-            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_materias SET mat_codigo='".$POST["codigoM"]."', mat_nombre='".$POST["nombreM"]."', mat_siglas='".$POST["siglasM"]."', mat_area='".$POST["areaM"]."', mat_oficial=1, mat_valor='".$POST["porcenAsigna"]."' WHERE mat_id='".$POST["idM"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_materias SET mat_codigo='".$POST["codigoM"]."', mat_nombre='".$POST["nombreM"]."', mat_siglas='".$POST["siglasM"]."', mat_area='".$POST["areaM"]."', mat_oficial=1, mat_valor='".$POST["porcenAsigna"]."', mat_sumar_promedio='".$POST["sumarPromedio"]."' WHERE mat_id='".$POST["idM"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }

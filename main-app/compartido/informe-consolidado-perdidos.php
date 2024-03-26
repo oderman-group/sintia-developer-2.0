@@ -66,6 +66,7 @@ include("../compartido/head-informes.php") ?>
             <td style="font-size:9px;"><?=$nombreCompleto?></td>
             <?php
 			$cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$curso."' AND car_grupo='".$grupo."' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"); 
+			$cargasPromdio=0;
 			while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
 				//PRUEBA CONSULTA PHP 8
 				$materia = Asignaturas::consultarDatosAsignatura($conexion, $config, $carga['car_materia']);
@@ -93,9 +94,12 @@ include("../compartido/head-informes.php") ?>
                 <?=$defPorMateria;?></td>
             <?php
 				//DEFINITIVA POR CADA ESTUDIANTE DE TODAS LAS MATERIAS Y PERIODOS
-				$defPorEstudiante += $defPorMateria;   
+				if ($materia['mat_sumar_promedio'] == SI) {
+					$defPorEstudiante += $defPorMateria; 
+					$cargasPromdio ++;
+				}  
 			}
-				$defPorEstudiante = round($defPorEstudiante/$numCargasPorCurso,2);
+				$defPorEstudiante = round($defPorEstudiante/$cargasPromdio,2);
 				
 				if($defPorEstudiante<$config[5] and $defPorEstudiante!="")$color = $config[6]; elseif($defPorEstudiante>=$config[5]) $color = $config[7];
 			?>

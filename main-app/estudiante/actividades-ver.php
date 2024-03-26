@@ -18,7 +18,7 @@ if($actividad[0]==""){
 	exit();
 }
 
-$fechas = Actividades::traerFechaActividad($conexion, $config, $idR);
+$fechas = Actividades::traerFechaActividadEstudiante($conexion, $config, $idR);
 if($fechas[0]<0){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=206&fechaD='.$actividad['tar_fecha_disponible'].'&diasF='.$fechas[0].'";</script>';
 	exit();
