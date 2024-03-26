@@ -113,7 +113,11 @@ if(!empty($_POST["calificaciones"])){
 		if($indImpDatos['ipc_copiado']!=0) $copiado = $indImpDatos['ipc_copiado'];
 		$codigo=Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores_carga');
 
-		$datosInsertInd .="('".$codigo."', '".$cargaConsultaActual."', '".$idRegInd."', '".$indImpDatos['ipc_valor']."', '".$periodoConsultaActual."', 1, '".$copiado."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
+		try{
+			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_carga(ipc_id, ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, ipc_copiado, institucion, year) VALUES('".$codigo."', '".$cargaConsultaActual."', '".$idRegInd."', '".$indImpDatos['ipc_valor']."', '".$periodoConsultaActual."', 1, '".$copiado."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+		} catch (Exception $e) {
+			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+		}
 
 		//Consultamos las calificaciones del indicador a Importar
 		try{
@@ -125,30 +129,13 @@ if(!empty($_POST["calificaciones"])){
 
 		$datosInsert = '';
 		while($calImpDatos = mysqli_fetch_array($calImpConsulta, MYSQLI_BOTH)){
-			$codigoACT=null;
-
-			$datosInsert .="('".$codigoACT."', '".mysqli_real_escape_string($conexion,$calImpDatos['act_descripcion'])."', '".$calImpDatos['act_fecha']."', '".$calImpDatos['act_valor']."', '".$idRegInd."', '".$cargaConsultaActual."', 0, now(), 1, '".$periodoConsultaActual."','".$calImpDatos['act_compartir']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
-
-		}
-
-		
-
-		if(!empty($datosInsert)){
-			$datosInsert = substr($datosInsert,0,-1);
+			$codigoACT=Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_actividades');
 			try{
-				mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividades(act_id, act_descripcion, act_fecha, act_valor, act_id_tipo, act_id_carga, act_registrada, act_fecha_creacion, act_estado, act_periodo, act_compartir, institucion, year) VALUES $datosInsert");
+				mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividades(act_id, act_descripcion, act_fecha, act_valor, act_id_tipo, act_id_carga, act_registrada, act_fecha_creacion, act_estado, act_periodo, act_compartir, institucion, year) VALUES('".$codigoACT."', '".mysqli_real_escape_string($conexion,$calImpDatos['act_descripcion'])."', '".$calImpDatos['act_fecha']."', '".$calImpDatos['act_valor']."', '".$idRegInd."', '".$cargaConsultaActual."', 0, now(), 1, '".$periodoConsultaActual."','".$calImpDatos['act_compartir']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 			} catch (Exception $e) {
 				include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 			}
-		}
-	}		
 
-	if(!empty($datosInsertInd)){
-		$datosInsertInd = substr($datosInsertInd,0,-1);
-		try{
-			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_carga(ipc_id, ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, ipc_copiado, institucion, year) VALUES $datosInsertInd");
-		} catch (Exception $e) {
-			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 		}
 	}
 	$ULR = 'calificaciones.php';
