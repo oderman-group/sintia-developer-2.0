@@ -31,7 +31,7 @@ $consulta = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".s
 											AND not_year='" . $_SESSION["bd"] . "' AND (not_institucion='" . $config['conf_id_institucion'] . "' OR not_global = 'SI')
 											$filtro                                            
 											ORDER BY not_id DESC
-                                            LIMIT 2 OFFSET $page
+                                            LIMIT 5 OFFSET $page
 											");
 $not = 1;
 $contReg = 1;

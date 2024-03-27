@@ -360,7 +360,7 @@
                     }
 
 
-                    var limite = 2;
+                    var limite = 5;
 
                     window.addEventListener('scroll', function() {
                         var paginar = document.getElementById("paginar").value;
