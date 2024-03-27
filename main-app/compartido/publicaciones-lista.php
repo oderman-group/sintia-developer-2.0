@@ -73,7 +73,7 @@ while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 
 
 ?>
-    <div id="PUB-<?= $resultado['not_id']; ?>" class="row">
+    <div id="PUB<?= $resultado['not_id']; ?>" class="row">
 
         <div class="col-sm-12">
             <div id="PANEL<?= $resultado['not_id']; ?>" class="panel <?= $clasesNoticiaGlobal; ?>" <?= $colorFondo; ?>>
