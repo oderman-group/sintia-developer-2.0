@@ -4,6 +4,7 @@ if (empty($_SESSION["id"])) {
     include_once("session-compartida.php");
     require_once(ROOT_PATH . "/main-app/compartido/sintia-funciones.php");
     include_once(ROOT_PATH . "/main-app/class/SocialComentarios.php");
+    include_once(ROOT_PATH . "/main-app/class/SocialReacciones.php");
     $input = json_decode(file_get_contents("php://input"), true);
     $page = $input["pagina"];
 }
@@ -40,14 +41,11 @@ while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
         $colorFondo = 'style="background: #999; opacity:0.7;"';
     }
 
-    $consultaReacciones = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".social_noticias_reacciones
-												INNER JOIN " . BD_GENERAL . ".usuarios uss ON uss_id=npr_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-												WHERE npr_noticia='" . $resultado['not_id'] . "'
-												ORDER BY npr_id DESC
-												");
-    $numReacciones = mysqli_num_rows($consultaReacciones);
-    $usrReacciones = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".social_noticias_reacciones 
-												WHERE npr_noticia='" . $resultado['not_id'] . "' AND npr_usuario='" . $_SESSION["id"] . "'"), MYSQLI_BOTH);
+
+    $parametros = ["npr_noticia" => $resultado['not_id']];
+    $numReacciones = intval(SocialReacciones::contar($parametros));
+    $parametros["npr_usuario"] = $_SESSION["id"];
+    $usrReacciones = SocialReacciones::consultar($parametros);
 
     if ($datosUsuarioActual['uss_tipo'] == 4) {
         include("verificar-usuario.php");
@@ -189,37 +187,43 @@ while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
                     <?php
                     $rName = array("", "Me gusta", "Me encanta", "Me divierte", "Me entristece");
                     $rIcons = array("", "fa-thumbs-o-up", "fa-heart", "fa-smile-o", "fa-frown-o");
+                    $rNameClass = array("", "me_gusta", "me_encanta", "me_divierte", "me_entristece");
+                    $claseReaccion = "";
                     if (isset($usrReacciones['npr_reaccion']) and $usrReacciones['npr_reaccion'] != "") {
                         $reaccionP = $usrReacciones['npr_reaccion'];
+                        $claseReaccion = $rNameClass[$usrReacciones["npr_reaccion"]];
                     } else {
                         $reaccionP = 1;
                     }
                     ?>
-                    <a id="panel-<?= $resultado['not_id']; ?>-reaccion" style="margin-right: 10px;" class="pull-left"><i class="fa <?= $rIcons[$reaccionP]; ?>"></i> <?= $rName[$reaccionP]; ?></a>
+                    <div class="dropdown  pull-left">
+                        <a id="panel-<?= $resultado['not_id']; ?>-reaccion" style="margin-right: 10px;" class="dropdown-toggle <?= $claseReaccion; ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa <?= $rIcons[$reaccionP]; ?>"></i> <?= $rName[$reaccionP]; ?></a>
+                        <ul id="opciones-<?= $resultado['not_id']; ?>" class="dropdown-menu" data-mdl-for="panel-<?= $resultado['not_id']; ?>-reaccion">
+                            <?php
+                            include '../compartido/reacciones-lista-opciones.php';
+                            ?>
+                        </ul>
 
-                    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" data-mdl-for="panel-<?= $resultado['not_id']; ?>-reaccion">
-                        <?php
-                        $i = 1;
-                        while ($i <= 4) {
-                            if (!empty($usrReacciones['npr_reaccion']) && $i == $usrReacciones['npr_reaccion']) {
-                                $estilos1 = 'style="background:#6d84b4;"';
-                                $estilos2 = 'style="color:#FFF;"';
-                            } else {
-                                $estilos1 = '';
-                                $estilos2 = '';
-                            }
-                        ?>
-                            <li class="mdl-menu__item" onclick="reaccionar('<?= $resultado['not_id']; ?>','<?= $i ?>','<?= $resultado['not_titulo']; ?>','<?= $datosUsuarioActual['uss_nombre']; ?>','<?= $resultado['not_usuario'] ?>')">
-                                <i class="fa <?= $rIcons[$i]; ?>"></i><?= $rName[$i]; ?></a>
-                            </li>
-                        <?php $i++;
-                        } ?>
-                    </ul>
-                    <?php if ($numReacciones > 0) { ?>
+                    </div>
 
-                        <a id="reacciones-<?= $resultado['not_id']; ?>" class="pull-left" onClick="mostrarDetalles(this)" name="<?= $resultado['not_id']; ?>"><?= number_format($numReacciones, 0, ",", "."); ?>
-                            reacciones</a>
-                    <?php } ?>
+
+                    <div id="dropdown-<?= $resultado['not_id']; ?>" class="dropdown  pull-left show">
+                        <?php if ($numReacciones > 0) { ?>
+                            <a id="reacciones-<?= $resultado['not_id']; ?>" name="<?= $resultado['not_id'] ?>" class="dropbtn" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <?= number_format($numReacciones, 0, ",", "."); ?> reacciones</a>
+                            <div id="reacciones-content-<?= $resultado['not_id']; ?>" class="dropdown-content">
+                                <?php
+                                include '../compartido/reacciones-lista.php';
+                                ?>
+                            </div>
+                            <div id="dropdown-reacciones-usuarios-<?= $resultado['not_id']; ?>" style="width:400px ;" class="dropdown-menu animate__animated animate__fadeInUp" aria-labelledby="reacciones-<?= $resultado['not_id']; ?>">
+                                <?php
+                                include '../compartido/reacciones-lista-usuarios.php';
+                                ?>
+                            </div>
+                        <?php } ?>
+                    </div>
+
+
                     <?php
                     $parametros = ["ncm_noticia" => $resultado['not_id'], "ncm_padre" => 0];
                     $numcomentarios = SocialComentarios::contar($parametros);
@@ -253,34 +257,6 @@ while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
                 </div>
 
             </div>
-            <script type="application/javascript">
-                function mostrarDetalles(dato) {
-                    var id = 'pub' + dato.name;
-                    document.getElementById(id).style.display = "block";
-                }
-
-                function ocultarDetalles(dato) {
-                    var id = 'pub' + dato.name;
-                    document.getElementById(id).style.display = "none";
-                }
-            </script>
-            <div class="panel" id="pub<?= $resultado['not_id']; ?>" style="display: none;">
-                <header class="panel-heading panel-heading-purple">
-                    Reacciones (<?= number_format($numReacciones, 0, ",", "."); ?>)
-                    <a class="pull-right" onClick="ocultarDetalles(this)" name="<?= $resultado['not_id']; ?>">Ocultar</a>
-                </header>
-                <div class="panel-body">
-                    <?php
-                    while ($datoReacciones = mysqli_fetch_array($consultaReacciones, MYSQLI_BOTH)) {
-                    ?>
-                        <p><a><?= $datoReacciones['uss_nombre']; ?></a>
-                            (<?= $rName[$datoReacciones['npr_reaccion']]; ?>)<br>
-                            <span style="font-size: 10px; color: darkgray;"><?= $datoReacciones['npr_fecha']; ?></span>
-                        </p>
-                    <?php } ?>
-                </div>
-            </div>
-
         </div>
     </div>
 

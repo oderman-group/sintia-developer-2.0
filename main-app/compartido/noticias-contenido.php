@@ -1,11 +1,13 @@
 <link href="../compartido/comentarios.css" rel="stylesheet" type="text/css" />
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <link href="../../config-general/assets/css/cargando.css" rel="stylesheet" type="text/css" />
+<link href="../../config-general/assets/css/comentarios-reacciones.css" rel="stylesheet" type="text/css" />
 <div class="row">
 
     <div class="col-md-12">
         <?php include("../compartido/barra-superior-noticias.php");
-        include("../class/SocialComentarios.php"); ?>
+        include("../class/SocialComentarios.php");
+        include("../class/SocialReacciones.php"); ?>
         <div class="row">
 
             <div class="col-md-4 col-lg-3">
@@ -124,6 +126,53 @@
             </div>-->
 
                 <script type="text/javascript">
+                    function recargarInclude(id) {
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", "../compartido/reacciones-lista.php", true);
+                        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState == 4 && xhr.status == 200) {
+                                document.getElementById("reacciones-content-" + id).innerHTML = xhr.responseText;
+                            }
+                        };
+                        var parametros = "id=" + encodeURIComponent(id);
+                        xhr.send(parametros);
+                    }
+
+                    function recargarIncludeListaUsuarios(id) {
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", "../compartido/reacciones-lista-usuarios.php", true);
+                        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState == 4 && xhr.status == 200) {
+                                document.getElementById("dropdown-reacciones-usuarios-" + id).innerHTML = xhr.responseText;
+                            }
+                        };
+                        var parametros = "id=" + encodeURIComponent(id);
+                        xhr.send(parametros);
+                    }
+
+                    function recargarIncludeOpciones(id) {
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", "../compartido/reacciones-lista-opciones.php", true);
+                        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState == 4 && xhr.status == 200) {
+                                document.getElementById("opciones-" + id).innerHTML = xhr.responseText;
+                            }
+                        };
+                        var parametros = "id=" + encodeURIComponent(id);
+                        xhr.send(parametros);
+                    }
+
+
+                    function mostrarReaciones(dato) {
+                        var id = 'dropdown-reacciones-usuarios-' + dato.name;
+                        console.log(dato);
+                        console.log(id);
+                        document.getElementById(id).style.display = "block";
+                    }
+
                     function reaccionar(id, reaccion, postname, usrname, postowner) {
                         var url = "../compartido/noticias-reaccionar-fetch.php";
                         var data = {
@@ -137,36 +186,80 @@
                     }
 
                     function respuesta(response) {
+                        console.log(JSON.stringify(response));
                         if (response["ok"]) {
                             reaccionesNombre = ["", " Me gusta ", " Me encanta ", " Me divierte ", " Me entristece "];
                             reaccionesIconos = ["", "fa-thumbs-o-up", "fa-heart", "fa-smile-o", "fa-frown-o"];
+                            reaccionesCalss = ["", "me_gusta", "me_encanta", "me_divierte", "me_entristece"];
+
                             index = parseInt(response["reaccion"]);
 
                             reacion = document.getElementById("reacciones-" + response["id"]);
-                            carBody = document.getElementById("car-body-" + response["id"]);
-                            panel = document.getElementById("panel-" + response["id"] + "1");
+                            dropdown = document.getElementById("dropdown-" + response["id"]);
+                            panel = document.getElementById("panel-" + response["id"] + "-reaccion");
 
 
                             if (reacion) {
                                 reacion.classList = [];
-                                reacion.innerText = response["cantidad"] + " Reacciones";
-                                reacion.classList.add('pull-left', 'animate__animated', 'animate__fadeInDown');
+                                if (parseInt(response["cantidad"]) > 0) {
+                                    reacion.innerText = response["cantidad"] + " Reacciones";
+                                    reacion.classList.add('animate__animated', 'animate__fadeInDown');
+                                } else {
+                                    reacion.innerText = "";
+                                    reacion.classList.add('animate__animated', 'animate__fadeInDown');
+                                }
                             } else {
+                                var divDropdownReacciones = document.createElement('div'); // se crea la etiqueta div
+                                divDropdownReacciones.id = "dropdown-reacciones-usuarios-" + response["id"];
+                                divDropdownReacciones.style = "width:400px ;";
+                                divDropdownReacciones.classList.add('animate__animated', 'animate__fadeInUp', 'dropdown-menu');
+                                divDropdownReacciones.setAttribute("aria-labelledby", "reacciones-" + response["id"]);
+
+                                var divReaccionesContent = document.createElement('div'); // se crea la etiqueta div
+                                divReaccionesContent.id = "reacciones-content-" + response["id"];
+                                divReaccionesContent.classList.add('dropdown-content');
+
                                 var reacionNueva = document.createElement('a'); // se crea la etiqueta a
-                                reacionNueva.id = "reacciones-" + response["id"]
-                                reacionNueva.classList.add('pull-left', 'animate__animated', 'animate__fadeInDown');
+                                reacionNueva.id = "reacciones-" + response["id"];
+                                reacionNueva.name = response["id"];
+                                reacionNueva.classList = [];
+                                reacionNueva.classList.add('animate__animated', 'animate__fadeInDown', 'dropbtn');
+                                reacionNueva.setAttribute("role", "button");
+                                reacionNueva.setAttribute("data-toggle", "dropdown");
+                                reacionNueva.setAttribute("aria-haspopup", "true");
+                                reacionNueva.setAttribute("aria-expanded", "false");
                                 reacionNueva.innerText = response["cantidad"] + " Reacciones";
-                                carBody.appendChild(reacionNueva);
+
+                                dropdown.appendChild(reacionNueva);
+                                dropdown.appendChild(divReaccionesContent);
+                                dropdown.appendChild(divDropdownReacciones);
+
+                               
                             }
 
                             panel.innerText = '';
-                            var icon = document.createElement('i'); // se crea la icono
-                            icon.classList.add('fa', reaccionesIconos[index]);
-                            panel.appendChild(icon);
-                            var texto = document.createTextNode(reaccionesNombre[index]);
-                            panel.appendChild(texto);
-                            panel.classList.add('animate__animated', 'animate__fadeInDown');
+                            if (response["accion"] == '<?php echo ACCION_ELIMINAR ?>') {
+                                var icon = document.createElement('i'); // se crea la icono
+                                icon.classList.add('fa', reaccionesIconos[1]);
+                                panel.appendChild(icon);
+                                var texto = document.createTextNode(reaccionesNombre[1]);
+                                panel.appendChild(texto);
+                                panel.classList = [];
+                                panel.classList.add('dropdown-toggle', 'animate__animated', 'animate__fadeInDown');
+                            } else {
+                                var icon = document.createElement('i'); // se crea la icono
+                                icon.classList.add('fa', reaccionesIconos[index]);
+                                panel.appendChild(icon);
+                                var texto = document.createTextNode(reaccionesNombre[index]);
+                                panel.appendChild(texto);
+                                panel.classList = [];
+                                panel.classList.add(reaccionesCalss[index], 'dropdown-toggle', 'animate__animated', 'animate__fadeInDown');
+                            }
 
+
+                            recargarInclude(response["id"]);
+                            recargarIncludeListaUsuarios(response["id"]);
+                            recargarIncludeOpciones(response["id"]);
                             $.toast({
                                 heading: 'Acción realizada',
                                 text: response["msg"],
@@ -300,12 +393,13 @@
                         var cont = parseInt(document.getElementById("page").value);
                         var miDiv = document.getElementById("contendedor-publicaciones");
                         var div = document.createElement('div');
+                        console.log(response);
                         div.innerHTML = response;
                         console.log(div.childNodes.length);
                         if (div.childNodes.length > 0) {
                             document.getElementById("page").value = (cont + limite);
                             document.getElementById("paginar").value = 'true';
-                            miDiv.appendChild(div);                            
+                            miDiv.appendChild(div);
                         } else {
                             document.getElementById("paginar").value = 'false';
                         }
