@@ -77,16 +77,20 @@
                                                 <tbody>
 													<?php
 													$contReg = 1; 
-													$parametros = ['matcur_id_matricula' => $datosEstudianteActual["mat_id"]];
+													$parametros = [
+														'matcur_id_matricula' => $datosEstudianteActual["mat_id"],
+														'matcur_id_institucion' => $config['conf_id_institucion'],
+														'matcur_years' => $_SESSION['bd']
+													];
 													$listaCursosMediaTecnica = MediaTecnicaServicios::listar($parametros);
 													$filtroOr='';
 													if ($listaCursosMediaTecnica != null) { 
 														foreach ($listaCursosMediaTecnica as $dato) {
-															$filtroOr=$filtroOr.' OR (car_curso='.$dato["matcur_id_curso"].' AND car_grupo='.$dato["matcur_id_grupo"].')';
+															$filtroOr=$filtroOr.'OR (car_curso='.$dato["matcur_id_curso"].' AND car_grupo='.$dato["matcur_id_grupo"].')';
 														}
 													}
 													$cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas 
-													WHERE (car_curso='".$datosEstudianteActual['mat_grado']."' AND car_grupo='".$datosEstudianteActual['mat_grupo']."') AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ".$filtroOr);
+													WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND (car_curso='".$datosEstudianteActual['mat_grado']."' AND car_grupo='".$datosEstudianteActual['mat_grupo']."' {$filtroOr})");
 													while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
 														$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_grados gra, ".BD_GENERAL.".usuarios uss WHERE am.mat_id='".$rCargas['car_materia']."' AND gra_id='".$rCargas['car_curso']."' AND uss_id='".$rCargas['car_docente']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
 														$rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);
