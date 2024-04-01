@@ -2,6 +2,7 @@
 include("conexion.php");
 require_once(ROOT_PATH."/main-app/class/EnviarEmail.php");
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
+require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 $year=date("Y");
 
 
@@ -291,12 +292,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 		}
 		
 		//TODOS LOS USUARIOS
-		try{
-			mysqli_query($conexion, "DELETE FROM ".BD_GENERAL.".usuarios WHERE institucion='".$cDemo['demo_institucion']."'");
-		} catch (Exception $e) {
-			echo $e->getMessage();
-			exit();
-		}
+		UsuariosPadre::eliminarTodosUsuarios($cDemo['demo_institucion']);
 		
 		//TODOS LAS MATRICULAS
 		try{
@@ -367,9 +363,8 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 	(SELECT COUNT(corr_id) FROM correos WHERE corr_institucion='".$cProg['corr_institucion']."' AND corr_usuario='".$cProg['corr_usuario']."' AND corr_tipo=3 AND corr_estado=0),
 	(SELECT COUNT(corr_id) FROM correos WHERE corr_institucion='".$cProg['corr_institucion']."' AND corr_usuario='".$cProg['corr_usuario']."' AND corr_tipo=4 AND corr_estado=0)");
 	$numeros = mysqli_fetch_array($consultaNumeros, MYSQLI_BOTH);
-	
-	$consultaAcudiente=mysqli_query($conexion,"SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$cProg['corr_usuario']."' AND institucion={$cProg['corr_institucion']} AND year={$year}");
-	$acudiente = mysqli_fetch_array($consultaAcudiente, MYSQLI_BOTH);
+
+	$acudiente = UsuariosPadre::sesionUsuario($cProg['corr_usuario'], "", $cProg['corr_institucion'], $year);
 	
 	$tituloMsj = "INFORME DIARIO DE SINTIA";
 	$bgTitulo = "#4086f4";
@@ -417,9 +412,8 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 		if($cDat['corr_tipo']==1 or $cDat['corr_tipo']==2 or $cDat['corr_tipo']==3){
 			
 			$datosRelacionados = Actividades::consultaGenerarParaCorreos($cDat["corr_estudiante"], $cDat["corr_actividad"], $cProg['corr_institucion'], $year);
-			
-			$consultaDocentes=mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$datosRelacionados['car_docente']."' AND institucion={$cProg['corr_institucion']} AND year={$year}");
-			$docente = mysqli_fetch_array($consultaDocentes, MYSQLI_BOTH);
+
+			$docente = UsuariosPadre::sesionUsuario($datosRelacionados['car_docente'], "", $cProg['corr_institucion'], $year);
 			
 			
 			if(!empty($datosRelacionados[0])){
@@ -494,8 +488,7 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 			WHERE car_id='".$cDat["corr_carga"]."' AND car.institucion={$cProg['corr_institucion']} AND car.year={$year}");
 			$datosRelacionados = mysqli_fetch_array($consultaRelacionados, MYSQLI_BOTH);
 			
-			$consultaDocentes=mysqli_query($conexion,"SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$datosRelacionados['car_docente']."' AND institucion={$cProg['corr_institucion']} AND year={$year}");
-			$docente = mysqli_fetch_array($consultaDocentes, MYSQLI_BOTH);
+			$docente = UsuariosPadre::sesionUsuario($datosRelacionados['car_docente'], "", $cProg['corr_institucion'], $year);
 			
 			
 			if(!empty($datosRelacionados[0])){
