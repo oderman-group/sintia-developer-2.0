@@ -17,7 +17,7 @@ include("../compartido/historial-acciones-guardar.php");
         exit();
     }
     require_once(ROOT_PATH."/main-app/class/Utilidades.php");
-    $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_areas');
+    $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_materias');
 
     if(empty($_POST["siglasM"])) {$_POST["siglasM"] = substr($_POST["nombreM"], 0, 3);}
     if(empty($_POST["porcenAsigna"])) {$_POST["porcenAsigna"] = '';}
