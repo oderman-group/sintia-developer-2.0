@@ -76,7 +76,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
     <html class="no-js" lang="en">
 
     <head>
-        <title>Boletín Ellen Key</title>
+        <title>Boletín Academico</title>
         <meta name="tipo_contenido" content="text/html;" http-equiv="content-type" charset="utf-8">
         <style>
             #saltoPagina {
@@ -476,7 +476,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
         <table width="100%" cellspacing="3" cellpadding="3" rules="all" border="1">
             <thead>
                 <tr>
-                    <td style="text-align: center; font-weight: bold; font-size: medium;">CARRERA 13 # 15N -45 B. KENNEDY       TELEFONO 6406120</td>
+                    <td style="text-align: center; font-weight: bold; font-size: medium;"><?=!empty($informacion_inst["info_direccion"]) ? strtoupper($informacion_inst["info_direccion"]) : "";?>       <?=!empty($informacion_inst["info_telefono"]) ? "TELEFONO ".$informacion_inst["info_telefono"] : "";?></td>
                 </tr>
             </thead>
         </table>
