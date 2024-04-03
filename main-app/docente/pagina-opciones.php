@@ -164,6 +164,7 @@
 						        </div>
 					
 						
+								<?php if(array_key_exists(19, $arregloModulos)){?>
 						        <div class="col-xl-3 col-md-6 col-12" onClick="url('cargas-carpetas.php')" style="cursor: pointer;">
 						          <div class="info-box bg-danger">
 						            <span class="info-box-icon push-bottom"><i class="fa fa-folder"></i></span>
@@ -175,6 +176,7 @@
 						            </div>
 						          </div>
 						        </div>
+								<?php }?>
 
 								
 						
@@ -205,6 +207,7 @@
 								<?php }?>
 					
 					
+								<?php if(array_key_exists(21, $arregloModulos)){?>
 								<div class="col-xl-3 col-md-6 col-12" onClick="url('importar-info.php')" style="cursor: pointer;">
 						          <div class="info-box bg-info">
 						            <span class="info-box-icon push-bottom"><i class="fa fa-cloud-upload"></i></span>
@@ -216,6 +219,7 @@
 						            </div>
 						          </div>
 						        </div>
+								<?php }?>
 					</div>
 					
 

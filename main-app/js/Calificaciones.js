@@ -266,9 +266,9 @@ function notasDisciplina(enviada){
 function observacionDisciplina(enviada){
     var periodo = enviada.title;
     var observacion = enviada.value;
-	var carga = enviada.step;	
+	var carga = enviada.getAttribute('step');	
 	var codEst = enviada.id;
-	var multiple = enviada.alt;
+	var multiple = enviada.getAttribute('alt');
 
     if(multiple == 1){
         var nameId = enviada.name;
