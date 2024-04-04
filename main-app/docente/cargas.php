@@ -138,7 +138,6 @@ $_SESSION["configuracion"] = $config;
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
                                                                         <li><a rel="'.$configGenerarJobs.'-'.$numSinNotas.'-1" data-toggle="tooltip" data-placement="right" title="Lo hará usted manualmente como siempre." href="javascript:void(0);" name="../compartido/generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" onclick="mensajeGenerarInforme(this)">Forma tradicional</a></li>
-                                                                        <li><a rel="'.$configGenerarJobs.'-'.$numSinNotas.'-2" data-toggle="tooltip" data-placement="right" title="Deje que la plataforma lo haga por usted. Es genial!" id="'.$rCargas["car_id"].'" href="javascript:void(0);" name="../compartido/job-generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" onclick="mensajeGenerarInforme(this)">Forma nueva</a></li>
                                                                     </ul>
                                                                 </div>
 															';
