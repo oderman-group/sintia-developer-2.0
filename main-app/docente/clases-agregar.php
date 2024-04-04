@@ -179,18 +179,7 @@ if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodo
 											</div>
 										</div>
 										<div class="form-group row">
-											<label class="col-sm-2 control-label">Grabar Video
-												<button id="btnIniciar" type="button" onclick="iniciarGrabacion()" class="btn btn-outline-secondary"><i class="fa-solid fa-video"></i></button>
-												<button id="btnGrabando" type="button" class="btn btn-outline-secondary" style="display: none;"><i class="fa-solid  fa-record-vinyl fa-beat-fade"></i></button>
-												<button id="btnDetener" type="button" onclick="detenerGrabacion()" style="display: none;" class="btn btn-outline-secondary"><i class="fa-solid fa-stop"></i></button>
-											</label>
-											<div class="col-sm-10" id="row-video">
-
-												<video id="videoGuardar" name="videoGuardar" style="display: none;"></video>
-												<video id="videoElement" style="display: none;" autoplay></video>
-
-												<input type="file" id="cargarVideo" name="videoClase" style="display: none;" accept="video/*"></input>
-											</div>
+											
 											<label class="col-sm-2 control-label">Grabar Video
 												<div class="btn-group" role="group" aria-label="Basic example">
 													<button id="btnIniciar" type="button" onclick="iniciarGrabacion()" class="btn btn-outline-secondary"><i class="fa-solid fa-video"></i></button>
