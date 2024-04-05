@@ -83,11 +83,9 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 						<tr align="center">
 							<td align="center">
 								<h2><?=$informacion_inst["info_nombre"]?></h2>
-								Jornada: Completa<br>
-								Aprobación y Resolución :  Lic. de funcionamiento 001183 de Octubre 8 de 2004<br>
-								CARRERA 43 N. 70 - 206 - Tel(s). 3312532<br>
-								Barranquilla<br>
-								Correo :info@maxtrummer.edu.co 
+								Jornada: <?=$informacion_inst["info_jornada"];?><br>
+								<?=strtoupper($informacion_inst["info_resolucion"]);?><br>
+								<?=$informacion_inst["info_direccion"];?> - Tel(s). <?=$informacion_inst["info_telefono"];?>
 							</td>   
 						</tr>
 					</table>
