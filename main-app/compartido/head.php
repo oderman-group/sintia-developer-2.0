@@ -215,6 +215,7 @@ if (!empty($datosPaginaActual)) {
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
+	font-size: 20px;
 }
 
 #loader {
