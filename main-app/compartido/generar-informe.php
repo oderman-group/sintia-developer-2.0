@@ -6,6 +6,7 @@ require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/servicios/GradoServicios.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once ROOT_PATH."/main-app/class/Conexion.php";
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 
 $conexionPDOInstance = new Conexion;
 $conexionPDO         = $conexionPDOInstance->conexionPDO(SERVER, USER, PASSWORD, BD_ADMIN);
@@ -29,10 +30,12 @@ if($config['conf_porcentaje_completo_generar_informe']==1){
 		exit();
 	}
 }
-include("../docente/verificar-carga.php");
+
+$infoCarga = CargaAcademica::cargasDatosEnSesion($carga, $_SESSION["id"]);
+$datosCarga = $infoCarga['datosCargaActual'];
 
 //Consultamos los estudiantes del grado y grupo
-$consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
+$consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCarga);
 
 $contBol=1;
  while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
@@ -173,7 +176,7 @@ include("../compartido/reporte-errores.php");
 
 include("../compartido/guardar-historial-acciones.php");
 ?>
-	<script language="javascript">window.location.href="../docente/page-info.php?idmsg=109";</script>
+	<script language="javascript">window.location.href="../docente/page-info.php?idmsg=109&curso=<?=$_GET["grado"];?>&grupo=<?=$_GET["grupo"];?>&periodo=<?=$_GET["periodo"];?>";</script>
 <?php
 	exit();
 ?>

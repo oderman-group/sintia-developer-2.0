@@ -572,6 +572,9 @@ function minimoUno(data) {
 }
 
 function mensajeGenerarInforme(datos){
+
+    document.getElementById("overlayInforme").style.display = "flex";
+
     arrayInfo   = datos.rel.split('-');
     var config= arrayInfo[0];
     var sinNotas= arrayInfo[1];
@@ -595,6 +598,9 @@ function mensajeGenerarInforme(datos){
         }
         if(opcion==2){            
             axios.get(url).then(function(response) {
+
+                    document.getElementById("overlayInforme").style.display = "none";
+
                     contenedorMensaje.innerHTML = nuevoContenido;
         
                     $.toast({

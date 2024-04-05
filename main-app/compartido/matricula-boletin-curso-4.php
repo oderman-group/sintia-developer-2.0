@@ -8,6 +8,8 @@ if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol(
 }
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Usuarios.php");
+require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
     
@@ -134,7 +136,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
         //CONSULTA QUE ME TRAE LAS areas DEL ESTUDIANTE
 
-        $consulta_mat_area_est = mysqli_query($conexion, "SELECT ar_id, car_ih FROM ".BD_ACADEMICA.".academico_cargas car
+        $consulta_mat_area_est = mysqli_query($conexion, "SELECT ar_id, car_ih, car_docente, car_director_grupo FROM ".BD_ACADEMICA.".academico_cargas car
 
 		INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car.car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 
@@ -218,6 +220,10 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
             $contador = 1;
 
             while ($fila = mysqli_fetch_array($consulta_mat_area_est, MYSQLI_BOTH)) {
+                //DIRECTOR DE GRUPO
+                if($fila["car_director_grupo"]==1){
+                    $idDirector=$fila["car_docente"];
+                }
 
                 $sumaValorMaterias = 0;
 
@@ -571,23 +577,50 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
 
 
+
         <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>   
+        <!--******FIRMAS******-->   
 
-        <!--<div align="center"><img src="../files/firmas/fondo1.jpg" height="160"></div>-->
-
-        
-
-<table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
-
-	<tr>
-
-		<td align="center"><img src="../files/firmas/firmaCampillo.jpeg" height="160"><br>_________________________________<br><?= strtoupper(""); ?><br>Rector(a)</td>
-
-		<td align="center"><p style="height:0px;"></p>_________________________________<br><?= strtoupper(""); ?><br>Director(a) de grupo</td>
-
-    </tr>
-
-</table> 
+        <table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
+            <tr>
+                <td align="center">
+                    <?php
+                        $directorGrupo = Usuarios::obtenerDatosUsuario($idDirector);
+                        $nombreDirectorGrupo = UsuariosPadre::nombreCompletoDelUsuario($directorGrupo);
+                        if(!empty($directorGrupo["uss_firma"])){
+                            echo '<img src="../files/fotos/'.$directorGrupo["uss_firma"].'" width="100"><br>';
+                        }else{
+                            echo '<p>&nbsp;</p>
+                                <p>&nbsp;</p>
+                                <p>&nbsp;</p>';
+                        }
+                    ?>
+                    <p style="height:0px;"></p>_________________________________<br>
+                    <p>&nbsp;</p>
+                    <?=$nombreDirectorGrupo?><br>
+                    Director(a) de grupo
+                </td>
+                <td align="center">
+                    <?php
+                        $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
+                        $nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
+                        if(!empty($rector["uss_firma"])){
+                            echo '<img src="../files/fotos/'.$rector["uss_firma"].'" width="100"><br>';
+                        }else{
+                            echo '<p>&nbsp;</p>
+                                <p>&nbsp;</p>
+                                <p>&nbsp;</p>';
+                        }
+                    ?>
+                    <p style="height:0px;"></p>_________________________________<br>
+                    <p>&nbsp;</p>
+                    <?=$nombreRector?><br>
+                    Rector(a)
+                </td>
+            </tr>
+        </table>
 
 
 
