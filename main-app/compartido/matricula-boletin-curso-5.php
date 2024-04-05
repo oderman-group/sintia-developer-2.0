@@ -84,7 +84,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 							<td align="center">
 								<h2><?=$informacion_inst["info_nombre"]?></h2>
 								Jornada: <?=$informacion_inst["info_jornada"]?><br>
-								<?=!empty($informacion_inst["info_resolucion"]) ? $informacion_inst["info_resolucion"] : "";?><br>
+								<?=!empty($informacion_inst["info_resolucion"]) ? strtoupper($informacion_inst["info_resolucion"]) : "";?><br>
 								<?=!empty($informacion_inst["info_direccion"]) ? strtoupper($informacion_inst["info_direccion"]) : "";?> <?=!empty($informacion_inst["info_telefono"]) ? "Tel(s). ".$informacion_inst["info_telefono"] : "";?><br>
 								<?=!empty($informacion_inst["ciu_nombre"]) ? $informacion_inst["ciu_nombre"]."/".$informacion_inst["dep_nombre"] : "";?>
 							</td>   
