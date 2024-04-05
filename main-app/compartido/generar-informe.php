@@ -176,7 +176,7 @@ include("../compartido/reporte-errores.php");
 
 include("../compartido/guardar-historial-acciones.php");
 ?>
-	<script language="javascript">window.location.href="../docente/page-info.php?idmsg=109";</script>
+	<script language="javascript">window.location.href="../docente/page-info.php?idmsg=109&curso=<?=$_GET["grado"];?>&grupo=<?=$_GET["grupo"];?>&periodo=<?=$_GET["periodo"];?>";</script>
 <?php
 	exit();
 ?>
