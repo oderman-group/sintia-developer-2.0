@@ -62,5 +62,5 @@ require_once(ROOT_PATH . "/librerias/Firebase/vendor/autoload.php");
 use Kreait\Firebase\Factory;
 $factory = (new Factory)
 	->withServiceAccount(ROOT_PATH . '/librerias/Firebase/key/firebase_credentials.json')
-	->withDatabaseUri('https://sintia-firebase-default-rtdb.firebaseio.com');
+	->withDatabaseUri('https://sintia-app-default-rtdb.firebaseio.com');
 $storage = $factory->createStorage();
