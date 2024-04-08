@@ -120,7 +120,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
         //CONSULTA QUE ME TRAE LAS areas DEL ESTUDIANTE
 
-        $consulta_mat_area_est = mysqli_query($conexion, "SELECT ar_id, car_ih, car_docente, car_director_grupo FROM ".BD_ACADEMICA.".academico_cargas car
+        $consulta_mat_area_est = mysqli_query($conexion, "SELECT ar_id, car_ih FROM ".BD_ACADEMICA.".academico_cargas car
 
 		INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car.car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
 
@@ -200,10 +200,6 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
             $contador = 1;
 
             while ($fila = mysqli_fetch_array($consulta_mat_area_est, MYSQLI_BOTH)) {
-                //DIRECTOR DE GRUPO
-                if($fila["car_director_grupo"]==1){
-                    $idDirector=$fila["car_docente"];
-                }
 
 
 
@@ -253,7 +249,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                 //CONSULTA QUE ME TRAE LA DEFINITIVA POR MATERIA Y NOMBRE DE LA MATERIA
 
-                $consulta_a_mat = mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,mat_nombre,mat_id,car_id FROM ".BD_ACADEMICA.".academico_materias am
+                $consulta_a_mat = mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,mat_nombre,mat_id,car_id, car_docente, car_director_grupo FROM ".BD_ACADEMICA.".academico_materias am
 
 				INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
 
@@ -339,6 +335,10 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
 
                     while ($fila2 = mysqli_fetch_array($consulta_a_mat, MYSQLI_BOTH)) {
+                        //DIRECTOR DE GRUPO
+                        if($fila2["car_director_grupo"]==1){
+                            $idDirector=$fila2["car_docente"];
+                        }
 
                         $contador_periodos = 0;
 
