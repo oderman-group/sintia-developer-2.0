@@ -165,13 +165,13 @@ if(@mysqli_num_rows($cndisiplina)>0){
         <td width="8%">Periodo</td>
         <td>Observaciones</td>
     </tr>
-<?php $cont = 1; while($rndisiplina=mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)){
+<?php while($rndisiplina=mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)){
 ?>
     <tr align="center" style="font-weight:bold; font-size:12px; height:20px;">
         <td><?=$rndisiplina["dn_periodo"]?></td>
-        <td align="left"><?="[".$cont."] ".$rndisiplina["dn_observacion"]?></td>
+        <td align="left"><?=$rndisiplina["dn_observacion"]?></td>
     </tr>
-<?php $cont++; }?>
+<?php }?>
 </table>
 <?php }?>
 	
