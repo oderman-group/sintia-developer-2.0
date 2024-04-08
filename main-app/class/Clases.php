@@ -171,7 +171,7 @@ class Clases {
             $archivoSubido->validarArchivo($FILES['videoClase']['size'], $FILES['videoClase']['name']);
             $explode=explode(".", $FILES['videoClase']['name']);
             $extension = end($explode);
-            $archivo = $_SESSION["inst"].'_'.$_SESSION["id"].'_calse_video_'.$POST["idR"].".".$extension;
+            $archivo = $_SESSION["inst"].'_'.$_SESSION["id"].'_clase_video_'.$POST["idR"].".".$extension;
             $archivoSubido->subirArchivoStorage(FILE_VIDEO_CLASES, $archivo, $nombreInputFile,$storage); 
             try{
                 mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_video_clase='".$archivo."' WHERE cls_id='".$POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
@@ -322,7 +322,7 @@ class Clases {
             $archivoSubido->validarArchivo($FILES['videoClase']['size'], $FILES['videoClase']['name']);
             $explode=explode(".", $FILES['videoClase']['name']);
             $extension = end($explode);
-            $claseVideo = $_SESSION["inst"].'_'.$_SESSION["id"].'_calse_video_'.$codigo.".".$extension;
+            $claseVideo = $_SESSION["inst"].'_'.$_SESSION["id"].'_clase_video_'.$codigo.".".$extension;
             $archivoSubido->subirArchivoStorage(FILE_VIDEO_CLASES, $claseVideo, $nombreInputFile,$storage); 
         }
         //Archivos
