@@ -4,6 +4,9 @@ if(($datosUsuarioActual['uss_tipo']==3 or $datosUsuarioActual['uss_tipo']==4) an
 	exit();
 }
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/Grados.php");
+require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 ?>
 <?php require_once("../class/servicios/MediaTecnicaServicios.php"); ?>
 <div class="page-content">
@@ -80,16 +83,13 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 														<?php
 															$p = 1;
 															while($p<=$datosEstudianteActual['gra_periodos']){
-																$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
-																WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$p."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-																");
-																$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
-																$numPeriodosCursos=mysqli_num_rows($consultaPeriodosCursos);
-																$porcentaje=25;
-																if($numPeriodosCursos>0){
-																	$porcentaje=$periodosCursos['gvp_valor'];
+																$periodosCursos = Grados::traerPorcentajePorPeriodosGrados($conexion, $config, $datosEstudianteActual['mat_grado'], $p);
+																
+																$porcentajeGrado=25;
+																if(!empty($periodosCursos['gvp_valor'])){
+																	$porcentajeGrado=$periodosCursos['gvp_valor'];
 																}
-																echo '<th style="text-align:center;">'.$p.'P<br>('.$porcentaje.'%)</th>';
+																echo '<th style="text-align:center;">'.$p.'P<br>('.$porcentajeGrado.'%)</th>';
 																$p++;
 															}
 														?> 
@@ -102,24 +102,27 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
                                                 <tbody>
 													<?php
 													$contReg = 1;
-													$parametros = ['matcur_id_matricula' => $datosEstudianteActual["mat_id"]];
+													$parametros = [
+														'matcur_id_matricula'	 	=> $datosEstudianteActual["mat_id"],
+														'matcur_id_institucion' 	=> $config['conf_id_institucion'],
+														'matcur_years' 				=> $_SESSION["bd"]
+													];
 													$listaCursosMediaTecnica = MediaTecnicaServicios::listar($parametros);
 													$filtroOr='';
 													if ($listaCursosMediaTecnica != null) { 
 														foreach ($listaCursosMediaTecnica as $dato) {
-															$filtroOr=$filtroOr.' OR (car_curso='.$dato["matcur_id_curso"].' AND car_grupo='.$dato["matcur_id_grupo"].')';
+															$filtroOr.=" OR (car_curso='".$dato["matcur_id_curso"]."' AND car_grupo='".$dato["matcur_id_grupo"]."')";
 														}
 													}
-													$cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE (car_curso='".$datosEstudianteActual['mat_grado']."' AND car_grupo='".$datosEstudianteActual['mat_grupo']."') AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ".$filtroOr);
+													$cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND ((car_curso='".$datosEstudianteActual['mat_grado']."' AND car_grupo='".$datosEstudianteActual['mat_grupo']."') {$filtroOr})");
 													while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
-														$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_grados gra, ".BD_GENERAL.".usuarios uss WHERE am.mat_id='".$rCargas['car_materia']."' AND gra_id='".$rCargas['car_curso']."' AND uss_id='".$rCargas['car_docente']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
-														$rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);
+														$rDatos = Asignaturas::consultarAsignaturaCursoUsuario($conexion, $config, $rCargas['car_curso'], $rCargas['car_materia'], $rCargas['car_docente']);
 													?>
                                                     
 													<tr>
                                                         <td style="text-align:center;"><?=$contReg;?></td>
 														<td style="text-align:center;"><?=$rCargas['car_id'];?></td>
-														<td><?=$rDatos[1];?></td>
+														<td><?=!empty($rDatos[1]) ? $rDatos[1] : "";?></td>
 
 														<?php
 														 $definitiva = 0;
@@ -128,18 +131,14 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 														 $sumaPorcentaje = 0;
 														 $n = 0;
 														 for($i=1; $i<=$datosEstudianteActual['gra_periodos']; $i++){
+															$periodosCursos = Grados::traerPorcentajePorPeriodosGrados($conexion, $config, $datosEstudianteActual['mat_grado'], $i);
 															
-															$consultaPeriodosCursos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
-															WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$p."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-															");
-															$periodosCursos = mysqli_fetch_array($consultaPeriodosCursos, MYSQLI_BOTH);
-															$numPeriodosCursos=mysqli_num_rows($consultaPeriodosCursos);
-															$porcentaje=25;
-															if($numPeriodosCursos>0){
-																$porcentaje=$periodosCursos['gvp_valor'];
+															$porcentajeGrado=25;
+															if(!empty($periodosCursos['gvp_valor'])){
+																$porcentajeGrado=$periodosCursos['gvp_valor'];
 															}
-															 $decimal = $porcentaje/100;
-															 
+															$decimal = $porcentajeGrado/100;
+															
 															//LAS CALIFICACIONES
 															$notasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$rCargas['car_id']."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 															$notasResultado = mysqli_fetch_array($notasConsulta, MYSQLI_BOTH);
@@ -173,7 +172,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 															if(!empty($sumaPorcentaje)){
 																$definitiva = ($definitiva / $sumaPorcentaje);
 															}
-															$consultaN = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_cod_estudiante='".$datosEstudianteActual['mat_id']."' AND niv_id_asg='".$rCargas['car_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+															$consultaN = Calificaciones::nivelacionEstudianteCarga($conexion, $config, $datosEstudianteActual['mat_id'], $rCargas['car_id']);
 															
 															$numN = mysqli_num_rows($consultaN);
 															$rN = mysqli_fetch_array($consultaN, MYSQLI_BOTH);
@@ -191,10 +190,13 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 														 //PREGUNTAMOS SI ESTAMOS EN EL PERIODO PENULTIMO O ULTIMO
 														 if($config[2]==$datosEstudianteActual['gra_periodos']){
 															 $notaMinima = ($config[5]-$definitiva);
-															 $periodosCursos2 = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
-															 WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$datosEstudianteActual['gra_periodos']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-															 "), MYSQLI_BOTH);
-															 $decimal2 = $periodosCursos2['gvp_valor']/100;
+															 $periodosCursos = Grados::traerPorcentajePorPeriodosGrados($conexion, $config, $datosEstudianteActual['mat_grado'], $datosEstudianteActual['gra_periodos']);
+															 
+															 $porcentajeGrado=25;
+															 if(!empty($periodosCursos['gvp_valor'])){
+																 $porcentajeGrado=$periodosCursos['gvp_valor'];
+															 }
+															 $decimal2 = $porcentajeGrado/100;
 															
 															if(!empty($decimal2)){ 
 																$notaMinima = round(($notaMinima / $decimal2), $config['conf_decimales_notas']);

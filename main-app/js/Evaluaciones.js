@@ -99,16 +99,31 @@ function enviarRespuestaEncuesta(datos) {
     })
     .then(response => response.text()) // Convertir la respuesta a texto
     .then(data => {
-        $.toast({
-            heading: 'Acción realizada',
-            text: 'La respuesta fue guardada correctamente.',
-            position: 'bottom-right',
-            showHideTransition: 'slide',
-            loaderBg: '#26c281',
-            icon: 'success',
-            hideAfter: 5000,
-            stack: 6
-        });
+        console.log(data);
+        if (data.includes('ER_DT_21')) {
+            $.toast({
+                heading: 'Redireccionando',
+                text: 'La encuesta escogida ya llego al limite y no puede ser respondida, porfavor escoja otra.',
+                position: 'bottom-right',
+                showHideTransition: 'slide',
+                loaderBg: '#26c281',
+                icon: 'warning',
+                hideAfter: 5000,
+                stack: 6
+            });
+            window.location.href = data;
+        } else {
+            $.toast({
+                heading: 'Acción realizada',
+                text: 'La respuesta fue guardada correctamente.',
+                position: 'bottom-right',
+                showHideTransition: 'slide',
+                loaderBg: '#26c281',
+                icon: 'success',
+                hideAfter: 5000,
+                stack: 6
+            });
+        }
     })
     .catch(error => {
          // Manejar errores

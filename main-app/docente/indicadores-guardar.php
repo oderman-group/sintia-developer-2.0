@@ -42,12 +42,12 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 		//Si el valor es mayor al adecuado lo ajustamos al porcentaje restante; Siempre que este último sea mayor a 0.
 		if($_POST["valor"]>$porcentajeRestante and $porcentajeRestante>0){$_POST["valor"] = $porcentajeRestante;}
 
-		Indicadores::guardarIndicadorCarga($conexion, $config, $cargaConsultaActual, $idRegistro, $periodoConsultaActual, $_POST, NULL);
+		Indicadores::guardarIndicadorCarga($conexion, $conexionPDO, $config, $cargaConsultaActual, $idRegistro, $periodoConsultaActual, $_POST, NULL, 1);
 	}else{
 		//El sistema reparte los porcentajes automáticamente y equitativamente.
 		$valorIgualIndicador = ($porcentajePermitido/($sumaIndicadores[2]+1));
 
-		Indicadores::guardarIndicadorCarga($conexion, $config, $cargaConsultaActual, $idRegistro, $periodoConsultaActual, $_POST, NULL);
+		Indicadores::guardarIndicadorCarga($conexion, $conexionPDO, $config, $cargaConsultaActual, $idRegistro, $periodoConsultaActual, $_POST, NULL, 1);
 
 		//Actualiza todos valores de la misma carga y periodo; incluyendo el que acaba de crear.
 		Indicadores::actualizarValorIndicadores($conexion, $config, $cargaConsultaActual, $periodoConsultaActual, $valorIgualIndicador);
@@ -78,12 +78,12 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 		//Si el valor es mayor al adecuado lo ajustamos al porcentaje restante; Siempre que este último sea mayor a 0.
 		if($indicadorBD['ipc_valor']>$porcentajeRestante and $porcentajeRestante>0){$indicadorBD['ipc_valor'] = $porcentajeRestante;}
 
-		Indicadores::guardarIndicadorCarga($conexion, $config, $cargaConsultaActual, $idRegistro, $periodoConsultaActual, NULL, $indicadorBD);
+		Indicadores::guardarIndicadorCarga($conexion, $conexionPDO, $config, $cargaConsultaActual, $idRegistro, $periodoConsultaActual, NULL, $indicadorBD, 1);
 	}else{
 	//El sistema reparte los porcentajes automáticamente y equitativamente.
 		$valorIgualIndicador = ($porcentajePermitido/($sumaIndicadores[2]+1));
 
-		Indicadores::guardarIndicadorCarga($conexion, $config, $cargaConsultaActual, $idRegistro, $periodoConsultaActual, NULL, $indicadorBD);
+		Indicadores::guardarIndicadorCarga($conexion, $conexionPDO, $config, $cargaConsultaActual, $idRegistro, $periodoConsultaActual, NULL, $indicadorBD, 1);
 
 		//Actualiza todos valores de la misma carga y periodo; incluyendo el que acaba de crear.
 		Indicadores::actualizarValorIndicadores($conexion, $config, $cargaConsultaActual, $periodoConsultaActual, $valorIgualIndicador);

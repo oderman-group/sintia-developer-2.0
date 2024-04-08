@@ -52,6 +52,9 @@
 										$contReg = 1;
 										while($resultado = mysqli_fetch_array($consultaEncuestas, MYSQLI_BOTH)){
 
+											$iniciadas = Asignaciones::consultarCantAsignacionesEmpezadas($conexion, $config, $resultado['gal_id']);
+											if ($resultado['gal_limite_evaluadores'] != 0 && $iniciadas >= $resultado['gal_limite_evaluadores'] ) { continue; }
+
 											$fechaBD = new DateTime($resultado['evag_fecha']);
 											$fecha = $fechaBD->format('d/m/Y');
 											$nombre = !empty($resultado['evag_nombre']) ? $resultado['evag_nombre'] : "";
@@ -73,9 +76,8 @@
 												break;
 
 												case MATERIA:
-													$consultaEvaluado = mysqli_query($conexion, "SELECT mat_nombre FROM ".BD_ACADEMICA.".academico_materias
-													WHERE mat_id='".$resultado['epag_id_evaluado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-													$datosEvaluado = mysqli_fetch_array($consultaEvaluado, MYSQLI_BOTH);
+													require_once(ROOT_PATH . "/main-app/class/Asignaturas.php");
+													$datosEvaluado = Asignaturas::consultarDatosAsignatura($conexion, $config, $resultado['epag_id_evaluado']);
 													$nombreEvaluado = $datosEvaluado['mat_nombre'];
 												break;
 

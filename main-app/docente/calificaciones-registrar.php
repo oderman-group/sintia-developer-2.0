@@ -123,9 +123,7 @@ $calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
 												<tbody>
 
 												 <?php
-
-												 $TablaNotas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-
+												 $TablaNotas = Boletin::listarTipoDeNotas($config["conf_notas_categoria"]);
 												 while($tabla = mysqli_fetch_array($TablaNotas, MYSQLI_BOTH)){
 
 												 ?>

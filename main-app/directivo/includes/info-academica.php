@@ -23,15 +23,14 @@
 			<div class="form-group row">
 				<label class="col-sm-3 control-label">Grupo</label>
 				<div class="col-sm-3">
-					<?php
-					$cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM " . BD_ACADEMICA . ".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-					?>
 					<select class="form-control" name="grupo" <?= $disabledPermiso; ?>>
-						<?php while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
-							if ($rv[0] == $datosEstudianteActual['mat_grupo'])
-								echo '<option value="' . $rv[0] . '" selected>' . $rv[1] . '</option>';
+						<?php 
+                        $cv = Grupos::traerGrupos($conexion, $config);
+						while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
+							if ($rv['gru_id'] == $datosEstudianteActual['mat_grupo'])
+								echo '<option value="' . $rv['gru_id'] . '" selected>' . $rv['gru_nombre'] . '</option>';
 							else
-								echo '<option value="' . $rv[0] . '">' . $rv[1] . '</option>';
+								echo '<option value="' . $rv['gru_id'] . '">' . $rv['gru_nombre'] . '</option>';
 						} ?>
 					</select>
 				</div>
@@ -152,9 +151,9 @@
 				<div style="display: none;">
 					<select id="grupoBase" multiple class="form-control select2-multiple">
 						<?php
-						$cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM " . BD_ACADEMICA . ".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                        $cv = Grupos::traerGrupos($conexion, $config);
 						while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
-							echo '<option value="' . $rv[0] . '" selected >' . $rv[1] . '</option>';
+							echo '<option value="' . $rv['gru_id'] . '" selected >' . $rv['gru_nombre'] . '</option>';
 						} ?>
 					</select>
 					<select id="estadoBase" multiple class="form-control select2-multiple">
@@ -199,12 +198,12 @@
 											<td>
 												<select id="grupo-<?= $idCurso["gra_id"]; ?>" class="form-control" onchange="editarCurso('<?= $idCurso['gra_id']; ?>')" <?= $disabledPermiso; ?>>
 													<?php
-													$cv = mysqli_query($conexion, "SELECT gru_id, gru_nombre FROM " . BD_ACADEMICA . ".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+													$cv = Grupos::traerGrupos($conexion, $config);
 													while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
-														if ($rv[0] == $idCurso['matcur_id_grupo'])
-															echo '<option value="' . $rv[0] . '" selected>' . $rv[1] . '</option>';
+														if ($rv['gru_id'] == $idCurso['matcur_id_grupo'])
+															echo '<option value="' . $rv['gru_id'] . '" selected>' . $rv['gru_nombre'] . '</option>';
 														else
-															echo '<option value="' . $rv[0] . '">' . $rv[1] . '</option>';
+															echo '<option value="' . $rv['gru_id'] . '">' . $rv['gru_nombre'] . '</option>';
 													} ?>
 												</select>
 											</td>

@@ -1,6 +1,7 @@
 <?php
 include("../directivo/session.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 ?>
 <head>
 	<title>TODAS LAS CALIFICACIONES</title>
@@ -37,12 +38,7 @@ require_once("../class/Estudiantes.php");
 									$cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$datosEstudianteActual['mat_grado']."' AND car_grupo='".$datosEstudianteActual['mat_grupo']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 									$nCargas = mysqli_num_rows($cCargas);
 									while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
-										$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_grados gra, ".BD_GENERAL.".usuarios uss WHERE am.mat_id='".$rCargas['car_materia']."' AND gra_id='".$rCargas['car_curso']."' AND uss_id='".$rCargas['car_docente']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
-										$rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);
-									    //PLAN DE CLASE
-										$Cpc = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_pclase WHERE pc_id_carga='".$rCargas['car_id']."' AND pc_periodo='".$_GET["periodo"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-									    $Rpc = mysqli_fetch_array($Cpc, MYSQLI_BOTH);
-									    $Npc = mysqli_num_rows($Cpc);
+                    $rDatos = Asignaturas::consultarAsignaturaCursoUsuario($conexion, $config, $rCargas['car_curso'], $rCargas['car_materia'], $rCargas['car_docente']);
 										//DEFINITIVAS
 										$carga = $rCargas['car_id'];
 										$periodo = $_GET["periodo"];

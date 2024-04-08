@@ -10,6 +10,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/Grados.php");
 require_once("../class/Grupos.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 
 if (empty($_REQUEST["periodo"])) {

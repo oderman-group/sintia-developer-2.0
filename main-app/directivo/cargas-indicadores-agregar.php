@@ -4,31 +4,16 @@
 <?php include("../compartido/head.php");?>
 <?php include("verificar-carga.php");?>
 <?php
+require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
 }
-try{
-    $consultaIndicadores=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga aic
-    INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=aic.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
-    WHERE aic.ipc_carga='".$cargaConsultaActual."' AND aic.ipc_periodo='".$periodoConsultaActual."' AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-    include("../compartido/error-catch-to-report.php");
-}
+$consultaIndicadores = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 $indicador = mysqli_fetch_array($consultaIndicadores, MYSQLI_BOTH);
 
-try{
-    $consultaSumaIndicadores=mysqli_query($conexion, "SELECT (SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
-    (SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
-    (SELECT count(*) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-    WHERE ipc_carga='".$cargaConsultaActual."' AND ipc_periodo='".$periodoConsultaActual."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})");
-} catch (Exception $e) {
-    include("../compartido/error-catch-to-report.php");
-}
-$sumaIndicadores = mysqli_fetch_array($consultaSumaIndicadores, MYSQLI_BOTH);
+$sumaIndicadores = Indicadores::consultarSumaIndicadores($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 $porcentajePermitido = 100 - $sumaIndicadores[0];
 $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
 $porcentajeRestante = ($porcentajeRestante + $indicador['ipc_valor']);

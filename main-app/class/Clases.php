@@ -384,4 +384,98 @@ class Clases {
         }
     }
 
+    /**
+     * Me trae el plan de clases de una carga en un periodo
+     *
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $carga
+     * @param int $periodo
+     * 
+     * @return array $resultado
+     *
+     */
+    public static function traerPlanClase(
+        mysqli $conexion,
+        array $config,
+        string $carga,
+        int $periodo
+    ){
+        
+        $resultado = [];
+
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_pclase 
+            WHERE pc_id_carga='".$carga."' AND pc_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+        return $resultado;
+    }
+
+    /**
+     * Me elimina el plan de clases de una carga en un periodo
+     *
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $carga
+     * @param int $periodo
+     *
+     */
+    public static function eliminarPlanClases(
+        mysqli $conexion,
+        array $config,
+        string $carga,
+        int $periodo
+    ){
+
+        try {
+            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_pclase WHERE pc_id_carga='".$carga."' AND pc_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+    }
+
+    /**
+     * Me guarda el plan de clases de una carga en un periodo
+     *
+     * @param mysqli $conexion
+     * @param PDO $conexionPDO
+     * @param array $config
+     * @param string $carga
+     * @param int $periodo
+     * @param array $FILES
+     *
+     */
+    public static function guardarPlanClases(
+        mysqli $conexion,
+        PDO $conexionPDO,
+        array $config,
+        string $carga,
+        int $periodo,
+        array $FILES
+    ){
+        $codigo=Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_pclase');
+
+        $archivoSubido = new Archivos;
+
+        $archivoSubido->validarArchivo($FILES['file']['size'], $FILES['file']['name']);
+        $explode=explode(".", $FILES['file']['name']);
+        $extension = end($explode);
+        $archivo = uniqid($_SESSION["inst"].'_'.$_SESSION["id"].'_file_').".".$extension;
+        $destino = ROOT_PATH."/main-app/files/pclase";
+        @unlink($destino."/".$archivo);
+        move_uploaded_file($FILES['file']['tmp_name'], $destino ."/".$archivo);
+
+        try {
+            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_pclase(pc_id, pc_plan, pc_id_carga, pc_periodo, pc_fecha_subido, institucion, year)VALUES('".$codigo."', '".$archivo."', '".$carga."', '".$periodo."', now(), {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+    }
+
 }
