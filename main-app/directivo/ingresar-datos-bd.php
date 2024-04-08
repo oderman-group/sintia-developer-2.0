@@ -304,6 +304,20 @@ try {
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
+
+		$data = [
+			'institucion_id'   => $idInsti,
+			'institucion_agno' => $year,
+			'usuario_id'       => '2',
+			'usuario_email'    => $_POST['email'],
+			'usuario_nombre'   => $_POST["nombre1"]." ".$_POST["apellido1"],
+			'usuario_usuario'  => $_POST["documento"],
+			'usuario_clave'    => 12345678
+		];
+		$asunto = 'Bienvenido a la Plataforma SINTIA';
+		$bodyTemplateRoute = ROOT_PATH.'/config-general/plantilla-email-bienvenida.php';
+		
+		EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute,null,null);
 	}
 
 	mysqli_query($conexion, "COMMIT");

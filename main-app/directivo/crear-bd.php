@@ -1,5 +1,6 @@
 <?php
 include("session.php");
+require_once(ROOT_PATH."/main-app/class/EnviarEmail.php");
 
 $idPaginaInterna = 'DV0067';
 
