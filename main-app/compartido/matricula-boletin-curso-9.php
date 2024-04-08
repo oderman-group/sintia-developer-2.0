@@ -161,17 +161,13 @@ if(@mysqli_num_rows($cndisiplina)>0){
     
     <tr style="font-weight:bold; background:#e0e0153b; height:25px; font-size:12px; text-align:center">
         <td width="8%">Periodo</td>
-        <!--<td width="8%">Nota</td>-->
         <td>Observaciones</td>
     </tr>
 <?php while($rndisiplina=mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)){
-// $consultaDesempenoND=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$rndisiplina["dn_nota"].">=notip_desde AND ".$rndisiplina["dn_nota"]."<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
-// $desempenoND = mysqli_fetch_array($consultaDesempenoND, MYSQLI_BOTH);
 ?>
     <tr align="center" style="font-weight:bold; font-size:12px; height:20px;">
         <td><?=$rndisiplina["dn_periodo"]?></td>
-        <!--<td><?=$desempenoND[1]?></td>-->
-        <td align="left"><?="[".$rndisiplina["dn_id"]."] ".$rndisiplina["dn_observacion"]?></td>
+        <td align="left"><?=$rndisiplina["dn_observacion"]?></td>
     </tr>
 <?php }?>
 </table>
