@@ -15,10 +15,7 @@ require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
 
-$consultaCalificaciones=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores ai
-INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga ipc ON ipc.ipc_indicador=ai.ind_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
-WHERE ai.ind_id='".$idR."' AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}");
-$calificacion = mysqli_fetch_array($consultaCalificaciones, MYSQLI_BOTH);
+$calificacion = Indicadores::traerDatosIndicadorRelacion($idR);
 ?>
 <!-- Theme Styles -->
 <link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />

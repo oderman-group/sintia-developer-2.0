@@ -2,6 +2,7 @@
 	require_once(ROOT_PATH."/main-app/class/Boletin.php");
 	require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 	require_once(ROOT_PATH."/main-app/class/Grados.php");
+	require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 	$usrEstud="";
 	if(!empty($_GET["usrEstud"])){ $usrEstud=base64_decode($_GET["usrEstud"]);}
 ?>
@@ -348,10 +349,7 @@
 
 														else $colorNota = $config[7];
 
-														$indicadorName = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores ai 
-															INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga ipc ON ipc.ipc_indicador=ai.ind_id AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
-															WHERE ai.ind_id='".$resultado['act_id_tipo']."' AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
-															"), MYSQLI_BOTH); 
+														$indicadorName = Indicadores::traerIndicadoresDatosRelacion($resultado['act_id_tipo']); 
 
 															$notaFinal=$nota3;
 															if($config['conf_forma_mostrar_notas'] == CUALITATIVA){

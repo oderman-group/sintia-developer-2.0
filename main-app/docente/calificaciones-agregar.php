@@ -100,8 +100,7 @@ if(
 											
 											<?php 
 											if($datosCargaActual['car_indicador_automatico']==1){
-												$consultaIndDef=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores WHERE ind_definitivo=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-												$indDef = mysqli_fetch_array($consultaIndDef, MYSQLI_BOTH);
+												$indDef = Indicadores::consultarIndicadoresDefinitivos();
 												$indicadorAuto = !empty($indDef['ind_id']) ? $indDef['ind_id'] : null;
 												
 												$indicadorDefitnivo = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
