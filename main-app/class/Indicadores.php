@@ -1,6 +1,7 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 require_once ROOT_PATH."/main-app/class/Conexion.php";
 
 class Indicadores {
@@ -345,6 +346,247 @@ class Indicadores {
 		} catch (Exception $e) {
 			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 		}
+    }
+    
+    /**
+     * Me trae los datos de un indicador.
+     *
+     * @param string $idIndicador
+     *
+     */
+    public static function traerIndicadoresDatos(
+        string $idIndicador
+    ){
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores WHERE ind_id=? AND institucion=? AND year=?";
+
+        $parametros = [$idIndicador, $_SESSION["idInstitucion"], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
+
+        return $resultado;
+    }
+    
+    /**
+     * Me trae los datos de un indicador y su relacion.
+     *
+     * @param string $idIndicador
+     *
+     */
+    public static function traerIndicadoresDatosRelacion(
+        string $idIndicador
+    ){
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores ai 
+        INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga ipc ON ipc.ipc_indicador=ai.ind_id AND ipc.institucion=? AND ipc.year=?
+        WHERE ai.ind_id=? AND ai.institucion=? AND ai.year=?";
+
+        $parametros = [$_SESSION["idInstitucion"], $_SESSION["bd"], $idIndicador, $_SESSION["idInstitucion"], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
+
+        return $resultado;
+    }
+    
+    /**
+     * Me trae los indicadores de una carga en un periodo.
+     *
+     * @param string $idCarga
+     * @param int    $periodo
+     *
+     */
+    public static function traerIndicadoresCargaPeriodo(
+        string $idCarga,
+        int    $periodo
+    ){
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores ai, ".BD_ACADEMICA.".academico_indicadores_carga aic WHERE ai.ind_id=aic.ipc_indicador AND aic.ipc_periodo=? AND aic.ipc_carga=? AND aic.institucion=? AND aic.year=? AND ai.institucion=? AND ai.year=?";
+
+        $parametros = [$periodo, $idCarga, $_SESSION["idInstitucion"], $_SESSION["bd"], $_SESSION["idInstitucion"], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
+    }
+    
+    /**
+     * Me trae los datos de un indicadores y su relación.
+     *
+     * @param string $idIndicador
+     *
+     */
+    public static function traerDatosIndicadorRelacion(
+        string $idIndicador
+    ){
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores ai
+		INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga ipc ON ipc.ipc_indicador=ai.ind_id AND ipc.institucion=? AND ipc.year=?
+		WHERE ai.ind_id=? AND ai.institucion=? AND ai.year=?";
+
+        $parametros = [$_SESSION["idInstitucion"], $_SESSION["bd"], $idIndicador, $_SESSION["idInstitucion"], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
+
+        return $resultado;
+    }
+    
+    /**
+     * Me trae la tematica de una carga
+     *
+     * @param string $idCarga
+     * @param int    $periodo
+     *
+     */
+    public static function consultaTematica(
+        string $idCarga,
+        int    $periodo
+    ){
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores WHERE ind_carga=? AND ind_periodo=? AND ind_tematica=1 AND institucion=? AND year=?";
+
+        $parametros = [$idCarga, $periodo, $_SESSION["idInstitucion"], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
+    }
+
+    /**
+     * Este metodo me actualiza la informacion de un usuario
+    **/
+    public static function actualizarIndicador (
+        array   $config,
+        string  $idIndicador,
+        string  $update,
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_indicadores SET {$updateSql}, ind_fecha_modificacion=now() WHERE ind_id=? AND institucion=? AND year=?";
+
+        $parametros = array_merge($updateValues, [$idIndicador, $config['conf_id_institucion'], $year]);
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+    }
+
+    /**
+     * Este metodo me actualiza la informacion de un usuario
+    **/
+    public static function actualizarIndicadorCargaPeriodo (
+        array   $config,
+        string  $idCarga,
+        int     $periodo,
+        string  $update,
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_indicadores SET {$updateSql}, ind_fecha_modificacion=now() WHERE ind_periodo=? AND ind_carga=? AND institucion=? AND year=?";
+
+        $parametros = array_merge($updateValues, [$periodo, $idCarga, $config['conf_id_institucion'], $year]);
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+    }
+
+    /**
+     * Este metodo me guarda la informacion de un indicador
+    **/
+    public static function guardarIndicador (
+        PDO     $conexionPDO,
+        string  $insert,
+        array   $parametros
+    )
+    {
+        $campos = explode(',', $insert);
+        $numCampos = count($campos);
+        $signosPreguntas = str_repeat('?,', $numCampos);
+        $signosPreguntas = rtrim($signosPreguntas, ',');
+
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores');
+        $parametros[] = $codigo;
+
+        $sql = "INSERT INTO ".BD_ACADEMICA.".academico_indicadores({$insert}) VALUES ({$signosPreguntas})";
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $codigo;
+    }
+    
+    /**
+     * Me trae los indicadores obligatorios.
+     */
+    public static function consultarIndicadoresObligatorios()
+    {
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores WHERE ind_obligatorio=1 AND institucion=? AND year=?";
+
+        $parametros = [$_SESSION["idInstitucion"], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
+    }
+    
+    /**
+     * Me trae el valor de los indicadores obligatorios.
+     *
+     * @param string $idIndicador
+     *
+     */
+    public static function consultarValorIndicadoresObligatorios(
+        string $idIndicador = ""
+    ){
+        $filtro = !empty($idIndicador) ? "AND ind_id!='".$idIndicador."'" : "";
+        $sql = "SELECT sum(ind_valor) FROM ".BD_ACADEMICA.".academico_indicadores WHERE ind_obligatorio=1 AND institucion=? AND year=? {$filtro}";
+
+        $parametros = [$_SESSION["idInstitucion"], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
+
+        return $resultado;
+    }
+    
+    /**
+     * Me trae los datos de un indicador.
+     *
+     * @param string $idIndicador
+     *
+     */
+    public static function eliminarIndicadores(
+        string $idIndicador
+    ){
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_indicadores WHERE ind_id=? AND institucion=? AND year=?";
+
+        $parametros = [$idIndicador, $_SESSION["idInstitucion"], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+    }
+    
+    /**
+     * Me trae el valor de los indicadores obligatorios.
+     *
+     * @param string $idIndicador
+     *
+     */
+    public static function consultarIndicadoresDefinitivos()
+    {
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores WHERE ind_definitivo=1 AND institucion=? AND year=?";
+
+        $parametros = [$_SESSION["idInstitucion"], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
+
+        return $resultado;
     }
 
 }
