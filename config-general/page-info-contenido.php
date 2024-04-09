@@ -83,6 +83,8 @@ switch($_GET["idmsg"]){
 		}
 		$url1 = 'cargas.php';
 		$boton1 = 'IR A CARGAS';
+		$url2 = '../compartido/informes-generales-sabanas.php?curso='.$_GET["curso"].'&grupo='.$_GET["grupo"].'&per='.$_GET['periodo'].'';
+		$boton2 = 'VER SABANA';
 		$lottie = 'https://lottie.host/127f030a-84e3-49fc-a1ad-4bc806e0292d/fXHrvhswC1.json';
 	break;
 		

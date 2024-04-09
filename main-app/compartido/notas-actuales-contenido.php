@@ -78,16 +78,20 @@ require_once(ROOT_PATH."/main-app/class/Asignaturas.php");?>
                                                 <tbody>
 													<?php
 													$contReg = 1; 
-													$parametros = ['matcur_id_matricula' => $datosEstudianteActual["mat_id"]];
+													$parametros = [
+														'matcur_id_matricula' => $datosEstudianteActual["mat_id"],
+														'matcur_id_institucion' => $config['conf_id_institucion'],
+														'matcur_years' => $_SESSION['bd']
+													];
 													$listaCursosMediaTecnica = MediaTecnicaServicios::listar($parametros);
 													$filtroOr='';
 													if ($listaCursosMediaTecnica != null) { 
 														foreach ($listaCursosMediaTecnica as $dato) {
-															$filtroOr=$filtroOr.' OR (car_curso='.$dato["matcur_id_curso"].' AND car_grupo='.$dato["matcur_id_grupo"].')';
+															$filtroOr=$filtroOr.'OR (car_curso='.$dato["matcur_id_curso"].' AND car_grupo='.$dato["matcur_id_grupo"].')';
 														}
 													}
 													$cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas 
-													WHERE (car_curso='".$datosEstudianteActual['mat_grado']."' AND car_grupo='".$datosEstudianteActual['mat_grupo']."') AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} ".$filtroOr);
+													WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND (car_curso='".$datosEstudianteActual['mat_grado']."' AND car_grupo='".$datosEstudianteActual['mat_grupo']."' {$filtroOr})");
 													while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
 														$rDatos = Asignaturas::consultarAsignaturaCursoUsuario($conexion, $config, $rCargas['car_curso'], $rCargas['car_materia'], $rCargas['car_docente']);
 														
