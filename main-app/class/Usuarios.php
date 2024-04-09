@@ -103,7 +103,7 @@ class Usuarios {
         }
 
         try {
-            mysqli_query($conexion, "UPDATE " . BD_GENERAL . ".usuarios SET uss_clave=SHA1('" . $data['nueva_clave'] . "') 
+            mysqli_query($conexion, "UPDATE " . BD_GENERAL . ".usuarios SET uss_clave=SHA1('" . $data['nueva_clave'] . "'), uss_intentos_fallidos=0 
             WHERE uss_id='" . $data['usuario_id'] . "' AND institucion={$data['institucion_id']} AND year={$data['institucion_agno']}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
