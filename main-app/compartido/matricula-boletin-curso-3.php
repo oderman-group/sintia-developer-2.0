@@ -699,7 +699,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
         <table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
             <tr>
-                <td align="center">
+                <td align="center" width="50%">
                     <?php
                         $directorGrupo = Usuarios::obtenerDatosUsuario($idDirector);
                         $nombreDirectorGrupo = UsuariosPadre::nombreCompletoDelUsuario($directorGrupo);
@@ -716,12 +716,12 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                     <?=$nombreDirectorGrupo?><br>
                     Director(a) de grupo
                 </td>
-                <td align="center">
+                <td align="center" width="50%">
                     <?php
                         $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
                         $nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
                         if(!empty($rector["uss_firma"])){
-                            echo '<img src="../files/fotos/'.$rector["uss_firma"].'" width="15%"><br>';
+                            echo '<img src="../files/fotos/'.$rector["uss_firma"].'" width="25%"><br>';
                         }else{
                             echo '<p>&nbsp;</p>
                                 <p>&nbsp;</p>
