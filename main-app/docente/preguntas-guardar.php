@@ -14,10 +14,8 @@ $archivoSubido = new Archivos;
 
 if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 	
-	$codigo = Evaluaciones::guardarPreguntasEvaluacion($conexion, $config, $_POST, $_FILES);
-
-	Evaluaciones::guardarRelacionPreguntaEvaluacion($conexion, $conexionPDO, $config, $codigo, $_POST);
-
+	
+	$codigo = Evaluaciones::guardarPreguntasEvaluacion($conexion, $config, $_POST, $_FILES,false);	
 	if($_POST["opcionR"]==1){
 		$cont=1;
 		$datosInsert = '';
@@ -26,8 +24,8 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 			if(!empty(trim($_POST["r$cont"]))){
 				if(empty($_POST["c$cont"])){$_POST["c$cont"]=0;}
 				$datosInsert .="('".$codigoR."', '".mysqli_real_escape_string($conexion,$_POST["r$cont"])."','".$_POST["c$cont"]."','".$codigo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
-				$cont++;
 			}
+			$cont++;
 		}
 
 		if(!empty($datosInsert)){
@@ -48,8 +46,8 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 			if(!empty(trim($_POST["rv$cont"]))){
 				if(empty($_POST["cv$cont"])){$_POST["cv$cont"]=0;}
 				$datosInsert .="('".$codigoR."', '".mysqli_real_escape_string($conexion,$_POST["rv$cont"])."','".$_POST["cv$cont"]."','".$codigo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
-				$cont++;
 			}
+			$cont++;
 		}
 
 		if(!empty($datosInsert)){
@@ -74,6 +72,7 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 			}
 		}
 	}
+	Evaluaciones::guardarRelacionPreguntaEvaluacion($conexion, $conexionPDO, $config, $codigo, $_POST);
 }else{
 	$preguntaBD = Evaluaciones::traerDatosPreguntas($conexion, $config, $_POST["bancoDatos"]);
 
