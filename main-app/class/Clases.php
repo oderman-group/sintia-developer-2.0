@@ -319,7 +319,7 @@ class Clases {
         $claseVideo='';
         if(!empty($FILES['videoClase']['name'])){
             $nombreInputFile = 'videoClase';
-            $archivoSubido->validarArchivo($FILES['videoClase']['size'], $FILES['videoClase']['name']);
+            // $archivoSubido->validarArchivo($FILES['videoClase']['size'], $FILES['videoClase']['name']);
             $explode=explode(".", $FILES['videoClase']['name']);
             $extension = end($explode);
             $claseVideo = $_SESSION["inst"].'_'.$_SESSION["id"].'_clase_video_'.$codigo.".".$extension;
