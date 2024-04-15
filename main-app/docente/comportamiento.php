@@ -99,6 +99,7 @@ include("../compartido/head.php");
 														if(!empty($notas['dn_nota']) && $notas['dn_nota']<$config[5]) $colorNota = $config[6]; elseif(!empty($notas['dn_nota']) && $notas['dn_nota']>=$config[5]) $colorNota = $config[7];
 
 														$observacion="";
+														$numDatos = 0;
 														if(!empty($notas['dn_observacion'])){
 															$observacion=$notas['dn_observacion'];
 															$explode=explode(",",$notas['dn_observacion']);
