@@ -129,10 +129,9 @@ if(!Modulos::validarPermisoEdicion()){
                                             </div>
                                         </div>
 
-                                        <?php if(Modulos::validarPermisoEdicion()){?>
-										    <input type="submit" class="btn btn-primary" value="Importar saldos">&nbsp;
-                                        <?php }?>
-										<a href="javascript:void(0);" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                      
+                                        <?php require_once("../compartido/botones-guardar.php");
+                            				$botones = new botonesGuardar("movimientos.php",Modulos::validarPermisoEdicion(),"Importar saldos"); ?>
                                     </form>
                                 </div>
                             </div>
