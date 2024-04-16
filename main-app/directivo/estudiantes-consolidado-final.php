@@ -94,7 +94,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                                 </div>
                             </div>
 
-                            <?php require_once("../compartido/botones-guardar.php");
+                            <?php require_once("../class/componentes/botones-guardar.php");
                             $botones = new botonesGuardar("estudiantes.php",  Modulos::validarSubRol(['DT0081']),"Generar planilla"); ?>
 
                         </form>

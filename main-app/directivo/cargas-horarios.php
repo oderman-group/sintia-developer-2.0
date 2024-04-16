@@ -127,7 +127,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 </tbody>
                                             </table>
                                             </div>
-											<?php require_once("../compartido/botones-guardar.php");
+											<?php require_once("../class/componentes/botones-guardar.php");
                             				$botones = new botonesGuardar("cargas.php",false); ?>
                                         </div>
                                     </div>

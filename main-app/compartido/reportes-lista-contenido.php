@@ -176,7 +176,7 @@
 													  ?>
                                                 </tbody>
                                             </table>
-											<?php require_once("../compartido/botones-guardar.php");
+											<?php require_once("../class/componentes/botones-guardar.php");
                             				$botones = new botonesGuardar("estudiantes.php", false); ?>
                                             </div>
                                         </div>

@@ -136,7 +136,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         <?php } ?>
 
 
-                                     <?php require_once("../compartido/botones-guardar.php");
+                                     <?php require_once("../class/componentes/botones-guardar.php");
                             				$botones = new botonesGuardar("asignaturas.php",Modulos::validarPermisoEdicion()); ?>
                                     </form>
                                 </div>

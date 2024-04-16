@@ -336,7 +336,7 @@ require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 											</div>
 										</div>
 
-										<?php require_once("../compartido/botones-guardar.php");
+										<?php require_once("../class/componentes/botones-guardar.php");
                             				$botones = new botonesGuardar("cargas.php",Modulos::validarPermisoEdicion()); ?>
 									 </form>
                                 </div>

@@ -70,7 +70,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         </div>	
 
 
-                                        <?php require_once("../compartido/botones-guardar.php");
+                                        <?php require_once("../class/componentes/botones-guardar.php");
                             				$botones = new botonesGuardar("cargas-estilo-notas.php?",Modulos::validarPermisoEdicion()); ?>
                                     </form>
                                 </div>

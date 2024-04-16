@@ -130,7 +130,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         </div>
 
                                       
-                                        <?php require_once("../compartido/botones-guardar.php");
+                                        <?php require_once("../class/componentes/botones-guardar.php");
                             				$botones = new botonesGuardar("movimientos.php",Modulos::validarPermisoEdicion(),"Importar saldos"); ?>
                                     </form>
                                 </div>

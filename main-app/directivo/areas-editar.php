@@ -122,7 +122,7 @@ $rCargas=mysqli_fetch_array($consultaCarga, MYSQLI_BOTH);
                                             </div>
                                         </div>
 
-                                    <?php require_once("../compartido/botones-guardar.php");
+                                    <?php require_once("../class/componentes/botones-guardar.php");
                             				$botones = new botonesGuardar("areas.php",Modulos::validarPermisoEdicion()); ?>
                                     </form>
                                 </div>
