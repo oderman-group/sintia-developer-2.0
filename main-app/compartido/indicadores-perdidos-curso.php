@@ -70,23 +70,22 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
     <body style="font-family:Arial;">
         <?php
         //CONSULTA QUE ME TRAE LAS areas DEL ESTUDIANTE
-        $consulta_mat_area_est = mysqli_query($conexion, "SELECT am.mat_id, am.mat_nombre, ar.ar_id, ar.ar_nombre, car.car_id, ind.ind_nombre, aic.ipc_periodo, ROUND(SUM(aac.cal_nota * (aa.act_valor / 100)) / SUM(aa.act_valor / 100), 2) AS nota, ind.ind_id
+        $consulta_mat_area_est = mysqli_query($conexion, "SELECT am.mat_id, am.mat_nombre, ar.ar_id, ar.ar_nombre, car.car_id, ind.ind_nombre, aic.ipc_periodo, ROUND(SUM(aac.cal_nota * (aa.act_valor / 100)) / SUM(aa.act_valor / 100), 2) AS nota, rind_nota, ind.ind_id
         FROM ".BD_ACADEMICA.".academico_cargas car
-        INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id = car.car_materia AND am.institucion = {$config['conf_id_institucion']}  AND am.year = {$_SESSION["bd"]}
-        INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id = am.mat_area AND ar.institucion = {$config['conf_id_institucion']}  AND ar.year = {$_SESSION["bd"]}
-        INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga = car.car_id AND bol.institucion = {$config['conf_id_institucion']}  AND bol.year = {$_SESSION["bd"]}
-        INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga aic ON aic.ipc_carga = car.car_id AND aic.institucion = {$config['conf_id_institucion']}  AND aic.year = {$_SESSION["bd"]}
-        INNER JOIN ".BD_ACADEMICA.".academico_indicadores ind ON ind.ind_id = aic.ipc_indicador AND ind.institucion = {$config['conf_id_institucion']}  AND ind.year = {$_SESSION["bd"]}
-        INNER JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id_tipo = aic.ipc_indicador AND aa.act_id_carga = car.car_id AND aa.act_estado = 1 AND aa.act_registrada = 1 AND aa.institucion = {$config['conf_id_institucion']}  AND aa.year = {$_SESSION["bd"]}
-        INNER JOIN ".BD_ACADEMICA.".academico_calificaciones aac ON aac.cal_id_actividad = aa.act_id AND aac.institucion = {$config['conf_id_institucion']}  AND aac.year = {$_SESSION["bd"]}
+        INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id = car.car_materia AND am.institucion = car.institucion  AND am.year = car.year
+        INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id = am.mat_area AND ar.institucion = car.institucion  AND ar.year = car.year
+        INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga = car.car_id AND bol.institucion = car.institucion  AND bol.year = car.year
+        INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga aic ON aic.ipc_carga = car.car_id AND aic.institucion = car.institucion  AND aic.year = car.year
+        INNER JOIN ".BD_ACADEMICA.".academico_indicadores ind ON ind.ind_id = aic.ipc_indicador AND ind.institucion = car.institucion  AND ind.year = car.year
+        INNER JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id_tipo = aic.ipc_indicador AND aa.act_id_carga = car.car_id AND aa.act_estado = 1 AND aa.act_registrada = 1 AND aa.institucion = car.institucion  AND aa.year = car.year
+        INNER JOIN ".BD_ACADEMICA.".academico_calificaciones aac ON aac.cal_id_actividad = aa.act_id AND aac.institucion = car.institucion  AND aac.year = car.year
+        LEFT JOIN ".BD_ACADEMICA.".academico_indicadores_recuperacion rec ON rind_estudiante='{$matriculadosDatos['mat_id']}' AND rind_carga=car.car_id AND rind_periodo=" . $condicion2 . " AND rind_indicador=ind_id AND rec.institucion=car.institucion AND rec.year=car.year
         WHERE car.car_curso = '{$idCurso}' AND car.car_grupo = '{$idGrupo}' AND car.institucion = {$config['conf_id_institucion']}  AND car.year = {$_SESSION["bd"]} AND bol.bol_estudiante = '{$matriculadosDatos['mat_id']}' AND bol.bol_periodo IN (" . $condicion . ") AND aac.cal_id_estudiante = '{$matriculadosDatos['mat_id']}' AND aa.act_periodo = " . $condicion2 . "
         GROUP BY ar.ar_id, am.mat_id, ind.ind_id
-        HAVING nota < {$config['conf_nota_minima_aprobar']}
+        HAVING nota < {$config['conf_nota_minima_aprobar']} AND (rind_nota IS NULL OR (rind_nota < nota AND rind_nota < {$config['conf_nota_minima_aprobar']}))
         ORDER BY ar.ar_posicion ASC");
         $numdatos = mysqli_num_rows($consulta_mat_area_est);
         if ($numdatos > 0) {
-
-        $numero_periodos = $config["conf_periodo"];
         ?>
         <div align="center" style="margin-bottom:20px;">
         </div>
@@ -114,6 +113,21 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
             $idMatAnterior = "";
             while ($fila = mysqli_fetch_array($consulta_mat_area_est, MYSQLI_BOTH)) {
 
+                $leyendaRI = '';
+                if(!empty($fila['rind_nota']) && $fila['rind_nota']>$fila["nota"]){
+                    $nota_indicador = round($fila['rind_nota'], 1);
+                    $leyendaRI = '<br><span style="color:navy; font-size:9px;">Recuperado.</span>';
+                }else{
+                    $nota_indicador = round($fila["nota"], 1);
+                }
+
+                if ($nota_indicador == 1)    $nota_indicador = "1.0";
+                if ($nota_indicador == 2)    $nota_indicador = "2.0";
+                if ($nota_indicador == 3)    $nota_indicador = "3.0";
+                if ($nota_indicador == 4)    $nota_indicador = "4.0";
+                if ($nota_indicador == 5)    $nota_indicador = "5.0";
+                if($nota_indicador >= $config['conf_nota_minima_aprobar']){continue;}
+
                 if ($idMatAnterior != $fila["mat_id"]) {
                     $idMatAnterior = $fila["mat_id"];
                 $contador_periodos = 0;
@@ -125,22 +139,6 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                 </tr>
                 <?php
                     }
-                    $recuperacionIndicador = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_estudiante='".$matriculadosDatos['mat_id']."' AND rind_carga='".$fila["car_id"]."' AND rind_periodo='".$periodoActual."' AND rind_indicador='".$fila["ind_id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
-
-                    $leyendaRI = '';
-                    if(!empty($recuperacionIndicador['rind_nota']) && $recuperacionIndicador['rind_nota']>$fila["nota"]){
-                        $nota_indicador = round($recuperacionIndicador['rind_nota'], 1);
-                        $leyendaRI = '<br><span style="color:navy; font-size:9px;">Recuperdo.</span>';
-                    }else{
-                        $nota_indicador = round($fila["nota"], 1);
-                    }
-
-                    if ($nota_indicador == 1)    $nota_indicador = "1.0";
-                    if ($nota_indicador == 2)    $nota_indicador = "2.0";
-                    if ($nota_indicador == 3)    $nota_indicador = "3.0";
-                    if ($nota_indicador == 4)    $nota_indicador = "4.0";
-                    if ($nota_indicador == 5)    $nota_indicador = "5.0";
-                    if($nota_indicador >= $config['conf_nota_minima_aprobar']){continue;}
                 ?>
                     <tr bgcolor="#FFF" style="font-size:12px;">
                         <td align="center">&nbsp;</td>
