@@ -26,7 +26,7 @@ if (!empty($_FILES['imagen']['name'])) {
     $imagen = uniqid($_SESSION["inst"] . '_' . $_SESSION["id"] . '_img_') . "." . $extension;
     $destino = "../files/publicaciones";
     $localFilePath = $_FILES['imagen']['tmp_name'];// Ruta del archivo local que deseas subir	
-	$cloudFilePath = FILE_PUBLICACIONES.$archivo;// Ruta en el almacenamiento en la nube de Firebase donde deseas almacenar el archivo
+	$cloudFilePath = FILE_PUBLICACIONES.$imagen;// Ruta en el almacenamiento en la nube de Firebase donde deseas almacenar el archivo
 	$storage->getBucket()->upload(fopen($localFilePath, 'r'), ['name' => $cloudFilePath	]);
     // move_uploaded_file($_FILES['imagen']['tmp_name'], $destino . "/" . $imagen);
 }
