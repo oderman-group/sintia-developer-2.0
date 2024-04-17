@@ -83,8 +83,8 @@ require_once("../class/Estudiantes.php");
                         </select>
                     </div>
                 </div>
-
-                <input type="submit" class="btn btn-success" value="Hacer cambio" name="consultas">
+                <?php require_once("../class/componentes/botones-guardar.php"); 
+                $botones = new botonesGuardar(null,Modulos::validarPermisoEdicion()); ?>
             </form>
         </div>
     </div>

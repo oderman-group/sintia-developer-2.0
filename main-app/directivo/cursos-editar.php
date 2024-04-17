@@ -590,12 +590,8 @@ if (!Modulos::validarPermisoEdicion()) {
 
                                         </div>
                                     <?php } ?>
-                                    <a href="javascript:void(0);" name="cursos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
-                                    <?php if (Modulos::validarPermisoEdicion()) { ?>
-                                        <button type="submit" class="btn  btn-info">
-                                            <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios
-                                        </button>
-                                    <?php } ?>
+                                    <?php require_once("../class/componentes/botones-guardar.php"); 
+                                        $botones = new botonesGuardar("estudiantes.php",Modulos::validarPermisoEdicion()); ?>
                                 </div>
                                 <!-- end js include path -->
                                 <script src="../ckeditor/ckeditor.js"></script>

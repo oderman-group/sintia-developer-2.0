@@ -367,13 +367,10 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
                                             </div>
                                         </div>
 										
-                                        <div class="text-right">
-                                            <a href="javascript:void(0);" name="movimientos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
-                                            <?php if(Modulos::validarPermisoEdicion() && $resultado['fcu_anulado']==0 && $resultado['fcu_status']==POR_COBRAR && $abonos==0){?>
-                                                <button type="submit" class="btn  btn-info">
-                                                    <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-                                                </button>
-                                            <?php }?>
+                                        <div>
+                                            
+                                            <?php require_once("../class/componentes/botones-guardar.php");
+                            				$botones = new botonesGuardar("movimientos.php",Modulos::validarPermisoEdicion() && $resultado['fcu_anulado']==0 && $resultado['fcu_status']==POR_COBRAR && $abonos==0,"Importar saldos"); ?>
                                         </div>
                                     </form>
                                 </div>
