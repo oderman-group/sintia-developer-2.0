@@ -113,7 +113,7 @@ if (!Modulos::validarPermisoEdicion() || $resultado['epag_estado'] != PENDIENTE)
                                             <select class="form-control select2" name="evaluador" <?= $disabledPermiso; ?>>
                                                 <option value="">Escoja una opción</option>
                                                 <?php
-                                                    $consultaEvaluador = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                                                    $consultaEvaluador = UsuariosPadre::obtenerTodosLosDatosDeUsuarios();
                                                     while ($datosEvaluador = mysqli_fetch_array($consultaEvaluador, MYSQLI_BOTH)) {
                                                         $selected = $resultado['epag_id_evaluador'] == $datosEvaluador['uss_id'] ? "selected": "";
                                                         echo '<option value="'.$datosEvaluador['uss_id'].'" '.$selected.'>'.UsuariosPadre::nombreCompletoDelUsuario($datosEvaluador).'</option>';
