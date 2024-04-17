@@ -41,8 +41,7 @@ require_once("../class/Plataforma.php");
 require_once("../class/UsuariosPadre.php");
 
 
-$rst_usrE = mysqli_query($conexion, "SELECT uss_usuario, uss_id, uss_intentos_fallidos FROM ".BD_GENERAL.".usuarios 
-WHERE uss_usuario='".trim($_POST["Usuario"])."' AND TRIM(uss_usuario)!='' AND uss_usuario IS NOT NULL AND institucion={$institucion['ins_id']} AND year={$_SESSION["bd"]}");
+$rst_usrE = UsuariosPadre::obtenerTodosLosDatosDeUsuarios("AND uss_usuario='".trim($_POST["Usuario"])."' AND TRIM(uss_usuario)!='' AND uss_usuario IS NOT NULL");
 
 $numE = mysqli_num_rows($rst_usrE);
 if($numE==0){
@@ -51,8 +50,8 @@ if($numE==0){
 }
 $usrE = mysqli_fetch_array($rst_usrE, MYSQLI_BOTH);
 
-if($usrE['uss_intentos_fallidos']>3 and md5($_POST["suma"])<>$_POST["sumaReal"]){
-	header("Location:".REDIRECT_ROUTE."/index.php?error=3&msg=varios-intentos-fallidos:".$usrE['uss_intentos_fallidos']."&inst=".base64_encode($_POST["bd"]));
+if($usrE['uss_intentos_fallidos']>=3 and md5($_POST["suma"])!=$_POST["sumaReal"]){
+	header("Location:".REDIRECT_ROUTE."/index.php?error=3&inst=".base64_encode($_POST["bd"]));
 	exit();
 }
 
@@ -155,7 +154,8 @@ if($num>0)
 		$url = $_SERVER['HTTP_REFERER'];
 	} 
 
-	mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_estado=1, uss_ultimo_ingreso=now(), uss_intentos_fallidos=0 WHERE uss_id='".$fila['uss_id']."' AND institucion={$_SESSION["idInstitucion"]} AND year={$_SESSION["bd"]}");
+    $update = "uss_estado=1, uss_ultimo_ingreso=now(), uss_intentos_fallidos=0";
+    UsuariosPadre::actualizarUsuarios($config, $fila['uss_id'], $update);
 ?>
 <!DOCTYPE html>
 <html lang="en">

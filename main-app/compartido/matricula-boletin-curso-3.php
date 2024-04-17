@@ -11,6 +11,7 @@ require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Usuarios.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 
 $year=$_SESSION["bd"];
 if(isset($_GET["year"])){
@@ -147,7 +148,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
             <tr>
 
-                <td>Documento:<br> <?= number_format($datosUsr["mat_documento"], 0, ",", "."); ?></td>
+                <td>Documento:<br> <?=strpos($datosUsr["mat_documento"], '.') !== true && is_numeric($datosUsr["mat_documento"]) ? number_format($datosUsr["mat_documento"],0,",",".") : $datosUsr["mat_documento"];?></td>
 
                 <td>Nombre:<br> <?=$nombre?></td>
 
@@ -306,12 +307,8 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                             while ($fila4 = mysqli_fetch_array($consulta_a_mat_indicadores, MYSQLI_BOTH)) {
 
                                 if ($fila4["mat_id"] == $fila2["mat_id"]) {
-
-                                    $consultaRecuperacionIndicador=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion 
-                                    WHERE rind_estudiante='".$matriculadosDatos['mat_id']."' AND rind_carga='".$fila2["car_id"]."' AND rind_periodo='".$periodoActual."' AND rind_indicador='".$fila4["ind_id"]."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-                                    $recuperacionIndicador = mysqli_fetch_array($consultaRecuperacionIndicador, MYSQLI_BOTH);
-
-                                    
+                                    $consultaRecuperacion = Indicadores::consultaRecuperacionIndicadorPeriodo($config, $fila4["ind_id"], $matriculadosDatos['mat_id'], $fila2["car_id"], $periodoActual, $year);
+                                    $recuperacionIndicador = mysqli_fetch_array($consultaRecuperacion, MYSQLI_BOTH);
 
                                     $contador_indicadores++;
                                     $leyendaRI = '';
@@ -469,9 +466,8 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                 $contadorIndicadores = 0;
                                 while ($fila4 = mysqli_fetch_array($consultaMatIndicadores, MYSQLI_BOTH)) {
                                     if ($fila4["mat_id"] == $fila2["mat_id"]) {
-                                        $consultaRecuperacionIndicador=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion 
-                                        WHERE rind_estudiante='".$matriculadosDatos['mat_id']."' AND rind_carga='".$fila2["car_id"]."' AND rind_periodo='".$periodoActual."' AND rind_indicador='".$fila4["ind_id"]."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-                                        $recuperacionIndicador = mysqli_fetch_array($consultaRecuperacionIndicador, MYSQLI_BOTH);
+                                        $consultaRecuperacion = Indicadores::consultaRecuperacionIndicadorPeriodo($config, $fila4["ind_id"], $matriculadosDatos['mat_id'], $fila2["car_id"], $periodoActual, $year);
+                                        $recuperacionIndicador = mysqli_fetch_array($consultaRecuperacion, MYSQLI_BOTH);
 
                                         $contadorIndicadores++;
                                         $leyendaRI = '';
@@ -613,36 +609,36 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
         <table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
             <tr>
-                <td align="center">
+                <td align="center" width="50%">
                     <?php
                         $directorGrupo = Usuarios::obtenerDatosUsuario($idDirector);
                         $nombreDirectorGrupo = UsuariosPadre::nombreCompletoDelUsuario($directorGrupo);
                         if(!empty($directorGrupo["uss_firma"])){
-                            echo '<img src="../files/fotos/'.$directorGrupo["uss_firma"].'" width="100"><br>';
+                            echo '<img src="../files/fotos/'.$directorGrupo["uss_firma"].'" width="15%"><br>';
                         }else{
                             echo '<p>&nbsp;</p>
                                 <p>&nbsp;</p>
                                 <p>&nbsp;</p>';
                         }
                     ?>
-                    <p style="height:0px;"></p>_________________________________<br>
+                    _________________________________<br>
                     <p>&nbsp;</p>
                     <?=$nombreDirectorGrupo?><br>
                     Director(a) de grupo
                 </td>
-                <td align="center">
+                <td align="center" width="50%">
                     <?php
                         $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
                         $nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
                         if(!empty($rector["uss_firma"])){
-                            echo '<img src="../files/fotos/'.$rector["uss_firma"].'" width="100"><br>';
+                            echo '<img src="../files/fotos/'.$rector["uss_firma"].'" width="25%"><br>';
                         }else{
                             echo '<p>&nbsp;</p>
                                 <p>&nbsp;</p>
                                 <p>&nbsp;</p>';
                         }
                     ?>
-                    <p style="height:0px;"></p>_________________________________<br>
+                    _________________________________<br>
                     <p>&nbsp;</p>
                     <?=$nombreRector?><br>
                     Rector(a)

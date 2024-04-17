@@ -5,8 +5,7 @@ class BindSQL{
     public static function prepararSQL(
         string $sql,
         array $parametros
-    )
-    {
+    ){
         global $conexion;
         
         try{
@@ -21,6 +20,11 @@ class BindSQL{
                         $tipoParametro .= 's';
                     }
                 }
+            
+                // Aplicar trim a cada valor en $parametros para eliminar comillas innecesarias
+                $parametros = array_map(function($value) {
+                    return trim($value, "'");
+                }, $parametros);
                 
                 mysqli_stmt_bind_param($consulta, $tipoParametro, ...$parametros);
 
@@ -38,5 +42,33 @@ class BindSQL{
         } catch (Exception $e) {
             include(ROOT_PATH."/compartido/error-catch-to-report.php");
         }
+    }
+
+    // Función para preparar la parte de la actualización de forma segura
+    public static function prepararUpdate(
+        string $update
+    ){
+        // Separar la cadena de actualización en partes clave=valor
+        $parts = explode(",", $update);
+    
+        // Array para almacenar las partes preparadas
+        $preparedParts = [];
+        // Array para almacenar los valores
+        $values = [];
+    
+        // Iterar sobre cada parte
+        foreach ($parts as $part) {
+            // Dividir la parte en clave y valor
+            $pair = explode("=", $part);
+            $key = trim($pair[0]);
+            $value = trim($pair[1]);
+    
+            // Añadir la parte preparada al array
+            $preparedParts[] = "{$key}=?";
+            $values[] = $value;
+        }
+    
+        // Unir las partes preparadas con comas y retornar
+        return [implode(",", $preparedParts), $values];
     }
 }
