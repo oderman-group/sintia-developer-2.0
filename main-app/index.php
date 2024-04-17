@@ -89,7 +89,23 @@ if(!isset($_GET['nodb'])) {
                                 <div class="invalid-feedback">usuario y/o contraseña invalido</div>
                                 <div class="form-text" id="caps-lock-message" style="display: none;">Mayúsculas
                                     activadas</div>
+                            </div><br>
+
+                            <?php
+                            if (!empty($_GET["error"]) && $_GET["error"] == 3) {
+                            $numA1 = rand(1, 10);
+                            $numA2 = rand(1, 10);
+                            $resultadoA = $numA1 + $numA2;
+                            ?>
+                            <p style="color: tomato;"><b>Valida que no eres un Robot</b><br>
+                                Escribe el resultado de la siguiente operación.</p>
+                            <div class=" form-floating mt-3">
+                            <input type="hidden" name="sumaReal" value="<?= md5($resultadoA); ?>" />
+                                <input type="text" class="form-control input-login" id="suma" name="suma" placeholder="Cuánto es <?= $numA1 . "+" . $numA2; ?>?" autocomplete="off" required>
+                                <label for="suma">Cuánto es <?= $numA1 . "+" . $numA2; ?>?</label>
+                                <div class="invalid-feedback">Por favor ingrese un numero válido.</div>
                             </div>
+                            <?php } ?>
                             
                             <div class="form-floating mt-3" style="display: none;">
                                 <select class="form-select select-invalid" id="year" name="year"

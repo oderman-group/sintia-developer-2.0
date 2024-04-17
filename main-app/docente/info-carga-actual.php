@@ -21,7 +21,7 @@
 												<ul class="list-group list-group-unbordered">
 													<li class="list-group-item">
 														<b><?=strtoupper($frases[49][$datosUsuarioActual['uss_idioma']]);?></b> 
-														<div class="profile-desc-item pull-right"><?=$datosCargaActual['id_nuevo'];?></div>
+														<div class="profile-desc-item pull-right"><?=$datosCargaActual['id_nuevo_carga'];?></div>
 													</li>
 													<li class="list-group-item">
 														<b><?=strtoupper($frases[116][$datosUsuarioActual['uss_idioma']]);?></b> 

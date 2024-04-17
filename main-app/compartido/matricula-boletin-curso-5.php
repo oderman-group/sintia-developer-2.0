@@ -84,11 +84,10 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 						<tr align="center">
 							<td align="center">
 								<h2><?=$informacion_inst["info_nombre"]?></h2>
-								Jornada: Completa<br>
-								Aprobación y Resolución :  Lic. de funcionamiento 001183 de Octubre 8 de 2004<br>
-								CARRERA 43 N. 70 - 206 - Tel(s). 3312532<br>
-								Barranquilla<br>
-								Correo :info@maxtrummer.edu.co 
+								Jornada: <?=$informacion_inst["info_jornada"]?><br>
+								<?=!empty($informacion_inst["info_resolucion"]) ? strtoupper($informacion_inst["info_resolucion"]) : "";?><br>
+								<?=!empty($informacion_inst["info_direccion"]) ? strtoupper($informacion_inst["info_direccion"]) : "";?> <?=!empty($informacion_inst["info_telefono"]) ? "Tel(s). ".$informacion_inst["info_telefono"] : "";?><br>
+								<?=!empty($informacion_inst["ciu_nombre"]) ? $informacion_inst["ciu_nombre"]."/".$informacion_inst["dep_nombre"] : "";?>
 							</td>   
 						</tr>
 					</table>
@@ -101,8 +100,8 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 						<tr><td colspan="2"><strong>Alumno:</strong> <?=$nombre?></td></tr>
 						
 						<tr>
-							<td><strong>Ruv:</strong> <?=number_format($datosUsr["mat_documento"],0,",",".");?></td>
-							<td><strong>Documento:</strong><br><?=number_format($datosUsr["mat_documento"],0,",",".");?></td>
+							<td><strong>Ruv:</strong> <?=strpos($datosUsr["mat_documento"], '.') !== true && is_numeric($datosUsr["mat_documento"]) ? number_format($datosUsr["mat_documento"],0,",",".") : $datosUsr["mat_documento"];?></td>
+							<td><strong>Documento:</strong><br><?=strpos($datosUsr["mat_documento"], '.') !== true && is_numeric($datosUsr["mat_documento"]) ? number_format($datosUsr["mat_documento"],0,",",".") : $datosUsr["mat_documento"];?></td>
 						</tr>
 						
 						<tr><td colspan="2"><strong>Grado: </strong><?=$datosUsr["gra_nombre"]." ".$datosUsr["gru_nombre"];?></td></tr>

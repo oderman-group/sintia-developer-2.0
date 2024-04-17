@@ -12,7 +12,7 @@ if(isset($_SESSION["id"]) and $_SESSION["id"]!=""){
 //seleccionamos la base de datos
 if (empty($_SESSION["inst"])) {
 	session_destroy();
-	require_once '../class/Utilidades.php';
+	require_once ROOT_PATH.'/main-app/class/Utilidades.php';
 	$directory = Utilidades::getDirectoryUserFromUrl($_SERVER['PHP_SELF']);
 	$page      = Utilidades::getPageFromUrl($_SERVER['PHP_SELF']);
 	header("Location:".REDIRECT_ROUTE."?error=4&urlDefault=".$page."&directory=".$directory);

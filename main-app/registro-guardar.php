@@ -192,11 +192,11 @@ try {
 	//TODOS LOS USUARIOS
 	try{
 		mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, uss_estado, uss_foto, uss_portada, uss_idioma, uss_tema, uss_perfil, uss_ocupacion, uss_email, uss_fecha_nacimiento, uss_permiso1, uss_celular, uss_genero, uss_ultimo_ingreso, uss_ultima_salida, uss_telefono, uss_bloqueado, uss_tipo_documento, uss_documento, institucion, year) VALUES 
-		('1','sintia-".$idInsti."',SHA1('sintia2014$'),1,'ADMINISTRACIÓN', NULL, 'SINTIA', NULL,0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','Administrador','soporte@plataformasintia.com','2022-12-06',1298,'(313) 591-2073',126,'2023-01-26 05:56:36','2023-01-26 05:55:46','853755',0, NULL, NULL,'".$idInsti."','".$year."'),
-		('2','".$_POST['usuario']."',SHA1('" . $clave . "'),5,'".$_POST['nombre']."',NULL,'".$_POST['apellidos']."',NULL,0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','DIRECTIVO', '".$_POST['email']."',NULL, 1298, '".$_POST['celular']."',126,NULL,NULL,NULL,0, NULL, '".$_POST['usuario']."','".$idInsti."','".$year."'),
-		('3','pruebaDC-".$idInsti."',SHA1('12345678'),2,'USUARIO', NULL,'DOCENTE', NULL,0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','DOCENTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0, NULL, NULL,'".$idInsti."','".$year."'),
-		('4','pruebaAC-".$idInsti."',SHA1('12345678'),3,'USUARIO', NULL,'ACUDIENTE', NULL,0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','ACUDIENTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0, NULL, NULL,'".$idInsti."','".$year."'),
-		('5','pruebaES-".$idInsti."',SHA1('12345678'),4,'USUARIO', NULL,'ESTUDIANTE', NULL,0,'mobiliar_dev_1_img_639e74c3624ac.png','default.png',1,'orange','','ESTUDIANTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0, NULL, NULL,'".$idInsti."','".$year."');");
+		('1','sintia-".$idInsti."',SHA1('sintia2014$'),1,'ADMINISTRACIÓN', NULL, 'SINTIA', NULL,0,'default.png','default.png',1,'orange','','Administrador','soporte@plataformasintia.com','2022-12-06',1298,'(313) 591-2073',126,'2023-01-26 05:56:36','2023-01-26 05:55:46','853755',0, NULL, NULL,'".$idInsti."','".$year."'),
+		('2','".$_POST['usuario']."',SHA1('" . $clave . "'),5,'".$_POST['nombre']."',NULL,'".$_POST['apellidos']."',NULL,0,'default.png','default.png',1,'orange','','DIRECTIVO', '".$_POST['email']."',NULL, 1298, '".$_POST['celular']."',126,NULL,NULL,NULL,0, NULL, '".$_POST['usuario']."','".$idInsti."','".$year."'),
+		('3','pruebaDC-".$idInsti."',SHA1('12345678'),2,'USUARIO', NULL,'DOCENTE', NULL,0,'default.png','default.png',1,'orange','','DOCENTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0, NULL, NULL,'".$idInsti."','".$year."'),
+		('4','pruebaAC-".$idInsti."',SHA1('12345678'),3,'USUARIO', NULL,'ACUDIENTE', NULL,0,'default.png','default.png',1,'orange','','ACUDIENTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0, NULL, NULL,'".$idInsti."','".$year."'),
+		('5','pruebaES-".$idInsti."',SHA1('12345678'),4,'USUARIO', NULL,'ESTUDIANTE', NULL,0,'default.png','default.png',1,'orange','','ESTUDIANTE',NULL,NULL,0,NULL,126,NULL,NULL,NULL,0, NULL, NULL,'".$idInsti."','".$year."');");
 	} catch (Exception $e) {
 		echo $e->getMessage();
 		exit();

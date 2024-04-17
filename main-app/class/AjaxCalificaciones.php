@@ -296,7 +296,7 @@ class AjaxCalificaciones {
      * @param string       $codEstudiante 
      * @param string    $nombreEst 
      * @param string       $carga
-     * @param double    $observacion
+     * @param string    $observacion
      * @param int       $periodo
      * 
      * @return array // se retorna mensaje de confirmación
