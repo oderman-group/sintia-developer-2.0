@@ -185,7 +185,7 @@ if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodo
 													<button id="btnIniciar" type="button" onclick="iniciarGrabacion()" class="btn btn-outline-secondary"><i class="fa-solid fa-video"></i></button>
 													<button id="btnGrabando" type="button" class="btn btn-outline-secondary" style="display: none;"><i class="fa-solid  fa-record-vinyl fa-beat-fade"></i></button>
 													<button id="btnDetener" type="button" onclick="detenerGrabacion()" style="display: none;" class="btn btn-outline-secondary"><i class="fa-solid fa-stop"></i></button>
-													<button id="btnEliminar" type="button" onclick="eliminarVideo('<?= $datosConsulta['cls_video_clase'] ?>')" style="display:none" class="btn btn-danger btn-outline-secondary"><i class="fa-solid fa-trash"></i></button>
+													<button id="btnEliminar" type="button" onclick="eliminarVideo()" style="display:none" class="btn btn-danger btn-outline-secondary"><i class="fa-solid fa-trash"></i></button>
 												</div>
 											</label>
 											<div class="col-sm-10" id="row-video">
@@ -385,12 +385,11 @@ if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodo
 										}, 30000); // 30 segundos
 									}
 
-									function eliminarVideo(valor) {
+									function eliminarVideo() {
 										btnEliminar.style.display = "none";
 										videoGuardar.style.display = "none";
 										videoElement.style.display = "none";
 										inputVideo.type = 'text';
-										inputVideo.value = valor;
 									}
 									document.addEventListener("DOMContentLoaded", () => {
 										let form = document.getElementById("form_subir");
