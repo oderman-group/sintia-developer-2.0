@@ -99,8 +99,8 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 						<tr><td colspan="2"><strong>Alumno:</strong> <?=$nombre?></td></tr>
 						
 						<tr>
-							<td><strong>Ruv:</strong> <?=number_format($datosUsr["mat_documento"],0,",",".");?></td>
-							<td><strong>Documento:</strong><br><?=number_format($datosUsr["mat_documento"],0,",",".");?></td>
+							<td><strong>Ruv:</strong> <?=strpos($datosUsr["mat_documento"], '.') !== true && is_numeric($datosUsr["mat_documento"]) ? number_format($datosUsr["mat_documento"],0,",",".") : $datosUsr["mat_documento"];?></td>
+							<td><strong>Documento:</strong><br><?=strpos($datosUsr["mat_documento"], '.') !== true && is_numeric($datosUsr["mat_documento"]) ? number_format($datosUsr["mat_documento"],0,",",".") : $datosUsr["mat_documento"];?></td>
 						</tr>
 						
 						<tr><td colspan="2"><strong>Grado: </strong><?=$datosUsr["gra_nombre"]." ".$datosUsr["gru_nombre"];?></td></tr>
