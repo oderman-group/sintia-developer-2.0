@@ -7,7 +7,9 @@ if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol(
 	exit();
 }
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
-require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Usuarios.php");
+require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 
@@ -146,7 +148,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
             <tr>
 
-                <td>Documento:<br> <?= number_format($datosUsr["mat_documento"], 0, ",", "."); ?></td>
+                <td>Documento:<br> <?=strpos($datosUsr["mat_documento"], '.') !== true && is_numeric($datosUsr["mat_documento"]) ? number_format($datosUsr["mat_documento"],0,",",".") : $datosUsr["mat_documento"];?></td>
 
                 <td>Nombre:<br> <?=$nombre?></td>
 
@@ -271,6 +273,10 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
 
                     while ($fila2 = mysqli_fetch_array($consulta_a_mat, MYSQLI_BOTH)) {
+                        //DIRECTOR DE GRUPO
+                        if($fila2["car_director_grupo"]==1){
+                            $idDirector=$fila2["car_docente"];
+                        }
 
                         $contador_periodos = 0;
 
@@ -596,11 +602,49 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
         </div>
 
-
-
         <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>   
+        <!--******FIRMAS******-->   
 
-        <div align="center"><img src="../files/firmas/firmalucy.jpeg" height="120"></div>
+        <table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
+            <tr>
+                <td align="center" width="50%">
+                    <?php
+                        $directorGrupo = Usuarios::obtenerDatosUsuario($idDirector);
+                        $nombreDirectorGrupo = UsuariosPadre::nombreCompletoDelUsuario($directorGrupo);
+                        if(!empty($directorGrupo["uss_firma"])){
+                            echo '<img src="../files/fotos/'.$directorGrupo["uss_firma"].'" width="15%"><br>';
+                        }else{
+                            echo '<p>&nbsp;</p>
+                                <p>&nbsp;</p>
+                                <p>&nbsp;</p>';
+                        }
+                    ?>
+                    _________________________________<br>
+                    <p>&nbsp;</p>
+                    <?=$nombreDirectorGrupo?><br>
+                    Director(a) de grupo
+                </td>
+                <td align="center" width="50%">
+                    <?php
+                        $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
+                        $nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
+                        if(!empty($rector["uss_firma"])){
+                            echo '<img src="../files/fotos/'.$rector["uss_firma"].'" width="25%"><br>';
+                        }else{
+                            echo '<p>&nbsp;</p>
+                                <p>&nbsp;</p>
+                                <p>&nbsp;</p>';
+                        }
+                    ?>
+                    _________________________________<br>
+                    <p>&nbsp;</p>
+                    <?=$nombreRector?><br>
+                    Rector(a)
+                </td>
+            </tr>
+        </table>
 
 
 
