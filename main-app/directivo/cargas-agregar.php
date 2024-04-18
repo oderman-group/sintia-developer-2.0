@@ -265,13 +265,8 @@ if(!Modulos::validarPermisoEdicion()){
                                         </div>
 
 
-                                        <?php if(Modulos::validarPermisoEdicion()){?>
-                                            <button type="submit" class="btn  btn-info">
-										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-									</button>
-                                        <?php }?>
-										
-										<a href="javascript:void(0);" name="cargas.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                        <?php require_once("../class/componentes/botones-guardar.php");
+                            				$botones = new botonesGuardar("cargas.php",Modulos::validarPermisoEdicion()); ?>
                                     </form>
                                 </div>
                             </div>

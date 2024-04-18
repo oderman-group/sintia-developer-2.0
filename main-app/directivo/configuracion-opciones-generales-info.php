@@ -79,8 +79,8 @@ include("../compartido/head.php");
                                         </div>
 
 
-										<button type="submit" class="btn  btn-info">
-										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
+										<?php require_once("../class/componentes/botones-guardar.php");
+                            				$botones = new botonesGuardar("configuracion-opciones-generales.php",Modulos::validarPermisoEdicion()); ?>
 									</button>
                                     </form>
                                 </div>

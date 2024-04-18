@@ -95,12 +95,9 @@ $resultado = Movimientos::traerDatosItems($conexion, $config, $id);
                                             </div>
                                         </div>
                                         
-                                        <a href="javascript:void(0);" name="items.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
-                                        <?php if(Modulos::validarPermisoEdicion()){?>
-                                            <button type="submit" class="btn  btn-info">
-                                                <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-                                            </button>
-                                        <?php }?>
+                                       
+                                        <?php require_once("../class/componentes/botones-guardar.php");
+                            				$botones = new botonesGuardar("items.php",Modulos::validarPermisoEdicion()); ?>
                                     </form>
                                 </div>
                             </div>

@@ -141,7 +141,8 @@ include("../compartido/head.php");
                                         }
                                     </script>
 
-                                    <input type="submit" id="btnGuardar" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                <?php require_once("../class/componentes/botones-guardar.php");
+                            				$botones = new botonesGuardar("mps-empresas.php",Modulos::validarPermisoEdicion()); ?>
                                 </form>
                             </div>
                         </div>

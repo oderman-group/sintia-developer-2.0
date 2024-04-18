@@ -113,11 +113,8 @@ if(!Modulos::validarPermisoEdicion()){
                                         </div>
 
 
-                                        <?php if(Modulos::validarPermisoEdicion()){?>
-										    <button type="submit" class="btn  btn-info">
-										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-									</button>
-                                        <?php }?>
+                                        <?php require_once("../class/componentes/botones-guardar.php");
+                            				$botones = new botonesGuardar("areas.php",Modulos::validarPermisoEdicion()); ?>
                                     </form>
                                 </div>
                             </div>

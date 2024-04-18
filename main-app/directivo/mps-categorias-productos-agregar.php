@@ -63,7 +63,8 @@ include("../compartido/head.php");
                                         </div>
                                     </div>
 
-                                    <input type="submit" id="btnGuardar" class="btn btn-primary" value="Guardar cambios">&nbsp;
+                                    <?php require_once("../class/componentes/botones-guardar.php");
+                            				$botones = new botonesGuardar("mps-categorias-productos.php",Modulos::validarPermisoEdicion()); ?>
                                 </form>
                             </div>
                         </div>

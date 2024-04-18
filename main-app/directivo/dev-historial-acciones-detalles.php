@@ -173,8 +173,9 @@ if($datosHistorial['hil_usuario_autologin']!=0){
                                             <input type="text" class="form-control" value="<?= $datosHistorial['hil_so']; ?>" readonly>
                                         </div>
                                     </div>
-
-                                    <a href="javascript:void(0);" name="dev-historial-acciones.php" onClick="deseaRegresar(this)" class="btn btn-round btn-primary">Regresar</a>
+                                    <?php require_once("../class/componentes/botones-guardar.php");
+                            				$botones = new botonesGuardar("dev-historial-acciones.php",false); ?>
+                                    
                                 </form>
                             </div>
                         </div>

@@ -72,11 +72,9 @@
 										
 										
 										
-										<button type="submit" class="btn  btn-info">
-										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-									</button>
+                                            <?php require_once("../class/componentes/botones-guardar.php");
+                            				$botones = new botonesGuardar("formatos-categorias.php?idF=".$_GET["idF"],Modulos::validarPermisoEdicion()); ?>
 
-										<a href="#" name="formatos-categorias.php?idF=<?=$_GET["idF"];?>" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 										</form>
 
 

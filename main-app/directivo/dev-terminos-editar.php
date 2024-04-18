@@ -96,9 +96,8 @@ $resultadoTerminos = mysqli_fetch_array($consultaTerminos, MYSQLI_BOTH);
                                         </div>
                                     </div>
 
-                                    <button type="submit" class="btn  btn-info">
-										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-									</button>
+                                    <?php require_once("../class/componentes/botones-guardar.php");
+                            				$botones = new botonesGuardar("dev-terminos.php",Modulos::validarPermisoEdicion()); ?>
                                 </form>
                             </div>
                         </div>

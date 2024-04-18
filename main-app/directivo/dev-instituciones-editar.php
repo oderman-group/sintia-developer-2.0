@@ -259,9 +259,8 @@ $datosInstitucion = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                         </div>
                                     </div>
 
-                                    <button type="submit" class="btn  btn-info">
-										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-									</button>
+                                    <?php require_once("../class/componentes/botones-guardar.php");
+                            				$botones = new botonesGuardar("dev-modulos.php",Modulos::validarPermisoEdicion()); ?>
                                 </form>
                             </div>
                         </div>

@@ -136,12 +136,8 @@ if (!Modulos::validarPermisoEdicion() || $resultado['epag_estado'] != PENDIENTE)
                                         </div>
                                     </div>
                                     
-                                    <a href="javascript:void(0);" name="asignaciones.php?idE=<?= base64_encode($resultado['epag_id_evaluacion']); ?>" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i><?= $frases[184][$datosUsuarioActual['uss_idioma']]; ?></a>
-                                    <?php if (Modulos::validarPermisoEdicion() && $resultado['epag_estado'] == PENDIENTE) { ?>
-                                        <button type="submit" class="btn  btn-info">
-                                            <i class="fa fa-save" aria-hidden="true"></i> <?= $frases[419][$datosUsuarioActual['uss_idioma']]; ?>
-                                        </button>
-                                    <?php } ?>
+                                    <?php require_once("../class/componentes/botones-guardar.php");
+                            				$botones = new botonesGuardar("asignaciones.php?idE=".base64_encode($resultado['epag_id_evaluacion']),Modulos::validarPermisoEdicion()); ?>
                                 </form>
                             </div>
                         </div>

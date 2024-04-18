@@ -367,9 +367,8 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
                                             </div>
                                         </div>
 										
-                                        <div>
-                                            
-                                            <?php require_once("../class/componentes/botones-guardar.php");
+                                        <div class="text-left" >                                            
+                                            <?php require_once("../class/componentes/botones-guardar.php");                                            
                             				$botones = new botonesGuardar("movimientos.php",Modulos::validarPermisoEdicion() && $resultado['fcu_anulado']==0 && $resultado['fcu_status']==POR_COBRAR && $abonos==0,"Importar saldos"); ?>
                                         </div>
                                     </form>

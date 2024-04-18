@@ -163,13 +163,11 @@ if(
 												</div>
 											<?php }?>
 
-											<a href="#" name="calificaciones.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 										<?php 
 										//Si existe el indicador definitivo cuando sea requerido
 										if($datosCargaActual['car_indicador_automatico']==1 && empty($indDef['ind_id'])){echo "<span style='color:red;'>No hay indicador definitivo configurado</span>";}else{?>
-											<button type="submit" class="btn  btn-info">
-										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-									</button>
+											<?php require_once("../class/componentes/botones-guardar.php");
+                            				$botones = new botonesGuardar("calificaciones.php",Modulos::validarPermisoEdicion()); ?>
 										<?php }?>
 										
 										
