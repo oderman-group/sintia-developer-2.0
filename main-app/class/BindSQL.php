@@ -40,7 +40,7 @@ class BindSQL{
                 exit();
             }
         } catch (Exception $e) {
-            include(ROOT_PATH."/compartido/error-catch-to-report.php");
+            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
         }
     }
 
