@@ -660,8 +660,8 @@ class Calificaciones {
             $parametros = [$datosCargaActual['car_curso'], $datosCargaActual['car_grupo'], $config['conf_id_institucion'], $year, $config['conf_id_institucion'], $year, $idActividad, $config['conf_id_institucion'], $year];
         } else {
             $sql = "SELECT count(*) FROM ".BD_ACADEMICA.".academico_calificaciones aac
-            INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_grado=? AND mat_grupo=? AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=aac.cal_id_estudiante AND mat.institucion=? AND mat.year=
-            WHERE aac.cal_id_actividad=? AND aac.institucion=? AND aac.year=";
+            INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_grado=? AND mat_grupo=? AND (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat_id=aac.cal_id_estudiante AND mat.institucion=? AND mat.year=?
+            WHERE aac.cal_id_actividad=? AND aac.institucion=? AND aac.year=?";
 
             $parametros = [$datosCargaActual['car_curso'], $datosCargaActual['car_grupo'], $config['conf_id_institucion'], $year, $idActividad, $config['conf_id_institucion'], $year];
         }
