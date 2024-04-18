@@ -15,9 +15,9 @@ if($numAsignacionesEncuesta > 0  && ($idPaginaInterna != 'DC0146' && $idPaginaIn
 
 			<div class="modal-body" align="center">
 
-				<p>Hola! <b><?=$datosUsuarioActual['uss_nombre'];?></b><br>
-				Usted tiene <b><?=$numAsignacionesEncuesta;?> encuestas por completar,</b><br>
-				de las cuales <b><?=$asignacionesObligatorias;?> son obligatorias</b>, para ver las encuestas pendientes de click en el botón <b>"VER ENCUESTAS"</b></p>
+				<p>Estimado <b><?=$datosUsuarioActual['uss_nombre'];?>,</b> usted tiene <b><?=$numAsignacionesEncuesta;?> encuesta(s) pendientes por completar,</b>
+				de las cuales <b><?=$asignacionesObligatorias;?> son obligatorias</b>.<br>
+				Para ver las encuestas pendientes haga click en el botón <b>VER ENCUESTAS</b>.</p>
 
 			</div>
 
