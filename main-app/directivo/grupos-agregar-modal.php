@@ -32,7 +32,7 @@ if (!Modulos::validarPermisoEdicion()) {
                             </div>
                         </div>
 
-                        <?php require_once("../class/componentes/botones-guardar.php"); 
+                        <?php  
                         $botones = new botonesGuardar(null,Modulos::validarPermisoEdicion()); ?>
                     </form>
                 </div>

@@ -92,8 +92,7 @@ if(!Modulos::validarPermisoEdicion()){
 
 
                                         
-                                        <?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("cargas-estilo-notas-especifica.php?id=".$_GET["id"],Modulos::validarPermisoEdicion()); ?>
+                                        <?php $botones = new botonesGuardar("cargas-estilo-notas-especifica.php?id=".$_GET["id"],Modulos::validarPermisoEdicion()); ?>
                                     </form>
                                 </div>
                             </div>

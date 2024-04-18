@@ -93,7 +93,7 @@ include("../compartido/head.php");
                                     </div>
 
                                    
-                                        <?php require_once("../class/componentes/botones-guardar.php"); 
+                                        <?php  
                                         $botones = new botonesGuardar("estudiantes.php",Modulos::validarSubRol(['DT0193']),"Generar Folios"); ?>
                                     
 

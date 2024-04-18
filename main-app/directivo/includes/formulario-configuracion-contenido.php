@@ -544,11 +544,7 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                         </div>
                     </div>
 
-                    <?php if(Modulos::validarPermisoEdicion() || $datosUsuarioActual['uss_tipo'] == TIPO_DEV){?>
-                        <button type="submit" class="btn  btn-info">
-                            <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-                        </button>
-                    <?php }?>
+                    <?php $botones = new botonesGuardar("dev-instituciones.php",Modulos::validarPermisoEdicion() || $datosUsuarioActual['uss_tipo'] == TIPO_DEV); ?>
                 </form>
             </div>
         </div>
