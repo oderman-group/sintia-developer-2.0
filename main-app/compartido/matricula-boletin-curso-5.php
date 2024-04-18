@@ -11,6 +11,7 @@ require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 require_once(ROOT_PATH."/main-app/class/Clases.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
     
 $year=$_SESSION["bd"];
 if(isset($_GET["year"])){
@@ -235,10 +236,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 					<?php
 					//INDICADORES PERDIDOS
 					while($indicadorP = mysqli_fetch_array($indicadoresPeridos, MYSQLI_BOTH)){
-						$consultaNotaIndicadorPA=mysqli_query($conexion, "SELECT ROUND(AVG(cal_nota),1) FROM ".BD_ACADEMICA.".academico_calificaciones aac
-						INNER JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id=aac.cal_id_actividad AND aa.act_id_tipo='".$indicadorP['rind_indicador']."' AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$year}
-						WHERE aac.cal_id_estudiante='".$datosUsr['mat_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$year}");
-						$notaIndicadorPA = mysqli_fetch_array($consultaNotaIndicadorPA, MYSQLI_BOTH);
+						$notaIndicadorPA = Calificaciones::consultaNotaIndicadoresPeriodos($config, $indicadorP['rind_indicador'], $datosUsr['mat_id'], $year);
 						
 						if($indicadorP['rind_periodo'] == $periodoActual){
 							continue;
@@ -265,10 +263,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 					<?php
 					//INDICADORES
 					while($indicador = mysqli_fetch_array($indicadores, MYSQLI_BOTH)){
-						$consultaNotaIndicador=mysqli_query($conexion, "SELECT ROUND(AVG(cal_nota),1) FROM ".BD_ACADEMICA.".academico_calificaciones aac
-						INNER JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id=aac.cal_id_actividad AND aa.act_id_tipo='".$indicador['ipc_indicador']."' AND aa.act_id_carga='".$datosCargas['car_id']."' AND aa.act_periodo='".$periodoActual."' AND aa.act_estado=1 AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$year}
-						WHERE aac.cal_id_estudiante='".$datosUsr['mat_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$year}");
-						$notaIndicador = mysqli_fetch_array($consultaNotaIndicador, MYSQLI_BOTH);
+						$notaIndicador = Calificaciones::consultaNotaIndicadores($config, $indicador['ipc_indicador'], $datosCargas['car_id'], $datosUsr['mat_id'], $periodoActual, $year);
 
                         $notaIndicadorFinal=$notaIndicador[0];
                         if($config['conf_forma_mostrar_notas'] == CUALITATIVA){

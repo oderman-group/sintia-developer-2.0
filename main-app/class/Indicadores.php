@@ -3,7 +3,6 @@ require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.ph
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 require_once ROOT_PATH."/main-app/class/Conexion.php";
-require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 
 class Indicadores {
 

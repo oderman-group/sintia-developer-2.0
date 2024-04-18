@@ -10,6 +10,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 $carga='';
 $grado='';
 $grupo='';
@@ -58,7 +59,7 @@ include("../compartido/head-informes.php") ?>
   while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
   $ind = Indicadores::traerIndicadoresDatos($resultado['act_id_tipo']);
 	if($resultado['act_registrada']==1) $estado = "REGISTRADA"; else $estado = "PENDIENTE";
-  $consultaNumCalificados=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='".$resultado['act_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+  $consultaNumCalificados = Calificaciones::traerCalificacionActividad($config, $resultado['act_id']);
 	$numCalificados = mysqli_num_rows($consultaNumCalificados);
 	if($numEstudiantes!=$numCalificados) $bg = '#FCC'; else $bg = '#FFF';
   ?>

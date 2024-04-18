@@ -6,7 +6,8 @@
 <?php include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
-require_once(ROOT_PATH."/main-app/class/Grados.php");?>
+require_once(ROOT_PATH."/main-app/class/Grados.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");?>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php"); ?>
@@ -132,10 +133,7 @@ require_once(ROOT_PATH."/main-app/class/Grados.php");?>
 													 $consulta = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 													$contReg = 1;
 													while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
-
-														$sumaNotas = mysqli_fetch_array(mysqli_query($conexion, "SELECT SUM(cal_nota * (act_valor/100)), SUM(act_valor) FROM ".BD_ACADEMICA.".academico_calificaciones aac
-														INNER JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id=aac.cal_id_actividad AND aa.act_id_tipo='" . $resultado['ipc_indicador'] . "' AND aa.act_periodo='" . $periodoConsultaActual . "' AND aa.act_id_carga='" . $cargaConsultaActual . "' AND aa.act_estado=1 AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$_SESSION["bd"]}
-														WHERE aac.cal_id_estudiante='" . $datosEstudianteActual['mat_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]}"), MYSQLI_BOTH);
+														$sumaNotas = Calificaciones::consultaSumaNotaIndicadores($config, $resultado['ipc_indicador'], $cargaConsultaActual, $datosEstudianteActual['mat_id'], $periodoConsultaActual);
 
 														$notasResultado = 0;
 														if(!empty($sumaNotas[1])){
@@ -150,9 +148,7 @@ require_once(ROOT_PATH."/main-app/class/Grados.php");?>
 														
 
 														//Promedio nota indicador según nota de actividades relacionadas
-														$notaIndicador = mysqli_fetch_array(mysqli_query($conexion, "SELECT ROUND(SUM(cal_nota*(act_valor/100)) / SUM(act_valor/100),2) FROM ".BD_ACADEMICA.".academico_calificaciones aac
-														INNER JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id=aac.cal_id_actividad AND aa.act_estado=1 AND aa.act_id_tipo='".$resultado['ipc_indicador']."' AND aa.act_periodo='".$periodoConsultaActual."' AND aa.act_id_carga='".$cargaConsultaActual."' AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$_SESSION["bd"]}
-														WHERE aac.cal_id_estudiante='".$datosEstudianteActual['mat_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]}"), MYSQLI_BOTH);
+														$notaIndicador = Calificaciones::consultaNotaIndicadoresPromedio($config, $resultado['ipc_indicador'], $cargaConsultaActual, $datosEstudianteActual['mat_id'], $periodoConsultaActual);
 														 
 														$notaRecuperacion = "";
 														if(!empty($notas['rind_nota']) and $notas['rind_nota']>$notas['rind_nota_original'] and $notas['rind_nota']>$notaIndicador[0]){

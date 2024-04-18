@@ -8,6 +8,7 @@ require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once ROOT_PATH."/main-app/class/Conexion.php";
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 
 $conexionPDOInstance = new Conexion;
 $conexionPDO         = $conexionPDOInstance->conexionPDO(SERVER, USER, PASSWORD, BD_ADMIN);
@@ -94,11 +95,7 @@ $contBol=1;
 	 
 	
 	//Vamos a obtener las definitivas por cada indicador y la definitiva general de la asignatura
-	$notasPorIndicador = mysqli_query($conexion, "SELECT SUM((cal_nota*(act_valor/100))), act_id_tipo, ipc_valor FROM ".BD_ACADEMICA.".academico_calificaciones aac
-	INNER JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id=aac.cal_id_actividad AND aa.act_estado=1 AND aa.act_registrada=1 AND aa.act_periodo='".$periodo."' AND aa.act_id_carga='".$carga."' AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$_SESSION["bd"]}
-	INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga ipc ON ipc.ipc_indicador=aa.act_id_tipo AND ipc.ipc_carga='".$carga."' AND ipc.ipc_periodo='".$periodo."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
-	WHERE aac.cal_id_estudiante='".$resultado['mat_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]}
-	GROUP BY aa.act_id_tipo");
+	$notasPorIndicador = Calificaciones::traerNotasPorIndicador($config, $carga, $resultado['mat_id'], $periodo);
 	$sumaNotaIndicador = 0; 
 	
 	while($notInd = mysqli_fetch_array($notasPorIndicador, MYSQLI_BOTH)){

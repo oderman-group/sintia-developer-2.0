@@ -4,6 +4,7 @@
 	require_once(ROOT_PATH."/main-app/class/Grados.php");
 	require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 	require_once(ROOT_PATH."/main-app/class/Actividades.php");
+	require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 	$usrEstud="";
 	if(!empty($_GET["usrEstud"])){ $usrEstud=base64_decode($_GET["usrEstud"]);}
 ?>
@@ -317,8 +318,7 @@
 													 $porcentajeActualActividad = 0;
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 
-														$nota = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones
-														WHERE cal_id_actividad='".$resultado['act_id']."' AND cal_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
+														$nota = Calificaciones::traerCalificacionActividadEstudiante($config, $resultado['act_id'], $datosEstudianteActual['mat_id']);
 
 														$porNuevo = ($resultado['act_valor'] / 100);
 
