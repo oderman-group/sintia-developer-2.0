@@ -161,8 +161,7 @@ $solicitudActual = Solicitudes::consultar(base64_decode($_GET["id"]));
 
                                     <div class="form-group">
                                         <div class=" col-md-9">
-                                            <?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("dev-solicitudes-cancelacion.php",true,"Actualizar solicitud"); ?>
+                                            <?php $botones = new botonesGuardar("dev-solicitudes-cancelacion.php",true,"Actualizar solicitud"); ?>
                                         </div>
                                     </div>
                                 </form>

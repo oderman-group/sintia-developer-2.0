@@ -124,7 +124,7 @@ $evaluacion = Evaluaciones::consultaEvaluacion($conexion, $config, $idR);
 											</div>
 
 										
-											<?php require_once("../class/componentes/botones-guardar.php");
+											<?php 
                             				$botones = new botonesGuardar("evaluaciones.php",Modulos::validarPermisoEdicion()); ?>
 									</form>
 

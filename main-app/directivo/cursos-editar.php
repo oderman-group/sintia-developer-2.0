@@ -590,7 +590,7 @@ if (!Modulos::validarPermisoEdicion()) {
 
                                         </div>
                                     <?php } ?>
-                                    <?php require_once("../class/componentes/botones-guardar.php"); 
+                                    <?php  
                                         $botones = new botonesGuardar("estudiantes.php",Modulos::validarPermisoEdicion()); ?>
                                 </div>
                                 <!-- end js include path -->

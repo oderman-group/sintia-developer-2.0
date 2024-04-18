@@ -76,8 +76,7 @@ $datosCategorias = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                         </div>
                                     </div>
 
-                                    <?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("mps-categorias-servicios.php",Modulos::validarPermisoEdicion()); ?>
+                                    <?php $botones = new botonesGuardar("mps-categorias-servicios.php",Modulos::validarPermisoEdicion()); ?>
                                 </form>
                             </div>
                         </div>

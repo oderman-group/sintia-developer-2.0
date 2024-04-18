@@ -304,8 +304,7 @@
                 </div>
             </div>
 
-            <?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("usuarios.php?cantidad=10",Modulos::validarPermisoEdicion()); ?>
+            <?php $botones = new botonesGuardar("usuarios.php?cantidad=10",Modulos::validarPermisoEdicion()); ?>
         </form>
     </div>
 </div>

@@ -183,8 +183,7 @@ $consultaPreguntas = PreguntaGeneral::listar($parametros);
                     </div>
                     <div class="form-group">
                         <div class="col-md-9">
-                            <?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("evaluaciones.php",Modulos::validarPermisoEdicion()); ?>
+                            <?php $botones = new botonesGuardar("evaluaciones.php",Modulos::validarPermisoEdicion()); ?>
                         </div>
                     </div>
                 </div>

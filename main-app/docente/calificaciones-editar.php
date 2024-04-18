@@ -174,7 +174,7 @@ $porcentajeRestante = 100 - $valores[0];
 
 
 
-											<?php require_once("../class/componentes/botones-guardar.php");
+											<?php 
                             				$botones = new botonesGuardar("calificaciones.php",Modulos::validarPermisoEdicion()); ?>
 										</form>
                                 </div>

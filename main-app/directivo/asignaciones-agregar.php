@@ -134,8 +134,7 @@ if (!empty($_GET['idE'])) {
                                         </div>
                                     </div>
                                     
-                                   <?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("asignaciones.php?idE=".base64_encode($idE),Modulos::validarPermisoEdicion()); ?>
+                                   <?php $botones = new botonesGuardar("asignaciones.php?idE=".base64_encode($idE),Modulos::validarPermisoEdicion()); ?>
                                 </form>
                             </div>
                         </div>

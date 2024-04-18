@@ -130,7 +130,7 @@ $porcentajeRestante = ($porcentajeRestante + $indicador['ipc_valor']);
 										<input type="hidden" name="saberes" class="form-control" value="<?=$indicador['ipc_evaluacion'];?>">
 										<?php }?>
 
-                                        <?php require_once("../class/componentes/botones-guardar.php");
+                                        <?php 
                             				$botones = new botonesGuardar("indicadores.php",Modulos::validarPermisoEdicion()); ?>    
                                     </form>
                                 </div>

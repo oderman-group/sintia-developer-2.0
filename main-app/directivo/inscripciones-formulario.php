@@ -485,8 +485,7 @@ $datosMadre = $madre->fetch();
                                             </div>
                                         </fieldset>
 
-                                        <?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("inscripciones.php",Modulos::validarPermisoEdicion()); ?>
+                                        <?php $botones = new botonesGuardar("inscripciones.php",Modulos::validarPermisoEdicion()); ?>
                                     </form>
                                 </div>
                             </div>

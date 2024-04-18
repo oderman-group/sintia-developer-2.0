@@ -191,8 +191,7 @@ if (!empty($infoDatos['emp_logo']) && file_exists('../files/marketplace/logos/'.
                                         }
                                     </script>
 
-                                    <?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("mps-empresas.php",Modulos::validarPermisoEdicion()); ?>
+                                    <?php $botones = new botonesGuardar("mps-empresas.php",Modulos::validarPermisoEdicion()); ?>
                                 </form>
                             </div>
                         </div>

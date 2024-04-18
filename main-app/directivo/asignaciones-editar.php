@@ -136,8 +136,7 @@ if (!Modulos::validarPermisoEdicion() || $resultado['epag_estado'] != PENDIENTE)
                                         </div>
                                     </div>
                                     
-                                    <?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("asignaciones.php?idE=".base64_encode($resultado['epag_id_evaluacion']),Modulos::validarPermisoEdicion()); ?>
+                                    <?php $botones = new botonesGuardar("asignaciones.php?idE=".base64_encode($resultado['epag_id_evaluacion']),Modulos::validarPermisoEdicion()); ?>
                                 </form>
                             </div>
                         </div>

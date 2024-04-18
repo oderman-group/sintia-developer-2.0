@@ -243,7 +243,7 @@ if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodo
                                         </div>
 
 
-										<?php require_once("../class/componentes/botones-guardar.php");
+										<?php 
                             				$botones = new botonesGuardar("clases.php",Modulos::validarPermisoEdicion()); 
 											?>
 									</form>

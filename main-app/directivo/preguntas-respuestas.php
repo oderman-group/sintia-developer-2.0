@@ -145,8 +145,7 @@ $consultaRespuestas = Respuesta::listarRespuestas($conexion, $config);
                     </div>
                     <div class="form-group">
                         <div class="col-md-9">
-                            <?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("preguntas.php",Modulos::validarPermisoEdicion()); ?>
+                            <?php $botones = new botonesGuardar("preguntas.php",Modulos::validarPermisoEdicion()); ?>
                         </div>
                     </div>
                 </div>

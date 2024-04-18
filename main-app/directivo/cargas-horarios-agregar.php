@@ -93,8 +93,7 @@ if(!Modulos::validarPermisoEdicion()){
 											</div>
 										</div>
 
-                                      <?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("cargas-horarios.php?id=".$_GET["id"],Modulos::validarPermisoEdicion()); ?>
+                                      <?php $botones = new botonesGuardar("cargas-horarios.php?id=".$_GET["id"],Modulos::validarPermisoEdicion()); ?>
                                     </form>
                                 </div>
                             </div>

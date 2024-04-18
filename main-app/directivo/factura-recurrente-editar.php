@@ -362,8 +362,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         </div>
 										
                                         <div class="text-left">
-                                            <?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("factura-recurrente.php",Modulos::validarPermisoEdicion()); ?>
+                                            <?php $botones = new botonesGuardar("factura-recurrente.php",Modulos::validarPermisoEdicion()); ?>
                                         </div>
                                     </form>
                                 </div>

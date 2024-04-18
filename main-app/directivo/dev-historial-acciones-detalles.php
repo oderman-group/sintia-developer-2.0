@@ -173,8 +173,7 @@ if($datosHistorial['hil_usuario_autologin']!=0){
                                             <input type="text" class="form-control" value="<?= $datosHistorial['hil_so']; ?>" readonly>
                                         </div>
                                     </div>
-                                    <?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("dev-historial-acciones.php",false); ?>
+                                    <?php $botones = new botonesGuardar("dev-historial-acciones.php",false); ?>
                                     
                                 </form>
                             </div>

@@ -70,7 +70,7 @@
 											</div>
 										
 
-                                            <?php require_once("../class/componentes/botones-guardar.php");
+                                            <?php 
                             				$botones = new botonesGuardar("formatos.php",Modulos::validarPermisoEdicion()); ?>
 										</form>
 

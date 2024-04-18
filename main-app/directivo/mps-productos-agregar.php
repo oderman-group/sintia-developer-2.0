@@ -161,8 +161,7 @@ include("../compartido/head.php");
                                         </div>
                                     </div>
 
-                                    <?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("mps-productos.php",Modulos::validarPermisoEdicion()); ?>
+                                    <?php $botones = new botonesGuardar("mps-productos.php",Modulos::validarPermisoEdicion()); ?>
                                 </form>
                             </div>
                         </div>

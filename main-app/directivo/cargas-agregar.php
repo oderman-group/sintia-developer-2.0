@@ -265,8 +265,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         </div>
 
 
-                                        <?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("cargas.php",Modulos::validarPermisoEdicion()); ?>
+                                        <?php $botones = new botonesGuardar("cargas.php",Modulos::validarPermisoEdicion()); ?>
                                     </form>
                                 </div>
                             </div>

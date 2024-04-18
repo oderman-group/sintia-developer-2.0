@@ -121,7 +121,7 @@ if(
 
 
 										
-										<?php require_once("../class/componentes/botones-guardar.php");
+										<?php 
                             				$botones = new botonesGuardar("indicadores.php",Modulos::validarPermisoEdicion()); ?>
 										
                                     </form>

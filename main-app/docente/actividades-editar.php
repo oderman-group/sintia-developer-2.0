@@ -140,7 +140,7 @@ $datosConsulta = Actividades::traerDatosActividades($conexion, $config, $idR);
 
 										
 										
-											 <?php require_once("../class/componentes/botones-guardar.php");
+											 <?php 
                             				$botones = new botonesGuardar("actividades.php",Modulos::validarPermisoEdicion()); ?>
 
 										</form>

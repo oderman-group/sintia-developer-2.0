@@ -265,8 +265,7 @@ if(!Modulos::validarPaginasHijasSubRol(base64_decode($_GET["idP"]))){
 											</div>
 										</div>
 
-										<?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("dev-paginas.php",Modulos::validarPermisoEdicion()); ?>
+										<?php $botones = new botonesGuardar("dev-paginas.php",Modulos::validarPermisoEdicion()); ?>
                                     </form>
                                 </div>
                             </div>

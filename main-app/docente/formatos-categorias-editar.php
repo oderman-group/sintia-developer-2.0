@@ -89,7 +89,7 @@ $evaluacion = mysqli_fetch_array($consultaEvaluacion, MYSQLI_BOTH);
 												</div>
 											</div>
 										
-                                            <?php require_once("../class/componentes/botones-guardar.php");
+                                            <?php 
                             				$botones = new botonesGuardar("formatos-categorias.php?idF=".$_GET["idF"],Modulos::validarPermisoEdicion()); ?>
 
 											</form>

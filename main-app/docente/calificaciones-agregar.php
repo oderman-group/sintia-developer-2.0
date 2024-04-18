@@ -166,7 +166,7 @@ if(
 										<?php 
 										//Si existe el indicador definitivo cuando sea requerido
 										if($datosCargaActual['car_indicador_automatico']==1 && empty($indDef['ind_id'])){echo "<span style='color:red;'>No hay indicador definitivo configurado</span>";}else{?>
-											<?php require_once("../class/componentes/botones-guardar.php");
+											<?php 
                             				$botones = new botonesGuardar("calificaciones.php",Modulos::validarPermisoEdicion()); ?>
 										<?php }?>
 										

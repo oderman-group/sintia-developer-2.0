@@ -171,7 +171,7 @@ require_once(ROOT_PATH."/main-app/class/Actividades.php");?>
                                             </div>
                                         </div>
 										
-										<?php require_once("../class/componentes/botones-guardar.php");
+										<?php 
                             				$botones = new botonesGuardar("actividades.php",Modulos::validarPermisoEdicion()); ?>
 
 										

@@ -78,8 +78,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                     </div>
                                     
                                     <div class="text-right">
-                                    <?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("respuesta.php",Modulos::validarPermisoEdicion()); ?>
+                                    <?php $botones = new botonesGuardar("respuesta.php",Modulos::validarPermisoEdicion()); ?>
                                     </div>
                                 </form>
                             </div>

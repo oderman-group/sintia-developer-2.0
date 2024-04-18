@@ -99,7 +99,7 @@ $pregunta = Evaluaciones::traerDatosPreguntas($conexion, $config, $idR);
 												</div>
 											</div>
 										
-                                            <?php require_once("../class/componentes/botones-guardar.php");
+                                            <?php 
                             				$botones = new botonesGuardar("evaluaciones-preguntas.php?idE=".$_GET["idE"],Modulos::validarPermisoEdicion()); ?>
 										</form>
 

@@ -127,7 +127,7 @@ require_once(ROOT_PATH."/main-app/class/Evaluaciones.php");?>
 										</div>
 										
 										
-										<?php require_once("../class/componentes/botones-guardar.php");
+										<?php 
                             				$botones = new botonesGuardar("evaluaciones.php",Modulos::validarPermisoEdicion()); ?>
 
 										</form>

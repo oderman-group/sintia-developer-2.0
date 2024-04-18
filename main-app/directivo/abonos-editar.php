@@ -278,8 +278,7 @@ $resultado = Movimientos::traerDatosAbonos($conexion, $config, $id);
                                             </div>
                                         </div>
                                         
-                                       <?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("abonos.php",Modulos::validarPermisoEdicion()); ?>
+                                       <?php $botones = new botonesGuardar("abonos.php",Modulos::validarPermisoEdicion()); ?>
                                     </form>
                                 </div>
                             </div>

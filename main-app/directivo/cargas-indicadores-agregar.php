@@ -114,8 +114,7 @@ if(!Modulos::validarPermisoEdicion()){
 										<input type="hidden" name="saberes" class="form-control" value="<?=$indicador['ipc_evaluacion'];?>">
 										<?php }?>
 
-                                        <?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("cargas-indicadores.php?carga=".$_GET["carga"]."&docente=".$_GET["docente"],Modulos::validarPermisoEdicion()); ?>
+                                        <?php $botones = new botonesGuardar("cargas-indicadores.php?carga=".$_GET["carga"]."&docente=".$_GET["docente"],Modulos::validarPermisoEdicion()); ?>
                                     </form>
                                 </div>
                             </div>

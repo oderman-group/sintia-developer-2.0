@@ -194,7 +194,7 @@ $datosConsulta = Clases::traerDatosClases($conexion, $config, $idR);
 
 
 
-											<?php require_once("../class/componentes/botones-guardar.php");
+											<?php 
                             				$botones = new botonesGuardar("movimientos.php",Modulos::validarPermisoEdicion()); ?>
                                     </form>
                                 </div>

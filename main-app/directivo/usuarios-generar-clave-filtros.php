@@ -100,8 +100,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                             </select>
                                         </div>
                                     </div>
-                                    <?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("usuarios.php?cantidad=50",Modulos::validarPermisoEdicion(),"Generar Contraseña"); ?>
+                                    <?php $botones = new botonesGuardar("usuarios.php?cantidad=50",Modulos::validarPermisoEdicion(),"Generar Contraseña"); ?>
                                         
                                   </form>
                             </div>

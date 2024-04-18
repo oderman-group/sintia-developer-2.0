@@ -115,8 +115,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                 </select>
                                             </div>
                                         </div>
-                                        <?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("usuarios.php",Modulos::validarPermisoEdicion(),"Importar usuarios"); ?>
+                                        <?php $botones = new botonesGuardar("usuarios.php",Modulos::validarPermisoEdicion(),"Importar usuarios"); ?>
                                         
                                     </form>
                                 </div>

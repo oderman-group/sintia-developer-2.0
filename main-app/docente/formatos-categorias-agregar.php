@@ -72,7 +72,7 @@
 										
 										
 										
-                                            <?php require_once("../class/componentes/botones-guardar.php");
+                                            <?php 
                             				$botones = new botonesGuardar("formatos-categorias.php?idF=".$_GET["idF"],Modulos::validarPermisoEdicion()); ?>
 
 										</form>

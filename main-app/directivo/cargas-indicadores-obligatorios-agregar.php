@@ -73,8 +73,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 
 
 										
-                                    <?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("cargas-indicadores-obligatorios.php",true); ?>
+                                    <?php $botones = new botonesGuardar("cargas-indicadores-obligatorios.php",true); ?>
                                     </form>
                                 </div>
                             </div>

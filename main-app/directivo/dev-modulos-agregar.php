@@ -86,8 +86,7 @@ include("../compartido/head.php");
                                             </div>
                                         </div>
 
-										<?php require_once("../class/componentes/botones-guardar.php");
-                            				$botones = new botonesGuardar("dev-modulos.php",Modulos::validarPermisoEdicion()); ?>
+										<?php $botones = new botonesGuardar("dev-modulos.php",Modulos::validarPermisoEdicion()); ?>
                                     </form>
                                 </div>
                             </div>
