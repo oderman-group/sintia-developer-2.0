@@ -254,8 +254,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                         $ultimoPeriodo = $config["conf_periodos_maximos"];
                                         for($i=1;$i<=$periodoActual;$i++){
                                             if($i!=$periodoActual){
-                                                $consultaPeriodos=mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$datosMaterias['car_id']."' AND bol_periodo='".$i."' AND bol_estudiante = '".$matriculadosDatos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-                                                $datosPeriodos=mysqli_fetch_array($consultaPeriodos, MYSQLI_BOTH);
+                                                $datosPeriodos = Boletin::traerNotaBoletinCargaPeriodo($config, $i, $matriculadosDatos['mat_id'], $datosMaterias['car_id'], $year);
                                                 $notaMateriasPeriodos=$datosPeriodos['bol_nota'];
                                                 $notaMateriasPeriodos=round($notaMateriasPeriodos, 1);
                                                 $notaMateriasPeriodosTotal+=$notaMateriasPeriodos;

@@ -879,9 +879,11 @@ class Boletin {
     ){
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante=? AND bol_carga=? AND bol_periodo=? AND institucion=? AND year=?";
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_boletin bol 
+        LEFT JOIN ".BD_ACADEMICA.".academico_notas_tipos ntp ON ntp.notip_categoria=? AND bol_nota>=ntp.notip_desde AND bol_nota<=ntp.notip_hasta AND ntp.institucion=bol.institucion AND ntp.year=bol.year
+        WHERE bol_estudiante=? AND bol_carga=? AND bol_periodo=? AND bol.institucion=? AND bol.year=?";
 
-        $parametros = [$idEstudiante, $idCarga, $periodo, $config['conf_id_institucion'], $year];
+        $parametros = [$config["conf_notas_categoria"], $idEstudiante, $idCarga, $periodo, $config['conf_id_institucion'], $year];
 
         $resultado = BindSQL::prepararSQL($sql, $parametros);
 

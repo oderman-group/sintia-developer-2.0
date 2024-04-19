@@ -181,10 +181,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 
 				$decimal = $porcentajeGrado/100;
 				
-				$consultaBoletin=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin bol 
-                INNER JOIN ".BD_ACADEMICA.".academico_notas_tipos ntp ON ntp.notip_categoria='".$config["conf_notas_categoria"]."' AND bol_nota>=ntp.notip_desde AND bol_nota<=ntp.notip_hasta AND ntp.institucion={$config['conf_id_institucion']} AND ntp.year={$year}
-                WHERE bol_carga='".$datosCargas['car_id']."' AND bol_estudiante='".$datosUsr['mat_id']."' AND bol_periodo='".$j."' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}");
-                $datosBoletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
+                $datosBoletin = Boletin::traerNotaBoletinCargaPeriodo($config, $j, $datosUsr['mat_id'], $datosCargas['car_id'], $year);
 				
 				$consultaAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) FROM ".BD_ACADEMICA.".academico_clases cls 
                 INNER JOIN ".BD_ACADEMICA.".academico_ausencias aus ON aus.aus_id_clase=cls.cls_id AND aus.aus_id_estudiante<='".$datosUsr['mat_id']."' AND aus.institucion={$config['conf_id_institucion']} AND aus.year={$year}
