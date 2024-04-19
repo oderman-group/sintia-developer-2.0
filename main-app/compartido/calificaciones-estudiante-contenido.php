@@ -155,15 +155,13 @@
 													$porcentajeGrado=$periodosCursos['gvp_valor'];
 												}
 												
-												$notapp = mysqli_fetch_array(mysqli_query($conexion, "SELECT bol_nota FROM ".BD_ACADEMICA.".academico_boletin 
+												$notapp = Boletin::traerNotaBoletinCargaPeriodo($config, $i, $datosEstudianteActual['mat_id'], $cargaConsultaActual);
 
-												WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
-
-												if(!empty($notapp[0])){
-													$porcentaje = ($notapp[0]/$config['conf_nota_hasta'])*100;
+												if(!empty($notapp['bol_nota'])){
+													$porcentaje = ($notapp['bol_nota']/$config['conf_nota_hasta'])*100;
 												}
 
-												if(!empty($notapp[0]) and $notapp[0] < $config['conf_nota_minima_aprobar']) $colorGrafico = 'danger'; else $colorGrafico = 'info';
+												if(!empty($notapp['bol_nota']) and $notapp['bol_nota'] < $config['conf_nota_minima_aprobar']) $colorGrafico = 'danger'; else $colorGrafico = 'info';
 
 												if($i==$periodoConsultaActual) $estiloResaltadoP = 'style="color: orange;"'; else $estiloResaltadoP = '';
 
@@ -176,11 +174,11 @@
 													
 
 													<?php
-														if(!empty($notapp[0]) and $config['conf_sin_nota_numerica']!=1){
+														if(!empty($notapp['bol_nota']) and $config['conf_sin_nota_numerica']!=1){
 
-														$notaPorPeriodo=$notapp[0];
+														$notaPorPeriodo=$notapp['bol_nota'];
 														if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
-															$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notapp[0]);
+															$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notapp['bol_nota']);
 															$notaPorPeriodo= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
 														}
 													?>

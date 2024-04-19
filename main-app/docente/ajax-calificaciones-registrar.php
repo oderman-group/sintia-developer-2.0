@@ -8,6 +8,7 @@ require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
 require_once(ROOT_PATH."/main-app/class/AjaxCalificaciones.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 $operacionesPermitidas = [9, 10];
 
@@ -210,20 +211,17 @@ if($_POST["operacion"]==7){
 }
 //Para guardar observaciones en el boletín de preescolar, Y TAMBIÉN EN EL DE LOS DEMÁS
 if($_POST["operacion"]==8){
-	$consultaNum=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin 
-	WHERE bol_carga='".$_POST["carga"]."' AND bol_estudiante='".$_POST["codEst"]."' AND bol_periodo='".$_POST["periodo"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-	$num = mysqli_num_rows($consultaNum);
+	$boletin = Boletin::traerNotaBoletinCargaPeriodo($config, $_POST["periodo"], $_POST["codEst"], $_POST["carga"]);
 	
-	
-	if(empty($existeNota['cal_id'])){
-		mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$_POST["carga"]."' AND bol_estudiante='".$_POST["codEst"]."' AND bol_periodo='".$_POST["periodo"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+	if(empty($boletin)){
+		if(!empty($boletin)){
+			Boletin::eliminarNotaBoletinID($config, $boletin['bol_id']);
+		}
 		
-		$codigoBOL=Utilidades::generateCode("BOL");
-		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_boletin(bol_id, bol_carga, bol_estudiante, bol_periodo, bol_tipo, bol_observaciones_boletin, bol_fecha_registro, bol_actualizaciones, institucion, year)VALUES('".$codigoBOL."', '".$_POST["carga"]."', '".$_POST["codEst"]."', '".$_POST["periodo"]."', 1, '".mysqli_real_escape_string($conexion,$_POST["nota"])."', now(), 0, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-		
+		Boletin::guardarNotaBoletin($conexionPDO, "bol_carga, bol_estudiante, bol_periodo, bol_tipo, bol_observaciones_boletin, bol_fecha_registro, bol_actualizaciones, institucion, year, bol_id", [$_POST["carga"], $_POST["codEst"], $_POST["periodo"], 1, mysqli_real_escape_string($conexion,$_POST["nota"]), date("Y-m-d H:i:s"), 0, $config['conf_id_institucion'], $_SESSION["bd"]]);
 	}else{
-		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_boletin SET bol_observaciones_boletin='".mysqli_real_escape_string($conexion,$_POST["nota"])."', bol_actualizaciones=bol_actualizaciones+1, bol_ultima_actualizacion=now() WHERE bol_carga='".$_POST["carga"]."' AND bol_estudiante='".$_POST["codEst"]."' AND bol_periodo='".$_POST["periodo"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		
+		$update = "bol_observaciones_boletin=".mysqli_real_escape_string($conexion,$_POST["nota"])."";
+		Boletin::actualizarNotaBoletin($config, $boletin['bol_id'], $update);
 	}
 	$mensajeNot = 'La observación para el boletín de este periodo se ha guardado correctamente para el estudiante <b>'.strtoupper($_POST["nombreEst"]).'</b>';
 }
@@ -232,12 +230,10 @@ if($_POST["operacion"]==8){
 if($_POST["operacion"]==9){
 	
 	//Consultamos si tiene registros en el boletín
-	$consultaBoletinDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin 
-	WHERE bol_carga='".$_POST["carga"]."' AND bol_periodo='".$_POST["periodo"]."' AND bol_estudiante='".$_POST["codEst"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-	$boletinDatos = mysqli_fetch_array($consultaBoletinDatos, MYSQLI_BOTH);
+	$boletinDatos = Boletin::traerNotaBoletinCargaPeriodo($config, $_POST["periodo"], $_POST["codEst"], $_POST["carga"]);
 	
 	$caso = 1; //Inserta la nueva definitiva del indicador normal
-	if($boletinDatos['bol_id']==""){
+	if(empty($boletinDatos['bol_id'])){
  		$caso = 2;
 		$mensajeNot = 'El estudiante <b>'.strtoupper($_POST["nombreEst"]).'</b> no presenta registros en el boletín actualmente para este periodo, en esta asignatura.';
 		$heading = 'No se generó ningún cambio';
@@ -254,7 +250,7 @@ if($_POST["operacion"]==9){
 		$num = mysqli_num_rows($consultaNum);
 		
 
-		if(empty($existeNota['cal_id'])){
+		if($num == 0){
 			Indicadores::eliminarRecuperacionIndicadorPeriodo($config, $_POST["codNota"], $_POST["codEst"], $_POST["carga"], $_POST["periodo"]);				
 			
 			Indicadores::guardarRecuperacionIndicador($conexionPDO, $config, $_POST["codEst"], $_POST["carga"], $_POST["nota"], $_POST["codNota"], $_POST["periodo"], $indicador['ipc_valor']);
@@ -277,24 +273,13 @@ if($_POST["operacion"]==9){
 		
 		$notaDefIndicador = round($recuperacionIndicador[0],1);
 
-
-
-		//if($notaDefIndicador == $boletinDatos['bol_nota']){
-			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_boletin SET bol_nota_anterior=bol_nota, bol_nota='".$notaDefIndicador."', bol_actualizaciones=bol_actualizaciones+1, bol_ultima_actualizacion=now(), bol_nota_indicadores='".$notaDefIndicador."', bol_tipo=3, bol_observaciones='Actualizada desde el indicador.' 
-			WHERE bol_carga='".$_POST["carga"]."' AND bol_periodo='".$_POST["periodo"]."' AND bol_estudiante='".$_POST["codEst"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-			$lineaError = __LINE__;
-			include("../compartido/reporte-errores.php");
-			
-			$mensajeNot = 'La recuperación del indicador de este periodo se ha guardado correctamente para el estudiante <b>'.strtoupper($_POST["nombreEst"]).'</b>. La nota definitiva de la asignatura ahora es <b>'.round($recuperacionIndicador[0],1)."</b>.";
-			$heading = 'Cambios guardados';
-			$tipo = 'success';
-			$icon = 'success';
-		//}else{
-			//$mensajeNot = 'No es posible registrar una definitiva de la asignatura igual a la que ya existe. Solo se guardó la recuperación del inidicador.';
-			//$heading = 'Este cambio no afectó en la definitiva';
-			//$tipo = 'danger';
-			//$icon = 'error';
-		//}
+		$update = "bol_nota_anterior=bol_nota, bol_nota=".$notaDefIndicador.", bol_nota_indicadores=".$notaDefIndicador.", bol_tipo=3, bol_observaciones='Actualizada desde el indicador.'";
+		Boletin::actualizarNotaBoletin($config, $boletinDatos['bol_id'], $update);
+		
+		$mensajeNot = 'La recuperación del indicador de este periodo se ha guardado correctamente para el estudiante <b>'.strtoupper($_POST["nombreEst"]).'</b>. La nota definitiva de la asignatura ahora es <b>'.round($recuperacionIndicador[0],1)."</b>.";
+		$heading = 'Cambios guardados';
+		$tipo = 'success';
+		$icon = 'success';
 		
 	}
 }

@@ -13,6 +13,7 @@ require_once(ROOT_PATH."/main-app/class/servicios/GradoServicios.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 $parametrosBuscar = array(
 	"tipo" =>JOBS_TIPO_GENERAR_INFORMES,
 	"estado" =>JOBS_ESTADO_PENDIENTE
@@ -93,9 +94,7 @@ $mensaje="";
 			$idNumericoEstudiante = preg_replace('/^MAT/', '', $estudiante); //Para ser usado en el codigo de los registros
 
 			//Consultamos si tiene registros en el boletín
-			$consultaBoletinDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin 
-			WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$estudiante."' AND institucion={$config['conf_id_institucion']} AND year={$anio}");
-			$boletinDatos = mysqli_fetch_array($consultaBoletinDatos, MYSQLI_BOTH); 
+			$boletinDatos = Boletin::traerNotaBoletinCargaPeriodo($config, $periodo, $estudiante, $carga, $anio);
 
 			if($config['conf_porcentaje_completo_generar_informe']==2){
 				//Verificamos que el estudiante tenga sus notas al porcentaje minimo permitido
@@ -175,14 +174,15 @@ $mensaje="";
 					"porcentaje" 	=> $boletinDatos['bol_porcentaje']
 				];
 		
-				mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_boletin SET bol_nota_anterior=bol_nota, bol_nota='".$definitiva."', bol_actualizaciones=bol_actualizaciones+1, bol_ultima_actualizacion=now(), bol_nota_indicadores='".$sumaNotaIndicador."', bol_tipo=1, bol_observaciones='Reemplazada', bol_porcentaje='".$porcentajeActual."', bol_historial_actualizacion='".json_encode($actualizacion)."' WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$estudiante."' AND institucion={$config['conf_id_institucion']} AND year={$anio}");
+				$update = "bol_nota_anterior=bol_nota, bol_nota=".$definitiva.", bol_nota_indicadores=".$sumaNotaIndicador.", bol_tipo=1, bol_observaciones='Reemplazada', bol_porcentaje=".$porcentajeActual.", bol_historial_actualizacion=".json_encode($actualizacion)."";
+				Boletin::actualizarNotaBoletin($config, $boletinDatos['bol_id'], $update, $anio);
 			}elseif($caso == 1){
 				//Eliminamos por si acaso hay algún registro
-				mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_boletin 
-				WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$estudiante."' AND institucion={$config['conf_id_institucion']} AND year={$anio}");			
+				if(!empty($boletinDatos['bol_id'])){
+					Boletin::eliminarNotaBoletinID($config, $boletinDatos['bol_id'], $anio);
+				}			
 				//INSERTAR LOS DATOS EN LA TABLA BOLETIN
-				$codigoBOL=Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_boletin').$contBol;
-				mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_boletin(bol_id, bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_fecha_registro, bol_actualizaciones, bol_nota_indicadores, bol_porcentaje, institucion, year)VALUES('".$codigoBOL."', '".$carga."', '".$estudiante."', '".$periodo."', '".$definitiva."', 1, now(), 0, '".$sumaNotaIndicador."', '".$porcentajeActual."', {$config['conf_id_institucion']}, {$anio})");
+				Boletin::guardarNotaBoletin($conexionPDO, "bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_fecha_registro, bol_actualizaciones, bol_nota_indicadores, bol_porcentaje, institucion, year, bol_id", [$carga, $estudiante, $periodo, $definitiva, 1, date("Y-m-d H:i:s"), 0, $sumaNotaIndicador, $porcentajeActual, $config['conf_id_institucion'], $anio]);
 				
 				$contBol++;
 			}

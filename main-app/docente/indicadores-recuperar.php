@@ -161,8 +161,7 @@ $calificacion = Indicadores::traerDatosIndicadorRelacion($idR);
 															//Color nota
 															if(!empty($notaRecuperacion) && $notaRecuperacion<$config[5]) $colorNota = $config[6]; elseif(!empty($notaRecuperacion) && $notaRecuperacion>=$config[5]) $colorNota = $config[7];
 														}
-														 $consultaNotasResultado=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$resultado['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-														$notasResultado = mysqli_fetch_array($consultaNotasResultado, MYSQLI_BOTH);
+														$notasResultado = Boletin::traerNotaBoletinCargaPeriodo($config, $periodoConsultaActual, $resultado['mat_id'], $cargaConsultaActual);
 														 
 														if(!empty($notaIndicador[0]) && $notaIndicador[0]<$config[5])$color = $config[6]; elseif(!empty($notaIndicador[0]) && $notaIndicador[0]>=$config[5]) $color = $config[7]; 
 														 
