@@ -5,6 +5,7 @@ include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Asignaciones.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
+require_once(ROOT_PATH."/main-app/class/Areas.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -86,9 +87,7 @@ if (!empty($_GET['idE'])) {
 																break;
 
 																case AREA:
-																	$consultaEvaluado = mysqli_query($conexion, "SELECT ar_nombre FROM ".BD_ACADEMICA.".academico_areas
-																	WHERE ar_id='".$resultado['epag_id_evaluado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-																	$datosEvaluado = mysqli_fetch_array($consultaEvaluado, MYSQLI_BOTH);
+																	$datosEvaluado = Areas::traerDatosArea($config, $resultado['epag_id_evaluado']);
 																	$nombreEvaluado = $datosEvaluado['ar_nombre'];
 																break;
 
