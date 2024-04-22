@@ -85,8 +85,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
 		$numero=mysqli_num_rows($materias1);
 		$def='0.0';
 		while($mat1=mysqli_fetch_array($materias1, MYSQLI_BOTH)){
-			$notas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$fila['mat_id']."' AND bol_carga='".$mat1['car_id']."' AND bol_periodo='".$per."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-			$nota=mysqli_fetch_array($notas, MYSQLI_BOTH);
+      $nota = Boletin::traerNotaBoletinCargaPeriodo($config, $per, $fila['mat_id'], $mat1['car_id']);
       $defini = 0;
       if(!empty($nota['bol_nota'])){$defini = $nota['bol_nota'];$suma=($suma+$defini);}
 			if($defini<$config[5]) $color='red'; else $color='blue';
@@ -130,19 +129,12 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
   }//Fin mientras que
   ?>
   </table>
-  
-<?php
-$puestos = mysqli_query($conexion, "SELECT SUM(bol_nota) AS suma, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2 FROM ".BD_ACADEMICA.".academico_boletin bol
-INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat.mat_id=bol_estudiante AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
-INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car_id=bol_carga AND car_curso='".$curso."' AND car_grupo='".$grupo."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}
-WHERE bol_periodo='".$per."' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$_SESSION["bd"]}
-GROUP BY bol_estudiante
-ORDER BY suma DESC
-");
-?>
 
-<?php if ( ($config['conf_ver_promedios_sabanas_docentes'] == 1 && $datosUsuarioActual['uss_tipo'] == TIPO_DOCENTE) || 
-           ($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO || $datosUsuarioActual['uss_tipo'] == TIPO_DEV) ) {?>
+<?php 
+    if ( ($config['conf_ver_promedios_sabanas_docentes'] == 1 && $datosUsuarioActual['uss_tipo'] == TIPO_DOCENTE) || ($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO || $datosUsuarioActual['uss_tipo'] == TIPO_DEV) ) {
+
+      $puestos = Boletin::consultarPuestosBoletin($config, $curso, $grupo, $per);
+?>
     <p>&nbsp;</p>
       <table width="100%" border="1" rules="all" align="center">
       <tr style="font-weight:bold; font-size:12px; height:30px;">

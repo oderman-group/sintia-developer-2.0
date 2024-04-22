@@ -244,8 +244,7 @@ while($fila2=mysqli_fetch_array($consulta_a_mat, MYSQLI_BOTH)){
             <td align="center" style="font-weight:bold; font-size:12px;background:#EAEAEA;"><?php echo $fila["car_ih"];?></td>
 <?php 
 for($l=1;$l<=$numero_periodos;$l++){
-	$consultaNotaEstudiante=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$fila2['car_id']."' AND bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_periodo='".$l."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-	$notaDelEstudiante = mysqli_fetch_array($consultaNotaEstudiante, MYSQLI_BOTH);
+	$notaDelEstudiante = Boletin::traerNotaBoletinCargaPeriodo($config, $l, $matriculadosDatos['mat_id'], $fila2['car_id'], $year);
 ?>
 			<td class=""  align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;">
 			<?php 
@@ -422,9 +421,7 @@ if($numIndicadores>0){
 ?>
 	<!-- observaciones de la asignatura-->
 	<?php
-	$consultaObservaciones=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin
-	WHERE bol_carga='".$fila2["car_id"]."' AND bol_periodo='".$periodoActual."' AND bol_estudiante='".$matriculadosDatos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-	$observacion = mysqli_fetch_array($consultaObservaciones, MYSQLI_BOTH);
+	$observacion = Boletin::traerNotaBoletinCargaPeriodo($config, $periodoActual, $matriculadosDatos['mat_id'], $fila2['car_id'], $year);
 	if(!empty($observacion['bol_observaciones_boletin'])){
 	?>
 	<tr>

@@ -3,6 +3,7 @@
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Grados.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -48,13 +49,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 													$porcentajeGrado=$periodosCursos['gvp_valor'];
 												}
 												
-												try{
-													$consultaNotaspp=mysqli_query($conexion, "SELECT bol_nota FROM ".BD_ACADEMICA.".academico_boletin 
-													WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-												} catch (Exception $e) {
-													include("../compartido/error-catch-to-report.php");
-												}
-												$notapp = mysqli_fetch_array($consultaNotaspp, MYSQLI_BOTH);
+												$notapp = Boletin::traerNotaBoletinCargaPeriodo($config, $i, $datosEstudianteActual['mat_id'], $cargaConsultaActual);
 												$porcentaje = ($notapp[0]/$config['conf_nota_hasta'])*100;
 												if($notapp[0] < $config['conf_nota_minima_aprobar']) $colorGrafico = 'danger'; else $colorGrafico = 'info';
 												if($i==$periodoConsultaActual) $estiloResaltadoP = 'style="color: orange;"'; else $estiloResaltadoP = '';
