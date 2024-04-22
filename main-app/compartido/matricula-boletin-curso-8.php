@@ -13,6 +13,7 @@ require_once("../class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/Ausencias.php");
 
 $year=$_SESSION["bd"];
 if(isset($_GET["year"])){
@@ -176,11 +177,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                 $ausPer4=0;
                 while($j<=$periodoActual){
 
-                    $consultaDatosAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) as sumAus FROM ".BD_ACADEMICA.".academico_ausencias aus
-                    INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car_curso='".$datosUsr['gra_id']."' AND car_materia='".$datosCargas['mat_id']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
-                    INNER JOIN ".BD_ACADEMICA.".academico_clases cls ON cls.cls_id=aus.aus_id_clase AND cls.cls_id_carga=car_id AND cls.cls_periodo='".$j."' AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$year}
-                    WHERE aus.aus_id_estudiante='".$datosUsr['mat_id']."' AND aus.institucion={$config['conf_id_institucion']} AND aus.year={$year}");
-                    $datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
+                    $datosAusencias = Ausencias::sumarAusenciasCarga($config, $datosUsr['gra_id'], $datosCargas['mat_id'], $j, $datosUsr['mat_id']);
 
                     if($datosAusencias['sumAus']>0){
                         switch($j){
