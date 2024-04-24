@@ -309,7 +309,7 @@ $datosConsultaBD = Clases::traerDatosClases($conexion, $config, $idR);
 				</div>
 				<div class="col-12" style="max-height: 700px; overflow-y: auto;">
 					<div>
-						<input hidden id="cantidad_clase" >
+
 						<ul class="comments-list animate__animated animate__flipInX" id="lista-preguntas">
 
 
@@ -321,7 +321,6 @@ $datosConsultaBD = Clases::traerDatosClases($conexion, $config, $idR);
 			</div>
 
 			<script>
-				 consultarPreguntas();
 				function getHeight(id, label) {
 					data = document.getElementById(id);
 					var altura = data.clientHeight;
@@ -366,7 +365,10 @@ $datosConsultaBD = Clases::traerDatosClases($conexion, $config, $idR);
 
 				}
 
-			
+				// setInterval('consultarPreguntas()', 10000);
+
+				window.onload = consultarPreguntas();
+
 				async function guardar(idPadre) {
 
 					idClase = '<?= $idR; ?>';
