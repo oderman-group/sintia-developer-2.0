@@ -7,7 +7,14 @@ require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 class Ausencias {
 
     /**
-     * Este metodo me trae las ausencias de un estudiante en una clase
+     * Esta función ejecuta una consulta preparada para seleccionar los registros de ausencias
+     * de un estudiante en una clase determinada de la base de datos.
+     *
+     * @param array  $config       Configuración de la aplicación.
+     * @param string $idClase      Identificador de la clase de la que se desean obtener las ausencias.
+     * @param string $idEstudiante Identificador del estudiante del que se desean obtener las ausencias.
+     * @param string $yearBd       Año de la base de datos (opcional). Si no se proporciona, se utiliza el valor de sesión.
+     * @return mixed|array|null    Retorna un array asociativo con los datos de ausencias si se encuentra alguna coincidencia, o NULL si no se encuentra ninguna.
     **/
     public static function traerAusenciasClaseEstudiante (
         array   $config,
@@ -29,7 +36,16 @@ class Ausencias {
     }
 
     /**
-     * Este metodo me suma todas las ausencias de un estudiante en una materia en un periodo
+     * Este método ejecuta una consulta SQL para obtener la suma total de ausencias de un estudiante
+     * en una carga académica determinada, considerando un período específico.
+     *
+     * @param array   $config       Configuración de la aplicación.
+     * @param string  $idCurso      Identificador del curso al que pertenece la carga académica.
+     * @param string  $idMateria    Identificador de la materia de la carga académica.
+     * @param int     $periodo      Número de período o sesión en la carga académica.
+     * @param string  $idEstudiante Identificador del estudiante del que se desean obtener las ausencias.
+     * @param string  $yearBd       Año de la base de datos (opcional). Si no se proporciona, se utiliza el valor de sesión.
+     * @return mixed|array|null     Retorna un array asociativo con la suma total de ausencias si se encuentra alguna coincidencia, o NULL si no se encuentra ninguna.
     **/
     public static function sumarAusenciasCarga (
         array   $config,
@@ -56,7 +72,12 @@ class Ausencias {
     }
 
     /**
-     * Este metodo me guarda una ausencia
+    * Este método ejecuta una consulta SQL para insertar una nueva ausencia en la tabla academico_ausencias
+    * utilizando los parámetros proporcionados.
+    *
+    * @param PDO     $conexionPDO   Objeto de conexión PDO.
+    * @param string  $insert        Lista de campos para insertar separados por comas.
+    * @param array   $parametros    Array de valores de parámetros para la consulta preparada.
     **/
     public static function guardarAusencia (
         PDO     $conexionPDO,
@@ -78,7 +99,13 @@ class Ausencias {
     }
 
     /**
-     * Este metodo me actualiza una ausencia
+    * Este método ejecuta una consulta SQL para actualizar una ausencia en la tabla academico_ausencias
+    * utilizando los parámetros proporcionados.
+    *
+    * @param array   $config       Configuración general del sistema.
+    * @param string  $idAusencia   Identificador único de la ausencia a actualizar.
+    * @param string  $update       Lista de campos a actualizar con sus nuevos valores en formato de SQL UPDATE.
+    * @param string  $yearBd       Año académico para el que se realiza la actualización (opcional).
     **/
     public static function actualizarAusencia (
         array   $config,
@@ -99,7 +126,12 @@ class Ausencias {
     }
 
     /**
-     * Este metodo me elimina una ausencia por su ID
+    * Este método ejecuta una consulta SQL para eliminar una ausencia de la tabla academico_ausencias
+    * utilizando el identificador de la ausencia y la configuración proporcionada.
+    *
+    * @param array   $config       Configuración general del sistema.
+    * @param string  $idAusencia   Identificador único de la ausencia a eliminar.
+    * @param string  $yearBd       Año académico para el que se realiza la eliminación (opcional).
     **/
     public static function eliminarAusenciasID (
         array   $config,
@@ -117,7 +149,12 @@ class Ausencias {
     }
 
     /**
-     * Este metodo me elimina todas las ausencias de un estudiante
+    * Este método ejecuta una consulta SQL para eliminar todas las ausencias de un estudiante
+    * en la tabla academico_ausencias utilizando el identificador del estudiante y la configuración proporcionada.
+    *
+    * @param array   $config       Configuración general del sistema.
+    * @param string  $idEstudiante Identificador único del estudiante cuyas ausencias se desean eliminar.
+    * @param string  $yearBd       Año académico para el que se realiza la eliminación (opcional).
     **/
     public static function eliminarAusenciasEstudiantes (
         array   $config,
@@ -135,7 +172,12 @@ class Ausencias {
     }
 
     /**
-     * Este metodo me elimina todas las ausencias de una clase
+    * Este método ejecuta una consulta SQL para eliminar todas las ausencias asociadas a una clase
+    * en la tabla academico_ausencias utilizando el identificador de la clase y la configuración proporcionada.
+    *
+    * @param array   $config       Configuración general del sistema.
+    * @param string  $idClase      Identificador único de la clase cuyas ausencias se desean eliminar.
+    * @param string  $yearBd       Año académico para el que se realiza la eliminación (opcional).
     **/
     public static function eliminarAusenciasClases (
         array   $config,
@@ -153,7 +195,12 @@ class Ausencias {
     }
 
     /**
-     * Este metodo me elimina todas las ausencias de una institución
+    * Este método ejecuta una consulta SQL para eliminar todas las ausencias asociadas a una institución
+    * en la tabla academico_ausencias utilizando la configuración proporcionada.
+    *
+    * @param array   $config       Configuración general del sistema.
+    * @param string  $yearBd       Año académico para el que se realiza la eliminación (opcional).
+    * @return void
     **/
     public static function eliminarAusenciasInstitucion (
         array   $config,
@@ -170,8 +217,15 @@ class Ausencias {
     }
 
     /**
-     * Este metodo me consulta el numero de estudiantes registrados
-     */
+    * Este método ejecuta una consulta SQL para contar el número de estudiantes ausentes en una clase
+    * determinada, considerando la configuración y los datos de carga proporcionados.
+    *
+    * @param array   $config            Configuración general del sistema.
+    * @param array   $datosCargaActual  Datos de la carga académica actual.
+    * @param string  $idClase           Identificador de la clase.
+    * @param string  $yearBd            Año académico para el que se realiza la consulta (opcional).
+    * @return mixed  El resultado de la consulta, que representa el número de estudiantes ausentes.
+    **/
     public static function consultaNumEstudiantesAusencias(
         array  $config,
         array  $datosCargaActual, 
