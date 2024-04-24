@@ -1110,4 +1110,443 @@ class Estudiantes {
         return $resultado;
     }
 
+    /**
+    * Este método devuelve una lista de matrículas según un filtro opcional para la institución y año indicados.
+    *
+    * @param array   $config      Configuración general del sistema.
+    * @param string  $filtro      Filtro adicional para la consulta SQL (opcional).
+    * @param string  $yearBd      Año de la base de datos a utilizar (opcional). Si no se proporciona, se utiliza el año de la sesión.
+    * @return mixed  El resultado de la consulta SQL que devuelve las matrículas.
+    */
+    public static function listarMatriculasFolio(
+        array   $config, 
+        string  $filtro = "", 
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
+        INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat_grado AND gra.institucion=mat.institucion AND gra.year=mat.year
+        WHERE mat_eliminado=0 AND mat.institucion=? AND mat.year=? {$filtro}
+        ORDER BY gra_vocal, mat_grupo, mat_primer_apellido, mat_segundo_apellido, mat_nombres";
+
+        $parametros = [$config['conf_id_institucion'], $year];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
+    }
+
+    /**
+    * Este método realiza una consulta SQL para obtener la información de las matrículas
+    * de los aspirantes cuyo estado de matrícula es igual a en inscripciones
+    * para la institución y año especificados en la configuración.
+    *
+    * @param array   $config      Configuración general del sistema.
+    * @param string  $yearBd      Año de la base de datos a utilizar (opcional). Si no se proporciona, se utiliza el año de la sesión.
+    * @return mixed  El resultado de la consulta, que contiene las matrículas de los aspirantes.
+    */
+    public static function listarMatriculasAspirantes(
+        array   $config, 
+        string  $filtro = "", 
+        string  $limite = "", 
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
+        INNER JOIN ".BD_ADMIN.".aspirantes ON asp_id=mat.mat_solicitud_inscripcion
+        LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=asp_grado AND gra.institucion=mat.institucion AND gra.year=mat.year
+        WHERE mat.mat_estado_matricula=5 AND mat.institucion=? AND mat.year=? {$filtro}
+        ORDER BY mat.mat_primer_apellido  {$limite}";
+
+        $parametros = [$config['conf_id_institucion'], $year];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
+    }
+
+    /**
+    * Este método realiza una consulta SQL para obtener las matrículas que están asociadas a observaciones disciplinarias,
+    * incluyendo detalles como las notas de disciplina y el grado al que pertenecen.
+    *
+    * @param array   $config      Configuración general del sistema.
+    * @param string  $filtro      Filtro adicional para restringir los resultados de la consulta (opcional).
+    * @param string  $orden       Orden de los resultados de la consulta (opcional). Por defecto, ordenado por apellidos.
+    * @param string  $yearBd      Año de la base de datos a utilizar (opcional). Si no se proporciona, se utiliza el año de la sesión.
+    * @return mixed  El resultado de la consulta, que contiene las matrículas con observaciones disciplinarias asociadas.
+    */
+    public static function listarMatriculasObservador(
+        array   $config, 
+        string  $filtro = "", 
+        string  $orden = "mat_primer_apellido, mat_segundo_apellido", 
+        string  $yearBd = "" 
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
+        INNER JOIN ".BD_DISCIPLINA.".disiplina_nota dn ON dn_cod_estudiante=mat_id AND dn.institucion=mat.institucion AND dn.year=mat.year
+        LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat_grado AND gra.institucion=mat.institucion AND gra.year=mat.year
+        WHERE  mat_eliminado=0  AND mat.institucion=? AND mat.year=? {$filtro}
+        ORDER BY {$orden}";
+
+        $parametros = [$config['conf_id_institucion'], $year];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
+    }
+
+    /**
+    * Este método realiza una consulta SQL para obtener las matrículas que están asociadas a reportes disciplinarios,
+    * incluyendo detalles como el tipo de falta y la fecha del reporte.
+    *
+    * @param array   $config      Configuración general del sistema.
+    * @param string  $filtro      Filtro adicional para restringir los resultados de la consulta (opcional).
+    * @param string  $yearBd      Año de la base de datos a utilizar (opcional). Si no se proporciona, se utiliza el año de la sesión.
+    * @return mixed  El resultado de la consulta, que contiene las matrículas con reportes disciplinarios asociados.
+    */
+    public static function listarMatriculasReportes(
+        array   $config, 
+        string  $filtro = "", 
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "SELECT mat_matricula,mat_primer_apellido,mat_segundo_apellido,mat_nombres,gru_nombre,gra_nombre,ogen_nombre,dr_fecha, dr_estudiante, dr_falta,
+        CASE dr_tipo WHEN 1 THEN 'Leve' WHEN 2 THEN 'Grave' WHEN 3 THEN 'Gravísima' END as tipo_falta
+        FROM ".BD_ACADEMICA.".academico_matriculas am 
+        INNER JOIN ".BD_ACADEMICA.".academico_grupos ag ON am.mat_grupo=ag.gru_id AND ag.institucion=am.institucion AND ag.year=am.year
+        INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra.gra_id=am.mat_grado AND gra.institucion=am.institucion AND gra.year=am.year
+        INNER JOIN ".BD_ADMIN.".opciones_generales og ON og.ogen_id=am.mat_tipo
+        INNER JOIN ".BD_DISCIPLINA.".disciplina_reportes dr ON dr.dr_estudiante=am.mat_id AND dr.institucion=am.institucion AND dr.year=am.year 
+        WHERE am.institucion=? AND am.year=? {$filtro}
+        ORDER BY mat_primer_apellido";
+
+        $parametros = [$config['conf_id_institucion'], $year];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
+    }
+
+    /**
+    * Este método realiza una consulta SQL para obtener los pasos de matrícula de los estudiantes,
+    * aplicando filtros y ordenamiento según los parámetros especificados.
+    *
+    * @param array   $config      Configuración general del sistema.
+    * @param string  $filtro      Filtro adicional para aplicar en la consulta SQL (opcional).
+    * @param string  $orden       Campo de ordenamiento para aplicar en la consulta SQL (opcional).
+    * @param string  $yearBd      Año de la base de datos a utilizar (opcional). Si no se proporciona, se utiliza el año de la sesión.
+    * @return mixed  El resultado de la consulta, que contiene los pasos de matrícula de los estudiantes.
+    */
+    public static function listarPasosMatricula(
+        array   $config, 
+        string  $filtro = "", 
+        string  $orden = "mat_primer_apellido, mat_segundo_apellido", 
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat 
+        LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat_grado AND gra.institucion=mat.institucion AND gra.year=mat.year
+        WHERE mat_eliminado=0 AND mat.institucion=? AND mat.year=? {$filtro}
+        ORDER BY {$orden}";
+
+        $parametros = [$config['conf_id_institucion'], $year];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
+    }
+
+    /**
+    * Este método realiza una consulta SQL para obtener las matrículas que no tienen un usuario asociado,
+    * aplicando filtros según la configuración proporcionada.
+    *
+    * @param array   $config      Configuración general del sistema.
+    * @param string  $yearBd      Año de la base de datos a utilizar (opcional). Si no se proporciona, se utiliza el año de la sesión.
+    * @return mixed  El resultado de la consulta, que contiene las matrículas sin usuario asociado.
+    */
+    public static function listarMatriculaSinUsuario(
+        array   $config, 
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat 
+        LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=mat.mat_id_usuario AND uss.institucion=mat.institucion AND uss.year=mat.year 
+        INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat.mat_grado AND gra.institucion=mat.institucion AND gra.year=mat.year 
+        INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=mat.mat_grupo AND gru.institucion=mat.institucion AND gru.year=mat.year
+        WHERE mat.mat_eliminado=0 AND mat.institucion=? AND mat.year=?
+        ORDER BY mat.mat_primer_apellido, mat.mat_segundo_apellido, mat.mat_nombres";
+
+        $parametros = [$config['conf_id_institucion'], $year];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
+    }
+
+    /**
+    * Este método realiza una consulta SQL para encontrar las matrículas que tienen el mismo número de documento
+    * de identidad y están asociadas a diferentes grados en la misma institución y año.
+    *
+    * @param array   $config      Configuración general del sistema.
+    * @param string  $yearBd      Año de la base de datos a utilizar (opcional). Si no se proporciona, se utiliza el año de la sesión.
+    * @return mixed  El resultado de la consulta, que contiene las matrículas duplicadas según el número de documento.
+    */
+    public static function listarMatriculasRepetidas(
+        array   $config, 
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "SELECT 
+        GROUP_CONCAT( mat_id SEPARATOR ', ') as mat_id, 
+        GROUP_CONCAT( mat_matricula SEPARATOR ', ') as mat_matricula, 
+        GROUP_CONCAT( gra_nombre SEPARATOR ', ') as gra_nombre, 
+        mat_documento, mat_estado_matricula, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2, COUNT(*) as duplicados 
+        FROM ".BD_ACADEMICA.".academico_matriculas mat 
+        INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat_grado AND gra.institucion=mat.institucion AND gra.year=mat.year
+        WHERE mat_eliminado=0 AND mat.institucion=? AND mat.year=?
+        GROUP BY mat_documento
+        HAVING COUNT(*) > 1 
+        ORDER BY mat_id ASC";
+
+        $parametros = [$config['conf_id_institucion'], $year];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
+    }
+
+    /**
+    * Este método ejecuta una consulta SQL para obtener el año de nacimiento de un usuario
+    * específico utilizando su ID de usuario y la configuración proporcionada.
+    *
+    * @param array   $config      Configuración general del sistema.
+    * @param string  $idUsuario   Identificador del usuario del cual se desea obtener el año de nacimiento.
+    * @param string  $yearBd        Año de la base de datos (opcional). Si no se proporciona, se utiliza el valor de sesión.
+    * @return mixed  El resultado de la consulta, que representa el año de nacimiento del usuario.
+    */
+    public static function traerYearNacimiento(
+        array   $config, 
+        string  $idUsuarios,
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "SELECT YEAR(mat_fecha_nacimiento) FROM ".BD_ACADEMICA.".academico_matriculas WHERE mat_id_usuario=? AND institucion=? AND year=?";
+
+        $parametros = [$idUsuarios, $config['conf_id_institucion'], $year];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
+
+        return $resultado;
+    }
+
+    /**
+    * Esta función ejecuta una consulta preparada para eliminar un registro de matriculas
+    *
+    * @param array  $config         Configuración del sistema.
+    * @param int    $idMatricula    Identificador del registro a eliminar.
+    * @param string $yearBd        Año de la base de datos (opcional). Si no se proporciona, se utiliza el valor de sesión.
+    **/
+    public static function eliminarMatricula (
+        array   $config,
+        int     $idMatricula,
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_matriculas WHERE mat_id=? AND institucion=? AND year=?";
+
+        $parametros = [$idMatricula, $config['conf_id_institucion'], $year];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+    }
+
+    /**
+    * Esta función ejecuta una consulta preparada para eliminar todos los registros de matriculas
+    * pertenecientes a una institución para un año específico de la base de datos.
+    *
+    * @param int    $idInstitucion Identificador de la institución cuyas matriculas se eliminarán.
+    * @param string $yearBd        Año de la base de datos (opcional). Si no se proporciona, se utiliza el valor de sesión.
+    **/
+    public static function eliminarTodasMatriculas (
+        int     $idInstitucion,
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_matriculas WHERE institucion=? AND year=?";
+
+        $parametros = [$idInstitucion, $year];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+    }
+
+    /**
+    * Esta función ejecuta una consulta preparada para insertar un nuevo registro de matricula en la tabla 'academico_matriculas'.
+    *
+    * @param PDO    $conexionPDO  Conexión PDO a la base de datos.
+    * @param string $insert       Lista de campos separados por coma para la inserción.
+    * @param array  $parametros   Array de parámetros para la consulta preparada.
+    **/
+    public static function guardarMatricula (
+        PDO     $conexionPDO,
+        string  $insert,
+        array   $parametros
+    )
+    {
+        $campos = explode(',', $insert);
+        $numCampos = count($campos);
+        $signosPreguntas = str_repeat('?,', $numCampos);
+        $signosPreguntas = rtrim($signosPreguntas, ',');
+
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_matriculas');
+        $parametros[] = $codigo;
+
+        $sql = "INSERT INTO ".BD_ACADEMICA.".academico_matriculas ({$insert}) VALUES ({$signosPreguntas})";
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+    }
+
+    /**
+    * Esta función ejecuta una consulta preparada para actualizar un registro de matriculas en la tabla 'academico_matriculas' por el id unico.
+    *
+    * @param array  $config         Configuración del sistema.
+    * @param string $idMatricula    Identificador de matricula a actualizar.
+    * @param string $update         Lista de campos y valores a actualizar en formato de cadena.
+    * @param string $yearBd         Año de la base de datos (opcional). Si no se proporciona, se utiliza el valor de sesión.
+    **/
+    public static function actualizarMatriculasPorId (
+        array   $config,
+        string  $idMatricula,
+        string  $update,
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_matriculas SET {$updateSql} WHERE mat_id=? AND institucion=? AND year=?";
+
+        $parametros = array_merge($updateValues, [$idMatricula, $config['conf_id_institucion'], $year]);
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+    }
+
+    /**
+    * Esta función ejecuta una consulta preparada para actualizar un registro de matriculas en la tabla 'academico_matriculas' por el id de su usuario.
+    *
+    * @param array  $config     Configuración del sistema.
+    * @param string $idUsuario  Identificador del id del usuario a actualizar.
+    * @param string $update     Lista de campos y valores a actualizar en formato de cadena.
+    * @param string $yearBd     Año de la base de datos (opcional). Si no se proporciona, se utiliza el valor de sesión.
+    **/
+    public static function actualizarMatriculasPorIdUsuario (
+        array   $config,
+        string  $idUsuario,
+        string  $update,
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_matriculas SET {$updateSql} WHERE mat_id_usuario=? AND institucion=? AND year=?";
+
+        $parametros = array_merge($updateValues, [$idUsuario, $config['conf_id_institucion'], $year]);
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+    }
+
+    /**
+    * Esta función ejecuta una consulta preparada para actualizar todos los registros de matriculas en la tabla 'academico_matriculas' de una institución.
+    *
+    * @param array  $config         Configuración del sistema.
+    * @param string $update         Lista de campos y valores a actualizar en formato de cadena.
+    * @param string $yearBd         Año de la base de datos (opcional). Si no se proporciona, se utiliza el valor de sesión.
+    **/
+    public static function actualizarMatriculasInstitucion (
+        array   $config,
+        string  $update,
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_matriculas SET {$updateSql} WHERE institucion=? AND year=?";
+
+        $parametros = array_merge($updateValues, [$config['conf_id_institucion'], $year]);
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+    }
+
+    /**
+    * Esta función ejecuta una consulta preparada para eliminar la matriculas inactivas en la tabla 'academico_matriculas'.
+    *
+    * @param mysqli $conexion   
+    * @param array  $config     Configuración del sistema.
+    * @param string $yearBd     Año de la base de datos (opcional). Si no se proporciona, se utiliza el valor de sesión.
+    **/
+    public static function eliminarMatriculasInactivas (
+        mysqli  $conexion,
+        array   $config,
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_matriculas SET mat_eliminado=1 WHERE mat_estado_matricula!=1 AND institucion=? AND year=?";
+
+        $parametros = [$config['conf_id_institucion'], $year];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        $columnasAfectadas = mysqli_affected_rows($conexion);
+
+        return $columnasAfectadas;
+    }
+
+    /**
+    * Esta función ejecuta una consulta preparada para eliminar el id del acudiente en la tabla 'academico_matriculas'.
+    *
+    * @param array  $config         Configuración del sistema.
+    * @param string $idAcudiente    Identificador del id del acudiente a eliminar.
+    * @param string $yearBd         Año de la base de datos (opcional). Si no se proporciona, se utiliza el valor de sesión.
+    **/
+    public static function eliminarMatriculasAcudiente (
+        array   $config,
+        string  $idAcudiente,
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_matriculas SET mat_acudiente=NULL WHERE mat_acudiente=? AND institucion=? AND year=?";
+
+        $parametros = [$idAcudiente, $config['conf_id_institucion'], $year];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+    }
+
 }
