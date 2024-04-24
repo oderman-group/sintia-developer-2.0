@@ -6,6 +6,7 @@ require_once(ROOT_PATH."/main-app/class/Foros.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/Ausencias.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0162';
@@ -41,11 +42,9 @@ try{
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
-try{
-    mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_matriculas SET mat_eliminado=1 WHERE mat_id='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
+
+$update = "mat_eliminado=1";
+Estudiantes::actualizarMatriculasPorId($config, $idE, $update);
 
 Calificaciones::eliminarNivelacionEstudiante($conexion, $config, $idE);
 
