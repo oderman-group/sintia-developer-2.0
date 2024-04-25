@@ -5,7 +5,7 @@ require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.ph
 //include(ROOT_PATH."/conexion-datos.php");
 $conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
 
-$consultaUsuario = mysqli_query($conexionBaseDatosServicios, "SELECT uss_usuario,uss_tipo,COUNT(DISTINCT institucion) AS cantidad_instituciones,GROUP_CONCAT(DISTINCT institucion ORDER BY institucion SEPARATOR ', ') AS instituciones FROM ".BD_GENERAL.".usuarios WHERE uss_usuario LIKE '".trim($_POST["Usuario"])."%' AND uss_cambio_notificacion=0");
+$consultaUsuario = mysqli_query($conexionBaseDatosServicios, "SELECT uss_usuario,uss_tipo,COUNT(DISTINCT institucion) AS cantidad_instituciones,GROUP_CONCAT(DISTINCT institucion ORDER BY institucion SEPARATOR ', ') AS instituciones FROM ".BD_GENERAL.".usuarios WHERE uss_usuario LIKE '".trim($_REQUEST["Usuario"])."%' AND uss_cambio_notificacion=0");
 $datosUsuario = mysqli_fetch_array($consultaUsuario, MYSQLI_BOTH);
 if(!empty($datosUsuario) && $datosUsuario['cantidad_instituciones'] > 1){
 	$institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".BD_ADMIN.".instituciones 
@@ -92,15 +92,24 @@ if(!empty($datosUsuario) && $datosUsuario['cantidad_instituciones'] > 1){
 									<option value="">Seleccione una institución</option>
 									<?php
 									while($instituciones = mysqli_fetch_array($institucionesConsulta, MYSQLI_BOTH)){
-										$selected = (isset($_REQUEST['inst']) && $inst == $instituciones['ins_id']) ? 'selected' : '';
 									?>
-										<option value="<?=$instituciones['ins_id'];?>" <?=$selected;?>><?=$instituciones['ins_siglas'];?></option>
+										<option value="<?=$instituciones['ins_id'];?>"><?=$instituciones['ins_siglas'];?></option>
 									<?php }?>
 								</select>
 								<label for="institution">Institucion</label>
+                                <div class="invalid-feedback">Por favor escoge una institución.</div>
+								<?php if(!empty($_GET['error'])){ 
+									if($_GET['error']==1){ ?>
+										<div style="width: 100%; margin-top: 0.25rem; font-size: 0.875em; color: #dc3545;">El usuario no fue encontrado para esta institución en este año. Por favor verifique.</div>
+									<?php }  
+									if($_GET['error']==2){ ?>
+										<div style="width: 100%; margin-top: 0.25rem; font-size: 0.875em; color: #dc3545;">Por favor escoge una institución.</div>
+									<?php } 
+								} ?>
 							</div>
 
-							<button class="w-10 btn btn-lg btn-info btn-rounded mt-3" type="submit">CONTINUAR LA AVENTURA</button>
+							<a class="w-10 btn btn-primary btn-rounded mt-3" href="<?=REDIRECT_ROUTE?>">REGRESAR AL INICIO</a>
+							<button class="w-10 btn btn-success btn-rounded mt-3" type="submit">CONTINUAR A LA AVENTURA</button>
 						</form>
 					</div>
 				</div>
@@ -116,11 +125,34 @@ if(!empty($datosUsuario) && $datosUsuario['cantidad_instituciones'] > 1){
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 		<!-- Bootstrap JS -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
+		<script src="../config-general/assets-login-2023/js/pages/login.js"></script>
 		<script>
 			function mostrarModalInstituciones() {
 				$("#modalInstituciones").modal("show");
 			}
 			$(document).ready(function() {
+				$('.form-select').select2({
+					theme: 'bootstrap-5'
+				});
+
+				$('.select2').on('select2:open', function () {
+					$(this).parent().find('.select2-selection--single').addClass('form-control');
+				});
+
+				$('form').on('submit', function (e) {
+					if (!this.checkValidity()) {
+						$('#institution').addClass('is-invalid');
+						this.classList.add('was-validated');
+						e.preventDefault();
+					} else {
+						$('#institution').removeClass('is-invalid');
+					}
+					
+				});
+				
 				mostrarModalInstituciones();
 			});
 		</script>
