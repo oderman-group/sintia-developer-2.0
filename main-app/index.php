@@ -50,26 +50,11 @@ if(!isset($_GET['nodb'])) {
             <div class="container">
                 <div class="row">
                     <div class="col-md-8 offset-md-2" id="login">
-                        <form method="post" action="controlador/autentico.php" class="needs-validation" novalidate>
+                        <form method="post" action="controlador/autentico-validar-cambio.php" class="needs-validation" novalidate>
                             <?php include("../config-general/mensajes-informativos.php"); ?>
 		                        <input type="hidden" name="urlDefault" value="<?php if(isset($_GET["urlDefault"])) echo $_GET["urlDefault"];?>" />
                                 <input type="hidden" name="directory"  value="<?php if(isset($_GET["directory"]))  echo $_GET["directory"]; ?>" />
-                            <img class="mb-4" src="<?=$logoIndex;?>" width="<?=$logoWidth;?>">
-<!-- 
-                            <div class="form-floating mt-3">
-                                <select class="form-select select2" id="institution" name="bd"
-                                    aria-label="Default select example" required>
-                                    <option value="">Seleccione una institución</option>
-                                    <?php
-                                    while($instituciones = mysqli_fetch_array($institucionesConsulta, MYSQLI_BOTH)){
-                                      $selected = (isset($_GET['inst']) && $inst == $instituciones['ins_id']) ? 'selected' : '';
-                                    ?>
-                                      <option value="<?=$instituciones['ins_id'];?>" <?=$selected;?>><?=$instituciones['ins_siglas'];?></option>
-                                    <?php }?>
-                                </select>
-                                <label for="institution">Institucion</label>
-                                <div class="invalid-feedback">Por favor seleccione una institución.</div>
-                            </div> -->
+                                <img class="mb-4" src="<?=$logoIndex;?>" width="<?=$logoWidth;?>">
                             
                             <div class=" form-floating mt-3">
                                 <input type="text" class="form-control input-login" id="emailInput" name="Usuario"
@@ -139,7 +124,7 @@ if(!isset($_GET['nodb'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
     <script src="../config-general/assets-login-2023/js/pages/login.js"></script>
-    <!-- <script>
+    <script>
         $(document).ready(function () {
             $('.form-select').select2({
                 theme: 'bootstrap-5'
@@ -160,7 +145,7 @@ if(!isset($_GET['nodb'])) {
                 
             });
         });
-    </script> -->
+    </script>
     <!-- Core theme JS-->
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
