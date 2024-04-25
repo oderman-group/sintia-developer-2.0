@@ -31,7 +31,7 @@ if(!empty($_POST["bd"])){
 		header("Location:".REDIRECT_ROUTE."/index.php?success=SC_GN_6");
 		exit();
 	}else{
-		header("Location:".REDIRECT_ROUTE."/controlador/autentico-validar-cambio.php?error=1");
+		header("Location:".REDIRECT_ROUTE."/index.php?error=1");
 		exit();
 	}
 }else{

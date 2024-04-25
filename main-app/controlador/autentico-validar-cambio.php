@@ -2,7 +2,9 @@
 session_start();
 $idPaginaInterna = 'GN0001';
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
-//include(ROOT_PATH."/conexion-datos.php");
+require_once(ROOT_PATH."/main-app/class/Plataforma.php");
+$Plataforma = new Plataforma;
+
 $conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
 
 $consultaUsuario = mysqli_query($conexionBaseDatosServicios, "SELECT uss_usuario,uss_tipo,COUNT(DISTINCT institucion) AS cantidad_instituciones,GROUP_CONCAT(DISTINCT institucion ORDER BY institucion SEPARATOR ', ') AS instituciones FROM ".BD_GENERAL.".usuarios WHERE uss_usuario LIKE '".trim($_REQUEST["Usuario"])."%' AND uss_cambio_notificacion=0");
@@ -108,8 +110,8 @@ if(!empty($datosUsuario) && $datosUsuario['cantidad_instituciones'] > 1){
 								} ?>
 							</div>
 
-							<a class="w-10 btn btn-primary btn-rounded mt-3" href="<?=REDIRECT_ROUTE?>">REGRESAR AL INICIO</a>
-							<button class="w-10 btn btn-success btn-rounded mt-3" type="submit">CONTINUAR A LA AVENTURA</button>
+							<a class="w-10 btn btn-secondary btn-rounded mt-3" href="<?=REDIRECT_ROUTE?>">REGRESAR AL INICIO</a>
+							<button class="w-10 btn btn-rounded mt-3" style="background: <?=$Plataforma->colorUno;?>; color:#FFF;" type="submit">CONTINUAR A LA AVENTURA</button>
 						</form>
 					</div>
 				</div>
@@ -119,8 +121,8 @@ if(!empty($datosUsuario) && $datosUsuario['cantidad_instituciones'] > 1){
 			<div class="espera-mensaje">
 			Estoy verificando tus datos, dame un momento...
 			</div>
-			<a class="w-10 btn btn-primary btn-rounded mt-3" href="<?=REDIRECT_ROUTE?>">REGRESAR AL INICIO</a>
-			<button class="w-10 btn btn-success btn-rounded mt-3" onclick="mostrarModalInstituciones()">CONTINUAR A LA AVENTURA</button>
+			<a class="w-10 btn btn-secondary btn-rounded mt-3" href="<?=REDIRECT_ROUTE?>">REGRESAR AL INICIO</a>
+			<button class="w-10 btn btn-rounded mt-3" style="background: <?=$Plataforma->colorUno;?>; color:#FFF;" onclick="mostrarModalInstituciones()">CONTINUAR A LA AVENTURA</button>
 		</div>
 		
 		<!-- jQuery -->
