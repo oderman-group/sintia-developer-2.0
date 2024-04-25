@@ -119,6 +119,8 @@ if(!empty($datosUsuario) && $datosUsuario['cantidad_instituciones'] > 1){
 			<div class="espera-mensaje">
 			Estoy verificando tus datos, dame un momento...
 			</div>
+			<a class="w-10 btn btn-primary btn-rounded mt-3" href="<?=REDIRECT_ROUTE?>">REGRESAR AL INICIO</a>
+			<button class="w-10 btn btn-success btn-rounded mt-3" onclick="mostrarModalInstituciones()">CONTINUAR A LA AVENTURA</button>
 		</div>
 		
 		<!-- jQuery -->
