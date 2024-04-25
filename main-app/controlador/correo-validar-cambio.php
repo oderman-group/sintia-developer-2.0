@@ -4,7 +4,7 @@ require_once("../../conexion.php");
 if(!empty($_POST["bd"])){
 	require_once(ROOT_PATH."/main-app/class/EnviarEmail.php");
 
-	$sql="SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_usuario='".trim($_POST["Usuario"])."-".$_POST["bd"]."' AND TRIM(uss_usuario)!='' AND uss_clave=SHA1('".$_POST["Clave"]."')  AND uss_usuario IS NOT NULL  AND institucion=".$_POST["bd"]." ORDER BY uss_ultimo_ingreso DESC LIMIT 1";
+	$sql="SELECT * FROM ".BD_GENERAL.".usuarios WHERE (uss_usuario='".trim($_POST["Usuario"])."-".$_POST["bd"]."' OR uss_usuario LIKE '".trim($_REQUEST["Usuario"])."%' ) AND TRIM(uss_usuario)!='' AND uss_clave=SHA1('".$_POST["Clave"]."')  AND uss_usuario IS NOT NULL  AND institucion=".$_POST["bd"]." ORDER BY uss_ultimo_ingreso DESC LIMIT 1";
 	$rst_usrE = mysqli_query($conexion, $sql);
 	$numE = mysqli_num_rows($rst_usrE);
 	if($numE>0){
