@@ -10,6 +10,9 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/Clases.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/Clases.php");
 
 $year=$_SESSION["bd"];
 if(!empty($_GET["year"])){
@@ -154,7 +157,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 			}
 			$promedioMateria = round($promedioMateria/($j-1),2);
 			$promedioMateriaFinal = $promedioMateria;
-            $consultaNivelacion=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id_asg='".$datosCargas['car_id']."' AND niv_cod_estudiante='".$datosUsr['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
+			$consultaNivelacion = Calificaciones::nivelacionEstudianteCarga($conexion, $config, $datosUsr['mat_id'], $datosCargas['car_id'], $year);
 			$nivelacion = mysqli_fetch_array($consultaNivelacion, MYSQLI_BOTH);
 			
 			// SI PERDIÓ LA MATERIA A FIN DE AÑO
@@ -165,11 +168,8 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 					$materiasPerdidas++;
 				}	
 			}
-		
-            $ConsultaPromediosMateriaEstiloNota=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
-            WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND '".$promedioMateriaFinal."'>=notip_desde AND '".$promedioMateriaFinal."'<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
-			$promediosMateriaEstiloNota = mysqli_fetch_array($ConsultaPromediosMateriaEstiloNota, MYSQLI_BOTH);
-			
+
+            $promediosMateriaEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioMateriaFinal, $year);
 			?>
             <td align="center"><?=$promedioMateriaFinal;?></td>
             <td align="center"><?=$promediosMateriaEstiloNota['notip_nombre'];?></td>
@@ -198,9 +198,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
                 WHERE cls.cls_periodo='".$j."' AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$year}");
 				$sumaAusencias = mysqli_fetch_array($consultaSumaAusencias, MYSQLI_BOTH);
 				
-                $consultaPromedioEstiloNota=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
-				WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND '".$promediosPeriodos['promedio']."'>=notip_desde AND '".$promediosPeriodos['promedio']."'<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
-				$promediosEstiloNota = mysqli_fetch_array($consultaPromedioEstiloNota, MYSQLI_BOTH);
+                $promediosEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promediosPeriodos['promedio'], $year);
             ?>
                 <td><?php //echo $sumaAusencias[0];?></td>
                 <td><?=$promediosPeriodos['promedio'];?></td>
@@ -210,9 +208,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
             }
 
             $promedioFinal = round($promedioFinal/$periodoActual,2);
-            $consultaPromedioFinalEstilioNota=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
-            WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND '".$promedioFinal."'>=notip_desde AND '".$promedioFinal."'<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
-            $promedioFinalEstiloNota = mysqli_fetch_array($consultaPromedioFinalEstilioNota, MYSQLI_BOTH);
+            $promedioFinalEstiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioFinal, $year);
             ?>
             <td><?=$promedioFinal;?></td>
             <td><?=$promedioFinalEstiloNota['notip_nombre'];?></td>
@@ -237,9 +233,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
         	<table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1">
             	<?php
 				$contador=1;
-				$estilosNota = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
-				WHERE notip_categoria='".$config["conf_notas_categoria"]."' AND institucion={$config['conf_id_institucion']} AND year={$year}
-				ORDER BY notip_desde DESC");
+                $estilosNota = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $year);
 				while($eN = mysqli_fetch_array($estilosNota, MYSQLI_BOTH)){
 					if($contador%2==1){$fondoFila = '#EAEAEA';}else{$fondoFila = '#FFF';}
 				?>

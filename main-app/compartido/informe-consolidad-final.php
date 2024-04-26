@@ -11,6 +11,7 @@ require_once("../class/Estudiantes.php");
 require_once("../class/Grados.php");
 require_once("../class/Grupos.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 $year = $_SESSION["bd"];
 if(!empty($_REQUEST["agno"])){
 	$year = $_REQUEST["agno"];
@@ -59,8 +60,7 @@ include("../compartido/head-informes.php") ?>
 										//SACAMOS EL NUMERO DE CARGAS O MATERIAS QUE TIENE UN CURSO PARA QUE SIRVA DE DIVISOR EN LA DEFINITIVA POR ESTUDIANTE
 										$numCargasPorCurso = mysqli_num_rows($cargas); 
 										while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
-											$consultaMaterias=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$carga['car_materia']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-											$materia = mysqli_fetch_array($consultaMaterias, MYSQLI_BOTH);
+											$materia = Asignaturas::consultarDatosAsignatura($conexion, $config, $carga['car_materia']);
 										?>
                                         	<th style="font-size:9px; text-align:center; border:groove;" colspan="<?=$config[19]+1;?>" width="5%"><?php if(!empty($materia['mat_nombre'])){echo $materia['mat_nombre'];}?></th>
                                         <?php
@@ -100,8 +100,7 @@ include("../compartido/head-informes.php") ?>
                                         <?php
 										$cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$cursoV."' AND car_grupo='".$grupoV."' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$year}"); 
 										while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
-											$consultaMaterias=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".$carga['car_materia']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-											$materia = mysqli_fetch_array($consultaMaterias, MYSQLI_BOTH);
+											$materia = Asignaturas::consultarDatosAsignatura($conexion, $config, $carga['car_materia']);
 											$p = 1;
                                             $porcPeriodo = array("",0.25,0.15,0.35,0.25);
 											$defPorMateria = 0;

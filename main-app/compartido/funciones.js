@@ -705,6 +705,7 @@ function mostrarModalCompraModulos(idModulo, year) {
         document.getElementById('enlaceWhatsapp').href = "https://api.whatsapp.com/send?phone=573006075800&text="+data.mensaje;
         document.getElementById('montoModulo').value = data.montoModulo;
         document.getElementById('nombreModulo').value = "MÓDULO "+data.nombreModulo;
+        document.getElementById('idModulo').value = idModulo;
 
         socket.emit("enviar_mensajes_modulos_dev", {
             year: year,

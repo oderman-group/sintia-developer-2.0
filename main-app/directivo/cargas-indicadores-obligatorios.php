@@ -2,6 +2,7 @@
 <?php $idPaginaInterna = 'DT0035';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -48,11 +49,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                     include("../compartido/error-catch-to-report.php");
                                 }
                                 $ind = mysqli_fetch_array($consultaInd, MYSQLI_BOTH);
-                                try{
-                                    $consultaIndGenerados=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_creado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                                } catch (Exception $e) {
-                                    include("../compartido/error-catch-to-report.php");
-                                }
+                                $consultaIndGenerados = Indicadores::consultarIndicadorGenerados($conexion, $config);
                                 $indGenerados = mysqli_num_rows($consultaIndGenerados);
                                 ?>
 								<div class="col-md-12">

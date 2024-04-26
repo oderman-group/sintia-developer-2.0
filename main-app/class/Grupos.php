@@ -1,4 +1,6 @@
 <?php
+require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 class Grupos {
 
     /**
@@ -78,6 +80,78 @@ class Grupos {
             exit();
         }
         return $resultado;
+    }
+    
+    /**
+     * Este metodo me trae los grupos de la institución
+     * @param mysqli $conexion
+     * @param array $config
+     * 
+     * @return mysqli_result $consulta
+     */
+    public static function traerGrupos(mysqli $conexion, array $config){
+        try{
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+
+        return $consulta;
+    }
+    
+    /**
+     * Este metodo me guarda un grupo
+     * @param mysqli $conexion
+     * @param PDO $conexionPDO
+     * @param array $config
+     * @param array $POST
+     */
+    public static function guardarGrupos(mysqli $conexion, PDO $conexionPDO, array $config, array $POST){
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_grupos');
+        try{
+            mysqli_query(
+                $conexion,
+                "INSERT INTO ".BD_ACADEMICA.".academico_grupos (
+                    gru_id, 
+                    gru_codigo, 
+                    gru_nombre, 
+                    institucion, 
+                    year
+                )	
+                VALUES(
+                    '".$codigo."', 
+                    '" . $POST["codigoG"] . "',
+                    '" . $POST["nombreG"] . "', 
+                    {$config['conf_id_institucion']}, 
+                    {$_SESSION["bd"]}
+                )"
+            );
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
+    }
+    
+    /**
+     * Este metodo me actualiza un grupo
+     * @param mysqli $conexion
+     * @param array $config
+     * @param array $POST
+     */
+    public static function actualizarGrupos(mysqli $conexion, array $config, array $POST){
+        try{
+            mysqli_query(
+                $conexion,
+                "UPDATE ".BD_ACADEMICA.".academico_grupos SET
+                    gru_codigo =".$POST['codigoG'].", 
+                    gru_nombre  ='".$POST['nombreG']."'
+                    WHERE gru_id='".$POST["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"
+            );
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
     }
 
 }

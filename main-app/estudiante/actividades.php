@@ -5,7 +5,8 @@
 <?php include("verificar-carga.php");?>
 <?php //include("verificar-pagina-bloqueada.php");?>
 <?php include("../compartido/head.php");
-require_once(ROOT_PATH."/main-app/class/Actividades.php");?>
+require_once(ROOT_PATH."/main-app/class/Actividades.php");
+require_once(ROOT_PATH."/main-app/class/Grados.php");?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -42,13 +43,12 @@ require_once(ROOT_PATH."/main-app/class/Actividades.php");?>
 											<?php
 											$porcentaje = 0;
 											for($i=1; $i<=$datosEstudianteActual['gra_periodos']; $i++){
-												$periodosCursos = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
-												WHERE gvp_grado='".$datosEstudianteActual['mat_grado']."' AND gvp_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-												"), MYSQLI_BOTH);
-												$porcentajeGrado=25;
-												if(!empty($periodosCursos['gvp_valor'])){
+                                                $periodosCursos = Grados::traerPorcentajePorPeriodosGrados($conexion, $config, $datosEstudianteActual['mat_grado'], $i);
+                                                
+                                                $porcentajeGrado=25;
+                                                if(!empty($periodosCursos['gvp_valor'])){
                                                     $porcentajeGrado=$periodosCursos['gvp_valor'];
-												}
+                                                }
 												
 												$notapp = mysqli_fetch_array(mysqli_query($conexion, "SELECT bol_nota FROM ".BD_ACADEMICA.".academico_boletin 
 												WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);

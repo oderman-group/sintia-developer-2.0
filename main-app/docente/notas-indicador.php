@@ -5,6 +5,7 @@ include("../compartido/historial-acciones-guardar.php");
 include("verificar-carga.php");
 include("../compartido/head.php");
 require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 
 $idPaginaInterna = 'DC0079';
 
@@ -106,9 +107,7 @@ include("../compartido/head.php");
 
 														<?php
 
-														$cA = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-														INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
-														WHERE ipc.ipc_carga='" . $cargaConsultaActual . "' AND ipc.ipc_periodo='" . $periodoConsultaActual . "' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
+														$cA = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 
 														while ($rA = mysqli_fetch_array($cA, MYSQLI_BOTH)) {
 
@@ -179,9 +178,7 @@ include("../compartido/head.php");
 
 															<?php
 
-															$cA = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-															INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
-															WHERE ipc.ipc_carga='" . $cargaConsultaActual . "' AND ipc.ipc_periodo='" . $periodoConsultaActual . "' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}");
+															$cA = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 
 															while ($rA = mysqli_fetch_array($cA, MYSQLI_BOTH)) {
 
