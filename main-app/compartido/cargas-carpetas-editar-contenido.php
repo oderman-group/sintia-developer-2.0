@@ -111,9 +111,7 @@
 														$infoConsulta = mysqli_query($conexion, "SELECT fxuc_usuario FROM ".$baseDatosServicios.".general_folders_usuarios_compartir WHERE fxuc_folder='".$idR."' AND fxuc_institucion='".$config['conf_id_institucion']."' AND fxuc_year='".$config['conf_agno']."'");
 														while($infoDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
 
-															$consultaExiste=mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss
-															INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
-															WHERE uss_id='".$infoDatos['fxuc_usuario']."' AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
+															$consultaExiste = UsuariosPadre::obtenerTodosLosDatosDeUsuarios("AND uss_id='".$infoDatos['fxuc_usuario']."'");
 															$existe = mysqli_fetch_array($consultaExiste, MYSQLI_BOTH);
 
 															if(!is_null($existe)){

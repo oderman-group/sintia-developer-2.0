@@ -536,12 +536,13 @@ class Estudiantes {
         global $conexion, $config;
         $resultado = [];
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+        $filtroCancelados = $config['conf_mostrar_estudiantes_cancelados'] == NO ? "AND mat.mat_estado_matricula IN (".MATRICULADO.", ".ASISTENTE.")" : " AND mat.mat_estado_matricula IN (".MATRICULADO.", ".ASISTENTE.", ".CANCELADO.")";
 
         try {
             $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat 
             INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON mat.mat_grupo=gru.gru_id AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$year}
             INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON mat.mat_grado=gra_id AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$year} 
-            WHERE mat.mat_eliminado=0 AND mat.mat_estado_matricula IN (".MATRICULADO.", ".ASISTENTE.", ".CANCELADO.") AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year} $filtro 
+            WHERE mat.mat_eliminado=0 {$filtroCancelados} AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year} {$filtro} 
             GROUP BY mat.mat_id
             ORDER BY mat.mat_grupo, mat.mat_primer_apellido");
         } catch (Exception $e) {
@@ -714,13 +715,13 @@ class Estudiantes {
             FROM ".BD_ACADEMICA.".academico_matriculas am 
             INNER JOIN ".BD_ACADEMICA.".academico_grupos ag ON am.mat_grupo=ag.gru_id AND ag.institucion={$config['conf_id_institucion']} AND ag.year={$_SESSION["bd"]}
             INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra.gra_id=am.mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
-            INNER JOIN $baseDatosServicios.opciones_generales og ON og.ogen_id=am.mat_tipo
-            INNER JOIN $baseDatosServicios.opciones_generales og2 ON og2.ogen_id=am.mat_genero
-            INNER JOIN $baseDatosServicios.opciones_generales og3 ON og3.ogen_id=am.mat_religion
-            INNER JOIN $baseDatosServicios.opciones_generales og4 ON og4.ogen_id=am.mat_estrato
-            INNER JOIN $baseDatosServicios.opciones_generales og5 ON og5.ogen_id=am.mat_tipo_documento
+            INNER JOIN ".BD_ADMIN.".opciones_generales og ON og.ogen_id=am.mat_tipo
+            INNER JOIN ".BD_ADMIN.".opciones_generales og2 ON og2.ogen_id=am.mat_genero
+            INNER JOIN ".BD_ADMIN.".opciones_generales og3 ON og3.ogen_id=am.mat_religion
+            INNER JOIN ".BD_ADMIN.".opciones_generales og4 ON og4.ogen_id=am.mat_estrato
+            INNER JOIN ".BD_ADMIN.".opciones_generales og5 ON og5.ogen_id=am.mat_tipo_documento
             INNER JOIN ".BD_GENERAL.".usuarios uss ON uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]} AND (uss.uss_id=am.mat_acudiente or am.mat_acudiente is null)
-            $where AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
+            WHERE am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} {$where}
             GROUP BY mat_id
             ORDER BY mat_primer_apellido,mat_estado_matricula;");
         } catch (Exception $e) {

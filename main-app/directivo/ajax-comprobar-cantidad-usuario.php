@@ -7,7 +7,7 @@ $tipoUsuario = $_REQUEST['tipoUsuario'];
 switch ($datosUnicosInstitucion['ins_id_plan']) {
     case 1:
         $cantDirectivos = 10;
-        $cantDocentes = 20;
+        $cantDocentes = 2000;
         $cantEstudianteAcudientes = 500;
     break;
     case 2:

@@ -3,6 +3,7 @@ include("session.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0217';
+require_once(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -18,3 +19,6 @@ WHERE mat_id ='".$_POST["idEstudiante"]."' AND institucion={$config['conf_id_ins
         El estado de la matrícula fue cambiado a <b><?=$estadosMatriculasEstudiantes[$_POST["nuevoEstado"]];?></b> correctamente.
     </p>
 </div>
+<?php
+require_once(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
+?>

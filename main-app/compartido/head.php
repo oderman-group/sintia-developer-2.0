@@ -204,6 +204,21 @@ if (!empty($datosPaginaActual)) {
 	flex-direction: column;
 }
 
+#overlayInforme {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+	z-index: 9999;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	font-size: 20px;
+}
+
 #loader {
 	border: 6px solid #f3f3f3; /* Light gray */
 	border-top: 6px solid #3498db; /* Blue */

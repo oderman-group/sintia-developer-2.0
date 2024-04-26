@@ -90,13 +90,7 @@ $resultado = Movimientos::traerDatosAbonos($conexion, $config, $id);
                                             <div class="col-sm-10">
                                                 <select class="form-control select2" id="select_cliente" onchange="mostrarTipoTransaccion()" required disabled <?=$disabledPermiso;?>>
                                                     <?php
-                                                        try{
-                                                            $datosConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss
-                                                            INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
-                                                            WHERE uss_id='".$resultado['invoiced']."' AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
-                                                        } catch (Exception $e) {
-                                                            include("../compartido/error-catch-to-report.php");
-                                                        }
+                                                        $datosConsulta = UsuariosPadre::obtenerTodosLosDatosDeUsuarios("AND uss_id='".$resultado['invoiced']."'");
                                                         while($resultadosDatos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)){
                                                     ?>
                                                         <option value="<?=$resultadosDatos['uss_id'];?>" <?php if($resultado['invoiced']==$resultadosDatos['uss_id']){ echo "selected";}?>><?=UsuariosPadre::nombreCompletoDelUsuario($resultadosDatos)." (".$resultadosDatos['pes_nombre'].")";?></option>
