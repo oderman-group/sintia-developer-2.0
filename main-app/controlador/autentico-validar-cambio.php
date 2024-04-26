@@ -171,6 +171,9 @@ if(!empty($datosUsuario) && $datosUsuario['cantidad_instituciones'] > 1){
 <?php
 	exit();
 }else{
-	header("Location:autentico.php?Usuario=".base64_encode($datosUsuario["uss_usuario"])."&Clave=".base64_encode($_REQUEST["Clave"])."&suma=".base64_encode($_REQUEST["suma"])."&sumaReal=".base64_encode($_REQUEST["sumaReal"])."&urlDefault=".base64_encode($_REQUEST["urlDefault"])."&directory=".base64_encode($_REQUEST["directory"]));
+	$consultaUsuario2 = mysqli_query($conexionBaseDatosServicios, "SELECT uss_usuario FROM ".BD_GENERAL.".usuarios WHERE (uss_usuario='".trim($_POST["Usuario"])."' OR uss_usuario LIKE '".trim($_REQUEST["Usuario"])."%' ) AND TRIM(uss_usuario)!='' AND uss_clave=SHA1('".$_POST["Clave"]."')  AND uss_usuario IS NOT NULL");
+	$datosUsuario2 = mysqli_fetch_array($consultaUsuario2, MYSQLI_BOTH);
+
+	header("Location:autentico.php?Usuario=".base64_encode($datosUsuario2["uss_usuario"])."&Clave=".base64_encode($_REQUEST["Clave"])."&suma=".base64_encode($_REQUEST["suma"])."&sumaReal=".base64_encode($_REQUEST["sumaReal"])."&urlDefault=".base64_encode($_REQUEST["urlDefault"])."&directory=".base64_encode($_REQUEST["directory"]));
 	exit();
 }
