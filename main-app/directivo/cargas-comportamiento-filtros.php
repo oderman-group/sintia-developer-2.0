@@ -167,7 +167,7 @@ if(!Modulos::validarPermisoEdicion()){
                                             </select>
                                         </div>
                                     </div>                                  
-                                    <?php $botones = new botonesGuardar("informes-todos.php",Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0051'])); ?>
+                                    <?php $botones = new botonesGuardar("informes-todos.php",Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0051']),"Generar Informe"); ?>
                                </form>
                             </div>
                         </div>
