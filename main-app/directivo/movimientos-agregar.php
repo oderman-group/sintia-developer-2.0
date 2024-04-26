@@ -261,8 +261,7 @@ $codigoUnico=Utilidades::generateCode("FCN");
                                         </div>
 										
                                         <div class="text-left">
-                                        <?php require_once("../compartido/botones-guardar.php");
-                            				$botones = new botonesGuardar("movimientos.php",Modulos::validarPermisoEdicion()); ?>
+                                        <?php $botones = new botonesGuardar("movimientos.php",Modulos::validarPermisoEdicion()); ?>
                                         </div>
                                     </form>
                                 </div>
