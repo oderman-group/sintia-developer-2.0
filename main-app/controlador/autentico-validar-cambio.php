@@ -86,8 +86,14 @@ if(!empty($datosUsuario) && $datosUsuario['cantidad_instituciones'] > 1){
 						</p>
 
 						<form method="post" action="correo-validar-cambio.php" class="needs-validation" novalidate>
+							<input type="hidden" name="urlDefault"  value="<?php if(isset($_REQUEST["urlDefault"]))  echo $_REQUEST["urlDefault"]; ?>" />
+							<input type="hidden" name="directory"  value="<?php if(isset($_REQUEST["directory"]))  echo $_REQUEST["directory"]; ?>" />
+
 							<input type="hidden" name="Usuario"  value="<?php if(isset($_REQUEST["Usuario"]))  echo $_REQUEST["Usuario"]; ?>" />
 							<input type="hidden" name="Clave"  value="<?php if(isset($_REQUEST["Clave"]))  echo $_REQUEST["Clave"]; ?>" />
+
+							<input type="hidden" name="suma"  value="<?php if(isset($_REQUEST["suma"]))  echo $_REQUEST["suma"]; ?>" />
+							<input type="hidden" name="sumaReal"  value="<?php if(isset($_REQUEST["sumaReal"]))  echo $_REQUEST["sumaReal"]; ?>" />
 							
 							<div class="form-floating mt-3" style="width: 50%;">
 								<select class="form-select select2" id="institution" name="bd" aria-label="Default select example" required>
