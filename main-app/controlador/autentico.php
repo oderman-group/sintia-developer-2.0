@@ -165,8 +165,7 @@ if($num>0)
 		$url = $_SERVER['HTTP_REFERER'];
 	} 
 
-    $update = "uss_estado=1, uss_ultimo_ingreso=now(), uss_intentos_fallidos=0";
-    UsuariosPadre::actualizarUsuarios($config, $fila['uss_id'], $update);
+	mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_estado=1, uss_ultimo_ingreso=now(), uss_intentos_fallidos=0 WHERE uss_id='".$fila['uss_id']."' AND institucion={$_SESSION["idInstitucion"]} AND year={$_SESSION["bd"]}");
 ?>
 <!DOCTYPE html>
 <html lang="en">
