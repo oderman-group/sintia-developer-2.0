@@ -3,6 +3,7 @@ include("conexion.php");
 require_once(ROOT_PATH."/main-app/class/EnviarEmail.php");
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/categoriasNotas.php");
 $year=date("Y");
 
 
@@ -252,12 +253,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 		}
 	
 		//CATEGORIA NOTAS
-		try{
-			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_categorias_notas WHERE institucion='".$cDemo['demo_institucion']."'");
-		} catch (Exception $e) {
-			echo $e->getMessage();
-			exit();
-		}
+		categoriasNota::eliminarTodasCategoriasNotas($cDemo['demo_institucion']);
 	
 		//TIPOS DE NOTAS
 		try{
