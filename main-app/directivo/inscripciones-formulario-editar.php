@@ -174,8 +174,8 @@ $datosAsp = $asp->fetch();
                                                 <label>Estado de solicitud <span style="color:red;">(*)</span></label>
                                                 <select class="form-control select2" name="estadoSolicitud" required>
                                                     <option value="">Escoger</option>
-                                                    <?php foreach ($estadosSolicitud as $key => $value) { ?>
-                                                        <option value="<?= $key; ?>" <?php if ($datosAsp['asp_estado_solicitud'] == $key) echo "selected"; ?>><?= $value; ?></option>
+                                                    <?php foreach ($ordenReal as $clave) { ?>
+                                                        <option value="<?= $clave; ?>" <?php if ($datosAsp['asp_estado_solicitud'] == $clave) echo "selected"; ?>><?= $estadosSolicitud[$clave]; ?></option>
                                                     <?php } ?>
                                                 </select>
                                             </div>
@@ -217,10 +217,7 @@ $datosAsp = $asp->fetch();
                                             </div>
                                         </div>
 
-                                        <button type="submit" class="btn  btn-info">
-										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-									</button>
-										<a href="javascript:void(0);" name="inscripciones.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
+                                        <?php $botones = new botonesGuardar("inscripciones.php",Modulos::validarPermisoEdicion()); ?>
                                     </form>
                                 </div>
                             </div>

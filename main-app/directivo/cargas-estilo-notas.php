@@ -111,7 +111,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 </tbody>
                                             </table>
                                             </div>
-                                        </div>
+                                            <?php $botones = new botonesGuardar("cargas.php",false); ?>
+                                        </div>                                       
                                     </div>
                                 </div>
 								
