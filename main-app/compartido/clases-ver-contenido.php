@@ -321,7 +321,7 @@ $datosConsultaBD = Clases::traerDatosClases($conexion, $config, $idR);
 			</div>
 
 			<script>
-				var cantidadActual = 0;
+				var cantidadActual = 0.1;
 				async function contarPreguntas() {
 					var url = "../compartido/clases-contar-comentarios.php";
 					var data = {
@@ -331,11 +331,24 @@ $datosConsultaBD = Clases::traerDatosClases($conexion, $config, $idR);
 					resultData = resultado["data"];
 					if (resultData["ok"]) {
 						var cantidadConsulta=parseInt(resultData["cantidad"]);
-						if (cantidadActual == 0) {
+						if (cantidadActual == 0.1) {
 							cantidadActual = parseInt(resultData["cantidad"]);
 						} else if (cantidadConsulta>cantidadActual) {
-							mostrarPregunta(resultData);
-							cantidadActual = parseInt(resultData["cantidad"]);
+							if(!document.getElementById("reg"+resultData["codigo"])){
+								await mostrarPregunta(resultData);
+								$.toast({
+								heading: 'Nuevo Comentario',
+								text: 'Nuevo Comentrario',
+								position: 'bottom-right',
+								showHideTransition: 'slide',
+								loaderBg: '#26c281',
+								icon: "success",
+								hideAfter: 5000,
+								stack: 6
+							});
+								cantidadActual = parseInt(resultData["cantidad"]);
+							}
+							
 						}
 
 
@@ -482,6 +495,8 @@ $datosConsultaBD = Clases::traerDatosClases($conexion, $config, $idR);
 						var miDiv = document.getElementById("div-respuesta-" + idPadre);
 						miDiv.classList.remove('show');
 						lista.classList.add('show');
+					}else{
+						cantidadActual = parseInt(dato["cantidad"]);
 					}
 
 
