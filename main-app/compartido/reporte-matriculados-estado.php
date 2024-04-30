@@ -28,113 +28,61 @@ $curso=0;
 if(!empty($_POST["cursosR"])){
 	$curso=1;
 	$cursoActual=GradoServicios::consultarCurso($_REQUEST["cursosR"]);
-	$condicion="gra_id=".$_POST["cursosR"];
+	$condicion=" AND gra_id=".$_POST["cursosR"];
 }
 if(!empty($_POST["gruposR"])){
-	if($condicion!=""){
-		$condicion=$condicion." AND gru_id=".$_POST["gruposR"];
-	}else{
-		$condicion=$condicion." gru_id=".$_POST["gruposR"];
-	}
+	$condicion .= " AND gru_id=".$_POST["gruposR"];
 } 
 if(!empty($_POST["estadoR"])){
-	if($condicion!=""){
-		$condicion=$condicion." AND mat_estado_matricula=".$_POST["estadoR"];
-	}else{
-		$condicion=$condicion." mat_estado_matricula=".$_POST["estadoR"];  
-	}
+	$condicion .= " AND mat_estado_matricula=".$_POST["estadoR"];  
 }  
 if(!empty($_POST["tipoR"])){
-	if($condicion!=""){
-		$condicion=$condicion." AND ogen_id=".$_POST["tipoR"];
-	}else{
-		$condicion=$condicion." ogen_id=".$_POST["tipoR"];  
-	}
+	$condicion .= " AND mat_tipo=".$_POST["tipoR"];  
 }
 
 if(!empty($_POST["acudienteR"])){
-	if($condicion!=""){
-		if($_POST["acudienteR"]==1){
-			$condicion=$condicion." AND mat_acudiente IS NOT NULL";
-		}else{
-			$condicion=$condicion." AND mat_acudiente IS NULL";
-		}
+	if($_POST["acudienteR"]==1){
+		$condicion .= " AND mat_acudiente IS NOT NULL";
 	}else{
-		if($_POST["acudienteR"]==1){
-			$condicion=$condicion." mat_acudiente IS NOT NULL";
-		}else{
-			$condicion=$condicion." mat_acudiente IS NULL";
-		}
+		$condicion .= " AND mat_acudiente IS NULL";
 	}
 }
 
 if(!empty($_POST["fotoR"])){
-	if($condicion!=""){
-		if($_POST["fotoR"]==1){
-			$condicion=$condicion." AND mat_foto IS NOT NULL";
-		}else{
-			$condicion=$condicion." AND mat_foto IS NULL";
-		}
+	if($_POST["fotoR"]==1){
+		$condicion .= " AND mat_foto IS NOT NULL";
 	}else{
-		if($_POST["fotoR"]==1){
-			$condicion=$condicion." mat_foto IS NOT NULL";
-		}else{
-			$condicion=$condicion." mat_foto IS NULL";
-		}
+		$condicion .= " AND mat_foto IS NULL";
 	}
 }
 if(!empty($_POST["inclu"])){
-	if($condicion!=""){
-		$condicion=$condicion." AND mat_inclusion=".$_POST["inclu"];
-	}else{
-		$condicion=$condicion." mat_inclusion=".$_POST["inclu"];  
-	}
+	$condicion .= " AND mat_inclusion=".$_POST["inclu"];
 }
 if(!empty($_POST["extra"])){
-	if($condicion!=""){
-		$condicion=$condicion." AND mat_extranjero=".$_POST["extra"];
-	}else{
-		$condicion=$condicion." mat_extranjero=".$_POST["extra"];  
-	}
+	$condicion .= " AND mat_extranjero=".$_POST["extra"]; 
 }
 if(!empty($_POST["generoR"])){
-	if($condicion!=""){
-		$condicion=$condicion." AND mat_genero=".$_POST["generoR"];
-	}else{
-		$condicion=$condicion." mat_genero=".$_POST["generoR"];  
-	}
+	$condicion .= " AND mat_genero=".$_POST["generoR"];  
 }
 
 if(!empty($_POST["religionR"])){
-	if($condicion!=""){
-		$condicion=$condicion." AND mat_religion=".$_POST["religionR"];
-	}else{
-		$condicion=$condicion." mat_religion=".$_POST["religionR"];  
-	}
+	$condicion .= " AND mat_religion=".$_POST["religionR"];
 }
 if(!empty($_POST["estratoE"])){
-	if($condicion!=""){
-		$condicion=$condicion." AND mat_estrato=".$_POST["estratoE"];
-	}else{
-		$condicion=$condicion." mat_estrato=".$_POST["estratoE"];  
-	}
+	$condicion .= " AND mat_estrato=".$_POST["estratoE"];  
 }
 if(!empty($_POST["tdocumentoR"])){
-	if($condicion!=""){
-		$condicion=$condicion." AND mat_tipo_documento=".$_POST["tdocumentoR"];
-	}else{
-		$condicion=$condicion." mat_tipo_documento=".$_POST["tdocumentoR"];  
-	}
+	$condicion .= " AND mat_tipo_documento=".$_POST["tdocumentoR"];  
 }
 
 if($condicion!=""){
-	$condicionw="WHERE ";
+	$condicionw="WHERE";
 }
-if($curso=1 && $cursoActual["gra_tipo"]==GRADO_INDIVIDUAL){
+if($curso=1 && (!empty($cursoActual) && $cursoActual["gra_tipo"]==GRADO_INDIVIDUAL)){
 	$consultaMatriculaEst=MediaTecnicaServicios::reporteEstadoEstudiantesMT($config,$condicion);
 }else{
 	$where=$condicionw.$condicion;
-	$consultaMatriculaEst=Estudiantes::reporteEstadoEstudiantes($where);
+	$consultaMatriculaEst=Estudiantes::reporteEstadoEstudiantes($condicion);
 }
 
 $numE=mysqli_num_rows($consultaMatriculaEst);

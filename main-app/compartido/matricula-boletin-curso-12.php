@@ -128,7 +128,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                         Informes: <?=$informacion_inst["info_telefono"]?><br><br>
                         AÑO LECTIVO: <?=$year?>
                     </td>
-                    <td>Documento:<br> <b style="color: #00adefad;"><?=number_format($matriculadosDatos["mat_documento"],0,",",".");?></b></td>
+                    <td>Documento:<br> <b style="color: #00adefad;"><?=strpos($matriculadosDatos["mat_documento"], '.') !== true && is_numeric($matriculadosDatos["mat_documento"]) ? number_format($matriculadosDatos["mat_documento"],0,",",".") : $matriculadosDatos["mat_documento"];?></b></td>
                     <td>Nombre:<br> <b style="color: #00adefad;"><?=$nombreEstudainte?></b></td>
                     <td>Grado:<br> <b style="color: #00adefad;"><?=strtoupper($matriculadosDatos["gra_nombre"]." ".$grupo)?></b></td>
                 </tr>
@@ -196,7 +196,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
             </thead>
             <tbody>
                 <?php
-                    $consultaAreas = Asignaturas::consultarAsignaturasArea($conexion, $config, $gradoActual, $grupoActual, $year);
+                    $consultaAreas = Asignaturas::consultarAsignaturasCurso($conexion, $config, $gradoActual, $grupoActual, $year);
                     $numAreas=mysqli_num_rows($consultaAreas);
                     $sumaPromedioGeneral=0;
                     $sumaPromedioGeneralPeriodo1=0;

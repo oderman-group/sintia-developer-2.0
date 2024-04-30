@@ -8,7 +8,7 @@
 
 
     if($_GET['tipoEncuesta'] == DIRECTIVO){
-        $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_tipo=5 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        $consulta = UsuariosPadre::consultaUsuariosPorTipo(TIPO_DIRECTIVO);
         while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
             $selected = !empty($_GET['idEvaluado']) && $_GET['idEvaluado'] == $resultado['uss_id'] ? "selected": "";
             echo '<option value="'.$resultado['uss_id'].'" '.$selected.'>'.UsuariosPadre::nombreCompletoDelUsuario($resultado).'</option>';
@@ -16,7 +16,7 @@
     }
 
     if($_GET['tipoEncuesta'] == DOCENTE){
-        $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_tipo=2 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        $consulta = UsuariosPadre::consultaUsuariosPorTipo(TIPO_DOCENTE);
         while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
             $selected = !empty($_GET['idEvaluado']) && $_GET['idEvaluado'] == $resultado['uss_id'] ? "selected": "";
             echo '<option value="'.$resultado['uss_id'].'" '.$selected.'>'.UsuariosPadre::nombreCompletoDelUsuario($resultado).'</option>';

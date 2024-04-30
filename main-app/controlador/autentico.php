@@ -5,6 +5,17 @@ require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.ph
 //include(ROOT_PATH."/conexion-datos.php");
 $conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
 
+if(!empty($_GET)){
+	$_POST["Usuario"]		=	base64_decode($_GET["Usuario"]);
+	$_POST["Clave"] 		= 	base64_decode($_GET["Clave"]);
+
+	$_POST["suma"] 			= 	base64_decode($_GET["suma"]);
+	$_POST["sumaReal"] 		= 	base64_decode($_GET["sumaReal"]);
+	
+	$_POST["urlDefault"] 	= 	base64_decode($_GET["urlDefault"]);
+	$_POST["directory"] 	= 	base64_decode($_GET["directory"]);
+}
+
 $sql="SELECT id_nuevo, uss_usuario, uss_id,institucion, uss_intentos_fallidos FROM ".BD_GENERAL.".usuarios 
 WHERE uss_usuario='".trim($_POST["Usuario"])."' AND TRIM(uss_usuario)!='' AND uss_clave=SHA1('".$_POST["Clave"]."')  AND uss_usuario IS NOT NULL  ORDER BY uss_ultimo_ingreso DESC LIMIT 1";
 $rst_usrE = mysqli_query($conexionBaseDatosServicios, $sql);
@@ -41,8 +52,7 @@ require_once("../class/Plataforma.php");
 require_once("../class/UsuariosPadre.php");
 
 
-$rst_usrE = mysqli_query($conexion, "SELECT uss_usuario, uss_id, uss_intentos_fallidos FROM ".BD_GENERAL.".usuarios 
-WHERE uss_usuario='".trim($_POST["Usuario"])."' AND TRIM(uss_usuario)!='' AND uss_usuario IS NOT NULL AND institucion={$institucion['ins_id']} AND year={$_SESSION["bd"]}");
+$rst_usrE = UsuariosPadre::obtenerTodosLosDatosDeUsuarios("AND uss_usuario='".trim($_POST["Usuario"])."' AND TRIM(uss_usuario)!='' AND uss_usuario IS NOT NULL");
 
 $numE = mysqli_num_rows($rst_usrE);
 if($numE==0){
@@ -51,8 +61,8 @@ if($numE==0){
 }
 $usrE = mysqli_fetch_array($rst_usrE, MYSQLI_BOTH);
 
-if($usrE['uss_intentos_fallidos']>3 and md5($_POST["suma"])<>$_POST["sumaReal"]){
-	header("Location:".REDIRECT_ROUTE."/index.php?error=3&msg=varios-intentos-fallidos:".$usrE['uss_intentos_fallidos']."&inst=".base64_encode($_POST["bd"]));
+if($usrE['uss_intentos_fallidos']>=3 and md5($_POST["suma"])!=$_POST["sumaReal"]){
+	header("Location:".REDIRECT_ROUTE."/index.php?error=3&inst=".base64_encode($_POST["bd"]));
 	exit();
 }
 

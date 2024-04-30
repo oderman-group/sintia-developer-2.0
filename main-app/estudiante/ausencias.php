@@ -137,7 +137,7 @@ require_once(ROOT_PATH."/main-app/class/Grados.php");?>
 													<tr>
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado['cls_id'];?></td>
-														<td><a href="clases-ver.php?idR=<?=base64_encode($resultado['cls_id']);?>"><?=$resultado[1];?></a></td>
+														<td><a href="clases-ver.php?idR=<?=base64_encode($resultado['cls_id']);?>"><?=$resultado['cls_tema'];?></a></td>
 														<td><?=$resultado['cls_fecha'];?></td>
 														<td><?=$totalAusencia;?></td>
 														<td>
