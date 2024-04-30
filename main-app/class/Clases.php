@@ -211,7 +211,29 @@ class Clases  extends Servicios{
     public static function actualizarClase(mysqli $conexion, array $config, array $POST, array $FILES){
 
         $archivoSubido = new Archivos;
-        
+        global $storage;
+        //Video
+        if(!empty($FILES['videoClase']['name'])){
+            $nombreInputFile = 'videoClase';
+            $archivoSubido->validarArchivo($FILES['videoClase']['size'], $FILES['videoClase']['name']);
+            $explode=explode(".", $FILES['videoClase']['name']);
+            $extension = end($explode);
+            $archivo = $_SESSION["inst"].'_'.$_SESSION["id"].'_clase_video_'.$POST["idR"].".".$extension;
+            $archivoSubido->subirArchivoStorage(FILE_VIDEO_CLASES, $archivo, $nombreInputFile,$storage); 
+            try{
+                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_video_clase='".$archivo."' WHERE cls_id='".$POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            } catch (Exception $e) {
+                include("../compartido/error-catch-to-report.php");
+            }
+        }else if(!empty($POST["videoClase"])){
+            try{
+                $storage->getBucket()->object(FILE_VIDEO_CLASES . $POST["videoClase"])->delete();
+                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_video_clase='' WHERE cls_id='".$POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            } catch (Exception $e) {
+                include("../compartido/error-catch-to-report.php");
+            }
+
+        }
         //Archivos
         $destino = "../files/clases";
         if(!empty($FILES['file']['name'])){
@@ -339,7 +361,17 @@ class Clases  extends Servicios{
         $codigo=Utilidades::generateCode("CLS");
         
         $archivoSubido = new Archivos;
-        
+        global $storage;
+        //Video
+        $claseVideo='';
+        if(!empty($FILES['videoClase']['name'])){
+            $nombreInputFile = 'videoClase';
+            // $archivoSubido->validarArchivo($FILES['videoClase']['size'], $FILES['videoClase']['name']);
+            $explode=explode(".", $FILES['videoClase']['name']);
+            $extension = end($explode);
+            $claseVideo = $_SESSION["inst"].'_'.$_SESSION["id"].'_clase_video_'.$codigo.".".$extension;
+            $archivoSubido->subirArchivoStorage(FILE_VIDEO_CLASES, $claseVideo, $nombreInputFile,$storage); 
+        }
         //Archivos
         $archivo = '';
         $destino = ROOT_PATH."/main-app/files/clases";
@@ -382,7 +414,7 @@ class Clases  extends Servicios{
             if($POST["disponible"]==1) $disponible=1;
         
             try{
-                mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_clases(cls_id, cls_tema, cls_fecha, cls_id_carga, cls_estado, cls_periodo, cls_video, cls_video_url, cls_archivo, cls_archivo2, cls_archivo3, cls_nombre_archivo1, cls_nombre_archivo2, cls_nombre_archivo3, cls_descripcion, cls_disponible, cls_meeting, cls_hipervinculo,cls_unidad, institucion, year)"." VALUES('".$codigo."', '".mysqli_real_escape_string($conexion,$POST["contenido"])."', '".$date."', '".$idCarga."', 1, '".$periodo."', '".$video."', '".$POST["video"]."', '".$archivo."', '".$archivo2."', '".$archivo3."', '".$POST["archivo1"]."', '".$POST["archivo2"]."', '".$POST["archivo3"]."', '".mysqli_real_escape_string($conexion,$POST["descripcion"])."', '".$disponible."', '".$POST["idMeeting"]."', '".$POST["vinculo"]."', '".$POST["unidad"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+                mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_clases(cls_id, cls_tema, cls_fecha, cls_id_carga, cls_estado, cls_periodo, cls_video, cls_video_url, cls_archivo, cls_archivo2, cls_archivo3, cls_nombre_archivo1, cls_nombre_archivo2, cls_nombre_archivo3, cls_descripcion, cls_disponible, cls_meeting, cls_hipervinculo,cls_unidad, institucion, year,cls_video_clase)"." VALUES('".$codigo."', '".mysqli_real_escape_string($conexion,$POST["contenido"])."', '".$date."', '".$idCarga."', 1, '".$periodo."', '".$video."', '".$POST["video"]."', '".$archivo."', '".$archivo2."', '".$archivo3."', '".$POST["archivo1"]."', '".$POST["archivo2"]."', '".$POST["archivo3"]."', '".mysqli_real_escape_string($conexion,$POST["descripcion"])."', '".$disponible."', '".$POST["idMeeting"]."', '".$POST["vinculo"]."', '".$POST["unidad"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]},'".$claseVideo."')");
             } catch (Exception $e) {
                 include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
             }
