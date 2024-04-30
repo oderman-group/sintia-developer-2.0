@@ -5,6 +5,17 @@ require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.ph
 //include(ROOT_PATH."/conexion-datos.php");
 $conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
 
+if(!empty($_GET)){
+	$_POST["Usuario"]		=	base64_decode($_GET["Usuario"]);
+	$_POST["Clave"] 		= 	base64_decode($_GET["Clave"]);
+
+	$_POST["suma"] 			= 	base64_decode($_GET["suma"]);
+	$_POST["sumaReal"] 		= 	base64_decode($_GET["sumaReal"]);
+	
+	$_POST["urlDefault"] 	= 	base64_decode($_GET["urlDefault"]);
+	$_POST["directory"] 	= 	base64_decode($_GET["directory"]);
+}
+
 $sql="SELECT id_nuevo, uss_usuario, uss_id,institucion, uss_intentos_fallidos FROM ".BD_GENERAL.".usuarios 
 WHERE uss_usuario='".trim($_POST["Usuario"])."' AND TRIM(uss_usuario)!='' AND uss_clave=SHA1('".$_POST["Clave"]."')  AND uss_usuario IS NOT NULL  ORDER BY uss_ultimo_ingreso DESC LIMIT 1";
 $rst_usrE = mysqli_query($conexionBaseDatosServicios, $sql);
@@ -154,8 +165,7 @@ if($num>0)
 		$url = $_SERVER['HTTP_REFERER'];
 	} 
 
-    $update = "uss_estado=1, uss_ultimo_ingreso=now(), uss_intentos_fallidos=0";
-    UsuariosPadre::actualizarUsuarios($config, $fila['uss_id'], $update);
+	mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_estado=1, uss_ultimo_ingreso=now(), uss_intentos_fallidos=0 WHERE uss_id='".$fila['uss_id']."' AND institucion={$_SESSION["idInstitucion"]} AND year={$_SESSION["bd"]}");
 ?>
 <!DOCTYPE html>
 <html lang="en">
