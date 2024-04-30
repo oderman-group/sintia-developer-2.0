@@ -33,13 +33,13 @@ class Clases  extends Servicios{
      * 
      * @return array $consulta
      */
-    public static function traerPreguntasClases(mysqli $conexion, array $config, string $idClase, string $filtro = ""){
+    public static function traerPreguntasClases(mysqli $conexion, array $config, string $idClase, string $filtro = "",string $limit = ""){
      
         $sqlInicial = "SELECT * FROM ".BD_ACADEMICA.".academico_clases_preguntas cpp
         INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=cpp.cpp_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-        WHERE cpp.cpp_id_clase='" . $idClase . "' AND cpp.institucion={$config['conf_id_institucion']}  AND cpp.year={$_SESSION["bd"]}  $filtro  ORDER BY cpp.cpp_fecha DESC";
+        WHERE cpp.cpp_id_clase='" . $idClase . "' AND cpp.institucion={$config['conf_id_institucion']}  AND cpp.year={$_SESSION["bd"]}  $filtro  ORDER BY cpp.cpp_fecha DESC" ;
         
-        return Servicios::SelectSql($sqlInicial);
+        return Servicios::SelectSql($sqlInicial,$limit);
     }
 
         /**

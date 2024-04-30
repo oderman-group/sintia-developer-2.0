@@ -321,11 +321,26 @@ $datosConsultaBD = Clases::traerDatosClases($conexion, $config, $idR);
 			</div>
 
 			<script>
-				function getHeight(id, label) {
-					data = document.getElementById(id);
-					var altura = data.clientHeight;
-					data2 = document.getElementById(label);
-					data2.textContent = "Altura: " + altura + "px";
+				var cantidadActual = 0;
+				async function contarPreguntas() {
+					var url = "../compartido/clases-contar-comentarios.php";
+					var data = {
+						"idClase": '<?= $idR; ?>'
+					};
+					resultado = await metodoFetchAsync(url, data, 'json', false);
+					resultData = resultado["data"];
+					if (resultData["ok"]) {
+						var cantidadConsulta=parseInt(resultData["cantidad"]);
+						if (cantidadActual == 0) {
+							cantidadActual = parseInt(resultData["cantidad"]);
+						} else if (cantidadConsulta>cantidadActual) {
+							mostrarPregunta(resultData);
+							cantidadActual = parseInt(resultData["cantidad"]);
+						}
+
+
+
+					}
 				}
 
 				function feedbackSend(data) {
@@ -365,7 +380,7 @@ $datosConsultaBD = Clases::traerDatosClases($conexion, $config, $idR);
 
 				}
 
-				// setInterval('consultarPreguntas()', 10000);
+				setInterval('contarPreguntas()', 10000);
 
 				window.onload = consultarPreguntas();
 
@@ -385,8 +400,8 @@ $datosConsultaBD = Clases::traerDatosClases($conexion, $config, $idR);
 					} else {
 						btn = document.getElementById("btnEnviar-" + idPadre);
 						contenido = document.getElementById("respuesta-" + idPadre);
-						idNivel=btoa(idPadre);
-						nivel =  document.getElementById("nivel" + idNivel).value;
+						idNivel = btoa(idPadre);
+						nivel = document.getElementById("nivel" + idNivel).value;
 
 					}
 					if (validar(contenido.value)) {
@@ -395,7 +410,7 @@ $datosConsultaBD = Clases::traerDatosClases($conexion, $config, $idR);
 							"idPadre": idPadre,
 							"sesionUsuario": sesionUsuario,
 							"contenido": contenido.value,
-							"nivel":nivel
+							"nivel": nivel
 						};
 
 						var url = "../compartido/clases-guardar-comentarios.php";
@@ -440,7 +455,7 @@ $datosConsultaBD = Clases::traerDatosClases($conexion, $config, $idR);
 						"idPregunta": idPregunta,
 						"usuarioActual": '<?= $datosUsuarioActual['uss_id']; ?>',
 						"usuarioDocente": '<?= $datosCargaActual['car_docente']; ?>',
-						"nivel":nivel
+						"nivel": nivel
 					};
 
 					var url = "../compartido/clase-comentario.php";
@@ -484,8 +499,10 @@ $datosConsultaBD = Clases::traerDatosClases($conexion, $config, $idR);
 						"usuarioActual": '<?= $datosUsuarioActual['uss_id']; ?>',
 						"usuarioDocente": '<?= $datosCargaActual['car_docente']; ?>'
 					};
+
 					var url = "../compartido/ajax-comentarios-preguntas.php";
 					resultado = await metodoFetchAsync(url, data, 'html', false);
+					contarPreguntas();
 					var lista = document.getElementById("lista-preguntas");
 					lista.innerHTML = resultado["data"];
 				}
