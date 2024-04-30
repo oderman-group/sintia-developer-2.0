@@ -384,6 +384,7 @@ $estadoAgno = array("EN CURSO", "SI", "NO");
                         </div>
                         
                     </div>
-					
+                    <?php 
+                            $botones = new botonesGuardar("estudiantes.php", false); ?>
                 </div>
             </div>

@@ -95,9 +95,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                             </div>
                                         </div>
 
-                                        <?php if(Modulos::validarSubRol(['DT0076'])){?>
-                                        <input type="submit" class="btn btn-primary" value="Generar Planilla">&nbsp;
-                                        <?php }?>
+                                        <?php   $botones = new botonesGuardar("estudiantes.php",  Modulos::validarSubRol(['DT0081']),"Generar planilla"); ?>
                                     </form>
                                 </div>
                             </div>
