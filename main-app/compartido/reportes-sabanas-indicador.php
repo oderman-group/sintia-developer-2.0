@@ -6,6 +6,7 @@ require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
+require_once(ROOT_PATH."/main-app/class/Grados.php");
 $Plataforma = new Plataforma;
 
 $curso='';
@@ -27,8 +28,7 @@ $cursoActual=GradoServicios::consultarCurso($curso);
 $asig =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual);
 $num_asg = mysqli_num_rows($asig);
 
-$consultaGrados=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados gra, ".BD_ACADEMICA.".academico_grupos gru WHERE gra_id='" . $curso . "' AND gru.gru_id='" . $grupo . "' AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}");
-$grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
+$grados = Grados::traerGradosGrupos($config, $curso, $grupo);
 ?>
 
 <head>

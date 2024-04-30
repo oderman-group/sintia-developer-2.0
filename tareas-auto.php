@@ -4,6 +4,7 @@ require_once(ROOT_PATH."/main-app/class/EnviarEmail.php");
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/categoriasNotas.php");
+require_once(ROOT_PATH."/main-app/class/Grados.php");
 $year=date("Y");
 
 
@@ -237,12 +238,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 		}
 	
 		//CURSOS
-		try{
-			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_grados WHERE institucion='".$cDemo['demo_institucion']."'");
-		} catch (Exception $e) {
-			echo $e->getMessage();
-			exit();
-		}
+		Grados::eliminarGradosInstitucion($cDemo['demo_institucion']);
 	
 		//GRUPOS
 		try{

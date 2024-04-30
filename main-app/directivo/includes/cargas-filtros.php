@@ -11,6 +11,7 @@
 									
 									<?php
 									require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
+									require_once(ROOT_PATH."/main-app/class/Grados.php");
 									try{
 										$consultaEstadisticaCarga=mysqli_query($conexion, "SELECT (SELECT count(car_id) FROM ".BD_ACADEMICA.".academico_cargas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})");
 									} catch (Exception $e) {
@@ -25,14 +26,7 @@
 										<header class="panel-heading panel-heading-purple"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											try{
-												$cursos = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados
-												WHERE gra_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-												ORDER BY gra_vocal
-												");
-											} catch (Exception $e) {
-												include("../compartido/error-catch-to-report.php");
-											}
+											$cursos = Grados::traerGradosInstitucion($config);
 											while($curso = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
 												try{
 													$consultaEstudianteGrado=mysqli_query($conexion, "SELECT count(car_id) FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$curso['gra_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");

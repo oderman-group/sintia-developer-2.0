@@ -5,6 +5,7 @@ include("../compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Grupos.php");
+require_once(ROOT_PATH."/main-app/class/Grados.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 
@@ -52,13 +53,7 @@ if(!Modulos::validarPermisoEdicion()){
     <div class="page-wrapper">
         <?php include("../compartido/encabezado.php");?>
 		<?php
-		try{
-			$consultaCurso=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE gra_id='".$_REQUEST["curso"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-		$curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
-		
+		$curso = Grados::obtenerGrado($_REQUEST["curso"]);
 		$consultaGrupo = Grupos::obtenerDatosGrupos($_REQUEST["grupo"]);
 		$grupo = mysqli_fetch_array($consultaGrupo, MYSQLI_BOTH);
 		?>
@@ -93,7 +88,7 @@ if(!Modulos::validarPermisoEdicion()){
 									<div id="resp"></div>
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
-                                            <header><b>Curso:</b> <?=$curso['gra_nombre'];?>&nbsp;&nbsp;&nbsp; <b>Grupo:</b> <?=$grupo[2];?></header>
+                                            <header><b>Curso:</b> <?=$curso['gra_nombre'];?>&nbsp;&nbsp;&nbsp; <b>Grupo:</b> <?=$grupo['gru_nombre'];?></header>
                                             <div class="tools">
                                                 <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
 			                                    <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>

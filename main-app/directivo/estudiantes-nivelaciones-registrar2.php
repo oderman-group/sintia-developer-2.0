@@ -5,6 +5,7 @@ include("../compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Grupos.php");
+require_once(ROOT_PATH."/main-app/class/Grados.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 $disabledPermiso = "";
@@ -115,13 +116,7 @@ $curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 <body Style="font-family: Arial;">
 
 		<?php
-		try {
-			$consultaCurso = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE gra_id='" . $_REQUEST["curso"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-		$curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
-		
+		$curso = Grados::obtenerGrado($_REQUEST["curso"]);
 		$consultaGrupo = Grupos::obtenerDatosGrupos($_REQUEST["grupo"]);
 		$grupo = mysqli_fetch_array($consultaGrupo, MYSQLI_BOTH);
 		?>

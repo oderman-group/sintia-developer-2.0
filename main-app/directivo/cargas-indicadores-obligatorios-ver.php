@@ -2,6 +2,7 @@
 <?php $idPaginaInterna = 'DT0036';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Grados.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
@@ -90,11 +91,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                     <tr>
                                                         <th width="20%">Materia</th>
                                                         <?php
-                                                        try{
-                                                            $cursos = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"); 
-                                                        } catch (Exception $e) {
-                                                            include("../compartido/error-catch-to-report.php");
-                                                        }
+                                                        $cursos = Grados::traerGradosInstitucion($config);
                                                         while($c = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
                                                         ?>
                                                             <th style="font-size:8px; text-align:center;"><?=$c['gra_nombre'];?></th>
@@ -113,11 +110,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                 <tr id="data1" class="odd gradeX">
                                                     <td><?=$m['mat_nombre'];?></td>
                                                     <?php
-                                                    try{
-                                                        $curso = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"); 
-                                                    } catch (Exception $e) {
-                                                        include("../compartido/error-catch-to-report.php");
-                                                    }
+                                                    $curso = Grados::traerGradosInstitucion($config);
                                                     while($c = mysqli_fetch_array($curso, MYSQLI_BOTH)){
                                                         try{
                                                             $consultaCarga=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$c['gra_id']."' AND car_materia='".$m['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
