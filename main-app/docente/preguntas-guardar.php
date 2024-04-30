@@ -16,7 +16,7 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 	
 	$codigo = Evaluaciones::guardarPreguntasEvaluacion($conexion, $config, $_POST, $_FILES);
 
-	Evaluaciones::guardarRelacionPreguntaEvaluacion($conexion, $config, $codigo, $_POST);
+	Evaluaciones::guardarRelacionPreguntaEvaluacion($conexion, $conexionPDO, $config, $codigo, $_POST);
 
 	if($_POST["opcionR"]==1){
 		$cont=1;
@@ -87,7 +87,7 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 		
 	}
 
-	Evaluaciones::guardarRelacionPreguntaEvaluacion($conexion, $config, $codigo, $_POST);
+	Evaluaciones::guardarRelacionPreguntaEvaluacion($conexion, $conexionPDO, $config, $codigo, $_POST);
 }
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
