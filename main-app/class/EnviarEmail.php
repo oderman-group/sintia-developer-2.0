@@ -81,22 +81,26 @@ class EnviarEmail {
                         }                         
                     }
                     $mail->send();
-                    self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ENVIADO,'');  
+                    self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$data['usuario_id'],$asunto,$body,ESTADO_EMAIL_ENVIADO,'');  
             }else{                 
                     if(!$validarRemitente){
-                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,'Error remitente'.EMAIL_SENDER);  
+                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$data['usuario_id'],$asunto,$body,ESTADO_EMAIL_ERROR,'Error remitente'.EMAIL_SENDER);  
                         self::mensajeError(EMAIL_SENDER);        
                     } 
                     if(!$validarDestinatario){
-                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario'.$destinatario); 
+                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$data['usuario_id'],$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario'.$destinatario); 
                         self::mensajeError($destinatario);        
                     }
                     if(!$validarDestinatario2){
-                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario 2'.$destinatario2); 
+                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$data['usuario_id'],$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario 2'.$destinatario2); 
                         self::mensajeError($destinatario2);        
                     }    
+                    if(!$validarDestinatario3){
+                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$data['usuario_id'],$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario 2'.$destinatario2); 
+                        self::mensajeError($destinatario2);        
+                    }  
                     if(!$validarcopia){
-                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario'.$correrocopia); 
+                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$data['usuario_id'],$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario'.$correrocopia); 
                         self::mensajeError($correrocopia);        
                     } 
             }
