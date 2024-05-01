@@ -8,6 +8,7 @@ require_once(ROOT_PATH."/main-app/class/Grupos.php");
 require_once(ROOT_PATH."/main-app/class/Grados.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -114,17 +115,12 @@ if(!Modulos::validarPermisoEdicion()){
 													<th rowspan="2" style="font-size:9px;">Mat</th>
 													<th rowspan="2" style="font-size:9px;">Estudiante</th>
 													<?php
-													try{
-														$cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$_REQUEST["curso"]."' AND car_grupo='".$_REQUEST["grupo"]."' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-													} catch (Exception $e) {
-														include("../compartido/error-catch-to-report.php");
-													}
 													//SACAMOS EL NUMERO DE CARGAS O MATERIAS QUE TIENE UN CURSO PARA QUE SIRVA DE DIVISOR EN LA DEFINITIVA POR ESTUDIANTE
+													$cargas = CargaAcademica::traerCargasMateriasPorCursoGrupo($config, $_REQUEST["curso"], $_REQUEST["grupo"]);
 													$numCargasPorCurso = mysqli_num_rows($cargas); 
 													while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
-														$materia = Asignaturas::consultarDatosAsignatura($conexion, $config, $carga['car_materia']);
 													?>
-														<th style="font-size:9px; text-align:center; border:groove;" colspan="3" width="5%"><?=$materia['mat_nombre'];?></th>
+														<th style="font-size:9px; text-align:center; border:groove;" colspan="3" width="5%"><?=$carga['mat_nombre'];?></th>
 													<?php
 													}
 													?>
@@ -133,11 +129,7 @@ if(!Modulos::validarPermisoEdicion()){
 													
 												<tr>
 													<?php
-													try{
-														$cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$_REQUEST["curso"]."' AND car_grupo='".$_REQUEST["grupo"]."' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"); 
-													} catch (Exception $e) {
-														include("../compartido/error-catch-to-report.php");
-													}
+													$cargas = CargaAcademica::traerCargasMateriasPorCursoGrupo($config, $_REQUEST["curso"], $_REQUEST["grupo"]);
 													while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
 													?>	
 													<th style="text-align:center;">DEF</th>
@@ -165,13 +157,8 @@ if(!Modulos::validarPermisoEdicion()){
 													<td style="font-size:9px;"><?=$resultado['mat_matricula'];?></td>
 													<td style="font-size:9px;"><?=$nombre?></td>
 													<?php
-													try{
-														$cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$_REQUEST["curso"]."' AND car_grupo='".$_REQUEST["grupo"]."' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"); 
-													} catch (Exception $e) {
-														include("../compartido/error-catch-to-report.php");
-													}
+													$cargas = CargaAcademica::traerCargasMateriasPorCursoGrupo($config, $_REQUEST["curso"], $_REQUEST["grupo"]);
 													while($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
-														$materia = Asignaturas::consultarDatosAsignatura($conexion, $config, $carga['car_materia']);
 														$p = 1;
 														$defPorMateria = 0;
 														//PERIODOS DE CADA MATERIA

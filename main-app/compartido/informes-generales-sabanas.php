@@ -2,9 +2,10 @@
 session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
-require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 $curso='';
 if(!empty($_GET["curso"])) {
   $curso = base64_decode($_GET["curso"]);
@@ -18,7 +19,7 @@ if(!empty($_GET["per"])) {
   $per = base64_decode($_GET["per"]);
 }
 
-require_once("../class/servicios/GradoServicios.php");
+require_once(ROOT_PATH."/main-app/class/servicios/GradoServicios.php");
 $filtroAdicional= "AND mat_grado='".$curso."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
 $cursoActual=GradoServicios::consultarCurso($curso);
 $asig =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual);	
@@ -56,11 +57,10 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
         <td align="center">Estudiante</td>
         <!--<td align="center">Gru</td>-->
         <?php
-		$materias1=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$curso."' AND car_grupo='".$grupo."' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+    $materias1 = CargaAcademica::traerCargasMateriasPorCursoGrupo($config, $curso, $grupo);
 		while($mat1=mysqli_fetch_array($materias1, MYSQLI_BOTH)){
-      $Mat = Asignaturas::consultarDatosAsignatura($conexion, $config, $mat1['car_materia']);
 		?>
-        	<td align="center"><?=strtoupper($Mat['mat_siglas']);?></td>      
+        	<td align="center"><?=strtoupper($mat1['mat_siglas']);?></td>      
   		<?php
 		}
 		?>
@@ -81,7 +81,7 @@ $grados = mysqli_fetch_array($consultaGrados, MYSQLI_BOTH);
       <!--<td align="center"><?php if($fila[7]==1)echo "A"; else echo "B";?></td> -->
        <?php
 		$suma=0;
-		$materias1=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$curso."' AND car_grupo='".$grupo."' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+    $materias1 = CargaAcademica::traerCargasMateriasPorCursoGrupo($config, $curso, $grupo);
 		$numero=mysqli_num_rows($materias1);
 		$def='0.0';
 		while($mat1=mysqli_fetch_array($materias1, MYSQLI_BOTH)){

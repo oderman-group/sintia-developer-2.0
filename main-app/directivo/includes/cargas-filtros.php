@@ -12,13 +12,10 @@
 									<?php
 									require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 									require_once(ROOT_PATH."/main-app/class/Grados.php");
-									try{
-										$consultaEstadisticaCarga=mysqli_query($conexion, "SELECT (SELECT count(car_id) FROM ".BD_ACADEMICA.".academico_cargas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})");
-									} catch (Exception $e) {
-										include("../compartido/error-catch-to-report.php");
-									}
-										$estadisticasCargas = mysqli_fetch_array($consultaEstadisticaCarga, MYSQLI_BOTH);
-										?>
+									require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
+									
+									$estadisticasCargas = CargaAcademica::contarCargas($config);
+									?>
 									
 									<h4 align="center"><?=strtoupper($frases[205][$datosUsuarioActual['uss_idioma']]);?></h4>
 									
@@ -28,12 +25,7 @@
 											<?php
 											$cursos = Grados::traerGradosInstitucion($config);
 											while($curso = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
-												try{
-													$consultaEstudianteGrado=mysqli_query($conexion, "SELECT count(car_id) FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$curso['gra_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-												} catch (Exception $e) {
-													include("../compartido/error-catch-to-report.php");
-												}
-												$estudiantesPorGrado = mysqli_fetch_array($consultaEstudianteGrado, MYSQLI_BOTH);
+												$estudiantesPorGrado = CargaAcademica::contarCargasGrado($config, $curso['gra_id']);
 												$porcentajePorGrado = 0;
 												if(!empty($estadisticasCargas[0])){
 													$porcentajePorGrado = round(($estudiantesPorGrado[0]/$estadisticasCargas[0])*100,2);
@@ -87,12 +79,7 @@
 											$docentes = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_tipo = ".TIPO_DOCENTE." AND uss_bloqueado=0
 											ORDER BY uss_nombre");
 											while($docente = mysqli_fetch_array($docentes, MYSQLI_BOTH)){
-												try{
-													$consultaCargaDocente=mysqli_query($conexion, "SELECT count(car_id) FROM ".BD_ACADEMICA.".academico_cargas WHERE car_docente='".$docente['uss_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-												} catch (Exception $e) {
-													include("../compartido/error-catch-to-report.php");
-												}
-												$cargasPorDocente = mysqli_fetch_array($consultaCargaDocente, MYSQLI_BOTH);
+												$cargasPorDocente = CargaAcademica::contarCargasDocente($config, $docente['uss_id']);
 												$porcentajePorGrado = 0;
 												if(!empty($estadisticasCargas[0])){
 													$porcentajePorGrado = round(($cargasPorDocente[0]/$estadisticasCargas[0])*100,2);
@@ -126,12 +113,7 @@
 											<?php
 											$docentes = Asignaturas::consultarTodasAsignaturas($conexion, $config);
 											while($docente = mysqli_fetch_array($docentes, MYSQLI_BOTH)){
-												try{
-													$consultaCargaDocente=mysqli_query($conexion, "SELECT count(car_id) FROM ".BD_ACADEMICA.".academico_cargas WHERE car_materia='".$docente['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-												} catch (Exception $e) {
-													include("../compartido/error-catch-to-report.php");
-												}
-												$cargasPorDocente = mysqli_fetch_array($consultaCargaDocente, MYSQLI_BOTH);
+												$cargasPorDocente = CargaAcademica::contarCargasMaterias($config, $docente['mat_id']);
 												$porcentajePorGrado = 0;
 												if(!empty($estadisticasCargas[0])){
 													$porcentajePorGrado = round(($cargasPorDocente[0]/$estadisticasCargas[0])*100,2);

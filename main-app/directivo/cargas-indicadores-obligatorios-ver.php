@@ -6,6 +6,7 @@ require_once(ROOT_PATH."/main-app/class/Grados.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -112,21 +113,13 @@ if(!Modulos::validarPermisoEdicion()){
                                                     <?php
                                                     $curso = Grados::traerGradosInstitucion($config);
                                                     while($c = mysqli_fetch_array($curso, MYSQLI_BOTH)){
-                                                        try{
-                                                            $consultaCarga=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$c['gra_id']."' AND car_materia='".$m['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                                                        } catch (Exception $e) {
-                                                            include("../compartido/error-catch-to-report.php");
-                                                        }
+                                                        $consultaCarga = CargaAcademica::traerCargasMateriasPorCursoMateria($config, $c['gra_id'], $m['mat_id']);
                                                         $carga = mysqli_fetch_array($consultaCarga, MYSQLI_BOTH);
                                                         if(!empty($carga['car_id'])){
                                                             $ipc = Indicadores::traerRelacionCargaIndicador($conexion, $config, $carga['car_id'], $ind);
                                                         }
                                                         
-                                                        try{
-                                                            $cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$c['gra_id']."' AND car_materia='".$m['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                                                        } catch (Exception $e) {
-                                                            include("../compartido/error-catch-to-report.php");
-                                                        }
+                                                        $cargas = CargaAcademica::traerCargasMateriasPorCursoMateria($config, $c['gra_id'], $m['mat_id']);
                                                         $indCreados=0;
                                                         while($cgs = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
                                                             try{
