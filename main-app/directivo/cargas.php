@@ -111,7 +111,7 @@ if($config['conf_doble_buscador'] == 1) {
 													<?php
 													include("includes/consulta-paginacion-cargas.php");	
 													try{										       
-														$busqueda=mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
+														$busqueda=mysqli_query($conexion,"SELECT car.*, am.*, gra.*, gru.*, uss.*, car.id_nuevo AS id_nuevo_carga FROM ".BD_ACADEMICA.".academico_cargas car
 														INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} {$filtroMT}
 														LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
 														LEFT JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
