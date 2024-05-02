@@ -22,6 +22,7 @@ function validarUsuario(datos) {
                     $("#respuestaUsuario").html(data.message);
                     $("input").attr('disabled', false); 
                     $("#btnEnviar").attr('disabled', false); 
+                    validarCampo(datos)
                 }
         })
         .catch(error => {
@@ -32,5 +33,25 @@ function validarUsuario(datos) {
         $("#respuestaUsuario").html("");
         $("input").attr('disabled', false); 
         $("#btnEnviar").attr('disabled', false); 
+    }
+}
+
+function validarCampo(input) {
+    var valor = input.value;
+    // Expresión regular para permitir solo letras, números y algunos caracteres especiales
+    var patron = /^[a-zA-Z0-9\-_]+$/;
+
+    // Verificar si el valor del campo coincide con el patrón
+    if (patron.test(valor)) {
+        // El valor es válido
+        $("#respuestaUsuario2").html('');
+        $("input").attr('disabled', false); 
+        $("#btnEnviar").attr('disabled', false); 
+    } else {
+        // El valor no es válido, establecer un mensaje de error personalizado
+        $("#respuestaUsuario2").html('<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button><i class="icon-exclamation-sign"></i>El campo del usuario no debe contener espacios en blanco ni caracteres especiales.<br>Puedes usar letras, números o combinarlos.</div>');
+        $("input").attr('disabled', true); 
+        $("input#usuario").attr('disabled',false); 
+        $("#btnEnviar").attr('disabled', true); 
     }
 }
