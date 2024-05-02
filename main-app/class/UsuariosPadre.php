@@ -271,6 +271,29 @@ class UsuariosPadre {
     }
 
     /**
+     * Valida la existencia de un usuario en toda la tabla.
+     *
+     * @param mysqli $conexion
+     * @param string $tipoUsuario
+     *
+     * @return int Número de filas que coinciden con la consulta.
+     */
+    public static function contarUsuariosPorTipo(
+        mysqli $conexion,
+        string $tipoUsuario,
+    ){
+        $num = 0;
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM " . BD_GENERAL . ".usuarios WHERE institucion={$_SESSION["idInstitucion"]} AND year={$_SESSION["bd"]} AND uss_tipo='" . $tipoUsuario . "'");
+            $num = mysqli_num_rows($consulta);
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        return $num;
+    }
+    
+    /**
      * Valida la existencia de un usuario por su documento en toda la tabla.
      *
      * @param mysqli $conexion

@@ -24,6 +24,49 @@ require_once("../class/Estudiantes.php");
         <div class="panel-body">
             <form name="formularioGuardar" action="informes-formato-boletin.php" method="post" target="_blank">
                 <div class="form-group row">
+                    <label class="col-sm-2 control-label">Escoja un Formato de Boletín</label>
+                    <div class="col-sm-2">
+                        <select id="tipoBoletin" class="form-control  select2" name="formatoB" onchange="cambiarTipo()">
+                            <option value="">Seleccione una opción</option>
+                            <?php
+                            try {
+                                $consultaBoletin = mysqli_query($conexion, "SELECT * FROM " . BD_ADMIN . ".opciones_generales WHERE ogen_grupo=15");
+                            } catch (Exception $e) {
+                                include("../compartido/error-catch-to-report.php");
+                            }
+                            while ($datosBoletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH)) {
+                            ?>
+                                <option value="<?= $datosBoletin['ogen_id']; ?>" ><?= $datosBoletin['ogen_nombre']; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <button type="button" titlee="Ver formato del boletin" class="btn btn-sm" data-toggle="popover"><i class="fa fa-eye"></i></button>
+                    <script>
+                        $(document).ready(function() {
+                            $('[data-toggle="popover"]').popover({
+                                html: true, // Habilitar contenido HTML
+                                content: function() {
+                                    valor = document.getElementById("tipoBoletin");
+                                    return '<div id="myPopover" class="popover-content"><label id="lbl_tipo">Formato tipo ' + valor.value + '</label>' +
+                                        '<img id="img-boletin" src="../files/images/boletines/tipo' + valor.value + '.png" class="w-100" />' +
+                                        '</div>';
+                                }
+                            });
+                        });
+
+                        function cambiarTipo() {
+                            var imagen_boletin = document.getElementById('img-boletin');
+                            if (imagen_boletin) {
+                                var valor = document.getElementById("tipoBoletin");
+                                var lbl_tipo = document.getElementById('lbl_tipo');
+                                imagen_boletin.src = "../files/images/boletines/tipo" + valor.value + ".png";
+                                lbl_tipo.textContent = 'Formato tipo ' + valor.value;
+                            }
+                        }
+                    </script>
+                </div>
+
+                <div class="form-group row">
                     <label class="col-sm-2 control-label">Curso</label>
                     <div class="col-sm-8">
                         <?php
@@ -106,6 +149,49 @@ require_once("../class/Estudiantes.php");
         <header class="panel-heading panel-heading-red">POR ESTUDIANTE </header>
         <div class="panel-body">
             <form name="formularioGuardar" action="informes-formato-boletin.php" method="post" target="_blank">
+                <div class="form-group row">
+                    <label class="col-sm-2 control-label">Escoja un Formato de Boletín</label>
+                    <div class="col-sm-2">
+                        <select id="tipoBoletinEst" class="form-control  select2" name="formatoB" onchange="cambiarTipoEst()">
+                            <option value="">Seleccione una opción</option>
+                            <?php
+                            try {
+                                $consultaBoletin = mysqli_query($conexion, "SELECT * FROM " . BD_ADMIN . ".opciones_generales WHERE ogen_grupo=15");
+                            } catch (Exception $e) {
+                                include("../compartido/error-catch-to-report.php");
+                            }
+                            while ($datosBoletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH)) {
+                            ?>
+                                <option value="<?= $datosBoletin['ogen_id']; ?>" ><?= $datosBoletin['ogen_nombre']; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <button type="button" titlee="Ver formato del boletin" class="btn btn-sm" data-toggle="popover_2"><i class="fa fa-eye"></i></button>
+                    <script>
+                        $(document).ready(function() {
+                            $('[data-toggle="popover_2"]').popover({
+                                html: true, // Habilitar contenido HTML
+                                content: function() {
+                                    valor = document.getElementById("tipoBoletinEst");
+                                    return '<div id="myPopover" class="popover-content"><label id="lbl_tipoEst">Formato tipo ' + valor.value + '</label>' +
+                                        '<img id="img-boletinEst" src="../files/images/boletines/tipo' + valor.value + '.png" class="w-100" />' +
+                                        '</div>';
+                                }
+                            });
+                        });
+
+                        function cambiarTipoEst() {
+                            var imagen_boletin = document.getElementById('img-boletinEst');
+                            if (imagen_boletin) {
+                                var valor = document.getElementById("tipoBoletinEst");
+                                var lbl_tipoEst = document.getElementById('lbl_tipoEst');
+                                imagen_boletin.src = "../files/images/boletines/tipo" + valor.value + ".png";
+                                lbl_tipoEst.textContent = 'Formato tipo ' + valor.value;
+                            }
+                        }
+                    </script>
+                </div>
+
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Estudiante</label>
                     <div class="col-sm-8">

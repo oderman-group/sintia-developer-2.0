@@ -2,6 +2,7 @@
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 require_once(ROOT_PATH."/main-app/class/servicios/MediaTecnicaServicios.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 
 class Estudiantes {
 
@@ -503,22 +504,21 @@ class Estudiantes {
     }
 
     /**
-     * Este metodo me registra las matriculas retiradas o restauradas
+     * Este método registra las matrículas retiradas o restauradas
      * @param string $idEstudiante
      * @param string $motivo
      * @param array $config
      * @param mysqli $conexion
      */
-    public static function retirarRestaurarEstudiante($idEstudiante, $motivo, $config, $conexion)
+    public static function retirarRestaurarEstudiante($idEstudiante, $motivo, $config, $conexion, $conexionPDO)
     {
-        $codigo=Utilidades::generateCode("MRT");
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_matriculas_retiradas');
 
-        try {
-            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_matriculas_retiradas (matret_id, matret_estudiante, matret_fecha, matret_motivo, matret_responsable, institucion, year)VALUES('".$codigo."', '".$idEstudiante."', now(), '".$motivo."', '".$_SESSION["id"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-        } catch (Exception $e) {
-            echo "Excepción capturada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "INSERT INTO " . BD_ACADEMICA . ".academico_matriculas_retiradas (matret_id, matret_estudiante, matret_fecha, matret_motivo, matret_responsable, institucion, year) VALUES (?, ?, NOW(), ?, ?, ?, ?)";
+
+        $parametros = [$codigo, $idEstudiante, $motivo, $_SESSION["id"], $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -1063,21 +1063,20 @@ class Estudiantes {
      */
     public static function traerDatosEstudiantesretirados(mysqli $conexion, array $config, string $id)
     {
-        $resultado=[];
+        $sql = "SELECT MAX(tabla_retiradas.id_nuevo), mat_id, mat_estado_matricula, mat_documento, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2, matret_motivo, matret_fecha, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, uss_usuario FROM " . BD_ACADEMICA . ".academico_matriculas mat
+        LEFT JOIN (SELECT * FROM " . BD_ACADEMICA . ".academico_matriculas_retiradas matret WHERE matret.institucion=? AND matret.year=? ORDER BY matret.id_nuevo DESC) AS tabla_retiradas ON tabla_retiradas.matret_estudiante=mat.mat_id
+        LEFT JOIN " . BD_GENERAL . ".usuarios uss ON uss_id=matret_responsable AND uss.institucion=? AND uss.year=?
+        WHERE mat_id=? AND mat.institucion=? AND mat.year=?";
 
-        try {
-            $consulta=mysqli_query($conexion, "SELECT MAX(tabla_retiradas.id_nuevo), mat_id, mat_estado_matricula, mat_documento, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2, matret_motivo, matret_fecha, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, uss_usuario FROM ".BD_ACADEMICA.".academico_matriculas mat
-            LEFT JOIN (SELECT * FROM ".BD_ACADEMICA.".academico_matriculas_retiradas matret WHERE matret.institucion={$config['conf_id_institucion']} AND matret.year={$_SESSION["bd"]} ORDER BY matret.id_nuevo DESC) AS tabla_retiradas ON tabla_retiradas.matret_estudiante=mat.mat_id
-            LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=matret_responsable AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-            WHERE mat_id='".$id."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
-        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        $parametros = [$config['conf_id_institucion'], $_SESSION["bd"], $config['conf_id_institucion'], $_SESSION["bd"], $id, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
 
+        // Obtener la fila de resultados como un array asociativo
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
+
+        // Devolver el resultado
         return $resultado;
-
     }
 
     /**
@@ -1092,24 +1091,23 @@ class Estudiantes {
         mysqli $conexion, 
         array $config, 
         string $id, 
-        string $yearBd    = ''
+        string $yearBd = ''
     )
     {
+        $year = !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
-        try {
-            $consulta=mysqli_query($conexion, "SELECT mat_id, mat_estado_matricula, mat_documento, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2, matret_motivo, matret_fecha, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, uss_usuario FROM ".BD_ACADEMICA.".academico_matriculas mat
-            INNER JOIN (SELECT * FROM ".BD_ACADEMICA.".academico_matriculas_retiradas matret WHERE matret.institucion={$config['conf_id_institucion']} AND matret.year={$year}) AS tabla_retiradas ON tabla_retiradas.matret_estudiante=mat.mat_id
-            INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=matret_responsable AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$year}
-            WHERE mat_id='".$id."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year}
-            ORDER BY tabla_retiradas.id_nuevo DESC");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT mat_id, mat_estado_matricula, mat_documento, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2, matret_motivo, matret_fecha, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, uss_usuario FROM " . BD_ACADEMICA . ".academico_matriculas mat
+        INNER JOIN (SELECT * FROM " . BD_ACADEMICA . ".academico_matriculas_retiradas matret WHERE matret.institucion=? AND matret.year=?) AS tabla_retiradas ON tabla_retiradas.matret_estudiante=mat.mat_id
+        INNER JOIN " . BD_GENERAL . ".usuarios uss ON uss_id=matret_responsable AND uss.institucion=? AND uss.year=?
+        WHERE mat_id=? AND mat.institucion=? AND mat.year=?
+        ORDER BY tabla_retiradas.id_nuevo DESC";
 
-        return $consulta;
+        $parametros = [$config['conf_id_institucion'], $year, $config['conf_id_institucion'], $year, $id, $config['conf_id_institucion'], $year];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
 
+        // Devolver el resultado
+        return $resultado;
     }
 
 }

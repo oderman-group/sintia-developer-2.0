@@ -169,7 +169,7 @@ $(document).ready(function() {
                                                 include("../compartido/error-catch-to-report.php");
                                             }
                                             ?>
-                                            <select class="form-control  select2" name="tipoUsuario" required <?=$disabledPermiso;?>>
+                                            <select class="form-control  select2" name="tipoUsuario" id="tipoUsuario" onchange="validarCantidadUsuarios(this)" required <?=$disabledPermiso;?>>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){

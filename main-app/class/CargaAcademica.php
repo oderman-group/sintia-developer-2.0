@@ -1,6 +1,7 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 class CargaAcademica {
 
     /**
@@ -195,27 +196,28 @@ class CargaAcademica {
      * @param string $idCarga Identificador de la carga académica.
      * @param string $idEstudiante Identificador del estudiante.
      *
-     * @return mysqli_result|false Devuelve el resultado de la consulta o false en caso de error.
+     * @return mysqli_result Devuelve el objeto de la consulta preparada o false en caso de error.
      */
     public static function accesoCargasEstudiante(
         mysqli $conexion, 
         array $config, 
         string $idCarga, 
         string $idEstudiante
-    ){
-        try {
-            $consulta = mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_cargas_acceso WHERE carpa_id_carga='".$idCarga."' AND carpa_id_estudiante='".$idEstudiante."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
-        return $consulta;
+    ) {
+        $sql = "SELECT * FROM " . BD_ACADEMICA . ".academico_cargas_acceso WHERE carpa_id_carga=? AND carpa_id_estudiante=? AND institucion=? AND year=?";
+
+        $parametros = [$idCarga, $idEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
     }
     
     /**
      * Guardar el acceso de un estudiante a una carga académica.
      *
      * @param mysqli $conexion Objeto de conexión a la base de datos.
+     * @param PDO $conexionPDO Objeto de conexión a la base de datos.
      * @param array $config Configuraciones de la aplicación.
      * @param string $idCarga Identificador de la carga académica.
      * @param string $idEstudiante Identificador del estudiante.
@@ -223,18 +225,18 @@ class CargaAcademica {
      */
     public static function guardarAccesoCargasEstudiante(
         mysqli $conexion, 
+        PDO $conexionPDO, 
         array $config, 
         string $idCarga, 
         string $idEstudiante
     ){
-        $idInsercion=Utilidades::generateCode("ACC");
+        $idInsercion = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_cargas_acceso');
 
-        try {
-            mysqli_query($conexion,"INSERT INTO ".BD_ACADEMICA.".academico_cargas_acceso(carpa_id, carpa_id_carga, carpa_id_estudiante, carpa_primer_acceso, carpa_ultimo_acceso, carpa_cantidad, institucion, year) VALUES ('" .$idInsercion . "', '".$idCarga."', '".$idEstudiante."', now(), now(), 1, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "INSERT INTO " . BD_ACADEMICA . ".academico_cargas_acceso (carpa_id, carpa_id_carga, carpa_id_estudiante, carpa_primer_acceso, carpa_ultimo_acceso, carpa_cantidad, institucion, year) VALUES (?, ?, ?, NOW(), NOW(), 1, ?, ?)";
+
+        $parametros = [$idInsercion, $idCarga, $idEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
     
     /**
@@ -252,12 +254,11 @@ class CargaAcademica {
         string $idCarga, 
         string $idEstudiante
     ){
-        try {
-            mysqli_query($conexion,"UPDATE ".BD_ACADEMICA.".academico_cargas_acceso SET carpa_ultimo_acceso=now(), carpa_cantidad=carpa_cantidad+1 WHERE carpa_id_carga='".$idCarga."' AND carpa_id_estudiante='".$idEstudiante."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "UPDATE " . BD_ACADEMICA . ".academico_cargas_acceso SET carpa_ultimo_acceso=NOW(), carpa_cantidad=carpa_cantidad+1 WHERE carpa_id_carga=? AND carpa_id_estudiante=? AND institucion=? AND year=?";
+
+        $parametros = [$idCarga, $idEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
     
     /**
@@ -273,13 +274,13 @@ class CargaAcademica {
         array $config, 
         string $idCarga
     ){
-        try {
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_horarios WHERE hor_id_carga='".base64_decode($idCarga)."' AND hor_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
-        return $consulta;
+        $sql = "SELECT * FROM " . BD_ACADEMICA . ".academico_horarios WHERE hor_id_carga=? AND hor_estado=1 AND institucion=? AND year=?";
+
+        $parametros = [base64_decode($idCarga), $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
     }
     
     /**
@@ -293,17 +294,19 @@ class CargaAcademica {
      */
     public static function guardarHorariosCargas(
         mysqli $conexion, 
+        PDO $conexionPDO, 
         array $config, 
         string $dia, 
         array $POST
     ){
-        $codigo = "HOR".$dia.strtotime("now");
-        try {
-            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_horarios(hor_id, hor_id_carga, hor_dia, hor_desde, hor_hasta, institucion, year)VALUES('" . $codigo . "'," . $POST["idH"] . ",'" . $dia . "','" . $POST["inicioH"] . "','" . $POST["finH"] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_horarios');
+
+        $sql = "INSERT INTO " . BD_ACADEMICA . ".academico_horarios(hor_id, hor_id_carga, hor_dia, hor_desde, hor_hasta, institucion, year) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        $parametros = [$codigo, $POST["idH"], $dia, $POST["inicioH"], $POST["finH"], $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        
         return $codigo;
     }
     
@@ -314,19 +317,20 @@ class CargaAcademica {
      * @param array $config Configuraciones de la aplicación.
      * @param string $idHorario Identificador del horario.
      *
+     * @return mysqli_result|false Devuelve el resultado de la consulta o false en caso de error.
      */
     public static function traerDatosHorarios(
         mysqli $conexion, 
         array $config, 
         string $idHorario
     ){
-        try {
-            $consulta=mysqli_query($conexion, "SELECT hor_id_carga, hor_dia, hor_desde, hor_hasta FROM ".BD_ACADEMICA.".academico_horarios WHERE hor_id='".base64_decode($idHorario)."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
-        return $consulta;
+        $sql = "SELECT hor_id_carga, hor_dia, hor_desde, hor_hasta FROM " . BD_ACADEMICA . ".academico_horarios WHERE hor_id=? AND institucion=? AND year=?";
+
+        $parametros = [base64_decode($idHorario), $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        
+        return $resultado;
     }
     
     /**
@@ -342,12 +346,11 @@ class CargaAcademica {
         array $config, 
         array $POST
     ){
-        try {
-            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_horarios SET hor_dia=" . $POST["diaH"] . ", hor_desde='" . $POST["inicioH"] . "', hor_hasta='" . $POST["finH"] . "' WHERE hor_id='" . $POST["idH"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "UPDATE " . BD_ACADEMICA . ".academico_horarios SET hor_dia=?, hor_desde=?, hor_hasta=? WHERE hor_id=? AND institucion=? AND year=?";
+
+        $parametros = [$POST["diaH"], $POST["inicioH"], $POST["finH"], $POST["idH"], $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
     
     /**
@@ -363,12 +366,11 @@ class CargaAcademica {
         array $config, 
         string $idHorario
     ){
-        try {
-            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_horarios SET hor_estado=0 WHERE hor_id='" . base64_decode($idHorario) . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "UPDATE " . BD_ACADEMICA . ".academico_horarios SET hor_estado=0 WHERE hor_id=? AND institucion=? AND year=?";
+
+        $parametros = [base64_decode($idHorario), $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
     
     /**
