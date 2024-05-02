@@ -55,3 +55,40 @@ function validarCampo(input) {
         $("#btnEnviar").attr('disabled', true); 
     }
 }
+
+/**
+ * Esta función hace una petición asincrona y recibe una respuesta.
+ * @param {array} datos 
+ */
+function validarDocumento(datos) {
+    var documento = datos.value;
+    var idUsuario = datos.getAttribute("data-id-usuario");
+    
+    if(documento!=""){
+
+        fetch('ajax-comprobar-documento.php?documento=' + documento + '&idUsuario=' + idUsuario, {
+            method: 'GET'
+        })
+        .then(response => response.json()) // Convertir la respuesta a objeto JSON
+        .then(data => {
+                if (data.success == 1) {
+                    $("#respuestaUsuario").html(data.message);
+                    $("input").attr('disabled', true); 
+                    $("input#documento").attr('disabled',false); 
+                    $("#btnEnviar").attr('disabled', true); 
+                } else {
+                    $("#respuestaUsuario").html(data.message);
+                    $("input").attr('disabled', false); 
+                    $("#btnEnviar").attr('disabled', false);
+                }
+        })
+        .catch(error => {
+            // Manejar errores
+            console.error('Error:', error);
+        });
+    } else {
+        $("#respuestaUsuario").html("");
+        $("input").attr('disabled', false); 
+        $("#btnEnviar").attr('disabled', false); 
+    }
+}

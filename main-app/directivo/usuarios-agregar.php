@@ -233,7 +233,7 @@ $(document).ready(function() {
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Documento</label>
                                         <div class="col-sm-4">
-                                            <input type="text" name="documento" class="form-control" value="<?=$datosUsuario['documento'];?>" <?=$disabledPermiso;?>>
+                                            <input type="text" name="documento" id="documento" class="form-control" data-id-usuario="0" oninput="validarDocumento(this)" value="<?=$datosUsuario['documento'];?>" <?=$disabledPermiso;?>>
                                         </div>
                                     </div>
 
