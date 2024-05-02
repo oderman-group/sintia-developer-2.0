@@ -390,7 +390,8 @@ class CargaAcademica {
         string $filtro = "", 
         string $order = "car_id", 
         string $limit = "LIMIT 0, 2000",
-        string $valueIlike = "" 
+        string $valueIlike = "",
+        array  $filtro2 = array()  
 
     ){
         if(!empty($valueIlike)){
@@ -408,6 +409,13 @@ class CargaAcademica {
                 OR CONCAT(TRIM(uss_nombre), ' ', TRIM(uss_apellido1)) LIKE '%".$busqueda."%'
                 OR CONCAT(TRIM(uss_nombre), TRIM(uss_apellido1)) LIKE '%".$busqueda."%'
             )";
+        }
+        if(!empty($filtro2)){
+            if(!empty($filtro2['periodoSeleccionados'])){
+                $arrayPeriodos=$filtro2['periodoSeleccionados'];
+                $periodos = implode(", ", $arrayPeriodos);
+                $filtro .= " AND car_periodo IN ({$periodos})";
+            }
         }
         try {
             $sql="SELECT car.*, am.*, gra.*, gru.*, uss.*, car.id_nuevo AS id_nuevo_carga FROM ".BD_ACADEMICA.".academico_cargas car
