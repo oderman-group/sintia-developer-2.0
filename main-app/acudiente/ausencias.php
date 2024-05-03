@@ -3,7 +3,8 @@
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Clases.php");
-require_once(ROOT_PATH."/main-app/class/Grados.php");?>
+require_once(ROOT_PATH."/main-app/class/Grados.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
@@ -44,20 +45,19 @@ require_once(ROOT_PATH."/main-app/class/Grados.php");?>
 													$porcentajeGrado=$periodosCursos['gvp_valor'];
 												}
 												
-												$notapp = mysqli_fetch_array(mysqli_query($conexion, "SELECT bol_nota FROM ".BD_ACADEMICA.".academico_boletin 
-												WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$cargaConsultaActual."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"), MYSQLI_BOTH);
-												$porcentaje = ($notapp[0]/$config['conf_nota_hasta'])*100;
-												if($notapp[0] < $config['conf_nota_minima_aprobar']) $colorGrafico = 'danger'; else $colorGrafico = 'info';
+												$notapp = Boletin::traerNotaBoletinCargaPeriodo($config, $i, $datosEstudianteActual['mat_id'], $cargaConsultaActual);
+												$porcentaje = ($notapp['bol_nota']/$config['conf_nota_hasta'])*100;
+												if($notapp['bol_nota'] < $config['conf_nota_minima_aprobar']) $colorGrafico = 'danger'; else $colorGrafico = 'info';
 												if($i==$periodoConsultaActual) $estiloResaltadoP = 'style="color: orange;"'; else $estiloResaltadoP = '';
 											?>
 												<p>
 													<a href="<?=$_SERVER['PHP_SELF'];?>?carga=<?=$cargaConsultaActual;?>&periodo=<?=$i;?>" <?=$estiloResaltadoP;?>><?=strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]);?> <?=$i;?> (<?=$porcentajeGrado?>%)</a>
 													
-													<?php if($notapp[0]!=""){?>
+													<?php if($notapp['bol_nota']!=""){?>
 														<div class="work-monitor work-progress">
 															<div class="states">
 																<div class="info">
-																	<div class="desc pull-left"><b><?=$frases[62][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$notapp[0];?></div>
+																	<div class="desc pull-left"><b><?=$frases[62][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$notapp['bol_nota'];?></div>
 																	<div class="percent pull-right"><?=$porcentaje;?>%</div>
 																</div>
 

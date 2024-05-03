@@ -191,9 +191,7 @@ $modulo = 1;
                 while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
 
                     //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
-
-                    $consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) AS promedio, MAX(bol_periodo) AS periodo FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' and bol_carga='" . $cargas["car_id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
-                    $boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
+				    $boletin = Boletin::traerDefinitivaBoletinCarga($config, $cargas["car_id"], $_POST["id"], $inicio);
 
                 $nota = 0;
                 if(!empty($boletin['promedio'])){
@@ -249,13 +247,11 @@ $modulo = 1;
                 while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
 
                     //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
-
-                    $consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' and bol_carga='" . $cargas["car_id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
-                    $boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
+				    $boletin = Boletin::traerDefinitivaBoletinCarga($config, $cargas["car_id"], $_POST["id"], $inicio);
 
                 $nota = 0;
-                if(!empty($boletin[0])){
-                    $nota = round($boletin[0],1);
+                if(!empty($boletin['promedio'])){
+                    $nota = round($boletin['promedio'],1);
                 }
 
                 $notaFinal=$nota;
@@ -377,9 +373,7 @@ $modulo = 1;
                 while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
 
                     //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
-
-                    $consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) AS promedio, MAX(bol_periodo) AS periodo FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
-                    $boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
+				    $boletin = Boletin::traerDefinitivaBoletinCarga($config, $cargas["car_id"], $_POST["id"], $inicio);
 
                 $nota = 0;
                 if(!empty($boletin['promedio'])){
@@ -412,15 +406,13 @@ $modulo = 1;
                         //PERIODOS
 
                         while ($p <= $config[19]) {
-
-                            $consultaNotasPeriodos = mysqli_query($conexion, "SELECT bol_nota FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND bol_periodo='" . $p . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
-                            $notasPeriodo = mysqli_fetch_array($consultaNotasPeriodos, MYSQLI_BOTH);
+                            $notasPeriodo = Boletin::traerNotaBoletinCargaPeriodo($config, $p, $_POST["id"], $cargas["car_id"], $inicio);
 
                             $notasPeriodoFinal='';
-                            if(!empty($notasPeriodo[0])){
-                                $notasPeriodoFinal=$notasPeriodo[0];
+                            if(!empty($notasPeriodo['bol_nota'])){
+                                $notasPeriodoFinal=$notasPeriodo['bol_nota'];
                                 if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
-                                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasPeriodo[0],$inicio);
+                                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasPeriodo['bol_nota'],$inicio);
                                     $notasPeriodoFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
                                 }
                             }
@@ -460,13 +452,11 @@ $modulo = 1;
                 while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
 
                     //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
-
-                    $consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
-                    $boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
+				    $boletin = Boletin::traerDefinitivaBoletinCarga($config, $cargas["car_id"], $_POST["id"], $inicio);
 
                 $nota = 0;
-                if(!empty($boletin[0])){
-                    $nota = round($boletin[0],1);
+                if(!empty($boletin['promedio'])){
+                    $nota = round($boletin['promedio'],1);
                 }
 
                     $desempeno = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota, $inicio);
@@ -486,15 +476,13 @@ $modulo = 1;
                         //PERIODOS
 
                         while ($p <= $config[19]) {
-
-                            $consultaNotasPeriodos = mysqli_query($conexion, "SELECT bol_nota FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $_POST["id"] . "' AND bol_carga='" . $cargas["car_id"] . "' AND bol_periodo='" . $p . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
-                            $notasPeriodo = mysqli_fetch_array($consultaNotasPeriodos, MYSQLI_BOTH);
+                            $notasPeriodo = Boletin::traerNotaBoletinCargaPeriodo($config, $p, $_POST["id"], $cargas["car_id"], $inicio);
 
                             $notasPeriodoFinal='';
-                            if(!empty($notasPeriodo[0])){
-                                $notasPeriodoFinal=$notasPeriodo[0];
+                            if(!empty($notasPeriodo['bol_nota'])){
+                                $notasPeriodoFinal=$notasPeriodo['bol_nota'];
                                 if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
-                                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasPeriodo[0],$inicio);
+                                    $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasPeriodo['bol_nota'],$inicio);
                                     $notasPeriodoFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
                                 }
                             }
