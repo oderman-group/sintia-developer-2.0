@@ -12,6 +12,7 @@ require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/servicios/GradoServicios.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 $parametrosBuscar = array(
 	"tipo" =>JOBS_TIPO_GENERAR_INFORMES,
 	"estado" =>JOBS_ESTADO_PENDIENTE
@@ -194,11 +195,11 @@ $mensaje="";
 
 		}
     
-	
-		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_cargas SET car_periodo=car_periodo+1 WHERE car_id='".$carga."' AND institucion={$config['conf_id_institucion']} AND year={$anio}");
-		$consulta_mat_area_est = mysqli_fetch_array(mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
-		INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car.car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$anio}
-		WHERE  car_id='".$carga."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$anio}"));
+		$update = "car_periodo=car_periodo+1";
+		CargaAcademica::actualizarCargaPorID($config, $carga, $update, $anio);
+
+		$consulta_mat_area_est = CargaAcademica::traerCargaMateriaPorID($config, $carga, $anio);
+
 		$respuesta ="
 		<h4>Resumen del proceso:</h4>
 		- Total estudiantes calificados: {$numEstudiantes}<br><br>

@@ -7,10 +7,11 @@ if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol(
 	exit();
 }
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
-require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 require_once(ROOT_PATH."/main-app/class/Grados.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 
 $year=$_SESSION["bd"];
 if(isset($_GET["year"])){
@@ -137,13 +138,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
     <?php
 	$materiasPerdidas = 0;
 	$colspan = 2 + (2 * $periodoActual);
-	$conAreas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
-	INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-	INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
-	WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
-	GROUP BY am.mat_area
-	ORDER BY ar_posicion
-	");
+    $conAreas = CargaAcademica::traerCargasMateriasAreaPorCursoGrupo($config, $datosUsr['mat_grado'], $datosUsr['mat_grupo'], $year);
 	while($datosAreas = mysqli_fetch_array($conAreas, MYSQLI_BOTH)){
 	?>
     <tbody>
@@ -157,10 +152,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
 		
 		<?php
 		$contador=1;
-		$conCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
-		INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.mat_area='".$datosAreas['ar_id']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-		WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
-		");
+		$conCargas = CargaAcademica::traerCargasAreasPorCursoGrupo($config, $datosUsr['mat_grado'], $datosUsr['mat_grupo'], $datosAreas['ar_id'], $year);
 		while($datosCargas = mysqli_fetch_array($conCargas, MYSQLI_BOTH)){
 		?>
 		<!-- ASIGNATURAS -->

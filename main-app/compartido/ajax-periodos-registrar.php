@@ -1,13 +1,13 @@
 <?php
 session_start();
 include("../../config-general/config.php");
-require_once("../class/Estudiantes.php");
-require_once("../class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
-$consultaDatosCargas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_id='".$_POST["carga"]."' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-$datosCargaActual = mysqli_fetch_array($consultaDatosCargas, MYSQLI_BOTH);
-?>
-<?php
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
+
+$datosCargaActual = CargaAcademica::traerCargaMateriaPorID($config, $_POST["carga"]);
+
 if(trim($_POST["nota"])==""){
     echo "<span style='color:red; font-size:16px;'>Digite una nota correcta</span>";
 	exit();
@@ -39,14 +39,12 @@ if($num==0){
 		
 		$estudiante = Estudiantes::obtenerDatosEstudiante($_POST["codEst"]);
 		$nombreCompleto = Estudiantes::NombreCompletoDelEstudiante($estudiante);
-		$consultaMateria=mysqli_query($conexion, "SELECT car_id, car_materia, mat_id, mat_nombre FROM ".BD_ACADEMICA.".academico_cargas car, ".BD_ACADEMICA.".academico_materias am WHERE car_id='".$datosCargaActual['car_id']."' AND am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
-		$materia = mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
 
 		$acudiente = UsuariosPadre::sesionUsuario($usuarioResponsable['upe_id_usuario']);
 		//include("../compartido/email-alertas.php");
 		$fin =  '<html><body>';
 						$fin .= '
-						Nos complace informarle que su acudido <b>'.$nombreCompleto.'</b>, ha recuperado el periodo '.$_POST["per"].' de la asignatura de <b>'.$materia[3].'</b>. Por favor ingrese a la plataforma SINTIA&reg; para revisarla.<br>
+						Nos complace informarle que su acudido <b>'.$nombreCompleto.'</b>, ha recuperado el periodo '.$_POST["per"].' de la asignatura de <b>'.$datosCargaActual['mat_nombre'].'</b>. Por favor ingrese a la plataforma SINTIA&reg; para revisarla.<br>
 						Le sugerimos que felicite a su acudido y lo motive para siga obteniendo buenas calificaciones.<br>
 						<b>RESALATAR LAS COSAS BUENAS DE LAS PERSONAS AUNQUE SEAN POCAS LOS MOTIVA A MEJORAR INCONSCIENTEMENTE</b>.<br>
 						<table width="80%" align="center" border="1" style="font-family:Verdana, Arial, Helvetica, sans-serif;" rules="groups" cellpadding="3" cellspacing="3">
@@ -74,7 +72,7 @@ if($num==0){
 					
 					<tr>
 						<td style="background:#ffd300; color:#FFFFFF; text-align:right;">ASIGNATURA</td>
-						<td style="background:#F6F6F6; color:#000000; text-align:left;">&nbsp;'.$materia[3].'</td>
+						<td style="background:#F6F6F6; color:#000000; text-align:left;">&nbsp;'.$datosCargaActual['mat_nombre'].'</td>
 					</tr>
 					
 					<tr>

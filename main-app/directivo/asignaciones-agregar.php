@@ -2,6 +2,7 @@
 include("session.php");
 $idPaginaInterna = 'DT0319';
 include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Grados.php");
 
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
     echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -115,7 +116,7 @@ if (!empty($_GET['idE'])) {
                                                 <select class="form-control  select2-multiple" style="width: 100%;" multiple name="evaluadorCursos[]" <?= $disabledPermiso; ?>>
                                                     <option value="">Escoja una opción</option>
                                                     <?php
-                                                        $consultaCursos = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                                                        $consultaCursos = Grados::traerGradosInstitucion($config);
                                                         while ($datosCursos = mysqli_fetch_array($consultaCursos, MYSQLI_BOTH)) {
                                                     ?>
                                                     <option value="<?=$datosCursos['gra_id']?>"><?=$datosCursos['gra_nombre']?></option>

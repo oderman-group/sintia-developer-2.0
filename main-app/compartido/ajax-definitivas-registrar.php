@@ -4,9 +4,6 @@ include("../modelo/conexion.php");
 include("../../config-general/config.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
-$consultaDatosCargasActual=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_id='".$_POST["carga"]."' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-$datosCargaActual = mysqli_fetch_array($consultaDatosCargasActual, MYSQLI_BOTH);
-
 if(trim($_POST["nota"])==""){
     echo "<span style='color:red; font-size:16px;'>Digite una nota correcta</span>";
 	exit();

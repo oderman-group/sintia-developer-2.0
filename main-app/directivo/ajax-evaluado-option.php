@@ -41,7 +41,8 @@
     }
 
     if($_GET['tipoEncuesta'] == CURSO){
-        $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        require_once(ROOT_PATH."/main-app/class/Grados.php");
+        $consulta = Grados::traerGradosInstitucion($config);
         while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
             $selected = !empty($_GET['idEvaluado']) && $_GET['idEvaluado'] == $resultado['gra_id'] ? "selected": "";
             echo '<option value="'.$resultado['gra_id'].'" '.$selected.'>'.$resultado['gra_nombre'].'</option>';
