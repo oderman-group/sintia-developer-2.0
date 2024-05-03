@@ -292,5 +292,39 @@ class UsuariosPadre {
 
         return $num;
     }
+    
+    /**
+     * Valida la existencia de un usuario por su documento en toda la tabla.
+     *
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $documento
+     * @param int $idUsuario
+     *
+     * @return int Número de filas que coinciden con la consulta.
+     */
+    public static function validarDocumento(
+        mysqli $conexion,
+        array $config,
+        string $documento,
+        int $idUsuario = 0
+    ){
+        $filtro = "";
+        if (!empty($idUsuario) && $idUsuario != 0) {
+            $filtro = "AND id_nuevo != '".$idUsuario."'";
+        }
+
+        $doctSinPuntos = strpos($documento, '.') == true ? str_replace('.', '', $documento) : $documento;
+        $doctConPuntos = strpos($documento, '.') !== true && is_numeric($documento) ? str_replace('.', '', $documento) : $documento;
+        $num = 0;
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM " . BD_GENERAL . ".usuarios WHERE (uss_documento='" . $doctSinPuntos . "' OR uss_documento='" . $doctConPuntos . "') {$filtro} AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            $num = mysqli_num_rows($consulta);
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+
+        return $num;
+    }
 
 }   
