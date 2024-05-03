@@ -196,7 +196,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
             </thead>
             <tbody>
                 <?php
-                    $consultaAreas = Asignaturas::consultarAsignaturasArea($conexion, $config, $gradoActual, $grupoActual, $year);
+                    $consultaAreas = Asignaturas::consultarAsignaturasCurso($conexion, $config, $gradoActual, $grupoActual, $year);
                     $numAreas=mysqli_num_rows($consultaAreas);
                     $sumaPromedioGeneral=0;
                     $sumaPromedioGeneralPeriodo1=0;

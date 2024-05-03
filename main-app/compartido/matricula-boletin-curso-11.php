@@ -244,7 +244,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                         <tr>
                             <td align="center"><?= $contador; ?></td>
                             <td style="font-size:12px; font-weight:bold;"><?=$materia["mat_nombre"]; ?></td>
-                            <td align="center" style="font-size:12px;"><?=$area["car_ih"]; ?></td>
+                            <td align="center" style="font-size:12px;"><?=$materia["car_ih"]; ?></td>
                             <?php
                                 $promedioMateria = 0;
                                 for ($j = 1; $j <= $periodoActual; $j++) {

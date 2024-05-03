@@ -155,10 +155,10 @@
 											</div>
 										
 
-
+										<a href="javascript:history.go(-1);" class="btn btn-secondary"><i class="fa fa-long-arrow-left"></i><?=$frases[184][$datosUsuarioActual['uss_idioma']];?></a>
 										<input type="submit" class="btn btn-primary" value="<?=$frases[41][$datosUsuarioActual['uss_idioma']];?>">&nbsp;
 										
-										<a href="javascript:history.go(-1);" class="btn btn-secondary"><i class="fa fa-long-arrow-left"></i><?=$frases[184][$datosUsuarioActual['uss_idioma']];?></a>
+										
                                     </form>
                                 </div>
                             </div>

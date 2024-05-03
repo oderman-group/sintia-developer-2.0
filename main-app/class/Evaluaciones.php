@@ -3,7 +3,7 @@ require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.ph
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 require_once(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
-class Evaluaciones{
+class Evaluaciones extends BindSQL{
     /**
      * Este metodo me trae las preguntas de una evaluación
      * @param mysqli $conexion
@@ -56,7 +56,7 @@ class Evaluaciones{
      * @param string $idPregunta
      * @param array $POST
      */
-    public static function guardarRelacionPreguntaEvaluacion(mysqli $conexion, PDO $conexionPDO, array $config, string $idPregunta, array $POST)
+    public static function guardarRelacionPreguntaEvaluacion(mysqli $conexion, PDO $conexionPDO, array $config, string $idPregunta, array $POST,$finalizarTransacion=true)
     {
         $codigoEVP = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_actividad_evaluacion_preguntas');
 
@@ -64,7 +64,7 @@ class Evaluaciones{
 
         $parametros = [$codigoEVP, $POST["idE"], $idPregunta, $config['conf_id_institucion'], $_SESSION["bd"]];
         
-        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        $resultado = BindSQL::prepararSQL($sql, $parametros,$finalizarTransacion);
     }
     
     /**
@@ -711,7 +711,7 @@ class Evaluaciones{
      * 
      * @return string $codigo
      */
-    public static function guardarPreguntasEvaluacion(mysqli $conexion, array $config, array $POST, array $FILES){
+    public static function guardarPreguntasEvaluacion(mysqli $conexion, array $config, array $POST, array $FILES,$finalizarTransacion=true){
 
         $archivoSubido = new Archivos;
         $codigo=Utilidades::generateCode("PRE");
@@ -726,7 +726,11 @@ class Evaluaciones{
             move_uploaded_file($FILES['file']['tmp_name'], $destino ."/".$archivo);
         }
         try{
-            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_preguntas(preg_id, preg_descripcion, preg_valor, preg_id_carga, preg_tipo_pregunta, preg_archivo, institucion, year)VALUES('".$codigo."', '".mysqli_real_escape_string($conexion,$POST["contenido"])."','".$POST["valor"]."','".$_COOKIE["carga"]."', '".$POST["opcionR"]."', '".$archivo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+            $sql = "INSERT INTO ".BD_ACADEMICA.".academico_actividad_preguntas(preg_id, preg_descripcion, preg_valor, preg_id_carga, preg_tipo_pregunta, preg_archivo, institucion, year)VALUES(?,?,?,?,?,?,?,?)";
+
+            $parametros = [$codigo, mysqli_real_escape_string($conexion,$POST["contenido"]), $POST["valor"],$_COOKIE["carga"],$POST["opcionR"], $archivo, $config['conf_id_institucion'], $_SESSION["bd"]];
+            
+            $resultado = BindSQL::prepararSQL($sql, $parametros,$finalizarTransacion);
         } catch (Exception $e) {
             include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
         }

@@ -201,7 +201,7 @@ class Calificaciones {
         array  $POST
     )
     {
-        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_areas');
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_nivelaciones');
 
         try {
             mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_nivelaciones(niv_id, niv_id_asg, niv_cod_estudiante, niv_definitiva, niv_fecha, institucion, year)VALUES('".$codigo."', '".$POST["carga"]."','".$POST["codEst"]."','".$POST["nota"]."',now(), {$config['conf_id_institucion']}, {$_SESSION["bd"]})");

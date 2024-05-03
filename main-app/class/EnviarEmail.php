@@ -50,17 +50,22 @@ class EnviarEmail {
             $correrocopia='soporte@plataformasintia.com';
             $destinatario=$data['usuario_email'];
             $destinatario2=empty($data['usuario2_email'])?null:$data['usuario2_email'];
+            $destinatario3=empty($data['usuario3_email'])?null:$data['usuario3_email'];
             $validarRemitente = self::validarEmail(EMAIL_SENDER);
             $validarDestinatario = self::validarEmail($destinatario);
             $validarDestinatario2 = is_null($destinatario2)?true:self::validarEmail($destinatario2);
+            $validarDestinatario3 = is_null($destinatario3)?true:self::validarEmail($destinatario3);
             $validarcopia = self::validarEmail($correrocopia);
 
-            if($validarRemitente && $validarDestinatario &&  $validarDestinatario2 && $validarcopia){
+            if($validarRemitente && $validarDestinatario &&  $validarDestinatario2 &&  $validarDestinatario3 && $validarcopia){
                     //Destinatarios
                     $mail->addAddress($correrocopia, 'Soporte Plataforma SINTIA');
                     $mail->addAddress($destinatario, $data['usuario_nombre']);
                     if(!is_null($destinatario2)){
                         $mail->addAddress($destinatario2, $data['usuario2_nombre']);
+                    }
+                    if(!is_null($destinatario3)){
+                        $mail->addAddress($destinatario3, $data['usuario3_nombre']);
                     }
                     
                     // Content
@@ -76,22 +81,26 @@ class EnviarEmail {
                         }                         
                     }
                     $mail->send();
-                    self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ENVIADO,'');  
+                    self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$data['usuario_id'],$asunto,$body,ESTADO_EMAIL_ENVIADO,'');  
             }else{                 
                     if(!$validarRemitente){
-                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,'Error remitente'.EMAIL_SENDER);  
+                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$data['usuario_id'],$asunto,$body,ESTADO_EMAIL_ERROR,'Error remitente'.EMAIL_SENDER);  
                         self::mensajeError(EMAIL_SENDER);        
                     } 
                     if(!$validarDestinatario){
-                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario'.$destinatario); 
+                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$data['usuario_id'],$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario'.$destinatario); 
                         self::mensajeError($destinatario);        
                     }
                     if(!$validarDestinatario2){
-                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario 2'.$destinatario2); 
+                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$data['usuario_id'],$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario 2'.$destinatario2); 
                         self::mensajeError($destinatario2);        
                     }    
+                    if(!$validarDestinatario3){
+                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$data['usuario_id'],$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario 2'.$destinatario2); 
+                        self::mensajeError($destinatario2);        
+                    }  
                     if(!$validarcopia){
-                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario'.$correrocopia); 
+                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$data['usuario_id'],$asunto,$body,ESTADO_EMAIL_ERROR,'Error destinatario'.$correrocopia); 
                         self::mensajeError($correrocopia);        
                     } 
             }
