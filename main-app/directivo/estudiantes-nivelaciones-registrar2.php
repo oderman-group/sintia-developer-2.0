@@ -7,6 +7,7 @@ include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Grupos.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 $disabledPermiso = "";
 if (!Modulos::validarPermisoEdicion()) {
 	$disabledPermiso = "disabled";
@@ -240,12 +241,7 @@ $curso = mysqli_fetch_array($consultaCurso, MYSQLI_BOTH);
 												$defPorMateria = 0;
 												//PERIODOS DE CADA MATERIA
 												while ($p <= $config[19]) {
-													try {
-														$consultaBoletin = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='" . $carga['car_id'] . "' AND bol_estudiante='" . $resultado['mat_id'] . "' AND bol_periodo='" . $p . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-													} catch (Exception $e) {
-														include("../compartido/error-catch-to-report.php");
-													}
-													$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
+													$boletin = Boletin::traerNotaBoletinCargaPeriodo($config, $p, $resultado['mat_id'], $carga['car_id']);
 													if (!empty($boletin['bol_nota'])) {
 														if ($boletin['bol_nota'] < $config[5]) $color = $config[6];
 														elseif ($boletin['bol_nota'] >= $config[5]) $color = $config[7];

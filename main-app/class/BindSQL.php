@@ -6,6 +6,13 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/app-sintia/config-general/constantes.
 
 class BindSQL
 {
+    /**
+     * Prepara y ejecuta una consulta SQL con parámetros.
+     *
+     * @param string $sql La consulta SQL con marcadores de posición.
+     * @param array $parametros Un array de valores para reemplazar los marcadores de posición en la consulta.
+     * @return mixed|false El resultado de la consulta o false en caso de error.
+     */
     public static function prepararSQL(
         string $sql,
         array $parametros,
@@ -48,7 +55,7 @@ class BindSQL
                 exit();
             }
         } catch (Exception $e) {
-             self::revertirTransacion();
+            self::revertirTransacion();
             include(ROOT_PATH . "/compartido/error-catch-to-report.php");
         }
     }

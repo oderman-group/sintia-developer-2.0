@@ -106,8 +106,7 @@ include("../compartido/head-informes.php") ?>
 											$defPorMateria = 0;
 											//PERIODOS DE CADA MATERIA
 											while($p<=$config[19]){
-												$consultaBoletin=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$carga['car_id']."' AND bol_estudiante='".$resultado['mat_id']."' AND bol_periodo='".$p."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-												$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
+												$boletin = Boletin::traerNotaBoletinCargaPeriodo($config, $p, $resultado['mat_id'], $carga['car_id'], $year);
 												if(!empty($boletin['bol_nota']) and $boletin['bol_nota']<$config[5] and $boletin['bol_nota']!="")$color = $config[6]; elseif(!empty($boletin['bol_nota']) and $boletin['bol_nota']>=$config[5]) $color = $config[7];
 												
 												$notaBoletinFinal="";
