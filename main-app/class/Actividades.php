@@ -18,7 +18,8 @@ class Actividades {
      * @return string $codigo
      */
     public static function guardarActividad(mysqli $conexion, array $config, array $POST, array $FILES, $storage, string $idCarga, int $periodo){
-        $codigo=Utilidades::generateCode("TAR");
+        global $conexionPDO;
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_actividad_tareas');
         
         $archivoSubido = new Archivos;
         
@@ -38,12 +39,11 @@ class Actividades {
         
         if(empty($POST["retrasos"]) || (!empty($POST["retrasos"]) && $POST["retrasos"]!=1)) $POST["retrasos"]='0';
         
-        try{
-            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_tareas(tar_id, tar_titulo, tar_descripcion, tar_id_carga, tar_periodo, tar_estado, tar_fecha_disponible, tar_fecha_entrega, tar_impedir_retrasos, tar_archivo, tar_peso1, institucion, year)
-            VALUES('".$codigo."', '".mysqli_real_escape_string($conexion,$POST["titulo"])."', '".mysqli_real_escape_string($conexion,$POST["contenido"])."', '".$idCarga."', '".$periodo."', 1, '".$POST["desde"]."', '".$POST["hasta"]."', '".$POST["retrasos"]."', '".$archivo."', '".$pesoMB."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
+        $sql = "INSERT INTO ".BD_ACADEMICA.".academico_actividad_tareas(tar_id, tar_titulo, tar_descripcion, tar_id_carga, tar_periodo, tar_estado, tar_fecha_disponible, tar_fecha_entrega, tar_impedir_retrasos, tar_archivo, tar_peso1, institucion, year) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        $parametros = [$codigo, mysqli_real_escape_string($conexion,$POST["titulo"]), mysqli_real_escape_string($conexion,$POST["contenido"]), $idCarga, $periodo, 1, $POST["desde"], $POST["hasta"], $POST["retrasos"], $archivo, $pesoMB, $config['conf_id_institucion'], $_SESSION["bd"]];
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
 
         return $codigo;
     }
@@ -68,20 +68,22 @@ class Actividades {
             $destino = ROOT_PATH."/main-app/files/tareas";
             @unlink($destino."/".$archivo);
             $archivoSubido->subirArchivoStorage(FILE_TAREAS, $archivo, $nombreInputFile,$storage); 
-            try{
-                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas SET tar_archivo='".$archivo."' WHERE tar_id='".$POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-            } catch (Exception $e) {
-                include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-            }
+            
+            $sql = "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas SET tar_archivo=? WHERE tar_id=? AND institucion=? AND year=?";
+    
+            $parametros = [$archivo, $POST["idR"], $config['conf_id_institucion'], $_SESSION["bd"]];
+            
+            $resultado = BindSQL::prepararSQL($sql, $parametros);
+    
         }
         
         if(empty($POST["retrasos"]) || $POST["retrasos"]!=1) $POST["retrasos"]='0';
         
-        try{
-            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas SET tar_titulo='".mysqli_real_escape_string($conexion,$POST["titulo"])."', tar_descripcion='".mysqli_real_escape_string($conexion,$POST["contenido"])."', tar_fecha_disponible='".$POST["desde"]."', tar_fecha_entrega='".$POST["hasta"]."', tar_impedir_retrasos='".$POST["retrasos"]."' WHERE tar_id='".$POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas SET tar_titulo=?, tar_descripcion=?, tar_fecha_disponible=?, tar_fecha_entrega=?, tar_impedir_retrasos=? WHERE tar_id=? AND institucion=? AND year=?";
+
+        $parametros = [mysqli_real_escape_string($conexion,$POST["titulo"]), mysqli_real_escape_string($conexion,$POST["contenido"]), $POST["desde"], $POST["hasta"], $POST["retrasos"], $POST["idR"], $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -93,16 +95,13 @@ class Actividades {
      * @return mysqli_result $consulta
      */
     public static function actividadesCargas(mysqli $conexion, array $config, string $idCarga){
-        try{
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas 
-            WHERE tar_id_carga='".$idCarga."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-            ");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas WHERE tar_id_carga=? AND institucion=? AND year=?";
 
-        return $consulta;
+        $parametros = [$idCarga, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
     }
 
     /**
@@ -116,17 +115,15 @@ class Actividades {
      * @return mysqli_result $consulta
      */
     public static function actividadesCargasPeriodosDiferente(mysqli $conexion, array $config, string $idCarga, int $periodo, string $idActividad){
-        try{
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas
-            WHERE tar_id_carga='".$idCarga."' AND tar_periodo='".$periodo."' AND tar_id!='".$idActividad."' 
-            AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-            ORDER BY tar_id DESC");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas
+        WHERE tar_id_carga=? AND tar_periodo=? AND tar_id!=? AND tar_estado=1 AND institucion=? AND year=?
+        ORDER BY tar_id DESC";
 
-        return $consulta;
+        $parametros = [$idCarga, $periodo, $idActividad, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
     }
 
     /**
@@ -139,16 +136,14 @@ class Actividades {
      * @return mysqli_result $consulta
      */
     public static function actividadesCargasPeriodos(mysqli $conexion, array $config, string $idCarga, int $periodo){
-        try{
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas
-            WHERE tar_id_carga='".$idCarga."' AND tar_periodo='".$periodo."' AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-            ORDER BY tar_id DESC");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas WHERE tar_id_carga=? AND tar_periodo=? AND tar_estado=1 AND institucion=? AND year=?
+        ORDER BY tar_id DESC";
 
-        return $consulta;
+        $parametros = [$idCarga, $periodo, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
     }
 
     /**
@@ -160,13 +155,13 @@ class Actividades {
      * @return array $resultado
      */
     public static function traerDatosActividades(mysqli $conexion, array $config, string $idActividad){
-        try{
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas WHERE tar_id='".$idActividad."' AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
-        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas WHERE tar_id=? AND tar_estado=1 AND institucion=? AND year=?";
+
+        $parametros = [$idActividad, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
 
         return $resultado;
     }
@@ -180,13 +175,13 @@ class Actividades {
      * @return array $resultado
      */
     public static function traerFechaActividad(mysqli $conexion, array $config, string $idActividad){
-        try{
-            $consulta = mysqli_query($conexion, "SELECT DATEDIFF(tar_fecha_disponible, now()), DATEDIFF(tar_fecha_entrega, now()) FROM ".BD_ACADEMICA.".academico_actividad_tareas WHERE tar_id='".$idActividad."' AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
-        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        $sql = "SELECT DATEDIFF(tar_fecha_disponible, now()), DATEDIFF(tar_fecha_entrega, now()) FROM ".BD_ACADEMICA.".academico_actividad_tareas WHERE tar_id=? AND tar_estado=1 AND institucion=? AND year=?";
+
+        $parametros = [$idActividad, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
 
         return $resultado;
     }
@@ -200,13 +195,13 @@ class Actividades {
      * @return array $resultado
      */
     public static function traerFechaActividadEstudiante(mysqli $conexion, array $config, string $idActividad){
-        try{
-            $consulta = mysqli_query($conexion, "SELECT TIMESTAMPDIFF(MINUTE, tar_fecha_disponible, now()), TIMESTAMPDIFF(MINUTE, tar_fecha_entrega, now()) FROM ".BD_ACADEMICA.".academico_actividad_tareas WHERE tar_id='".$idActividad."' AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
-        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        $sql = "SELECT TIMESTAMPDIFF(MINUTE, tar_fecha_disponible, now()), TIMESTAMPDIFF(MINUTE, tar_fecha_entrega, now()) FROM ".BD_ACADEMICA.".academico_actividad_tareas WHERE tar_id=? AND tar_estado=1 AND institucion=? AND year=?";
+
+        $parametros = [$idActividad, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
 
         return $resultado;
     }
@@ -220,13 +215,13 @@ class Actividades {
      * @return array $resultado
      */
     public static function fechaEntregaActividad(mysqli $conexion, array $config, string $idActividad){
-        try{
-            $consulta = mysqli_query($conexion, "SELECT DATEDIFF(tar_fecha_disponible, now()), DATEDIFF(tar_fecha_entrega, now()), tar_fecha_entrega, tar_impedir_retrasos FROM ".BD_ACADEMICA.".academico_actividad_tareas WHERE tar_id='".$idActividad."' AND tar_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
-        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        $sql = "SELECT DATEDIFF(tar_fecha_disponible, now()), DATEDIFF(tar_fecha_entrega, now()), tar_fecha_entrega, tar_impedir_retrasos FROM ".BD_ACADEMICA.".academico_actividad_tareas WHERE tar_id=? AND tar_estado=1 AND institucion=? AND year=?";
+
+        $parametros = [$idActividad, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
 
         return $resultado;
     }
@@ -238,11 +233,12 @@ class Actividades {
      * @param string $idActividad
      */
     public static function eliminarActividad(mysqli $conexion, array $config, string $idActividad, $storage){
-        try{
-            $consultaRegistro=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas WHERE tar_id='".$idActividad."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_tareas WHERE tar_id=? AND institucion=? AND year=?";
+
+        $parametros = [$idActividad, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $consultaRegistro = BindSQL::prepararSQL($sql, $parametros);
+
         $registro = mysqli_fetch_array($consultaRegistro, MYSQLI_BOTH);
         
         $url1= $storage->getBucket()->object(FILE_TAREAS.$registro["tar_archivo"])->signedUrl(new DateTime('tomorrow'));
@@ -261,11 +257,11 @@ class Actividades {
             unlink($url3);	
         }
         
-        try{
-            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas SET tar_estado=0 WHERE tar_id='".$idActividad."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas SET tar_estado=0 WHERE tar_id=? AND institucion=? AND year=?";
+
+        $parametros = [$idActividad, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -276,11 +272,11 @@ class Actividades {
      */
     public static function impedirRetrasoActividad(mysqli $conexion, array $config, array $POST){
         
-        try{
-            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas SET tar_impedir_retrasos='".$POST["valor"]."' WHERE tar_id='".$POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas SET tar_impedir_retrasos=? WHERE tar_id=? AND institucion=? AND year=?";
+
+        $parametros = [$POST["valor"], $POST["idR"], $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
