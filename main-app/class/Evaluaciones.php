@@ -471,21 +471,21 @@ class Evaluaciones extends BindSQL{
      * @return array $resultado
      */
     public static function traerRespuestaEvaluacion(mysqli $conexion, array $config, string $idEvaluacion, string $idEstudiante){
-        try{
-            $consulta = mysqli_query($conexion, "SELECT
-            (SELECT count(res.res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res 
-            INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=1 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]} 
-            WHERE res.res_id_evaluacion='".$idEvaluacion."' AND res.res_id_estudiante='".$idEstudiante."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}),
-            (SELECT count(res.res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res 
-            INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=0 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]}
-            WHERE res.res_id_evaluacion='".$idEvaluacion."' AND res.res_id_estudiante='".$idEstudiante."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}),
-            (SELECT count(res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados 
-            WHERE res_id_evaluacion='".$idEvaluacion."' AND res_id_estudiante='".$idEstudiante."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND res_id_respuesta=0)");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
-        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        $sql = "SELECT
+        (SELECT count(res.res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res 
+        INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=1 AND resp.institucion=res.institucion AND resp.year=res.year 
+        WHERE res.res_id_evaluacion=? AND res.res_id_estudiante=? AND res.institucion=? AND res.year=?),
+        (SELECT count(res.res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res 
+        INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=0 AND resp.institucion=res.institucion AND resp.year=res.year
+        WHERE res.res_id_evaluacion=? AND res.res_id_estudiante=? AND res.institucion=? AND res.year=?),
+        (SELECT count(res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados 
+        WHERE res_id_evaluacion=? AND res_id_estudiante=? AND institucion=? AND year=? AND res_id_respuesta=0)";
+
+        $parametros = [$idEvaluacion, $idEstudiante, $config['conf_id_institucion'], $_SESSION["bd"], $idEvaluacion, $idEstudiante, $config['conf_id_institucion'], $_SESSION["bd"], $idEvaluacion, $idEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
 
         return $resultado;
     }
@@ -500,14 +500,14 @@ class Evaluaciones extends BindSQL{
      * @return int $numDatos
      */
     public static function verificarEstudianteEvaluacion(mysqli $conexion, array $config, string $idEvaluacion, string $idEstudiante){
-        try{
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados 
-            WHERE res_id_evaluacion='".$idEvaluacion."' AND res_id_estudiante='".$idEstudiante."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
-        $numDatos = mysqli_num_rows($consulta);
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados 
+        WHERE res_id_evaluacion=? AND res_id_estudiante=? AND institucion=? AND year=?";
+
+        $parametros = [$idEvaluacion, $idEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        $numDatos = mysqli_num_rows($resultado);
 
         return $numDatos;
     }
@@ -522,19 +522,19 @@ class Evaluaciones extends BindSQL{
      * @return array $resultado
      */
     public static function respuestasXPreguntas(mysqli $conexion, array $config, string $idEvaluacion, string $idPregunta){
-        try{
-            $consulta = mysqli_query($conexion, "SELECT
-            (SELECT count(res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res
-            INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=1 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]}
-            WHERE res.res_id_evaluacion='".$idEvaluacion."' AND res.res_id_pregunta='".$idPregunta."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]}),
-            (SELECT count(res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res
-            INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=0 AND resp.institucion={$config['conf_id_institucion']} AND resp.year={$_SESSION["bd"]}
-            WHERE res.res_id_evaluacion='".$idEvaluacion."' AND res.res_id_pregunta='".$idPregunta."' AND res.institucion={$config['conf_id_institucion']} AND res.year={$_SESSION["bd"]})");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
-        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        $sql = "SELECT
+        (SELECT count(res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res
+        INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=1 AND resp.institucion=res.institucion AND resp.year=res.year
+        WHERE res.res_id_evaluacion=? AND res.res_id_pregunta=? AND res.institucion=? AND res.year=?),
+        (SELECT count(res_id) FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados res
+        INNER JOIN ".BD_ACADEMICA.".academico_actividad_respuestas resp ON resp.resp_id_pregunta=res.res_id_pregunta AND resp.resp_id=res.res_id_respuesta AND resp.resp_correcta=0 AND resp.institucion=res.institucion AND resp.year=res.year
+        WHERE res.res_id_evaluacion=? AND res.res_id_pregunta=? AND res.institucion=? AND res.year=?)";
+
+        $parametros = [$idEvaluacion, $idPregunta, $config['conf_id_institucion'], $_SESSION["bd"], $idEvaluacion, $idPregunta, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
 
         return $resultado;
     }
@@ -551,14 +551,14 @@ class Evaluaciones extends BindSQL{
      * @return array $resultado
      */
     public static function compararRespuestas(mysqli $conexion, array $config, string $idEvaluacion, string $idEstudiante, string $idPregunta, string $idRespuesta){
-        try{
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados
-            WHERE res_id_evaluacion='".$idEvaluacion."' AND res_id_estudiante='".$idEstudiante."' AND res_id_pregunta='".$idPregunta."' AND res_id_respuesta='".$idRespuesta."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
-        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados
+        WHERE res_id_evaluacion=? AND res_id_estudiante=? AND res_id_pregunta=? AND res_id_respuesta=? AND institucion=? AND year=?";
+
+        $parametros = [$idEvaluacion, $idEstudiante, $idPregunta, $idRespuesta, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
 
         return $resultado;
     }
@@ -569,12 +569,11 @@ class Evaluaciones extends BindSQL{
      * @param array $config
      */
     public static function eliminarResultados(mysqli $conexion, array $config){
-        try{
-            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados WHERE institucion=? AND year=?";
+
+        $parametros = [$config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -584,12 +583,11 @@ class Evaluaciones extends BindSQL{
      * @param string $idEstudiante
      */
     public static function eliminarResultadosEstudiante(mysqli $conexion, array $config, string $idEstudiante){
-        try{
-            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados WHERE res_id_estudiante='" . $idEstudiante . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados WHERE res_id_estudiante=? AND institucion=? AND year=?";
+
+        $parametros = [$idEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -600,13 +598,11 @@ class Evaluaciones extends BindSQL{
      * @param string $idEstudiante
      */
     public static function eliminarIntentosEstudiante(mysqli $conexion, array $config, string $idEvaluacion, string $idEstudiante){
-        try{
-            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados 
-            WHERE res_id_evaluacion='".$idEvaluacion."' AND res_id_estudiante='".$idEstudiante."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados WHERE res_id_evaluacion=? AND res_id_estudiante=? AND institucion=? AND year=?";
+
+        $parametros = [$idEvaluacion, $idEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -616,12 +612,11 @@ class Evaluaciones extends BindSQL{
      * @param string $idEvaluacion
      */
     public static function eliminarResultadosEvaluacion(mysqli $conexion, array $config, string $idEvaluacion){
-        try{
-            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados WHERE res_id_evaluacion='" . $idEvaluacion . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados WHERE res_id_evaluacion=? AND institucion=? AND year=?";
+
+        $parametros = [$idEvaluacion, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -634,14 +629,13 @@ class Evaluaciones extends BindSQL{
      * @return mysqli_result $consulta
      */
     public static function traerResultadoEvaluacion(mysqli $conexion, array $config, string $idEvaluacion){
-        try{
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados WHERE res_id_evaluacion='".$idEvaluacion."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados WHERE res_id_evaluacion=? AND institucion=? AND year=?";
 
-        return $consulta;
+        $parametros = [$idEvaluacion, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
     }
 
     /**
@@ -655,14 +649,14 @@ class Evaluaciones extends BindSQL{
      * @param string $archivo
      */
     public static function guardarResultado(mysqli $conexion, array $config, string $idEvaluacion, string $idEstudiante, string $idPregunta, string $idRespuesta, string $archivo){
-        $codigo=Utilidades::generateCode("RES");
-        try{
-            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados(res_id, res_id_pregunta, res_id_respuesta, res_id_estudiante, res_id_evaluacion, res_archivo, institucion, year)
-            VALUES('".$codigo."', '".$idPregunta."', '".$idRespuesta."', '".$idEstudiante."', '".$idEvaluacion."', '".$archivo."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        global $conexionPDO;
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_actividad_evaluaciones_resultados');
+
+        $sql = "INSERT INTO ".BD_ACADEMICA.".academico_actividad_evaluaciones_resultados(res_id, res_id_pregunta, res_id_respuesta, res_id_estudiante, res_id_evaluacion, res_archivo, institucion, year) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        $parametros = [$codigo, $idPregunta, $idRespuesta, $idEstudiante, $idEvaluacion, $archivo, $config['conf_id_institucion'], $_SESSION["bd"]];
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
