@@ -835,15 +835,13 @@ class Evaluaciones extends BindSQL{
      * @return mysqli_result $consulta
      */
     public static function traerRespuestaPregunta(mysqli $conexion, array $config, string $idPregunta){
-        try{
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_respuestas
-            WHERE resp_id_pregunta='".$idPregunta."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_respuestas WHERE resp_id_pregunta=? AND institucion=? AND year=?";
 
-        return $consulta;
+        $parametros = [$idPregunta, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
     }
 
     /**
@@ -854,13 +852,14 @@ class Evaluaciones extends BindSQL{
      * @param string $idPregunta
      */
     public static function guardarRespuestaBD(mysqli $conexion, array $config, array $datosRespuesta, string $idPregunta){
+        global $conexionPDO;
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_actividad_respuestas');
 
-        $codigoR=Utilidades::generateCode("RES");
-        try{
-            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_respuestas(resp_id, resp_descripcion, resp_correcta, resp_id_pregunta, resp_imagen, institucion, year)VALUES('".$codigoR."', '".$datosRespuesta['resp_descripcion']."', '".$datosRespuesta['resp_correcta']."', '".$idPregunta."', '".$datosRespuesta['resp_imagen']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
+        $sql = "INSERT INTO ".BD_ACADEMICA.".academico_actividad_respuestas(resp_id, resp_descripcion, resp_correcta, resp_id_pregunta, resp_imagen, institucion, year)VALUES(?, ?, ?, ?, ?, ?, ?)";
+        
+        $parametros = [$codigo, $datosRespuesta['resp_descripcion'], $datosRespuesta['resp_correcta'], $idPregunta, $datosRespuesta['resp_imagen'], $config['conf_id_institucion'], $_SESSION["bd"]];
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -872,11 +871,11 @@ class Evaluaciones extends BindSQL{
      */
     public static function actualizarEstadoRespuesta(mysqli $conexion, array $config, string $idRespuesta, int $estado){
 
-        try{
-            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_respuestas SET resp_correcta='".$estado."' WHERE resp_id='".$idRespuesta."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_actividad_respuestas SET resp_correcta=? WHERE resp_id=? AND institucion=? AND year=?";
+
+        $parametros = [$estado, $idRespuesta, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -887,11 +886,11 @@ class Evaluaciones extends BindSQL{
      */
     public static function eliminarRespuesta(mysqli $conexion, array $config, string $idRespuesta){
 
-        try{
-            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_respuestas WHERE resp_id='".$idRespuesta."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_actividad_respuestas WHERE resp_id=? AND institucion=? AND year=?";
+
+        $parametros = [$idRespuesta, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -902,11 +901,11 @@ class Evaluaciones extends BindSQL{
      */
     public static function actualizarRespuesta(mysqli $conexion, array $config, array $POST){
 
-        try{
-            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividad_respuestas SET resp_descripcion='".$POST["valor"]."' WHERE resp_id='".$POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_actividad_respuestas SET resp_descripcion=? WHERE resp_id=? AND institucion=? AND year=?";
+
+        $parametros = [mysqli_real_escape_string($conexion,$POST["valor"]), $POST["idR"], $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -916,12 +915,38 @@ class Evaluaciones extends BindSQL{
      * @param array $POST
      */
     public static function guardarRespuesta(mysqli $conexion, array $config, array $POST){
-        $codigo=Utilidades::generateCode("RES");
+        global $conexionPDO;
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_actividad_respuestas');
 
-        try{
-            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_respuestas(resp_id, resp_descripcion, resp_correcta, resp_id_pregunta, institucion, year)VALUES('".$codigo."', '".$POST["valor"]."', 0, '".$POST["pregunta"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
+        $sql = "INSERT INTO ".BD_ACADEMICA.".academico_actividad_respuestas(resp_id, resp_descripcion, resp_correcta, resp_id_pregunta, institucion, year)VALUES('".$codigo."', '".$POST["valor"]."', 0, '".$POST["pregunta"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})";
+        
+        $parametros = [$codigo, mysqli_real_escape_string($conexion,$POST["valor"]), 0, $POST["pregunta"], $config['conf_id_institucion'], $_SESSION["bd"]];
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+    }
+
+    /**
+     * Este metodo me guarda la informacion de una respuesta
+     * @param PDO    $conexionPDO
+     * @param string $insert
+     * @param array  $parametros
+    **/
+    public static function guardarRespuestas (
+        PDO     $conexionPDO,
+        string  $insert,
+        array   $parametros
+    )
+    {
+        $campos = explode(',', $insert);
+        $numCampos = count($campos);
+        $signosPreguntas = str_repeat('?,', $numCampos);
+        $signosPreguntas = rtrim($signosPreguntas, ',');
+
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_actividad_respuestas');
+        $parametros[] = $codigo;
+
+        $sql = "INSERT INTO ".BD_ACADEMICA.".academico_actividad_respuestas({$insert}) VALUES ({$signosPreguntas})";
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 }
