@@ -125,18 +125,17 @@ class Foros{
      * @return mysqli_result $consulta
      */
     public static function traerComentariosForos(mysqli $conexion, array $config, string $idForo, string $filtro = ''){
-        try{
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios com
-            INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=com_id_estudiante AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-            WHERE com_id_foro='".$idForo."' AND com.institucion={$config['conf_id_institucion']} AND com.year={$_SESSION["bd"]}
-            $filtro
-            ORDER BY com_id DESC");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios com
+        INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=com_id_estudiante AND uss.institucion=com.institucion AND uss.year=com.year
+        WHERE com_id_foro=? AND com.institucion=? AND com.year=?
+        {$filtro}
+        ORDER BY com_id DESC";
 
-        return $consulta;
+        $parametros = [$idForo, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
     }
     
     /**
@@ -146,12 +145,11 @@ class Foros{
      * @param string $idComentario
      */
     public static function eliminarComentario(mysqli $conexion, array $config, string $idComentario){
-        try{
-            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios WHERE com_id='" . $idComentario . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios WHERE com_id=? AND institucion=? AND year=?";
+
+        $parametros = [$idComentario, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
     
     /**
@@ -160,12 +158,11 @@ class Foros{
      * @param array $config
      */
     public static function eliminarTodosComentario(mysqli $conexion, array $config){
-        try{
-            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios WHERE institucion=? AND year=?";
+
+        $parametros = [$config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
     
     /**
@@ -175,12 +172,11 @@ class Foros{
      * @param string $idEstudiante
      */
     public static function eliminarComentarioEstudiante(mysqli $conexion, array $config, string $idEstudiante){
-        try{
-            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios WHERE com_id_estudiante='" . $idEstudiante . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios WHERE com_id_estudiante=? AND institucion=? AND year=?";
+
+        $parametros = [$idEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
     
     /**
@@ -190,12 +186,11 @@ class Foros{
      * @param string $idForo
      */
     public static function eliminarComentarioForo(mysqli $conexion, array $config, string $idForo){
-        try{
-            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios WHERE com_id_foro='" . $idForo . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_actividad_foro_comentarios WHERE com_id_foro=? AND institucion=? AND year=?";
+
+        $parametros = [$idForo, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
     
     /**
@@ -205,15 +200,16 @@ class Foros{
      * @param array $POST
      */
     public static function guardarComentario(mysqli $conexion, array $config, array $POST){
-        $codigo=Utilidades::generateCode("COM");
-        try{
-            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_foro_comentarios(com_id, com_id_foro, com_descripcion, com_id_estudiante, com_fecha, institucion, year)VALUES('".$codigo."', '" . mysqli_real_escape_string($conexion,$POST["foro"]) . "', '" . mysqli_real_escape_string($conexion,$POST["contenido"]) . "', '" . $_SESSION["id"] . "', now(), {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        global $conexionPDO;
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_actividad_foro_comentarios');
 
-        return mysqli_insert_id($conexion);
+        $sql = "INSERT INTO ".BD_ACADEMICA.".academico_actividad_foro_comentarios(com_id, com_id_foro, com_descripcion, com_id_estudiante, com_fecha, institucion, year)VALUES(?, ?, ?, ?, now(), ?, ?)";
+        
+        $parametros = [$codigo, mysqli_real_escape_string($conexion,$POST["foro"]), mysqli_real_escape_string($conexion,$POST["contenido"]), $_SESSION["id"], $config['conf_id_institucion'], $_SESSION["bd"]];
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $codigo;
     }
     
     /**
