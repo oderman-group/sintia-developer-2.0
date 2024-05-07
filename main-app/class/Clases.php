@@ -68,14 +68,13 @@ class Clases {
      * @return array $resultado
      */
     public static function traerDatosClases(mysqli $conexion, array $config, string $idClase){
-        try{
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases 
-            WHERE cls_id='".$idClase."' AND cls_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-            $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_clases WHERE cls_id=? AND cls_estado=1 AND institucion=? AND year=?";
+
+        $parametros = [$idClase, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
 
         return $resultado;
     }
@@ -90,15 +89,13 @@ class Clases {
      * @return mysqli_result $consulta
      */
     public static function traerClasesCargaPeriodo(mysqli $conexion, array $config, string $idCarga, int $periodo){
-        try{
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases 
-            WHERE cls_id_carga='".$idCarga."' AND cls_periodo='".$periodo."' AND cls_registrada=1 AND cls_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_clases WHERE cls_id_carga=? AND cls_periodo=? AND cls_registrada=1 AND cls_estado=1 AND institucion=? AND year=?";
 
-        return $consulta;
+        $parametros = [$idCarga, $periodo, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
     }
     
     /**
@@ -112,15 +109,15 @@ class Clases {
      * @return array $resultado
      */
     public static function traerDatosAusencias(mysqli $conexion, array $config, string $idEstudiante, string $idCarga, int $periodo, string $year){
-        try{
-            $consulta = mysqli_query($conexion, "SELECT sum(aus_ausencias) FROM ".BD_ACADEMICA.".academico_clases cls 
-            INNER JOIN ".BD_ACADEMICA.".academico_ausencias aus ON aus.aus_id_clase=cls.cls_id AND aus.aus_id_estudiante='".$idEstudiante."' AND aus.institucion={$config['conf_id_institucion']} AND aus.year={$year}
-            WHERE cls.cls_id_carga='".$idCarga."' AND cls.cls_periodo='".$periodo."' AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$year}");
-            $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT sum(aus_ausencias) FROM ".BD_ACADEMICA.".academico_clases cls 
+        INNER JOIN ".BD_ACADEMICA.".academico_ausencias aus ON aus.aus_id_clase=cls.cls_id AND aus.aus_id_estudiante=? AND aus.institucion=cls.institucion AND aus.year=cls.year
+        WHERE cls.cls_id_carga=? AND cls.cls_periodo=? AND cls.institucion=? AND cls.year=?";
+
+        $parametros = [$idEstudiante, $idCarga, $periodo, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
 
         return $resultado;
     }
@@ -132,12 +129,11 @@ class Clases {
      * @param array $POST
      */
     public static function registrarAusenciaClase(mysqli $conexion, array $config, array $POST){
-        try{
-            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_registrada=1, cls_fecha_registro=now() WHERE cls_id='".$POST["codNota"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_registrada=1, cls_fecha_registro=now() WHERE cls_id=? AND institucion=? AND year=?";
+
+        $parametros = [$POST["codNota"], $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
     
     /**
@@ -147,12 +143,11 @@ class Clases {
      * @param array $POST
      */
     public static function cambiarEstadoClase(mysqli $conexion, array $config, array $POST){
-        try{
-            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_disponible='".$POST["valor"]."' WHERE cls_id='".$POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_disponible=? WHERE cls_id=? AND institucion=? AND year={$_SESSION["bd"]}";
+
+        $parametros = [$POST["valor"], $POST["idR"], $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
     
     /**
@@ -173,19 +168,18 @@ class Clases {
             $explode=explode(".", $FILES['videoClase']['name']);
             $extension = end($explode);
             $archivo = $_SESSION["inst"].'_'.$_SESSION["id"].'_clase_video_'.$POST["idR"].".".$extension;
-            $archivoSubido->subirArchivoStorage(FILE_VIDEO_CLASES, $archivo, $nombreInputFile,$storage); 
-            try{
-                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_video_clase='".$archivo."' WHERE cls_id='".$POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-            } catch (Exception $e) {
-                include("../compartido/error-catch-to-report.php");
-            }
+            $archivoSubido->subirArchivoStorage(FILE_VIDEO_CLASES, $archivo, $nombreInputFile,$storage);
+            
+            $sql = "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_video_clase=? WHERE cls_id=? AND institucion=? AND year=?";
+            $parametros = [$archivo, $POST["idR"], $config['conf_id_institucion'], $_SESSION["bd"]];
+            $resultado = BindSQL::prepararSQL($sql, $parametros);
+    
         }else if(!empty($POST["videoClase"])){
-            try{
-                $storage->getBucket()->object(FILE_VIDEO_CLASES . $POST["videoClase"])->delete();
-                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_video_clase='' WHERE cls_id='".$POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-            } catch (Exception $e) {
-                include("../compartido/error-catch-to-report.php");
-            }
+            $storage->getBucket()->object(FILE_VIDEO_CLASES . $POST["videoClase"])->delete();
+            
+            $sql = "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_video_clase='' WHERE cls_id=? AND institucion=? AND year=?";
+            $parametros = [$POST["idR"], $config['conf_id_institucion'], $_SESSION["bd"]];
+            $resultado = BindSQL::prepararSQL($sql, $parametros);
 
         }
         //Archivos
@@ -197,39 +191,36 @@ class Clases {
             $archivo = uniqid($_SESSION["inst"].'_'.$_SESSION["id"].'_file1_').".".$extension;
             @unlink($destino."/".$archivo);
             move_uploaded_file($FILES['file']['tmp_name'], $destino ."/".$archivo);
-            try{
-                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_archivo='".$archivo."' WHERE cls_id='".$POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-            } catch (Exception $e) {
-                include("../compartido/error-catch-to-report.php");
-            }
+            
+            $sql = "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_archivo=? WHERE cls_id=? AND institucion=? AND year=?";
+            $parametros = [$archivo, $POST["idR"], $config['conf_id_institucion'], $_SESSION["bd"]];
+            $resultado = BindSQL::prepararSQL($sql, $parametros);
         }
         
         if(!empty($FILES['file2']['name'])){
             $archivoSubido->validarArchivo($FILES['file2']['size'], $FILES['file2']['name']);
             $explode=explode(".", $FILES['file2']['name']);
-            $extension = end($explode);
+            $extension2 = end($explode);
             $archivo2 = uniqid($_SESSION["inst"].'_'.$_SESSION["id"].'_file2_').".".$extension2;
             @unlink($destino."/".$archivo2);
             move_uploaded_file($FILES['file2']['tmp_name'], $destino ."/".$archivo2);
-            try{
-                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_archivo2='".$archivo2."' WHERE cls_id='".$POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-            } catch (Exception $e) {
-                include("../compartido/error-catch-to-report.php");
-            }
+            
+            $sql = "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_archivo2=? WHERE cls_id=? AND institucion=? AND year=?";
+            $parametros = [$archivo2, $POST["idR"], $config['conf_id_institucion'], $_SESSION["bd"]];
+            $resultado = BindSQL::prepararSQL($sql, $parametros);
         }
         
         if(!empty($FILES['file3']['name'])){
             $archivoSubido->validarArchivo($FILES['file3']['size'], $FILES['file3']['name']);
             $explode=explode(".", $FILES['file3']['name']);
-            $extension = end($explode);
+            $extension3 = end($explode);
             $archivo3 = uniqid($_SESSION["inst"].'_'.$_SESSION["id"].'_file3_').".".$extension3;
             @unlink($destino."/".$archivo3);
             move_uploaded_file($FILES['file3']['tmp_name'], $destino ."/".$archivo3);
-            try{
-                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_archivo3='".$archivo3."' WHERE cls_id='".$POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-            } catch (Exception $e) {
-                include("../compartido/error-catch-to-report.php");
-            }
+            
+            $sql = "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_archivo3=? WHERE cls_id=? AND institucion=? AND year=?";
+            $parametros = [$archivo3, $POST["idR"], $config['conf_id_institucion'], $_SESSION["bd"]];
+            $resultado = BindSQL::prepararSQL($sql, $parametros);
         }
         
         $findme   = '?v=';
@@ -241,12 +232,12 @@ class Clases {
         
         $date = date('Y-m-d', strtotime(str_replace('-', '/', $POST["fecha"])));
         
-        try{
-            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_tema='".mysqli_real_escape_string($conexion,$POST["contenido"])."', cls_fecha='".$date."', cls_video='".$video."', cls_video_url='".$POST["video"]."', cls_descripcion='".mysqli_real_escape_string($conexion,$POST["descripcion"])."', cls_nombre_archivo1='".$POST["archivo1"]."', cls_nombre_archivo2='".$POST["archivo2"]."', cls_nombre_archivo3='".$POST["archivo3"]."', cls_disponible='".$disponible."', cls_hipervinculo='".$POST["vinculo"]."', cls_unidad='".$POST["unidad"]."'
-            WHERE cls_id='".$POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include("../compartido/error-catch-to-report.php");
-        }
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_tema=?, cls_fecha=?, cls_video=?, cls_video_url=?, cls_descripcion=?, cls_nombre_archivo1=?, cls_nombre_archivo2=?, cls_nombre_archivo3=?, cls_disponible=?, cls_hipervinculo=?, cls_unidad=?
+        WHERE cls_id=? AND institucion=? AND year=?";
+
+        $parametros = [mysqli_real_escape_string($conexion,$POST["contenido"]), $date, $video, $POST["video"], mysqli_real_escape_string($conexion,$POST["descripcion"]), $POST["archivo1"], $POST["archivo2"], $POST["archivo3"], $disponible, $POST["vinculo"], $POST["unidad"], $POST["idR"], $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
     
     /**
@@ -259,15 +250,14 @@ class Clases {
      * @return mysqli_result $consulta
      */
     public static function listarClasesBD(mysqli $conexion, array $config, string $idCarga, int $idPeriodo){
-        try{
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases 
-            WHERE cls_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} AND ((cls_compartir=1 AND cls_id_carga!='".$idCarga."') OR (cls_id_carga='".$idCarga."' AND cls_periodo!='".$idPeriodo."'))");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_clases 
+        WHERE cls_estado=1 AND institucion=? AND year=? AND ((cls_compartir=1 AND cls_id_carga!=?) OR (cls_id_carga=? AND cls_periodo!=?))";
 
-        return $consulta;
+        $parametros = [$config['conf_id_institucion'], $_SESSION["bd"], $idCarga, $idCarga, $idPeriodo];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
     }
     
     /**
@@ -277,12 +267,7 @@ class Clases {
      * @param string $idClase
      */
     public static function eliminarClases(mysqli $conexion, array $config, string $idClase){
-        try{
-            $consultaRegistro=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases WHERE cls_id='".$idClase."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
-        $registro = mysqli_fetch_array($consultaRegistro, MYSQLI_BOTH);
+        $registro = self::traerDatosClases($conexion, $config, $idClase);
         
         $ruta = ROOT_PATH."/main-app/files/clases";
         if(!empty($registro['cls_archivo']) && file_exists($ruta."/".$registro['cls_archivo'])){
@@ -297,11 +282,9 @@ class Clases {
             unlink($ruta."/".$registro['cls_archivo3']);	
         }
         
-        try{
-            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_estado=0 WHERE cls_id='".$idClase."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_estado=0 WHERE cls_id=? AND institucion=? AND year=?";
+        $parametros = [$idClase, $config['conf_id_institucion'], $_SESSION["bd"]];
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
     
     /**
@@ -312,7 +295,8 @@ class Clases {
      * @param array $FILES
      */
     public static function guardarClases(mysqli $conexion, array $config, array $POST, array $FILES, string $idCarga, int $periodo){
-        $codigo=Utilidades::generateCode("CLS");
+        global $conexionPDO;
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_clases');
         
         $archivoSubido = new Archivos;
         global $storage;
@@ -367,11 +351,11 @@ class Clases {
             $disponible=0;
             if($POST["disponible"]==1) $disponible=1;
         
-            try{
-                mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_clases(cls_id, cls_tema, cls_fecha, cls_id_carga, cls_estado, cls_periodo, cls_video, cls_video_url, cls_archivo, cls_archivo2, cls_archivo3, cls_nombre_archivo1, cls_nombre_archivo2, cls_nombre_archivo3, cls_descripcion, cls_disponible, cls_meeting, cls_hipervinculo,cls_unidad, institucion, year,cls_video_clase)"." VALUES('".$codigo."', '".mysqli_real_escape_string($conexion,$POST["contenido"])."', '".$date."', '".$idCarga."', 1, '".$periodo."', '".$video."', '".$POST["video"]."', '".$archivo."', '".$archivo2."', '".$archivo3."', '".$POST["archivo1"]."', '".$POST["archivo2"]."', '".$POST["archivo3"]."', '".mysqli_real_escape_string($conexion,$POST["descripcion"])."', '".$disponible."', '".$POST["idMeeting"]."', '".$POST["vinculo"]."', '".$POST["unidad"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]},'".$claseVideo."')");
-            } catch (Exception $e) {
-                include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-            }
+            $sql = "INSERT INTO ".BD_ACADEMICA.".academico_clases(cls_id, cls_tema, cls_fecha, cls_id_carga, cls_estado, cls_periodo, cls_video, cls_video_url, cls_archivo, cls_archivo2, cls_archivo3, cls_nombre_archivo1, cls_nombre_archivo2, cls_nombre_archivo3, cls_descripcion, cls_disponible, cls_meeting, cls_hipervinculo,cls_unidad, institucion, year,cls_video_clase)"." VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            $parametros = [$codigo, mysqli_real_escape_string($conexion,$POST["contenido"]), $date, $idCarga, 1, $periodo, $video, $POST["video"], $archivo, $archivo2, $archivo3, $POST["archivo1"], $POST["archivo2"], $POST["archivo3"], mysqli_real_escape_string($conexion,$POST["descripcion"]), $disponible, $POST["idMeeting"], $POST["vinculo"], $POST["unidad"], $config['conf_id_institucion'], $_SESSION["bd"],$claseVideo];
+            
+            $resultado = BindSQL::prepararSQL($sql, $parametros);
         }
 
         return $codigo;
@@ -388,16 +372,15 @@ class Clases {
      * @return mysqli_result $consulta
      */
     public static function listarClasesDiferentes(mysqli $conexion, array $config, string $idClases, string $idCarga, int $idPeriodo){
-        try{
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases 
-            WHERE cls_id_carga='".$idCarga."' AND cls_periodo='".$idPeriodo           ."' AND cls_estado=1 AND cls_id!='".$idClases."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-            ORDER BY cls_id DESC");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_clases 
+        WHERE cls_id_carga=? AND cls_periodo=? AND cls_estado=1 AND cls_id!=? AND institucion=? AND year=?
+        ORDER BY cls_id DESC";
 
-        return $consulta;
+        $parametros = [$idCarga, $idPeriodo, $idClases, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
     }
     
     /**
@@ -408,13 +391,12 @@ class Clases {
      * @param int $idPeriodo
      */
     public static function eliminarClasesCargas(mysqli $conexion, array $config, string $idCarga, int $idPeriodo){
-        try{
-            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_estado=0
-            WHERE cls_id_carga='".$idCarga."' AND cls_periodo='".$idPeriodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_estado=0
+        WHERE cls_id_carga=? AND cls_periodo=? AND institucion=? AND year=?";
+
+        $parametros = [$idCarga, $idPeriodo, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
