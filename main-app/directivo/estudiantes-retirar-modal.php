@@ -1,12 +1,12 @@
 <?php
-
+$idPaginaInterna = 'DT0074';
 
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
     echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
     exit();
 }
-require_once("../class/Estudiantes.php");
-require_once("../class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 
 $id = "";
 if (!empty($_GET["id"])) {
@@ -42,7 +42,7 @@ if ($e['mat_estado_matricula'] == MATRICULADO || $e['mat_estado_matricula'] == A
 <link href="../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
 </head>
 <!-- END HEAD -->
-<?php include("../compartido/body.php"); ?>
+<?php include(ROOT_PATH."/main-app/compartido/body.php"); ?>
 <div class="panel">
     <header class="panel-heading panel-heading-purple"><?= $tituloFormulario ?></header>
     <div class="panel-body">
