@@ -3,6 +3,7 @@ require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.ph
 require_once(ROOT_PATH."/main-app/class/servicios/GradoServicios.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once ROOT_PATH."/main-app/class/Conexion.php";
+require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 class Grados {
 
     /**
@@ -112,17 +113,15 @@ class Grados {
         string $grado,
         int $periodo,
     ){
-        
-        $resultado = [];
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos WHERE gvp_grado=? AND gvp_periodo=? AND institucion=? AND year=?";
 
-        try {
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados_periodos
-            WHERE gvp_grado='" . $grado . "' AND gvp_periodo='" . $periodo . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-            $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $parametros = [$grado, $periodo, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
+        
         return $resultado;
     }
 
