@@ -47,7 +47,7 @@ class Movimientos {
       if(!empty($parametrosArray["filtro"])){
         $sqlFiltro =$parametrosArray["filtro"];
       }
-      $sqlInicial = "SELECT * FROM " . BD_FINANCIERA . ".finanzas_cuentas fc
+      $sqlInicial = "SELECT fc.*, uss.*, fc.id_nuevo AS id_nuevo_movimientos FROM " . BD_FINANCIERA . ".finanzas_cuentas fc
       INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=fcu_usuario AND uss.institucion='$institucion' AND uss.year='$year'
 	  WHERE fcu_id=fcu_id AND fc.institucion='$institucion' AND fc.year='$year' ".$sqlFinal." ".$sqlFiltro." 
       ORDER BY fcu_id";     

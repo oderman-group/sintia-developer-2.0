@@ -94,7 +94,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
         <table width="100%" cellspacing="5" cellpadding="5" border="0" rules="none">
             <tr>
-                <td>Documento:<br> <?=is_numeric($matriculadosDatos["mat_documento"]) && strpos($matriculadosDatos["mat_documento"], '.') !== true ? number_format($matriculadosDatos["mat_documento"], 0, ",", ".") : $matriculadosDatos["mat_documento"];?></td>
+                <td>Documento:<br> <?=strpos($matriculadosDatos["mat_documento"], '.') !== true && is_numeric($matriculadosDatos["mat_documento"]) ? number_format($matriculadosDatos["mat_documento"],0,",",".") : $matriculadosDatos["mat_documento"];?></td>
                 <td>Nombre:<br> <?= Estudiantes::NombreCompletoDelEstudiante($matriculadosDatos); ?></td>
                 <td>Grado:<br> <?= $cursoActual["gra_nombre"] . " " . $matriculadosDatos["gru_nombre"]; ?></td>
                 <td>Periodo:<br> <b><?= $periodoActuales . " (" . date("Y") . ")"; ?></b></td>
