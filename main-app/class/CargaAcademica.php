@@ -446,13 +446,12 @@ class CargaAcademica {
      */
     public static function validarCursosComplementario(mysqli $conexion, array $config, string $idEstudiante, string $idCarga){
         $num=0;
-        try{
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas_estudiantes WHERE carpest_carga='".$idCarga."' AND carpest_estudiante='".$idEstudiante."' AND carpest_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
-        $num = mysqli_num_rows($consulta);
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_cargas_estudiantes WHERE carpest_carga=? AND carpest_estudiante=? AND carpest_estado=1 AND institucion=? AND year=?";
+
+        $parametros = [$idCarga, $idEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]];
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        
+        $num = mysqli_num_rows($resultado);
 
         return $num;
     }
