@@ -77,6 +77,7 @@ if(!Modulos::validarPermisoEdicion()){
 						
                         <div class="col-sm-12">
                         <span style="color: blue; font-size: 15px;" id="respuestaUsuario"></span>
+                        <span style="color: blue; font-size: 15px;" id="respuestaUsuario2"></span>
 						<?php include("../../config-general/mensajes-informativos.php"); ?>
 
 						<nav>
