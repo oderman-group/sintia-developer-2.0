@@ -195,7 +195,7 @@
             <div class="form-group row">
                 <label class="col-sm-2 control-label">Documento</label>
                 <div class="col-sm-4">
-                    <input type="text" name="documento" class="form-control" value="<?=$datosEditar['uss_documento'];?>" <?=$readOnly;?> <?=$disabledPermiso;?>>
+                    <input type="text" name="documento" id="documento" class="form-control" data-id-usuario="<?=$datosEditar['id_nuevo'];?>" oninput="validarDocumento(this)" value="<?=$datosEditar['uss_documento'];?>" <?=$readOnly;?> <?=$disabledPermiso;?>>
                 </div>
             </div>
             
