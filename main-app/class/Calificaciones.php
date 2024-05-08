@@ -673,4 +673,49 @@ class Calificaciones {
         return $resultado;
     }
 
+    /**
+     * Este metodo me consultas las evidencias de una institucion
+     * @param array     $config
+     * @param string    $yearBd
+    **/
+    public static function traerEvidenciasInstitucion (
+        array   $config, 
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_evidencias WHERE institucion=? AND year=?";
+
+        $parametros = [$config['conf_id_institucion'], $year];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
+    }
+
+    /**
+     * Este metodo me trae la información de una evidencia
+     * @param array     $config
+     * @param string    $idEvidencia
+     * @param string    $yearBd
+    **/
+    public static function traerDatosEvidencias (
+        array   $config, 
+        string  $idEvidencia,
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_evidencias WHERE evid_id=? AND institucion=? AND year=?";
+
+        $parametros = [$idEvidencia, $config['conf_id_institucion'], $year];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
+
+        return $resultado;
+    }
 }
