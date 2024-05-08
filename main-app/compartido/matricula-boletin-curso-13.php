@@ -246,21 +246,10 @@ while($fila2=mysqli_fetch_array($consulta_a_mat, MYSQLI_BOTH)){
 			<?php 
 			if($notaDelEstudiante['bol_nota']!=""){
 				$desempenoNotaP = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaDelEstudiante['bol_nota'], $year);
-				if($datosUsr["mat_grado"]>100){
-					$notaF = ceil($notaDelEstudiante['bol_nota']);
-					/*
-					switch($notaF){
-						case 1: echo "D"; break;
-						case 2: echo "I"; break;
-						case 3: echo "A"; break;
-						case 4: echo "S"; break;
-						case 5: echo "E"; break;
-					}
-					*/
+				if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
 					echo $desempenoNotaP['notip_nombre'];
 				}else{
 					echo $notaDelEstudiante['bol_nota']."<br>".$desempenoNotaP['notip_nombre'];
-					//echo $notas[$l]."<br>".$desempenoNotaP['notip_nombre'];
 				}
 
 				if (!isset($promedios[$l])) {
