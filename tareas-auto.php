@@ -3,6 +3,9 @@ include("conexion.php");
 require_once(ROOT_PATH."/main-app/class/EnviarEmail.php");
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
+require_once ROOT_PATH."/main-app/class/Asignaturas.php";
+require_once ROOT_PATH."/main-app/class/Grupos.php";
+require_once ROOT_PATH."/main-app/class/CargaAcademica.php";
 $year=date("Y");
 
 
@@ -244,12 +247,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 		}
 	
 		//GRUPOS
-		try{
-			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion='".$cDemo['demo_institucion']."'");
-		} catch (Exception $e) {
-			echo $e->getMessage();
-			exit();
-		}
+		Grupos::eliminarTodosGrupos($cDemo['demo_institucion']);
 	
 		//CATEGORIA NOTAS
 		try{
@@ -260,12 +258,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 		}
 	
 		//TIPOS DE NOTAS
-		try{
-			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE institucion='".$cDemo['demo_institucion']."'");
-		} catch (Exception $e) {
-			echo $e->getMessage();
-			exit();
-		}
+		CargaAcademica::eliminarTodosTiposNota($cDemo['demo_institucion']);
 		
 		//AREAS
 		try{
@@ -276,12 +269,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 		}
 		
 		//MATERIAS
-		try{
-			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_materias WHERE institucion='".$cDemo['demo_institucion']."'");
-		} catch (Exception $e) {
-			echo $e->getMessage();
-			exit();
-		}
+		Asignaturas::eliminarTodasAsignaturas($cDemo['demo_institucion']);
 		
 		//TODOS LOS USUARIOS
 		try{

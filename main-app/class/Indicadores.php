@@ -22,18 +22,16 @@ class Indicadores {
         int     $periodo
     )
     {
-        try{
-            $consulta=mysqli_query($conexion, "SELECT
-            (SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-            WHERE ipc_carga='".$idcarga."' AND ipc_periodo='".$periodo."' AND ipc_creado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
-            (SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-            WHERE ipc_carga='".$idcarga."' AND ipc_periodo='".$periodo."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
-            (SELECT count(*) FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-            WHERE ipc_carga='".$idcarga."' AND ipc_periodo='".$periodo."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
-        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        $sql = "SELECT
+        (SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga=? AND ipc_periodo=? AND ipc_creado=0 AND institucion=? AND year=?),
+        (SELECT sum(ipc_valor) FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga=? AND ipc_periodo=? AND ipc_creado=1 AND institucion=? AND year=?),
+        (SELECT count(*) FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga=? AND ipc_periodo=? AND ipc_creado=1 AND institucion=? AND year=?)";
+
+        $parametros = [$idcarga, $periodo, $config['conf_id_institucion'], $_SESSION["bd"], $idcarga, $periodo, $config['conf_id_institucion'], $_SESSION["bd"], $idcarga, $periodo, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
 
         return $resultado;
     }
@@ -77,11 +75,11 @@ class Indicadores {
             $valorIndicador     = !empty($indicadorCopiado['ipc_valor']) ? $indicadorCopiado['ipc_valor'] : NULL;
         }
 
-		try{
-			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_carga(ipc_id, ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, ipc_copiado, ipc_evaluacion, institucion, year) VALUES('".$codigo."', '".$idcarga."', '".$idIndicador."', '".$valorIndicador."', '".$periodo."', '".$creado."', '".$copiado."', '".$evaluacion."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-		} catch (Exception $e) {
-			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-		}
+        $sql = "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_carga(ipc_id, ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, ipc_copiado, ipc_evaluacion, institucion, year) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $parametros = [$codigo, $idcarga, $idIndicador, $valorIndicador, $periodo, $creado, $copiado, $evaluacion, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -100,11 +98,11 @@ class Indicadores {
         float   $valorIndicadores
     )
     {
-		try{
-			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_indicadores_carga SET ipc_valor='".$valorIndicadores."' WHERE ipc_carga='".$idcarga."' AND ipc_periodo='".$periodo."' AND ipc_creado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		} catch (Exception $e) {
-			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-		}
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_indicadores_carga SET ipc_valor=? WHERE ipc_carga=? AND ipc_periodo=? AND ipc_creado=1 AND institucion=? AND year=?";
+
+        $parametros = [$valorIndicadores, $idcarga, $periodo, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -123,12 +121,13 @@ class Indicadores {
         string  $idIndicador
     )
     {
-        try{
-            $consulta=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga='".$idCarga."' AND ipc_indicador='".$idIndicador."' AND ipc_creado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
-        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga=? AND ipc_indicador=? AND ipc_creado=0 AND institucion=? AND year=?";
+
+        $parametros = [$idCarga, $idIndicador, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
 
         return $resultado;
     }
@@ -147,11 +146,11 @@ class Indicadores {
         string  $idIndicador
     )
     {
-        try{
-            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga='".$idCarga."' AND ipc_indicador='".$idIndicador."' AND ipc_creado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga=? AND ipc_indicador=? AND ipc_creado=0 AND institucion=? AND year=?";
+
+        $parametros = [$idCarga, $idIndicador, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -176,15 +175,15 @@ class Indicadores {
         if (!empty($year)) {
             $yearConsulta = $year;
         }
-        try{
-            $consulta=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-            INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$yearConsulta}
-            WHERE ipc.ipc_carga='".$idCarga."' AND ipc.ipc_periodo='".$periodo."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$yearConsulta}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
+        INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion=ipc.institucio AND ai.year=ipc.year
+        WHERE ipc.ipc_carga=? AND ipc.ipc_periodo=? AND ipc.institucion=? AND ipc.year=?";
 
-        return $consulta;
+        $parametros = [$idCarga, $periodo, $config['conf_id_institucion'], $yearConsulta];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
     }
 
     /**
@@ -201,14 +200,15 @@ class Indicadores {
         string  $idIndicador
     )
     {
-        try{
-            $consulta=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga aic
-            INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=aic.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
-            WHERE aic.ipc_id='".$idIndicador."' AND aic.institucion={$config['conf_id_institucion']} AND aic.year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
-        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga aic
+        INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=aic.ipc_indicador AND ai.institucion=aic.institucion AND ai.year=aic.year
+        WHERE aic.ipc_id=? AND aic.institucion=? AND aic.year=?";
+
+        $parametros = [$idIndicador, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
 
         return $resultado;
     }
@@ -225,11 +225,11 @@ class Indicadores {
         string  $idIndicador
     )
     {
-        try{
-            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_id='" . $idIndicador . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_id=? AND institucion=? AND year=?";
+
+        $parametros = [$idIndicador, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -244,13 +244,13 @@ class Indicadores {
         array   $config
     )
     {
-        try{
-            $consulta=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_creado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_creado=0 AND institucion=? AND year=?";
 
-        return $consulta;
+        $parametros = [$config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
     }
 
     /**
@@ -269,16 +269,16 @@ class Indicadores {
         string  $filtro = "",
     )
     {
-        try{
-            $consulta=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-            INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
-            WHERE ipc.ipc_carga='".$idCarga."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]} $filtro
-            ORDER BY ipc.ipc_periodo");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
+        INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion=ipc.institucion AND ai.year=ipc.year
+        WHERE ipc.ipc_carga=? AND ipc.institucion=? AND ipc.year=? {$filtro}
+        ORDER BY ipc.ipc_periodo";
 
-        return $consulta;
+        $parametros = [$idCarga, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
     }
 
     /**
@@ -299,13 +299,13 @@ class Indicadores {
         int     $periodo
     )
     {
-        try{
-            $consulta=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga 
-            WHERE ipc_indicador='".$idIndicador."' AND ipc_carga='".$idCarga."' AND ipc_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
-        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_indicador=? AND ipc_carga=? AND ipc_periodo=? AND institucion=? AND year=?";
+
+        $parametros = [$idIndicador, $idCarga, $periodo, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
 
         return $resultado;
     }
@@ -324,11 +324,11 @@ class Indicadores {
         int     $periodo
     )
     {
-        try{
-            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga='".$idCarga."' AND ipc_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_indicadores_carga WHERE ipc_carga=? AND ipc_periodo=? AND institucion=? AND year=?";
+
+        $parametros = [$idCarga, $periodo, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -725,6 +725,51 @@ class Indicadores {
 
         $parametros = [$nota, $nota, $valor, $carga, $estudiante, $periodo, $idIndicador, $config['conf_id_institucion'], $year];
         
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+    }
+
+    /**
+     * Este metodo me guarda la relacion de un indicador y una carga
+    **/
+    public static function guardarRelacionIndicadorCarga (
+        PDO     $conexionPDO,
+        string  $insert,
+        array   $parametros
+    )
+    {
+        $campos = explode(',', $insert);
+        $numCampos = count($campos);
+        $signosPreguntas = str_repeat('?,', $numCampos);
+        $signosPreguntas = rtrim($signosPreguntas, ',');
+
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores_carga');
+        $parametros[] = $codigo;
+
+        $sql = "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_carga({$insert}) VALUES ({$signosPreguntas})";
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $codigo;
+    }
+
+    /**
+     * Este metodo me actualiza la relación de una carga y un periodo
+    **/
+    public static function actualizarRelacionIndicadorCargas (
+        array   $config,
+        string  $idIndicador,
+        string  $update,
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_indicadores_carga SET {$updateSql} WHERE ipc_id=? AND institucion=? AND year=?";
+
+        $parametros = array_merge($updateValues, [$idIndicador, $config['conf_id_institucion'], $year]);
+
         $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 

@@ -23,8 +23,6 @@ if(!empty($_POST["indicadores"]) and empty($_POST["calificaciones"])){
 	$indImpConsulta = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $_POST["cargaImportar"], $_POST["periodoImportar"]);
 
 	$datosInsert = '';
-	$sumCod = 1;
-
 	while($indImpDatos = mysqli_fetch_array($indImpConsulta, MYSQLI_BOTH)){
 		$idRegInd = $indImpDatos['ind_id'];
 
@@ -35,14 +33,8 @@ if(!empty($_POST["indicadores"]) and empty($_POST["calificaciones"])){
 
 		$copiado = 0;
 		if($indImpDatos['ipc_copiado']!=0) $copiado = $indImpDatos['ipc_copiado'];
-		$codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores_carga');
-		$codigo .= $sumCod;
 
-		try{
-			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_carga(ipc_id, ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, ipc_copiado, institucion, year) VALUES ('".$codigo."', '".$cargaConsultaActual."', '".$idRegInd."', '".$indImpDatos['ipc_valor']."', '".$periodoConsultaActual."', 1, '".$copiado."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-		} catch (Exception $e) {
-			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-		}
+		Indicadores::guardarRelacionIndicadorCarga($conexionPDO, "ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, ipc_copiado, institucion, year, ipc_id", [$cargaConsultaActual, $idRegInd, $indImpDatos['ipc_valor'], $periodoConsultaActual, 1, $copiado, $config['conf_id_institucion'], $_SESSION["bd"]]);
 	}
 
 	$ULR = 'indicadores.php';
@@ -58,7 +50,6 @@ if(!empty($_POST["calificaciones"])){
 	$indImpConsulta = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $_POST["cargaImportar"], $_POST["periodoImportar"]);
 
 	$datosInsertInd = '';
-	$sumCodInd = 1;
 	while($indImpDatos = mysqli_fetch_array($indImpConsulta, MYSQLI_BOTH)){
 		$idRegInd = $indImpDatos['ind_id'];
 
@@ -69,14 +60,8 @@ if(!empty($_POST["calificaciones"])){
 
 		$copiado = 0;
 		if($indImpDatos['ipc_copiado']!=0) $copiado = $indImpDatos['ipc_copiado'];
-		$codigo=Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores_carga');
-		$codigo .= $sumCodInd;
 
-		try{
-			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_carga(ipc_id, ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, ipc_copiado, institucion, year) VALUES('".$codigo."', '".$cargaConsultaActual."', '".$idRegInd."', '".$indImpDatos['ipc_valor']."', '".$periodoConsultaActual."', 1, '".$copiado."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-		} catch (Exception $e) {
-			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-		}
+		Indicadores::guardarRelacionIndicadorCarga($conexionPDO, "ipc_carga, ipc_indicador, ipc_valor, ipc_periodo, ipc_creado, ipc_copiado, institucion, year, ipc_id", [$cargaConsultaActual, $idRegInd, $indImpDatos['ipc_valor'], $periodoConsultaActual, 1, $copiado, $config['conf_id_institucion'], $_SESSION["bd"]]);
 
 		//Consultamos las calificaciones del indicador a Importar
 		$calImpConsulta = Actividades::traerActividadesCargaIndicador($config, $indImpDatos['ind_id'], $_POST["cargaImportar"], $_POST["periodoImportar"]);
