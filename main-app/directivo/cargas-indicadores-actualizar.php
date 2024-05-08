@@ -25,11 +25,10 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 
 	//Si vamos a relacionar los indicadores con los SABERES
 	if ($datosCargaActual['car_saberes_indicador'] == 1) {
-		try{
-			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_indicadores_carga SET ipc_evaluacion='" . $_POST["saberes"] . "' WHERE ipc_id='" . $_POST["idR"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		} catch (Exception $e) {
-			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-		}
+		$update="
+			ipc_evaluacion=" . $_POST["saberes"] . "
+		";
+		Indicadores::actualizarRelacionIndicadorCargas($config, $_POST["idR"], $update);
 	}
 
 	//Para los DIRECTIVOS los valores de los indicadores son de forma manual
@@ -41,11 +40,11 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 		$_POST["valor"] = $porcentajeRestante;
 	}
 
-	try{
-		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_indicadores_carga SET ipc_valor='" . $_POST["valor"] . "', ipc_creado='" . $_POST["creado"] . "' WHERE ipc_id='" . $_POST["idR"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-	} catch (Exception $e) {
-		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-	}
+	$update="
+		ipc_valor=" . $_POST["valor"] . ", 
+		ipc_creado=" . $_POST["creado"] . "
+	";
+	Indicadores::actualizarRelacionIndicadorCargas($config, $_POST["idR"], $update);
 
 	include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 	echo '<script type="text/javascript">window.location.href="cargas-indicadores.php?carga=' . $_GET["carga"] . '&docente=' . $_GET["docente"] . '";</script>';
