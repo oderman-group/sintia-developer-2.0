@@ -17,6 +17,8 @@ if(isset($_GET["year"])){
 $year=base64_decode($_GET["year"]);
 }
 
+$tamañoLogo = $_SESSION['idInstitucion'] == ICOLVEN ? 100 : 50;
+
 $modulo = 1;
 
 if (empty($_GET["periodo"])) {
@@ -133,7 +135,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
         ?>
 
         <div align="center" style="margin-bottom:20px;">
-    <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" width="100%"><br>
+    <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" width="<?=$tamañoLogo?>%"><br>
     <!-- <?=$informacion_inst["info_nombre"]?><br>
     BOLETÍN DE CALIFICACIONES<br> -->
 
