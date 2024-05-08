@@ -79,11 +79,11 @@ class Calificaciones {
     )
     {
 
-        try {
-            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_recuperaciones_notas WHERE rec_cod_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include("../compartido/error-catch-to-report.php");
-        }
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_recuperaciones_notas WHERE rec_cod_estudiante=? AND institucion=? AND year=?";
+
+        $parametros = [$idE, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -97,11 +97,11 @@ class Calificaciones {
     )
     {
 
-        try {
-            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_recuperaciones_notas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include("../compartido/error-catch-to-report.php");
-        }
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_recuperaciones_notas WHERE institucion=? AND year=?";
+
+        $parametros = [$config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
