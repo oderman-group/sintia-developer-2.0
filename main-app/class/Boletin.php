@@ -278,16 +278,15 @@ class Boletin {
         string $yearBd    = ''
     )
     {
-        global $conexion, $config;
+        global $config;
         $resultado = [];
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        try {
-            $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id_asg='" . $carga . "' AND niv_cod_estudiante='" . $estudiante . "' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id_asg=? AND niv_cod_estudiante=? AND institucion=? AND year=?";
+
+        $parametros = [$carga, $estudiante, $config['conf_id_institucion'], $year];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
 
         return $resultado;
     }
