@@ -140,13 +140,11 @@ class Grados {
         string $curso,
         string $materia
     ){
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_intensidad_curso WHERE ipc_curso=? AND ipc_materia=? AND institucion=? AND year=?";
 
-        try {
-            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_intensidad_curso WHERE ipc_curso='".$curso."' AND ipc_materia='".$materia."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $parametros = [$curso, $materia, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -169,12 +167,11 @@ class Grados {
     ){
         $codigo=Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_intensidad_curso');
 
-        try {
-            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_intensidad_curso(ipc_id, ipc_curso, ipc_materia, ipc_intensidad, institucion, year)VALUES('".$codigo."', '".$curso."','".$materia."','".$ih."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "INSERT INTO ".BD_ACADEMICA.".academico_intensidad_curso(ipc_id, ipc_curso, ipc_materia, ipc_intensidad, institucion, year)VALUES(?, ?, ?, ?, ?, ?)";
+
+        $parametros = [$codigo, $curso, $materia, $ih, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -194,16 +191,15 @@ class Grados {
         string $curso,
         string $materia
     ){
-        
-        $resultado = [];
 
-        try {
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_intensidad_curso WHERE ipc_curso='".$curso."' AND ipc_materia='".$materia."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-            $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_intensidad_curso WHERE ipc_curso=? AND ipc_materia=? AND institucion=? AND year=?";
+
+        $parametros = [$curso, $materia, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
+        
         return $resultado;
     }
 
