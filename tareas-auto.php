@@ -3,6 +3,7 @@ include("conexion.php");
 require_once(ROOT_PATH."/main-app/class/EnviarEmail.php");
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
+require_once ROOT_PATH."/main-app/class/Asignaturas.php";
 require_once ROOT_PATH."/main-app/class/Grupos.php";
 $year=date("Y");
 
@@ -272,12 +273,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 		}
 		
 		//MATERIAS
-		try{
-			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_materias WHERE institucion='".$cDemo['demo_institucion']."'");
-		} catch (Exception $e) {
-			echo $e->getMessage();
-			exit();
-		}
+		Asignaturas::eliminarTodasAsignaturas($cDemo['demo_institucion']);
 		
 		//TODOS LOS USUARIOS
 		try{
