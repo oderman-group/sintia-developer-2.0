@@ -388,33 +388,29 @@ class AjaxCalificaciones {
     **/
     public static function ajaxGuardarObservacionBoletin($conexion, $codEstudiante, $carga, $observacion, $periodo)
     {
-        global $config;
+        global $config, $conexionPDO;
 
         if(trim($observacion)==""){
             $datosMensaje=["heading"=>"Nota vacia","estado"=>"warning","mensaje"=>"Digite una observación correcta."];
             return $datosMensaje;
         }
 
-        try{
-            $consultaNumD=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$carga."' AND bol_estudiante='".$codEstudiante."' AND bol_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga=? AND bol_estudiante=? AND bol_periodo=? AND institucion=? AND year=?";
+        $parametros = [$carga, $codEstudiante, $periodo, $config['conf_id_institucion'], $_SESSION["bd"]];
+        $consultaNumD = BindSQL::prepararSQL($sql, $parametros);
+
         $numD = mysqli_num_rows($consultaNumD);
 
         if($numD==0){
-            $codigoBOL=Utilidades::generateCode("BOL");
-            try{
-                mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_boletin(bol_id, bol_carga, bol_estudiante, bol_periodo, bol_tipo, bol_observaciones_boletin, bol_fecha_registro, bol_actualizaciones, institucion, year)VALUES('".$codigoBOL."', '".$carga."', '".$codEstudiante."', '".$periodo."', 1, '".mysqli_real_escape_string($conexion,$observacion)."', now(), 0, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-            } catch (Exception $e) {
-                include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-            }
+            $codigoBOL = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_boletin');
+    
+            $sql = "INSERT INTO ".BD_ACADEMICA.".academico_boletin(bol_id, bol_carga, bol_estudiante, bol_periodo, bol_tipo, bol_observaciones_boletin, bol_fecha_registro, bol_actualizaciones, institucion, year)VALUES(?, ?, ?, ?, ?, ?, now(), ?, ?, ?)";
+            $parametros = [$codigoBOL, $carga, $codEstudiante, $periodo, 1, mysqli_real_escape_string($conexion,$observacion), 0, $config['conf_id_institucion'], $_SESSION["bd"]];
+            $resultado = BindSQL::prepararSQL($sql, $parametros);
         }else{
-            try{
-                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_boletin SET bol_observaciones_boletin='".mysqli_real_escape_string($conexion,$observacion)."', bol_actualizaciones=bol_actualizaciones+1, bol_ultima_actualizacion=now() WHERE bol_carga='".$carga."' AND bol_estudiante='".$codEstudiante."' AND bol_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-            } catch (Exception $e) {
-                include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-            }
+            $sql = "UPDATE ".BD_ACADEMICA.".academico_boletin SET bol_observaciones_boletin=?, bol_actualizaciones=bol_actualizaciones+1, bol_ultima_actualizacion=now() WHERE bol_carga=? AND bol_estudiante=? AND bol_periodo=? AND institucion=? AND year=?";
+            $parametros = [mysqli_real_escape_string($conexion,$observacion), $carga, $codEstudiante, $periodo, $config['conf_id_institucion'], $_SESSION["bd"]];
+            $resultado = BindSQL::prepararSQL($sql, $parametros);
         }
         $datosEstudiante =Estudiantes::obtenerDatosEstudiante($codEstudiante);
 
@@ -450,11 +446,9 @@ class AjaxCalificaciones {
         $datosEstudiante =Estudiantes::obtenerDatosEstudiante($codEstudiante);
 
         //Consultamos si tiene registros en el boletín
-        try{
-            $consultaBoletinDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$codEstudiante."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga=? AND bol_periodo=? AND bol_estudiante=? AND institucion=? AND year=?";
+        $parametros = [$carga, $periodo, $codEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]];
+        $consultaBoletinDatos = BindSQL::prepararSQL($sql, $parametros);
         $boletinDatos = mysqli_fetch_array($consultaBoletinDatos, MYSQLI_BOTH);
 
         $caso = 1; //Inserta la nueva definitiva del indicador normal
@@ -507,11 +501,9 @@ class AjaxCalificaciones {
             
             $notaDefIndicador = round($recuperacionIndicador[0],1);
 
-            try{
-                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_boletin SET bol_nota_anterior=bol_nota, bol_nota='".$notaDefIndicador."', bol_actualizaciones=bol_actualizaciones+1, bol_ultima_actualizacion=now(), bol_nota_indicadores='".$notaDefIndicador."', bol_tipo=3, bol_observaciones='Actualizada desde el indicador.' WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$codEstudiante."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-            } catch (Exception $e) {
-                include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-            }
+            $sql = "UPDATE ".BD_ACADEMICA.".academico_boletin SET bol_nota_anterior=bol_nota, bol_nota=?, bol_actualizaciones=bol_actualizaciones+1, bol_ultima_actualizacion=now(), bol_nota_indicadores=?, bol_tipo=3, bol_observaciones='Actualizada desde el indicador.' WHERE bol_carga=? AND bol_periodo=? AND bol_estudiante=? AND institucion=? AND year=?";
+            $parametros = [$notaDefIndicador, $notaDefIndicador, $carga, $periodo, $codEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]];
+            $resultado = BindSQL::prepararSQL($sql, $parametros);
             
             $mensajeNot = 'La recuperación del indicador de este periodo se ha guardado correctamente para el estudiante <b>'.Estudiantes::NombreCompletoDelEstudiante($datosEstudiante).'</b>. La nota definitiva de la asignatura ahora es <b>'.round($recuperacionIndicador[0],1)."</b>.";
             $heading = 'Cambios guardados';
