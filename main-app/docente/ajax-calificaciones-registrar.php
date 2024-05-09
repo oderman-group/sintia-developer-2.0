@@ -9,6 +9,7 @@ require_once(ROOT_PATH."/main-app/class/Actividades.php");
 require_once(ROOT_PATH."/main-app/class/AjaxCalificaciones.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 
 $operacionesPermitidas = [9, 10];
 
@@ -260,14 +261,15 @@ if($_POST["operacion"]==9){
 		}
 		
 		//Actualizamos la nota actual a los que la tengan nula.
-		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_indicadores_recuperacion SET rind_nota_actual=rind_nota_original
-		WHERE rind_carga='".$_POST["carga"]."' AND rind_estudiante='".$_POST["codEst"]."' AND rind_periodo='".$_POST["periodo"]."' AND rind_nota_actual IS NULL AND rind_nota_original=rind_nota AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-		");
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_indicadores_recuperacion SET rind_nota_actual=rind_nota_original WHERE rind_carga=? AND rind_estudiante=? AND rind_periodo=? AND rind_nota_actual IS NULL AND rind_nota_original=rind_nota AND institucion=? AND year=?";
+		$parametros = [$_POST["carga"], $_POST["codEst"], $_POST["periodo"], $config['conf_id_institucion'], $_SESSION["bd"]];
+		$consultaUpdate = BindSQL::prepararSQL($sql, $parametros);
 		
 		
 		//Se suman los decimales de todos los indicadores para obtener la definitiva de la asignatura
-		$consultaRecuperacionIndicador=mysqli_query($conexion, "SELECT SUM(rind_nota_actual) FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion 
-		WHERE rind_carga='".$_POST["carga"]."' AND rind_estudiante='".$_POST["codEst"]."' AND rind_periodo='".$_POST["periodo"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        $sql = "SELECT SUM(rind_nota_actual) FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_carga=? AND rind_estudiante=? AND rind_periodo=? AND institucion=? AND year=?";
+		$parametros = [$_POST["carga"], $_POST["codEst"], $_POST["periodo"], $config['conf_id_institucion'], $_SESSION["bd"]];
+		$consultaRecuperacionIndicador = BindSQL::prepararSQL($sql, $parametros);
 		$recuperacionIndicador = mysqli_fetch_array($consultaRecuperacionIndicador, MYSQLI_BOTH);
 		
 		

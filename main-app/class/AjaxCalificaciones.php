@@ -2,6 +2,7 @@
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 
 class AjaxCalificaciones {
 
@@ -449,6 +450,8 @@ class AjaxCalificaciones {
     **/
     public static function ajaxGuardarRecuperacionIndicadores($conexion, $config, $codEstudiante, $carga, $periodo, $codNota, $nota, $notaAnterior)
     {
+        global $conexionPDO;
+
         if(trim($nota)==""){
             $datosMensaje=["heading"=>"Nota vacia","estado"=>"warning","mensaje"=>"Digite una nota correcta."];
             return $datosMensaje;
@@ -482,42 +485,34 @@ class AjaxCalificaciones {
             $valorIndicador = ($indicador['ipc_valor']/100);
             $rindNotaActual = ($nota * $valorIndicador);
 
-            try{
-                $consultaNum=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_carga='".$carga."' AND rind_estudiante='".$codEstudiante."' AND rind_periodo='".$periodo."' AND rind_indicador='".$codNota."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-            } catch (Exception $e) {
-                include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-            }
+            $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_carga=? AND rind_estudiante=? AND rind_periodo=? AND rind_indicador=? AND institucion=? AND year=?";
+            $parametros = [$carga, $codEstudiante, $periodo, $codNota, $config['conf_id_institucion'], $_SESSION["bd"]];
+            $consultaNum = BindSQL::prepararSQL($sql, $parametros);
             $num = mysqli_num_rows($consultaNum);
 
             if($num==0){
-                try{
-                    $codigo=Utilidades::generateCode("RIN");
-                    mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_recuperacion(rind_id, rind_fecha_registro, rind_estudiante, rind_carga, rind_nota, rind_indicador, rind_periodo, rind_actualizaciones, rind_nota_actual, rind_valor_indicador_registro, institucion, year)VALUES('".$codigo."', now(), '".$codEstudiante."', '".$carga."', '".$nota."', '".$codNota."', '".$periodo."', 1, '".$rindNotaActual."', '".$indicador['ipc_valor']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-                } catch (Exception $e) {
-                    include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-                }
+                $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores_recuperacion');
+
+                $sql = "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_recuperacion(rind_id, rind_fecha_registro, rind_estudiante, rind_carga, rind_nota, rind_indicador, rind_periodo, rind_actualizaciones, rind_nota_actual, rind_valor_indicador_registro, institucion, year)VALUES(?, now(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                $parametros = [$codigo, $codEstudiante, $carga, $nota, $codNota, $periodo, 1, $rindNotaActual, $indicador['ipc_valor'], $config['conf_id_institucion'], $_SESSION["bd"]];
+                $resultado = BindSQL::prepararSQL($sql, $parametros);
             }else{
                 if($notaAnterior==""){$notaAnterior = "0.0";}
-                try{
-                    mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_indicadores_recuperacion SET rind_nota='".$nota."', rind_nota_anterior='".$notaAnterior."', rind_actualizaciones=rind_actualizaciones+1, rind_ultima_actualizacion=now(), rind_nota_actual='".$rindNotaActual."', rind_tipo_ultima_actualizacion=2, rind_valor_indicador_actualizacion='".$indicador['ipc_valor']."' WHERE rind_carga='".$carga."' AND rind_estudiante='".$codEstudiante."' AND rind_periodo='".$periodo."' AND rind_indicador='".$codNota."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                } catch (Exception $e) {
-                    include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-                }
+                
+                $sql = "UPDATE ".BD_ACADEMICA.".academico_indicadores_recuperacion SET rind_nota=?, rind_nota_anterior=?, rind_actualizaciones=rind_actualizaciones+1, rind_ultima_actualizacion=now(), rind_nota_actual=?, rind_tipo_ultima_actualizacion=2, rind_valor_indicador_actualizacion=? WHERE rind_carga=? AND rind_estudiante=? AND rind_periodo=? AND rind_indicador=? AND institucion=? AND year=?";
+                $parametros = [$nota, $notaAnterior, $rindNotaActual, $indicador['ipc_valor'], $carga, $codEstudiante, $periodo, $codNota, $config['conf_id_institucion'], $_SESSION["bd"]];
+                $resultado = BindSQL::prepararSQL($sql, $parametros);
             }
             
             //Actualizamos la nota actual a los que la tengan nula.
-            try{
-                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_indicadores_recuperacion SET rind_nota_actual=rind_nota_original WHERE rind_carga='".$carga."' AND rind_estudiante='".$codEstudiante."' AND rind_periodo='".$periodo."' AND rind_nota_actual IS NULL AND rind_nota_original=rind_nota AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-            } catch (Exception $e) {
-                include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-            }
+            $sql = "UPDATE ".BD_ACADEMICA.".academico_indicadores_recuperacion SET rind_nota_actual=rind_nota_original WHERE rind_carga=? AND rind_estudiante=? AND rind_periodo=? AND rind_nota_actual IS NULL AND rind_nota_original=rind_nota AND institucion=? AND year=?";
+            $parametros = [$carga, $codEstudiante, $periodo, $config['conf_id_institucion'], $_SESSION["bd"]];
+            $resultado = BindSQL::prepararSQL($sql, $parametros);
 
             //Se suman los decimales de todos los indicadores para obtener la definitiva de la asignatura
-            try{
-                $consultaRecuperacionIndicador=mysqli_query($conexion, "SELECT SUM(rind_nota_actual) FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_carga='".$carga."' AND rind_estudiante='".$codEstudiante."' AND rind_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-            } catch (Exception $e) {
-                include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-            }
+            $sql = "SELECT SUM(rind_nota_actual) FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_carga=? AND rind_estudiante=? AND rind_periodo=? AND institucion=? AND year=?";
+            $parametros = [$carga, $codEstudiante, $periodo, $config['conf_id_institucion'], $_SESSION["bd"]];
+            $consultaRecuperacionIndicador = BindSQL::prepararSQL($sql, $parametros);
             $recuperacionIndicador = mysqli_fetch_array($consultaRecuperacionIndicador, MYSQLI_BOTH);
             
             $notaDefIndicador = round($recuperacionIndicador[0],1);
