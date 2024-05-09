@@ -21,27 +21,26 @@ class AjaxCalificaciones {
     **/
     public static function ajaxGuardarNota($conexion, $config, $codEstudiante, $nombreEst, $codNota, $nota, $notaAnterior)
     {
+        global $conexionPDO;
+
         if(trim($nota)==""){
             $datosMensaje=["heading"=>"Nota vacia","estado"=>"warning","mensaje"=>"Digite una nota correcta."];
             return $datosMensaje;
         }
         if($nota>$config[4]) $nota = $config[4]; if($nota<$config[3]) $nota = $config[3];
 
-        try{
-            $consultaNum = mysqli_query($conexion, "SELECT cal_id_actividad, cal_id_estudiante FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='{$codNota}' AND cal_id_estudiante='{$codEstudiante}' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
+        $sql = "SELECT cal_id_actividad, cal_id_estudiante FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad=? AND cal_id_estudiante=? AND institucion=? AND year=?";
+        $parametros = [$codNota, $codEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]];
+        $consultaNum = BindSQL::prepararSQL($sql, $parametros);
+
         $num = mysqli_num_rows($consultaNum);
     
         if($num==0){
-            $codigo=Utilidades::generateCode("CAL");
-            
-            try{
-                mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_calificaciones(cal_id, cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones, institucion, year)VALUES('".$codigo."', '{$codEstudiante}',{$nota},'{$codNota}', now(), 0, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-            } catch (Exception $e) {
-                include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-            }
+            $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_calificaciones');
+    
+            $sql = "INSERT INTO ".BD_ACADEMICA.".academico_calificaciones(cal_id, cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones, institucion, year)VALUES(?, ?,?, ?, now(), ?, ?, ?)";
+            $parametros = [$codigo, $codEstudiante, $nota, $codNota, 0, $config['conf_id_institucion'], $_SESSION["bd"]];
+            $resultado = BindSQL::prepararSQL($sql, $parametros);
             
             $sql = "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id=? AND institucion=? AND year=?";
             $parametros = [$codNota, $config['conf_id_institucion'], $_SESSION["bd"]];
@@ -50,11 +49,9 @@ class AjaxCalificaciones {
         }else{
             if($notaAnterior==""){$notaAnterior = "0.0";}
             
-            try{
-                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_calificaciones SET cal_nota={$nota}, cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1, cal_nota_anterior={$notaAnterior}, cal_tipo=1 WHERE cal_id_actividad='{$codNota}' AND cal_id_estudiante='{$codEstudiante}' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-            } catch (Exception $e) {
-                include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-            }
+            $sql = "UPDATE ".BD_ACADEMICA.".academico_calificaciones SET cal_nota=?, cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1, cal_nota_anterior=?, cal_tipo=1 WHERE cal_id_actividad=? AND cal_id_estudiante=? AND institucion=? AND year=?";
+            $parametros = [$nota, $notaAnterior, $codNota, $codEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]];
+            $resultado = BindSQL::prepararSQL($sql, $parametros);
             
             $sql = "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1 WHERE act_id=? AND institucion=? AND year=?";
             $parametros = [$codNota, $config['conf_id_institucion'], $_SESSION["bd"]];
@@ -80,38 +77,33 @@ class AjaxCalificaciones {
     **/
     public static function ajaxGuardarObservacion($conexion, $codEstudiante, $nombreEst, $codObservacion, $observacion)
     {
-        global $config;
+        global $config, $conexionPDO;
         if(trim($observacion)==""){
             $datosMensaje=["heading"=>"Nota vacia","estado"=>"warning","mensaje"=>"Digite una observación correcta."];
             return $datosMensaje;
         }
 
-        try{
-            $consultaNum = mysqli_query($conexion, "SELECT cal_id_actividad, cal_id_estudiante FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='{$codObservacion}' AND cal_id_estudiante='{$codEstudiante}' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
+        $sql = "SELECT cal_id_actividad, cal_id_estudiante FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad=? AND cal_id_estudiante=? AND institucion=? AND year=?";
+        $parametros = [$codObservacion, $codEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]];
+        $consultaNum = BindSQL::prepararSQL($sql, $parametros);
+
         $num = mysqli_num_rows($consultaNum);
 
         if($num==0){
-            $codigo=Utilidades::generateCode("CAL");
-            
-            try{
-                mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_calificaciones(cal_id, cal_id_estudiante, cal_observaciones, cal_id_actividad, institucion, year)VALUES('".$codigo."', '".$codEstudiante."','".mysqli_real_escape_string($conexion,$observacion)."','".$codObservacion."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-            } catch (Exception $e) {
-                include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-            }
+            $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_calificaciones');
+    
+            $sql = "INSERT INTO ".BD_ACADEMICA.".academico_calificaciones(cal_id, cal_id_estudiante, cal_observaciones, cal_id_actividad, institucion, year)VALUES(?, ?, ?, ?, ?, ?)";
+            $parametros = [$codigo, $codEstudiante, mysqli_real_escape_string($conexion,$observacion), $codObservacion, $config['conf_id_institucion'], $_SESSION["bd"]];
+            $resultado = BindSQL::prepararSQL($sql, $parametros);
             
             $sql = "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id=? AND institucion=? AND year=?";
             $parametros = [$codObservacion, $config['conf_id_institucion'], $_SESSION["bd"]];
             $resultado = BindSQL::prepararSQL($sql, $parametros);
             
         }else{
-            try{
-                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_calificaciones SET cal_observaciones='".mysqli_real_escape_string($conexion,$observacion)."' WHERE cal_id_actividad='".$codObservacion."' AND cal_id_estudiante='".$codEstudiante."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-            } catch (Exception $e) {
-                include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-            }
+            $sql = "UPDATE ".BD_ACADEMICA.".academico_calificaciones SET cal_observaciones=? WHERE cal_id_actividad=? AND cal_id_estudiante=? AND institucion=? AND year=?";
+            $parametros = [mysqli_real_escape_string($conexion,$observacion), $codObservacion, $codEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]];
+            $resultado = BindSQL::prepararSQL($sql, $parametros);
             
             $sql = "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1 WHERE act_id=? AND institucion=? AND year=?";
             $parametros = [$codObservacion, $config['conf_id_institucion'], $_SESSION["bd"]];
@@ -148,37 +140,29 @@ class AjaxCalificaciones {
         $cont = 1;
         while($estudiantes = mysqli_fetch_array($consultaE, MYSQLI_BOTH)){
             
-            try{
-                $consultaNumE=mysqli_query($conexion, "SELECT cal_id_actividad, cal_id_estudiante FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='".$codNota."' AND cal_id_estudiante='".$estudiantes['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-            } catch (Exception $e) {
-                include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-            }
+            $sql = "SELECT cal_id_actividad, cal_id_estudiante FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad=? AND cal_id_estudiante=? AND institucion=? AND year=?";
+            $parametros = [$codNota, $estudiantes['mat_id'], $config['conf_id_institucion'], $_SESSION["bd"]];
+            $consultaNumE = BindSQL::prepararSQL($sql, $parametros);
             $numE = mysqli_num_rows($consultaNumE);
             
             if($numE==0){
                 $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_calificaciones').$cont; 
 		
-                try{
-                    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='".$codNota."' AND cal_id_estudiante='".$estudiantes['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"); 
-                } catch (Exception $e) {
-                    include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-                }        
+                $sql = "DELETE FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad=? AND cal_id_estudiante=? AND institucion=? AND year=?";
+                $parametros = [$codNota, $estudiantes['mat_id'], $config['conf_id_institucion'], $_SESSION["bd"]];
+                $resultado = BindSQL::prepararSQL($sql, $parametros);    
             
-                try{
-                    mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_calificaciones(cal_id, cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones, institucion, year)VALUES('".$codigo."', '".$estudiantes['mat_id']."','".$nota."','".$codNota."', now(), 0, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-                } catch (Exception $e) {
-                    include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-                }
+                $sql = "INSERT INTO ".BD_ACADEMICA.".academico_calificaciones(cal_id, cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones, institucion, year)VALUES(?, ?, ?, ?, now(), ?, ?, ?)";
+                $parametros = [$codigo, $estudiantes['mat_id'], $nota, $codNota, 0, $config['conf_id_institucion'], $_SESSION["bd"]];
+                $resultado = BindSQL::prepararSQL($sql, $parametros);
 
                 $cont ++;
             }else{
             
-                try{
-                    mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_calificaciones SET cal_nota='".$nota."', cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1 
-                    WHERE cal_id_actividad='".$codNota."' AND cal_id_estudiante='".$estudiantes['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                } catch (Exception $e) {
-                    include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-                }
+                $sql = "UPDATE ".BD_ACADEMICA.".academico_calificaciones SET cal_nota=?, cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1 
+                WHERE cal_id_actividad=? AND cal_id_estudiante=? AND institucion=? AND year=?";
+                $parametros = [$nota, $codNota, $estudiantes['mat_id'], $config['conf_id_institucion'], $_SESSION["bd"]];
+                $resultado = BindSQL::prepararSQL($sql, $parametros);
             }
         }
         
@@ -220,11 +204,9 @@ class AjaxCalificaciones {
             include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
         }
         
-        try{
-            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_calificaciones SET cal_nota='".$nota."', cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1, cal_nota_anterior='".$notaAnterior."', cal_tipo=2 WHERE cal_id_actividad='".$codNota."' AND cal_id_estudiante='".$codEstudiante."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_calificaciones SET cal_nota=?, cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1, cal_nota_anterior=?, cal_tipo=2 WHERE cal_id_actividad=? AND cal_id_estudiante=? AND institucion=? AND year=?";
+        $parametros = [$nota, $notaAnterior, $codNota, $codEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]];
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
 
         $datosMensaje=["heading"=>"Cambios guardados","estado"=>"success","mensaje"=>"La nota de recuperación se ha guardado correctamente para el estudiante <b>".strtoupper($nombreEst)."</b>"];
 
