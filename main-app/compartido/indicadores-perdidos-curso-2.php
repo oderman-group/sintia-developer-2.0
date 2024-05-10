@@ -161,7 +161,7 @@ WHERE mat_id='" . $matriculadosDatos['mat_id']."' AND am.institucion={$config['c
 
             <tr>
 
-                <td>Documento:<br> <?= number_format($datos_usr["mat_documento"], 0, ",", "."); ?></td>
+                <td>Documento:<br> <?=strpos($datos_usr["mat_documento"], '.') !== true && is_numeric($datos_usr["mat_documento"]) ? number_format($datos_usr["mat_documento"],0,",",".") : $datos_usr["mat_documento"];?></td>
 
                 <td>Nombre:<br> <?= Estudiantes::NombreCompletoDelEstudiante($datos_usr) ?></td>
 

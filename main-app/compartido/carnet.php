@@ -31,7 +31,7 @@ $nombreCompleto = Estudiantes::NombreCompletoDelEstudiante($resultado);
             <td align="center" colspan="2"><?=$nombreCompleto?></td>
         </tr>
         <tr>
-            <td align="center" colspan="2"><b>IDENTIFICACIÓN</b><br><?=number_format($resultado['mat_documento'],0,",",".");?></td>
+            <td align="center" colspan="2"><b>IDENTIFICACIÓN</b><br><?=strpos($resultado["mat_documento"], '.') !== true && is_numeric($resultado["mat_documento"]) ? number_format($resultado["mat_documento"],0,",",".") : $resultado["mat_documento"];?></td>
         </tr>
         <tr>
             <td align="center"><b>Grado:</b> <?=$resultado["gra_nombre"];?></td>
