@@ -75,18 +75,10 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
             <div class="form-group row">
                 <label class="col-sm-2 control-label"><?= $frases[55][$datosUsuarioActual['uss_idioma']]; ?></label>
                 <div class="col-sm-10">
-                    <?php
-                    try {
-                        $datosConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat 
-                                                    INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=mat_id_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-                                                    WHERE (mat_estado_matricula=1 OR mat_estado_matricula=2) AND mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]} ORDER BY mat_primer_apellido");
-                    } catch (Exception $e) {
-                        include("../compartido/error-catch-to-report.php");
-                    }
-                    ?>
                     <select class="form-control  select2" id="selectEstudiantesReportes" style="width: 100%;" name="est" multiple>
                         <option value="">Seleccione una opción</option>
                         <?php
+                        $datosConsulta = Estudiantes::listarEstudiantesEnGrados();
                         while ($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)) {
                         ?>
                             <option value="<?= $datos['uss_id']; ?>"><?= UsuariosPadre::nombreCompletoDelUsuario($datos); ?></option>
