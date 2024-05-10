@@ -284,6 +284,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 base64_decode($_GET["estado"])==1 ? $mensaje = 'La respuesta cambio de estado a correcta' : $mensaje = 'La respuesta cambio de estado a incorrecta';
             break;
 
+            case 'SC_GN_6':
+                $tipo = 'success';
+                $mensaje = 'Se te envío un correo con el nuevo usuarios de acceso.';
+            break;
+
             default:
                 $tipo = 'secondary';
                 $mensaje = 'Error desconocido: '.$_GET['error'];

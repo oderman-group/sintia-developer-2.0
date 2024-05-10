@@ -2,7 +2,8 @@
 session_start();
 include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
-require_once(ROOT_PATH."/main-app/class/Actividades.php");?>
+require_once(ROOT_PATH."/main-app/class/Actividades.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");?>
 <head>
 	<title>CALIFICACIONES POR MATERIA</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -28,9 +29,8 @@ require_once(ROOT_PATH."/main-app/class/Actividades.php");?>
                                       </tr>
                                      <?php
                     $consulta = Actividades::consultaActividadesCarga($config, $_GET["carga"], $_GET["periodo"]);
-                    while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-                    $consultaNotas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='".$resultado['act_id']."' AND cal_id_estudiante='".$_GET["estudiante"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-									 	$nota = mysqli_fetch_array($consultaNotas, MYSQLI_BOTH);
+									 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+                    $nota = Calificaciones::traerCalificacionActividadEstudiante($config, $resultado['act_id'], $_GET["estudiante"]);
 										$porNuevo = ($resultado['act_valor'] / 100);
 										$acumulaValor = ($acumulaValor + $porNuevo);
 										$notaMultiplicada = ($nota['cal_nota'] * $porNuevo);

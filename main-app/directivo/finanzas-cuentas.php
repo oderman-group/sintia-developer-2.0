@@ -74,7 +74,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($e);
 													</tr>
 													<tr>
 														<td colspan="2"></td>
-														<td><strong><?=number_format($e['mat_documento'],0,".",".");?></strong></td>
+														<td><strong><?=strpos($e["mat_documento"], '.') !== true && is_numeric($e["mat_documento"]) ? number_format($e["mat_documento"],0,",",".") : $e["mat_documento"];?></strong></td>
 													</tr>
 													<tr class="info">
 														<td colspan="2"></td>

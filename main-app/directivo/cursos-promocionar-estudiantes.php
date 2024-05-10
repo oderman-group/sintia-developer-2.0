@@ -4,6 +4,7 @@
 	require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 	require_once(ROOT_PATH."/main-app/class/Grados.php");
     require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
+	require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 	$filtro = " AND car_curso='".$_POST["desde"]."'";
 	$numEstudiantesPromocionados = 0;
@@ -19,11 +20,8 @@
 			$consultaCargas = CargaAcademica::listarCargas($conexion, $config, "", $filtro,"mat_id, car_grupo");
 			while($datosCarga = mysqli_fetch_array($consultaCargas, MYSQLI_BOTH)){
 				
-				try {
-					$consulta=mysqli_query($conexion,"UPDATE ".BD_ACADEMICA.".academico_boletin SET bol_carga='".$_POST["carga".$datosCarga['car_id']]."' WHERE bol_estudiante='".$idEstudiantes."' AND bol_carga='".$datosCarga['car_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-				} catch (Exception $e) {
-					include("../compartido/error-catch-to-report.php");
-				}
+				$update = "bol_carga=".$_POST["carga".$datosCarga['car_id']]."";
+				Boletin::actualizarBoletinCargaEstudiante($config, $datosCarga['car_id'], $idEstudiantes, $update);
 				
 				Calificaciones::transferirNivelacion($conexion, $config, $_POST["carga".$datosCarga['car_id']], $datosCarga['car_id'], $idEstudiantes);
 			}

@@ -24,7 +24,7 @@ if ($numDotos > 0) {
         
         <p style="margin-top:10px;">
             <div class="btn-group">
-                <a href="estudiantes-editar.php?id=<?=$datosEstudianteActual['mat_id'];?>" id="addRow" class="btn deepPink-bgcolor">
+                <a href="estudiantes-editar.php?id=<?=base64_encode($datosEstudianteActual['mat_id']);?>" id="addRow" class="btn deepPink-bgcolor">
                     Sí, deseo mostrar la información
                 </a>
             </div>

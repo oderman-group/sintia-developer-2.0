@@ -3,8 +3,8 @@ session_start();
 include("../../config-general/config.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
-$consultaIndicadorObg=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores WHERE ind_id='".$_POST["indicador"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-$indicadorObg = mysqli_fetch_array($consultaIndicadorObg, MYSQLI_BOTH);
+
+$indicadorObg = Indicadores::traerIndicadoresDatos($_POST["indicador"]);
 
 $consultaCargasEjemplo=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_id='".$_POST["carga"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 $cargaEjemplo = mysqli_fetch_array($consultaCargasEjemplo, MYSQLI_BOTH);

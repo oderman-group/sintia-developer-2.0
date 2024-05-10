@@ -151,8 +151,7 @@ if(isset($_REQUEST["estampilla"])){$estampilla=base64_decode($_REQUEST["estampil
                                         $notaMateriasPeriodosTotal=0;
                                         $ultimoPeriodo = $config["conf_periodos_maximos"];
                                         for($i=1;$i<=$config["conf_periodos_maximos"];$i++){
-											$consultaPeriodos=mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$datosMaterias['car_id']."' AND bol_periodo='".$i."' AND bol_estudiante = '".$matricula['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
-											$datosPeriodos=mysqli_fetch_array($consultaPeriodos, MYSQLI_BOTH);
+											$datosPeriodos = Boletin::traerNotaBoletinCargaPeriodo($config, $i, $matricula['mat_id'], $datosMaterias["car_id"], $inicio);
 											$notaMateriasPeriodos=$datosPeriodos['bol_nota'];
 											$notaMateriasPeriodos=round($notaMateriasPeriodos, 1);
 											$notaMateriasPeriodosTotal+=$notaMateriasPeriodos;
@@ -311,8 +310,7 @@ if(isset($_REQUEST["estampilla"])){$estampilla=base64_decode($_REQUEST["estampil
 		$periodoFinal = $config['conf_periodos_maximos'];
 		while ($cargasC = mysqli_fetch_array($cargasAcademicasC, MYSQLI_BOTH)) {
 			//OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
-			$consultaBoletinC = mysqli_query($conexion, "SELECT avg(bol_nota) AS promedio, MAX(bol_periodo) AS periodo FROM " . BD_ACADEMICA . ".academico_boletin WHERE bol_estudiante='" . $id . "' AND bol_carga='" . $cargasC["car_id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$inicio}");
-			$boletinC = mysqli_fetch_array($consultaBoletinC, MYSQLI_BOTH);
+			$boletinC = Boletin::traerDefinitivaBoletinCarga($config, $cargasC["car_id"], $id, $inicio);
 			$notaC = round($boletinC['promedio'], 1);
 			if ($notaC < $config[5]) {
 				$vectorMP[$materiasPerdidas] = $cargasC["car_id"];

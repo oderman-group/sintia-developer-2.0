@@ -234,13 +234,16 @@ class Estudiantes {
         $resultado = [];
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
+        $doctSinPuntos = strpos($estudiante, '.') == true ? str_replace('.', '', $estudiante) : $estudiante;
+        $doctConPuntos = strpos($estudiante, '.') !== true && is_numeric($estudiante) ? str_replace('.', '', $estudiante) : $estudiante;
+
         try {
             $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
             LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=mat.mat_id_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$year}
             LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat.mat_grado AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$year}
             LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=mat.mat_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$year}
             LEFT JOIN ".$baseDatosServicios.".opciones_generales ON ogen_id=mat.mat_genero
-            WHERE (mat.mat_id='".$estudiante."' || mat.mat_documento='".$estudiante."' || mat.mat_matricula='".$estudiante."') AND mat.mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year}
+            WHERE (mat.mat_id='".$estudiante."' || (mat.mat_documento ='".$doctSinPuntos."' OR mat.mat_documento ='".$doctConPuntos."') || mat.mat_matricula='".$estudiante."') AND mat.mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year}
             ");
             $num = mysqli_num_rows($consulta);
             if($num == 0){
@@ -402,9 +405,12 @@ class Estudiantes {
         $num = 0;
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
+        $doctSinPuntos = strpos($estudiante, '.') == true ? str_replace('.', '', $estudiante) : $estudiante;
+        $doctConPuntos = strpos($estudiante, '.') !== true && is_numeric($estudiante) ? str_replace('.', '', $estudiante) : $estudiante;
+
         try {
             $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas
-            WHERE (mat_id='".$estudiante."' || mat_documento='".$estudiante."') AND mat_eliminado=0 AND institucion={$config['conf_id_institucion']} AND year={$year}");
+            WHERE (mat_id='".$estudiante."' || (mat_documento ='".$doctSinPuntos."' OR mat_documento ='".$doctConPuntos."')) AND mat_eliminado=0 AND institucion={$config['conf_id_institucion']} AND year={$year}");
             $num = mysqli_num_rows($consulta);
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
@@ -510,7 +516,7 @@ class Estudiantes {
      * @param array $config
      * @param mysqli $conexion
      */
-    public static function retirarRestaurarEstudiante($idEstudiante, $motivo, $config, $conexion, $conexionPDO)
+    public static function retirarRestaurarEstudiante($idEstudiante, $motivo, $config, $conexion, $conexionPDO,$finalizarTransacion=true)
     {
         $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_matriculas_retiradas');
 
@@ -518,7 +524,7 @@ class Estudiantes {
 
         $parametros = [$codigo, $idEstudiante, $motivo, $_SESSION["id"], $config['conf_id_institucion'], $_SESSION["bd"]];
         
-        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        $resultado = BindSQL::prepararSQL($sql, $parametros,$finalizarTransacion);
     }
 
     /**

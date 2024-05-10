@@ -2,11 +2,14 @@
 include("session.php");
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 
-$consultaDoc = Estudiantes::obtenerListadoDeEstudiantes(" AND mat_documento ='".$_POST["nDoct"]."' AND mat_id!='".$_POST["idEstudiante"]."' AND mat_eliminado=0");
+$doctSinPuntos = strpos($_POST["nDoct"], '.') == true ? str_replace('.', '', $_POST["nDoct"]) : $_POST["nDoct"];
+$doctConPuntos = strpos($_POST["nDoct"], '.') !== true && is_numeric($_POST["nDoct"]) ? str_replace('.', '', $_POST["nDoct"]) : $_POST["nDoct"];
 
-$datosEstudiantes = mysqli_fetch_array($consultaDoc, MYSQLI_BOTH);
+$consultaDoc = Estudiantes::obtenerListadoDeEstudiantes(" AND (mat_documento ='".$doctSinPuntos."' OR mat_documento ='".$doctConPuntos."') AND mat_id!='".$_POST["idEstudiante"]."' AND mat_eliminado=0");
+
 $numDatos=mysqli_num_rows($consultaDoc);
 if ($numDatos > 0) {
+    $datosEstudiantes = mysqli_fetch_array($consultaDoc, MYSQLI_BOTH);
 ?>
     <script type="application/javascript">
         document.getElementById('apellido1').disabled = 'disabled';
@@ -24,7 +27,7 @@ if ($numDatos > 0) {
         </p>
         <p style="margin-top:10px;">
             <div class="btn-group">
-                <a href="estudiantes-editar.php?id=<?=$datosEstudiantes['mat_id'];?>" id="addRow" class="btn deepPink-bgcolor">
+                <a href="estudiantes-editar.php?id=<?=base64_encode($datosEstudiantes['mat_id']);?>" id="addRow" class="btn deepPink-bgcolor">
                     Sí, deseo mostrar la información
                 </a>
             </div>

@@ -86,14 +86,14 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 								           	<div class="form-group row">
 												<label class="col-sm-2 control-label">NIT</label>
 												<div class="col-sm-2">
-													<input type="text" name="nitI" class="form-control" required value="<?= $datosinf["info_nit"];?>">
+													<input type="text" name="nitI" class="form-control" value="<?= $datosinf["info_nit"];?>">
 												</div>
 											</div>
 
                                             <div class="form-group row">
 												<label class="col-sm-2 control-label">Código DANE</label>
 												<div class="col-sm-2">
-													<input type="text" name="dane" class="form-control" required value="<?= $datosinf["info_dane"];?>">
+													<input type="text" name="dane" class="form-control" value="<?= $datosinf["info_dane"];?>">
 												</div>
 											</div>
 											
@@ -203,14 +203,14 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 										    <div class="form-group row">
 												<label class="col-sm-2 control-label">Resolución para certificados</label>
 												<div class="col-sm-6">
-                                                <textarea name="resolucion" cols="79" rows="3" required><?=$datosinf["info_resolucion"]?></textarea>
+                                                <textarea name="resolucion" cols="79" rows="3"><?=$datosinf["info_resolucion"]?></textarea>
 												</div>
 											</div>
 											
 										    <div class="form-group row">
 												<label class="col-sm-2 control-label">Decretos de plan de estudio para certificados</label>
 												<div class="col-sm-6">
-                                                <textarea name="decretos" cols="79" rows="3" required><?=$datosinf["info_decreto_plan_estudio"]?></textarea>
+                                                <textarea name="decretos" cols="79" rows="3"><?=$datosinf["info_decreto_plan_estudio"]?></textarea>
 												</div>
 											</div>
 											   

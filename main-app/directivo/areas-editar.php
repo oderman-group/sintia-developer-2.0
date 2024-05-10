@@ -112,12 +112,7 @@ $rCargas = Areas::traerDatosArea($config, base64_decode($_GET["id"]));
                                             </div>
                                         </div>
 
-
-                                        <?php if(Modulos::validarPermisoEdicion()){?>
-										    <button type="submit" class="btn  btn-info">
-										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-									</button>
-                                        <?php }?>
+                                    <?php $botones = new botonesGuardar("areas.php",Modulos::validarPermisoEdicion()); ?>
                                     </form>
                                 </div>
                             </div>

@@ -7,6 +7,7 @@ include("../compartido/head.php");
 require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 
 $valores = Actividades::consultarValores($config, $cargaConsultaActual, $periodoConsultaActual);
 $porcentajeRestante = 100 - $valores[0];
@@ -116,8 +117,7 @@ th {
 														$cA = Actividades::traerActividadesCarga($config, $cargaConsultaActual, $periodoConsultaActual);
 														 while($rA = mysqli_fetch_array($cA, MYSQLI_BOTH)){
 															//LAS CALIFICACIONES
-															$consultaNotasResultados=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_estudiante='".$resultado['mat_id']."' AND cal_id_actividad='".$rA['act_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-															$notasResultado = mysqli_fetch_array($consultaNotasResultados, MYSQLI_BOTH);
+															$notasResultado = Calificaciones::traerCalificacionActividadEstudiante($config, $rA['act_id'], $resultado['mat_id']);
 															
 															$arrayEnviar = [
 																"tipo"=>5, 

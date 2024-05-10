@@ -30,18 +30,11 @@ Foros::eliminarRespuestaEstudiante($conexion, $config, $idE);
 
 Actividades::eliminarActividadesEntregasEstudiante($conexion, $config, $idE);
 
-Ausencias::eliminarAusenciasEstudiantes($config, $idE);
+Boletin::eliminarNotasBoletinEstudiante($config, $idE);
 
-try{
-    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
-try{
-    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
+Calificaciones::eliminarCalificacionEstudiante($config, $idE);
+
+Ausencias::eliminarAusenciasEstudiantes($config, $idE);
 
 $update = "mat_eliminado=1";
 Estudiantes::actualizarMatriculasPorId($config, $idE, $update);

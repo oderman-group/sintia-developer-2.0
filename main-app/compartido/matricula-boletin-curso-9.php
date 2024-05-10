@@ -11,6 +11,7 @@ require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 require_once(ROOT_PATH."/main-app/class/Usuarios.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 $year=$_SESSION["bd"];
 if(isset($_GET["year"])){
@@ -118,9 +119,7 @@ $contador_periodos=0;
 		}
 		$indicadores = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $cargas['car_id'], $periodoActual, $year);
 		
-		$consultaObservacion=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin
-		WHERE bol_carga='".$cargas['car_id']."' AND bol_periodo='".$periodoActual."' AND bol_estudiante='".$datosUsr["mat_id"]."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-		$observacion = mysqli_fetch_array($consultaObservacion, MYSQLI_BOTH);
+		$observacion = Boletin::traerNotaBoletinCargaPeriodo($config, $periodoActual, $datosUsr['mat_id'], $cargas['car_id'], $year);
 		
 		$colorFondo = '#FFF;';
 		if($i%2==0){$colorFondo = '#e0e0153b';}

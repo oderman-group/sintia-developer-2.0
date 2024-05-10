@@ -45,6 +45,7 @@ define('CHAT_TIPO_AUDIO', 4);
 define('FILE_CURSOS', "cursos/");
 define('FILE_PUBLICACIONES', "publicaciones/");
 define('FILE_TAREAS', "tareas/");
+define('FILE_VIDEO_CLASES', "video-clases/");
 define('FILE_TAREAS_ENTREGADAS', "tareas-entregadas/");
 
 

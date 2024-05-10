@@ -95,8 +95,7 @@ if(
 											
 											<?php 
 											if($datosCargaActual['car_indicador_automatico']==1){
-												$consultaIndDef=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores WHERE ind_definitivo=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-												$indDef = mysqli_fetch_array($consultaIndDef, MYSQLI_BOTH);
+												$indDef = Indicadores::consultarIndicadoresDefinitivos();
 												$indicadorAuto = !empty($indDef['ind_id']) ? $indDef['ind_id'] : null;
 												
 												$indicadorDefitnivo = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
@@ -158,13 +157,11 @@ if(
 												</div>
 											<?php }?>
 
-											<a href="#" name="calificaciones.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 										<?php 
 										//Si existe el indicador definitivo cuando sea requerido
 										if($datosCargaActual['car_indicador_automatico']==1 && empty($indDef['ind_id'])){echo "<span style='color:red;'>No hay indicador definitivo configurado</span>";}else{?>
-											<button type="submit" class="btn  btn-info">
-										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-									</button>
+											<?php 
+                            				$botones = new botonesGuardar("calificaciones.php",Modulos::validarPermisoEdicion()); ?>
 										<?php }?>
 										
 										

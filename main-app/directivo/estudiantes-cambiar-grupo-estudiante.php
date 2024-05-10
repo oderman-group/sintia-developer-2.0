@@ -1,6 +1,7 @@
 <?php
 include("session.php");
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 $consultaEstudiante = Estudiantes::obtenerListadoDeEstudiantes(" AND mat_id='" . $_POST["estudiante"] . "'");
 
@@ -19,12 +20,8 @@ try{
 		}
 		$cargasConsultaNuevo = mysqli_fetch_array($consultaCargas, MYSQLI_BOTH);		
         if(!is_null($cargasConsultaNuevo)){
-			try{
-				mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_boletin SET bol_carga='" . $cargasConsultaNuevo["car_id"] . "' 
-				WHERE bol_carga='" . $cargasDatos["car_id"] . "' AND bol_estudiante='" . $_POST["estudiante"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-			} catch (Exception $e) {
-				include("../compartido/error-catch-to-report.php");
-			}
+			$update = "bol_carga=".$cargasConsultaNuevo["car_id"]."";
+			Boletin::actualizarBoletinCargaEstudiante($config, $cargasDatos['car_id'], $_POST["estudiante"], $update);
 			$contador++;
 		}		
 	}
