@@ -340,7 +340,7 @@ require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 									<p>&nbsp;</p>
 									<ul class="list-group list-group-unbordered">
 										<?php
-										$consulta = CargaAcademica::consultaCargasRelacionadas($config, $datosEditar["car_docente"], $datosEditar["car_curso"], "", $filtroMT);
+										$consulta = CargaAcademica::consultaCargasRelacionadas($config, $datosEditar["car_docente"], $datosEditar["car_curso"]);
 										while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 											$resaltaItem = $Plataforma->colorDos;
 											if($resultado['car_id']==base64_decode($_GET["idR"])){$resaltaItem = $Plataforma->colorUno;}
