@@ -139,8 +139,14 @@ if (!empty($_GET['idE'])) {
 																	<?php if(Modulos::validarSubRol(['DT0321']) ){?>
 																		<li><a href="asignaciones-editar.php?id=<?=base64_encode($resultado['epag_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
 																	<?php }?>
-																	<?php if(Modulos::validarSubRol(['DT0323']) && $resultado['epag_estado'] == PENDIENTE){?>
-                                                                    	<li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" id="<?=$resultado['epag_id'];?>" name="asignaciones-eliminar.php?id=<?=base64_encode($resultado['epag_id']);?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
+																	<?php if(Modulos::validarSubRol(['DT0329']) ){?>
+																		<li><a href="asignaciones-asignados.php?id=<?=base64_encode($resultado['gal_id']);?>">Usuarios Asignados</a></li>
+																	<?php }?>
+																	<?php if( Modulos::validarSubRol(['DT0328']) ){?>
+																		<li><a href="../compartido/evaluaciones-generar-informe.php?idE=<?=base64_encode($resultado['gal_id']);?>" target="_blank">Generar Informe</a></li>
+																	<?php }?>
+																	<?php if(Modulos::validarSubRol(['DT0323']) && $iniciadas == 0){?>
+                                                                    	<li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" id="<?=$resultado['gal_id'];?>" name="asignaciones-eliminar.php?id=<?=base64_encode($resultado['gal_id']);?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
 																	<?php } ?>
 																	</ul>
 																</div>
