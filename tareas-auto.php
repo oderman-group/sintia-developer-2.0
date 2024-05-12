@@ -3,6 +3,8 @@ include("conexion.php");
 require_once(ROOT_PATH."/main-app/class/EnviarEmail.php");
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Areas.php");
 $year=date("Y");
 
 
@@ -268,12 +270,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 		}
 		
 		//AREAS
-		try{
-			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_areas WHERE institucion='".$cDemo['demo_institucion']."'");
-		} catch (Exception $e) {
-			echo $e->getMessage();
-			exit();
-		}
+		Areas::eliminarTodasAreas($cDemo['demo_institucion']);
 		
 		//MATERIAS
 		try{
@@ -295,12 +292,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 		UsuariosPadre::eliminarTodosUsuarios($cDemo['demo_institucion']);
 		
 		//TODOS LAS MATRICULAS
-		try{
-			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_matriculas WHERE institucion='".$cDemo['demo_institucion']."'");
-		} catch (Exception $e) {
-			echo $e->getMessage();
-			exit();
-		}
+		Estudiantes::eliminarTodasMatriculas($cDemo['demo_institucion']);
 	
 		//CARGAS
 		try{

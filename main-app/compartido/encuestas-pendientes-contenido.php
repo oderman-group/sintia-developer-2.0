@@ -35,8 +35,9 @@
 							</thead>
 							<tbody>
 								<?php
+									require_once(ROOT_PATH."/main-app/class/Areas.php");
 									if (!empty($_GET['asignacion'])){
-										require_once(ROOT_PATH . "/main-app/class/PreguntaGeneral.php");
+										require_once(ROOT_PATH."/main-app/class/PreguntaGeneral.php");
 										
 										$idA= base64_decode($_GET['asignacion']);
 										$obligatorias= base64_decode($_GET['obligatorias']);
@@ -69,9 +70,7 @@
 												break;
 
 												case AREA:
-													$consultaEvaluado = mysqli_query($conexion, "SELECT ar_nombre FROM ".BD_ACADEMICA.".academico_areas
-													WHERE ar_id='".$resultado['epag_id_evaluado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-													$datosEvaluado = mysqli_fetch_array($consultaEvaluado, MYSQLI_BOTH);
+													$datosEvaluado = Areas::traerDatosArea($config, $resultado['epag_id_evaluado']);
 													$nombreEvaluado = $datosEvaluado['ar_nombre'];
 												break;
 
