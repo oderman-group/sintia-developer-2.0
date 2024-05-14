@@ -22,6 +22,7 @@ foreach ($data["data"] as $resultado) {
 	$color = $resultado["mat_inclusion"] == 1 ? 'blue' : '';
 
 	$nombreAcudiente = '';
+	$idAcudiente = '';
 	if (isset($acudiente['uss_id'])) {
 		$nombreAcudiente = UsuariosPadre::nombreCompletoDelUsuario($acudiente);
 		$idAcudiente = $acudiente['uss_id'];
