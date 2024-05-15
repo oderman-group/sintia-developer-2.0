@@ -243,6 +243,7 @@ for($l=1;$l<=$numero_periodos;$l++){
 			<td class=""  align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;">
 			<?php 
 			if(!empty($notaDelEstudiante['bol_nota'])){
+				$desempenoNotaP = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaDelEstudiante['bol_nota'], $year);
 				if($datosUsr["mat_grado"]>11){
 					$notaF = ceil($notaDelEstudiante['bol_nota']);
 					/*
@@ -254,9 +255,8 @@ for($l=1;$l<=$numero_periodos;$l++){
 						case 5: echo "E"; break;
 					}
 					*/
-					echo $desempenoNotaP[1];
+					echo $desempenoNotaP['notip_nombre'];
 				}else{
-					$desempenoNotaP = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaDelEstudiante['bol_nota'], $year);
 					if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
 						echo $desempenoNotaP['notip_nombre'];
 					}else{
