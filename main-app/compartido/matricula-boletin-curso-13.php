@@ -197,26 +197,7 @@ if($total_promedio==1)	$total_promedio="1.0";	if($total_promedio==2)	$total_prom
 			?>
 			<td class=""  align="center" style="font-weight:bold;"></td>
             <?php }?>
-        <td align="center" style="font-weight:bold;"><?php 
-		$desempenoNotaPromArea = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $total_promedio, $year);
-		
-		if($datosUsr["mat_grado"]>100){
-				$notaFA = ceil($total_promedio);
-			/*
-				switch($notaFA){
-					case 1: echo "D"; break;
-					case 2: echo "I"; break;
-					case 3: echo "A"; break;
-					case 4: echo "S"; break;
-					case 5: echo "E"; break;
-				}
-				*/
-			echo $desempenoNotaPromArea['notip_nombre'];
-				}else{
-		echo $total_promedio;
-				}
-		
-		?></td>
+        <td align="center" style="font-weight:bold;"><?=$total_promedio;?></td>
          <td align="center" style="font-weight:bold;"></td>
           <td align="center" style="font-weight:bold;"></td>
 	</tr>
@@ -246,21 +227,10 @@ while($fila2=mysqli_fetch_array($consulta_a_mat, MYSQLI_BOTH)){
 			<?php 
 			if($notaDelEstudiante['bol_nota']!=""){
 				$desempenoNotaP = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaDelEstudiante['bol_nota'], $year);
-				if($datosUsr["mat_grado"]>100){
-					$notaF = ceil($notaDelEstudiante['bol_nota']);
-					/*
-					switch($notaF){
-						case 1: echo "D"; break;
-						case 2: echo "I"; break;
-						case 3: echo "A"; break;
-						case 4: echo "S"; break;
-						case 5: echo "E"; break;
-					}
-					*/
+				if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
 					echo $desempenoNotaP['notip_nombre'];
 				}else{
 					echo $notaDelEstudiante['bol_nota']."<br>".$desempenoNotaP['notip_nombre'];
-					//echo $notas[$l]."<br>".$desempenoNotaP['notip_nombre'];
 				}
 
 				if (!isset($promedios[$l])) {
@@ -304,27 +274,7 @@ while($fila2=mysqli_fetch_array($consulta_a_mat, MYSQLI_BOTH)){
 		   }
 	   ?>
        
-        <td align="center" style="font-weight:bold; background:#EAEAEA;"><?php 
-		$desempenoNotaXasig = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $total_promedio2, $year);
-	
-					if($datosUsr["mat_grado"]>100){
-				$notaFI = ceil($total_promedio2);
-						/*
-				switch($notaFI){
-					case 1: echo "D"; break;
-					case 2: echo "I"; break;
-					case 3: echo "A"; break;
-					case 4: echo "S"; break;
-					case 5: echo "E"; break;
-				}
-				*/
-						echo $desempenoNotaXasig['notip_nombre'];
-						
-				}else{
-					echo $total_promedio2;
-				}
-		
-		?></td>
+        <td align="center" style="font-weight:bold; background:#EAEAEA;"><?=$total_promedio2?></td>
         <td align="center" style="font-weight:bold; background:#EAEAEA;"><?php //DESEMPEÑO
 		while($r_desempeno=mysqli_fetch_array($consulta_desempeno, MYSQLI_BOTH)){
 			if($total_promedio2>=$r_desempeno["notip_desde"] && $total_promedio2<=$r_desempeno["notip_hasta"]){
@@ -370,24 +320,7 @@ if($numIndicadores>0){
             <?php for($m=1;$m<=$numero_periodos;$m++){ 
 			$desempenoNotaInd = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota_indicador, $year);
 			?>
-			<td class=""  align="center" style="font-weight:bold;"><?php if($periodoActual==$m){
-				if($datosUsr["mat_grado"]>100){
-				$notaFII = ceil($nota_indicador);
-					/*
-				switch($notaFII){
-					case 1: echo "D"; break;
-					case 2: echo "I"; break;
-					case 3: echo "A"; break;
-					case 4: echo "S"; break;
-					case 5: echo "E"; break;
-				}
-				*/
-					echo $desempenoNotaInd['notip_nombre'];
-			}else{
-				echo $nota_indicador;
-			}
-				
-				} ?></td>
+			<td class=""  align="center" style="font-weight:bold;"><?php if($periodoActual==$m){ echo $nota_indicador;} ?></td>
             <?php } ?>
  <td align="center" style="font-weight:bold;"></td>
         <td align="center" style="font-weight:bold;"></td>
@@ -435,16 +368,7 @@ if($numIndicadores>0){
 		$desempenoNotaProm = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaFFF, $year);
 		?>
         <td style="font-size:16px;">
-        	<?php 
-		if($promedios[$n]!=0){
-			if($datosUsr["mat_grado"]>100){
-				$notaFF = ceil(round(($promedios[$n]/$contpromedios[$n]),1));
-				echo $desempenoNotaProm['notip_nombre'];
-			}else{
-				echo $promedioPuesto;
-			}
-			
-			}?></td>
+        	<?php  if($promedios[$n]!=0){ echo $promedioPuesto;}?></td>
         <?php } ?>
         <td></td>
         <td colspan="2">&nbsp;</td>
