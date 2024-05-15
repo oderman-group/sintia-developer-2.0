@@ -204,10 +204,13 @@ class componenteFiltro
                     $html .= "</div>";
                 }
 
+                $html .= "<script>
+                                var {$filtro["get"]}Seleccionados = [];
+                            </script>";
+
                 if(!empty($filtro["tipo"]) && $filtro["tipo"] == 'check'){
                     $html .= "
                         <script>
-                            var {$filtro["get"]}Seleccionados = [];
                             document.addEventListener('DOMContentLoaded', function () {
                                 // Obtener todos los checkboxes del filtro
                                 var {$filtro["get"]}Checkboxes = document.querySelectorAll('.{$filtro["get"]}-checkbox');
