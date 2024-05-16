@@ -93,9 +93,8 @@ if (!empty($_GET['idE'])) {
 														while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 															switch ($resultado['epag_tipo']) {
 																case CURSO:
-																	$consultaEvaluado = mysqli_query($conexion, "SELECT gra_nombre FROM ".BD_ACADEMICA.".academico_grados
-																	WHERE gra_id='".$resultado['epag_id_evaluado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-																	$datosEvaluado = mysqli_fetch_array($consultaEvaluado, MYSQLI_BOTH);
+																	require_once(ROOT_PATH."/main-app/class/Grados.php");
+																	$datosEvaluado = Grados::obtenerGrado($resultado['epag_id_evaluado']);
 																	$nombreEvaluado = $datosEvaluado['gra_nombre'];
 																break;
 

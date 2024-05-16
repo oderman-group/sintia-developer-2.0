@@ -8,6 +8,7 @@
     }
     include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
     require_once("../class/Estudiantes.php");
+    require_once(ROOT_PATH."/main-app/class/Grados.php");
     
     $year=$_SESSION["bd"];
     if(isset($_POST["year"])){
@@ -27,11 +28,7 @@
     if (empty($_POST["formatoB"])) {
         $consulta="";
         if(isset($_POST["curso"]) AND $_POST["curso"]!=""){
-            try{
-                $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE gra_id='".$_POST["curso"]."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-            } catch (Exception $e) {
-                include("../compartido/error-catch-to-report.php");
-            }
+            $consulta = Grados::obtenerDatosGrados($_POST["curso"], $year);
         }
 
         if(isset($_POST["estudiante"]) AND $_POST["estudiante"]!=""){
