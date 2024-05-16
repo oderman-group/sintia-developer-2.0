@@ -22,21 +22,18 @@ class Calificaciones {
         array   $datosIndicador
     )
     {
-		try{
-			$consultaActividadesNum=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id_tipo='".$datosIndicador['ipc_indicador']."' AND act_id_carga='".$idcarga."' AND act_periodo='".$periodo."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		} catch (Exception $e) {
-			include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-		}
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id_tipo=? AND act_id_carga=? AND act_periodo=? AND act_estado=1 AND institucion=? AND year=?";
+        $parametros = [$datosIndicador['ipc_indicador'], $idcarga, $periodo, $config['conf_id_institucion'], $_SESSION["bd"]];
+        $consultaActividadesNum = BindSQL::prepararSQL($sql, $parametros);
 		$actividadesNum = mysqli_num_rows($consultaActividadesNum);
 
 		//Si hay actividades relacionadas al indicador, actualizamos su valor.
 		if($actividadesNum>0){
 			$valorIgualActividad = ($datosIndicador['ipc_valor']/$actividadesNum);
-			try{
-				mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_valor='".$valorIgualActividad."' WHERE act_id_tipo='".$datosIndicador['ipc_indicador']."' AND act_id_carga='".$idcarga."' AND act_periodo='".$periodo."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-			} catch (Exception $e) {
-				include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-			}
+            
+            $sql = "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_valor=? WHERE act_id_tipo=? AND act_id_carga=? AND act_periodo=? AND act_estado=1 AND institucion=? AND year=?";
+            $parametros = [$valorIgualActividad, $datosIndicador['ipc_indicador'], $idcarga, $periodo, $config['conf_id_institucion'], $_SESSION["bd"]];
+            $resultado = BindSQL::prepararSQL($sql, $parametros);
 		}
     }
 
@@ -669,6 +666,26 @@ class Calificaciones {
         $resultado = BindSQL::prepararSQL($sql, $parametros);
 
         $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
+
+        return $resultado;
+    }
+
+    /**
+     * Este metodo me consulta las actividades y los indicadores a los que pertenecen
+     */
+    public static function consultarActividadesIndicador(
+        array  $config,
+        string $idCarga,
+        int    $periodo,
+        string $yearBd = ""
+    ){
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "SELECT aa.id_nuevo AS id_nuevo_act, aa.*, ai.* FROM ".BD_ACADEMICA.".academico_actividades aa
+        INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=aa.act_id_tipo AND ai.institucion=aa.institucion AND ai.year=aa.year
+        WHERE aa.act_id_carga=? AND aa.act_periodo=? AND aa.act_estado=1 AND aa.institucion=? AND aa.year=?";
+        $parametros = [$idCarga, $periodo, $config['conf_id_institucion'], $year];
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
 
         return $resultado;
     }
