@@ -62,13 +62,7 @@ $contador_periodos=0;
 $contp = 1;
 $puestoCurso = 0;
 $promedioPuesto = 0;
-$puestos = mysqli_query($conexion, "SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom,
-ROW_NUMBER() OVER(ORDER BY prom desc) as puesto 
-FROM ".BD_ACADEMICA.".academico_matriculas mat
-INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol_estudiante=mat_id AND bol_periodo='".$periodoActual."' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
-WHERE  mat_grado='".$matriculadosDatos['mat_grado']."' AND mat_grupo='".$matriculadosDatos['mat_grupo']."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year}
-GROUP BY mat_id 
-ORDER BY prom DESC");
+$puesto = Boletin::obtenerPuestoYpromedioEstudiante($periodoActual,$matriculadosDatos['mat_grado'], $matriculadosDatos['mat_grupo'], $year);
 
 while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
 	if($puesto['bol_estudiante']==$matriculadosDatos['mat_id']){
@@ -241,12 +235,12 @@ while($fila2=mysqli_fetch_array($consulta_a_mat, MYSQLI_BOTH)){
             <td align="center" style="font-weight:bold; font-size:12px;background:#EAEAEA;"><?php echo $fila["car_ih"];?></td>
 <?php 
 for($l=1;$l<=$numero_periodos;$l++){
-	$consultaNotaEstudiante=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='".$fila2['car_id']."' AND bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_periodo='".$l."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-	$notaDelEstudiante = mysqli_fetch_array($consultaNotaEstudiante, MYSQLI_BOTH);
+	$notaDelEstudiante = Boletin::traerNotaBoletinCargaPeriodo($config, $l, $matriculadosDatos['mat_id'], $fila2['car_id'], $year);
 ?>
 			<td class=""  align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;">
 			<?php 
 			if(!empty($notaDelEstudiante['bol_nota'])){
+				$desempenoNotaP = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaDelEstudiante['bol_nota'], $year);
 				if($datosUsr["mat_grado"]>11){
 					$notaF = ceil($notaDelEstudiante['bol_nota']);
 					/*
@@ -258,9 +252,8 @@ for($l=1;$l<=$numero_periodos;$l++){
 						case 5: echo "E"; break;
 					}
 					*/
-					echo $desempenoNotaP[1];
+					echo $desempenoNotaP['notip_nombre'];
 				}else{
-					$desempenoNotaP = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaDelEstudiante['bol_nota'], $year);
 					if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
 						echo $desempenoNotaP['notip_nombre'];
 					}else{
@@ -419,9 +412,7 @@ if($numIndicadores>0){
 ?>
 	<!-- observaciones de la asignatura-->
 	<?php
-	$consultaObservaciones=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin
-	WHERE bol_carga='".$fila2["car_id"]."' AND bol_periodo='".$periodoActual."' AND bol_estudiante='".$matriculadosDatos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-	$observacion = mysqli_fetch_array($consultaObservaciones, MYSQLI_BOTH);
+	$observacion = Boletin::traerNotaBoletinCargaPeriodo($config, $periodoActual, $matriculadosDatos['mat_id'], $fila2['car_id'], $year);
 	if(!empty($observacion['bol_observaciones_boletin'])){
 	?>
 	<tr>

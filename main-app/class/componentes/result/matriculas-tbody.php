@@ -22,6 +22,7 @@ foreach ($data["data"] as $resultado) {
 	$color = $resultado["mat_inclusion"] == 1 ? 'blue' : '';
 
 	$nombreAcudiente = '';
+	$idAcudiente = '';
 	if (isset($acudiente['uss_id'])) {
 		$nombreAcudiente = UsuariosPadre::nombreCompletoDelUsuario($acudiente);
 		$idAcudiente = $acudiente['uss_id'];
@@ -197,22 +198,14 @@ foreach ($data["data"] as $resultado) {
 	$_GET["id"] = base64_encode($resultado['mat_id']);
 	if (!empty($resultado['gra_nombre'])) {
 		$idModal = "cambiarGrupoModal" . $resultado['mat_id'];
-		$contenido = "../directivo/estudiantes-cambiar-grupo-modal.php";
-		if (!empty($data["dataTotal"])) {
-			include("../../compartido/contenido-modal.php");
-		}else{
-			include("../compartido/contenido-modal.php");
-		}
+		$contenido = ROOT_PATH."/main-app/directivo/estudiantes-cambiar-grupo-modal.php";
+		include(ROOT_PATH."/main-app/compartido/contenido-modal.php");
 		
 	}
 
 	$idModal = "retirarModal" . $resultado['mat_id'];
-	$contenido = "../directivo/estudiantes-retirar-modal.php";
-	if (!empty($data["dataTotal"])) {
-		include("../../compartido/contenido-modal.php");
-	}else{
-		include("../compartido/contenido-modal.php");
-	}
+	$contenido = ROOT_PATH."/main-app/directivo/estudiantes-retirar-modal.php";
+	include(ROOT_PATH."/main-app/compartido/contenido-modal.php");
 
 	$contReg++;
 }

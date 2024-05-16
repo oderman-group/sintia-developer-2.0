@@ -112,8 +112,7 @@ if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
   $nombreMayor="";
   while($fila=mysqli_fetch_array($asig, MYSQLI_BOTH)){
     $nombre = Estudiantes::NombreCompletoDelEstudiante($fila);
-  		$cuentaest=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$fila['mat_id']."' AND bol_periodo='".$per."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} GROUP BY bol_carga");
-		$numero=mysqli_num_rows($cuentaest);
+    $numero = Boletin::contarNotaBoletinPeriodo($config, $per, $fila['mat_id']);
 		$def='0.0';
 		
   ?>
@@ -126,8 +125,7 @@ if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
 		$suma=0;
     $materias1 = CargaAcademica::traerCargasMateriasPorCursoGrupo($config, $curso, $grupo);
 		while($mat1=mysqli_fetch_array($materias1, MYSQLI_BOTH)){
-			$notas=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$fila['mat_id']."' AND bol_carga='".$mat1['car_id']."' AND bol_periodo='".$per."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-			$nota=mysqli_fetch_array($notas, MYSQLI_BOTH);
+      $nota = Boletin::traerNotaBoletinCargaPeriodo($config, $per, $fila['mat_id'], $mat1['car_id']);
       $defini = 0;
       if(!empty($nota['bol_nota'])){$defini = $nota['bol_nota'];$suma=($suma+$defini);}
 			if($defini<$config[5]) $color='red'; else $color='blue';

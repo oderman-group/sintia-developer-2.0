@@ -12,13 +12,15 @@ if (count($acceso) > 5) {
 }
 if ($content == 'json') {    
     $valor =  !empty($input['valor']) ? $input['valor'] : "";
+    $filtro2 =  !empty($input['filtro2']) ? $input['filtro2'] : "";
     $response = array();
     $parametros = array();
     $filtrosDecode = array();
     if (!empty($input['valor'])) {
-        $parametros = [
-            'valor' => $input['valor']
-        ];
+        $parametros['valor'] = $input['valor'];
+    }
+    if (!empty($input['filtro2'])) {
+        $parametros['filtro2'] = $input['filtro2'];
     }
     $filtros = $input['filtros'];
     foreach ($filtros as $key => $filtro) {

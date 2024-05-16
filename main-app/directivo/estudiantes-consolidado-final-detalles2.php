@@ -7,6 +7,7 @@ require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 $year = $agnoBD;
 ?>
 
@@ -257,8 +258,7 @@ if (!Modulos::validarPermisoEdicion()) {
 												$defPorMateria = 0;
 												//PERIODOS DE CADA MATERIA
 												while ($p <= $config[19]) {
-													$consultaBoletin = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='" . $carga['car_id'] . "' AND bol_estudiante='" . $resultado['mat_id'] . "' AND bol_periodo='" . $p . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-													$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
+													$boletin = Boletin::traerNotaBoletinCargaPeriodo($config, $p, $resultado['mat_id'], $carga['car_id']);
 													if (isset($boletin['bol_nota']) and $boletin['bol_nota'] < $config[5] and $boletin['bol_nota'] != "") $color = $config[6];
 													elseif (isset($boletin['bol_nota']) and $boletin['bol_nota'] >= $config[5]) $color = $config[7];
 													if (isset($boletin['bol_nota'])) {

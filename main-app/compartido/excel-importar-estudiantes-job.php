@@ -85,6 +85,7 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 		$acudientesCreados       = array();
 		$acudientesExistentes    = array();
 		$acudientesNoCreados     = array();
+		$contE=1;
 		while ($f <= $numFilas) {
 			/*
 			***************ACUDIENTE********************
@@ -225,8 +226,8 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 						}
 						//Actualizamos el acudiente y los datos del formulario
 						try{
-							mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_matriculas SET mat_matricula=mat_matricula $camposActualizar
-									WHERE mat_id='".$datosEstudianteExistente['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$anio}");
+							$update = "mat_matricula=mat_matricula {$camposActualizar}";
+							Estudiantes::actualizarMatriculasPorId($config, $datosEstudianteExistente['mat_id'], $update, $anio);
 						} catch (Exception $e) {
 							SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
 						}
@@ -282,8 +283,10 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 						SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
 					}
 					
-					$codigoMAT = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_matriculas');
+					$codigoMAT = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_matriculas').$contE;
 					$sql .= "('".$codigoMAT."', '".$arrayIndividual['mat_matricula']."', NOW(), '".$arrayIndividual['mat_primer_apellido']."', '".$arrayIndividual['mat_segundo_apellido']."', '".$arrayIndividual['mat_nombres']."', '".$grado."', '".$idUsuarioEstudiante."', '".$idAcudiente."', '".$arrayIndividual['mat_documento']."', '".$tipoDocumento."', '".$grupo."', '".$arrayIndividual['mat_direccion']."', '".$genero."', '".$fNacimiento."', '".$arrayIndividual['mat_barrio']."', '".$arrayIndividual['mat_celular']."', '".$email."', '".$estrato."', '".$arrayIndividual['mat_tipo_sangre']."', '".$arrayIndividual['mat_eps']."', '".$arrayIndividual['mat_nombre2']."', {$config['conf_id_institucion']}, {$anio}),";
+
+					$contE++;
 					
 					//Borramos si hay alguna asociación igual y creamos la nueva
 					try{

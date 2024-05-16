@@ -14,6 +14,7 @@ require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
+require_once(ROOT_PATH."/main-app/class/Ausencias.php");
 
 $year=$_SESSION["bd"];
 if(isset($_GET["year"])){
@@ -62,9 +63,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
     }
     $contp = 1;
     $puestoCurso = 0;
-    $puestos = mysqli_query($conexion, "SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom FROM ".BD_ACADEMICA.".academico_matriculas mat
-    INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol_estudiante=mat_id AND bol_periodo='" . $periodoActual . "' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
-    WHERE  mat_grado='" . $matriculadosDatos['mat_grado'] . "' AND mat_grupo='" . $matriculadosDatos['mat_grupo'] . "' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year} GROUP BY mat_id ORDER BY prom DESC");
+    $puestos = Boletin::obtenerPuestoYpromedioEstudiante($periodoActual,$matriculadosDatos['mat_grado'], $matriculadosDatos['mat_grupo'], $year);
     while ($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)) {
         if ($puesto['bol_estudiante'] == $matriculadosDatos['mat_id']) {
             $puestoCurso = $contp;
@@ -175,11 +174,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                 $ausPer4=0;
                 while($j<=$periodoActual){
 
-                    $consultaDatosAusencias=mysqli_query($conexion, "SELECT sum(aus_ausencias) as sumAus FROM ".BD_ACADEMICA.".academico_ausencias aus
-                    INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car_curso='".$datosUsr['gra_id']."' AND car_materia='".$datosCargas['mat_id']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
-                    INNER JOIN ".BD_ACADEMICA.".academico_clases cls ON cls.cls_id=aus.aus_id_clase AND cls.cls_id_carga=car_id AND cls.cls_periodo='".$j."' AND cls.institucion={$config['conf_id_institucion']} AND cls.year={$year}
-                    WHERE aus.aus_id_estudiante='".$datosUsr['mat_id']."' AND aus.institucion={$config['conf_id_institucion']} AND aus.year={$year}");
-                    $datosAusencias = mysqli_fetch_array($consultaDatosAusencias, MYSQLI_BOTH);
+                    $datosAusencias = Ausencias::sumarAusenciasCarga($config, $datosUsr['gra_id'], $datosCargas['mat_id'], $j, $datosUsr['mat_id']);
 
                     if($datosAusencias['sumAus']>0){
                         switch($j){
@@ -209,10 +204,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                         $promedioMateria = 0;
                         for ($j = 1; $j <= $periodoActual; $j++) {
 
-                            $consultaDatosBoletin=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin bol 
-                            LEFT JOIN ".BD_ACADEMICA.".academico_notas_tipos ntp ON ntp.notip_categoria='" . $config["conf_notas_categoria"] . "' AND bol_nota>=ntp.notip_desde AND bol_nota<=ntp.notip_hasta AND ntp.institucion={$config['conf_id_institucion']} AND ntp.year={$year}
-                            WHERE bol_carga='" . $datosCargas['car_id'] . "' AND bol_estudiante='" . $datosUsr['mat_id'] . "' AND bol_periodo='" . $j . "' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}");
-                            $datosBoletin = mysqli_fetch_array($consultaDatosBoletin, MYSQLI_BOTH);
+                            $datosBoletin = Boletin::traerNotaBoletinCargaPeriodo($config, $j, $datosUsr['mat_id'], $datosCargas['car_id'], $year);
 
 
                             $promedioMateria += $datosBoletin['bol_nota'];

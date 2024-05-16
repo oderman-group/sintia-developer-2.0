@@ -5,8 +5,7 @@ require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 
-$consultaIndicadorObg=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores WHERE ind_id='".$_POST["indicador"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-$indicadorObg = mysqli_fetch_array($consultaIndicadorObg, MYSQLI_BOTH);
+$indicadorObg = Indicadores::traerIndicadoresDatos($_POST["indicador"]);
 
 $cargaEjemplo = CargaAcademica::traerCargaMateriaPorID($config, $_POST["carga"]);
 

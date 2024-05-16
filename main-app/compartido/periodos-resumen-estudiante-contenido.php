@@ -141,8 +141,7 @@ require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 															$decimal = $porcentajeGrado/100;
 															
 															//LAS CALIFICACIONES
-															$notasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante='".$datosEstudianteActual['mat_id']."' AND bol_carga='".$rCargas['car_id']."' AND bol_periodo='".$i."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-															$notasResultado = mysqli_fetch_array($notasConsulta, MYSQLI_BOTH);
+															$notasResultado = Boletin::traerNotaBoletinCargaPeriodo($config, $i, $datosEstudianteActual['mat_id'], $rCargas["car_id"]);
 															$numN = mysqli_num_rows($notasConsulta);
 															if($numN){
 																$n++;

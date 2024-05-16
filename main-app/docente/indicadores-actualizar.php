@@ -15,11 +15,10 @@ $porcentajePermitido = 100 - $sumaIndicadores[0];
 $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
 $porcentajeRestante = ($porcentajeRestante + $_POST["valorIndicador"]);
 
-try{
-	mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_indicadores SET ind_nombre='".mysqli_real_escape_string($conexion,$_POST["contenido"])."' WHERE ind_id='".$_POST["idInd"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-}
+$update = "
+	ind_nombre=".mysqli_real_escape_string($conexion,$_POST["contenido"])."
+";
+Indicadores::actualizarIndicador($config, $_POST["idInd"], $update);
 
 //Si vamos a relacionar los indicadores con los SABERES
 if($datosCargaActual['car_saberes_indicador']==1){

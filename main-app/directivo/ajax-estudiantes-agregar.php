@@ -1,14 +1,9 @@
 <?php 
 include("session.php");
-try{
-    $consultaDoc=mysqli_query($conexion, "SELECT mat_documento FROM ".BD_ACADEMICA.".academico_matriculas
-    WHERE mat_documento ='".$_POST["nDoct"]."' AND mat_eliminado=0 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-    include("../compartido/error-catch-to-report.php");
-}
-$numDotos=mysqli_num_rows($consultaDoc);
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+
+$numDotos= Estudiantes::validarExistenciaEstudiante($_POST["nDoct"]);
 if ($numDotos > 0) {
-    require_once("../class/Estudiantes.php");
     $datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_POST["nDoct"]);
     $nombreEstudiante = Estudiantes::NombreCompletoDelEstudiante($datosEstudianteActual);
 ?>
@@ -29,7 +24,7 @@ if ($numDotos > 0) {
         
         <p style="margin-top:10px;">
             <div class="btn-group">
-                <a href="estudiantes-editar.php?id=<?=$datosEstudianteActual['mat_id'];?>" id="addRow" class="btn deepPink-bgcolor">
+                <a href="estudiantes-editar.php?id=<?=base64_encode($datosEstudianteActual['mat_id']);?>" id="addRow" class="btn deepPink-bgcolor">
                     Sí, deseo mostrar la información
                 </a>
             </div>

@@ -140,4 +140,27 @@ class Plataforma {
         }
     }
 
+    /**
+     * Este metodo sirve para consultar la configuración de la institución
+     * 
+     * @return array
+     */
+    public static function traerDatosPlanes(
+        mysqli  $conexion,
+        int     $idPlan
+    )
+    {
+        $resultado = [];
+
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".planes_sintia WHERE plns_id='{$idPlan}'");
+            $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        } catch (Exception $e) {
+            include(ROOT_PATH."/compartido/error-catch-to-report.php");
+        }
+
+        return $resultado;
+
+    }
+
 }

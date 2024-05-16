@@ -5,6 +5,7 @@
     $idPaginaInterna = 'DT0252';
     require_once(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
     require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
+    require_once(ROOT_PATH."/main-app/class/Areas.php");
 
 
     if($_GET['tipoEncuesta'] == DIRECTIVO){
@@ -24,7 +25,7 @@
     }
 
     if($_GET['tipoEncuesta'] == AREA){
-        $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_areas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        $consulta = Areas::traerAreasInstitucion($config);
         while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
             $selected = !empty($_GET['idEvaluado']) && $_GET['idEvaluado'] == $resultado['ar_id'] ? "selected": "";
             echo '<option value="'.$resultado['ar_id'].'" '.$selected.'>'.$resultado['ar_nombre'].'</option>';

@@ -392,7 +392,8 @@ class CargaAcademica {
         string $filtro = "", 
         string $order = "car_id", 
         string $limit = "LIMIT 0, 2000",
-        string $valueIlike = "" 
+        string $valueIlike = "",
+        array  $filtro2 = array()  
 
     ){
         if(!empty($valueIlike)){
@@ -411,8 +412,15 @@ class CargaAcademica {
                 OR CONCAT(TRIM(uss_nombre), TRIM(uss_apellido1)) LIKE '%".$busqueda."%'
             )";
         }
+        if(!empty($filtro2)){
+            if(!empty($filtro2['periodoSeleccionados'])){
+                $arrayPeriodos=$filtro2['periodoSeleccionados'];
+                $periodos = implode(", ", $arrayPeriodos);
+                $filtro .= " AND car_periodo IN ({$periodos})";
+            }
+        }
         try {
-            $sql="SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
+            $sql="SELECT car.*, am.*, gra.*, gru.*, uss.*, car.id_nuevo AS id_nuevo_carga FROM ".BD_ACADEMICA.".academico_cargas car
             INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion=car.institucion AND gra.year=car.year {$filtroMT}
             LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion=car.institucion AND gru.year=car.year
             LEFT JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion=car.institucion AND am.year=car.year
