@@ -689,35 +689,37 @@ function mostrarImagen(idFile, idImg) {
  * @param {string} url url la cual se va a ejecutar
  * @param {array} data datos que se enviuaran
  * @param {string} tipo tipo de envio si es un Json o un html
- * @param {boolean} get  valida si la peticion es GET
+ * @param {boolean} isGet  valida si la peticion es GET
  * @param {string} metodoresponse  meodo que se ecutaran con la respuesta del fetch
  */
-function metodoFetch(url,data,tipo,get,metodoresponse) {
-           if(tipo=='json'){
-           var parametros= {
-                method:get?"GET":"POST", // or 'PUT'
-                body: JSON.stringify(data), // data can be `string` or {object}!
-                headers: {
-                    "Content-Type": "application/json"
-                }
+function metodoFetch(url, data, tipo, isGet, metodoresponse) {
+    var parametros;
+    if (tipo == 'json') {
+        parametros = {
+            method: isGet ? "GET" : "POST", // or 'PUT'
+            body: JSON.stringify(data), // data can be `string` or {object}!
+            headers: {
+                "Content-Type": "application/json"
             }
-           }else{
-            var parametros= {
-                method:get?"GET":"POST", // or 'PUT'
-                body: JSON.stringify(data), // data can be `string` or {object}!
-                headers: {
-                    "Content-Type": "text/html"
-                }
+        }
+    } else {
+        parametros = {
+            method: isGet ? "GET" : "POST", // or 'PUT'
+            body: JSON.stringify(data), // data can be `string` or {object}!
+            headers: {
+                "Content-Type": "text/html"
             }
-           }
 
-			fetch(url,parametros)
-				.then((res) => tipo=='json'?res.json():res.text())
-				.catch((error) => console.error("Error:", error))
-				.then(
-					function(res) {
-                        window[metodoresponse](res,data);
-					});
+        }
+    }
+
+    fetch(url, parametros)
+        .then((res) => tipo == 'json' ? res.json() : res.text())
+        .catch((error) => console.error("Error:", error))
+        .then(
+            function (res) {
+                window[metodoresponse](res, data);
+            });
 
 }
 /**

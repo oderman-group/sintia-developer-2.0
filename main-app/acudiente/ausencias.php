@@ -4,6 +4,7 @@
 <?php include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Clases.php");
 require_once(ROOT_PATH."/main-app/class/Grados.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 require_once(ROOT_PATH."/main-app/class/Ausencias.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
 </head>
@@ -83,10 +84,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");?>
 										<header class="panel-heading panel-heading-purple"><?=$frases[73][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											$cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
-											INNER JOIN ".BD_ACADEMICA.".academico_materias mate ON mate.mat_id=car_materia AND mate.institucion={$config['conf_id_institucion']} AND mate.year={$_SESSION["bd"]}
-											WHERE car_curso='".$datosEstudianteActual['mat_grado']."' AND car_grupo='".$datosEstudianteActual['mat_grupo']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
-											$nCargas = mysqli_num_rows($cCargas);
+											$cCargas = CargaAcademica::traerCargasMateriasPorCursoGrupo($config, $datosEstudianteActual['mat_grado'], $datosEstudianteActual['mat_grupo']);
 											while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
 												if($rCargas['car_id']==$cargaConsultaActual) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
 											?>

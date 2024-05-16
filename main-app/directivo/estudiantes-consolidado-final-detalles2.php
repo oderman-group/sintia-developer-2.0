@@ -6,6 +6,7 @@
 require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 $year = $agnoBD;
 ?>
@@ -201,13 +202,12 @@ if (!Modulos::validarPermisoEdicion()) {
 										<th rowspan="2" class="css_doc"  style="font-weight:bold;background:<?= $Plataforma->colorUno; ?>; color:#FFF;" width="100px">Doc</th>
 										<th rowspan="2" class="css_nombre" style="font-weight:bold; background:<?= $Plataforma->colorUno; ?>; color:#FFF;" width="400px">Estudiante</th>
 										<?php
-										$cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='" . $_POST["curso"] . "' AND car_grupo='" . $_POST["grupo"] . "' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 										//SACAMOS EL NUMERO DE CARGAS O MATERIASQUE TIENE UN CURSO PARAQUE SIRVA DE DIVISOR EN LA DEFINITIVA POR ESTUDIANTE
+										$cargas = CargaAcademica::traerCargasMateriasPorCursoGrupo($config, $_POST["curso"], $_POST["grupo"]);
 										$numCargasPorCurso = mysqli_num_rows($cargas);
 										while ($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)) {
-											$materia = Asignaturas::consultarDatosAsignatura($conexion, $config, $carga['car_materia']);
 										?>
-											<th width="<?= ($config[19] + 1) * 50; ?>px" style="font-size:9px; text-align:center; border:groove;" colspan="<?= $config[19] + 1; ?>"><?= $materia['mat_nombre']; ?></th>
+											<th width="<?= ($config[19] + 1) * 50; ?>px" style="font-size:9px; text-align:center; border:groove;" colspan="<?= $config[19] + 1; ?>"><?= $carga['mat_nombre']; ?></th>
 										<?php
 										}
 										?>
@@ -216,9 +216,7 @@ if (!Modulos::validarPermisoEdicion()) {
 
 									<tr>
 										<?php
-
-										$cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='" . $_POST["curso"] . "' AND car_grupo='" . $_POST["grupo"] . "' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-
+										$cargas = CargaAcademica::traerCargasMateriasPorCursoGrupo($config, $_POST["curso"], $_POST["grupo"]);
 										while ($carga = mysqli_fetch_array($cargas)) {
 											$p = 1;
 											//PERIODOS DE CADA MATERIA
@@ -254,10 +252,8 @@ if (!Modulos::validarPermisoEdicion()) {
 											<td style="font-size:9px;" scope="row" width="100px"><?= $resultado['mat_documento']; ?></td>
 											<td style="font-size:9px;" scope="row" width="400px"><?= Estudiantes::NombreCompletoDelEstudiante($resultado); ?></td>
 											<?php
-											$cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='" . $_POST["curso"] . "' AND car_grupo='" . $_POST["grupo"] . "' AND car_activa=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-
+											$cargas = CargaAcademica::traerCargasMateriasPorCursoGrupo($config, $_POST["curso"], $_POST["grupo"]);
 											while ($carga = mysqli_fetch_array($cargas, MYSQLI_BOTH)) {
-												$materia = Asignaturas::consultarDatosAsignatura($conexion, $config, $carga['car_materia']);
 												$p = 1;
 												$defPorMateria = 0;
 												//PERIODOS DE CADA MATERIA
@@ -288,7 +284,7 @@ if (!Modulos::validarPermisoEdicion()) {
 																name="<?= $carga['car_id']; ?>" id="<?= $resultado['mat_id']; ?>" 
 																onChange="def(this)" 
 																alt="<?= $p; ?>" 
-																title="Materia: <?= $materia['mat_nombre']; ?> - Periodo: <?= $p; ?>" 
+																title="Materia: <?= $carga['mat_nombre']; ?> - Periodo: <?= $p; ?>" 
 																<?= $disabled; ?> 
 																<?= $disabledPermiso; ?>
 														/>
