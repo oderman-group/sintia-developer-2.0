@@ -3,9 +3,28 @@ require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.ph
 require_once(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/BindSQL.php");
+require_once("servicios/Servicios.php");
 
-class Clases {
+class Clases  extends Servicios{
     
+      /**
+   * Realiza un conteo teniendo encuenta los parametros ingresados.
+   *
+   * @param array|null $parametrosArray Arreglo de parámetros para filtrar la consulta (opcional).
+   *
+   * @return array|mysqli_result|false Arreglo de datos del resultado, objeto mysqli_result o false si hay un error.
+   */
+  public static function contar($parametrosArray = null,$filtro ="")
+  {
+    $sqlInicial = "SELECT Count(*) as cantidad FROM " . BD_ACADEMICA . ".academico_clases_preguntas";
+    if ($parametrosArray && count($parametrosArray) > 0) {
+        $parametrosValidos = array('cpp_id_clase', 'institucion','year','cpp_padre');
+        $sqlInicial = Servicios::concatenarWhereAnd($sqlInicial, $parametrosValidos, $parametrosArray);
+      };
+    $sqlFinal = "";
+    $sql = $sqlInicial .$filtro. $sqlFinal;
+    return Servicios::SelectSql($sql)[0]["cantidad"];
+  }
     /**
      * Este metodo me trae las preguntas de una clase
      * @param mysqli $conexion
@@ -13,17 +32,34 @@ class Clases {
      * @param string $idClase
      * @param string $filtro
      * 
-     * @return mysqli_result $consulta
+     * @return array $consulta
      */
-    public static function traerPreguntasClases(mysqli $conexion, array $config, string $idClase, string $filtro = ""){
-        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_clases_preguntas cpp
-        INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=cpp.cpp_usuario AND uss.institucion=cpp.institucion AND uss.year=cpp.year
-        WHERE cpp.cpp_id_clase=? AND cpp.institucion=? AND cpp.year=? {$filtro} 
-        ORDER BY cpp.cpp_fecha DESC";
-
-        $parametros = [$idClase, $config['conf_id_institucion'], $_SESSION["bd"]];
+    public static function traerPreguntasClases(mysqli $conexion, array $config, string $idClase, string $filtro = "",string $limit = ""){
+     
+        $sqlInicial = "SELECT * FROM ".BD_ACADEMICA.".academico_clases_preguntas cpp
+        INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=cpp.cpp_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+        WHERE cpp.cpp_id_clase='" . $idClase . "' AND cpp.institucion={$config['conf_id_institucion']}  AND cpp.year={$_SESSION["bd"]}  $filtro  ORDER BY cpp.cpp_fecha DESC" ;
         
-        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        return Servicios::SelectSql($sqlInicial,$limit);
+    }
+
+        /**
+     * Este metodo me trae una pregunta especifica de la clase
+     * @param string $idClase
+     * 
+     * @return array $resultado
+     */
+    public static function traerPregunta(string $idPregunta){
+        try{
+            global $conexion,$config;
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases_preguntas cpp
+            INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=cpp.cpp_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+            WHERE cpp.cpp_id='" . $idPregunta . "' AND cpp.institucion={$config['conf_id_institucion']} AND cpp.year={$_SESSION["bd"]} ");
+            $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        } catch (Exception $e) {
+            echo "Excepción catpurada: ".$e->getMessage();
+            exit();
+        }
 
         return $resultado;
     }
@@ -52,9 +88,9 @@ class Clases {
         global $conexionPDO;
         $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_clases_preguntas');
 
-        $sql = "INSERT INTO ".BD_ACADEMICA.".academico_clases_preguntas(cpp_id, cpp_usuario, cpp_fecha, cpp_id_clase, cpp_contenido, institucion, year)VALUES(?, ?, now(), ?, ?, ?, ?)";
+        $sql = "INSERT INTO ".BD_ACADEMICA.".academico_clases_preguntas(cpp_id, cpp_usuario, cpp_fecha, cpp_id_clase, cpp_contenido, cpp_padre, institucion, year)VALUES(?, ?, now(), ?, ?, ?, ?, ?)";
         
-        $parametros = [$codigo, $_SESSION["id"], $POST["idClase"], mysqli_real_escape_string($conexion,$POST["contenido"]), $config['conf_id_institucion'], $_SESSION["bd"]];
+        $parametros = [$codigo, $_SESSION["id"], $POST["idClase"], mysqli_real_escape_string($conexion,$POST["contenido"]), $POST["idPadre"], $config['conf_id_institucion'], $_SESSION["bd"]];
 
         $resultado = BindSQL::prepararSQL($sql, $parametros);
     }

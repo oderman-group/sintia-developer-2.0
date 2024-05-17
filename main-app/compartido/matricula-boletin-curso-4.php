@@ -7,12 +7,13 @@ if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol(
 	exit();
 }
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
-require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Usuarios.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
     
 
 $year=$_SESSION["bd"];
@@ -134,21 +135,10 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
     <body style="font-family:Arial;">
 
         <?php
-
         //CONSULTA QUE ME TRAE LAS areas DEL ESTUDIANTE
-
-        $consulta_mat_area_est = mysqli_query($conexion, "SELECT ar_id, car_ih, car_docente, car_director_grupo FROM ".BD_ACADEMICA.".academico_cargas car
-
-		INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car.car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-
-		INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id= am.mat_area AND ar.institucion={$config['conf_id_institucion']} AND ar.year={$year}
-
-		WHERE  car_curso='" . $datosUsr["mat_grado"] . "' AND car_grupo='" . $datosUsr["mat_grupo"] . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year} GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
-
-        //$numero_periodos=$config["conf_periodos_maximos"];
-
+        $consulta_mat_area_est = CargaAcademica::traerCargasMateriasAreaPorCursoGrupo($config, $datosUsr["mat_grado"], $datosUsr["mat_grupo"], $year);
+        
         $numero_periodos = $config["conf_periodo"];
-
         ?>
 
         <div align="center" style="margin-bottom:20px;">

@@ -55,8 +55,8 @@ class BindSQL
                 exit();
             }
         } catch (Exception $e) {
-            self::revertirTransacion();
-            include(ROOT_PATH . "/compartido/error-catch-to-report.php");
+             self::revertirTransacion();
+            include(ROOT_PATH . "/main-app/compartido/error-catch-to-report.php");
         }
     }
     // funcion para Iniciar la transacio

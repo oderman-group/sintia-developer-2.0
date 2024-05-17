@@ -3,6 +3,8 @@
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Grados.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
+require_once(ROOT_PATH."/main-app/class/Ausencias.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
@@ -86,13 +88,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 										<header class="panel-heading panel-heading-purple"><?=$frases[73][$datosUsuarioActual['uss_idioma']];?> </header>
 										<div class="panel-body">
 											<?php
-											try{
-												$cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
-												INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
-												WHERE car_curso='".$datosEstudianteActual['mat_grupo']."' AND car_grupo='".$datosEstudianteActual['mat_grupo']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}");
-											} catch (Exception $e) {
-												include("../compartido/error-catch-to-report.php");
-											}
+											$cCargas = CargaAcademica::traerCargasMateriasPorCursoGrupo($config, $datosEstudianteActual['mat_grado'], $datosEstudianteActual['mat_grupo'], $year);
 											$nCargas = mysqli_num_rows($cCargas);
 											while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
 												if($rCargas['car_id']==$cargaConsultaActual) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
@@ -136,13 +132,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														include("../compartido/error-catch-to-report.php");
 													}
 													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-														try{
-															$consultaAusencias=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_ausencias 
-															WHERE aus_id_clase='".$resultado['cls_id']."' AND aus_id_estudiante='".$datosEstudianteActual['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
-														}
-														$ausencia = mysqli_fetch_array($consultaAusencias, MYSQLI_BOTH);
+														$ausencia = Ausencias::traerAusenciasClaseEstudiante($config, $resultado['cls_id'], $datosEstudianteActual['mat_id']);
 													 ?>
 													<tr>
                                                         <td><?=$contReg;?></td>

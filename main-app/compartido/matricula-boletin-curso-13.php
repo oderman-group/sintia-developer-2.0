@@ -7,10 +7,11 @@ if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol(
 	exit();
 }
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
-require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
     
 $year=$_SESSION["bd"];
 if(isset($_GET["year"])){
@@ -62,13 +63,7 @@ $contador_periodos=0;
 $contp = 1;
 $puestoCurso = 0;
 $promedioPuesto = 0;
-$puestos = mysqli_query($conexion, "SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom,
-ROW_NUMBER() OVER(ORDER BY prom desc) as puesto 
-FROM ".BD_ACADEMICA.".academico_matriculas mat
-INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol_estudiante=mat_id AND bol_periodo='".$periodoActual."' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
-WHERE  mat_grado='".$matriculadosDatos['mat_grado']."' AND mat_grupo='".$matriculadosDatos['mat_grupo']."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year}
-GROUP BY mat_id 
-ORDER BY prom DESC");
+$puestos = Boletin::obtenerPuestoYpromedioEstudiante($periodoActual,$matriculadosDatos['mat_grado'], $matriculadosDatos['mat_grupo'], $year);
 
 while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
 	if($puesto['bol_estudiante']==$matriculadosDatos['mat_id']){
@@ -99,11 +94,7 @@ while($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)){
 //CONSULTA QUE ME TRAE EL DESEMPEÑO
 $consulta_desempeno = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $year);	
 //CONSULTA QUE ME TRAE LAS areas DEL ESTUDIANTE
-$consulta_mat_area_est=mysqli_query($conexion, "SELECT ar_id, car_ih FROM ".BD_ACADEMICA.".academico_cargas car
-INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id= am.mat_area AND ar.institucion={$config['conf_id_institucion']} AND ar.year={$year}
-WHERE  car_curso='".$datosUsr["mat_grado"]."' AND car_grupo='".$datosUsr["mat_grupo"]."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year} GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
-//$numero_periodos=$config["conf_periodos_maximos"];
+$consulta_mat_area_est = CargaAcademica::traerCargasMateriasAreaPorCursoGrupo($config, $datosUsr['mat_grado'], $datosUsr['mat_grupo'], $year);
 $numero_periodos=$periodoActual;
  ?>
 
@@ -197,26 +188,7 @@ if($total_promedio==1)	$total_promedio="1.0";	if($total_promedio==2)	$total_prom
 			?>
 			<td class=""  align="center" style="font-weight:bold;"></td>
             <?php }?>
-        <td align="center" style="font-weight:bold;"><?php 
-		$desempenoNotaPromArea = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $total_promedio, $year);
-		
-		if($datosUsr["mat_grado"]>100){
-				$notaFA = ceil($total_promedio);
-			/*
-				switch($notaFA){
-					case 1: echo "D"; break;
-					case 2: echo "I"; break;
-					case 3: echo "A"; break;
-					case 4: echo "S"; break;
-					case 5: echo "E"; break;
-				}
-				*/
-			echo $desempenoNotaPromArea['notip_nombre'];
-				}else{
-		echo $total_promedio;
-				}
-		
-		?></td>
+        <td align="center" style="font-weight:bold;"><?=$total_promedio;?></td>
          <td align="center" style="font-weight:bold;"></td>
           <td align="center" style="font-weight:bold;"></td>
 	</tr>
@@ -245,21 +217,10 @@ while($fila2=mysqli_fetch_array($consulta_a_mat, MYSQLI_BOTH)){
 			<?php 
 			if($notaDelEstudiante['bol_nota']!=""){
 				$desempenoNotaP = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaDelEstudiante['bol_nota'], $year);
-				if($datosUsr["mat_grado"]>100){
-					$notaF = ceil($notaDelEstudiante['bol_nota']);
-					/*
-					switch($notaF){
-						case 1: echo "D"; break;
-						case 2: echo "I"; break;
-						case 3: echo "A"; break;
-						case 4: echo "S"; break;
-						case 5: echo "E"; break;
-					}
-					*/
+				if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
 					echo $desempenoNotaP['notip_nombre'];
 				}else{
 					echo $notaDelEstudiante['bol_nota']."<br>".$desempenoNotaP['notip_nombre'];
-					//echo $notas[$l]."<br>".$desempenoNotaP['notip_nombre'];
 				}
 
 				if (!isset($promedios[$l])) {
@@ -303,27 +264,7 @@ while($fila2=mysqli_fetch_array($consulta_a_mat, MYSQLI_BOTH)){
 		   }
 	   ?>
        
-        <td align="center" style="font-weight:bold; background:#EAEAEA;"><?php 
-		$desempenoNotaXasig = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $total_promedio2, $year);
-	
-					if($datosUsr["mat_grado"]>100){
-				$notaFI = ceil($total_promedio2);
-						/*
-				switch($notaFI){
-					case 1: echo "D"; break;
-					case 2: echo "I"; break;
-					case 3: echo "A"; break;
-					case 4: echo "S"; break;
-					case 5: echo "E"; break;
-				}
-				*/
-						echo $desempenoNotaXasig['notip_nombre'];
-						
-				}else{
-					echo $total_promedio2;
-				}
-		
-		?></td>
+        <td align="center" style="font-weight:bold; background:#EAEAEA;"><?=$total_promedio2?></td>
         <td align="center" style="font-weight:bold; background:#EAEAEA;"><?php //DESEMPEÑO
 		while($r_desempeno=mysqli_fetch_array($consulta_desempeno, MYSQLI_BOTH)){
 			if($total_promedio2>=$r_desempeno["notip_desde"] && $total_promedio2<=$r_desempeno["notip_hasta"]){
@@ -369,24 +310,7 @@ if($numIndicadores>0){
             <?php for($m=1;$m<=$numero_periodos;$m++){ 
 			$desempenoNotaInd = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $nota_indicador, $year);
 			?>
-			<td class=""  align="center" style="font-weight:bold;"><?php if($periodoActual==$m){
-				if($datosUsr["mat_grado"]>100){
-				$notaFII = ceil($nota_indicador);
-					/*
-				switch($notaFII){
-					case 1: echo "D"; break;
-					case 2: echo "I"; break;
-					case 3: echo "A"; break;
-					case 4: echo "S"; break;
-					case 5: echo "E"; break;
-				}
-				*/
-					echo $desempenoNotaInd['notip_nombre'];
-			}else{
-				echo $nota_indicador;
-			}
-				
-				} ?></td>
+			<td class=""  align="center" style="font-weight:bold;"><?php if($periodoActual==$m){ echo $nota_indicador;} ?></td>
             <?php } ?>
  <td align="center" style="font-weight:bold;"></td>
         <td align="center" style="font-weight:bold;"></td>
@@ -432,16 +356,7 @@ if($numIndicadores>0){
 		$desempenoNotaProm = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaFFF, $year);
 		?>
         <td style="font-size:16px;">
-        	<?php 
-		if($promedios[$n]!=0){
-			if($datosUsr["mat_grado"]>100){
-				$notaFF = ceil(round(($promedios[$n]/$contpromedios[$n]),1));
-				echo $desempenoNotaProm['notip_nombre'];
-			}else{
-				echo $promedioPuesto;
-			}
-			
-			}?></td>
+        	<?php  if($promedios[$n]!=0){ echo $promedioPuesto;}?></td>
         <?php } ?>
         <td></td>
         <td colspan="2">&nbsp;</td>

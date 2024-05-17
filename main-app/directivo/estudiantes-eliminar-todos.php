@@ -5,6 +5,8 @@ require_once(ROOT_PATH."/main-app/class/Foros.php");
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/Ausencias.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 Modulos::validarAccesoDirectoPaginas();
@@ -24,21 +26,13 @@ Foros::eliminarTodasRespuestas($conexion, $config);
 
 Actividades::eliminarActividadesEntregasTodas($conexion, $config);
 
-try{
-	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_ausencias WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
-
 Boletin::eliminarNotasBoletinInstitucion($config);
 
 Calificaciones::eliminarCalificacionesInstitucion($config);
 
-try{
-	mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_matriculas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"); //ELIMINA TODO
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
+Ausencias::eliminarAusenciasInstitucion($config);
+
+Estudiantes::eliminarTodasMatriculas($config['conf_id_institucion']);
 
 Calificaciones::eliminarTodasNivelaciones($conexion, $config);
 

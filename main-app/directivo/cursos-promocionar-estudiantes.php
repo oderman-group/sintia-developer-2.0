@@ -12,11 +12,8 @@
 		$cambiarEstado = !empty($_POST["estado".$idEstudiantes]) ? ", mat_estado_matricula=1" : "";
 		$grupo = (!empty($_POST["grupoPara"]) && $_POST["grupoPara"] != 0)  ? $_POST["grupoPara"] : $_POST["grupo".$idEstudiantes];
 
-		try {
-			$consulta=mysqli_query($conexion,"UPDATE ".BD_ACADEMICA.".academico_matriculas SET mat_grado='".$_POST["para"]."', mat_grupo='".$grupo."', mat_promocionado=1 {$cambiarEstado} WHERE mat_id='".$idEstudiantes."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
+		$update = "mat_grado=".$_POST["para"].", mat_grupo=".$grupo.", mat_promocionado=1 {$cambiarEstado}";
+		Estudiantes::actualizarMatriculasPorId($config, $idEstudiantes, $update);
 
 		if (!empty($_POST['relacionCargas']) || $_POST['relacionCargas'] == 1) {
 			$filtro .= (!empty($_POST["grupoDesde"]) && $_POST["grupoDesde"] != 0) ? " AND car_grupo='".$_POST["grupoDesde"]."'" : "";
