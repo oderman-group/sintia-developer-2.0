@@ -192,21 +192,22 @@ foreach ($data["data"] as $resultado) {
 					} ?>
 				</ul>
 			</div>
+			<?php
+				$_GET["id"] = base64_encode($resultado['mat_id']);
+				if (!empty($resultado['gra_nombre'])) {
+					$idModal = "cambiarGrupoModal" . $resultado['mat_id'];
+					$contenido = ROOT_PATH."/main-app/directivo/estudiantes-cambiar-grupo-modal.php";
+					include(ROOT_PATH."/main-app/compartido/contenido-modal.php");
+					
+				}
+
+				$idModal = "retirarModal" . $resultado['mat_id'];
+				$contenido = ROOT_PATH."/main-app/directivo/estudiantes-retirar-modal.php";
+				include(ROOT_PATH."/main-app/compartido/contenido-modal.php");
+			?>
 		</td>
 	</tr>
 <?php
-	$_GET["id"] = base64_encode($resultado['mat_id']);
-	if (!empty($resultado['gra_nombre'])) {
-		$idModal = "cambiarGrupoModal" . $resultado['mat_id'];
-		$contenido = ROOT_PATH."/main-app/directivo/estudiantes-cambiar-grupo-modal.php";
-		include(ROOT_PATH."/main-app/compartido/contenido-modal.php");
-		
-	}
-
-	$idModal = "retirarModal" . $resultado['mat_id'];
-	$contenido = ROOT_PATH."/main-app/directivo/estudiantes-retirar-modal.php";
-	include(ROOT_PATH."/main-app/compartido/contenido-modal.php");
-
 	$contReg++;
 }
 ?>
