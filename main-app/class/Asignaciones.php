@@ -106,7 +106,7 @@ class Asignaciones {
         foreach ($POST['evaluado'] as $idEvaluado){
 
             try {
-                mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".general_limite_asignacion (gal_limite_evaluadores, gal_id_evaluacion, gal_id_evaluado, gal_tipo, gal_institucion, gal_year)VALUES('".$POST["limiteEvaluadores"]."', '".$POST["idE"]."', '".$idEvaluado."', '".$POST["tipoEncuesta"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
+                mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".general_limite_asignacion (gal_limite_evaluadores, gal_id_evaluacion, gal_id_evaluado, gal_tipo, gal_tipo_evaluador, gal_institucion, gal_year)VALUES('".$POST["limiteEvaluadores"]."', '".$POST["idE"]."', '".$idEvaluado."', '".$POST["tipoEncuesta"]."', '".$POST["evaluador"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
             } catch (Exception $e) {
                 include("../compartido/error-catch-to-report.php");
             }
