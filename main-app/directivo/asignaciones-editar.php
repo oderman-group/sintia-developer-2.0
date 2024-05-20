@@ -16,6 +16,7 @@ if (!empty($_GET['id'])) {
 }
 
 $resultado = Asignaciones::traerDatosAsignacion($conexion, $config, $id);
+$cursos = !empty($resultado['gal_id_curso']) ? explode(",", $resultado['gal_id_curso']) : array();
 
 $iniciadas = Asignaciones::consultarCantAsignacionesEmpezadas($conexion, $config, $resultado['gal_id']);
 
@@ -127,13 +128,13 @@ if (!Modulos::validarPermisoEdicion() || $iniciadas > 0) {
                                                 <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Si el evaluador sera curso, especifique que cursos realizaran la encuesta."><i class="fa fa-question"></i></button>
                                             </label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" style="width: 100%;" name="evaluadorCursos" <?= $disabledPermiso; ?>>
+                                                <select class="form-control  select2-multiple" style="width: 100%;" multiple name="evaluadorCursos[]" <?= $disabledPermiso; ?>>
                                                     <option value="">Escoja una opción</option>
                                                     <?php
                                                         $consultaCursos = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
                                                         while ($datosCursos = mysqli_fetch_array($consultaCursos, MYSQLI_BOTH)) {
                                                     ?>
-                                                    <option value="<?=$datosCursos['gra_id']?>" <?=!empty($resultado['gal_id_curso']) && $resultado['gal_id_curso'] == $datosCursos['gra_id'] ? "selected": "";?>><?=$datosCursos['gra_nombre']?></option>
+                                                    <option value="<?=$datosCursos['gra_id']?>" <?=!empty($resultado['gal_id_curso']) && in_array($datosCursos['gra_id'], $cursos) ? "selected": "";?>><?=$datosCursos['gra_nombre']?></option>
                                                     <?php } ?>
                                                 </select>
                                             </div>
