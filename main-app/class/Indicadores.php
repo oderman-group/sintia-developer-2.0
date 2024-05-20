@@ -176,7 +176,7 @@ class Indicadores {
             $yearConsulta = $year;
         }
         $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-        INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion=ipc.institucio AND ai.year=ipc.year
+        INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion=ipc.institucion AND ai.year=ipc.year
         WHERE ipc.ipc_carga=? AND ipc.ipc_periodo=? AND ipc.institucion=? AND ipc.year=?";
 
         $parametros = [$idCarga, $periodo, $config['conf_id_institucion'], $yearConsulta];
