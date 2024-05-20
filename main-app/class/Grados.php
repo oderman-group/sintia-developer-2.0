@@ -61,6 +61,110 @@ class Grados {
     }
 
     /**
+    * Esta función ejecuta una consulta preparada para insertar un nuevo registro de curso en la tabla 'academico_grados'.
+    *
+    * @param PDO    $conexionPDO  Conexión PDO a la base de datos.
+    * @param string $insert       Lista de campos separados por coma para la inserción.
+    * @param array  $parametros   Array de parámetros para la consulta preparada.
+    * @return string              Código único generado para el nuevo registro de curso.
+    **/
+    public static function guardarCurso (
+        PDO     $conexionPDO,
+        string  $insert,
+        array   $parametros
+    )
+    {
+        $campos = explode(',', $insert);
+        $numCampos = count($campos);
+        $signosPreguntas = str_repeat('?,', $numCampos);
+        $signosPreguntas = rtrim($signosPreguntas, ',');
+
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_grados');
+        $parametros[] = $codigo;
+
+        $sql = "INSERT INTO ".BD_ACADEMICA.".academico_grados ({$insert}) VALUES ({$signosPreguntas})";
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $codigo;
+    }
+
+    /**
+    * Esta función ejecuta una consulta preparada para actualizar un registro de cursos en la tabla 'academico_grados'.
+    *
+    * @param array  $config     Configuración del sistema.
+    * @param string $idCursos   Identificador del curso a actualizar.
+    * @param string $update     Lista de campos y valores a actualizar en formato de cadena.
+    * @param string $yearBd     Año de la base de datos (opcional). Si no se proporciona, se utiliza el valor de sesión.
+    **/
+    public static function actualizarCursos (
+        array   $config,
+        string  $idCursos,
+        string  $update,
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_grados SET {$updateSql} WHERE gra_id=? AND institucion=? AND year=?";
+
+        $parametros = array_merge($updateValues, [$idCursos, $config['conf_id_institucion'], $year]);
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+    }
+
+    /**
+    * Esta función ejecuta una consulta preparada para actualizar todos los cursos en la tabla 'academico_grados'.
+    *
+    * @param array  $config     Configuración del sistema.
+    * @param string $update     Lista de campos y valores a actualizar en formato de cadena.
+    * @param string $yearBd     Año de la base de datos (opcional). Si no se proporciona, se utiliza el valor de sesión.
+    **/
+    public static function actualizarTodosCursos (
+        array   $config,
+        string  $update,
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_grados SET {$updateSql} WHERE institucion=? AND year=?";
+
+        $parametros = array_merge($updateValues, [$config['conf_id_institucion'], $year]);
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+    }
+
+    /**
+    * Esta función ejecuta una consulta para obtener todos los cursos de una institución,
+    *
+    * @param array  $config    Configuración de la aplicación.
+    * @param string $yearBd    Año de la base de datos (opcional). Si no se proporciona, se utiliza el año de sesión.
+    * @return mysqli_result    Objeto `mysqli_result` que contiene los resultados de la consulta.
+    **/
+    public static function traerGradosInstitucion (
+        array   $config,
+        string  $tipo       =   "",
+        string  $yearBd     =   ""
+    )
+    {
+        $year       = !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+        $filtroTipo = !empty($tipo) ? "gra_tipo='{$tipo}' AND" : "";
+
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE gra_estado=1 AND {$filtroTipo} institucion=? AND year=? ORDER BY gra_vocal";
+
+        $parametros = [$config['conf_id_institucion'], $year];
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
+    }
+
+    /**
      * Obtiene los datos de un grado académico específico.
      *
      * @param string $grado El identificador único del grado académico a obtener.
@@ -77,23 +181,104 @@ class Grados {
      * print_r($datosGrado);
      * ```
      */
-    public static function obtenerDatosGrados($grado = ''){
+    public static function obtenerDatosGrados($grado = '', $yearBD = ''){
         
-        global $conexion, $config;
+        global $config;
         
         $resultado = [];
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        try {
-            $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE gra_id='{$grado}' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE gra_id=? AND institucion=? AND year=?";
+
+        $parametros = [$grado, $config['conf_id_institucion'], $year];
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
         return $resultado;
     }
 
-    public static function obtenerGrado($grado = ''){        
-            return mysqli_fetch_array(Grados::obtenerDatosGrados($grado));
+    public static function obtenerGrado($grado = '', $yearBD = ''){        
+            return mysqli_fetch_array(Grados::obtenerDatosGrados($grado, $yearBD));
+    }
+
+    /**
+    * Esta función ejecuta una consulta para obtener los datos de una grado por su nombre
+    *
+    * @param array  $config    Configuración de la aplicación.
+    * @param string $nombreGrado
+    * @param string $yearBd    Año de la base de datos (opcional). Si no se proporciona, se utiliza el año de sesión.
+    **/
+    public static function obtenerGradoPorNombre (
+        array   $config,
+        string  $nombreGrado,
+        string  $yearBd     =   ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE gra_nombre=? AND institucion=? AND year=?";
+
+        $parametros = [$nombreGrado, $config['conf_id_institucion'], $year];
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
+
+        return $resultado;
+    }
+
+    /**
+    * Esta función ejecuta una consulta para obtener todos los cursos y grupos de una institución,
+    *
+    * @param array  $config    Configuración de la aplicación.
+    * @param string $idGrado   Identificador del curso.
+    * @param string $idGrupo   Identificador del grupo.
+    * @param string $yearBd    Año de la base de datos (opcional). Si no se proporciona, se utiliza el año de sesión.
+    **/
+    public static function traerGradosGrupos (
+        array   $config,
+        string  $idGrado     =   "",
+        string  $idGrupo     =   "",
+        string  $yearBd     =   ""
+    )
+    {
+        $year           = !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+        $filtroGrado    = !empty($idGrado) ? "gra.gra_id='{$idGrado}' AND" : "";
+        $filtroGrupo    = !empty($idGrupo) ? "gru.gru_id='{$idGrupo}' AND" : "";
+
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_grados gra
+        JOIN ".BD_ACADEMICA.".academico_grupos gru ON {$filtroGrupo} gru.institucion=gra.institucion AND gru.year=gra.year
+        WHERE {$filtroGrado} gra.institucion=? AND gra.year=?";
+
+        $parametros = [$config['conf_id_institucion'], $year];
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
+
+        return $resultado;
+    }
+
+    /**
+    * Esta función ejecuta una consulta preparada para eliminar todos los registros de categorias de nota
+    * pertenecientes a una institución para un año específico de la base de datos.
+    *
+    * @param int    $idInstitucion Identificador de la institución cuyas categorias de nota se eliminarán.
+    * @param string $yearBd        Año de la base de datos (opcional). Si no se proporciona, se utiliza el valor de sesión.
+    * @return void
+    **/
+    public static function eliminarGradosInstitucion (
+        int     $idInstitucion,
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_grados WHERE institucion=? AND year=?";
+
+        $parametros = [$idInstitucion, $year];
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**

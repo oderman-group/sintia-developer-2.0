@@ -1,7 +1,7 @@
 <?php 
 include("session.php");
-require_once("../class/Estudiantes.php");
-require_once("../class/Usuarios.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Usuarios.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 
@@ -81,13 +81,11 @@ if (!empty($_FILES['fotoMat']['name'])) {
 	$archivo = uniqid($_SESSION["inst"] . '_' . $_SESSION["id"] . '_img_') . "." . $extension;
 	$destino = "../files/fotos";
 	move_uploaded_file($_FILES['fotoMat']['tmp_name'], $destino . "/" . $archivo);
-	try{
-		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_matriculas SET mat_foto='" . $archivo . "' WHERE mat_id='" . $_POST["id"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
 
-    $update = "uss_foto='" . $archivo . "'";
+	$update = "mat_foto=" . $archivo . "";
+	Estudiantes::actualizarMatriculasPorId($config, $_POST["id"], $update);
+
+    $update = "uss_foto=" . $archivo . "";
     UsuariosPadre::actualizarUsuarios($config, $_POST["idU"], $update);
 }
 
@@ -99,12 +97,7 @@ UsuariosPadre::actualizarUsuarios($config, $_POST["idU"], $update);
 //ACTUALIZAR EL ACUDIENTE 1	
 if($_POST["documentoA"]!=""){
 
-	try {
-		$consultaIdAcudiente=mysqli_query($conexion, "SELECT mat_acudiente FROM ".BD_ACADEMICA.".academico_matriculas WHERE mat_id='".$_POST["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		$datosIdAcudiente = mysqli_fetch_array($consultaIdAcudiente, MYSQLI_BOTH);
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
+	$datosIdAcudiente = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
 
 	$usuarioAcudiente=$_POST["documentoA"];
 	if(!empty($datosIdAcudiente['mat_acudiente']) && $datosIdAcudiente['mat_acudiente']!=0){
@@ -140,11 +133,8 @@ if($_POST["documentoA"]!=""){
 		$idAcudiente = UsuariosPadre::guardarUsuario($conexionPDO, "uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_ocupacion, uss_email, uss_fecha_nacimiento, uss_permiso1, uss_genero, uss_celular, uss_foto, uss_idioma, uss_tipo_documento, uss_lugar_expedicion, uss_direccion, uss_apellido1, uss_apellido2, uss_nombre2, uss_documento, uss_tema_sidebar, uss_tema_header, uss_tema_logo, institucion, year, uss_id", [$_POST["documentoA"], $clavePorDefectoUsuarios, 3, mysqli_real_escape_string($conexion,$_POST["nombreA"]), 0, $_POST["ocupacionA"], $_POST["email"], $_POST["fechaNA"], 0, $_POST["generoA"], $_POST["celular"], 'default.png', 1, $_POST["tipoDAcudiente"], $_POST["lugardA"], $_POST["direccion"], mysqli_real_escape_string($conexion,$_POST["apellido1A"]), mysqli_real_escape_string($conexion,$_POST["apellido2A"]), mysqli_real_escape_string($conexion,$_POST["nombre2A"]), $_POST["documentoA"], 'cyan-sidebar-color', 'header-indigo', 'logo-indigo', $config['conf_id_institucion'], $_SESSION["bd"]]);
 	}
 
-	try {
-		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_matriculas SET mat_acudiente='".$idAcudiente."' WHERE mat_id='".$_POST["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}	
+	$update = "mat_acudiente=".$idAcudiente."";
+	Estudiantes::actualizarMatriculasPorId($config, $_POST["id"], $update);
 
 	try {
 		mysqli_query($conexion, "DELETE FROM ".BD_GENERAL.".usuarios_por_estudiantes 
@@ -219,11 +209,8 @@ if(!empty($_POST["idAcudiente2"])){
 			$idAcudiente2 = UsuariosPadre::guardarUsuario($conexionPDO, "uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_ocupacion, uss_email, uss_permiso1, uss_genero, uss_celular, uss_foto, uss_portada, uss_idioma, uss_tema, uss_lugar_expedicion, uss_direccion, uss_apellido1, uss_apellido2, uss_nombre2, uss_documento, institucion, year, uss_id", [$_POST["documentoA2"],$clavePorDefectoUsuarios,3,$_POST["nombreA2"],0,$_POST["ocupacionA2"],$_POST["email"],0,$_POST["generoA2"],$_POST["celular"], 'default.png', 'default.png', 1, 'green', $_POST["lugardA2"], $_POST["direccion"], $_POST["apellido1A2"], $_POST["apellido2A2"], $_POST["nombre2A2"],$_POST["documentoA2"], $config['conf_id_institucion'], $_SESSION["bd"]]);
 		}
 	
-		try {
-			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_matriculas SET mat_acudiente2='".$idAcudiente2."' WHERE mat_id='".$_POST["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
+		$update = "mat_acudiente2=".$idAcudiente2."";
+		Estudiantes::actualizarMatriculasPorId($config, $_POST["id"], $update);
 	}
 }
 include("../compartido/guardar-historial-acciones.php");

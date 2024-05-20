@@ -3,13 +3,13 @@ session_start();
 include("../../config-general/config.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 
 $indicadorObg = Indicadores::traerIndicadoresDatos($_POST["indicador"]);
 
-$consultaCargasEjemplo=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_id='".$_POST["carga"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-$cargaEjemplo = mysqli_fetch_array($consultaCargasEjemplo, MYSQLI_BOTH);
+$cargaEjemplo = CargaAcademica::traerCargaMateriaPorID($config, $_POST["carga"]);
 
-$cargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$cargaEjemplo['car_curso']."' AND car_materia='".$cargaEjemplo['car_materia']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+$cargas = CargaAcademica::traerCargasMateriasPorCursoMateria($config, $cargaEjemplo['car_curso'], $cargaEjemplo['car_materia']);
 
 while($cgs = mysqli_fetch_array($cargas, MYSQLI_BOTH)){
 	$ipc = Indicadores::traerRelacionCargaIndicador($conexion, $config, $cgs['car_id'], $_POST["indicador"]);

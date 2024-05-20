@@ -7,10 +7,11 @@ if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol(
 	exit();
 }
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
-require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 require_once(ROOT_PATH."/main-app/class/Usuarios.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 $year=$_SESSION["bd"];
@@ -83,7 +84,7 @@ $contador_periodos=0;
 <body style="font-family:Arial;">
 
 <div align="center" style="margin-bottom:20px;">
-    <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" width="100%"><br>
+	<img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" width="<?=$tamañoLogo?>%"><br>
     <!-- <?=$informacion_inst["info_nombre"]?><br>
     BOLETÍN DE CALIFICACIONES<br> -->
 </div> 
@@ -108,9 +109,7 @@ $contador_periodos=0;
 	</tr>
 	
 	<?php
-	$cargasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
-	INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-	WHERE car_curso='".$datosUsr["mat_grado"]."' AND car_grupo='".$datosUsr["mat_grupo"]."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}");
+	$cargasConsulta = CargaAcademica::traerCargasMateriasPorCursoGrupo($config, $datosUsr["mat_grado"], $datosUsr["mat_grupo"], $year);
 	$i=1;
 	while($cargas = mysqli_fetch_array($cargasConsulta, MYSQLI_BOTH)){
 		//DIRECTOR DE GRUPO

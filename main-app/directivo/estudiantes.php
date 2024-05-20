@@ -108,10 +108,10 @@ if($config['conf_doble_buscador'] == 1) {
 												</div>
 											</div>
 											
-                                        <div>
+                                        <div class="table-scrollable">
 											
-                                    		<table <?php echo $jQueryTable;?> class="display" style="width:100%;">
-											<div id="gifCarga" class="gif-carga">
+                                    		<table <?=$jQueryTable;?> class="display" style="width:100%;">
+												<div id="gifCarga" class="gif-carga">
 													<img  alt="Cargando...">
 												</div>
                                                 <thead>
@@ -143,7 +143,7 @@ if($config['conf_doble_buscador'] == 1) {
 													}
 													$lista = $arraysDatos;
 													$data["data"] =$lista;
-													include("../class/componentes/result/matriculas-tbody.php");
+													include(ROOT_PATH . "/main-app/class/componentes/result/matriculas-tbody.php");
 													  ?>
                                                 </tbody>
                                             </table>
@@ -160,9 +160,6 @@ if($config['conf_doble_buscador'] == 1) {
             <!-- end page content -->
              <?php // include("../compartido/panel-configuracion.php");?>
         </div>
-		
-		
-		<?php $idModal="ModalSintia1"; $_GET["id"]=base64_encode(2803); $contenido="../compartido/noticias-agregar-modal.php"; include("../compartido/contenido-modal.php");?>
         <!-- end page container -->
         <?php include("../compartido/footer.php");?>
     </div>

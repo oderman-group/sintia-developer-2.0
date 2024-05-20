@@ -7,9 +7,10 @@ if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol(
 	exit();
 }
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
-require_once("../class/Estudiantes.php");
-require_once("../class/servicios/GradoServicios.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/servicios/GradoServicios.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 ?>
 <head>
 	<title>SINTIA - INFORME PARCIAL</title>
@@ -55,11 +56,7 @@ while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH
                                     <!-- BEGIN -->
                                     <tbody>
                                     <?php
-									$cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
-									INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
-									INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]}
-									INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-									WHERE (car_curso='".$matriculadosDatos['mat_grado']."' AND car_grupo='".$matriculadosDatos['mat_grupo']."') AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]} {$filtroOR}");
+                  $cCargas = CargaAcademica::datosRelacionadosCargaPorCursoGrupo($config, $matriculadosDatos['mat_grado'], $matriculadosDatos['mat_grupo'], $filtroOR);
 									$nCargas = mysqli_num_rows($cCargas);
 									$materiasDividir = 0;
 									$promedioG = 0;
@@ -94,51 +91,10 @@ while($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH
 										}	
 								   ?>   
                                     </tbody>
-                                    <!-- END --
-                                     <tfoot>
-                                      <tr style="font-weight:bold;">
-                                        <td colspan="4" style="text-align:right;">PROMEDIO GENERAL</td>
-                                        <td style="text-align:center;"><?php echo $promedioG;?></td>
-                                      </tr>
-                                    </tfoot>
-                                    -->
                                   </table>
-                                  
-    
-<p>&nbsp;</p>                              
-<!--                                  
-<div style="float:left; margin-left:20px; position:relative; max-width:200px; margin-top:-20px; font-size:12px;" align="center">
-_________________________<br>
-Coordinador(a) Acad&eacute;mico(a)
-</div>
-
-<div style="position:relative; float:right; margin-right:20px; max-width:200px; margin-top:-20px; font-size:12px;" align="center">
-_________________________<br>
-Director(a) De Grupo
-</div>
-
-<div style="position:relative; margin-top:60px; font-size:12px;" align="center">
-Yo__________________________________________________________________<br>
-
-Doy constancia de haber recibido del INSTITUTO COLOMBO VENEZOLANO el<br>
-informe acad&eacute;mico parcial de mi acudido y a la vez la citaci&oacute;n<br>
-respectiva para la reuni&oacute;n en donde se me informar&aacute; las causas y<br>
-recomendaciones del bajo demsempe&ntilde;o, establecidas pora la comisi&oacute;n de<br>
-evaluaci&oacute;n y promocion.
-</div>
-
-<div style="margin-top:10px; position:relative; font-size:12px;" align="center">
-_______________________________<br>
-Firma Del Padre Y/O Acudiente
-</div>
-
-<div align="center" style="margin-top:20px; font-size:12px;">En el Se&ntilde;or, pon tu confianza. Salmos 11:01</div>  
- -->                                 
-                                  
-                                  
-                                    
- <?php }?>
- <?php include("../compartido/footer-informes.php");
+<?php 
+}
+include("../compartido/footer-informes.php");
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php"); ?>	
 </body>
 

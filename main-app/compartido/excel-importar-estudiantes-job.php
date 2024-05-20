@@ -18,8 +18,9 @@ require_once(ROOT_PATH."/main-app/class/Sysjobs.php");
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Usuarios.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
-require ROOT_PATH.'/librerias/Excel/vendor/autoload.php';
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/Grados.php");
+require ROOT_PATH.'/librerias/Excel/vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\IOFactory;
 $parametrosBuscar = array(
 	"tipo" =>JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL,
@@ -84,6 +85,7 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 		$acudientesCreados       = array();
 		$acudientesExistentes    = array();
 		$acudientesNoCreados     = array();
+		$contE=1;
 		while ($f <= $numFilas) {
 			/*
 			***************ACUDIENTE********************
@@ -155,16 +157,11 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 			$genero = $tiposGenero[$arrayIndividual['mat_genero']];
 			$grado = "";
 			if(!empty($arrayIndividual['mat_grado'])) {
-				try{
-					$consulta= mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados 
-								WHERE gra_nombre='".$arrayIndividual['mat_grado']."' AND institucion={$config['conf_id_institucion']} AND year={$anio}");
-				} catch (Exception $e) {
-					SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
-				}
-				$num = mysqli_num_rows($consulta);
-				if($num > 0){
-					$datos=mysqli_fetch_array($consulta, MYSQLI_BOTH);
+				$datos = Grados::obtenerGradoPorNombre($config, $arrayIndividual['mat_grado'], $anio);
+				if(!empty($datos['gra_id'])){
 					$grado = $datos['gra_id'];
+				}else{
+					SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,"No se encontro el curso");
 				}
 			}
 			$grupo = 1;
@@ -229,8 +226,8 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 						}
 						//Actualizamos el acudiente y los datos del formulario
 						try{
-							mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_matriculas SET mat_matricula=mat_matricula $camposActualizar
-									WHERE mat_id='".$datosEstudianteExistente['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$anio}");
+							$update = "mat_matricula=mat_matricula {$camposActualizar}";
+							Estudiantes::actualizarMatriculasPorId($config, $datosEstudianteExistente['mat_id'], $update, $anio);
 						} catch (Exception $e) {
 							SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
 						}
@@ -286,8 +283,10 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 						SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
 					}
 					
-					$codigoMAT = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_matriculas');
+					$codigoMAT = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_matriculas').$contE;
 					$sql .= "('".$codigoMAT."', '".$arrayIndividual['mat_matricula']."', NOW(), '".$arrayIndividual['mat_primer_apellido']."', '".$arrayIndividual['mat_segundo_apellido']."', '".$arrayIndividual['mat_nombres']."', '".$grado."', '".$idUsuarioEstudiante."', '".$idAcudiente."', '".$arrayIndividual['mat_documento']."', '".$tipoDocumento."', '".$grupo."', '".$arrayIndividual['mat_direccion']."', '".$genero."', '".$fNacimiento."', '".$arrayIndividual['mat_barrio']."', '".$arrayIndividual['mat_celular']."', '".$email."', '".$estrato."', '".$arrayIndividual['mat_tipo_sangre']."', '".$arrayIndividual['mat_eps']."', '".$arrayIndividual['mat_nombre2']."', {$config['conf_id_institucion']}, {$anio}),";
+
+					$contE++;
 					
 					//Borramos si hay alguna asociación igual y creamos la nueva
 					try{

@@ -5,6 +5,8 @@ require_once(ROOT_PATH."/main-app/class/Actividades.php");
 require_once(ROOT_PATH."/main-app/class/Foros.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/Ausencias.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0162';
@@ -28,21 +30,14 @@ Foros::eliminarRespuestaEstudiante($conexion, $config, $idE);
 
 Actividades::eliminarActividadesEntregasEstudiante($conexion, $config, $idE);
 
-try{
-    mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_ausencias WHERE aus_id_estudiante='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
-
 Boletin::eliminarNotasBoletinEstudiante($config, $idE);
 
 Calificaciones::eliminarCalificacionEstudiante($config, $idE);
 
-try{
-    mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_matriculas SET mat_eliminado=1 WHERE mat_id='" . $idE . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
+Ausencias::eliminarAusenciasEstudiantes($config, $idE);
+
+$update = "mat_eliminado=1";
+Estudiantes::actualizarMatriculasPorId($config, $idE, $update);
 
 Calificaciones::eliminarNivelacionEstudiante($conexion, $config, $idE);
 
