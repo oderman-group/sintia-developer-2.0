@@ -38,7 +38,7 @@ require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
         <div class="panel-body">
 
 
-            <form action="estudiantes-cambiar-grupo-estudiante.php" method="post" class="form-horizontal" enctype="multipart/form-data">
+            <form action="estudiantes-cambiar-grupo-estudiante.php" method="post" class="form-horizontal" enctype="multipart/form-data" id="form-<?= $idModal ?>">
                 <input type="hidden" value="<?= $e['mat_id']; ?>" name="estudiante">
 
 
