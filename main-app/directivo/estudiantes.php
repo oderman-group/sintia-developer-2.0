@@ -108,7 +108,7 @@ if($config['conf_doble_buscador'] == 1) {
 												</div>
 											</div>
 											
-                                        <div class="table-scrollable">
+                                        <div>
 											
                                     		<table <?=$jQueryTable;?> class="display" style="width:100%;">
 												<div id="gifCarga" class="gif-carga">
