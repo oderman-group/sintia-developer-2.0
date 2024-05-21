@@ -1,6 +1,6 @@
 <?php
 include("session.php");
-$idPaginaInterna = 'DT0318';
+$idPaginaInterna = 'DT0329';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Asignaciones.php");
@@ -13,8 +13,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 
 $idE = '';
-if (!empty($_GET['idE'])) {
-    $idE = base64_decode($_GET['idE']);;
+if (!empty($_GET['id'])) {
+    $idE = base64_decode($_GET['id']);;
 }
 ?>
 	<!-- data tables -->
@@ -35,7 +35,7 @@ if (!empty($_GET['idE'])) {
                     <div class="page-bar">
                         <div class="page-title-breadcrumb">
                             <div class=" pull-left">
-                                <div class="page-title">Asignaciones</div>
+                                <div class="page-title">Usuarios Asignados</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
                         </div>
@@ -45,10 +45,10 @@ if (!empty($_GET['idE'])) {
                         <div class="col-md-12">
                         	<?php include("../../config-general/mensajes-informativos.php"); ?>
 							<?php include("../compartido/publicidad-lateral.php");?>
-							<?php include("includes/barra-superior-asignaciones.php"); ?>
+							<?php include("includes/barra-superior-asignaciones-asignados.php"); ?>
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
-                                            <header>Asignaciones</header>
+                                            <header>Usuarios Asignados</header>
                                             <div class="tools">
                                                 <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
 			                                    <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
@@ -57,76 +57,36 @@ if (!empty($_GET['idE'])) {
                                         </div>
                                         <div class="card-body">
 											
-											<div class="row" style="margin-bottom: 10px;">
-												<div class="col-sm-12">
-													<div class="btn-group">
-														<?php if(Modulos::validarPermisoEdicion() &&  Modulos::validarSubRol(['DT0319']) ) {?>
-															<a href="asignaciones-agregar.php?idE=<?=base64_encode($idE)?>" id="addRow" class="btn deepPink-bgcolor">
-															<?=$frases[231][$datosUsuarioActual['uss_idioma']];?> <i class="fa fa-plus"></i>
-															</a>
-														<?php }?>
-													</div>
-												</div>
-											</div>
-											
                                         <div>
                                     		<table id="example1" class="display" style="width:100%;">
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-														<th>Tipo</th>
-														<th>Evaluado</th>
-														<th>Evaluadores</th>
-														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0321', 'DT0329', 'DT0323'])){?>
+														<th>Evaluador</th>
+														<th>Estado</th>
+														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0330'])){?>
 															<th><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></th>
 														<?php }?>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 													<?php
-													include("includes/consulta-paginacion-asignaciones.php");
+													include("includes/consulta-paginacion-asignaciones-asignados.php");
 													$filtroLimite = 'LIMIT '.$inicio.','.$registros;
-													$consulta = Asignaciones::consultarAsignacionesEvaluacion($conexion, $config, $idE, $filtro, $filtroLimite);
+													$consulta = Asignaciones::listarAsignaciones($conexion, $config, $idE, $filtro, $filtroLimite);
 													$contReg = 1;
 													if(!empty($consulta)){
 														while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-															switch ($resultado['gal_tipo']) {
-																case CURSO:
-																	require_once(ROOT_PATH."/main-app/class/Grados.php");
-																	$datosEvaluado = Grados::obtenerGrado($resultado['epag_id_evaluado']);
-																	$nombreEvaluado = $datosEvaluado['gra_nombre'];
-																break;
-
-																case AREA:
-																	$datosEvaluado = Areas::traerDatosArea($config, $resultado['gal_id_evaluado']);
-																	$nombreEvaluado = $datosEvaluado['ar_nombre'];
-																break;
-
-																case MATERIA:
-																	$datosEvaluado = Asignaturas::consultarDatosAsignatura($conexion, $config, $resultado['gal_id_evaluado']);
-																	$nombreEvaluado = $datosEvaluado['mat_nombre'];
-																break;
-
-																default:
-																	if($resultado['gal_tipo'] == DIRECTIVO || $resultado['gal_tipo'] == DOCENTE) {
-																		$datosEvaluado = UsuariosPadre::sesionUsuario($resultado['gal_id_evaluado']);
-																		$nombreEvaluado = UsuariosPadre::nombreCompletoDelUsuario($datosEvaluado);
-																	}
-																break;
-															}
-
-															$iniciadas = Asignaciones::consultarCantAsignacionesEmpezadas($conexion, $config, $resultado['gal_id']);
 
 															$arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
 															$arrayDatos = json_encode($arrayEnviar);
 															$objetoEnviar = htmlentities($arrayDatos);
 													?>
-													<tr id="reg<?=$resultado['gal_id'];?>">
+													<tr id="reg<?=$resultado['epag_id'];?>">
                                                         <td><?=$contReg;?></td>
-														<td><?=$resultado['gal_tipo'];?></td>
-														<td><?=$nombreEvaluado;?></td>
-														<td><?=$resultado['gal_tipo_evaluador'];?></td>
-														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0321', 'DT0329', 'DT0323'])){?>
+														<td><?=UsuariosPadre::nombreCompletoDelUsuario($resultado)?></td>
+														<td><?=$resultado['epag_estado']?></td>
+														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0330']) && $resultado['epag_estado'] == PENDIENTE){?>
 															<td>
 																<div class="btn-group">
 																	<button type="button" class="btn btn-primary"><?=$frases[54][$datosUsuarioActual['uss_idioma']];?></button>
@@ -134,17 +94,8 @@ if (!empty($_GET['idE'])) {
 																		<i class="fa fa-angle-down"></i>
 																	</button>
 																	<ul class="dropdown-menu" role="menu" style="z-index: 10000;">
-																	<?php if(Modulos::validarSubRol(['DT0321']) ){?>
-																		<li><a href="asignaciones-editar.php?id=<?=base64_encode($resultado['gal_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
-																	<?php }?>
-																	<?php if(Modulos::validarSubRol(['DT0329']) ){?>
-																		<li><a href="asignaciones-asignados.php?id=<?=base64_encode($resultado['gal_id']);?>">Usuarios Asignados</a></li>
-																	<?php }?>
-																	<?php if( Modulos::validarSubRol(['DT0328']) ){?>
-																		<li><a href="../compartido/evaluaciones-generar-informe.php?idE=<?=base64_encode($resultado['gal_id']);?>" target="_blank">Generar Informe</a></li>
-																	<?php }?>
-																	<?php if(Modulos::validarSubRol(['DT0323']) && $iniciadas == 0){?>
-                                                                    	<li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" id="<?=$resultado['gal_id'];?>" name="asignaciones-eliminar.php?id=<?=base64_encode($resultado['gal_id']);?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
+																	<?php if(Modulos::validarSubRol(['DT0330'])){?>
+                                                                    	<li><a href="javascript:void(0);" title="<?=$objetoEnviar;?>" id="<?=$resultado['epag_id'];?>" name="asignaciones-asignados-eliminar.php?id=<?=base64_encode($resultado['epag_id']);?>" onClick="deseaEliminar(this)"><?=$frases[174][$datosUsuarioActual['uss_idioma']];?></a></li>
 																	<?php } ?>
 																	</ul>
 																</div>

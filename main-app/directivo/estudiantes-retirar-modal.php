@@ -46,7 +46,7 @@ if ($e['mat_estado_matricula'] == MATRICULADO || $e['mat_estado_matricula'] == A
         <header class="panel-heading panel-heading-purple"><?= $tituloFormulario ?></header>
         <div class="panel-body">
 
-            <form action="estudiantes-retirar-actualizar.php" method="post" class="form-horizontal" enctype="multipart/form-data" id="form-modal">
+            <form action="estudiantes-retirar-actualizar.php" method="post" class="form-horizontal" enctype="multipart/form-data" id="form-<?= $idModal ?>">
                 <input type="hidden" value="<?= $e['mat_id']; ?>" name="estudiante">
                 <input type="hidden" value="<?= $e['mat_estado_matricula']; ?>" name="estadoMatricula">
 
