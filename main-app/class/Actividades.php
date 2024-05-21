@@ -1032,6 +1032,8 @@ class Actividades {
         $parametros = [$codigo, $contenido, $fecha, $periodo, $idIndicador, $carga, $compartir, $evidencia, $config['conf_id_institucion'], $year];
         
         $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $codigo;
     }
 
     /**
@@ -1058,5 +1060,7 @@ class Actividades {
         $parametros = [$codigo, $contenido, $fecha, $periodo, $idIndicador, $carga, $compartir, $valor, $config['conf_id_institucion'], $year];
         
         $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $codigo;
     }
 }

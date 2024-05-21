@@ -11,6 +11,7 @@
 									
 									<?php
 									require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
+									require_once ROOT_PATH."/main-app/class/Grupos.php";
 									require_once(ROOT_PATH."/main-app/class/Grados.php");
 									require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 									
@@ -56,11 +57,7 @@
 										<header class="panel-heading panel-heading-purple">Grupos </header>
 										<div class="panel-body">
 											<?php
-											try{
-												$grupos = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grupos WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-											} catch (Exception $e) {
-												include("../compartido/error-catch-to-report.php");
-											}
+											$grupos = Grupos::listarGrupos();
 											while($grupo = mysqli_fetch_array($grupos, MYSQLI_BOTH)){
 												if($grupo['gru_id']==$_GET["grupo"]) $estiloResaltado = 'style="color: orange;"'; else $estiloResaltado = '';
 											?>

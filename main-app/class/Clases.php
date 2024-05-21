@@ -452,17 +452,14 @@ class Clases  extends Servicios{
         string $carga,
         int $periodo
     ){
-        
-        $resultado = [];
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_pclase WHERE pc_id_carga=? AND pc_periodo=? AND institucion=? AND year=?";
 
-        try {
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_pclase 
-            WHERE pc_id_carga='".$carga."' AND pc_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-            $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $parametros = [$carga, $periodo, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
+
         return $resultado;
     }
 
@@ -481,13 +478,11 @@ class Clases  extends Servicios{
         string $carga,
         int $periodo
     ){
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_pclase WHERE pc_id_carga=? AND pc_periodo=? AND institucion=? AND year=?";
 
-        try {
-            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_pclase WHERE pc_id_carga='".$carga."' AND pc_periodo='".$periodo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $parametros = [$carga, $periodo, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -521,12 +516,11 @@ class Clases  extends Servicios{
         @unlink($destino."/".$archivo);
         move_uploaded_file($FILES['file']['tmp_name'], $destino ."/".$archivo);
 
-        try {
-            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_pclase(pc_id, pc_plan, pc_id_carga, pc_periodo, pc_fecha_subido, institucion, year)VALUES('".$codigo."', '".$archivo."', '".$carga."', '".$periodo."', now(), {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "INSERT INTO ".BD_ACADEMICA.".academico_pclase(pc_id, pc_plan, pc_id_carga, pc_periodo, pc_fecha_subido, institucion, year)VALUES(?, ?, ?, ?, now(), ?, ?)";
+
+        $parametros = [$codigo, $archivo, $carga, $periodo, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
 }

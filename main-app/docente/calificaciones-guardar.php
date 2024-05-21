@@ -33,7 +33,7 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 	//Si los valores de las calificaciones son de forma automática.
 	if($datosCargaActual['car_configuracion']==0){
 		//Insertamos la calificación
-		Actividades::guardarCalificacionAutomatica($conexionPDO, $config, mysqli_real_escape_string($conexion,$_POST["contenido"]), $fecha, $cargaConsultaActual, $_POST["indicador"], $periodoConsultaActual, $infoCompartir, $_POST["evidencia"]);
+		$idRegistro = Actividades::guardarCalificacionAutomatica($conexionPDO, $config, mysqli_real_escape_string($conexion,$_POST["contenido"]), $fecha, $cargaConsultaActual, $_POST["indicador"], $periodoConsultaActual, $infoCompartir, $_POST["evidencia"]);
 
 		//Actualizamos el valor de todas las actividades del indicador
 		Calificaciones::actualizarValorCalificacionesDeUnIndicador($conexion, $config, $cargaConsultaActual, $periodoConsultaActual, $indicadoresDatos);	
@@ -50,7 +50,7 @@ if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 		if($_POST["valor"]>$porcentajeRestante and $porcentajeRestante>0){$_POST["valor"] = $porcentajeRestante;}
 
 		//Insertamos la calificación
-		Actividades::guardarCalificacionManual($conexionPDO, $config, mysqli_real_escape_string($conexion,$_POST["contenido"]), $fecha, $cargaConsultaActual, $_POST["indicador"], $periodoConsultaActual, $infoCompartir, $_POST["valor"]);
+		$idRegistro = Actividades::guardarCalificacionManual($conexionPDO, $config, mysqli_real_escape_string($conexion,$_POST["contenido"]), $fecha, $cargaConsultaActual, $_POST["indicador"], $periodoConsultaActual, $infoCompartir, $_POST["valor"]);
 	}
 }
 //Si escoge del banco de datos

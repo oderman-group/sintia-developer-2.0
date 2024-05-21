@@ -468,11 +468,11 @@ class CargaAcademica {
         string  $idTipoNota
     )
     {
-        try {
-            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_id='" . $idTipoNota . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include("../compartido/error-catch-to-report.php");
-        }
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_id=? AND institucion=? AND year=?";
+
+        $parametros = [$idTipoNota, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -487,11 +487,11 @@ class CargaAcademica {
         string  $idCategoria
     )
     {
-        try {
-            mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='" . $idCategoria . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include("../compartido/error-catch-to-report.php");
-        }
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria=? AND institucion=? AND year=?";
+
+        $parametros = [$idCategoria, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -510,11 +510,11 @@ class CargaAcademica {
     {
         $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_notas_tipos');
 
-        try {
-            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_notas_tipos (notip_id, notip_nombre, notip_desde, notip_hasta,notip_categoria, institucion, year)VALUES('".$codigo."', '" . $POST["nombreCN"] . "'," . $POST["ndesdeCN"] . "," . $POST["nhastaCN"] . ",'" . $POST["idCN"] . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-        } catch (Exception $e) {
-            include("../compartido/error-catch-to-report.php");
-        }
+        $sql = "INSERT INTO ".BD_ACADEMICA.".academico_notas_tipos (notip_id, notip_nombre, notip_desde, notip_hasta,notip_categoria, institucion, year)VALUES(?, ?, ?, ?, ?, ?, ?)";
+
+        $parametros = [$codigo, $POST["nombreCN"], $POST["ndesdeCN"], $POST["nhastaCN"], $POST["idCN"], $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -530,11 +530,11 @@ class CargaAcademica {
     )
     {
 
-        try {
-            mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_notas_tipos SET notip_nombre='" . $POST["nombreCN"] . "', notip_desde=" . $POST["ndesdeCN"] . ", notip_hasta=" . $POST["nhastaCN"] . " WHERE notip_id='" . $POST["idN"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include("../compartido/error-catch-to-report.php");
-        }
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_notas_tipos SET notip_nombre=?, notip_desde=?, notip_hasta=? WHERE notip_id=? AND institucion=? AND year=?";
+
+        $parametros = [$POST["nombreCN"], $POST["ndesdeCN"], $POST["nhastaCN"], $POST["idN"], $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
@@ -551,14 +551,34 @@ class CargaAcademica {
         string  $idTipoNota
     )
     {
-        try{
-            $consulta=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_id='".$idTipoNota."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
-        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_id=? AND institucion=? AND year=?";
+
+        $parametros = [$idTipoNota, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
 
         return $resultado;
+    }
+
+    /**
+     * Este metodo me elimina todos los tipos de nota
+     * @param string $idInstitucion
+     * @param string $yearBd
+    **/
+    public static function eliminarTodosTiposNota (
+        string  $idInstitucion,
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "DELETE FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE institucion=? AND year=?";
+
+        $parametros = [$idInstitucion, $year];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
