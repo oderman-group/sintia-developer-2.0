@@ -3,6 +3,9 @@ include("conexion.php");
 require_once(ROOT_PATH."/main-app/class/EnviarEmail.php");
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/categoriasNotas.php");
+require_once(ROOT_PATH."/main-app/class/Grados.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Areas.php");
 $year=date("Y");
@@ -238,12 +241,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 		}
 	
 		//CURSOS
-		try{
-			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_grados WHERE institucion='".$cDemo['demo_institucion']."'");
-		} catch (Exception $e) {
-			echo $e->getMessage();
-			exit();
-		}
+		Grados::eliminarGradosInstitucion($cDemo['demo_institucion']);
 	
 		//GRUPOS
 		try{
@@ -254,12 +252,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 		}
 	
 		//CATEGORIA NOTAS
-		try{
-			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_categorias_notas WHERE institucion='".$cDemo['demo_institucion']."'");
-		} catch (Exception $e) {
-			echo $e->getMessage();
-			exit();
-		}
+		categoriasNota::eliminarTodasCategoriasNotas($cDemo['demo_institucion']);
 	
 		//TIPOS DE NOTAS
 		try{
@@ -295,12 +288,7 @@ while($cDemo = mysqli_fetch_array($correosDemo, MYSQLI_BOTH)){
 		Estudiantes::eliminarTodasMatriculas($cDemo['demo_institucion']);
 	
 		//CARGAS
-		try{
-			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_cargas WHERE institucion='".$cDemo['demo_institucion']."'");
-		} catch (Exception $e) {
-			echo $e->getMessage();
-			exit();
-		}
+		CargaAcademica::eliminarCargasInstitucion($cDemo['demo_institucion']);
 
 		try{
 			mysqli_query($conexion, "DELETE FROM ".BD_ADMIN.".instituciones WHERE ins_id='".$cDemo['demo_institucion']."'");
@@ -472,13 +460,7 @@ while($cProg = mysqli_fetch_array($correosProg, MYSQLI_BOTH)){
 		
 		//Del tipo 4
 		if($cDat['corr_tipo']==4){
-			$consultaRelacionados=mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
-			INNER JOIN ".BD_ACADEMICA.".academico_materias AS mate ON mate.mat_id=car_materia AND mate.institucion={$cProg['corr_institucion']} AND mate.year={$year}
-			INNER JOIN ".BD_ACADEMICA.".academico_matriculas AS matri ON matri.mat_id='".$cDat["corr_estudiante"]."' AND matri.institucion={$cProg['corr_institucion']} AND matri.year={$year}
-			INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=mat_acudiente AND uss.institucion={$cProg['corr_institucion']} AND uss.year={$year}
-			INNER JOIN ".BD_ACADEMICA.".academico_grados AS gra ON gra.gra_id=matri.mat_grado AND gra.institucion={$cProg['corr_institucion']} AND gra.year={$year}
-			WHERE car_id='".$cDat["corr_carga"]."' AND car.institucion={$cProg['corr_institucion']} AND car.year={$year}");
-			$datosRelacionados = mysqli_fetch_array($consultaRelacionados, MYSQLI_BOTH);
+			$datosRelacionados = CargaAcademica::traerDatosRelacionadosCargaEstudiante($cProg['corr_institucion'], $cDat["corr_estudiante"], $cDat["corr_carga"], $year);
 			
 			$docente = UsuariosPadre::sesionUsuario($datosRelacionados['car_docente'], "", $cProg['corr_institucion'], $year);
 			
