@@ -1,7 +1,6 @@
 <?php
 include("session.php");
 $idPaginaInterna = 'DT0335';
-require_once(ROOT_PATH . "/main-app/class/Modulos.php");
 include(ROOT_PATH . "/main-app/compartido/historial-acciones-guardar.php");
 include(ROOT_PATH . "/main-app/compartido/head.php");
 ?>
