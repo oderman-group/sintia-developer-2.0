@@ -305,4 +305,22 @@ class Modulos {
         }
         return false;
     }
+
+    public static function listarModulos(
+        mysqli $conexion,
+        string $filtro = "",
+        string $limit = "LIMIT 0, 2000",
+        int $estado = NULL 
+    ){
+        $filtroEstado = !empty($estado) ? "AND mod_estado={$estado}" : "";
+
+        $sql = "SELECT * FROM ".BD_ADMIN.".modulos
+        WHERE mod_id=mod_id {$filtro} {$filtroEstado}
+        ORDER BY mod_id
+        {$limit}";
+        
+        $consulta = mysqli_query($conexion, $sql);
+
+        return $consulta;
+    }
 }
