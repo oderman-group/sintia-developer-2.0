@@ -21,7 +21,7 @@ include(ROOT_PATH . "/main-app/compartido/head.php");
                     <div class="col-sm-12">
                         <div class="row">
                             <?php
-                            $serviciosConsulta = Modulos::listarModulos($conexion, "", "", 1);
+                            $serviciosConsulta = Modulos::listarModulos($conexion, " AND mod_types_customer LIKE '%".$_SESSION["datosUnicosInstitucion"]['ins_tipo']."%'", "", 1);
                             $numServicios = mysqli_num_rows($serviciosConsulta);
                             if ($numServicios > 0) {
                                 while ($datosServicios = mysqli_fetch_array($serviciosConsulta, MYSQLI_BOTH)) {
