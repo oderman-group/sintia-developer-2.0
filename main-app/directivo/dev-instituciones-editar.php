@@ -298,6 +298,7 @@ $datosInstitucion = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                                 <tbody>
                                                     <?php
                                                     while ($modulos = mysqli_fetch_array($consultaModulos, MYSQLI_BOTH)) {
+                                                        if (Modulos::validarModulosExtras($conexion, $modulos['mod_id'], base64_decode($_GET["id"]))) { continue; }
                                                         $cheked = Modulos::verificarModulosDeInstitucion(base64_decode($_GET["id"]),$modulos['mod_id']) ? "checked" : "";
                                                     ?>
                                                         <tr>
