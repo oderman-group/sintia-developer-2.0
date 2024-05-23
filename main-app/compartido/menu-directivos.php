@@ -290,7 +290,7 @@
 									<span class="title">Servicios SINTIA</span> <span class="arrow"></span>
 								</a>
 								<ul class="sub-menu bg-warning text-dark">
-									<li class="nav-item"><a href="modulos.php" class="nav-link text-dark"> <span class="title">Modulos</span></a></li>
+									<li class="nav-item"><a href="servicios-modulos.php" class="nav-link text-dark"> <span class="title">Modulos</span></a></li>
 									<li class="nav-item"><a href="#" class="nav-link text-dark"> <span class="title"><?=$frases[75][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 								</ul>
 							</li>
