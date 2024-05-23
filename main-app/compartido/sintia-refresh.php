@@ -20,8 +20,12 @@ $datosUnicosInstitucion = mysqli_fetch_array($datosUnicosInstitucionConsulta, MY
 $_SESSION["datosUnicosInstitucion"] = $datosUnicosInstitucion;
 
 $arregloModulos = array();
-$modulosSintia = mysqli_query($conexion, "SELECT mod_id, mod_nombre FROM ".$baseDatosServicios.".modulos
-INNER JOIN ".$baseDatosServicios.".instituciones_modulos ON ipmod_institucion='".$config['conf_id_institucion']."' AND ipmod_modulo=mod_id
+$modulosSintia = mysqli_query($conexion, "SELECT mod_id, mod_nombre FROM ".BD_ADMIN.".modulos
+INNER JOIN ".BD_ADMIN.".instituciones_modulos ON ipmod_institucion='".$config['conf_id_institucion']."' AND ipmod_modulo=mod_id
+WHERE mod_estado=1
+UNION
+SELECT mod_id, mod_nombre FROM ".BD_ADMIN.".modulos
+INNER JOIN ".BD_ADMIN.".instituciones_paquetes_extras ON paqext_institucion='".$config['conf_id_institucion']."' AND paqext_id_paquete=mod_id AND paqext_tipo='".MODULOS."'
 WHERE mod_estado=1");
 while($modI = mysqli_fetch_array($modulosSintia, MYSQLI_BOTH)){
     $arregloModulos [$modI['mod_id']] = $modI['mod_nombre'];

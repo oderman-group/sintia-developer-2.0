@@ -1,4 +1,5 @@
 <?php
+require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 
 class Modulos {
 
@@ -111,8 +112,11 @@ class Modulos {
     {
         global $conexion, $baseDatosServicios;
 
-        $consultaModulos = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones_modulos 
-        WHERE ipmod_institucion='".$idInstitucion."' AND ipmod_modulo='".$idModulos."'");
+        $consultaModulos = mysqli_query($conexion, "SELECT ipmod_modulo AS id_modulo FROM ".BD_ADMIN.".instituciones_modulos 
+        WHERE ipmod_institucion='".$idInstitucion."' AND ipmod_modulo='".$idModulos."'
+        UNION
+        SELECT paqext_id_paquete AS id_modulo FROM ".BD_ADMIN.".instituciones_paquetes_extras 
+        WHERE paqext_institucion='".$idInstitucion."' AND paqext_id_paquete='".$idModulos."' AND paqext_tipo='".MODULOS."'");
         $modulos = mysqli_fetch_array($consultaModulos, MYSQLI_BOTH);
         if (empty($modulos[0])) { 
             return false;
@@ -270,10 +274,12 @@ class Modulos {
     {
         global $conexion, $baseDatosServicios, $config;
 
-        $consultaPaginaActualUsuarios = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".paginas_publicidad
-        INNER JOIN ".$baseDatosServicios.".instituciones_modulos 
-        ON ipmod_modulo=pagp_modulo 
-        AND ipmod_institucion='".$config['conf_id_institucion']."'
+        $consultaPaginaActualUsuarios = mysqli_query($conexion, "SELECT pp.* FROM ".BD_ADMIN.".paginas_publicidad pp
+        INNER JOIN ".BD_ADMIN.".instituciones_modulos ON ipmod_modulo=pagp_modulo AND ipmod_institucion='".$config['conf_id_institucion']."'
+        WHERE pagp_id='".$idPaginaInterna."'
+        UNION
+        SELECT pp.* FROM ".BD_ADMIN.".paginas_publicidad pp
+        INNER JOIN ".BD_ADMIN.".instituciones_paquetes_extras ON paqext_institucion='".$config['conf_id_institucion']."' AND paqext_id_paquete=pagp_modulo AND paqext_tipo='".MODULOS."'
         WHERE pagp_id='".$idPaginaInterna."'");
         $paginaActualUsuario = mysqli_fetch_array($consultaPaginaActualUsuarios, MYSQLI_BOTH);
         if (empty($paginaActualUsuario)) { 
@@ -304,5 +310,23 @@ class Modulos {
             }
         }
         return false;
+    }
+
+    public static function listarModulos(
+        mysqli $conexion,
+        string $filtro = "",
+        string $limit = "LIMIT 0, 2000",
+        int $estado = NULL 
+    ){
+        $filtroEstado = !empty($estado) ? "AND mod_estado={$estado}" : "";
+
+        $sql = "SELECT * FROM ".BD_ADMIN.".modulos
+        WHERE mod_id=mod_id {$filtro} {$filtroEstado}
+        ORDER BY mod_id
+        {$limit}";
+        
+        $consulta = mysqli_query($conexion, $sql);
+
+        return $consulta;
     }
 }
