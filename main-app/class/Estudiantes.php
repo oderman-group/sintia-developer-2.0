@@ -1163,7 +1163,7 @@ class Estudiantes {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
         $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
-        INNER JOIN ".BD_ADMIN.".aspirantes ON asp_id=mat.mat_solicitud_inscripcion
+        INNER JOIN ".BD_ADMISIONES.".aspirantes ON asp_id=mat.mat_solicitud_inscripcion
         LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=asp_grado AND gra.institucion=mat.institucion AND gra.year=mat.year
         WHERE mat.mat_estado_matricula=5 AND mat.institucion=? AND mat.year=? {$filtro}
         ORDER BY mat.mat_primer_apellido  {$limite}";
