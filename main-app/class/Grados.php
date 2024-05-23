@@ -46,16 +46,13 @@ class Grados {
             $filtro="AND gra_tipo ='".GRADO_GRUPAL."'";
         }
 
-        try {
-            $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados
-            WHERE gra_estado IN (1, '".$estado."') AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]} 
-            ".$filtro."
-            ORDER BY gra_vocal
-            ");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_grados
+        WHERE gra_estado IN (1, '".$estado."') AND institucion=? AND year=? {$filtro}
+        ORDER BY gra_vocal";
+
+        $parametros = [$config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
 
         return $resultado;
     }
