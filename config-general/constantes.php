@@ -186,6 +186,8 @@ define('KINDERGARTEN', 'KINDERGARTEN');
 define('PEOPLE', 'PEOPLE');
 
 /** TIPOS DE PAQUETES **/
+define('PLANES', 'PLANES');
+define('ESPACIO', 'ESPACIO');
 define('USUARIOS', 'USUARIOS');
 define('MODULOS', 'MODULOS');
 
