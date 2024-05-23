@@ -21,7 +21,7 @@ $estudiante = mysqli_fetch_array($consultaEstudiante, MYSQLI_BOTH);
 	$update = "mat_grado=" . $_POST["cursoNuevo"] . ", mat_grupo=" . $_POST["grupoNuevo"] . "";
 	Estudiantes::actualizarMatriculasPorId($config, $_POST["estudiante"], $update);
 	
-	include("../compartido/guardar-historial-acciones.php");
+	include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 	$msj="Se actualizaron (".$contador.") cargas para el estudiante ".Estudiantes::NombreCompletoDelEstudiante($estudiante);
 	echo '<script type="text/javascript">window.location.href="estudiantes.php?success=SC_DT_4&summary='.base64_encode($msj).'&id='.base64_encode($_POST["estudiante"]).'";</script>';
 	exit();
