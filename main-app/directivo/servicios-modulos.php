@@ -16,12 +16,24 @@ include(ROOT_PATH . "/main-app/compartido/head.php");
         <!-- start page content -->
         <div class="page-content-wrapper">
             <div class="page-content">
+                <div class="page-bar">
+                    <div class="page-title-breadcrumb">
+                        <div class=" pull-left">
+                            <div class="page-title">Comprar Módulos Extras</div>
+                            <?php include("../compartido/texto-manual-ayuda.php");?>
+                        </div>
+                    </div>
+                </div>
                 <!-- start course list -->
+                <?php
+                    include("includes/barra-superior-servicios-modulos.php");
+                ?>
                 <div class="row mt-2">
                     <div class="col-sm-12">
                         <div class="row">
                             <?php
-                            $serviciosConsulta = Modulos::listarModulos($conexion, " AND mod_types_customer LIKE '%".$_SESSION["datosUnicosInstitucion"]['ins_tipo']."%'", "", 1);
+                            $filtro .= " AND mod_types_customer LIKE '%".$_SESSION["datosUnicosInstitucion"]['ins_tipo']."%'";
+                            $serviciosConsulta = Modulos::listarModulos($conexion, $filtro, "", 1);
                             $numServicios = mysqli_num_rows($serviciosConsulta);
                             if ($numServicios > 0) {
                                 while ($datosServicios = mysqli_fetch_array($serviciosConsulta, MYSQLI_BOTH)) {
