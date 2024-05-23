@@ -203,7 +203,7 @@ $datosInstitucion = mysqli_fetch_array($consulta, MYSQLI_BOTH);
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
                                                 try{
-                                                    $consultaPlan = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".planes_sintia");
+                                                    $consultaPlan = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".planes_sintia WHERE plns_tipo='".PLANES."'");
                                                 } catch (Exception $e) {
                                                     include("../compartido/error-catch-to-report.php");
                                                 }
