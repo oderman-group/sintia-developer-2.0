@@ -32,7 +32,7 @@ include(ROOT_PATH . "/main-app/compartido/head.php");
                     <div class="col-sm-12">
                         <div class="row">
                             <?php
-                            $serviciosConsulta = Plataforma::listarPaquetes();
+                            $serviciosConsulta = Plataforma::listarPaquetes($filtro);
                             $numServicios = mysqli_num_rows($serviciosConsulta);
                             if ($numServicios > 0) {
                                 while ($datosServicios = mysqli_fetch_array($serviciosConsulta, MYSQLI_BOTH)) {
