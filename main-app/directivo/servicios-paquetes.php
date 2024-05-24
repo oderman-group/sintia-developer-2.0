@@ -19,20 +19,20 @@ include(ROOT_PATH . "/main-app/compartido/head.php");
                 <div class="page-bar">
                     <div class="page-title-breadcrumb">
                         <div class=" pull-left">
-                            <div class="page-title">Comprar Usuarios Extras</div>
+                            <div class="page-title">Comprar Paquetes Extras</div>
                             <?php include("../compartido/texto-manual-ayuda.php");?>
                         </div>
                     </div>
                 </div>
                 <!-- start course list -->
                 <?php
-                    include("includes/barra-superior-servicios-usuarios.php");
+                    include("includes/barra-superior-servicios-paquetes.php");
                 ?>
                 <div class="row mt-2">
                     <div class="col-sm-12">
                         <div class="row">
                             <?php
-                            $serviciosConsulta = Plataforma::listarPlanesPorTipo(USUARIOS);
+                            $serviciosConsulta = Plataforma::listarPaquetes();
                             $numServicios = mysqli_num_rows($serviciosConsulta);
                             if ($numServicios > 0) {
                                 while ($datosServicios = mysqli_fetch_array($serviciosConsulta, MYSQLI_BOTH)) {

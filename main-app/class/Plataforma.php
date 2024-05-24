@@ -178,6 +178,18 @@ class Plataforma {
 
     }
 
+    public static function listarPaquetes()
+    {
+        $sql = "SELECT * FROM ".BD_ADMIN.".planes_sintia WHERE plns_tipo!=?";
+
+        $parametros = [PLANES];
+        
+        $consulta = BindSQL::prepararSQL($sql, $parametros);
+
+        return $consulta;
+
+    }
+
     public static function validarPaquete(
         string     $idInstitucion,
         string     $idPaquete,

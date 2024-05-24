@@ -33,7 +33,7 @@ $urlOrigen = $explode[1];
 				<input type="hidden" class="form-control" name="idPaquete" id="idPaquete" value="">
 				<input type="hidden" class="form-control" name="url_origen" id="url_origen" value="<?=REDIRECT_ROUTE."/".$urlOrigen;?>">
 
-				<button type="submit" class="btn btn-info"><i class="fa fa-credit-card" aria-hidden="true"></i>ADQUIRIR MÓDULO</button>
+				<button type="submit" class="btn btn-info"><i class="fa fa-credit-card" aria-hidden="true"></i>ADQUIRIR PAQUETE</button>
 			</form>
 			<a href="#" id="enlaceWhatsappPaquete" target="_blank" class="btn btn-success">CONTACTAR CON UN ASESOR</a>
 		</div>

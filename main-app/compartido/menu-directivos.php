@@ -291,7 +291,7 @@
 								</a>
 								<ul class="sub-menu bg-warning text-dark" <?php agregarClass(SUB_MENU,["DT0335","DT0336"])?>>
 									<li <?php agregarClass(MENU,["DT0335"]) ?>><a href="servicios-modulos.php" class="nav-link text-dark"> <span class="title">Modulos</span></a></li>
-									<li <?php agregarClass(MENU,["DT0336"]) ?>><a href="servicios-usuarios.php" class="nav-link text-dark"> <span class="title"><?=$frases[75][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+									<li <?php agregarClass(MENU,["DT0336"]) ?>><a href="servicios-paquetes.php" class="nav-link text-dark"> <span class="title">Paquetes</span></a></li>
 								</ul>
 							</li>
 
