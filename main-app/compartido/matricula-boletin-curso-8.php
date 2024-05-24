@@ -225,7 +225,8 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                                 $notaBoletinFinal= !empty($datosBoletin['notip_nombre']) ? $datosBoletin['notip_nombre'] : "";
                             }
 
-                            $notaBoletinFinal = !empty($datosBoletin['bol_tipo']) && $datosBoletin['bol_tipo'] != 1 ? round($datosBoletin['bol_nota_anterior'], 1)." / ".$notaBoletinFinal." Nivelada" : $notaBoletinFinal;
+                            $notaNivelada = $notaBoletinFinal >= $config["conf_nota_minima_aprobar"] ? " Nivelada" : "";
+                            $notaBoletinFinal = !empty($datosBoletin['bol_tipo']) && $datosBoletin['bol_tipo'] != 1 ? round($datosBoletin['bol_nota_anterior'], 1)." / ".$notaBoletinFinal.$notaNivelada : $notaBoletinFinal;
                         ?>
                             <td align="center"><?= $notaBoletinFinal; ?></td>
                             <td align="center"><img src="../files/iconos/<?= $datosBoletin['notip_imagen']; ?>" width="15" height="15"></td>
