@@ -285,13 +285,13 @@
 	                        </li>
 							<?php }?>
 							
-							<li class="nav-item bg-warning">
+							<li <?php agregarClass(MENU_PADRE,["DT0335","DT0336"]) ?> class="nav-item bg-warning">
 								<a href="#" class="nav-link nav-toggle bg-warning text-dark"><i class="fa-solid fa-cart-plus text-dark"></i>
 									<span class="title">Servicios SINTIA</span> <span class="arrow"></span>
 								</a>
-								<ul class="sub-menu bg-warning text-dark">
-									<li class="nav-item"><a href="servicios-modulos.php" class="nav-link text-dark"> <span class="title">Modulos</span></a></li>
-									<li class="nav-item"><a href="#" class="nav-link text-dark"> <span class="title"><?=$frases[75][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+								<ul class="sub-menu bg-warning text-dark" <?php agregarClass(SUB_MENU,["DT0335","DT0336"])?>>
+									<li <?php agregarClass(MENU,["DT0335"]) ?>><a href="servicios-modulos.php" class="nav-link text-dark"> <span class="title">Modulos</span></a></li>
+									<li <?php agregarClass(MENU,["DT0336"]) ?>><a href="servicios-usuarios.php" class="nav-link text-dark"> <span class="title"><?=$frases[75][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 								</ul>
 							</li>
 
