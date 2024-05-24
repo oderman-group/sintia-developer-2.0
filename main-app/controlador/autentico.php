@@ -50,6 +50,7 @@ if( !empty($institucion['ins_year_default']) && is_numeric($institucion['ins_yea
 include("../modelo/conexion.php");
 require_once("../class/Plataforma.php");
 require_once("../class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/Modulos.php");
 
 
 $rst_usrE = UsuariosPadre::obtenerTodosLosDatosDeUsuarios("AND uss_usuario='".trim($_POST["Usuario"])."' AND TRIM(uss_usuario)!='' AND uss_usuario IS NOT NULL");
@@ -142,18 +143,8 @@ if($num>0)
 	$datosUnicosInstitucion = mysqli_fetch_array($datosUnicosInstitucionConsulta, MYSQLI_BOTH);
 	$_SESSION["datosUnicosInstitucion"] = $datosUnicosInstitucion;
 
-	$arregloModulos = array();
-	$modulosSintia = mysqli_query($conexion, "SELECT mod_id, mod_nombre FROM ".BD_ADMIN.".modulos
-	INNER JOIN ".BD_ADMIN.".instituciones_modulos ON ipmod_institucion='".$config['conf_id_institucion']."' AND ipmod_modulo=mod_id
-	WHERE mod_estado=1
-	UNION
-	SELECT mod_id, mod_nombre FROM ".BD_ADMIN.".modulos
-	INNER JOIN ".BD_ADMIN.".instituciones_paquetes_extras ON paqext_institucion='".$config['conf_id_institucion']."' AND paqext_id_paquete=mod_id AND paqext_tipo='".MODULOS."'
-	WHERE mod_estado=1");
-	while($modI = mysqli_fetch_array($modulosSintia, MYSQLI_BOTH)){
-		$arregloModulos [$modI['mod_id']] = $modI['mod_nombre'];
-	}
-
+    
+	$arregloModulos = Modulos::consultarModulosIntitucion($conexion, $config['conf_id_institucion']);
 	$_SESSION["modulos"] = $arregloModulos;
 
 	//INICIO SESION

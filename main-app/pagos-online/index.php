@@ -28,6 +28,11 @@
     if(!empty($_POST['idPaquete'])) {
         $idPaquete = $_POST['idPaquete']; 
     }
+
+    $tipoPaquete = '';
+    if(!empty($_POST['tipoPaquete'])) {
+        $tipoPaquete = $_POST['tipoPaquete']; 
+    }
     
 ?>
 <!DOCTYPE html>
@@ -188,6 +193,7 @@
                 data-epayco-extra15="<?=$curso?>"
                 data-epayco-extra16="<?=$idModulo?>"
                 data-epayco-extra17="<?=$idPaquete?>"
+                data-epayco-extra18="<?=$tipoPaquete?>"
 
                 data-epayco-response="<?=REDIRECT_ROUTE?>/pagos-online/respuesta.php"
                 data-epayco-methodconfirmation="get"

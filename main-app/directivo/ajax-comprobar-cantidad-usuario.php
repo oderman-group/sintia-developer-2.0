@@ -6,7 +6,7 @@ if($_REQUEST['tipoUsuario']!=""){
     $tipoUsuario = $_REQUEST['tipoUsuario'];
 
     $datosPlan = Plataforma::traerDatosPlanes($conexion, $datosUnicosInstitucion['ins_id_plan']);
-    $datosPaquetes = Plataforma::contarDatosPaquetes($datosUnicosInstitucion['ins_id'], USUARIOS);
+    $datosPaquetes = Plataforma::contarDatosPaquetes($datosUnicosInstitucion['ins_id'], PAQUETES);
 
     $cantDirectivos = $datosPlan['plns_cant_directivos'] + $datosPaquetes['plns_cant_directivos'];
     $cantDocentes = $datosPlan['plns_cant_docentes'] + $datosPaquetes['plns_cant_docentes'];

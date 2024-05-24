@@ -1,5 +1,6 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+require_once(ROOT_PATH."/main-app/class/Plataforma.php");
 
 class Modulos {
 
@@ -119,6 +120,13 @@ class Modulos {
         WHERE paqext_institucion='".$idInstitucion."' AND paqext_id_paquete='".$idModulos."' AND paqext_tipo='".MODULOS."'");
         $modulos = mysqli_fetch_array($consultaModulos, MYSQLI_BOTH);
         if (empty($modulos[0])) { 
+            $datosPaquetes = Plataforma::contarDatosPaquetes($idInstitucion, PAQUETES);
+            if (!empty($datosPaquetes['plns_modulos'])) {
+                $modulosArray = explode(',', $datosPaquetes['plns_modulos']);
+                if (in_array($idModulos, $modulosArray)) {
+                    return true;
+                }
+            }
             return false;
         }
         return true;
@@ -283,6 +291,15 @@ class Modulos {
         WHERE pagp_id='".$idPaginaInterna."'");
         $paginaActualUsuario = mysqli_fetch_array($consultaPaginaActualUsuarios, MYSQLI_BOTH);
         if (empty($paginaActualUsuario)) { 
+            $datosPaquetes = Plataforma::contarDatosPaquetes($config['conf_id_institucion'], PAQUETES);
+            if (!empty($datosPaquetes['plns_modulos'])) {
+                $consultaPaginaActualUsuarios2 = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".paginas_publicidad pp
+                WHERE pagp_id='".$idPaginaInterna."' AND pagp_modulo IN (".$datosPaquetes['plns_modulos'].")");
+                $paginaActualUsuario = mysqli_fetch_array($consultaPaginaActualUsuarios2, MYSQLI_BOTH);
+                if (!empty($paginaActualUsuario)) { 
+                    return $paginaActualUsuario;
+                }
+            }
             return [];
         }
         return $paginaActualUsuario;
@@ -328,5 +345,36 @@ class Modulos {
         $consulta = mysqli_query($conexion, $sql);
 
         return $consulta;
+    }
+
+    public static function consultarModulosIntitucion(
+        mysqli  $conexion,
+        int     $idInstitucion
+    ){
+        $arregloModulos = array();
+        $modulosSintia = mysqli_query($conexion, "SELECT mod_id, mod_nombre FROM ".BD_ADMIN.".modulos
+        INNER JOIN ".BD_ADMIN.".instituciones_modulos ON ipmod_institucion='".$idInstitucion."' AND ipmod_modulo=mod_id
+        WHERE mod_estado=1
+        UNION
+        SELECT mod_id, mod_nombre FROM ".BD_ADMIN.".modulos
+        INNER JOIN ".BD_ADMIN.".instituciones_paquetes_extras ON paqext_institucion='".$idInstitucion."' AND paqext_id_paquete=mod_id AND paqext_tipo='".MODULOS."'
+        WHERE mod_estado=1");
+        while($modI = mysqli_fetch_array($modulosSintia, MYSQLI_BOTH)){
+            $arregloModulos [$modI['mod_id']] = $modI['mod_nombre'];
+        }
+
+        $datosPaquetes = Plataforma::contarDatosPaquetes($idInstitucion, PAQUETES);
+        if (!empty($datosPaquetes['plns_modulos'])) {
+            $modulosSintia2 = mysqli_query($conexion, "SELECT mod_id, mod_nombre FROM ".BD_ADMIN.".modulos
+            INNER JOIN ".BD_ADMIN.".instituciones_modulos ON ipmod_institucion='".$idInstitucion."' AND ipmod_modulo=mod_id
+            WHERE mod_estado=1
+            UNION
+            SELECT mod_id, mod_nombre FROM ".BD_ADMIN.".modulos WHERE mod_estado=1 AND mod_id IN (".$datosPaquetes['plns_modulos'].")");
+            while($modI = mysqli_fetch_array($modulosSintia2, MYSQLI_BOTH)){
+                $arregloModulos [$modI['mod_id']] = $modI['mod_nombre'];
+            }
+        }
+
+        return $arregloModulos;
     }
 }
