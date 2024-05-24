@@ -220,7 +220,7 @@ class Plataforma {
         $sql = "SELECT 
         SUM(plns_valor) AS plns_valor, 
         SUM(plns_espacio_gb) AS plns_espacio_gb, 
-        GROUP_CONCAT(plns_modulos SEPARATOR ', ') AS plns_modulos, 
+        GROUP_CONCAT(DISTINCT CASE WHEN plns_modulos IS NOT NULL AND plns_modulos != '' THEN plns_modulos END ORDER BY plns_modulos SEPARATOR ',') AS plns_modulos, 
         SUM(plns_cant_directivos) AS plns_cant_directivos, 
         SUM(plns_cant_docentes) AS plns_cant_docentes, 
         SUM(plns_cant_estudiantes) AS plns_cant_estudiantes FROM ".BD_ADMIN.".instituciones_paquetes_extras

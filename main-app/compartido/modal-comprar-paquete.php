@@ -31,6 +31,7 @@ $urlOrigen = $explode[1];
 				<input type="hidden" class="form-control" name="monto" id="montoPaquete" value="">
 				<input type="hidden" class="form-control" name="nombre" id="nombrePaquete" value="">
 				<input type="hidden" class="form-control" name="idPaquete" id="idPaquete" value="">
+				<input type="hidden" class="form-control" name="tipoPaquete" id="tipoPaquete" value="">
 				<input type="hidden" class="form-control" name="url_origen" id="url_origen" value="<?=REDIRECT_ROUTE."/".$urlOrigen;?>">
 
 				<button type="submit" class="btn btn-info"><i class="fa fa-credit-card" aria-hidden="true"></i>ADQUIRIR PAQUETE</button>

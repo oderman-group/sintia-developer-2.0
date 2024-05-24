@@ -819,6 +819,7 @@ function mostrarModalCompraPaquete(idPaquete) {
         document.getElementById('montoPaquete').value = data.montoPaquete;
         document.getElementById('nombrePaquete').value = "PAQUETE "+data.nombrePaquete;
         document.getElementById('idPaquete').value = idPaquete;
+        document.getElementById('tipoPaquete').value = data.tipoPaquete;
 
         $("#modalComprarPaquete").modal("show");
     })

@@ -18,18 +18,8 @@ WHERE ins_id='".$_SESSION["idInstitucion"]."' AND ins_enviroment='".ENVIROMENT."
 $datosUnicosInstitucion = mysqli_fetch_array($datosUnicosInstitucionConsulta, MYSQLI_BOTH);
 $_SESSION["datosUnicosInstitucion"] = $datosUnicosInstitucion;
 
-$arregloModulos = array();
-$modulosSintia = mysqli_query($conexion, "SELECT mod_id, mod_nombre FROM ".BD_ADMIN.".modulos
-INNER JOIN ".BD_ADMIN.".instituciones_modulos ON ipmod_institucion='".$_SESSION["idInstitucion"]."' AND ipmod_modulo=mod_id
-WHERE mod_estado=1
-UNION
-SELECT mod_id, mod_nombre FROM ".BD_ADMIN.".modulos
-INNER JOIN ".BD_ADMIN.".instituciones_paquetes_extras ON paqext_institucion='".$_SESSION["idInstitucion"]."' AND paqext_id_paquete=mod_id AND paqext_tipo='".MODULOS."'
-WHERE mod_estado=1");
-while($modI = mysqli_fetch_array($modulosSintia, MYSQLI_BOTH)){
-    $arregloModulos [$modI['mod_id']] = $modI['mod_nombre'];
-}
-
+    
+$arregloModulos = Modulos::consultarModulosIntitucion($conexion, $_SESSION["idInstitucion"]);
 $_SESSION["modulos"] = $arregloModulos;
 
 $informacionInstConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_informacion WHERE info_institucion='" . $_SESSION["idInstitucion"] . "' AND info_year='" . $_SESSION["bd"] . "'");

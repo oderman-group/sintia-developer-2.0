@@ -23,7 +23,8 @@ require_once(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
         "imgPaquete"             =>      $imgPaquete,
         "descripcionPaquete"     =>      $descripcionPaquete,
         "mensaje"                =>      $mensaje,
-        "montoPaquete"           =>      $resultado['plns_valor']
+        "montoPaquete"           =>      $resultado['plns_valor'],
+        "tipoPaquete"            =>      $resultado['plns_tipo']
     ];
     
     header('Content-Type: application/json');

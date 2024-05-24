@@ -43,27 +43,39 @@ include(ROOT_PATH . "/main-app/compartido/head.php");
                                     if (!empty($datosServicios['plns_valor'])) {
                                         $precio = $datosServicios['plns_valor'];
                                     }
+
+                                    $fondoDisponible    = '';
+                                    $fondoDestacado     = 'info';
+                                    $destacado         = 'Disponible';
+                                    $onClick            = "onClick='mostrarModalCompraPaquete({$datosServicios['plns_id']})'";
+                                    $bordeDestacado     = 'border-info rounded-top animate__animated animate__pulse animate__delay-1s animate__repeat-3';
+                                    if($datosServicios['plns_tipo'] == MODULOS && Plataforma::validarPaquete($_SESSION["idInstitucion"], $datosServicios['plns_id'], PAQUETES)){
+                                        $onClick            = "";
+                                        $fondoDestacado     = 'danger';
+                                        $bordeDestacado     = 'border-light';
+                                        $destacado         = 'Ya Adquirido';
+                                        $fondoDisponible    = 'background-color:#9e9e9e33;';
+                                    }
                             ?>
                                     <div class="col-lg-3 col-md-6 col-12 col-sm-6 mb-3" id="reg<?= $datosServicios['plns_id']; ?>">
-                                        <div class="blogThumb border border-info rounded-top animate__animated animate__pulse animate__delay-1s animate__repeat-3" style="height: 100%;">
+                                        <div class="blogThumb border <?= $bordeDestacado; ?>" style="height: 100%;  <?= $fondoDisponible; ?>">
                                             <div class="thumb-center" style="height: 55%;">
-                                                <a href="javascript:void(0);" onClick="mostrarModalCompraPaquete(<?=$datosServicios['plns_id']?>)"><img class="img-responsive" style="height: 300px;" src="<?= $foto; ?>"></a>
+                                                <a href="javascript:void(0);" <?= $onClick; ?>><img class="img-responsive" style="height: 300px;" src="<?= $foto; ?>"></a>
                                             </div>
                                             <div class="course-box" style="height: 45%;  display: flex; flex-direction: column; justify-content: flex-end;">
-                                                <h5><a style="color:cadetblue;" name="javascript:void(0);" onClick="mostrarModalCompraPaquete(<?=$datosServicios['plns_id']?>)"><?= strtoupper($datosServicios['plns_nombre']); ?></a> <span class="badge badge-info">Disponible</span>
+                                                <h5><a style="color:cadetblue;" name="javascript:void(0);" <?= $onClick; ?>><?= strtoupper($datosServicios['plns_nombre']); ?></a> <span class="badge badge-<?=$fondoDestacado?>"><?=$destacado?></span>
                                                 </h5>
                                                 <div class="text-muted" style="overflow: hidden;">
                                                     <?php if (!empty($datosServicios['plns_tipo'])) { ?><span class="m-r-10" style="font-size: 9px;"> <kbd><?= $datosServicios['plns_tipo']; ?></kbd></span> <?php } ?>
                                                 </div>
                                                 <p>
                                                     <span style="font-weight: bold;"> $<?= number_format($precio, 0, ",", ".") ?></span><br>
-                                                    <span class="m-r-10" style="font-size: 10px;">Disponible</span>
                                                 </p>
                                                 <p>
                                                     <?php
-                                                    if ($precio >= 1) {
+                                                    if ($precio >= 1 && ($datosServicios['plns_tipo'] != MODULOS || ($datosServicios['plns_tipo'] == MODULOS && !Plataforma::validarPaquete($_SESSION["idInstitucion"], $datosServicios['plns_id'], PAQUETES)))) {
                                                     ?>
-                                                        <a href="javascript:void(0);" onClick="mostrarModalCompraPaquete(<?=$datosServicios['plns_id']?>)" class="btn btn-info"><i class="fa fa-credit-card"></i>ADQUIRIR PAQUETE</a>
+                                                        <a href="javascript:void(0);" <?= $onClick; ?> class="btn btn-info"><i class="fa fa-credit-card"></i>ADQUIRIR PAQUETE</a>
                                                         <a href="https://api.whatsapp.com/send?phone=573006075800&text=Hola, mi nombre es <?=UsuariosPadre::nombreCompletoDelUsuario($datosUsuarioActual)?>, soy de la compañía <?=$informacion_inst["info_nombre"]?>, me gustaría recibir más información sobre el paquete <?=strtoupper($datosServicios['plns_nombre'])?>" target="_blank" class="btn btn-success" title="CONTACTAR CON UN ASESOR"><i class="fa fa-envelope"></i></a>
                                                     <?php
                                                     }
