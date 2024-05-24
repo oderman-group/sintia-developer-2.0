@@ -117,6 +117,10 @@ include("../../conexion.php");
         
         $_SESSION["modulos"] = $arregloModulos;
       }
+
+      if (!empty($jsonObject['data']['x_extra17'])) {
+        mysqli_query($conexion, "INSERT INTO " . BD_ADMIN . ".instituciones_paquetes_extras(paqext_institucion, paqext_id_paquete, paqext_fecha, paqext_tipo) VALUES ('" . $jsonObject['data']['x_extra6'] . "', '" . $jsonObject['data']['x_extra17'] . "', now(), '".USUARIOS."'");
+      }
     }
   }
 
