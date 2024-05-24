@@ -154,7 +154,7 @@ require_once("../conexion.php");
                                     <select class="form-select select2" id="plan" name="plan" aria-label="Default select example" required>
                                         <option value="">Escoge un plan</option>
                                         <?php
-                                            $consultaPlanes = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".planes_sintia");
+                                            $consultaPlanes = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".planes_sintia WHERE plns_tipo='".PLANES."'");
                                             while ($planes = mysqli_fetch_array($consultaPlanes, MYSQLI_BOTH)) {
                                         ?>
                                         <option value="<?=$planes['plns_id']?>" <?= !empty($_REQUEST["plan"]) && $_REQUEST["plan"] == $planes['plns_id'] ? "selected" : ""; ?>><?=$planes['plns_nombre']?></option>
