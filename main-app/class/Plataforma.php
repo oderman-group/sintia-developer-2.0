@@ -178,9 +178,11 @@ class Plataforma {
 
     }
 
-    public static function listarPaquetes()
+    public static function listarPaquetes(
+        string $filtro
+    )
     {
-        $sql = "SELECT * FROM ".BD_ADMIN.".planes_sintia WHERE plns_tipo!=?";
+        $sql = "SELECT * FROM ".BD_ADMIN.".planes_sintia WHERE plns_tipo!=? {$filtro}";
 
         $parametros = [PLANES];
         
