@@ -1551,4 +1551,81 @@ class CargaAcademica {
 
         return $resultado;
     }
+
+    /**
+     * Este metodo me trar las cargas que el estudiante lleva perdidas hasta el momento
+     * @param array   $config           Configuración del sistema.
+     * @param string  $idEstudiante     Identificador del grupo.
+     * @param string  $idCurso          Identificador del curso.
+     * @param string  $idGrupo          Identificador del grupo.
+     * @param string  $filtroOR         Filtro adicional opcional en formato SQL para la cláusula WHERE (por defecto, vacío).
+     * @param string  $yearBd           Año académico (opcional).
+     *
+     * @return mysqli_result
+     */
+    public static function consultaInformeParcialPerdidas (
+        array   $config,
+        string  $idEstudiante,
+        string  $idCurso,
+        string  $idGrupo,
+        string  $filtroOR = "",
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "SELECT car_id, mat_id, mat_nombre, mat_sumar_promedio, SUM(aa.act_valor) AS porcentaje, ROUND(SUM(ac.cal_nota * (aa.act_valor / 100)) / SUM(aa.act_valor / 100), 2) AS nota, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2 FROM ".BD_ACADEMICA.".academico_cargas car 
+        INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion=car.institucion AND am.year=car.year
+        INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion=car.institucion AND gra.year=car.year
+        INNER JOIN ".BD_ACADEMICA.".academico_actividades aa ON act_id_carga=car_id AND act_registrada=1 AND act_estado=1 AND act_periodo=? AND aa.institucion=car.institucion AND aa.year=car.year
+        INNER JOIN ".BD_ACADEMICA.".academico_calificaciones ac ON cal_id_actividad=act_id AND cal_id_estudiante=? AND ac.institucion=car.institucion AND ac.year=car.year
+        INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion=car.institucion AND uss.year=car.year
+        WHERE car_curso=? AND car_grupo=? AND car.institucion=? AND car.year=? {$filtroOR}
+        GROUP BY car_id
+        HAVING nota<? AND porcentaje > 0";
+
+        $parametros = [$config['conf_periodo'], $idEstudiante, $idCurso, $idGrupo, $config['conf_id_institucion'], $year, $config['conf_nota_minima_aprobar']];
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
+    }
+
+    /** Este metodo me muestra el progreso del estudiante en todas sus materias
+     * @param array   $config           Configuración del sistema.
+     * @param string  $idEstudiante     Identificador del grupo.
+     * @param string  $idCurso          Identificador del curso.
+     * @param string  $idGrupo          Identificador del grupo.
+     * @param string  $filtroOR         Filtro adicional opcional en formato SQL para la cláusula WHERE (por defecto, vacío).
+     * @param string  $yearBd           Año académico (opcional).
+     *
+     * @return mysqli_result
+     */
+    public static function consultaInformeParcialTodas (
+        array   $config,
+        string  $idEstudiante,
+        string  $idCurso,
+        string  $idGrupo,
+        string  $filtroOR = "",
+        string  $yearBd = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "SELECT car_id, mat_id, mat_nombre, mat_sumar_promedio, SUM(aa.act_valor) AS porcentaje, ROUND(SUM(ac.cal_nota * (aa.act_valor / 100)) / SUM(aa.act_valor / 100), 2) AS nota, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2 FROM ".BD_ACADEMICA.".academico_cargas car 
+        INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion=car.institucion AND am.year=car.year
+        INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion=car.institucion AND gra.year=car.year
+        INNER JOIN ".BD_ACADEMICA.".academico_actividades aa ON act_id_carga=car_id AND act_registrada=1 AND act_estado=1 AND act_periodo=? AND aa.institucion=car.institucion AND aa.year=car.year
+        INNER JOIN ".BD_ACADEMICA.".academico_calificaciones ac ON cal_id_actividad=act_id AND cal_id_estudiante=? AND ac.institucion=car.institucion AND ac.year=car.year
+        INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion=car.institucion AND uss.year=car.year
+        WHERE car_curso=? AND car_grupo=? AND car.institucion=? AND car.year=? {$filtroOR}
+        GROUP BY car_id
+        HAVING porcentaje > 0";
+
+        $parametros = [$config['conf_periodo'], $idEstudiante, $idCurso, $idGrupo, $config['conf_id_institucion'], $year];
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
+    }
 }
