@@ -7,12 +7,13 @@ if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol(
 	exit();
 }
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
-require_once("../class/Estudiantes.php");
-require_once("../class/Usuarios.php");
-require_once("../class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Usuarios.php");
+require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 require_once(ROOT_PATH."/main-app/class/Ausencias.php");
 
 $year=$_SESSION["bd"];
@@ -153,9 +154,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
             $ausPer3Total=0;
             $ausPer4Total=0;
             $sumAusenciasTotal=0;
-            $conCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
-            INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-            WHERE car_curso='" . $datosUsr['mat_grado'] . "' AND car_grupo='" . $datosUsr['mat_grupo'] . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}");
+            $conCargas = CargaAcademica::traerCargasMateriasPorCursoGrupo($config, $datosUsr['mat_grado'], $datosUsr['mat_grupo'], $year);
             while ($datosCargas = mysqli_fetch_array($conCargas, MYSQLI_BOTH)) {
                 //DIRECTOR DE GRUPO
                 if($datosCargas["car_director_grupo"]==1){
@@ -225,6 +224,9 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                             if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
                                 $notaBoletinFinal= !empty($datosBoletin['notip_nombre']) ? $datosBoletin['notip_nombre'] : "";
                             }
+
+                            $notaNivelada = $notaBoletinFinal >= $config["conf_nota_minima_aprobar"] ? " Nivelada" : "";
+                            $notaBoletinFinal = !empty($datosBoletin['bol_tipo']) && $datosBoletin['bol_tipo'] != 1 ? round($datosBoletin['bol_nota_anterior'], 1)." / ".$notaBoletinFinal.$notaNivelada : $notaBoletinFinal;
                         ?>
                             <td align="center"><?= $notaBoletinFinal; ?></td>
                             <td align="center"><img src="../files/iconos/<?= $datosBoletin['notip_imagen']; ?>" width="15" height="15"></td>
@@ -237,7 +239,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                         // SI PERDIÓ LA MATERIA A FIN DE AÑO
                         if ($promedioMateria < $config["conf_nota_minima_aprobar"]) {
-                            if ($nivelacion['niv_definitiva'] >= $config["conf_nota_minima_aprobar"]) {
+                            if (!empty($nivelacion['niv_definitiva']) && $nivelacion['niv_definitiva'] >= $config["conf_nota_minima_aprobar"]) {
                                 $promedioMateriaFinal = $nivelacion['niv_definitiva'];
                             } else {
                                 $materiasPerdidas++;
@@ -425,10 +427,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
             </thead>
 
             <?php
-            $conCargasDos = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
-	        INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-	        INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$year}
-	        WHERE car_curso='" . $gradoActual . "' AND car_grupo='" . $grupoActual . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}");
+            $conCargasDos = CargaAcademica::traerCargasMateriasPorCursoGrupo($config, $gradoActual, $gradoActual, $year);
             while ($datosCargasDos = mysqli_fetch_array($conCargasDos, MYSQLI_BOTH)) {
 
                 

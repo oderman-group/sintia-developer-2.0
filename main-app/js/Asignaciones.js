@@ -22,7 +22,7 @@ function selectEvaluado(datos){
  */
 function mostrarSelectCurso(datos){
     var elementCurso = document.getElementById('elementSelectCurso');
-    if (datos.value === 'CURSO') {
+    if (datos.value === 'CURSO' || datos.value === 'ACUDIENTE') {
         elementCurso.style.display = 'contents';
     } else {
         elementCurso.style.display = 'none';

@@ -16,18 +16,15 @@ class Boletin {
     * @throws Exception Si hay algún problema durante la ejecución de la consulta SQL, se captura una excepción y se imprime un mensaje de error.
     */
     public static function listarTipoDeNotas($categoria, string $yearBd    = ''){
-        global $conexion, $config;
+        global $config;
         $resultado = [];
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        try {
-            $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
-            WHERE notip_categoria='".$categoria."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-            
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria=? AND institucion=? AND year=?";
+
+        $parametros = [$categoria, $config['conf_id_institucion'], $year];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
 
         return $resultado;
     }
@@ -88,15 +85,13 @@ class Boletin {
         $resultado = [];
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        try {
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos 
-            WHERE notip_categoria='".$categoria."' AND '".$nota."'>=notip_desde AND '".$nota."'<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
-            
-            $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria=? AND ?>=notip_desde AND ?<=notip_hasta AND institucion=? AND year=?";
+
+        $parametros = [$categoria, $nota, $nota, $config['conf_id_institucion'], $year];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
 
         return $resultado;
     }
@@ -169,20 +164,20 @@ class Boletin {
         string $yearBd    = ''
     )
     {
-        global $conexion, $config;
+        global $config;
         $resultado = [];
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        try {
-            $resultado = mysqli_query($conexion, "SELECT ar_id, car_ih FROM ".BD_ACADEMICA.".academico_cargas car
-            INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car.car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-            INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id= am.mat_area AND ar.institucion={$config['conf_id_institucion']} AND ar.year={$year}
-            WHERE  car_curso='".$grado."' AND car_grupo='".$grupo."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year} 
-            GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT ar_id, car_ih FROM ".BD_ACADEMICA.".academico_cargas car
+        INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car.car_materia AND am.institucion=car.institucion AND am.year=car.year
+        INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id= am.mat_area AND ar.institucion=car.institucion AND ar.year=car.year
+        WHERE  car_curso=? AND car_grupo=? AND car.institucion=? AND car.year=? 
+        GROUP BY ar.ar_id 
+        ORDER BY ar.ar_posicion ASC";
+
+        $parametros = [$grado, $grupo, $config['conf_id_institucion'], $year];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
 
         return $resultado;
     }
@@ -245,17 +240,44 @@ class Boletin {
         string $yearBd     = ''
     )
     {
-        global $conexion, $config;
+        global $config;
         $resultado = [];
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        try {
-            $resultado = mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota), 2) as promedio FROM ".BD_ACADEMICA.".academico_boletin 
-            WHERE bol_estudiante='" . $estudiante . "' AND bol_periodo='" . $periodo . "' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT ROUND(AVG(bol_nota), 2) as promedio FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante=? AND bol_periodo=? AND institucion=? AND year=?";
+        $parametros = [$estudiante, $periodo, $config['conf_id_institucion'], $year];
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
+    }
+
+    /**
+     * Obtiene el promedio de notas de un estudiante para una carga académico específico.
+     *
+     * @param int    $estudiante La identificación del estudiante.
+     * @param string $carga La carga académico para el cual se desea obtener el promedio.
+     * @param string $BD (Opcional) El nombre de la base de datos específica a la que se va a realizar la consulta. Si no se proporciona, se utiliza la base de datos por defecto.
+     * @param string $yearBd (Opcional) El año académico para el cual se desea obtener el promedio. Si no se proporciona, se utiliza el año académico actual de la sesión.
+     *
+     * @return mysqli_result Un conjunto de resultados (`mysqli_result`) que contiene el promedio de notas del estudiante para el periodo académico especificado.
+     *
+     * @throws Exception Si hay algún problema durante la ejecución de la consulta SQL, se captura una excepción y se imprime un mensaje de error.
+     *
+     */
+    public static function obtenerPromedioPorTodasLasCargas(
+        string $estudiante = '',
+        string $carga,
+        string $yearBd     = ''
+    )
+    {
+        global $config;
+        $resultado = [];
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "SELECT ROUND(AVG(bol_nota), 2) as def FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_estudiante=? AND bol_carga=? AND institucion=? AND year=?";
+        $parametros = [$estudiante, $carga, $config['conf_id_institucion'], $year];
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
 
         return $resultado;
     }
@@ -278,16 +300,15 @@ class Boletin {
         string $yearBd    = ''
     )
     {
-        global $conexion, $config;
+        global $config;
         $resultado = [];
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        try {
-            $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id_asg='" . $carga . "' AND niv_cod_estudiante='" . $estudiante . "' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id_asg=? AND niv_cod_estudiante=? AND institucion=? AND year=?";
+
+        $parametros = [$carga, $estudiante, $config['conf_id_institucion'], $year];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
 
         return $resultado;
     }
@@ -369,16 +390,13 @@ class Boletin {
         string $yearBd    = ''
     )
     {
-        global $conexion, $config;
+        global $config;
         $resultado = [];
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        try {
-            $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_estudiante='" . $estudiante . "' AND rind_carga='" . $carga . "' AND rind_periodo='" . $periodo . "' AND rind_indicador='" . $indicador . "' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_estudiante=? AND rind_carga=? AND rind_periodo=? AND rind_indicador=? AND institucion=? AND year=?";
+        $parametros = [$estudiante, $carga, $periodo, $indicador, $config['conf_id_institucion'], $year];
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
 
         return $resultado;
     }
@@ -415,16 +433,13 @@ class Boletin {
         string $yearBd    = ''
     )
     {
-        global $conexion, $config;
+        global $config;
         $resultado = [];
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        try {
-            $resultado = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga='" . $carga . "' AND bol_periodo='" . $periodo . "' AND bol_estudiante='" . $estudiante . "' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_boletin WHERE bol_carga=? AND bol_periodo=? AND bol_estudiante=? AND institucion=? AND year=?";
+        $parametros = [$carga, $periodo, $estudiante, $config['conf_id_institucion'], $year];
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
 
         return $resultado;
     }

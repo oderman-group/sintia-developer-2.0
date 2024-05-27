@@ -5,6 +5,7 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 require_once(ROOT_PATH."/main-app/class/Grados.php");
 require_once(ROOT_PATH."/main-app/class/Grupos.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 $curso='';
 if(!empty($_GET["curso"])) {
   $curso = base64_decode($_GET["curso"]);
@@ -96,11 +97,10 @@ if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
         <td align="center">Estudiante</td>
         <!--<td align="center">Gru</td>-->
         <?php
-		$materias1=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$curso."' AND car_grupo='".$grupo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+        $materias1 = CargaAcademica::traerCargasMateriasPorCursoGrupo($config, $curso, $grupo);
 		while($mat1=mysqli_fetch_array($materias1, MYSQLI_BOTH)){
-      $Mat = Asignaturas::consultarDatosAsignatura($conexion, $config, $mat1['car_materia']);
 		?>
-        	<td align="center" colspan="<?=$colspan?>"><?=strtoupper($Mat['mat_siglas']);?></td>      
+        	<td align="center" colspan="<?=$colspan?>"><?=strtoupper($mat1['mat_siglas']);?></td>      
   		<?php
 		}
 		?>
@@ -123,9 +123,7 @@ if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
       <!--<td align="center"><?php if($fila[7]==1)echo "A"; else echo "B";?></td> -->
        <?php
 		$suma=0;
-		$materias1 = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas 
-    WHERE car_curso='".$curso."' AND car_grupo='".$grupo."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-
+    $materias1 = CargaAcademica::traerCargasMateriasPorCursoGrupo($config, $curso, $grupo);
 		while($mat1=mysqli_fetch_array($materias1, MYSQLI_BOTH)){
       $nota = Boletin::traerNotaBoletinCargaPeriodo($config, $per, $fila['mat_id'], $mat1['car_id']);
       $defini = 0;

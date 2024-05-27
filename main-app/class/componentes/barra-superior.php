@@ -237,7 +237,7 @@ class componenteFiltro
                                     {$this->id}_buscar();
                                 }
                             });
-                        </>
+                        </script>
                     ";
                 }
 

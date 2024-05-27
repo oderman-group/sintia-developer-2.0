@@ -7,10 +7,11 @@ if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol(
 	exit();
 }
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
-require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 require_once(ROOT_PATH."/main-app/class/Clases.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
     
 $year=$_SESSION["bd"];
@@ -146,19 +147,11 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
     <?php
 	//AREAS
 	$contador=1;
-	$areas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
-	INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-	INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
-	WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
-	GROUP BY am.mat_area
-	");
+	$areas = CargaAcademica::traerCargasMateriasAreaPorCursoGrupo($config, $datosUsr["mat_grado"], $datosUsr["mat_grupo"], $year);
 	
 	while($area = mysqli_fetch_array($areas, MYSQLI_BOTH)){
 		//OBTENER EL PROMEDIO POR AREA
-		$asignaturas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
-		INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.mat_area='".$area['ar_id']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-		INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
-		WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}");
+		$asignaturas = CargaAcademica::calcularPromedioAreaPorCursoGrupo($config, $datosUsr["mat_grado"], $datosUsr["mat_grupo"], $area['ar_id'], $year);
 		$a = 0;
 		$promedioArea = 0;
 		while($asignatura = mysqli_fetch_array($asignaturas, MYSQLI_BOTH)){
@@ -187,10 +180,7 @@ $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);
         </tr>
 	<?php 
 	//ASIGNATURAS
-	$conCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
-	INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.mat_area='".$area['ar_id']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-	INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
-	WHERE car_curso='".$datosUsr['mat_grado']."' AND car_grupo='".$datosUsr['mat_grupo']."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}");
+	$conCargas = CargaAcademica::calcularPromedioAreaPorCursoGrupo($config, $datosUsr["mat_grado"], $datosUsr["mat_grupo"], $area['ar_id'], $year);
 	while($datosCargas = mysqli_fetch_array($conCargas, MYSQLI_BOTH)){
 
 		$datosBoletin = Boletin::traerNotaBoletinCargaPeriodo($config, $periodoActual, $datosUsr['mat_id'], $datosCargas['car_id'], $year);

@@ -90,10 +90,7 @@ $porcentajeRestante = 100 - $valores[0];
 			</thead>
 			<tbody>
 				<?php
-					$consulta = mysqli_query($conexion, "SELECT aa.id_nuevo AS id_nuevo_act, aa.*, ai.* FROM ".BD_ACADEMICA.".academico_actividades aa
-					INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=aa.act_id_tipo AND ai.institucion={$config['conf_id_institucion']} AND ai.year={$_SESSION["bd"]}
-					WHERE aa.act_id_carga='".$cargaConsultaActual."' AND aa.act_periodo='".$periodoConsultaActual."' AND aa.act_estado=1 AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$_SESSION["bd"]}
-					");
+					$consulta = Calificaciones::consultarActividadesIndicador($config, $cargaConsultaActual, $periodoConsultaActual);
 					$contReg = 1;
 					$porcentajeActual = 0;
 					$cantidadEstudiantes = Estudiantes::contarEstudiantesParaDocentes($filtroDocentesParaListarEstudiantes);
@@ -105,8 +102,7 @@ $porcentajeRestante = 100 - $valores[0];
 						$porcentajeActual +=$resultado['act_valor'];
 						
 						if($datosCargaActual['car_evidencia']==1){
-						$consultaEvidencia=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_evidencias WHERE evid_id='".$resultado['act_id_evidencia']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-						$evidencia = mysqli_fetch_array($consultaEvidencia, MYSQLI_BOTH);
+							$evidencia = Calificaciones::traerDatosEvidencias($config, $resultado['act_id_evidencia']);
 						}
 					?>
 				

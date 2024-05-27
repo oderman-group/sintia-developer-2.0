@@ -6,6 +6,7 @@
 <?php include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 
 $valores = Actividades::consultarValores($config, $cargaConsultaActual, $periodoConsultaActual);
 $porcentajeRestante = 100 - $valores[0];
@@ -129,13 +130,10 @@ if(
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Evidencia</label>
                                             <div class="col-sm-10">
-												<?php
-												$evidenciasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_evidencias WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-												");
-												?>
                                                 <select class="form-control  select2" name="evidencia" required>
                                                     <option value="">Seleccione una opción</option>
 													<?php
+													$evidenciasConsulta = Calificaciones::traerEvidenciasInstitucion($config);
 													while($evidenciasDatos = mysqli_fetch_array($evidenciasConsulta, MYSQLI_BOTH)){
 													?>
                                                     	<option value="<?=$evidenciasDatos['evid_id'];?>"><?=$evidenciasDatos['evid_nombre']." (".$evidenciasDatos['evid_valor']."%)"?></option>
