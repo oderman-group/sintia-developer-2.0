@@ -7,6 +7,7 @@ require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/Ausencias.php");
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0162';

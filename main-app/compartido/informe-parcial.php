@@ -7,9 +7,10 @@ if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol(
 	exit();
 }
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
-require_once("../class/UsuariosPadre.php");
-require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 $estudiante="";
 if(!empty($_GET["estudiante"])){ $estudiante=base64_decode($_GET["estudiante"]);}
 if(!empty($_POST["estudiante"])){ $estudiante=$_POST["estudiante"];}
@@ -38,8 +39,8 @@ if(isset($_POST["periodo"])){
 								  ?>
     
     <?=$informacion_inst["info_nombre"]?><br>
-    INFORME PARCIAL - PERIODO: <?php echo $cPeriodo;?><br>
-    <?php echo $config["conf_fecha_parcial"];?><br>
+    INFORME PARCIAL - PERIODO: <?=$cPeriodo;?><br>
+    <?=$config["conf_fecha_parcial"];?><br>
     <?php 
       $tamano='height="100" width="150"';
       if($config['conf_id_institucion'] == ICOLVEN){
@@ -47,7 +48,7 @@ if(isset($_POST["periodo"])){
       }
     ?>
     <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" <?=$tamano?>><br>
-    <?php echo $config["conf_descripcion_parcial"];?><br>
+    <?=$config["conf_descripcion_parcial"];?><br>
     ESTUDIANTE: <?=$nombre;?></br>
 </div>  
 
@@ -67,20 +68,18 @@ if(isset($_POST["periodo"])){
                                     <!-- BEGIN -->
                                     <tbody>
                                     <?php
-									$cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$datosEstudianteActual['mat_grado']."' AND car_grupo='".$datosEstudianteActual['mat_grupo']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                  $cCargas = CargaAcademica::datosRelacionadosCargaPorCursoGrupo($config, $datosEstudianteActual['mat_grado'], $datosEstudianteActual['mat_grupo']);
 									$nCargas = mysqli_num_rows($cCargas);
 									$materiasDividir = 0;
 									$promedioG = 0;
 									while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
-										$cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, mat_sumar_promedio, gra_codigo, gra_nombre, uss_id, uss_nombre FROM ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_grados gra, ".BD_GENERAL.".usuarios uss WHERE am.mat_id='".$rCargas['car_materia']."' AND gra_id='".$rCargas['car_curso']."' AND uss_id='".$rCargas['car_docente']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
-										$rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);
 										//DEFINITIVAS
 										$carga = $rCargas['car_id'];
 										$estudiante = $estudiante;
 										$periodo = $cPeriodo;
 										include("../definitivas.php");
 										//SOLO SE CUENTAN LAS MATERIAS QUE TIENEN NOTAS.
-										if($porcentajeActual>0 && $rDatos['mat_sumar_promedio'] == SI){$materiasDividir++;}
+										if($porcentajeActual>0 && $rCargas['mat_sumar_promedio'] == SI){$materiasDividir++;}
 
                     $definitivaFinal=$definitiva;
                     if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
@@ -90,13 +89,13 @@ if(isset($_POST["periodo"])){
 									?>
                                     <tr id="data1" class="odd gradeX">
                                         <td style="text-align:center;"><?=$rCargas['car_id'];?></td>
-                                        <td><?=UsuariosPadre::nombreCompletoDelUsuario($rDatos);?></td>
-                                        <td><?=$rDatos['mat_nombre'];?></td>
+                                        <td><?=UsuariosPadre::nombreCompletoDelUsuario($rCargas);?></td>
+                                        <td><?=$rCargas['mat_nombre'];?></td>
                                         <td style="text-align:center;"><?=$porcentajeActual;?>%</td>
                                         <td style="color:<?=$colorDefinitiva;?>; text-align:center; font-weight:bold;"><?=$definitivaFinal;?></td>
                                       </tr>
                                    <?php 
-                      if($rDatos['mat_sumar_promedio'] == SI){
+                      if($rCargas['mat_sumar_promedio'] == SI){
                         $promedioG += $definitiva;
                       }	
 								   }
@@ -108,11 +107,9 @@ if(isset($_POST["periodo"])){
                       $consultaEstudianteActualMT = MediaTecnicaServicios::existeEstudianteMT($config,$year,$estudiante);
                       while($datosEstudianteActualMT = mysqli_fetch_array($consultaEstudianteActualMT, MYSQLI_BOTH)){
                         if(!empty($datosEstudianteActualMT)){
-                          $cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='".$datosEstudianteActualMT['matcur_id_curso']."' AND car_grupo='".$datosEstudianteActualMT['matcur_id_grupo']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                          $cCargas = CargaAcademica::datosRelacionadosCargaPorCursoGrupo($config, $datosEstudianteActualMT['mat_grado'], $datosEstudianteActualMT['mat_grupo']);
                           $nCargas = mysqli_num_rows($cCargas);
                           while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
-                            $cDatos = mysqli_query($conexion, "SELECT mat_id, mat_nombre, gra_codigo, gra_nombre, uss_id, uss_nombre FROM ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_grados gra, ".BD_GENERAL.".usuarios uss WHERE am.mat_id='".$rCargas['car_materia']."' AND gra_id='".$rCargas['car_curso']."' AND uss_id='".$rCargas['car_docente']."' AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]} AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}");
-                            $rDatos = mysqli_fetch_array($cDatos, MYSQLI_BOTH);
                             //DEFINITIVAS
                             $carga = $rCargas['car_id'];
                             $periodo = $cPeriodo;
@@ -126,8 +123,8 @@ if(isset($_POST["periodo"])){
                     ?>
                                       <tr id="data1" class="odd gradeX">
                                           <td style="text-align:center;"><?=$rCargas['car_id'];?></td>
-                                          <td><?=UsuariosPadre::nombreCompletoDelUsuario($rDatos);?></td>
-                                          <td><?=$rDatos['mat_nombre'];?></td>
+                                          <td><?=UsuariosPadre::nombreCompletoDelUsuario($rCargas);?></td>
+                                          <td><?=$rCargas['mat_nombre'];?></td>
                                           <td style="text-align:center;"><?=$porcentajeActual;?>%</td>
                                           <td style="color:<?=$colorDefinitiva;?>; text-align:center; font-weight:bold;"><?=$definitivaFinal;?></td>
                                         </tr>
@@ -144,7 +141,7 @@ if(isset($_POST["periodo"])){
                                      <tfoot>
                                       <tr style="font-weight:bold;">
                                         <td colspan="4" style="text-align:right;">PROMEDIO GENERAL</td>
-                                        <td style="text-align:center;"><?php echo $promedioGFinal;?></td>
+                                        <td style="text-align:center;"><?=$promedioGFinal;?></td>
                                       </tr>
                                     </tfoot>
                                   </table>

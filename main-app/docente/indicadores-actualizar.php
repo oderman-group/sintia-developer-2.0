@@ -22,11 +22,10 @@ Indicadores::actualizarIndicador($config, $_POST["idInd"], $update);
 
 //Si vamos a relacionar los indicadores con los SABERES
 if($datosCargaActual['car_saberes_indicador']==1){
-	try{
-		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_indicadores_carga SET ipc_evaluacion='".$_POST["saberes"]."' WHERE ipc_id='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-	} catch (Exception $e) {
-		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-	}
+	$update="
+		ipc_evaluacion=" . $_POST["saberes"] . "
+	";
+	Indicadores::actualizarRelacionIndicadorCargas($config, $_POST["idR"], $update);
 }
 
 //Si los valores de los indicadores son de forma manual
@@ -35,11 +34,10 @@ if($datosCargaActual['car_valor_indicador']==1){
 	//Si el valor es mayor al adecuado lo ajustamos al porcentaje restante; Siempre que este último sea mayor a 0.
 	if($_POST["valor"]>$porcentajeRestante and $porcentajeRestante>0){$_POST["valor"] = $porcentajeRestante;}
 
-	try{
-		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_indicadores_carga SET ipc_valor='".$_POST["valor"]."' WHERE ipc_id='".$_POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-	} catch (Exception $e) {
-		include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-	}
+	$update="
+		ipc_valor=" . $_POST["valor"] . "
+	";
+	Indicadores::actualizarRelacionIndicadorCargas($config, $_POST["idR"], $update);
 }else{
 		//El sistema reparte los porcentajes automáticamente y equitativamente.
 		$valorIgualIndicador = ($porcentajePermitido/($sumaIndicadores[2]));

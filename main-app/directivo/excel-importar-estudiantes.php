@@ -4,6 +4,7 @@ require_once("../class/Usuarios.php");
 require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/Grados.php");
 require '../../librerias/Excel/vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -123,17 +124,8 @@ if($extension == 'xlsx'){
 
 				$grado = "";
 				if(!empty($arrayIndividual['mat_grado'])) {
-					try{
-						$consulta= mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados 
-						WHERE gra_nombre='".$arrayIndividual['mat_grado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-					} catch (Exception $e) {
-						include("../compartido/error-catch-to-report.php");
-					}
-
-					$num = mysqli_num_rows($consulta);
-
-					if($num > 0){
-						$datos=mysqli_fetch_array($consulta, MYSQLI_BOTH);
+					$datos = Grados::obtenerGradoPorNombre($config, $arrayIndividual['mat_grado']);
+					if(!empty($datos['gra_id'])){
 						$grado = $datos['gra_id'];
 					}
 					

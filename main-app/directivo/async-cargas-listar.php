@@ -5,13 +5,12 @@ include("../compartido/historial-acciones-guardar.php");
 require_once("../class/UsuariosPadre.php");
 require_once("../class/CargaAcademica.php");
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 
 $config = Plataforma::sesionConfiguracion();
 $_SESSION["configuracion"] = $config;
 
-$docentesProgreso = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas 
-WHERE car_docente='{$_GET["docente"]}' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-ORDER BY car_periodo");
+$docentesProgreso = CargaAcademica::traerCargasDocentes($config, $_GET["docente"]);
 $numCargas = mysqli_num_rows($docentesProgreso);
 ?>
 

@@ -18,8 +18,9 @@ require_once(ROOT_PATH."/main-app/class/Sysjobs.php");
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Usuarios.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
-require ROOT_PATH.'/librerias/Excel/vendor/autoload.php';
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/Grados.php");
+require ROOT_PATH.'/librerias/Excel/vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\IOFactory;
 $parametrosBuscar = array(
 	"tipo" =>JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL,
@@ -156,16 +157,11 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 			$genero = $tiposGenero[$arrayIndividual['mat_genero']];
 			$grado = "";
 			if(!empty($arrayIndividual['mat_grado'])) {
-				try{
-					$consulta= mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados 
-								WHERE gra_nombre='".$arrayIndividual['mat_grado']."' AND institucion={$config['conf_id_institucion']} AND year={$anio}");
-				} catch (Exception $e) {
-					SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());
-				}
-				$num = mysqli_num_rows($consulta);
-				if($num > 0){
-					$datos=mysqli_fetch_array($consulta, MYSQLI_BOTH);
+				$datos = Grados::obtenerGradoPorNombre($config, $arrayIndividual['mat_grado'], $anio);
+				if(!empty($datos['gra_id'])){
 					$grado = $datos['gra_id'];
+				}else{
+					SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,"No se encontro el curso");
 				}
 			}
 			$grupo = 1;
