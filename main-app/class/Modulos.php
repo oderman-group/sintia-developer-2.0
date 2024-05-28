@@ -305,4 +305,18 @@ class Modulos {
         }
         return false;
     }
+
+    public static function validarModulosExtras($conexion, $modulo, $idInstitucion){
+
+        try{
+            $consultaModulo = mysqli_query($conexion, "SELECT paqext_id_paquete FROM ".BD_ADMIN.".instituciones_paquetes_extras WHERE paqext_id_paquete='".$modulo."' AND paqext_institucion='".$idInstitucion."' AND paqext_tipo='MODULOS'");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        $numDatosModulo=mysqli_num_rows($consultaModulo);
+        if ($numDatosModulo > 0) { 
+            return true;
+        }
+        return false;
+    }
 }
