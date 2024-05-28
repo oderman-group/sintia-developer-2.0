@@ -1,5 +1,6 @@
 <?php
 require_once(ROOT_PATH."/main-app/class/Grupos.php");
+require_once(ROOT_PATH."/main-app/class/Grados.php");
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
     echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
     exit();
@@ -19,16 +20,10 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
             <div class="form-group row">
                 <label class="col-sm-2 control-label"><?= $frases[26][$datosUsuarioActual['uss_idioma']]; ?></label>
                 <div class="col-sm-10">
-                    <?php
-                    try {
-                        $datosConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE gra_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                    } catch (Exception $e) {
-                        include("../compartido/error-catch-to-report.php");
-                    }
-                    ?>
                     <select class="form-control  select2" style="width: 100%;" name="grado" required>
                         <option value="">Seleccione una opción</option>
                         <?php
+                        $datosConsulta = Grados::traerGradosInstitucion($config);
                         while ($datos = mysqli_fetch_array($datosConsulta, MYSQLI_BOTH)) {
                         ?>
                             <option value="<?= $datos['gra_id']; ?>"><?= $datos['gra_nombre'] ?></option>

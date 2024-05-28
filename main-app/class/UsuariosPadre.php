@@ -39,19 +39,17 @@ class UsuariosPadre {
      */
     public static function listarUsuariosAnio($usuario)
     {
-        global $conexion;
         global $yearStart;
         global $yearEnd;
-        global $baseDatosServicios;
-        global $filtro;
         $index = 0;
-        $tableName = BDT_GeneralPerfiles::getTableName();
         $arraysDatos = [];
 
         while ($yearStart <= $yearEnd) {
-            $consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM " . BD_GENERAL . ".usuarios uss 
-            INNER JOIN " . $baseDatosServicios . ".{$tableName} ON pes_id=uss_tipo
-            WHERE uss_usuario LIKE '" . $usuario . "%' AND uss.institucion={$_SESSION["idInstitucion"]} AND uss.year={$yearStart}");
+            $sql = "SELECT * FROM " . BD_GENERAL . ".usuarios uss 
+            INNER JOIN " . BD_ADMIN . ".general_perfiles ON pes_id=uss_tipo
+            WHERE uss_usuario LIKE '" . $usuario . "%' AND uss.institucion=? AND uss.year=?";
+            $parametros = [$_SESSION["idInstitucion"], $yearStart];
+            $consultaUsuarioAuto = BindSQL::prepararSQL($sql, $parametros);
 
             if ($consultaUsuarioAuto->num_rows > 0) {
                 while ($fila = $consultaUsuarioAuto->fetch_assoc()) {
@@ -107,8 +105,10 @@ class UsuariosPadre {
      */
     public static function sesionUsuarioAnio($usuario,$year)
     {
-        global $conexion;
-        $consultaUsuarioAuto = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_usuario='".$usuario."' AND institucion={$_SESSION["idInstitucion"]} AND year={$year} limit 1");
+        $sql = "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_usuario=? AND institucion=? AND year=? limit 1";
+        $parametros = [$usuario, $_SESSION['idInstitucion'], $year];
+        $consultaUsuarioAuto = BindSQL::prepararSQL($sql, $parametros);
+
         $datosUsuarioAuto = mysqli_fetch_array($consultaUsuarioAuto, MYSQLI_BOTH);
         return $datosUsuarioAuto;
     }
@@ -152,30 +152,36 @@ class UsuariosPadre {
                 while($yearStart <= $yearEnd){	
                     if ($_SESSION["bd"] == $yearStart) {			
                         if($get == 5) {
-                            mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET 
-                            uss_tema_header='" . $_GET["temaHeader"] . "', 
-                            uss_tema_sidebar='" . $_GET["temaSidebar"] . "', 
-                            uss_tema_logo='" . $_GET["temaLogo"] . "' 
-                            WHERE uss_id='" . $_SESSION["id"] . "' AND institucion={$_SESSION["idInstitucion"]} AND year={$yearStart}");
+                            $sql = "UPDATE ".BD_GENERAL.".usuarios SET 
+                            uss_tema_header=?, 
+                            uss_tema_sidebar=?, 
+                            uss_tema_logo=? 
+                            WHERE uss_id=? AND institucion=? AND year=?";
+                            $parametros = [$_GET["temaHeader"], $_GET["temaSidebar"], $_GET["temaLogo"], $_SESSION["id"], $_SESSION["idInstitucion"], $yearStart];
+                            $resultado = BindSQL::prepararSQL($sql, $parametros);
                         }
                         else {
-                            mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET $campoTabla='" . $_GET[$campoGet] . "' 
-                            WHERE uss_id='" . $_SESSION["id"] . "' AND institucion={$_SESSION["idInstitucion"]} AND year={$yearStart}");
+                            $sql = "UPDATE ".BD_GENERAL.".usuarios SET $campoTabla=? WHERE uss_id=? AND institucion=? AND year=?";
+                            $parametros = [$_GET[$campoGet], $_SESSION["id"], $_SESSION["idInstitucion"], $yearStart];
+                            $resultado = BindSQL::prepararSQL($sql, $parametros);
                         }
                     } else {
                         $usuarioSession = $_SESSION["datosUsuario"];
                         $usauriosOtrosAnios = UsuariosPadre::sesionUsuarioAnio($usuarioSession['uss_usuario'], $yearStart);
                         if($usauriosOtrosAnios) {
                             if($get == 5) {
-                                mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET 
-                                uss_tema_header='" . $_GET["temaHeader"] . "', 
-                                uss_tema_sidebar='" . $_GET["temaSidebar"] . "', 
-                                uss_tema_logo='" . $_GET["temaLogo"] . "' 
-                                WHERE uss_id='" .$usauriosOtrosAnios["uss_id"]."' AND institucion={$_SESSION["idInstitucion"]} AND year={$yearStart}");
+                                $sql = "UPDATE ".BD_GENERAL.".usuarios SET 
+                                uss_tema_header=?, 
+                                uss_tema_sidebar=?, 
+                                uss_tema_logo=? 
+                                WHERE uss_id=? AND institucion=? AND year=?";
+                                $parametros = [$_GET["temaHeader"], $_GET["temaSidebar"], $_GET["temaLogo"], $usauriosOtrosAnios["uss_id"], $_SESSION["idInstitucion"], $yearStart];
+                                $resultado = BindSQL::prepararSQL($sql, $parametros);
                             }
                             else {
-                                mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET $campoTabla='" . $_GET[$campoGet] . "' 
-                                WHERE uss_id='" .$usauriosOtrosAnios["uss_id"]. "' AND institucion={$_SESSION["idInstitucion"]} AND year={$yearStart}"); 
+                                $sql = "UPDATE ".BD_GENERAL.".usuarios SET $campoTabla=? WHERE uss_id=? AND institucion=? AND year=?";
+                                $parametros = [$_GET[$campoGet], $usauriosOtrosAnios["uss_id"], $_SESSION["idInstitucion"], $yearStart];
+                                $resultado = BindSQL::prepararSQL($sql, $parametros); 
                             }
                         }
                         
@@ -201,12 +207,15 @@ class UsuariosPadre {
         string $yearBd    = ''
     )
     {
-        global $conexion,$baseDatosServicios, $config;
+        global $config;
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        $consulta= mysqli_query($conexion, "SELECT uss_id,uss_apellido1,uss_apellido2,uss_nombre,uss_nombre2,pes_nombre FROM ".BD_GENERAL.".usuarios uss 
-        INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo
-        WHERE CONCAT(uss_apellido1,' ',uss_apellido2,' ',uss_nombre,' ',uss_nombre2) LIKE '%".$nombre."%' AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$year} ORDER BY uss_apellido1, uss_apellido2, uss_nombre LIMIT 10");
+        $sql = "SELECT uss_id, uss_apellido1, uss_apellido2, uss_nombre, uss_nombre2, pes_nombre FROM ".BD_GENERAL.".usuarios uss 
+        INNER JOIN ".BD_ADMIN.".general_perfiles ON pes_id=uss_tipo
+        WHERE CONCAT(uss_apellido1,' ',uss_apellido2,' ',uss_nombre,' ',uss_nombre2) LIKE '%".$nombre."%' AND uss.institucion=? AND uss.year=? 
+        ORDER BY uss_apellido1, uss_apellido2, uss_nombre LIMIT 10";
+        $parametros = [$config['conf_id_institucion'], $year];
+        $consulta = BindSQL::prepararSQL($sql, $parametros);
 
         return $consulta;         
     }
@@ -230,15 +239,13 @@ class UsuariosPadre {
         $year       = !empty($yearBd) ? $yearBd : $_SESSION["bd"];
         $idInsti    = !empty($instiBd) ? $instiBd : $_SESSION["idInstitucion"];
 
-        try{
-            $consultaUsuario = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss 
-            INNER JOIN ".BD_ADMIN.".general_perfiles ON pes_id=uss_tipo 
-            WHERE uss.institucion={$idInsti} AND uss.year={$year} {$filtroBusqueda}");
-            return $consultaUsuario;
-        } catch (Exception $e) {
-            include("../compartido/error-catch-to-report.php");
-            return 0;
-        }
+        $sql = "SELECT * FROM ".BD_GENERAL.".usuarios uss 
+        INNER JOIN ".BD_ADMIN.".general_perfiles ON pes_id=uss_tipo 
+        WHERE uss.institucion=? AND uss.year=? {$filtroBusqueda}";
+        $parametros = [$idInsti, $year];
+        $consultaUsuario = BindSQL::prepararSQL($sql, $parametros);
+
+        return $consultaUsuario;
 
     }
 
@@ -274,13 +281,12 @@ class UsuariosPadre {
             $filtro = "AND id_nuevo != '".$idUsuario."'";
         }
         $num = 0;
-        try {
-            $consulta = mysqli_query($conexion, "SELECT * FROM " . BD_GENERAL . ".usuarios WHERE uss_usuario='" . $usuario . "' {$filtro}");
-            $num = mysqli_num_rows($consulta);
-        } catch (Exception $e) {
-            include("../compartido/error-catch-to-report.php");
-        }
+        
+        $sql = "SELECT * FROM " . BD_GENERAL . ".usuarios WHERE uss_usuario=? {$filtro}";
+        $parametros = [$usuario];
+        $consulta = BindSQL::prepararSQL($sql, $parametros);
 
+        $num = mysqli_num_rows($consulta);
         return $num;
     }
 
@@ -297,13 +303,11 @@ class UsuariosPadre {
         string $tipoUsuario,
     ){
         $num = 0;
-        try {
-            $consulta = mysqli_query($conexion, "SELECT * FROM " . BD_GENERAL . ".usuarios WHERE institucion={$_SESSION["idInstitucion"]} AND year={$_SESSION["bd"]} AND uss_tipo='" . $tipoUsuario . "'");
-            $num = mysqli_num_rows($consulta);
-        } catch (Exception $e) {
-            include("../compartido/error-catch-to-report.php");
-        }
+        $sql = "SELECT * FROM " . BD_GENERAL . ".usuarios WHERE institucion=? AND year=? AND uss_tipo=?";
+        $parametros = [$_SESSION["idInstitucion"], $_SESSION["bd"], $tipoUsuario];
+        $consulta = BindSQL::prepararSQL($sql, $parametros);
 
+        $num = mysqli_num_rows($consulta);
         return $num;
     }
     
@@ -331,13 +335,11 @@ class UsuariosPadre {
         $doctSinPuntos = strpos($documento, '.') == true ? str_replace('.', '', $documento) : $documento;
         $doctConPuntos = strpos($documento, '.') !== true && is_numeric($documento) ? str_replace('.', '', $documento) : $documento;
         $num = 0;
-        try {
-            $consulta = mysqli_query($conexion, "SELECT * FROM " . BD_GENERAL . ".usuarios WHERE (uss_documento='" . $doctSinPuntos . "' OR uss_documento='" . $doctConPuntos . "') {$filtro} AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-            $num = mysqli_num_rows($consulta);
-        } catch (Exception $e) {
-            include("../compartido/error-catch-to-report.php");
-        }
+        $sql = "SELECT * FROM " . BD_GENERAL . ".usuarios WHERE (uss_documento=? OR uss_documento=?) {$filtro} AND institucion=? AND year=?";
+        $parametros = [$doctSinPuntos, $doctConPuntos, $config['conf_id_institucion'], $_SESSION["bd"]];
+        $consulta = BindSQL::prepararSQL($sql, $parametros);
 
+        $num = mysqli_num_rows($consulta);
         return $num;
     }
 

@@ -12,6 +12,7 @@ require_once(ROOT_PATH."/main-app/class/Usuarios.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 
 $year=$_SESSION["bd"];
 if(isset($_GET["year"])){
@@ -122,14 +123,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
         <?php
 
         //CONSULTA QUE ME TRAE LAS areas DEL ESTUDIANTE
-
-        $consulta_mat_area_est = mysqli_query($conexion, "SELECT ar_id, car_ih FROM ".BD_ACADEMICA.".academico_cargas car
-
-		INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car.car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-
-		INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id= am.mat_area AND ar.institucion={$config['conf_id_institucion']} AND ar.year={$year}
-
-		WHERE  car_curso='" . $datosUsr["mat_grado"] . "' AND car_grupo='" . $datosUsr["mat_grupo"] . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year} GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
+        $consulta_mat_area_est = CargaAcademica::traerCargasMateriasAreaPorCursoGrupo($config, $datosUsr["mat_grado"], $datosUsr["mat_grupo"], $year);
 
         $numero_periodos = $config["conf_periodo"];
 
