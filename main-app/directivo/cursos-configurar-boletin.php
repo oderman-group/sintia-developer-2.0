@@ -223,7 +223,7 @@ if (!Modulos::validarPermisoEdicion() && $datosUsuarioActual['uss_tipo'] == TIPO
                                     </div>
 
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label">Mostrar Rango de NOtas?
+                                        <label class="col-sm-2 control-label">Mostrar Rango de Notas?
                                             <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Deseas que se vean el rango de notas que maneja la institución en el boletin?."><i class="fa fa-question"></i></button>
                                         </label>
                                         <div class="col-sm-4">
@@ -258,6 +258,95 @@ if (!Modulos::validarPermisoEdicion() && $datosUsuarioActual['uss_tipo'] == TIPO
                                                 <option value="">Seleccione una opción</option>
                                                 <option value="<?=MOSTRAR?>" <?= !empty($datosConfiguracion['conbol_mostrar_nota_comportamiento']) && $datosConfiguracion['conbol_mostrar_nota_comportamiento'] == MOSTRAR ? "selected" : ""; ?>>Mostrar</option>
                                                 <option value="<?=NO_MOSTRAR?>" <?= !empty($datosConfiguracion['conbol_mostrar_nota_comportamiento']) && $datosConfiguracion['conbol_mostrar_nota_comportamiento'] == NO_MOSTRAR ? "selected" : ""; ?>>No Mostrar</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Mostrar periodos anteriores?
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Deseas ver la definitiva en los periodos anteriores en el boletin?."><i class="fa fa-question"></i></button>
+                                        </label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control  select2" id="periodoAnterior" name="periodoAnterior" required <?= $disabledPermiso; ?>>
+                                                <option value="">Seleccione una opción</option>
+                                                <option value="<?=MOSTRAR?>" <?= !empty($datosConfiguracion['conbol_acomulado_final']) && $datosConfiguracion['conbol_acomulado_final'] == MOSTRAR ? "selected" : ""; ?>>Mostrar</option>
+                                                <option value="<?=NO_MOSTRAR?>" <?= !empty($datosConfiguracion['conbol_acomulado_final']) && $datosConfiguracion['conbol_acomulado_final'] == NO_MOSTRAR ? "selected" : ""; ?>>No Mostrar</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Mostrar Ausencias?
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Deseas que se vean las ausencias del estudiante en el boletin?."><i class="fa fa-question"></i></button>
+                                        </label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control  select2" id="ausencias" name="ausencias" required <?= $disabledPermiso; ?>>
+                                                <option value="">Seleccione una opción</option>
+                                                <option value="<?=POR_PERIODO?>" <?= !empty($datosConfiguracion['conbol_ausencias']) && $datosConfiguracion['conbol_ausencias'] == POR_PERIODO ? "selected" : ""; ?>>Por cada periodo</option>
+                                                <option value="<?=PERIODO_ACTUAL?>" <?= !empty($datosConfiguracion['conbol_ausencias']) && $datosConfiguracion['conbol_ausencias'] == PERIODO_ACTUAL ? "selected" : ""; ?>>Solo periodo actual</option>
+                                                <option value="<?=NO_MOSTRAR?>" <?= !empty($datosConfiguracion['conbol_ausencias']) && $datosConfiguracion['conbol_ausencias'] == NO_MOSTRAR ? "selected" : ""; ?>>No Mostrar</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <script>
+                                    $(document).ready(function() {
+                                        $('#periodoAnterior').change(function() {
+                                            const periodoAnteriorValue = $(this).val();
+                                            const ausencias = $('#ausencias');
+
+                                            // Clear current options in the 'ausencias' select
+                                            ausencias.empty();
+
+                                            // Add the appropriate options based on the selection in 'periodoAnterior'
+                                            if (periodoAnteriorValue === '<?=MOSTRAR?>') {
+                                                ausencias.append('<option value="<?=POR_PERIODO?>" <?= !empty($datosConfiguracion['conbol_ausencias']) && $datosConfiguracion['conbol_ausencias'] == POR_PERIODO ? "selected" : ""; ?>>Por cada periodo</option>');
+                                            }
+                                            
+                                            ausencias.append('<option value="<?=PERIODO_ACTUAL?>" <?= !empty($datosConfiguracion['conbol_ausencias']) && $datosConfiguracion['conbol_ausencias'] == PERIODO_ACTUAL ? "selected" : ""; ?>>Solo periodo actual</option>');
+                                            ausencias.append('<option value="<?=NO_MOSTRAR?>" <?= !empty($datosConfiguracion['conbol_ausencias']) && $datosConfiguracion['conbol_ausencias'] == NO_MOSTRAR ? "selected" : ""; ?>>No Mostrar</option>');
+
+                                            // Update the select2 options
+                                            ausencias.trigger('change');
+                                        });
+                                    });
+                                    </script>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Mostrar desempeño?
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Deseas que se vean el desempeño del estudiante en el boletin?."><i class="fa fa-question"></i></button>
+                                        </label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control  select2" id="desempeno" name="desempeno" required <?= $disabledPermiso; ?>>
+                                                <option value="">Seleccione una opción</option>
+                                                <option value="<?=COLUMNA?>" <?= !empty($datosConfiguracion['conbol_desempeno']) && $datosConfiguracion['conbol_desempeno'] == COLUMNA ? "selected" : ""; ?>>En una columna aparte</option>
+                                                <option value="<?=EN_INSCRIPCION?>" <?= !empty($datosConfiguracion['conbol_desempeno']) && $datosConfiguracion['conbol_desempeno'] == EN_INSCRIPCION ? "selected" : ""; ?>>Debajo de la nota</option>
+                                                <option value="<?=NO_MOSTRAR?>" <?= !empty($datosConfiguracion['conbol_desempeno']) && $datosConfiguracion['conbol_desempeno'] == NO_MOSTRAR ? "selected" : ""; ?>>No Mostrar</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Mostrar intensidad horaria?
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Deseas que se vean la intensidad horaria de cada materia en el boletin?."><i class="fa fa-question"></i></button>
+                                        </label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control  select2" id="ih" name="ih" required <?= $disabledPermiso; ?>>
+                                                <option value="">Seleccione una opción</option>
+                                                <option value="<?=MOSTRAR?>" <?= !empty($datosConfiguracion['conbol_ih']) && $datosConfiguracion['conbol_ih'] == MOSTRAR ? "selected" : ""; ?>>Mostrar</option>
+                                                <option value="<?=NO_MOSTRAR?>" <?= !empty($datosConfiguracion['conbol_ih']) && $datosConfiguracion['conbol_ih'] == NO_MOSTRAR ? "selected" : ""; ?>>No Mostrar</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label">Mostrar acomulado final?
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Deseas ver un acomulado final de lo que va en el año en el boletin?."><i class="fa fa-question"></i></button>
+                                        </label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control  select2" id="acomulado" name="acomulado" required <?= $disabledPermiso; ?>>
+                                                <option value="">Seleccione una opción</option>
+                                                <option value="<?=MOSTRAR?>" <?= !empty($datosConfiguracion['conbol_acomulado_final']) && $datosConfiguracion['conbol_acomulado_final'] == MOSTRAR ? "selected" : ""; ?>>Mostrar</option>
+                                                <option value="<?=NO_MOSTRAR?>" <?= !empty($datosConfiguracion['conbol_acomulado_final']) && $datosConfiguracion['conbol_acomulado_final'] == NO_MOSTRAR ? "selected" : ""; ?>>No Mostrar</option>
                                             </select>
                                         </div>
                                     </div>
