@@ -1052,7 +1052,6 @@ class Boletin {
      * @param string $idCurso      
      * @param string $idGrupo      
      * @param int    $periodo      
-     * @param string $periodos    
      * @param string $idEstudiante 
      * @param string $yearBd       
      *
@@ -1063,7 +1062,6 @@ class Boletin {
         string  $idCurso,
         string  $idGrupo,
         int     $periodo,
-        string  $periodos,
         string  $idEstudiante,
         string  $yearBd = ""
     )
@@ -1079,17 +1077,17 @@ class Boletin {
         FROM ".BD_ACADEMICA.".academico_cargas ac 
         INNER JOIN ".BD_ACADEMICA.".academico_materias am ON mat_id=car_materia AND am.institucion=ac.institucion AND am.year=ac.year
         INNER JOIN ".BD_ACADEMICA.".academico_areas aa ON ar_id=mat_area AND aa.institucion=ac.institucion AND aa.year=ac.year
-        INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id  AND ipc_periodo IN (".$periodos.") AND aic.institucion=ac.institucion AND aic.year=ac.year
+        INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga aic ON aic.ipc_carga=ac.car_id  AND ipc_periodo=? AND aic.institucion=ac.institucion AND aic.year=ac.year
         INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON aic.ipc_indicador=ai.ind_id AND ai.institucion=ac.institucion AND ai.year=ac.year
         INNER JOIN ".BD_ACADEMICA.".academico_actividades act ON act.act_id_tipo=aic.ipc_indicador AND act_id_carga=car_id and act_periodo=? AND act_estado=1 AND act_registrada=1 AND act.institucion=ac.institucion AND act.year=ac.year
         INNER JOIN ".BD_ACADEMICA.".academico_calificaciones aac ON aac.cal_id_actividad=act.act_id AND cal_id_estudiante=? AND aac.institucion=ac.institucion AND aac.year=ac.year
-        INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol_carga=car_id AND bol_periodo IN (".$periodos.") AND bol_estudiante=? AND bol.institucion=ac.institucion AND bol.year=ac.year
-        LEFT JOIN ".BD_DISCIPLINA.".disiplina_nota dn ON dn_cod_estudiante=? AND dn_periodo IN (".$periodos.") AND dn.institucion=ac.institucion AND dn.year=ac.year
+        INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol_carga=car_id AND bol_periodo=? AND bol_estudiante=? AND bol.institucion=ac.institucion AND bol.year=ac.year
+        LEFT JOIN ".BD_DISCIPLINA.".disiplina_nota dn ON dn_cod_estudiante=? AND dn_periodo=? AND dn.institucion=ac.institucion AND dn.year=ac.year
         WHERE car_curso=? AND car_grupo=? AND ac.institucion=? AND ac.year=?
         GROUP BY act_id_tipo, act_id_carga
         ORDER BY ar_posicion, mat_id, ipc_periodo, ind_id";
 
-        $parametros = [$periodo, $idEstudiante, $idEstudiante, $idEstudiante, $idCurso, $idGrupo, $config['conf_id_institucion'], $year];
+        $parametros = [$periodo, $periodo, $idEstudiante, $periodo, $idEstudiante, $idEstudiante, $periodo, $idCurso, $idGrupo, $config['conf_id_institucion'], $year];
 
         $consulta = BindSQL::prepararSQL($sql, $parametros);
 
