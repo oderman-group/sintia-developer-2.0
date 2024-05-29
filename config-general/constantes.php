@@ -206,6 +206,10 @@ define('INICIO', 'INICIO');
 define('FIN', 'FIN');
 define('PRIMERA_HOJA', 'PRIMERA_HOJA');
 define('SEGUNDA_HOJA', 'SEGUNDA_HOJA');
+define('POR_PERIODO', 'POR_PERIODO');
+define('PERIODO_ACTUAL', 'PERIODO_ACTUAL');
+define('COLUMNA', 'COLUMNA');
+define('EN_NOTA', 'EN_NOTA');
 
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':
