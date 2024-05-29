@@ -185,6 +185,28 @@ define('COMPANY', 'COMPANY');
 define('KINDERGARTEN', 'KINDERGARTEN');
 define('PEOPLE', 'PEOPLE');
 
+/* CONFIGURACION DE BOLETIN */
+define('GENERAL', 'GENERAL');
+define('TABLA', 'TABLA');
+define('BANNER', 'BANNER');
+define('DERECHA', 'DERECHA');
+define('IZQUIERDA', 'IZQUIERDA');
+define('SOLO_AREA', 'AREA');
+define('AREA_NOTA', 'AREA_NOTA');
+define('SOLO_MATERIA', 'MATERIA');
+define('MATERIA_NOTA', 'MATERIA_NOTA');
+define('INDICADOR', 'INDICADOR');
+define('INDICADOR_NOTA', 'INDICADOR_NOTA');
+define('MOSTRAR', 'MOSTRAR');
+define('NO_MOSTRAR', 'NO_MOSTRAR');
+define('NORMAL', 'NORMAL');
+define('PORCENTAJE_MATERIA', 'PORCENTAJE_MATERIA');
+define('OTRA_HOJA', 'OTRA_HOJA');
+define('INICIO', 'INICIO');
+define('FIN', 'FIN');
+define('PRIMERA_HOJA', 'PRIMERA_HOJA');
+define('SEGUNDA_HOJA', 'SEGUNDA_HOJA');
+
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':
         define('REDIRECT_ROUTE', 'http://localhost/app-sintia/main-app');

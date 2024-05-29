@@ -9,6 +9,8 @@
  
       <?php if(Modulos::validarSubRol(['DT0145'])){?>
         <li class="nav-item"> <a class="nav-link" href="cursos-promocionar-estudiantes-detalles.php" style="color:<?=$Plataforma->colorUno;?>;">Promocionar Estudiantes</a></li>
+      <?php } if(Modulos::validarSubRol(['DT0337'])){?>
+        <li class="nav-item"> <a class="nav-link" href="cursos-configurar-boletin.php" style="color:<?=$Plataforma->colorUno;?>;">Configurar Boletín</a></li>
       <?php }?>
 
       <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0063','DT0210','DT0211'])){?>
