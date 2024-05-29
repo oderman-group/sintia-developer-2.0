@@ -1045,9 +1045,20 @@ class Boletin {
     }
 
     /**
-     * Este metodo me consulta toda la informacion del estudiante par el boletin general
-    **/
-    public static function consultaBoletin (
+     * Obtiene la información del boletín de un estudiante determinado, incluidas calificaciones y observaciones.
+     * por períodos específicos.
+     *
+     * @param array  $config       
+     * @param string $idCurso      
+     * @param string $idGrupo      
+     * @param int    $periodo      
+     * @param string $periodos    
+     * @param string $idEstudiante 
+     * @param string $yearBd       
+     *
+     * @return mysqli_result               
+     */
+    public static function consultaBoletinGeneral (
         array   $config,
         string  $idCurso,
         string  $idGrupo,
