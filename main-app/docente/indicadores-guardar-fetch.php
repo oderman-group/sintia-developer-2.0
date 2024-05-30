@@ -17,7 +17,6 @@ $valores = json_decode($input["valor"], true);
 
 $infoCompartir = 0;
 foreach ($valores["indicadores"] as $clave => $descripcion) {
-	$idRegistro      = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_indicadores');
 	$sumaIndicadores = Indicadores::consultarSumaIndicadores($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 	$porcentajePermitido = 100 - $sumaIndicadores[0];
 	$porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
@@ -26,12 +25,7 @@ foreach ($valores["indicadores"] as $clave => $descripcion) {
 		echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=209";</script>';
 		exit();
 	}
-	try {
-		$sql = "INSERT INTO " . BD_ACADEMICA . ".academico_indicadores(ind_id, ind_nombre, ind_obligatorio, ind_publico, institucion, year) VALUES('" . $idRegistro . "', '" . mysqli_real_escape_string($conexion, $descripcion["descripcion"]) . "', 0, '" . $infoCompartir . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]})";
-		mysqli_query($conexion, $sql);
-	} catch (Exception $e) {
-		include(ROOT_PATH . "/main-app/compartido/error-catch-to-report.php");
-	}
+	$idRegistro = Indicadores::guardarIndicador($conexionPDO, "ind_nombre, ind_obligatorio, ind_publico, institucion, year, ind_id", [mysqli_real_escape_string($conexion, $descripcion["descripcion"]), 0, $infoCompartir, $config['conf_id_institucion'], $_SESSION["bd"]]);
 	//Si decide poner los valores porcentuales de los indicadores de forma manual
 	if ($datosCargaActual['car_valor_indicador'] == 1) {
 		if ($porcentajeRestante <= 0) {

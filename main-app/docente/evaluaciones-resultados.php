@@ -10,6 +10,7 @@ require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 
 
 $idE="";
@@ -228,12 +229,9 @@ $idE="";
 														 
 														 //Exportar las notas
 														 if(!empty($_POST["exportar"]) && $_POST["exportar"]==1 and !empty($nota)){
-															$codigo=Utilidades::generateCode("CAL");
-															 
-															mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='".$_POST["actividad"]."' AND cal_id_estudiante='".$resultado['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+															Calificaciones::eliminarCalificacionActividadEstudiante($config, $_POST["actividad"], $resultado['mat_id']);
 															
-															 
-															mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_calificaciones(cal_id, cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones, institucion, year)VALUES('".$codigo."', '".$resultado['mat_id']."','".$nota."','".$_POST["actividad"]."', now(), 0, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+															Calificaciones::guardarNotaActividadEstudiante($conexionPDO, "cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones, institucion, year, cal_id", [$resultado['mat_id'],$nota,$_POST["actividad"], date("Y-m-d H:i:s"), 0, $config['conf_id_institucion'], $_SESSION["bd"]]);
 															
 															
 															 //Solo actuliza una vez que la actividad fue registrada.

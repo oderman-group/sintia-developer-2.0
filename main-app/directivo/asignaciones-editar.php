@@ -150,7 +150,7 @@ if (!Modulos::validarPermisoEdicion() || $iniciadas > 0) {
                                         </div>
                                     </div>
                                     
-                                    <?php $botones = new botonesGuardar("asignaciones.php?idE=".base64_encode($resultado['epag_id_evaluacion']),Modulos::validarPermisoEdicion()); ?>
+                                    <?php $botones = new botonesGuardar("asignaciones.php?idE=".base64_encode($resultado['gal_id_evaluacion']),Modulos::validarPermisoEdicion()); ?>
                                 </form>
                             </div>
                         </div>
