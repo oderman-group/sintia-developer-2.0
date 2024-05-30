@@ -44,7 +44,7 @@ $Plataforma = new Plataforma;
 
 				<p>
 					<h3 style="text-align: center;">
-					<a href="'.REDIRECT_ROUTE.'" target="_blank" style="color: #41c4c4; font-weight:bold;">ACCEDER A MI CUENTA AHORA</a>
+					<a href="<?=REDIRECT_ROUTE;?>" target="_blank" style="color: #41c4c4; font-weight:bold;">ACCEDER A MI CUENTA AHORA</a>
 					</h3>
 				</p>
 			</div>
