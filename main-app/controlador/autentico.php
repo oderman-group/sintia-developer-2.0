@@ -52,8 +52,7 @@ require_once("../class/Plataforma.php");
 require_once("../class/UsuariosPadre.php");
 
 
-$rst_usrE = mysqli_query($conexion, "SELECT uss_usuario, uss_id, uss_intentos_fallidos FROM ".BD_GENERAL.".usuarios 
-WHERE uss_usuario='".trim($_POST["Usuario"])."' AND TRIM(uss_usuario)!='' AND uss_usuario IS NOT NULL AND institucion={$institucion['ins_id']} AND year={$_SESSION["bd"]}");
+$rst_usrE = UsuariosPadre::obtenerTodosLosDatosDeUsuarios("AND uss_usuario='".trim($_POST["Usuario"])."' AND TRIM(uss_usuario)!='' AND uss_usuario IS NOT NULL");
 
 $numE = mysqli_num_rows($rst_usrE);
 if($numE==0){

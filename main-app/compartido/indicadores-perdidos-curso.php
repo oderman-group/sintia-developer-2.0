@@ -11,6 +11,7 @@ require_once("../class/Grados.php");
 require_once("../class/Grupos.php");
 require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 
 
 if (empty($_REQUEST["periodo"])) {

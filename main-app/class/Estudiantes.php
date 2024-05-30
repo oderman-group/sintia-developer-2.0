@@ -510,7 +510,7 @@ class Estudiantes {
      * @param array $config
      * @param mysqli $conexion
      */
-    public static function retirarRestaurarEstudiante($idEstudiante, $motivo, $config, $conexion, $conexionPDO)
+    public static function retirarRestaurarEstudiante($idEstudiante, $motivo, $config, $conexion, $conexionPDO,$finalizarTransacion=true)
     {
         $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_matriculas_retiradas');
 
@@ -518,7 +518,7 @@ class Estudiantes {
 
         $parametros = [$codigo, $idEstudiante, $motivo, $_SESSION["id"], $config['conf_id_institucion'], $_SESSION["bd"]];
         
-        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        $resultado = BindSQL::prepararSQL($sql, $parametros,$finalizarTransacion);
     }
 
     /**

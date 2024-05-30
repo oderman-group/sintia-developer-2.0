@@ -3,16 +3,11 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("verificar-carga.php");?>
 <?php include("verificar-periodos-diferentes.php");?>
-<?php include("../compartido/head.php");?>
-<?php
+<?php include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
-$consultaValores=mysqli_query($conexion, "SELECT
-(SELECT sum(act_valor) FROM ".BD_ACADEMICA.".academico_actividades 
-WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
-(SELECT count(*) FROM ".BD_ACADEMICA.".academico_actividades 
-WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})
-");
-$valores = mysqli_fetch_array($consultaValores, MYSQLI_BOTH);
+require_once(ROOT_PATH."/main-app/class/Actividades.php");
+
+$valores = Actividades::consultarValores($config, $cargaConsultaActual, $periodoConsultaActual);
 $porcentajeRestante = 100 - $valores[0];
 
 if(
@@ -163,13 +158,11 @@ if(
 												</div>
 											<?php }?>
 
-											<a href="#" name="calificaciones.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
 										<?php 
 										//Si existe el indicador definitivo cuando sea requerido
 										if($datosCargaActual['car_indicador_automatico']==1 && empty($indDef['ind_id'])){echo "<span style='color:red;'>No hay indicador definitivo configurado</span>";}else{?>
-											<button type="submit" class="btn  btn-info">
-										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-									</button>
+											<?php 
+                            				$botones = new botonesGuardar("calificaciones.php",Modulos::validarPermisoEdicion()); ?>
 										<?php }?>
 										
 										

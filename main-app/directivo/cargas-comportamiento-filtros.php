@@ -166,14 +166,9 @@ if(!Modulos::validarPermisoEdicion()){
                                                 ?>
                                             </select>
                                         </div>
-                                    </div>
-                                    
-                                    <?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0051'])){?>
-                                        <input type="submit" class="btn btn-primary" value="Generar informe">&nbsp;
-                                    <?php }?>
-                                    
-                                    <a href="javascript:void(0);" name="informes-todos.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
-                                </form>
+                                    </div>                                  
+                                    <?php $botones = new botonesGuardar("informes-todos.php",Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0051']),"Generar Informe"); ?>
+                               </form>
                             </div>
                         </div>
 						

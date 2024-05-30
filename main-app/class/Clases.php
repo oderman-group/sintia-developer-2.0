@@ -2,9 +2,28 @@
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 require_once(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+require_once("servicios/Servicios.php");
 
-class Clases {
+class Clases  extends Servicios{
     
+      /**
+   * Realiza un conteo teniendo encuenta los parametros ingresados.
+   *
+   * @param array|null $parametrosArray Arreglo de parámetros para filtrar la consulta (opcional).
+   *
+   * @return array|mysqli_result|false Arreglo de datos del resultado, objeto mysqli_result o false si hay un error.
+   */
+  public static function contar($parametrosArray = null,$filtro ="")
+  {
+    $sqlInicial = "SELECT Count(*) as cantidad FROM " . BD_ACADEMICA . ".academico_clases_preguntas";
+    if ($parametrosArray && count($parametrosArray) > 0) {
+        $parametrosValidos = array('cpp_id_clase', 'institucion','year','cpp_padre');
+        $sqlInicial = Servicios::concatenarWhereAnd($sqlInicial, $parametrosValidos, $parametrosArray);
+      };
+    $sqlFinal = "";
+    $sql = $sqlInicial .$filtro. $sqlFinal;
+    return Servicios::SelectSql($sql)[0]["cantidad"];
+  }
     /**
      * Este metodo me trae las preguntas de una clase
      * @param mysqli $conexion
@@ -12,19 +31,36 @@ class Clases {
      * @param string $idClase
      * @param string $filtro
      * 
-     * @return mysqli_result $consulta
+     * @return array $consulta
      */
-    public static function traerPreguntasClases(mysqli $conexion, array $config, string $idClase, string $filtro = ""){
+    public static function traerPreguntasClases(mysqli $conexion, array $config, string $idClase, string $filtro = "",string $limit = ""){
+     
+        $sqlInicial = "SELECT * FROM ".BD_ACADEMICA.".academico_clases_preguntas cpp
+        INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=cpp.cpp_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
+        WHERE cpp.cpp_id_clase='" . $idClase . "' AND cpp.institucion={$config['conf_id_institucion']}  AND cpp.year={$_SESSION["bd"]}  $filtro  ORDER BY cpp.cpp_fecha DESC" ;
+        
+        return Servicios::SelectSql($sqlInicial,$limit);
+    }
+
+        /**
+     * Este metodo me trae una pregunta especifica de la clase
+     * @param string $idClase
+     * 
+     * @return array $resultado
+     */
+    public static function traerPregunta(string $idPregunta){
         try{
+            global $conexion,$config;
             $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_clases_preguntas cpp
             INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=cpp.cpp_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-            WHERE cpp.cpp_id_clase='" . $idClase . "' AND cpp.institucion={$config['conf_id_institucion']} AND cpp.year={$_SESSION["bd"]} $filtro ORDER BY cpp.cpp_fecha DESC");
+            WHERE cpp.cpp_id='" . $idPregunta . "' AND cpp.institucion={$config['conf_id_institucion']} AND cpp.year={$_SESSION["bd"]} ");
+            $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
             exit();
         }
 
-        return $consulta;
+        return $resultado;
     }
     
     /**
@@ -51,11 +87,22 @@ class Clases {
     public static function guardarPreguntasClases(mysqli $conexion, array $config, array $POST){
         $codigo=Utilidades::generateCode("CPP");
         try{
-            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_clases_preguntas(cpp_id, cpp_usuario, cpp_fecha, cpp_id_clase, cpp_contenido, institucion, year)VALUES('".$codigo."', '" . $_SESSION["id"] . "', now(), '" . $POST["idClase"] . "', '" . mysqli_real_escape_string($conexion,$POST["contenido"]) . "', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+            $sql="INSERT INTO ".BD_ACADEMICA.".academico_clases_preguntas(cpp_id, cpp_usuario, cpp_fecha, cpp_id_clase, cpp_contenido, institucion, year,cpp_padre)
+            VALUES('".$codigo."',
+             '" . $_SESSION["id"] . "',
+              now(), 
+              '" . $POST["idClase"] . "',
+              '" . mysqli_real_escape_string($conexion,$POST["contenido"]) . "',
+               {$config['conf_id_institucion']},
+               {$_SESSION["bd"]},
+               '" .$POST["idPadre"]. "')
+               ";
+            mysqli_query($conexion, $sql);
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
             exit();
         }
+        return $codigo;
     }
     
     /**
@@ -164,7 +211,29 @@ class Clases {
     public static function actualizarClase(mysqli $conexion, array $config, array $POST, array $FILES){
 
         $archivoSubido = new Archivos;
-        
+        global $storage;
+        //Video
+        if(!empty($FILES['videoClase']['name'])){
+            $nombreInputFile = 'videoClase';
+            $archivoSubido->validarArchivo($FILES['videoClase']['size'], $FILES['videoClase']['name']);
+            $explode=explode(".", $FILES['videoClase']['name']);
+            $extension = end($explode);
+            $archivo = $_SESSION["inst"].'_'.$_SESSION["id"].'_clase_video_'.$POST["idR"].".".$extension;
+            $archivoSubido->subirArchivoStorage(FILE_VIDEO_CLASES, $archivo, $nombreInputFile,$storage); 
+            try{
+                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_video_clase='".$archivo."' WHERE cls_id='".$POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            } catch (Exception $e) {
+                include("../compartido/error-catch-to-report.php");
+            }
+        }else if(!empty($POST["videoClase"])){
+            try{
+                $storage->getBucket()->object(FILE_VIDEO_CLASES . $POST["videoClase"])->delete();
+                mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_video_clase='' WHERE cls_id='".$POST["idR"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+            } catch (Exception $e) {
+                include("../compartido/error-catch-to-report.php");
+            }
+
+        }
         //Archivos
         $destino = "../files/clases";
         if(!empty($FILES['file']['name'])){
@@ -292,7 +361,17 @@ class Clases {
         $codigo=Utilidades::generateCode("CLS");
         
         $archivoSubido = new Archivos;
-        
+        global $storage;
+        //Video
+        $claseVideo='';
+        if(!empty($FILES['videoClase']['name'])){
+            $nombreInputFile = 'videoClase';
+            // $archivoSubido->validarArchivo($FILES['videoClase']['size'], $FILES['videoClase']['name']);
+            $explode=explode(".", $FILES['videoClase']['name']);
+            $extension = end($explode);
+            $claseVideo = $_SESSION["inst"].'_'.$_SESSION["id"].'_clase_video_'.$codigo.".".$extension;
+            $archivoSubido->subirArchivoStorage(FILE_VIDEO_CLASES, $claseVideo, $nombreInputFile,$storage); 
+        }
         //Archivos
         $archivo = '';
         $destino = ROOT_PATH."/main-app/files/clases";
@@ -335,7 +414,7 @@ class Clases {
             if($POST["disponible"]==1) $disponible=1;
         
             try{
-                mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_clases(cls_id, cls_tema, cls_fecha, cls_id_carga, cls_estado, cls_periodo, cls_video, cls_video_url, cls_archivo, cls_archivo2, cls_archivo3, cls_nombre_archivo1, cls_nombre_archivo2, cls_nombre_archivo3, cls_descripcion, cls_disponible, cls_meeting, cls_hipervinculo,cls_unidad, institucion, year)"." VALUES('".$codigo."', '".mysqli_real_escape_string($conexion,$POST["contenido"])."', '".$date."', '".$idCarga."', 1, '".$periodo."', '".$video."', '".$POST["video"]."', '".$archivo."', '".$archivo2."', '".$archivo3."', '".$POST["archivo1"]."', '".$POST["archivo2"]."', '".$POST["archivo3"]."', '".mysqli_real_escape_string($conexion,$POST["descripcion"])."', '".$disponible."', '".$POST["idMeeting"]."', '".$POST["vinculo"]."', '".$POST["unidad"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+                mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_clases(cls_id, cls_tema, cls_fecha, cls_id_carga, cls_estado, cls_periodo, cls_video, cls_video_url, cls_archivo, cls_archivo2, cls_archivo3, cls_nombre_archivo1, cls_nombre_archivo2, cls_nombre_archivo3, cls_descripcion, cls_disponible, cls_meeting, cls_hipervinculo,cls_unidad, institucion, year,cls_video_clase)"." VALUES('".$codigo."', '".mysqli_real_escape_string($conexion,$POST["contenido"])."', '".$date."', '".$idCarga."', 1, '".$periodo."', '".$video."', '".$POST["video"]."', '".$archivo."', '".$archivo2."', '".$archivo3."', '".$POST["archivo1"]."', '".$POST["archivo2"]."', '".$POST["archivo3"]."', '".mysqli_real_escape_string($conexion,$POST["descripcion"])."', '".$disponible."', '".$POST["idMeeting"]."', '".$POST["vinculo"]."', '".$POST["unidad"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]},'".$claseVideo."')");
             } catch (Exception $e) {
                 include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
             }

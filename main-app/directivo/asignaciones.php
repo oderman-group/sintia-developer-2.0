@@ -111,9 +111,7 @@ if (!empty($_GET['idE'])) {
 
 																default:
 																	if($resultado['epag_tipo'] == DIRECTIVO || $resultado['epag_tipo'] == DOCENTE) {
-																		$consultaEvaluado = mysqli_query($conexion, "SELECT uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2 FROM ".BD_GENERAL.".usuarios
-																		WHERE uss_id='".$resultado['epag_id_evaluado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-																		$datosEvaluado = mysqli_fetch_array($consultaEvaluado, MYSQLI_BOTH);
+																		$datosEvaluado = UsuariosPadre::sesionUsuario($resultado['epag_id_evaluado']);
 																		$nombreEvaluado = UsuariosPadre::nombreCompletoDelUsuario($datosEvaluado);
 																	}
 																break;
