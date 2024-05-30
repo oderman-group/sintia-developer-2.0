@@ -138,4 +138,33 @@ class Respuesta {
 
         return $num;
     }
+
+    /**
+     * Este metodo me trae la respuesta de un usuario a una pregunta
+     * @param mysqli $conexion
+     * @param array $config
+     * @param string $idPregunta
+     * @param string $idUsuario
+     * 
+     * @return array $resultado
+    **/
+    public static function traerRespuestaPregunta (
+        mysqli $conexion, 
+        array $config,
+        string $idPregunta,
+        string $idUsuario
+    )
+    {
+        $resultado = [];
+        try {
+            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".general_resultados gr 
+            LEFT JOIN ".BD_ADMIN.".general_respuestas gr2 ON gr2.resg_id=resg_respuesta AND gr2.resg_institucion = gr.resg_institucion AND gr2.resg_year = gr.resg_year
+            WHERE gr.resg_id_pregunta={$idPregunta} AND resg_id_usuario='{$idUsuario}' AND gr.resg_institucion = {$config['conf_id_institucion']} AND gr.resg_year = {$_SESSION["bd"]}");
+        } catch (Exception $e) {
+            include("../compartido/error-catch-to-report.php");
+        }
+        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+
+        return $resultado;
+    }
 }
