@@ -106,10 +106,10 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                 $leyendaRI = '';
                 if(!empty($fila['rind_nota']) && $fila['rind_nota']>$fila["nota"]){
-                    $nota_indicador = round($fila['rind_nota'], 1);
+                    $nota_indicador = $fila['rind_nota'];
                     $leyendaRI = '<br><span style="color:navy; font-size:9px;">Recuperado.</span>';
                 }else{
-                    $nota_indicador = round($fila["nota"], 1);
+                    $nota_indicador = $fila["nota"];
                 }
 
                 if ($nota_indicador == 1)    $nota_indicador = "1.0";
@@ -117,7 +117,6 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                 if ($nota_indicador == 3)    $nota_indicador = "3.0";
                 if ($nota_indicador == 4)    $nota_indicador = "4.0";
                 if ($nota_indicador == 5)    $nota_indicador = "5.0";
-                if($nota_indicador >= $config['conf_nota_minima_aprobar']){continue;}
 
                 if ($idMatAnterior != $fila["mat_id"]) {
                     $idMatAnterior = $fila["mat_id"];
