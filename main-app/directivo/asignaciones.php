@@ -37,6 +37,10 @@ if (!empty($_GET['idE'])) {
                                 <div class="page-title">Asignaciones</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
+							<ol class="breadcrumb page-breadcrumb pull-right">
+								<li><a class="parent-item" href="javascript:void(0);" name="evaluaciones.php" onClick="deseaRegresar(this)">Evaluaciones</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+								<li class="active">Asignaciones</li>
+							</ol>
                         </div>
                     </div>
 
@@ -142,7 +146,7 @@ if (!empty($_GET['idE'])) {
 																		<li><a href="asignaciones-editar.php?id=<?=base64_encode($resultado['gal_id']);?>"><?=$frases[165][$datosUsuarioActual['uss_idioma']];?></a></li>
 																	<?php }?>
 																	<?php if(Modulos::validarSubRol(['DT0329']) ){?>
-																		<li><a href="asignaciones-asignados.php?id=<?=base64_encode($resultado['gal_id']);?>">Usuarios Asignados</a></li>
+																		<li><a href="asignaciones-asignados.php?id=<?=base64_encode($resultado['gal_id']);?>&idE=<?=$_GET['idE'];?>">Usuarios Asignados</a></li>
 																	<?php }?>
 																	<?php if( Modulos::validarSubRol(['DT0328']) ){?>
 																		<li><a href="../compartido/evaluaciones-generar-informe.php?idE=<?=base64_encode($resultado['gal_id']);?>" target="_blank">Generar Informe</a></li>
