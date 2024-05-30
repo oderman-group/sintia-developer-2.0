@@ -71,7 +71,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
     <body style="font-family:Arial;">
         <?php
         //CONSULTA QUE ME TRAE LAS areas DEL ESTUDIANTE
-        $consulta_mat_area_est = mysqli_query($conexion, "SELECT am.mat_id, am.mat_nombre, ar.ar_id, ar.ar_nombre, car.car_id, ind.ind_nombre, aic.ipc_periodo, ROUND(SUM(aac.cal_nota * (aa.act_valor / 100)) / SUM(aa.act_valor / 100), 2) AS nota, rind_nota, ind.ind_id
+        $consulta_mat_area_est = mysqli_query($conexion, "SELECT am.mat_id, am.mat_nombre, ar.ar_id, ar.ar_nombre, car.car_id, ind.ind_nombre, aic.ipc_periodo, ROUND(SUM(aac.cal_nota * (aa.act_valor / 100)) / SUM(aa.act_valor / 100), 2) AS nota, ROUND(rind_nota, 2) AS rind_nota, ind.ind_id
         FROM ".BD_ACADEMICA.".academico_cargas car
         INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id = car.car_materia AND am.institucion = car.institucion  AND am.year = car.year
         INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id = am.mat_area AND ar.institucion = car.institucion  AND ar.year = car.year
@@ -116,10 +116,10 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                 $leyendaRI = '';
                 if(!empty($fila['rind_nota']) && $fila['rind_nota']>$fila["nota"]){
-                    $nota_indicador = round($fila['rind_nota'], 1);
+                    $nota_indicador = $fila['rind_nota'];
                     $leyendaRI = '<br><span style="color:navy; font-size:9px;">Recuperado.</span>';
                 }else{
-                    $nota_indicador = round($fila["nota"], 1);
+                    $nota_indicador = $fila["nota"];
                 }
 
                 if ($nota_indicador == 1)    $nota_indicador = "1.0";
@@ -127,7 +127,6 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                 if ($nota_indicador == 3)    $nota_indicador = "3.0";
                 if ($nota_indicador == 4)    $nota_indicador = "4.0";
                 if ($nota_indicador == 5)    $nota_indicador = "5.0";
-                if($nota_indicador >= $config['conf_nota_minima_aprobar']){continue;}
 
                 if ($idMatAnterior != $fila["mat_id"]) {
                     $idMatAnterior = $fila["mat_id"];
