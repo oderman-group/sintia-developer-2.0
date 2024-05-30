@@ -3,7 +3,7 @@ include("session.php");
 $idPaginaInterna = 'DT0337';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
-require_once(ROOT_PATH."/main-app/class/Grados.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
@@ -11,7 +11,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
     exit();
 }
 
-$datosConfiguracion = Grados::traerConfiguracionBoletin($config);
+$datosConfiguracion = Boletin::traerConfiguracionBoletin($config);
 
 $disabledPermiso = "";
 if (!Modulos::validarPermisoEdicion() && $datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO) {
