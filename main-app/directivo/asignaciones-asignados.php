@@ -5,7 +5,6 @@ include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Asignaciones.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
-require_once(ROOT_PATH."/main-app/class/Areas.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -38,6 +37,10 @@ if (!empty($_GET['id'])) {
                                 <div class="page-title">Usuarios Asignados</div>
 								<?php include("../compartido/texto-manual-ayuda.php");?>
                             </div>
+                            <ol class="breadcrumb page-breadcrumb pull-right">
+                                <li><a class="parent-item" href="javascript:void(0);" name="asignaciones.php?idE=<?=$_GET['idE']?>" onClick="deseaRegresar(this)">Asignaciones</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                                <li class="active">Usuarios Asignados</li>
+                            </ol>
                         </div>
                     </div>
 

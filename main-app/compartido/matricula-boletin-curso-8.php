@@ -224,6 +224,9 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                             if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
                                 $notaBoletinFinal= !empty($datosBoletin['notip_nombre']) ? $datosBoletin['notip_nombre'] : "";
                             }
+
+                            $notaNivelada = $notaBoletinFinal >= $config["conf_nota_minima_aprobar"] ? " Nivelada" : "";
+                            $notaBoletinFinal = !empty($datosBoletin['bol_tipo']) && $datosBoletin['bol_tipo'] != 1 ? round($datosBoletin['bol_nota_anterior'], 1)." / ".$notaBoletinFinal.$notaNivelada : $notaBoletinFinal;
                         ?>
                             <td align="center"><?= $notaBoletinFinal; ?></td>
                             <td align="center"><img src="../files/iconos/<?= $datosBoletin['notip_imagen']; ?>" width="15" height="15"></td>
@@ -236,7 +239,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
 
                         // SI PERDIÓ LA MATERIA A FIN DE AÑO
                         if ($promedioMateria < $config["conf_nota_minima_aprobar"]) {
-                            if ($nivelacion['niv_definitiva'] >= $config["conf_nota_minima_aprobar"]) {
+                            if (!empty($nivelacion['niv_definitiva']) && $nivelacion['niv_definitiva'] >= $config["conf_nota_minima_aprobar"]) {
                                 $promedioMateriaFinal = $nivelacion['niv_definitiva'];
                             } else {
                                 $materiasPerdidas++;
