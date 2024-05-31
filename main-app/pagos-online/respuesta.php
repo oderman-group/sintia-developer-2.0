@@ -62,7 +62,7 @@ include("../../conexion.php");
       if (!empty($jsonObject['data']['x_extra16'])) {
         require_once(ROOT_PATH."/main-app/class/Modulos.php");
 
-        mysqli_query($conexion, "INSERT INTO " . BD_ADMIN . ".instituciones_paquetes_extras(paqext_institucion, paqext_id_paquete, paqext_fecha, paqext_tipo) VALUES ('" . $jsonObject['data']['x_extra6'] . "', '" . $jsonObject['data']['x_extra16'] . "', now(), '".MODULOS."'");
+        mysqli_query($conexion, "INSERT INTO " . BD_ADMIN . ".instituciones_paquetes_extras(paqext_institucion, paqext_id_paquete, paqext_fecha, paqext_tipo) VALUES ('" . $jsonObject['data']['x_extra6'] . "', '" . $jsonObject['data']['x_extra16'] . "', now(), '".MODULOS."')");
 
         if($jsonObject['data']['x_extra16'] == MODULO_ADMISIONES) {
           require_once(ROOT_PATH."/main-app/class/Plataforma.php");
@@ -111,7 +111,7 @@ include("../../conexion.php");
 
       if (!empty($jsonObject['data']['x_extra17']) && !empty($jsonObject['data']['x_extra18'])) {
           
-        mysqli_query($conexion, "INSERT INTO " . BD_ADMIN . ".instituciones_paquetes_extras(paqext_institucion, paqext_id_paquete, paqext_fecha, paqext_tipo) VALUES ('" . $jsonObject['data']['x_extra6'] . "', '" . $jsonObject['data']['x_extra17'] . "', now(), '".PAQUETES."'");
+        mysqli_query($conexion, "INSERT INTO " . BD_ADMIN . ".instituciones_paquetes_extras(paqext_institucion, paqext_id_paquete, paqext_fecha, paqext_tipo) VALUES ('" . $jsonObject['data']['x_extra6'] . "', '" . $jsonObject['data']['x_extra17'] . "', now(), '".PAQUETES."')");
 
         if ($jsonObject['data']['x_extra18'] == MODULOS) {
             require_once(ROOT_PATH."/main-app/class/Plataforma.php");
