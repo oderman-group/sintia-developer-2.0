@@ -60,7 +60,7 @@ function validarCantidadUsuarios(datos) {
                     $("#respuestaUsuario").html(data.message);
                     $("input").attr('disabled', false); 
                     $("#btnEnviar").attr('disabled', false); 
-                    if (tipoUsuario == 5 && subRoles) {
+                    if (subRoles) {
                         mostrarSubroles(datos);
                     }
                 }

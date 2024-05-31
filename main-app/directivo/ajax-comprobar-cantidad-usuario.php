@@ -2,8 +2,8 @@
 include('session.php');
 require_once(ROOT_PATH."/main-app/class/Plataforma.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
-if($_REQUEST['tipoUsuario']!=""){
-    $tipoUsuario = $_REQUEST['tipoUsuario'];
+if(!empty($_REQUEST['tipoUsuario'])){
+    $tipoUsuario = $_REQUEST['tipoUsuario'] == TIPO_ACUDIENTE || $_REQUEST['tipoUsuario'] == TIPO_ESTUDIANTE ? "3,4" : $_REQUEST['tipoUsuario'];
 
     $datosPlan = Plataforma::traerDatosPlanes($conexion, $datosUnicosInstitucion['ins_id_plan']);
     $datosPaquetes = Plataforma::contarDatosPaquetes($datosUnicosInstitucion['ins_id'], PAQUETES);
@@ -16,7 +16,7 @@ if($_REQUEST['tipoUsuario']!=""){
     $totalCliente = UsuariosPadre::contarUsuariosPorTipo($conexion, $tipoUsuario);
 
     $limite = 0;
-    switch ($tipoUsuario) {
+    switch ($_REQUEST['tipoUsuario']) {
         case TIPO_DIRECTIVO:
             if ($datosUnicosInstitucion['ins_id_plan'] != 3 && $totalCliente >= $cantDirectivos) {
                 $limite = 1;
