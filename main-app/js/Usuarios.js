@@ -42,6 +42,7 @@ function validarUsuario(datos) {
  */
 function validarCantidadUsuarios(datos) {
     var tipoUsuario = datos.value;
+    var subRoles = document.getElementById("subRoles");
     
     if(tipoUsuario!=""){
 
@@ -59,7 +60,9 @@ function validarCantidadUsuarios(datos) {
                     $("#respuestaUsuario").html(data.message);
                     $("input").attr('disabled', false); 
                     $("#btnEnviar").attr('disabled', false); 
-                    mostrarSubroles(datos);
+                    if (tipoUsuario == 5 && subRoles) {
+                        mostrarSubroles(datos);
+                    }
                 }
         })
         .catch(error => {
