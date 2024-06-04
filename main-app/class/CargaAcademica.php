@@ -642,6 +642,7 @@ class CargaAcademica {
 		INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car.car_materia AND am.institucion=car.institucion AND am.year=car.year
         INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion=car.institucion AND gra.year=car.year
         INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion=car.institucion AND gru.year=car.year
+        LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_responsable AND uss.institucion=car.institucion AND uss.year=car.year
 		WHERE car_id=? AND car.institucion=? AND car.year=?";
 
         $parametros = [$idCarga, $config['conf_id_institucion'], $year];
