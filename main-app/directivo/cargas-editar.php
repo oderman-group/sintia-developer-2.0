@@ -12,7 +12,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 try{
 	$consultaDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
-	INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_responsable AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]} WHERE car_id='".base64_decode($_GET["idR"])."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
+	LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_responsable AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]} WHERE car_id='".base64_decode($_GET["idR"])."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
 }
