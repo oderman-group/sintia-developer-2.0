@@ -303,8 +303,8 @@ class UsuariosPadre {
         string $tipoUsuario,
     ){
         $num = 0;
-        $sql = "SELECT * FROM " . BD_GENERAL . ".usuarios WHERE institucion=? AND year=? AND uss_tipo=?";
-        $parametros = [$_SESSION["idInstitucion"], $_SESSION["bd"], $tipoUsuario];
+        $sql = "SELECT * FROM " . BD_GENERAL . ".usuarios WHERE institucion=? AND year=? AND uss_tipo IN (".$tipoUsuario.")";
+        $parametros = [$_SESSION["idInstitucion"], $_SESSION["bd"]];
         $consulta = BindSQL::prepararSQL($sql, $parametros);
 
         $num = mysqli_num_rows($consulta);
