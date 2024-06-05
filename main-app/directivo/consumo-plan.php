@@ -109,9 +109,10 @@ include("../compartido/head.php");
 
     <?php
         $datosPlan = Plataforma::traerDatosPlanes($conexion, $datosUnicosInstitucion['ins_id_plan']);
-        $totalDirectivos = $datosPlan['plns_cant_directivos'];
-        $totalDocentes = $datosPlan['plns_cant_docentes'];
-        $totalEstudianteAcudientes = $datosPlan['plns_cant_estudiantes'];
+        $datosPaquetes = Plataforma::contarDatosPaquetes($datosUnicosInstitucion['ins_id'], PAQUETES);
+        $totalDirectivos = $datosPlan['plns_cant_directivos'] + $datosPaquetes['plns_cant_directivos'];
+        $totalDocentes = $datosPlan['plns_cant_docentes'] + $datosPaquetes['plns_cant_docentes'];
+        $totalEstudianteAcudientes = $datosPlan['plns_cant_estudiantes'] + $datosPaquetes['plns_cant_estudiantes'];
 
         
         $directivosCreados = UsuariosPadre::contarUsuariosPorTipo($conexion, 5);

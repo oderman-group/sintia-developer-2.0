@@ -211,6 +211,13 @@ define('PERIODO_ACTUAL', 'PERIODO_ACTUAL');
 define('COLUMNA', 'COLUMNA');
 define('EN_NOTA', 'EN_NOTA');
 
+/** TIPOS DE PAQUETES **/
+define('PLANES', 'PLANES');
+define('ESPACIO', 'ESPACIO');
+define('USUARIOS', 'USUARIOS');
+define('MODULOS', 'MODULOS');
+define('PAQUETES', 'PAQUETES');
+
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':
         define('REDIRECT_ROUTE', 'http://localhost/app-sintia/main-app');

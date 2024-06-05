@@ -797,3 +797,33 @@ function mostrarModalCompraModulos(idModulo, year) {
         console.error('Error:', error);
     });
 }
+
+/**
+ * muestra modal para comprar paquete
+ * @param {int} idPaquete
+ */
+function mostrarModalCompraPaquete(idPaquete) {
+
+    fetch('../compartido/ajax-consultar-paquete.php?idPaquete='+(idPaquete), {
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('tituloPaquete').innerHTML = "PAQUETE "+data.nombrePaquete;
+        document.getElementById('imgPaquete').src = data.imgPaquete;
+        if (data.descripcionPaquete !== "") {
+            document.getElementById('tituloDescripcionPaquete').innerHTML = "DESCRIPCIÓN DEL PAQUETE";
+            document.getElementById('descripcionPaquete').innerHTML = data.descripcionPaquete;
+        }
+        document.getElementById('enlaceWhatsappPaquete').href = "https://api.whatsapp.com/send?phone=573006075800&text="+data.mensaje;
+        document.getElementById('montoPaquete').value = data.montoPaquete;
+        document.getElementById('nombrePaquete').value = "PAQUETE "+data.nombrePaquete;
+        document.getElementById('idPaquete').value = idPaquete;
+        document.getElementById('tipoPaquete').value = data.tipoPaquete;
+
+        $("#modalComprarPaquete").modal("show");
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}

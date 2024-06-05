@@ -1033,7 +1033,7 @@ class Boletin {
         $sql = "SELECT SUM(bol_nota) AS suma, mat_primer_apellido, mat_segundo_apellido, mat_nombres, mat_nombre2 FROM ".BD_ACADEMICA.".academico_boletin bol
         INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat.mat_id=bol_estudiante AND mat.institucion=? AND mat.year=?
         INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car_id=bol_carga AND car_curso=? AND car_grupo=? AND car.institucion=? AND car.year=?
-        WHERE bol_periodo=? AND bol.institucion=? AND bol.year=?
+        WHERE bol_periodo=? AND bol.institucion=? AND bol.year=? AND (mat_estado_matricula=1 OR mat_estado_matricula=2)
         GROUP BY bol_estudiante
         ORDER BY suma DESC";
 
