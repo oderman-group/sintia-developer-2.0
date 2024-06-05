@@ -37,17 +37,15 @@ class CargaAcademica {
         global $conexion, $config;
         $result = false;
 
-        try {
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas
-            WHERE car_docente='".$docente."' AND car_curso='".$curso."' AND car_grupo='".$grupo."' AND car_materia='".$asignatura."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-            ");
-            $num = mysqli_num_rows($consulta);
-            if($num > 0) {
-                $result = true;
-            }
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_docente=? AND car_curso=? AND car_grupo=? AND car_materia=? AND institucion=? AND year=?";
+
+        $parametros = [$docente, $curso, $grupo, $asignatura, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $consulta = BindSQL::prepararSQL($sql, $parametros);
+
+        $num = mysqli_num_rows($consulta);
+        if($num > 0) {
+            $result = true;
         }
 
         return $result;
@@ -68,16 +66,17 @@ class CargaAcademica {
         global $conexion, $filtroMT, $config;
 
         $infoCargaActual = [];
-		try{
-			$consultaCargaActual = mysqli_query($conexion, "SELECT car.*, am.*, gra.*, gru.*, car.id_nuevo AS id_nuevo_carga FROM ".BD_ACADEMICA.".academico_cargas car 
-			INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion=car.institucion AND am.year=car.year
-			INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion=car.institucion AND gra.year=car.year {$filtroMT}
-			INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion=car.institucion AND gru.year=car.year
-			WHERE car_id='".$carga."' AND car_docente='".$sesion."' AND car_activa=1 AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-		$datosCargaActual = mysqli_fetch_array($consultaCargaActual, MYSQLI_BOTH);
+        $sql = "SELECT car.*, am.*, gra.*, gru.*, car.id_nuevo AS id_nuevo_carga FROM ".BD_ACADEMICA.".academico_cargas car 
+        INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion=car.institucion AND am.year=car.year
+        INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion=car.institucion AND gra.year=car.year {$filtroMT}
+        INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion=car.institucion AND gru.year=car.year
+        WHERE car_id=? AND car_docente=? AND car_activa=1 AND car.institucion=? AND car.year=?";
+
+        $parametros = [$carga, $sesion, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        
+		$datosCargaActual = mysqli_fetch_array($resultado, MYSQLI_BOTH);
 		$infoCargaActual = [
 			'datosCargaActual'  => $datosCargaActual
 		];
@@ -171,18 +170,18 @@ class CargaAcademica {
         global $conexion, $config;
         $result = [];
 
-        try {
-            $consulta = mysqli_query($conexion,"SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
-            LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion=car.institucion AND gra.year=car.year
-            LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion=car.institucion AND gru.year=car.year
-            LEFT JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion=car.institucion AND am.year=car.year
-            LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion=car.institucion AND uss.year=car.year
-            WHERE car_id='{$idCarga}' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}");
-            $result = mysqli_fetch_array($consulta, MYSQLI_BOTH);
-        } catch (Exception $e) {
-            echo "Excepción catpurada: ".$e->getMessage();
-            exit();
-        }
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
+        LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion=car.institucion AND gra.year=car.year
+        LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion=car.institucion AND gru.year=car.year
+        LEFT JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion=car.institucion AND am.year=car.year
+        LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion=car.institucion AND uss.year=car.year
+        WHERE car_id=? AND car.institucion=? AND car.year=?";
+
+        $parametros = [$idCarga, $config['conf_id_institucion'], $_SESSION["bd"]];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        
+        $result = mysqli_fetch_array($resultado, MYSQLI_BOTH);
 
         return $result;
 
@@ -425,10 +424,13 @@ class CargaAcademica {
             LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion=car.institucion AND gru.year=car.year
             LEFT JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion=car.institucion AND am.year=car.year
             LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion=car.institucion AND uss.year=car.year
-            WHERE car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]} {$filtro}
+            WHERE car.institucion=? AND car.year=? {$filtro}
             ORDER BY {$order}
             {$limit};";
-            $consulta=mysqli_query($conexion,$sql);
+    
+            $parametros = [$config['conf_id_institucion'], $_SESSION["bd"]];
+            
+            $consulta = BindSQL::prepararSQL($sql, $parametros);
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
@@ -640,6 +642,7 @@ class CargaAcademica {
 		INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car.car_materia AND am.institucion=car.institucion AND am.year=car.year
         INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion=car.institucion AND gra.year=car.year
         INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion=car.institucion AND gru.year=car.year
+        LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_responsable AND uss.institucion=car.institucion AND uss.year=car.year
 		WHERE car_id=? AND car.institucion=? AND car.year=?";
 
         $parametros = [$idCarga, $config['conf_id_institucion'], $year];
@@ -1155,7 +1158,7 @@ class CargaAcademica {
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        $sql = "SELECT am.mat_id, am.mat_nombre, ar.ar_id, ar.ar_nombre, car.car_id, ind.ind_nombre, aic.ipc_periodo, ROUND(SUM(aac.cal_nota * (aa.act_valor / 100)) / SUM(aa.act_valor / 100), 2) AS nota, rind_nota, ind.ind_id
+        $sql = "SELECT am.mat_id, am.mat_nombre, ar.ar_id, ar.ar_nombre, car.car_id, ind.ind_nombre, aic.ipc_periodo, ROUND(SUM(aac.cal_nota * (aa.act_valor / 100)) / SUM(aa.act_valor / 100), 2) AS nota, ROUND(rind_nota, 2) AS rind_nota, ind.ind_id
         FROM ".BD_ACADEMICA.".academico_cargas car
         INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id = car.car_materia AND am.institucion = car.institucion  AND am.year = car.year
         INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id = am.mat_area AND ar.institucion = car.institucion  AND ar.year = car.year

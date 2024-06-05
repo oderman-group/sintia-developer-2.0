@@ -295,9 +295,7 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                         $datosBoletin = Boletin::traerNotaBoletinCargaPeriodo($config, $periodoActual, $matriculadosDatos['mat_id'], $fila2['car_id'], $year);
 
 
-                        $consultaNotaFinal=mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota),2) AS def FROM ".BD_ACADEMICA.".academico_boletin 
-                        WHERE bol_estudiante='".$matriculadosDatos['mat_id']."' AND bol_carga='".$fila2["car_id"]."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-                        $notaFinal = mysqli_fetch_array($consultaNotaFinal, MYSQLI_BOTH);
+                        $notaFinal = Boletin::obtenerPromedioPorTodasLasCargas($matriculadosDatos['mat_id'], $fila2["car_id"], $year);
 
 
                         //Calculo

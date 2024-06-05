@@ -278,7 +278,7 @@ class Asignaturas {
 
         $sql = "SELECT bol_nota FROM ".BD_ACADEMICA.".academico_materias am
         INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id = am.mat_area AND a.institucion=am.institucion AND a.year=am.year
-        INNER JOIN ".BD_ACADEMICA.".academico_cargas car on car_materia = am.mat_id and car_curso=? AND car_grupo= AND car.institucion=am.institucion AND car.year=am.year
+        INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car_materia = am.mat_id AND car_curso=? AND car_grupo=? AND car.institucion=am.institucion AND car.year=am.year
         LEFT JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol_carga=car_id AND bol_periodo=? AND bol_estudiante=? AND bol.institucion=am.institucion AND bol.year=am.year
         WHERE am.institucion=? AND am.year=?
         ORDER BY am.mat_id";

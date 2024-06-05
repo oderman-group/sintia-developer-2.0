@@ -12,7 +12,7 @@ foreach ($data["data"] as $resultado) {
 
 	$acudiente = UsuariosPadre::sesionUsuario($resultado["mat_acudiente"]);
 
-	$bgColor = $resultado['uss_bloqueado'] == 1 ? 'style="background-color: #ff572238;' : '';
+	$bgColor = $resultado['uss_bloqueado'] == 1 ? 'style="background-color: #ff572238;"' : '';
 
 	$cheked = '';
 	if ($resultado['uss_bloqueado'] == 1) {
