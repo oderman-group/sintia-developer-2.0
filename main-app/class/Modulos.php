@@ -1,4 +1,5 @@
 <?php
+require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 
 class Modulos {
 
@@ -306,6 +307,36 @@ class Modulos {
         return false;
     }
 
+    /**
+     * ListarModulosConPaginas
+     *
+     * Este método obtiene una lista de módulos con sus respectivas páginas publicitarias
+     * asociadas a una institución específica.
+     *
+     * Realiza una consulta SQL para seleccionar los módulos relacionados con una institución
+     * dada, agrupando por el módulo y ordenando por el ID del módulo.
+     *
+     * @param int   $tipoUsuario
+     * 
+     * @return mixed La consulta preparada con los resultados de los módulos.
+     */
+    public static function ListarModulosConPaginas(
+        int $tipoUsuario = TIPO_DIRECTIVO
+    ){
+        $sql = "SELECT m.* FROM ".BD_ADMIN.".instituciones_modulos im 
+        INNER JOIN ".BD_ADMIN.".paginas_publicidad pp ON pp.pagp_modulo=im.ipmod_modulo
+        INNER JOIN ".BD_ADMIN.".modulos m ON m.mod_id=pp.pagp_modulo
+        WHERE pp.pagp_tipo_usuario=? AND im.ipmod_institucion=?
+        GROUP BY pp.pagp_modulo
+        ORDER BY m.mod_id";
+
+        $parametros = [$tipoUsuario, $_SESSION["idInstitucion"]];
+        
+        $consulta = BindSQL::prepararSQL($sql, $parametros);
+
+        return $consulta;
+    }
+    
     public static function validarModulosExtras($conexion, $modulo, $idInstitucion){
 
         try{
