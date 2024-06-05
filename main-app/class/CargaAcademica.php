@@ -642,6 +642,7 @@ class CargaAcademica {
 		INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car.car_materia AND am.institucion=car.institucion AND am.year=car.year
         INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion=car.institucion AND gra.year=car.year
         INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion=car.institucion AND gru.year=car.year
+        LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_responsable AND uss.institucion=car.institucion AND uss.year=car.year
 		WHERE car_id=? AND car.institucion=? AND car.year=?";
 
         $parametros = [$idCarga, $config['conf_id_institucion'], $year];
@@ -709,7 +710,8 @@ class CargaAcademica {
         INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion=car.institucion AND gra.year=car.year
         INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion=car.institucion AND gru.year=car.year
         INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion=car.institucion AND uss.year=car.year
-        WHERE car.institucion=? AND car.year=? AND (car_curso=? AND car_grupo=? {$filtroOr})";
+        WHERE car.institucion=? AND car.year=? AND (car_curso=? AND car_grupo=? {$filtroOr})
+        ORDER BY mat_id";
 
         $parametros = [$config['conf_id_institucion'], $year, $idCurso, $idGrupo];
 
@@ -1157,7 +1159,7 @@ class CargaAcademica {
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        $sql = "SELECT am.mat_id, am.mat_nombre, ar.ar_id, ar.ar_nombre, car.car_id, ind.ind_nombre, aic.ipc_periodo, ROUND(SUM(aac.cal_nota * (aa.act_valor / 100)) / SUM(aa.act_valor / 100), 2) AS nota, rind_nota, ind.ind_id
+        $sql = "SELECT am.mat_id, am.mat_nombre, ar.ar_id, ar.ar_nombre, car.car_id, ind.ind_nombre, aic.ipc_periodo, ROUND(SUM(aac.cal_nota * (aa.act_valor / 100)) / SUM(aa.act_valor / 100), 2) AS nota, ROUND(rind_nota, 2) AS rind_nota, ind.ind_id
         FROM ".BD_ACADEMICA.".academico_cargas car
         INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id = car.car_materia AND am.institucion = car.institucion  AND am.year = car.year
         INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id = am.mat_area AND ar.institucion = car.institucion  AND ar.year = car.year
@@ -1623,6 +1625,33 @@ class CargaAcademica {
         HAVING porcentaje > 0";
 
         $parametros = [$config['conf_periodo'], $idEstudiante, $idCurso, $idGrupo, $config['conf_id_institucion'], $year];
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
+    }
+
+    public static function consultaInformeSabanas (
+        string  $idEstudiante,
+        int     $periodo,
+        array   $config,
+        string  $idCurso,
+        string  $idGrupo,
+        string  $yearBd = "",
+        string  $filtroOr = ""
+    )
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "SELECT car_id, bol_nota, notip_nombre FROM ".BD_ACADEMICA.".academico_cargas car
+        INNER JOIN ".BD_ACADEMICA.".academico_materias mate ON mate.mat_id=car_materia AND mate.institucion=car.institucion AND mate.year=car.year
+        INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion=car.institucion AND uss.year=car.year
+        LEFT JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol_estudiante=? AND bol_carga=car_id AND bol_periodo=? AND bol.institucion=car.institucion AND bol.year=car.year
+        LEFT JOIN ".BD_ACADEMICA.".academico_notas_tipos ntp ON ntp.notip_categoria=? AND bol_nota>=ntp.notip_desde AND bol_nota<=ntp.notip_hasta AND ntp.institucion=bol.institucion AND ntp.year=bol.year
+        WHERE car.institucion=? AND car.year=? AND (car_curso=? AND car_grupo=? {$filtroOr})
+        ORDER BY mat_id";
+
+        $parametros = [$idEstudiante, $periodo, $config['conf_notas_categoria'], $config['conf_id_institucion'], $year, $idCurso, $idGrupo];
 
         $resultado = BindSQL::prepararSQL($sql, $parametros);
 

@@ -744,14 +744,14 @@ class Estudiantes {
             WHEN 5 THEN 'En inscripción' 
         END AS estado
         FROM ".BD_ACADEMICA.".academico_matriculas am 
-        INNER JOIN ".BD_ACADEMICA.".academico_grupos ag ON am.mat_grupo=ag.gru_id AND ag.institucion=am.institucion AND ag.year=am.year
-        INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra.gra_id=am.mat_grado AND gra.institucion=am.institucion AND gra.year=am.year
-        INNER JOIN ".BD_ADMIN.".opciones_generales og ON og.ogen_id=am.mat_tipo
-        INNER JOIN ".BD_ADMIN.".opciones_generales og2 ON og2.ogen_id=am.mat_genero
-        INNER JOIN ".BD_ADMIN.".opciones_generales og3 ON og3.ogen_id=am.mat_religion
-        INNER JOIN ".BD_ADMIN.".opciones_generales og4 ON og4.ogen_id=am.mat_estrato
-        INNER JOIN ".BD_ADMIN.".opciones_generales og5 ON og5.ogen_id=am.mat_tipo_documento
-        INNER JOIN ".BD_GENERAL.".usuarios uss ON uss.institucion=am.institucion AND uss.year=am.year AND (uss.uss_id=am.mat_acudiente or am.mat_acudiente is null)
+        LEFT JOIN ".BD_ACADEMICA.".academico_grupos ag ON am.mat_grupo=ag.gru_id AND ag.institucion=am.institucion AND ag.year=am.year
+        LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra.gra_id=am.mat_grado AND gra.institucion=am.institucion AND gra.year=am.year
+        LEFT JOIN ".BD_ADMIN.".opciones_generales og ON og.ogen_id=am.mat_tipo
+        LEFT JOIN ".BD_ADMIN.".opciones_generales og2 ON og2.ogen_id=am.mat_genero
+        LEFT JOIN ".BD_ADMIN.".opciones_generales og3 ON og3.ogen_id=am.mat_religion
+        LEFT JOIN ".BD_ADMIN.".opciones_generales og4 ON og4.ogen_id=am.mat_estrato
+        LEFT JOIN ".BD_ADMIN.".opciones_generales og5 ON og5.ogen_id=am.mat_tipo_documento
+        LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss.institucion=am.institucion AND uss.year=am.year AND (uss.uss_id=am.mat_acudiente or am.mat_acudiente is null)
         WHERE am.institucion=? AND am.year=? {$where}
         GROUP BY mat_id
         ORDER BY mat_primer_apellido,mat_estado_matricula;";
@@ -1187,7 +1187,7 @@ class Estudiantes {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
         $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
-        INNER JOIN ".BD_ADMIN.".aspirantes ON asp_id=mat.mat_solicitud_inscripcion
+        INNER JOIN ".BD_ADMISIONES.".aspirantes ON asp_id=mat.mat_solicitud_inscripcion
         LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=asp_grado AND gra.institucion=mat.institucion AND gra.year=mat.year
         WHERE mat.mat_estado_matricula=5 AND mat.institucion=? AND mat.year=? {$filtro}
         ORDER BY mat.mat_primer_apellido  {$limite}";
