@@ -80,7 +80,7 @@ class Asignaciones {
     {
         try {
             $consulta = mysqli_query($conexion, "SELECT epag_id, uss_id, uss_nombre, uss_nombre2, uss_apellido1, uss_apellido2, epag_id_evaluado, epag_estado, epag_tipo FROM ".BD_ADMIN.".general_evaluacion_asignar 
-            LEFT JOIN ".BD_GENERAL.".usuarios ON uss_id=epag_id_evaluador AND institucion = epag_institucion AND year = epag_year
+            INNER JOIN ".BD_GENERAL.".usuarios ON uss_id=epag_id_evaluador AND institucion = epag_institucion AND year = epag_year
             WHERE epag_id_limite='".$idAsignacion."' ".$filtro." AND epag_institucion = {$config['conf_id_institucion']} AND epag_year = {$_SESSION["bd"]}
             ".$filtroLimite."");
         } catch (Exception $e) {
@@ -153,14 +153,15 @@ class Asignaciones {
                     include("../compartido/error-catch-to-report.php");
                 }
                 foreach ($POST['evaluadorCursos'] as $idCurso){
-                    $consulta = mysqli_query($conexion, "SELECT upe_id_usuario FROM ".BD_ACADEMICA.".academico_matriculas mat
+                    $consulta = mysqli_query($conexion, "SELECT uss_id FROM ".BD_ACADEMICA.".academico_matriculas mat
                     INNER JOIN ".BD_GENERAL.".usuarios_por_estudiantes upe ON upe_id_estudiante=mat_id AND upe.institucion=mat.institucion AND upe.year=mat.year
-                    WHERE mat_grado = '".$idCurso."' AND (upe_id_usuario!='' OR upe_id_usuario IS NOT NULL) AND mat_eliminado=0 AND mat_estado_matricula='".MATRICULADO."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
+                    INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=upe_id_usuario AND uss.institucion=mat.institucion AND uss.year=mat.year
+                    WHERE mat_grado = '".$idCurso."' AND (upe_id_usuario!='' OR upe_id_usuario IS NOT NULL) AND (uss_id!='' OR uss_id IS NOT NULL) AND mat_eliminado=0 AND mat_estado_matricula='".MATRICULADO."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
                     ORDER BY RAND() 
                     LIMIT {$POST["limiteEvaluadores"]}");
                     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
                         try {
-                            mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".general_evaluacion_asignar (epag_id_evaluacion, epag_id_evaluado, epag_id_evaluador, epag_tipo, epag_id_limite, epag_institucion, epag_year)VALUES('".$POST["idE"]."', '".$idEvaluado."', '".$resultado["upe_id_usuario"]."', '".$POST["tipoEncuesta"]."', '".$idLimite."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
+                            mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".general_evaluacion_asignar (epag_id_evaluacion, epag_id_evaluado, epag_id_evaluador, epag_tipo, epag_id_limite, epag_institucion, epag_year)VALUES('".$POST["idE"]."', '".$idEvaluado."', '".$resultado["uss_id"]."', '".$POST["tipoEncuesta"]."', '".$idLimite."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
                         } catch (Exception $e) {
                             include("../compartido/error-catch-to-report.php");
                         }
@@ -177,13 +178,14 @@ class Asignaciones {
                     include("../compartido/error-catch-to-report.php");
                 }
                 foreach ($POST['evaluadorCursos'] as $idCurso){
-                    $consulta = mysqli_query($conexion, "SELECT mat_id_usuario FROM ".BD_ACADEMICA.".academico_matriculas 
-                    WHERE mat_grado = '".$idCurso."' AND (mat_id_usuario!='' OR mat_id_usuario IS NOT NULL) AND mat_eliminado=0 AND mat_estado_matricula='".MATRICULADO."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
+                    $consulta = mysqli_query($conexion, "SELECT uss_id FROM ".BD_ACADEMICA.".academico_matriculas mat
+                    INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=mat_id_usuario AND uss.institucion=mat.institucion AND uss.year=mat.year
+                    WHERE mat_grado = '".$idCurso."' AND (mat_id_usuario!='' OR mat_id_usuario IS NOT NULL) AND (uss_id!='' OR uss_id IS NOT NULL) AND mat_eliminado=0 AND mat_estado_matricula='".MATRICULADO."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
                     ORDER BY RAND() 
                     LIMIT {$POST["limiteEvaluadores"]}");
                     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
                         try {
-                            mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".general_evaluacion_asignar (epag_id_evaluacion, epag_id_evaluado, epag_id_evaluador, epag_tipo, epag_id_limite, epag_institucion, epag_year)VALUES('".$POST["idE"]."', '".$idEvaluado."', '".$resultado["mat_id_usuario"]."', '".$POST["tipoEncuesta"]."', '".$idLimite."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
+                            mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".general_evaluacion_asignar (epag_id_evaluacion, epag_id_evaluado, epag_id_evaluador, epag_tipo, epag_id_limite, epag_institucion, epag_year)VALUES('".$POST["idE"]."', '".$idEvaluado."', '".$resultado["uss_id"]."', '".$POST["tipoEncuesta"]."', '".$idLimite."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
                         } catch (Exception $e) {
                             include("../compartido/error-catch-to-report.php");
                         }
@@ -287,14 +289,15 @@ class Asignaciones {
         
             if($POST['evaluador'] == ACUDIENTE){
                 foreach ($POST['evaluadorCursos'] as $idCurso){
-                    $consulta = mysqli_query($conexion, "SELECT upe_id_usuario FROM ".BD_ACADEMICA.".academico_matriculas mat
+                    $consulta = mysqli_query($conexion, "SELECT uss_id FROM ".BD_ACADEMICA.".academico_matriculas mat
                     INNER JOIN ".BD_GENERAL.".usuarios_por_estudiantes upe ON upe_id_estudiante=mat_id AND upe.institucion=mat.institucion AND upe.year=mat.year
-                    WHERE mat_grado = '".$idCurso."' AND (upe_id_usuario!='' OR upe_id_usuario IS NOT NULL) AND mat_eliminado=0 AND mat_estado_matricula='".MATRICULADO."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
+                    INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=upe_id_usuario AND uss.institucion=mat.institucion AND uss.year=mat.year
+                    WHERE mat_grado = '".$idCurso."' AND (upe_id_usuario!='' OR upe_id_usuario IS NOT NULL) AND (uss_id!='' OR uss_id IS NOT NULL) AND mat_eliminado=0 AND mat_estado_matricula='".MATRICULADO."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
                     ORDER BY RAND() 
                     LIMIT {$POST["limiteEvaluadores"]}");
                     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
                         try {
-                            mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".general_evaluacion_asignar (epag_id_evaluacion, epag_id_evaluado, epag_id_evaluador, epag_tipo, epag_id_limite, epag_institucion, epag_year)VALUES('".$POST["idE"]."', '".$POST["evaluado"]."', '".$resultado["upe_id_usuario"]."', '".$POST["tipoEncuesta"]."', '".$POST["id"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
+                            mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".general_evaluacion_asignar (epag_id_evaluacion, epag_id_evaluado, epag_id_evaluador, epag_tipo, epag_id_limite, epag_institucion, epag_year)VALUES('".$POST["idE"]."', '".$POST["evaluado"]."', '".$resultado["uss_id"]."', '".$POST["tipoEncuesta"]."', '".$POST["id"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
                         } catch (Exception $e) {
                             include("../compartido/error-catch-to-report.php");
                         }
@@ -304,13 +307,14 @@ class Asignaciones {
         
             if($POST['evaluador'] == CURSO){
                 foreach ($POST['evaluadorCursos'] as $idCurso){
-                    $consulta = mysqli_query($conexion, "SELECT mat_id_usuario FROM ".BD_ACADEMICA.".academico_matriculas 
-                    WHERE mat_grado = '".$idCurso."' AND (mat_id_usuario!='' OR mat_id_usuario IS NOT NULL) AND mat_eliminado=0 AND mat_estado_matricula='".MATRICULADO."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
+                    $consulta = mysqli_query($conexion, "SELECT uss_id FROM ".BD_ACADEMICA.".academico_matriculas mat
+                    INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=mat_id_usuario AND uss.institucion=mat.institucion AND uss.year=mat.year 
+                    WHERE mat_grado = '".$idCurso."' AND (mat_id_usuario!='' OR mat_id_usuario IS NOT NULL) AND (uss_id!='' OR uss_id IS NOT NULL) AND mat_eliminado=0 AND mat_estado_matricula='".MATRICULADO."' AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]}
                     ORDER BY RAND() 
                     LIMIT {$POST["limiteEvaluadores"]}");
                     while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
                         try {
-                            mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".general_evaluacion_asignar (epag_id_evaluacion, epag_id_evaluado, epag_id_evaluador, epag_tipo, epag_id_limite, epag_institucion, epag_year)VALUES('".$POST["idE"]."', '".$POST["evaluado"]."', '".$resultado["mat_id_usuario"]."', '".$POST["tipoEncuesta"]."', '".$POST["id"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
+                            mysqli_query($conexion, "INSERT INTO ".BD_ADMIN.".general_evaluacion_asignar (epag_id_evaluacion, epag_id_evaluado, epag_id_evaluador, epag_tipo, epag_id_limite, epag_institucion, epag_year)VALUES('".$POST["idE"]."', '".$POST["evaluado"]."', '".$resultado["uss_id"]."', '".$POST["tipoEncuesta"]."', '".$POST["id"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]});");
                         } catch (Exception $e) {
                             include("../compartido/error-catch-to-report.php");
                         }
@@ -384,7 +388,7 @@ class Asignaciones {
         try {
             $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".general_evaluacion_asignar  AS asignar
             INNER JOIN ".BD_ADMIN.".general_limite_asignacion ON gal_id=asignar.epag_id_limite
-            INNER JOIN ".BD_ADMIN.".general_evaluaciones ON evag_id=asignar.epag_id_evaluacion AND evag_institucion = {$config['conf_id_institucion']} AND evag_year = {$_SESSION["bd"]} 
+            INNER JOIN ".BD_ADMIN.".general_evaluaciones ON evag_id=asignar.epag_id_evaluacion AND evag_visible=1 AND evag_institucion = {$config['conf_id_institucion']} AND evag_year = {$_SESSION["bd"]} 
             WHERE asignar.epag_id_evaluador='{$idUsuario}' AND asignar.epag_estado IN ('".PENDIENTE."', '".PROCESO."') AND asignar.epag_institucion = {$config['conf_id_institucion']} AND asignar.epag_year = {$_SESSION["bd"]}");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");

@@ -185,6 +185,13 @@ define('COMPANY', 'COMPANY');
 define('KINDERGARTEN', 'KINDERGARTEN');
 define('PEOPLE', 'PEOPLE');
 
+/** TIPOS DE PAQUETES **/
+define('PLANES', 'PLANES');
+define('ESPACIO', 'ESPACIO');
+define('USUARIOS', 'USUARIOS');
+define('MODULOS', 'MODULOS');
+define('PAQUETES', 'PAQUETES');
+
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':
         define('REDIRECT_ROUTE', 'http://localhost/app-sintia/main-app');
