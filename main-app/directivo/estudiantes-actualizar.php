@@ -111,7 +111,7 @@ if($_POST["documentoA"]!=""){
 		include("../compartido/error-catch-to-report.php");
 	}
 
-	$usuarioAcudiente=$_POST["documentoA"];
+	$usuarioAcudiente=$_POST["usuarioAcudiente"];
 	if(!empty($datosIdAcudiente['mat_acudiente']) && $datosIdAcudiente['mat_acudiente']!=0){
 		$usuarioAcudiente=$datosIdAcudiente['mat_acudiente'];
 	}
@@ -125,7 +125,7 @@ if($_POST["documentoA"]!=""){
 	if(!empty($acudiente)){
 		try {
 			mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET 
-			uss_usuario   		 = '".$_POST["documentoA"]."', 
+			uss_usuario   		 = '".$_POST["usuarioAcudiente"]."', 
 			uss_nombre    		 = '".mysqli_real_escape_string($conexion,$_POST["nombreA"])."', 
 			uss_email     		 = '".$_POST["email"]."', 
 			uss_ocupacion 		 = '".$_POST["ocupacionA"]."', 
