@@ -30,17 +30,18 @@ $estado='';
 $mensaje='';
 $pasosMatricula='';
 if($config['conf_mostrar_pasos_matricula'] == 1){
-	$_POST["iniciarProceso"] ?? 0;
-	$_POST["actualizarDatos"] ?? 0;
-	$_POST["pagoMatricula"] ?? 0;
-	$_POST["contrato"] ?? 0;
-	$_POST["pagare"] ?? 0;
-	$_POST["compromisoA"] ?? 0;
-	$_POST["compromisoC"] ?? 0;
-	$_POST["manual"] ?? 0;
-	$_POST["contrato14"] ?? 0;
-	$_POST["compromisoOpcion"] ?? 0;
-	$_POST["firmaHoja"] ?? 0;
+
+	is_numeric($_POST["iniciarProceso"]) ? $_POST["iniciarProceso"] : 0;
+	is_numeric($_POST["actualizarDatos"]) ? $_POST["actualizarDatos"] : 0;
+	is_numeric($_POST["pagoMatricula"]) ? $_POST["pagoMatricula"] : 0;
+	is_numeric($_POST["contrato"]) ? $_POST["contrato"] : 0;
+	is_numeric($_POST["pagare"]) ? $_POST["pagare"] : 0;
+	is_numeric($_POST["compromisoA"]) ? $_POST["compromisoA"] : 0;
+	is_numeric($_POST["compromisoC"]) ? $_POST["compromisoC"] : 0;
+	is_numeric($_POST["manual"]) ? $_POST["manual"] : 0;
+	is_numeric($_POST["contrato14"]) ? $_POST["contrato14"] : 0;
+	is_numeric($_POST["compromisoOpcion"]) ? $_POST["compromisoOpcion"] : 0;
+	is_numeric($_POST["firmaHoja"]) ? $_POST["firmaHoja"] : 0;
 	
 	$pasosMatricula="
 		mat_iniciar_proceso='".$_POST["iniciarProceso"]."',
