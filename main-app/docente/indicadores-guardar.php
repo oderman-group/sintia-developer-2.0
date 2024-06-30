@@ -1,5 +1,6 @@
 <?php
 include("session.php");
+require_once(ROOT_PATH."/main-app/class/Modulos.php");
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DC0127';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
