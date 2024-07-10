@@ -30,17 +30,6 @@ $estado='';
 $mensaje='';
 $pasosMatricula='';
 if($config['conf_mostrar_pasos_matricula'] == 1){
-	$_POST["iniciarProceso"] ?? 0;
-	$_POST["actualizarDatos"] ?? 0;
-	$_POST["pagoMatricula"] ?? 0;
-	$_POST["contrato"] ?? 0;
-	$_POST["pagare"] ?? 0;
-	$_POST["compromisoA"] ?? 0;
-	$_POST["compromisoC"] ?? 0;
-	$_POST["manual"] ?? 0;
-	$_POST["contrato14"] ?? 0;
-	$_POST["compromisoOpcion"] ?? 0;
-	$_POST["firmaHoja"] ?? 0;
 	
 	$pasosMatricula="
 		mat_iniciar_proceso='".$_POST["iniciarProceso"]."',

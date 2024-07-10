@@ -208,12 +208,11 @@ require_once(ROOT_PATH."/main-app/class/Actividades.php");?>
 
 													if (peticion.status >= 200 && peticion.status < 300) {
 														var respuesta = peticion.responseText;
-														console.log(respuesta); 
+														setTimeout(redirect(), 2000);
 													} else {
 														console.error('Error en la solicitud:', peticion.status, peticion.statusText);
+														document.getElementById("barra_estado").innerHTML = `Error en la solicitud: ${peticion.statusText}`;
 													}
-
-													setTimeout(redirect(), 2000);
 													
 													function redirect(){
 														location.href='actividades.php?success=SC_DT_1&id='+respuesta;
