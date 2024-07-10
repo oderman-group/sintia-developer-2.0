@@ -17,7 +17,6 @@ class Actividades {
      * @return string $codigo
      */
     public static function guardarActividad(mysqli $conexion, array $config, array $POST, array $FILES, $storage, string $idCarga, int $periodo){
-        $codigo=Utilidades::generateCode("TAR");
         
         $archivoSubido = new Archivos;
         
@@ -38,13 +37,17 @@ class Actividades {
         if(empty($POST["retrasos"]) || (!empty($POST["retrasos"]) && $POST["retrasos"]!=1)) $POST["retrasos"]='0';
         
         try{
+            $codigo=Utilidades::generateCode("TAR");
+
             mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_actividad_tareas(tar_id, tar_titulo, tar_descripcion, tar_id_carga, tar_periodo, tar_estado, tar_fecha_disponible, tar_fecha_entrega, tar_impedir_retrasos, tar_archivo, tar_peso1, institucion, year)
             VALUES('".$codigo."', '".mysqli_real_escape_string($conexion,$POST["titulo"])."', '".mysqli_real_escape_string($conexion,$POST["contenido"])."', '".$idCarga."', '".$periodo."', 1, '".$POST["desde"]."', '".$POST["hasta"]."', '".$POST["retrasos"]."', '".$archivo."', '".$pesoMB."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
+
+            return $codigo;
         } catch (Exception $e) {
             include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+            return;
         }
 
-        return $codigo;
     }
 
     /**
