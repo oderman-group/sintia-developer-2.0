@@ -17,6 +17,8 @@ if(isset($_GET["year"])){
 $year=base64_decode($_GET["year"]);
 }
 
+$tamañoLogo = $_SESSION['idInstitucion'] == ICOLVEN ? 100 : 50;
+
 $modulo = 1;
 if(empty($_GET["periodo"])){
 	$periodoActual = 1;
