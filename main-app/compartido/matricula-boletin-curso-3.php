@@ -58,8 +58,20 @@ if(!empty($_REQUEST["grupo"])){
     $filtro .= " AND mat_grupo='".base64_decode($_REQUEST["grupo"])."'";
 }
 
-$matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro,$year);
-while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)) {
+
+$estudiantesCache = 'estudiantes.json';
+if (!file_exists($estudiantesCache)) {
+    $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($year);
+    $rows = [];
+    while ($resultado = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_ASSOC)) {
+        $rows[] = $resultado;
+    }
+    file_put_contents($estudiantesCache, json_encode($rows));
+} else {
+    $rows = Estudiantes::estudiantesMatriculadosCache($filtro, $year);
+}
+
+foreach($rows as $matriculadosDatos) {
 
     //contador materias
 
