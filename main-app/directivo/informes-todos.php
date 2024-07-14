@@ -6,6 +6,19 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
+<?php
+$estudiantesCache = 'estudiantes.json';
+if (!file_exists($estudiantesCache)) {
+	require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+    $matriculadosPorCurso = Estudiantes::estudiantesMatriculados('', date("Y"));
+    $rows = [];
+    while ($resultado = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_ASSOC)) {
+        $rows[] = $resultado;
+    }
+
+    file_put_contents($estudiantesCache, json_encode($rows));
+}
+?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>

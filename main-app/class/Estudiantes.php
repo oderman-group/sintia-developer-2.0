@@ -553,6 +553,18 @@ class Estudiantes {
         return $resultado;
     }
 
+    public static function estudiantesMatriculadosCache() {
+        $estudiantesCache = '../directivo/estudiantes.json';
+
+        if (file_exists($estudiantesCache)) {
+            $json_data = file_get_contents($estudiantesCache);
+            $data      = json_decode($json_data, true);
+            return $data;
+        } else {
+            return [];
+        }
+    }
+
     /**
      * este metodo me trae los datos de un estudiante para usar en boletines
      * @param string $estudiante
