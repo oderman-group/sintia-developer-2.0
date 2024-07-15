@@ -14,7 +14,40 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 $year=$_SESSION["bd"];
 if(isset($_GET["year"])){
-$year=base64_decode($_GET["year"]);
+    $year=base64_decode($_GET["year"]);
+}
+
+$filtro = "";
+if (!empty($_GET["id"])) {
+
+    $filtro .= " AND mat_id='" . base64_decode($_GET["id"]) . "'";
+}
+
+if (!empty($_REQUEST["curso"])) {
+
+    $filtro .= " AND mat_grado='" . base64_decode($_REQUEST["curso"]) . "'";
+}
+if(!empty($_REQUEST["grupo"])){
+    $filtro .= " AND mat_grupo='".base64_decode($_REQUEST["grupo"])."'";
+}
+
+$estudiantesCache = 'estudiantes_' . base64_decode($_REQUEST["curso"]) . '_' .base64_decode($_REQUEST["grupo"]) . '.json';
+
+if (!file_exists($estudiantesCache)) {
+    $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
+    $rows = [];
+    while ($resultado = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_ASSOC)) {
+        $rows[] = $resultado;
+    }
+    file_put_contents($estudiantesCache, json_encode($rows));
+
+    $ruta = "matricula-boletin-curso-3.php?id=".$id."&periodo=".$_GET["periodo"]."&curso=".$_REQUEST["curso"]."&grupo=".$_REQUEST["grupo"]."&year=".$_GET["year"];
+
+    echo '<script type="text/javascript">window.location.href="'.$ruta.'";</script>';
+	exit();
+
+} else {
+    $rows = Estudiantes::estudiantesMatriculadosCache($estudiantesCache);
 }
 
 $tamañoLogo = $_SESSION['idInstitucion'] == ICOLVEN ? 100 : 50;
@@ -44,33 +77,6 @@ if ($periodoActual == 4) $periodoActuales = "Final";
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 
 <?php
-$filtro = "";
-if (!empty($_GET["id"])) {
-
-    $filtro .= " AND mat_id='" . base64_decode($_GET["id"]) . "'";
-}
-
-if (!empty($_REQUEST["curso"])) {
-
-    $filtro .= " AND mat_grado='" . base64_decode($_REQUEST["curso"]) . "'";
-}
-if(!empty($_REQUEST["grupo"])){
-    $filtro .= " AND mat_grupo='".base64_decode($_REQUEST["grupo"])."'";
-}
-
-
-$estudiantesCache = '../directivo/estudiantes.json';
-if (!file_exists($estudiantesCache)) {
-    $matriculadosPorCurso = Estudiantes::estudiantesMatriculados('', $year);
-    $rows = [];
-    while ($resultado = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_ASSOC)) {
-        $rows[] = $resultado;
-    }
-    file_put_contents($estudiantesCache, json_encode($rows));
-} else {
-    $rows = Estudiantes::estudiantesMatriculadosCache($filtro, $year);
-}
-
 foreach($rows as $matriculadosDatos) {
 
     //contador materias
