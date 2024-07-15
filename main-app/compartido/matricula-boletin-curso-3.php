@@ -59,9 +59,9 @@ if(!empty($_REQUEST["grupo"])){
 }
 
 
-$estudiantesCache = 'estudiantes.json';
+$estudiantesCache = '../directivo/estudiantes.json';
 if (!file_exists($estudiantesCache)) {
-    $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($year);
+    $matriculadosPorCurso = Estudiantes::estudiantesMatriculados('', $year);
     $rows = [];
     while ($resultado = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_ASSOC)) {
         $rows[] = $resultado;
