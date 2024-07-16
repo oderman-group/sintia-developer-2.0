@@ -128,6 +128,7 @@ class Grupos {
                 )"
             );
 
+            //Eliminar el archivo para limpiar la caché
             $archivoCache = 'grupos.json';
             if (file_exists($archivoCache)) {
                 unlink($archivoCache);
