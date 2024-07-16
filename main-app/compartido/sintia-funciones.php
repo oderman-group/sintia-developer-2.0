@@ -87,7 +87,7 @@ class Usuarios{
 
 	
 
-	function verificarFoto($foto){
+	public static function verificarFoto($foto){
 
 		
 
