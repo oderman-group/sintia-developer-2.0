@@ -150,4 +150,19 @@ class Grupos {
         $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
 
+
+    public static function listarGruposCache() {
+        $archivoCache = 'grupos.json';
+
+        if (file_exists($archivoCache)) {
+            $json_data = file_get_contents($archivoCache);
+            $data = json_decode($json_data, true);
+            return $data;
+        } else {
+            return [];
+        }
+    }
+
+
+
 }

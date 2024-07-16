@@ -31,6 +31,7 @@ $estado='';
 $mensaje='';
 $pasosMatricula='';
 if($config['conf_mostrar_pasos_matricula'] == 1){
+	
 	$pasosMatricula="
 		mat_iniciar_proceso='".$_POST["iniciarProceso"]."',
 		mat_actualizar_datos='".$_POST["actualizarDatos"]."',

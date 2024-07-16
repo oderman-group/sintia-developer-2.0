@@ -46,6 +46,7 @@ class Actividades {
         $resultado = BindSQL::prepararSQL($sql, $parametros);
 
         return $codigo;
+
     }
 
     /**
