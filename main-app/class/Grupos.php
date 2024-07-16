@@ -127,6 +127,14 @@ class Grupos {
                     {$_SESSION["bd"]}
                 )"
             );
+
+            $archivoCache = 'grupos.json';
+            if (file_exists($archivoCache)) {
+                unlink($archivoCache);
+            }
+
+            return $codigo;
+
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();
             exit();
@@ -153,5 +161,20 @@ class Grupos {
             exit();
         }
     }
+
+
+    public static function listarGruposCache() {
+        $archivoCache = 'grupos.json';
+
+        if (file_exists($archivoCache)) {
+            $json_data = file_get_contents($archivoCache);
+            $data = json_decode($json_data, true);
+            return $data;
+        } else {
+            return [];
+        }
+    }
+
+
 
 }
