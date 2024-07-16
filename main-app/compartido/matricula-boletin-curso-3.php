@@ -33,12 +33,23 @@ if(!empty($_REQUEST["grupo"])){
 
 $estudiantesCache = 'estudiantes_' . base64_decode($_REQUEST["curso"]) . '_' .base64_decode($_REQUEST["grupo"]) . '.json';
 
-if (!file_exists($estudiantesCache)) {
+if (!empty($_GET["id"])) {
+
     $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
     $rows = [];
+
     while ($resultado = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_ASSOC)) {
         $rows[] = $resultado;
     }
+
+} else if (!file_exists($estudiantesCache)) {
+    $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
+    $rows = [];
+
+    while ($resultado = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_ASSOC)) {
+        $rows[] = $resultado;
+    }
+
     file_put_contents($estudiantesCache, json_encode($rows));
 
     $ruta = "matricula-boletin-curso-3.php?id=".$id."&periodo=".$_GET["periodo"]."&curso=".$_REQUEST["curso"]."&grupo=".$_REQUEST["grupo"]."&year=".$_GET["year"];
