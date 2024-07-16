@@ -5,7 +5,7 @@ require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.ph
 //include(ROOT_PATH."/conexion-datos.php");
 $conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
 
-if(!empty($_GET)){
+if(!empty($_GET)) {
 	$_POST["Usuario"]		=	base64_decode($_GET["Usuario"]);
 	$_POST["Clave"] 		= 	base64_decode($_GET["Clave"]);
 
