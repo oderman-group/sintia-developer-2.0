@@ -12,6 +12,8 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 
+$redis = RedisInstance::getRedisInstance();
+
 $jQueryTable = '';
 if($config['conf_doble_buscador'] == 1) {
 	$jQueryTable = 'id="example1"';
