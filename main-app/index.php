@@ -50,7 +50,7 @@ if(!isset($_GET['nodb'])) {
             <div class="container">
                 <div class="row">
                     <div class="col-md-8 offset-md-2" id="login">
-                        <form method="post" action="controlador/autentico.php" class="needs-validation" novalidate>
+                        <form method="post" action="controlador/autentico-validar-cambio.php" class="needs-validation" novalidate>
                             <?php include("../config-general/mensajes-informativos.php"); ?>
 		                        <input type="hidden" name="urlDefault" value="<?php if(isset($_GET["urlDefault"])) echo $_GET["urlDefault"];?>" />
                                 <input type="hidden" name="directory"  value="<?php if(isset($_GET["directory"]))  echo $_GET["directory"]; ?>" />
@@ -82,7 +82,7 @@ if(!isset($_GET['nodb'])) {
                             $numA2 = rand(1, 10);
                             $resultadoA = $numA1 + $numA2;
                             ?>
-                            <p style="color: tomato;"><b>Valida que no eres un Robot...</b><br>
+                            <p style="color: tomato;"><b>Valida que no eres un Robot</b><br>
                                 Escribe el resultado de la siguiente operación.</p>
                             <div class=" form-floating mt-3">
                             <input type="hidden" name="sumaReal" value="<?= md5($resultadoA); ?>" />
