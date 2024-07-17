@@ -17,7 +17,7 @@ if (trim($_POST["nombreG"]) == "" || trim($_POST["codigoG"]) == "") {
 	exit();
 }
 
-Grupos::guardarGrupos($conexion, $conexionPDO, $config, $_POST);
+$codigo = Grupos::guardarGrupos($conexion, $conexionPDO, $config, $_POST);
 
 include("../compartido/guardar-historial-acciones.php");
 echo '<script type="text/javascript">window.location.href="grupos.php?success=SC_DT_1&id=' . base64_encode($codigo) . '";</script>';
