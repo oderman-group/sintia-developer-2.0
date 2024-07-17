@@ -5,11 +5,13 @@ require_once(ROOT_PATH."/main-app/modelo/conexion.php");
 require_once(ROOT_PATH."/main-app/class/Plataforma.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/Modulos.php");
+require_once(ROOT_PATH."/main-app/class/RedisInstance.php");
 
 $arregloModulos = $_SESSION["modulos"];
 
 $Utilidades = new Utilidades; 
 $Plataforma = new Plataforma;
+
 $config = $_SESSION["configuracion"];
 
 $informacion_inst = $_SESSION["informacionInstConsulta"];
