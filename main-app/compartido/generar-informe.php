@@ -134,7 +134,7 @@ $contBol=1;
 			"porcentaje" 	=> $boletinDatos['bol_porcentaje']
 		];
 	
-		$update = "bol_nota_anterior=bol_nota, bol_nota=".$definitiva.", bol_nota_indicadores=".$sumaNotaIndicador.", bol_tipo=1, bol_observaciones='Reemplazada', bol_porcentaje=".$porcentajeActual.", bol_historial_actualizacion=".json_encode($actualizacion)."";
+		$update = "bol_nota_anterior=bol_nota, bol_nota=".$definitiva.", bol_nota_indicadores=".$sumaNotaIndicador.", bol_tipo=1, bol_observaciones='Reemplazada', bol_porcentaje=".$porcentajeActual.", bol_historial_actualizacion='".json_encode($actualizacion)."'";
 		Boletin::actualizarNotaBoletin($config, $boletinDatos['bol_id'], $update);
 	}elseif($caso == 1){
 		//Eliminamos por si acaso hay algún registro
