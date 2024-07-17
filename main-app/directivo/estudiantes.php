@@ -7,6 +7,40 @@ require_once("../class/Estudiantes.php");
 require_once("../class/servicios/GradoServicios.php"); 
 require_once(ROOT_PATH."/main-app/class/Grupos.php");
 
+if (isset($_GET['mode']) && $_GET['mode'] === 'DEV') {
+	$redis = RedisInstance::getRedisInstance();
+
+	$arrayTest = [
+		[
+			'Nombre' => 'Jhon',
+			'Edad'   => 33,
+			'Genero' => 'M'
+		],
+		[
+			'Nombre' => 'Michelle',
+			'Edad'   => 24,
+			'Genero' => 'F'
+		],
+	];
+
+	$redis->set('jhonky', json_encode($arrayTest));
+	//echo $redis->ttl('jhonky'); exit();
+	print_r(json_decode($redis->get('jhonky'), true));
+	echo "<hr>";
+	
+	$redis->lPush("estudiantes", "Jhon");
+	$redis->lPush("estudiantes", "Cristal");
+	$redis->lPush("estudiantes", "Michelle");
+
+	$estudiantes = $redis->lRange("estudiantes", 0, 2);
+	
+	foreach($estudiantes as $valor) {
+		echo $valor."<br>";
+	}
+
+	exit();
+}
+
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
@@ -51,6 +85,16 @@ if($config['conf_doble_buscador'] == 1) {
 								<div class="col-md-12">
 								<?php include("../../config-general/mensajes-informativos.php"); ?>
 								<span id="respuestaCambiarEstado"></span>
+
+								<?php 
+								//include("includes/barra-superior-matriculas.php");	
+								// $matKeys = array_slice($keys, $inicio, $registros);
+								// foreach ($matKeys as $matKey){
+								// 	$matData = $redis->get($matKey);
+								// 	$resultado = json_decode($matData, true);
+								// }
+								// print_r($resultado); exit();
+								?>
 								
 								<?php include("includes/barra-superior-matriculas-componente.php");	?>
 
