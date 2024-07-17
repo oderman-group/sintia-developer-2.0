@@ -115,6 +115,8 @@ class Grupos {
         $parametros = [$codigo, $POST["codigoG"], $POST["nombreG"], $config['conf_id_institucion'], $_SESSION["bd"]];
         
         $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $codigo;
     }
     
     /**
