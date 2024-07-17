@@ -82,7 +82,7 @@ if(!isset($_GET['nodb'])) {
                             $numA2 = rand(1, 10);
                             $resultadoA = $numA1 + $numA2;
                             ?>
-                            <p style="color: tomato;"><b>Valida que no eres un Robot.</b><br>
+                            <p style="color: tomato;"><b>Valida que no eres un Robot</b><br>
                                 Escribe el resultado de la siguiente operación.</p>
                             <div class=" form-floating mt-3">
                             <input type="hidden" name="sumaReal" value="<?= md5($resultadoA); ?>" />
