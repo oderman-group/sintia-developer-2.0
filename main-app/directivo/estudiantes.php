@@ -51,41 +51,6 @@ if($config['conf_doble_buscador'] == 1) {
 								<div class="col-md-12">
 								<?php include("../../config-general/mensajes-informativos.php"); ?>
 								<span id="respuestaCambiarEstado"></span>
-
-								<?php 
-								//include("includes/barra-superior-matriculas.php");	
-								// $matKeys = array_slice($keys, $inicio, $registros);
-								// foreach ($matKeys as $matKey){
-								// 	$matData = $redis->get($matKey);
-								// 	$resultado = json_decode($matData, true);
-								// }
-								// print_r($resultado); exit();
-								// $arrayTest = [
-								// 	[
-								// 		'Nombre' => 'Jhon',
-								// 		'Edad'   => 33,
-								// 		'Genero' => 'M'
-								// 	],
-								// 	[
-								// 		'Nombre' => 'Michelle',
-								// 		'Edad'   => 24,
-								// 		'Genero' => 'F'
-								// 	],
-								// ];
-								// $redis->set('jhonky', json_encode($arrayTest));
-								// //echo $redis->ttl('jhonky'); exit();
-								// echo json_decode($redis->get('jhonky'), true)[0]['Nombre'];
-								// $redis->lPush("estudiantes", "Jhon");
-								// $redis->lPush("estudiantes", "Cristal");
-								// $redis->lPush("estudiantes", "Michelle");
-
-								// $estudiantes = $redis->lRange("estudiantes", 0, 2);
-								
-								// foreach($estudiantes as $valor) {
-								// 	echo $valor."<br>";
-								// }
-								// exit();
-								?>
 								
 								<?php include("includes/barra-superior-matriculas-componente.php");	?>
 
