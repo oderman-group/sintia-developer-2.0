@@ -2,7 +2,7 @@
 	<hr>
 	<hr>
 <?php
-$acudiente2 = UsuariosPadre::sesionUsuario($datosEstudianteActual["mat_acudiente2"]);
+$acudiente2 = isset($datosEstudianteActual["mat_acudiente2"]) ? UsuariosPadre::sesionUsuario($datosEstudianteActual["mat_acudiente2"]) : null;
 ?>  
 <h2><b>ACUDIENTE 2</b></h2>
 <input type="hidden" name="idAcudiente2" value="<?php if(!empty($datosEstudianteActual["mat_acudiente2"])){ echo $datosEstudianteActual["mat_acudiente2"];}?>">

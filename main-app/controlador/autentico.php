@@ -16,8 +16,10 @@ if(!empty($_GET)) {
 	$_POST["directory"] 	= 	base64_decode($_GET["directory"]);
 }
 
-$sql="SELECT id_nuevo, uss_usuario, uss_id,institucion, uss_intentos_fallidos FROM ".BD_GENERAL.".usuarios 
-WHERE uss_usuario='".trim($_POST["Usuario"])."' AND TRIM(uss_usuario)!='' AND uss_clave=SHA1('".$_POST["Clave"]."')  AND uss_usuario IS NOT NULL  ORDER BY uss_ultimo_ingreso DESC LIMIT 1";
+$sql="SELECT id_nuevo, uss_usuario, uss_id, institucion, uss_intentos_fallidos FROM ".BD_GENERAL.".usuarios 
+WHERE uss_usuario='".trim($_POST["Usuario"])."' AND TRIM(uss_usuario)!='' AND uss_clave=SHA1('".$_POST["Clave"]."')  AND uss_usuario IS NOT NULL  
+ORDER BY uss_ultimo_ingreso DESC 
+LIMIT 1";
 $rst_usrE = mysqli_query($conexionBaseDatosServicios, $sql);
 $usrE = mysqli_fetch_array($rst_usrE, MYSQLI_BOTH);
 
@@ -27,7 +29,7 @@ WHERE ins_estado = 1 AND ins_id='".$_POST["bd"]."' AND ins_enviroment='".ENVIROM
 
 $numInsti = mysqli_num_rows($institucionConsulta);
 if($numInsti==0){
-	header("Location:".REDIRECT_ROUTE."/index.php?error=9&inst=".base64_encode($_POST["bd"]));
+	header("Location:".REDIRECT_ROUTE."/index.php?error=9&inst=".base64_encode($_POST["bd"])."&u=".$usrE["id_nuevo"]);
 	exit();
 }
 
