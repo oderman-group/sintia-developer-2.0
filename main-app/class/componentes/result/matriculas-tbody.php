@@ -10,7 +10,7 @@ $contReg = 1;
 $usuariosClase = new Usuarios;
 foreach ($data["data"] as $resultado) {
 
-	$acudiente = UsuariosPadre::sesionUsuario($resultado["mat_acudiente"]);
+	$acudiente = isset($resultado["mat_acudiente"]) ? UsuariosPadre::sesionUsuario($resultado["mat_acudiente"]) : null;
 
 	$bgColor = $resultado['uss_bloqueado'] == 1 ? 'style="background-color: #ff572238;"' : '';
 
