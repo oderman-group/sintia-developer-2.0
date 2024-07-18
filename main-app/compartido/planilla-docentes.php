@@ -8,6 +8,7 @@ if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol(
 }
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
+require_once("../class/CargaAcademica.php");
 
 if(!empty($_GET["carga"])) {
   $carga = base64_decode($_GET["carga"]);
