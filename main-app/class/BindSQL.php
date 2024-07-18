@@ -26,8 +26,15 @@ class BindSQL
             if ($consulta) {
                 $tipoParametro = '';
                 foreach ($parametros as $parametro) {
-                    if (is_numeric($parametro)) {
+                    if (is_int($parametro)) {
                         $tipoParametro .= 'i';
+                    } else if (is_float($parametro)) {
+                        $tipoParametro .= 'd';
+                    } else if (is_string($parametro)) {
+                        $tipoParametro .= 's';
+                    } else if (is_bool($parametro)) {
+                        $tipoParametro .= 'i';
+                        $parametro = $parametro ? 1 : 0;
                     } else {
                         $tipoParametro .= 's';
                     }
