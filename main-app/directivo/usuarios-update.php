@@ -65,7 +65,9 @@ if (!empty($_POST["clave"]) && $_POST["cambiarClave"] == 1) {
 		exit();
 	}
 
-	$update = "uss_clave= SHA1('" . $_POST["clave"] . "')";
+	$claveEncriptada = SHA1($_POST["clave"]);
+
+	$update = "uss_clave= '" . $claveEncriptada . "'";
 	UsuariosPadre::actualizarUsuarios($config, $_POST["idR"], $update);
 
 }
