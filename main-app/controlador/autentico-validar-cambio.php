@@ -7,8 +7,13 @@ $Plataforma = new Plataforma;
 
 $conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
 
-$consultaUsuario = mysqli_query($conexionBaseDatosServicios, "SELECT uss_usuario,uss_tipo,COUNT(DISTINCT institucion) AS cantidad_instituciones,GROUP_CONCAT(DISTINCT institucion ORDER BY institucion SEPARATOR ', ') AS instituciones FROM ".BD_GENERAL.".usuarios WHERE uss_usuario LIKE '".trim($_REQUEST["Usuario"])."%' AND uss_cambio_notificacion=0");
-$datosUsuario = mysqli_fetch_array($consultaUsuario, MYSQLI_BOTH);
+$consultaUsuario = mysqli_query($conexionBaseDatosServicios, "SELECT uss_usuario, uss_tipo, COUNT(DISTINCT institucion) AS cantidad_instituciones, GROUP_CONCAT(DISTINCT institucion 
+ORDER BY institucion SEPARATOR ', ') AS instituciones 
+FROM ".BD_GENERAL.".usuarios 
+WHERE uss_usuario = '".trim($_REQUEST["Usuario"])."' AND uss_cambio_notificacion=0");
+
+$datosUsuario = mysqli_fetch_array($consultaUsuario, MYSQLI_ASSOC);
+
 if(!empty($datosUsuario) && $datosUsuario['cantidad_instituciones'] > 1){
 	$institucionesConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".BD_ADMIN.".instituciones 
 	WHERE ins_id IN (".$datosUsuario['instituciones'].") AND ins_estado = 1 AND ins_enviroment='".ENVIROMENT."'");
