@@ -324,7 +324,10 @@ if (!Modulos::validarPermisoEdicion()) {
 
 									</div>
 								</div>
-								<?php include("enlaces-paginacion.php"); ?>
+								<?php 
+								include("enlaces-paginacion.php"); 
+								$consulta->free();
+								?>
 							</div>
 
 

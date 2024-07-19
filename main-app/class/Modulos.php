@@ -148,7 +148,7 @@ class Modulos {
      * ```
      */
     public static function validarAccesoDirectoPaginas(){
-        if($_SERVER['HTTP_REFERER']==""){
+        if (!isset($_SERVER['HTTP_REFERER']) || (isset($_SERVER['HTTP_REFERER']) && $_SERVER['HTTP_REFERER']=="")) {
             echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=303";</script>';
             exit();
         }

@@ -191,7 +191,7 @@ class SysJobs {
      * los parametros["estado"]
      * @param array $parametros 
      * 
-     * @return array // se retorna el registro para consultar
+     * @return mysqli_result // se retorna el registro para consultar
      */
     public static function listar(array $parametrosBusqueda = []) {
         global $conexion, $baseDatosServicios;

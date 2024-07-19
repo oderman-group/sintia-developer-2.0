@@ -1,8 +1,8 @@
 <?php
 session_start();
 $idPaginaInterna = 'CM0006';
-include("../../config-general/config.php");
-require_once("../class/Estudiantes.php");
+include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/config.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/servicios/GradoServicios.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once ROOT_PATH."/main-app/class/Conexion.php";
@@ -12,7 +12,7 @@ require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 $conexionPDOInstance = new Conexion;
-$conexionPDO         = $conexionPDOInstance->conexionPDO(SERVER, USER, PASSWORD, BD_ADMIN);
+$conexionPDO         = $conexionPDOInstance->conexionPDO(SERVIDOR_CONEXION, USUARIO_CONEXION, CLAVE_CONEXION, BD_ADMIN);
 
 $config = Plataforma::sesionConfiguracion();
 $_SESSION["configuracion"] = $config;

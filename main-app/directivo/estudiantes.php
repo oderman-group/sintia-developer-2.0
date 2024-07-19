@@ -187,6 +187,7 @@ if($config['conf_doble_buscador'] == 1) {
 														$arraysDatos[$index] = $fila;
 														$index++;
 													}
+													$consulta->free();
 													$lista = $arraysDatos;
 													$data["data"] =$lista;
 													include(ROOT_PATH . "/main-app/class/componentes/result/matriculas-tbody.php");

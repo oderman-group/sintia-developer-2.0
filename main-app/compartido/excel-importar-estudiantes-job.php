@@ -4,7 +4,7 @@ require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.ph
 require_once ROOT_PATH."/main-app/class/Conexion.php";
 
 $conexionPDOInstance = new Conexion;
-$conexionPDO         = $conexionPDOInstance->conexionPDO(SERVER, USER, PASSWORD, BD_ADMIN);
+$conexionPDO         = $conexionPDOInstance->conexionPDO(SERVIDOR_CONEXION, USUARIO_CONEXION, CLAVE_CONEXION, BD_ADMIN);
 $conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion);
 
 /**
