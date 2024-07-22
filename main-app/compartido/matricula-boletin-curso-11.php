@@ -324,20 +324,22 @@ while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOT
                             <td align="center" style=" font-size:12px;"><?=$promediosMateriaEstiloNotaFinal;?></td>
                         </tr>
                         <?php
-                        $consultaObsevacion=Boletin::obtenerObservaciones($materia["car_id"], $periodoActual, $matriculadosDatos['mat_id'], $year);
-                        $observacion = mysqli_fetch_array($consultaObsevacion, MYSQLI_BOTH);
-                        if ($observacion['bol_observaciones_boletin'] != "") {
+                        if($materia['car_observaciones_boletin'] == 1) {
+                            $consultaObsevacion=Boletin::obtenerObservaciones($materia["car_id"], $periodoActual, $matriculadosDatos['mat_id'], $year);
+                            $observacion = mysqli_fetch_array($consultaObsevacion, MYSQLI_BOTH);
+                            if ($observacion['bol_observaciones_boletin'] != "") {
                             ?>
-                            <tr>
-                                <td colspan="<?=$colspan?>">
-                                    <h5 align="center" style="margin: 0">Observaciones</h5>
-                                    <p style="margin: 0 0 0 10px; font-size: 11px; font-style: italic;">
-                                        <?= $observacion['bol_observaciones_boletin']; ?>
-                                    </p>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td colspan="<?=$colspan?>">
+                                        <h5 align="center" style="margin: 0">Observaciones</h5>
+                                        <p style="margin: 0 0 0 10px; font-size: 11px; font-style: italic;">
+                                            <?= $observacion['bol_observaciones_boletin']; ?>
+                                        </p>
+                                    </td>
+                                </tr>
                         
                     <?php
+                            }
                         }
                         $contador++;
                         $ausPer1Total+=$ausPer1;
