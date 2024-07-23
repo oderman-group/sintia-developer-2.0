@@ -79,7 +79,7 @@ class Unidades{
         
         $sql = "INSERT INTO " . BD_ACADEMICA . ".academico_unidades (uni_id, uni_nombre, uni_id_carga, uni_periodo, uni_descripcion, institucion, year) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        $parametros = [$codigo, $POST["nombre"], $idCarga, $periodo, $POST["contenido"], $config['conf_id_institucion'], $_SESSION["bd"]];
+        $parametros = [$codigo, $POST["nombre"], $idCarga, $periodo, mysqli_real_escape_string($conexion, trim($POST["contenido"])), $config['conf_id_institucion'], $_SESSION["bd"]];
         
         $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
@@ -96,7 +96,7 @@ class Unidades{
     {
         $sql = "UPDATE " . BD_ACADEMICA . ".academico_unidades SET uni_nombre=?, uni_id_carga=?, uni_periodo=?, uni_descripcion=? WHERE id_nuevo=? AND institucion=? AND year=?";
 
-        $parametros = [$POST["nombre"], $idCarga, $pertiodo, $POST["contenido"], $POST["idR"], $config['conf_id_institucion'], $_SESSION["bd"]];
+        $parametros = [$POST["nombre"], $idCarga, $pertiodo, mysqli_real_escape_string($conexion, trim($POST["contenido"])), $POST["idR"], $config['conf_id_institucion'], $_SESSION["bd"]];
         
         $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
