@@ -12,7 +12,9 @@
 	include("../compartido/historial-acciones-guardar.php");
 
 	foreach ($_POST["cargas"] as $idCarga) {
-		$update = "car_docente=" . $_POST["para"] . "";
+		$update = [
+			'car_docente' => $_POST["para"]
+		];
 		CargaAcademica::actualizarCargaPorID($config, $idCarga, $update);
 	}
 

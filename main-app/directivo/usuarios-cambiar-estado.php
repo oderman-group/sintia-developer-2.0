@@ -13,7 +13,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 if (base64_decode($_GET["lock"]) == 1) $estado = 0;
 else $estado = 1;
 
-$update = "uss_bloqueado='" . $estado . "'";
+$update = ['uss_bloqueado' => $estado];
 UsuariosPadre::actualizarUsuarios($config, base64_decode($_GET["idR"]), $update);
 
 include("../compartido/guardar-historial-acciones.php");

@@ -17,7 +17,10 @@ if(trim($_POST["nombreA"])=="" or trim($_POST["posicionA"])==""){
 	exit();
 }
 
-$update = "ar_nombre=".$_POST["nombreA"].", ar_posicion=".$_POST["posicionA"]."";
+$update = [
+	"ar_nombre"   => $_POST["nombreA"], 
+	"ar_posicion" => $_POST["posicionA"]
+];
 Areas::actualizarAreas($config, $_POST["idA"], $update);
 
 include("../compartido/guardar-historial-acciones.php");

@@ -11,7 +11,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }
 
-$update = "mat_estado_matricula=".$_POST["nuevoEstado"]."";
+$update = [
+    'mat_estado_matricula' => $_POST["nuevoEstado"]
+];
 Estudiantes::actualizarMatriculasPorId($config, $_POST["idEstudiante"], $update);
 ?>  
 <div class="alert alert-success">

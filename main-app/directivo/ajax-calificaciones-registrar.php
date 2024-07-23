@@ -23,7 +23,9 @@ if($_POST["operacion"]==1){
 
 		Actividades::marcarActividadRegistrada($config, $_POST["codNota"]);
 	}else{
-		$update = "cal_nota=".$_POST["nota"]."";
+		$update = [
+			'cal_nota' => $_POST["nota"]
+		];
 		Calificaciones::actualizarNotaActividadEstudiante($config, $_POST["codNota"], $_POST["codEst"], $update);
 
 		Actividades::marcarActividadRegistrada($config, $_POST["codNota"]);
@@ -40,7 +42,9 @@ if($_POST["operacion"]==2){
 
 		Actividades::marcarActividadRegistrada($config, $_POST["codNota"]);
 	}else{
-		$update = "cal_observaciones=".mysqli_real_escape_string($conexion,$_POST["nota"])."";
+		$update = [
+			'cal_observaciones' => mysqli_real_escape_string($conexion,$_POST["nota"])
+		];
 		Calificaciones::actualizarNotaActividadEstudiante($config, $_POST["codNota"], $_POST["codEst"], $update);
 
 		Actividades::marcarActividadRegistrada($config, $_POST["codNota"]);
@@ -66,7 +70,9 @@ if($_POST["operacion"]==3){
 			
 			Actividades::marcarActividadRegistrada($config, $_POST["codNota"]);
 		}else{
-			$update = "cal_nota=".$_POST["nota"]."";
+			$update = [
+				"cal_nota" => $_POST["nota"]
+			];
 			Calificaciones::actualizarNotaActividadEstudiante($config, $_POST["codNota"], $estudiantes['mat_id'], $update);
 			
 			Actividades::marcarActividadRegistrada($config, $_POST["codNota"]);

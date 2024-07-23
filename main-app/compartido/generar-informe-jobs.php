@@ -3,8 +3,7 @@ $_SERVER['DOCUMENT_ROOT'] = dirname(dirname(dirname(dirname(__FILE__))));
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 require_once ROOT_PATH."/main-app/class/Conexion.php";
 
-$conexionPDOInstance = new Conexion;
-$conexionPDO         = $conexionPDOInstance->conexionPDO(SERVIDOR_CONEXION, USUARIO_CONEXION, CLAVE_CONEXION, BD_ADMIN);
+$conexionPDO         = Conexion::newConnection('PDO');
 $conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion);
 
 require_once(ROOT_PATH."/main-app/class/Sysjobs.php");
@@ -175,7 +174,15 @@ $mensaje="";
 					"porcentaje" 	=> $boletinDatos['bol_porcentaje']
 				];
 		
-				$update = "bol_nota_anterior=bol_nota, bol_nota=".$definitiva.", bol_nota_indicadores=".$sumaNotaIndicador.", bol_tipo=1, bol_observaciones='Reemplazada', bol_porcentaje=".$porcentajeActual.", bol_historial_actualizacion=".json_encode($actualizacion)."";
+				$update = [
+					'bol_nota_anterior'           => 'bol_nota', 
+					'bol_nota'                    => $definitiva, 
+					'bol_nota_indicadores='       => $sumaNotaIndicador, 
+					'bol_tipo'                    => 1, 
+					'bol_observaciones'           => 'Reemplazada', 
+					'bol_porcentaje'              => $porcentajeActual, 
+					'bol_historial_actualizacion' => json_encode($actualizacion)
+				];
 				Boletin::actualizarNotaBoletin($config, $boletinDatos['bol_id'], $update, $anio);
 			}elseif($caso == 1){
 				//Eliminamos por si acaso hay algún registro
@@ -192,7 +199,7 @@ $mensaje="";
 
 		}
     
-		$update = "car_periodo=car_periodo+1";
+		$update = ['car_periodo' => 'car_periodo+1'];
 		CargaAcademica::actualizarCargaPorID($config, $carga, $update, $anio);
 
 		$consulta_mat_area_est = CargaAcademica::traerCargaMateriaPorID($config, $carga, $anio);

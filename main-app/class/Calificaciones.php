@@ -408,13 +408,13 @@ class Calificaciones {
         array   $config,
         string  $idActividad,
         string  $idEstudiante,
-        string  $update,
+        array   $update,
         string  $yearBd = ""
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+        [$updateSql, $updateValues] = BindSQL::prepararUpdateConArray($update);
 
         $sql = "UPDATE ".BD_ACADEMICA.".academico_calificaciones SET {$updateSql}, cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1 WHERE cal_id_actividad=? AND cal_id_estudiante=? AND institucion=? AND year=?";
 

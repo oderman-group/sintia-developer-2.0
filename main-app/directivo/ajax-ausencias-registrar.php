@@ -18,7 +18,9 @@ if(empty($rC)){
 	}	
 	
 }else{
-	$update = "aus_ausencias=".$_POST["nota"]."";
+	$update = [
+		"aus_ausencias" => $_POST["nota"]
+	];
 	Ausencias::actualizarAusencia($config, $rC['aus_id'], $update);
 	
 	try{

@@ -175,9 +175,11 @@ class Indicadores {
         if (!empty($year)) {
             $yearConsulta = $year;
         }
-        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_carga ipc
-        INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=ipc.ipc_indicador AND ai.institucion=ipc.institucion AND ai.year=ipc.year
-        WHERE ipc.ipc_carga=? AND ipc.ipc_periodo=? AND ipc.institucion=? AND ipc.year=?";
+        $sql = "SELECT aipc.id_nuevo AS aipc_id_nuevo, aipc.ipc_id, aipc.ipc_carga, aipc.ipc_indicador, aipc.ipc_valor, aipc.ipc_periodo, aipc.ipc_creado, aipc.institucion, aipc.year, 
+        ai.id_nuevo, ai.ind_nombre, ai.ind_tematica, ai.ind_definitivo 
+        FROM ".BD_ACADEMICA.".academico_indicadores_carga aipc
+        INNER JOIN ".BD_ACADEMICA.".academico_indicadores ai ON ai.ind_id=aipc.ipc_indicador AND ai.institucion=aipc.institucion AND ai.year=aipc.year
+        WHERE aipc.ipc_carga=? AND aipc.ipc_periodo=? AND aipc.institucion=? AND aipc.year=?";
 
         $parametros = [$idCarga, $periodo, $config['conf_id_institucion'], $yearConsulta];
         
@@ -458,13 +460,13 @@ class Indicadores {
     public static function actualizarIndicador (
         array   $config,
         string  $idIndicador,
-        string  $update,
+        array   $update,
         string  $yearBd = ""
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+        [$updateSql, $updateValues] = BindSQL::prepararUpdateConArray($update);
 
         $sql = "UPDATE ".BD_ACADEMICA.".academico_indicadores SET {$updateSql}, ind_fecha_modificacion=now() WHERE ind_id=? AND institucion=? AND year=?";
 
@@ -480,13 +482,13 @@ class Indicadores {
         array   $config,
         string  $idCarga,
         int     $periodo,
-        string  $update,
+        array   $update,
         string  $yearBd = ""
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+        [$updateSql, $updateValues] = BindSQL::prepararUpdateConArray($update);
 
         $sql = "UPDATE ".BD_ACADEMICA.".academico_indicadores SET {$updateSql}, ind_fecha_modificacion=now() WHERE ind_periodo=? AND ind_carga=? AND institucion=? AND year=?";
 
@@ -758,13 +760,13 @@ class Indicadores {
     public static function actualizarRelacionIndicadorCargas (
         array   $config,
         string  $idIndicador,
-        string  $update,
+        array   $update,
         string  $yearBd = ""
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+        [$updateSql, $updateValues] = BindSQL::prepararUpdateConArray($update);
 
         $sql = "UPDATE ".BD_ACADEMICA.".academico_indicadores_carga SET {$updateSql} WHERE ipc_id=? AND institucion=? AND year=?";
 

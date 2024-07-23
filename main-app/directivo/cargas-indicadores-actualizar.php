@@ -18,16 +18,16 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	$porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
 	$porcentajeRestante = ($porcentajeRestante + $_POST["valorIndicador"]);
 
-	$update="
-		ind_nombre=" . $_POST["contenido"] . "
-	";
+	$update = [
+		'ind_nombre' => $_POST["contenido"]
+	];
 	Indicadores::actualizarIndicador($config, $_POST["idInd"], $update);
 
 	//Si vamos a relacionar los indicadores con los SABERES
 	if ($datosCargaActual['car_saberes_indicador'] == 1) {
-		$update="
-			ipc_evaluacion=" . $_POST["saberes"] . "
-		";
+		$update = [
+			'ipc_evaluacion' => $_POST["saberes"]
+		];
 		Indicadores::actualizarRelacionIndicadorCargas($config, $_POST["idR"], $update);
 	}
 
@@ -40,10 +40,10 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 		$_POST["valor"] = $porcentajeRestante;
 	}
 
-	$update="
-		ipc_valor=" . $_POST["valor"] . ", 
-		ipc_creado=" . $_POST["creado"] . "
-	";
+	$update = [
+		'ipc_valor'  => $_POST["valor"], 
+		'ipc_creado' => $_POST["creado"]
+	];
 	Indicadores::actualizarRelacionIndicadorCargas($config, $_POST["idR"], $update);
 
 	include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");

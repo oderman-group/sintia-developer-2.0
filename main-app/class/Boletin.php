@@ -980,13 +980,13 @@ class Boletin {
     public static function actualizarNotaBoletin (
         array   $config,
         string  $idBoletin,
-        string  $update,
+        array   $update,
         string  $yearBd = ""
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+        [$updateSql, $updateValues] = BindSQL::prepararUpdateConArray($update);
 
         $sql = "UPDATE ".BD_ACADEMICA.".academico_boletin SET {$updateSql}, bol_actualizaciones=bol_actualizaciones+1, bol_ultima_actualizacion=now() WHERE bol_id=? AND institucion=? AND year=?";
 
@@ -1002,13 +1002,13 @@ class Boletin {
         array   $config,
         string  $idCarga,
         string  $idEstudiante,
-        string  $update,
+        array   $update,
         string  $yearBd = ""
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+        [$updateSql, $updateValues] = BindSQL::prepararUpdateConArray($update);
 
         $sql = "UPDATE ".BD_ACADEMICA.".academico_boletin SET {$updateSql} WHERE bol_estudiante=? AND bol_carga=? AND institucion=? AND year=?";
 

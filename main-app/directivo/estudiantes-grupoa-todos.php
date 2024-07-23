@@ -11,7 +11,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 include("../compartido/historial-acciones-guardar.php");
 
-$update = "mat_grupo=1";
+$update = ['mat_grupo' => 1];
 Estudiantes::actualizarMatriculasInstitucion($config, $update);
 
 include("../compartido/guardar-historial-acciones.php");

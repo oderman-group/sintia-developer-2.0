@@ -3,10 +3,13 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");?>
-<?php require_once("../class/Estudiantes.php");
+<?php 
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 require_once(ROOT_PATH."/main-app/class/Grados.php");
-require_once(ROOT_PATH."/main-app/class/Calificaciones.php");?>
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+?>
 
 </head>
 
@@ -179,7 +182,7 @@ require_once(ROOT_PATH."/main-app/class/Calificaciones.php");?>
                                 }
                                 if($definitiva<$config[5])$color = $config[6]; elseif($definitiva>=$config[5]) $color = $config[7];
 
-                                $definitivaFinal=$definitiva;
+                                $definitivaFinal=Utilidades::setFinalZero($definitiva);
                                 $atributosA='style="text-decoration:underline; color:'.$color.';"';
                                 if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
                                     $atributosA='tabindex="0" role="button" data-toggle="popover" data-trigger="hover" title="Nota Cuantitativa: '.$definitiva.'" data-content="<b>Nota Cuantitativa:</b><br>'.$definitiva.'" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:'.$color.';"';

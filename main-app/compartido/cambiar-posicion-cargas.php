@@ -11,7 +11,9 @@ function posicion ($conexion, $config, $idRegistro, $posicionInicial, $docente) 
     try {
         $registro = CargaAcademica::consultarPosicionCarga($config, $docente, $idRegistro, $posicionInicial, $filtroMT);
 
-        $update = "car_posicion_docente=" . $posicionInicial . "";
+        $update = [
+            'car_posicion_docente' => $posicionInicial
+        ];
         CargaAcademica::actualizarCargaPorID($config, $idRegistro, $update);
 
         if( !empty($registro) ) {

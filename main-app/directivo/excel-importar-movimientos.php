@@ -96,12 +96,12 @@ if($extension == 'xlsx'){
 						}elseif($_POST["accion"]==2){//Bloquear a los que deben
 							if($tipoMovimiento == 1){
 								$tipo = 3;
-								$update = "uss_bloqueado=1";
+								$update = ['uss_bloqueado' => 1];
 								UsuariosPadre::actualizarUsuarios($config, $idUsuario, $update);
 								$usuariosBloqueados[] = "FILA ".$f;
 							}else{
 								$tipo = 4;
-								$update = "uss_bloqueado='0'";
+								$update = ['uss_bloqueado' => '0'];
 								UsuariosPadre::actualizarUsuarios($config, $idUsuario, $update);
 							}
 						}

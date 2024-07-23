@@ -14,7 +14,7 @@ while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 ?>
     <tr id="reg<?= $resultado['ipc_id']; ?>">
         <td><?= $contReg; ?></td>
-        <td><?= $resultado['ipc_id']; ?></td>
+        <td><?= $resultado['aipc_id_nuevo']; ?></td>
         <td><?= $resultado['ind_nombre']; ?></td>
         <td><?= $resultado['ipc_valor']; ?>%</td>
 

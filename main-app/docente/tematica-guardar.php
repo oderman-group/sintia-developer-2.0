@@ -17,7 +17,9 @@ $numTema = mysqli_num_rows($consultaNumTema);
 
 if($numTema>0){
 
-	$update = "ind_nombre=".$_POST["contenido"]."";
+	$update = [
+		'ind_nombre' => mysqli_real_escape_string($conexion,$_POST["contenido"])
+	];
 	Indicadores::actualizarIndicadorCargaPeriodo($config, $cargaConsultaActual, $periodoConsultaActual, $update);
 }else{
 	$codigo = Indicadores::guardarIndicador($conexionPDO, "ind_nombre, ind_obligatorio, ind_periodo, ind_carga, ind_fecha_creacion, ind_tematica, institucion, year, ind_id", [mysqli_real_escape_string($conexion,$_POST["contenido"]), 0, $periodoConsultaActual, $cargaConsultaActual, date("Y-m-d H:i:s"), 1, $config['conf_id_institucion'], $_SESSION["bd"]]);

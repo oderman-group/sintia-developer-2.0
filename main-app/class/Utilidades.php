@@ -218,4 +218,12 @@ class Utilidades {
         return strtoupper(substr($word, 0, 3));
 
     }
+
+    public static function setFinalZero($nota) {
+        if (is_int($nota)) {
+            return $nota.".0";
+        }
+
+        return $nota;
+    }
 }

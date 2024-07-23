@@ -52,50 +52,56 @@ if (empty($_POST["tipoNegocio"])) $_POST["tipoNegocio"] = '0';
 
 //Si es estudiante
 if ($_POST["tipoUsuario"] == 4) {
-    $update = "
-        uss_nombre='" . strtoupper($_POST["nombre"]) . "', 
-        uss_nombre2='" . strtoupper($_POST["nombre2"]) . "', 
-        uss_apellido1='" . strtoupper($_POST["apellido1"]) . "', 
-        uss_apellido2='" . strtoupper($_POST["apellido2"]) . "', 
-        uss_email='" . strtolower($_POST["email"]) . "', 
-        uss_celular='" . $_POST["celular"] . "', 
-        uss_lugar_nacimiento='" . $_POST["lNacimiento"] . "', 
-        uss_telefono='" . $_POST["telefono"] . "', 
-        uss_notificacion='" . $notificaciones . "', 
-        uss_mostrar_edad='" . $mostrarEdad . "'
-    ";
+    $update = [
+        "uss_nombre" => strtoupper($_POST["nombre"]),
+        "uss_nombre2" => strtoupper($_POST["nombre2"]),
+        "uss_apellido1" => strtoupper($_POST["apellido1"]),
+        "uss_apellido2" => strtoupper($_POST["apellido2"]),
+        "uss_email" => strtolower($_POST["email"]),
+        "uss_celular" => $_POST["celular"],
+        "uss_lugar_nacimiento" => $_POST["lNacimiento"],
+        "uss_telefono" => $_POST["telefono"],
+        "uss_notificacion" => $notificaciones,
+        "uss_mostrar_edad" => $mostrarEdad
+    ];
     UsuariosPadre::actualizarUsuarios($config, $_SESSION["id"], $update);
 
     //Actualizar matricula a los estudiantes
-    $update = "mat_genero=" . $_POST["genero"] . ", mat_fecha_nacimiento=" . $_POST["fechaN"] . ", mat_celular=" . $_POST["celular"] . ", mat_lugar_nacimiento=" . $_POST["lNacimiento"] . ", mat_telefono=" . $_POST["telefono"] . "";
+    $update = [
+        "mat_genero" => $_POST["genero"],
+        "mat_fecha_nacimiento" => $_POST["fechaN"],
+        "mat_celular" => $_POST["celular"],
+        "mat_lugar_nacimiento" => $_POST["lNacimiento"],
+        "mat_telefono" => $_POST["telefono"]
+    ];
     Estudiantes::actualizarMatriculasPorIdUsuario($config, $_SESSION["id"], $update);
 } else {
-    $update = "
-        uss_nombre='" . strtoupper($_POST["nombre"]) . "', 
-        uss_nombre2='" . strtoupper($_POST["nombre2"]) . "', 
-        uss_apellido1='" . strtoupper($_POST["apellido1"]) . "', 
-        uss_apellido2='" . strtoupper($_POST["apellido2"]) . "', 
-        uss_email='" . strtolower($_POST["email"]) . "', 
-        uss_genero='" . $_POST["genero"] . "', 
-        uss_fecha_nacimiento='" . $_POST["fechaN"] . "', 
-        uss_celular='" . $_POST["celular"] . "', 
-        uss_numero_hijos='" . $_POST["numeroHijos"] . "', 
-        uss_lugar_nacimiento='" . $_POST["lNacimiento"] . "', 
-        uss_nivel_academico='" . $_POST["nAcademico"] . "', 
-        uss_telefono='" . $_POST["telefono"] . "', 
-        uss_notificacion='" . $notificaciones . "', 
-        uss_mostrar_edad='" . $mostrarEdad . "',
-        uss_profesion='" . $_POST["profesion"] . "',
-        uss_estado_laboral='" . $_POST["eLaboral"] . "',
-        uss_religion='" . $_POST["religion"] . "',
-        uss_estado_civil='" . $_POST["eCivil"] . "',
-        uss_direccion='" . mysqli_real_escape_string($conexion,$_POST["direccion"]) . "',
-        uss_estrato='" . $_POST["estrato"] . "',
-        uss_tipo_vivienda='" . $_POST["tipoVivienda"] . "',
-        uss_medio_transporte='" . $_POST["medioTransporte"] . "',
-        uss_tipo_negocio='" . $_POST["tipoNegocio"] . "',
-        uss_sitio_web_negocio='" . mysqli_real_escape_string($conexion,$_POST["web"]) . "'
-    ";
+    $update = [
+        "uss_nombre" => strtoupper($_POST["nombre"]),
+        "uss_nombre2" => strtoupper($_POST["nombre2"]),
+        "uss_apellido1" => strtoupper($_POST["apellido1"]),
+        "uss_apellido2" => strtoupper($_POST["apellido2"]),
+        "uss_email" => strtolower($_POST["email"]),
+        "uss_genero" => $_POST["genero"],
+        "uss_fecha_nacimiento" => $_POST["fechaN"],
+        "uss_celular" => $_POST["celular"],
+        "uss_numero_hijos" => $_POST["numeroHijos"],
+        "uss_lugar_nacimiento" => $_POST["lNacimiento"],
+        "uss_nivel_academico" => $_POST["nAcademico"],
+        "uss_telefono" => $_POST["telefono"],
+        "uss_notificacion" => $notificaciones,
+        "uss_mostrar_edad" => $mostrarEdad,
+        "uss_profesion" => $_POST["profesion"],
+        "uss_estado_laboral" => $_POST["eLaboral"],
+        "uss_religion" => $_POST["religion"],
+        "uss_estado_civil" => $_POST["eCivil"],
+        "uss_direccion" => mysqli_real_escape_string($conexion, $_POST["direccion"]),
+        "uss_estrato" => $_POST["estrato"],
+        "uss_tipo_vivienda" => $_POST["tipoVivienda"],
+        "uss_medio_transporte" => $_POST["medioTransporte"],
+        "uss_tipo_negocio" => $_POST["tipoNegocio"],
+        "uss_sitio_web_negocio" => mysqli_real_escape_string($conexion, $_POST["web"])
+    ];
     UsuariosPadre::actualizarUsuarios($config, $_SESSION["id"], $update);
 }
 
@@ -107,7 +113,7 @@ if (!empty($_FILES['firmaDigital']['name'])) {
     $destino = "../files/fotos";
     move_uploaded_file($_FILES['firmaDigital']['tmp_name'], $destino . "/" . $archivo);
 
-    $update = "uss_firma='" . $archivo . "'";
+    $update = ['uss_firma' => $archivo];
     UsuariosPadre::actualizarUsuarios($config, $_SESSION["id"], $update);
 }
 
@@ -119,7 +125,7 @@ if (!empty($_FILES['fotoPerfil']['name'])) {
     $destino = "../files/fotos";
     move_uploaded_file($_FILES['fotoPerfil']['tmp_name'], $destino . "/" . $archivo);
 
-    $update = "uss_foto='" . $archivo . "'";
+    $update = ['uss_foto' => $archivo];
     UsuariosPadre::actualizarUsuarios($config, $_SESSION["id"], $update);
 
     $file = $destino . "/" . $archivo;  // Dirección de la imagen

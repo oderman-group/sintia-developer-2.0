@@ -3,8 +3,7 @@ $_SERVER['DOCUMENT_ROOT'] = dirname(dirname(dirname(dirname(__FILE__))));
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 require_once ROOT_PATH."/main-app/class/Conexion.php";
 
-$conexionPDOInstance = new Conexion;
-$conexionPDO         = $conexionPDOInstance->conexionPDO(SERVIDOR_CONEXION, USUARIO_CONEXION, CLAVE_CONEXION, BD_ADMIN);
+$conexionPDO         = Conexion::newConnection('PDO');
 $conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion);
 
 /**
@@ -184,26 +183,29 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 				if($numMatricula > 0) {
 					$datosEstudianteExistente = Estudiantes::obtenerDatosEstudiante($arrayIndividual['mat_documento']);
 					try {
-						$camposActualizar = "";
+						$update = [
+							'mat_matricula' => 'mat_matricula'
+						];
+
 						if(!empty($actualizarCampo)) {
 							$camposFormulario = count($actualizarCampo);
 							if($camposFormulario > 0) {
 								$cont = 0;
 								while ($cont < $camposFormulario) {
 									if($actualizarCampo[$cont] == 1) {
-										$camposActualizar .= ", mat_grado='".$grado."'";
+										$update['mat_grado'] = $grado;
 									}
 									if($actualizarCampo[$cont] == 2) {
-										$camposActualizar .= ", mat_grupo='".$grupo."'";
+										$update['mat_grupo'] = $grupo;
 									}
 									if($actualizarCampo[$cont] == 3) {
-										$camposActualizar .= ", mat_tipo_documento='".$tipoDocumento."'";
+										$update['mat_tipo_documento'] = $tipoDocumento;
 									}
 									if($actualizarCampo[$cont] == 4) {
-										$camposActualizar .= ", mat_acudiente='".$idAcudiente."'";
+										$update['mat_acudiente'] = $idAcudiente;
 									}
 									if($actualizarCampo[$cont] == 5) {
-										$camposActualizar .= ", mat_nombre2='".$hojaActual->getCell('D'.$f)->getValue()."'";
+										$update['mat_nombre2'] = $hojaActual->getCell('D'.$f)->getValue();
 									}
 									if($actualizarCampo[$cont] == 6) {
 										$matFechaNacimiento=$hojaActual->getCell('H'.$f)->getFormattedValue();
@@ -218,7 +220,8 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 											$year  = $fecha[0];
 											$fNacimiento = $year.'-'.$mes.'-'.$dia;
 										}
-										$camposActualizar .= ", mat_fecha_nacimiento='".$fNacimiento."'";
+
+										$update['mat_fecha_nacimiento'] = $fNacimiento;
 									}
 									$cont ++;
 								}
@@ -226,7 +229,6 @@ while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
 						}
 						//Actualizamos el acudiente y los datos del formulario
 						try{
-							$update = "mat_matricula=mat_matricula {$camposActualizar}";
 							Estudiantes::actualizarMatriculasPorId($config, $datosEstudianteExistente['mat_id'], $update, $anio);
 						} catch (Exception $e) {
 							SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$e->getMessage());

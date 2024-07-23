@@ -994,20 +994,20 @@ class CargaAcademica {
      *
      * @param array   $config         Configuración de la aplicación.
      * @param string  $idCarga        ID de la carga.
-     * @param string  $update         Cadena con las actualizaciones a realizar en formato SQL.
+     * @param array  $update         Cadena con las actualizaciones a realizar en formato SQL.
      * @param string  $yearBd         Año para la base de datos (opcional).
      * @return void                   No devuelve ningún valor.
      */
     public static function actualizarCargaPorID (
         array   $config,
         string  $idCarga,
-        string  $update,
+        array   $update,
         string  $yearBd = ""
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+        [$updateSql, $updateValues] = BindSQL::prepararUpdateConArray($update);
 
         $sql = "UPDATE ".BD_ACADEMICA.".academico_cargas SET {$updateSql} WHERE car_id=? AND institucion=? AND year=?";
 
@@ -1025,7 +1025,7 @@ class CargaAcademica {
      * @param array   $config         Configuración de la aplicación.
      * @param string  $idCurso        ID del curso.
      * @param string  $idMateria      ID de la materia.
-     * @param string  $update         Cadena con las actualizaciones a realizar en formato SQL.
+     * @param array   $update         Cadena con las actualizaciones a realizar en formato SQL.
      * @param string  $yearBd         Año para la base de datos (opcional).
      * @return void                   No devuelve ningún valor.
      */
@@ -1033,13 +1033,13 @@ class CargaAcademica {
         array   $config,
         string  $idCurso,
         string  $idMateria,
-        string  $update,
+        array   $update,
         string  $yearBd = ""
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+        [$updateSql, $updateValues] = BindSQL::prepararUpdateConArray($update);
 
         $sql = "UPDATE ".BD_ACADEMICA.".academico_cargas SET {$updateSql} WHERE car_curso=? AND car_materia=? AND institucion=? AND year=?";
 

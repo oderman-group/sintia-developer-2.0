@@ -47,14 +47,14 @@ class BindSQL
                 
                 mysqli_stmt_bind_param($consulta, $tipoParametro, ...$parametros);
 
-
                 mysqli_stmt_execute($consulta);
 
-
                 $resultado = mysqli_stmt_get_result($consulta);
+
                 if($finalizartransacion){
                     self::finalizarTransacion();
                 }
+
                 return $resultado;
             } else {
                 self::revertirTransacion();
@@ -66,6 +66,7 @@ class BindSQL
             include(ROOT_PATH . "/main-app/compartido/error-catch-to-report.php");
         }
     }
+
     // funcion para Iniciar la transacio
         public static function iniciarTransacion() // funcion para realizar transaciones multiples
     {
@@ -79,12 +80,14 @@ class BindSQL
         global $conexion;
         mysqli_query($conexion, "COMMIT");
     }
+
     // funcion para revertir la transacion
     public static function revertirTransacion() 
     {
         global $conexion;
         mysqli_query($conexion, "ROLLBACK");
     }
+
     // Función para preparar la parte de la actualización de forma segura
     public static function prepararUpdate(string $update){
         // Separar la cadena de actualización en partes clave=valor
@@ -102,6 +105,35 @@ class BindSQL
             $key = trim($pair[0]);
             $value = trim($pair[1]);
     
+            // Añadir la parte preparada al array
+            $preparedParts[] = "{$key}=?";
+            $values[] = $value;
+        }
+    
+        // Unir las partes preparadas con comas y retornar
+        return [implode(",", $preparedParts), $values];
+    }
+
+    /**
+     * Prepara la parte de la actualización de una consulta SQL a partir de un array asociativo.
+     *
+     * Esta función toma un array asociativo donde las claves son los nombres de columnas y los valores son los valores a actualizar.
+     * La función devuelve un array con dos elementos:
+     * 1. Una cadena con las partes de la actualización preparadas para ser utilizadas en una consulta SQL, separadas por comas.
+     * 2. Un array con los valores correspondientes a las partes preparadas.
+     *
+     * @param array $update Un array asociativo con los nombres de columnas y los valores a actualizar.
+     * @return array Un array con dos elementos: la cadena de actualización preparada y el array de valores.
+     */
+    public static function prepararUpdateConArray(array $update){
+    
+        // Array para almacenar las partes preparadas
+        $preparedParts = [];
+        // Array para almacenar los valores
+        $values = [];
+    
+        // Iterar sobre cada parte
+        foreach ($update as $key => $value) {
             // Añadir la parte preparada al array
             $preparedParts[] = "{$key}=?";
             $values[] = $value;

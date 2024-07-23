@@ -54,7 +54,9 @@ require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 		$cloudFilePath = FILE_CURSOS.$archivo;// Ruta en el almacenamiento en la nube de Firebase donde deseas almacenar el archivo
 		$storage->getBucket()->upload(fopen($localFilePath, 'r'), ['name' => $cloudFilePath	]);
 
-		$update = "gra_cover_image=".$archivo."";
+		$update = [
+			'gra_cover_image' => $archivo
+		];
 		Grados::actualizarCursos($config, $codGRADO, $update);
 	}
 

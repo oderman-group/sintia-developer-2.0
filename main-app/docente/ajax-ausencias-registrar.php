@@ -15,7 +15,9 @@ if(empty($rC)){
 	Clases::registrarAusenciaClase($conexion, $config, $_POST);
 	
 }else{
-	$update = "aus_ausencias=".$_POST["nota"]."";
+	$update = [
+		"aus_ausencias" => $_POST["nota"]
+	];
 	Ausencias::actualizarAusencia($config, $rC['aus_id'], $update);
 	
 	Clases::registrarAusenciaClase($conexion, $config, $_POST);
