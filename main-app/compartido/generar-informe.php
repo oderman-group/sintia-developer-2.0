@@ -157,7 +157,7 @@ $contBol=1;
 		 	
 }
 
-$update = ['car_periodo' => 'car_periodo+1'];
+$update = ['car_periodo' => $periodo+1];
 CargaAcademica::actualizarCargaPorID($config, $carga, $update);
 
 include("../compartido/guardar-historial-acciones.php");

@@ -199,7 +199,7 @@ $mensaje="";
 
 		}
     
-		$update = ['car_periodo' => 'car_periodo+1'];
+		$update = ['car_periodo' => ($periodo + 1)];
 		CargaAcademica::actualizarCargaPorID($config, $carga, $update, $anio);
 
 		$consulta_mat_area_est = CargaAcademica::traerCargaMateriaPorID($config, $carga, $anio);
