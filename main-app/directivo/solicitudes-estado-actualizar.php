@@ -11,7 +11,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 
 if( $_GET["estado"] == 3 ) {
-    $update = "uss_bloqueado=0";
+    $update = ['uss_bloqueado' => 0];
     UsuariosPadre::actualizarUsuarios($config, $_GET["idUsuario"], $update);
 }
 

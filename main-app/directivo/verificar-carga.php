@@ -23,10 +23,14 @@ if(!isset($_GET["carga"]) or !is_numeric(base64_decode($_GET["carga"]))){
 $cargaHconsulta = CargaAcademica::traerCargaMateriaPorID($config, $cargaConsultaActual);
 
 if($cargaHconsulta['car_primer_acceso_docente']==""){
-	$update = "car_primer_acceso_docente=".date("Y-m-d H:i:s")."";
+	$update = [
+		'car_primer_acceso_docente' => date("Y-m-d H:i:s")
+	];
 	CargaAcademica::actualizarCargaPorID($config, $cargaConsultaActual, $update);
 }else{
-	$update = "car_ultimo_acceso_docente=".date("Y-m-d H:i:s")."";
+	$update = [
+		'car_ultimo_acceso_docente' => date("Y-m-d H:i:s")
+	];
 	CargaAcademica::actualizarCargaPorID($config, $cargaConsultaActual, $update);
 }
 //A los directivos no se les consulta el docente ni tampoco el estado de la carga (Activa o Inactiva)

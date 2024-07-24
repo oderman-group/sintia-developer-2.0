@@ -37,7 +37,7 @@ Calificaciones::eliminarCalificacionEstudiante($config, $idE);
 
 Ausencias::eliminarAusenciasEstudiantes($config, $idE);
 
-$update = "mat_eliminado=1";
+$update = ['mat_eliminado' => 1];
 Estudiantes::actualizarMatriculasPorId($config, $idE, $update);
 
 Calificaciones::eliminarNivelacionEstudiante($conexion, $config, $idE);

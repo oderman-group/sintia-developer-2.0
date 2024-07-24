@@ -2,7 +2,11 @@
 session_start();
 $idPaginaInterna = 'GN0001';
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
-//include(ROOT_PATH."/conexion-datos.php");
+require_once(ROOT_PATH."/main-app/class/Autenticate.php");
+require_once(ROOT_PATH."/main-app/class/Instituciones.php");
+
+$auth = Autenticate::getInstance();
+
 $conexionBaseDatosServicios = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
 
 if(!empty($_GET)) {
@@ -16,29 +20,28 @@ if(!empty($_GET)) {
 	$_POST["directory"] 	= 	base64_decode($_GET["directory"]);
 }
 
-$sql="SELECT id_nuevo, uss_usuario, uss_id, institucion, uss_intentos_fallidos FROM ".BD_GENERAL.".usuarios 
-WHERE uss_usuario='".trim($_POST["Usuario"])."' AND TRIM(uss_usuario)!='' AND uss_clave=SHA1('".$_POST["Clave"]."')  AND uss_usuario IS NOT NULL  
-ORDER BY uss_ultimo_ingreso DESC 
-LIMIT 1";
-$rst_usrE = mysqli_query($conexionBaseDatosServicios, $sql);
-$usrE = mysqli_fetch_array($rst_usrE, MYSQLI_BOTH);
+try {
+	$usrE = $auth->getUserData($_POST["Usuario"], $_POST["Clave"]);
+} catch (Exception $e) {
+	header("Location:".REDIRECT_ROUTE."/index.php?error=10&genericError=".$e->getMessage());
+	exit();
+}
 
-$_POST["bd"]=$usrE["institucion"];
-$institucionConsulta = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".$baseDatosServicios.".instituciones 
-WHERE ins_estado = 1 AND ins_id='".$_POST["bd"]."' AND ins_enviroment='".ENVIROMENT."'");
+$_POST["bd"] = $usrE["institucion"];
+$institucionConsulta = Instituciones::getDataInstitution($_POST["bd"]);
 
 $numInsti = mysqli_num_rows($institucionConsulta);
-if($numInsti==0){
+if ($numInsti==0) {
 	header("Location:".REDIRECT_ROUTE."/index.php?error=9&inst=".base64_encode($_POST["bd"])."&u=".$usrE["id_nuevo"]);
 	exit();
 }
 
 $institucion = mysqli_fetch_array($institucionConsulta, MYSQLI_BOTH);
-$yearArray = explode(",", $institucion['ins_years']);
-$yearStart = $yearArray[0];
-$yearEnd = $yearArray[1];
+$yearArray   = explode(",", $institucion['ins_years']);
+$yearStart   = $yearArray[0];
+$yearEnd     = $yearArray[1];
 
-$_SESSION["inst"] = $institucion['ins_bd'];
+$_SESSION["inst"]          = $institucion['ins_bd'];
 $_SESSION["idInstitucion"] = $institucion['ins_id'];
 
 if( !empty($institucion['ins_year_default']) && is_numeric($institucion['ins_year_default']) ) {
@@ -64,16 +67,16 @@ if($numE==0){
 }
 $usrE = mysqli_fetch_array($rst_usrE, MYSQLI_BOTH);
 
-if($usrE['uss_intentos_fallidos']>=3 and md5($_POST["suma"])!=$_POST["sumaReal"]){
+if($usrE['uss_intentos_fallidos']>=3 && md5($_POST["suma"]) != $_POST["sumaReal"]){
 	header("Location:".REDIRECT_ROUTE."/index.php?error=3&inst=".base64_encode($_POST["bd"]));
 	exit();
 }
 
 $rst_usr = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_usuario='".trim($_POST["Usuario"])."' AND uss_clave=SHA1('".$_POST["Clave"]."') AND TRIM(uss_usuario)!='' AND uss_usuario IS NOT NULL AND TRIM(uss_clave)!='' AND uss_clave IS NOT NULL");
 
-$num = mysqli_num_rows($rst_usr);
+$num  = mysqli_num_rows($rst_usr);
 $fila = mysqli_fetch_array($rst_usr, MYSQLI_BOTH);
-if($num>0)
+if ($num>0)
 {	
 	if($fila['uss_bloqueado'] == 1){
 		header("Location:".REDIRECT_ROUTE."/index.php?error=6&inst=".base64_encode($_POST["bd"]));
@@ -137,8 +140,8 @@ if($num>0)
 	LEFT JOIN ".$baseDatosServicios.".localidad_ciudades ON ciu_id=info_ciudad
 	LEFT JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento
 	WHERE info_institucion='" . $config['conf_id_institucion'] . "' AND info_year='" . $_SESSION["bd"] . "'");
-	$informacion_inst = mysqli_fetch_array($informacionInstConsulta, MYSQLI_BOTH);
-	$_SESSION["informacionInstConsulta"] = $informacion_inst;
+	$informacionInstitucion = mysqli_fetch_array($informacionInstConsulta, MYSQLI_BOTH);
+	$_SESSION["informacionInstConsulta"] = $informacionInstitucion;
 
 	$datosUnicosInstitucionConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones 
 	WHERE ins_id='".$config['conf_id_institucion']."' AND ins_enviroment='".ENVIROMENT."'");
@@ -255,7 +258,7 @@ if($num>0)
 </html>
 <?php
 	exit();
-}else{
+} else {
 	mysqli_query($conexion, "UPDATE ".BD_GENERAL.".usuarios SET uss_intentos_fallidos=uss_intentos_fallidos+1 WHERE uss_id='".$usrE['uss_id']."' AND institucion={$_SESSION["idInstitucion"]} AND year={$_SESSION["bd"]}");
 
 

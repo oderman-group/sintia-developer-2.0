@@ -271,7 +271,7 @@ class Clases  extends Servicios{
         $sql = "UPDATE ".BD_ACADEMICA.".academico_clases SET cls_tema=?, cls_fecha=?, cls_video=?, cls_video_url=?, cls_descripcion=?, cls_nombre_archivo1=?, cls_nombre_archivo2=?, cls_nombre_archivo3=?, cls_disponible=?, cls_hipervinculo=?, cls_unidad=?
         WHERE cls_id=? AND institucion=? AND year=?";
 
-        $parametros = [mysqli_real_escape_string($conexion,$POST["contenido"]), $date, $video, $POST["video"], mysqli_real_escape_string($conexion,$POST["descripcion"]), $POST["archivo1"], $POST["archivo2"], $POST["archivo3"], $disponible, $POST["vinculo"], $POST["unidad"], $POST["idR"], $config['conf_id_institucion'], $_SESSION["bd"]];
+        $parametros = [mysqli_real_escape_string($conexion,$POST["contenido"]), $date, $video, $POST["video"], mysqli_real_escape_string($conexion,trim($POST["descripcion"])), $POST["archivo1"], $POST["archivo2"], $POST["archivo3"], $disponible, $POST["vinculo"], $POST["unidad"], $POST["idR"], $config['conf_id_institucion'], $_SESSION["bd"]];
         
         $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
@@ -389,7 +389,7 @@ class Clases  extends Servicios{
         
             $sql = "INSERT INTO ".BD_ACADEMICA.".academico_clases(cls_id, cls_tema, cls_fecha, cls_id_carga, cls_estado, cls_periodo, cls_video, cls_video_url, cls_archivo, cls_archivo2, cls_archivo3, cls_nombre_archivo1, cls_nombre_archivo2, cls_nombre_archivo3, cls_descripcion, cls_disponible, cls_meeting, cls_hipervinculo,cls_unidad, institucion, year,cls_video_clase)"." VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-            $parametros = [$codigo, mysqli_real_escape_string($conexion,$POST["contenido"]), $date, $idCarga, 1, $periodo, $video, $POST["video"], $archivo, $archivo2, $archivo3, $POST["archivo1"], $POST["archivo2"], $POST["archivo3"], mysqli_real_escape_string($conexion,$POST["descripcion"]), $disponible, $POST["idMeeting"], $POST["vinculo"], $POST["unidad"], $config['conf_id_institucion'], $_SESSION["bd"],$claseVideo];
+            $parametros = [$codigo, mysqli_real_escape_string($conexion,$POST["contenido"]), $date, $idCarga, 1, $periodo, $video, $POST["video"], $archivo, $archivo2, $archivo3, $POST["archivo1"], $POST["archivo2"], $POST["archivo3"], mysqli_real_escape_string($conexion,trim($POST["descripcion"])), $disponible, $POST["idMeeting"], $POST["vinculo"], $POST["unidad"], $config['conf_id_institucion'], $_SESSION["bd"],$claseVideo];
             
             $resultado = BindSQL::prepararSQL($sql, $parametros);
         }

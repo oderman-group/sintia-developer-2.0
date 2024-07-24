@@ -141,4 +141,4 @@ LIMIT ".$empezar.",1
 </div>
 <!-- end footer -->
 
-<?php $conexion->close(); ?>
+<?php Conexion::getConexion()->closeConnection(); ?>

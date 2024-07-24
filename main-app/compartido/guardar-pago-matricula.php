@@ -17,7 +17,7 @@ if (!empty($_FILES['archivo']['name'])) {
     move_uploaded_file($_FILES['archivo']['tmp_name'], $destino . "/" . $archivo);
 }
 
-$update = "mat_soporte_pago=".$archivo."";
+$update = ['mat_soporte_pago' => $archivo];
 Estudiantes::actualizarMatriculasPorIdUsuario($config, $_SESSION["id"], $update);
 
 $url= $usuariosClase->verificarTipoUsuario($datosUsuarioActual['uss_tipo'],'matricula.php');

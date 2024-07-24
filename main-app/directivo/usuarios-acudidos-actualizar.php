@@ -22,7 +22,9 @@ $numero = (count($_POST["acudidos"]));
 $contador = 0;
 while ($contador < $numero) {
 
-    $update = "mat_acudiente=".$_POST["id"]."";
+    $update = [
+        'mat_acudiente' => $_POST["id"]
+    ];
     Estudiantes::actualizarMatriculasPorId($config, $_POST["acudidos"][$contador], $update);	
 
     $idInsercion=Utilidades::generateCode("UPE");

@@ -104,19 +104,19 @@ class Ausencias {
     *
     * @param array   $config       Configuración general del sistema.
     * @param string  $idAusencia   Identificador único de la ausencia a actualizar.
-    * @param string  $update       Lista de campos a actualizar con sus nuevos valores en formato de SQL UPDATE.
+    * @param array   Ppppppppppppppppppp$update       Lista de campos a actualizar con sus nuevos valores en formato de SQL UPDATE.
     * @param string  $yearBd       Año académico para el que se realiza la actualización (opcional).
     **/
     public static function actualizarAusencia (
         array   $config,
         string  $idAusencia,
-        string  $update,
+        array   $update,
         string  $yearBd = ""
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+        [$updateSql, $updateValues] = BindSQL::prepararUpdateConArray($update);
 
         $sql = "UPDATE ".BD_ACADEMICA.".academico_ausencias SET {$updateSql} WHERE aus_id=? AND institucion=? AND year=?";
 

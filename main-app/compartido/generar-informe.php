@@ -11,8 +11,7 @@ require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
-$conexionPDOInstance = new Conexion;
-$conexionPDO         = $conexionPDOInstance->conexionPDO(SERVIDOR_CONEXION, USUARIO_CONEXION, CLAVE_CONEXION, BD_ADMIN);
+$conexionPDO = Conexion::newConnection('PDO');
 
 $config = Plataforma::sesionConfiguracion();
 $_SESSION["configuracion"] = $config;
@@ -134,7 +133,14 @@ $contBol=1;
 			"porcentaje" 	=> $boletinDatos['bol_porcentaje']
 		];
 	
-		$update = "bol_nota_anterior=bol_nota, bol_nota=".$definitiva.", bol_nota_indicadores=".$sumaNotaIndicador.", bol_tipo=1, bol_observaciones='Reemplazada', bol_porcentaje=".$porcentajeActual;
+		$update = [
+			'bol_nota_anterior'    => 'bol_nota', 
+			'bol_nota'             => $definitiva, 
+			'bol_nota_indicadores' => $sumaNotaIndicador, 
+			'bol_tipo'             => 1, 
+			'bol_observaciones'    => 'Reemplazada', 
+			'bol_porcentaje'       => $porcentajeActual
+	];
 		Boletin::actualizarNotaBoletin($config, $boletinDatos['bol_id'], $update);
 	}elseif($caso == 1){
 		//Eliminamos por si acaso hay algún registro
@@ -151,7 +157,7 @@ $contBol=1;
 		 	
 }
 
-$update = "car_periodo=car_periodo+1";
+$update = ['car_periodo' => $periodo+1];
 CargaAcademica::actualizarCargaPorID($config, $carga, $update);
 
 include("../compartido/guardar-historial-acciones.php");

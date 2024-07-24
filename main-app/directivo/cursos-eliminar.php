@@ -11,7 +11,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 include("../compartido/historial-acciones-guardar.php");
 
-$update = "gra_estado=0";
+$update = [
+	'gra_estado' => 0
+];
 Grados::actualizarCursos($config, base64_decode($_GET["id"]), $update);
 
 include("../compartido/guardar-historial-acciones.php");

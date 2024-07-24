@@ -34,10 +34,14 @@ if( !empty($_SESSION["infoCargaActual"]) ) {
 	$datosCargaActual = $_SESSION["infoCargaActual"]['datosCargaActual'];
 
 	if(!empty($datosCargaActual['car_primer_acceso_docente']) && $datosCargaActual['car_primer_acceso_docente']==""){
-		$update = "car_primer_acceso_docente=".date("Y-m-d H:i:s")."";
+		$update = [
+			'car_primer_acceso_docente' => date("Y-m-d H:i:s")
+		];
 		CargaAcademica::actualizarCargaPorID($config, $cargaConsultaActual, $update);
 	}else{
-		$update = "car_ultimo_acceso_docente=".date("Y-m-d H:i:s")."";
+		$update = [
+			'car_ultimo_acceso_docente' => date("Y-m-d H:i:s")
+		];
 		CargaAcademica::actualizarCargaPorID($config, $cargaConsultaActual, $update);
 	}
 }

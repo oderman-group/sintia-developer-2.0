@@ -48,7 +48,10 @@ if($_POST["operacion"]==1){
 
 	}else{
 		if($_POST["notaAnterior"]==""){$_POST["notaAnterior"] = "0.0";}
-		$update = "cal_nota=".$_POST["nota"].", cal_nota_anterior=".$_POST["notaAnterior"]."";
+		$update = [
+			'cal_nota'          => $_POST["nota"], 
+			'cal_nota_anterior' => $_POST["notaAnterior"]
+		];
 		Calificaciones::actualizarNotaActividadEstudiante($config, $_POST["codNota"], $_POST["codEst"], $update);
 
 		Actividades::marcarActividadRegistrada($config, $_POST["codNota"]);
@@ -67,7 +70,9 @@ if($_POST["operacion"]==2){
 		Actividades::marcarActividadRegistrada($config, $_POST["codNota"]);
 		
 	}else{
-		$update = "cal_observaciones=".mysqli_real_escape_string($conexion,$_POST["nota"])."";
+		$update = [
+			'cal_observaciones' => mysqli_real_escape_string($conexion,$_POST["nota"])
+		];
 		Calificaciones::actualizarNotaActividadEstudiante($config, $_POST["codNota"], $_POST["codEst"], $update);
 
 		Actividades::marcarActividadRegistrada($config, $_POST["codNota"]);
@@ -99,7 +104,9 @@ if($_POST["operacion"]==3){
 
 			Actividades::marcarActividadRegistrada($config, $_POST["codNota"]);
 		}else{
-			$update = "cal_nota=".$_POST["nota"]."";
+			$update = [
+				'cal_nota' => $_POST["nota"]
+			];
 			Calificaciones::actualizarNotaActividadEstudiante($config, $_POST["codNota"], $estudiantes['mat_id'], $update);
 
 			Actividades::marcarActividadRegistrada($config, $_POST["codNota"]);
@@ -221,7 +228,9 @@ if($_POST["operacion"]==8){
 		
 		Boletin::guardarNotaBoletin($conexionPDO, "bol_carga, bol_estudiante, bol_periodo, bol_tipo, bol_observaciones_boletin, bol_fecha_registro, bol_actualizaciones, institucion, year, bol_id", [$_POST["carga"], $_POST["codEst"], $_POST["periodo"], 1, mysqli_real_escape_string($conexion,$_POST["nota"]), date("Y-m-d H:i:s"), 0, $config['conf_id_institucion'], $_SESSION["bd"]]);
 	}else{
-		$update = "bol_observaciones_boletin=".mysqli_real_escape_string($conexion,$_POST["nota"])."";
+		$update = [
+			'bol_observaciones_boletin' => mysqli_real_escape_string($conexion,$_POST["nota"])
+		];
 		Boletin::actualizarNotaBoletin($config, $boletin['bol_id'], $update);
 	}
 	$mensajeNot = 'La observación para el boletín de este periodo se ha guardado correctamente para el estudiante <b>'.strtoupper($_POST["nombreEst"]).'</b>';
@@ -275,7 +284,13 @@ if($_POST["operacion"]==9){
 		
 		$notaDefIndicador = round($recuperacionIndicador[0],1);
 
-		$update = "bol_nota_anterior=bol_nota, bol_nota=".$notaDefIndicador.", bol_nota_indicadores=".$notaDefIndicador.", bol_tipo=3, bol_observaciones='Actualizada desde el indicador.'";
+		$update = [
+			'bol_nota_anterior'    => 'bol_nota', 
+			'bol_nota'             => $notaDefIndicador, 
+			'bol_nota_indicadores' => $notaDefIndicador, 
+			'bol_tipo'             => 3, 
+			'bol_observaciones'    => 'Actualizada desde el indicador'
+		];
 		Boletin::actualizarNotaBoletin($config, $boletinDatos['bol_id'], $update);
 		
 		$mensajeNot = 'La recuperación del indicador de este periodo se ha guardado correctamente para el estudiante <b>'.strtoupper($_POST["nombreEst"]).'</b>. La nota definitiva de la asignatura ahora es <b>'.round($recuperacionIndicador[0],1)."</b>.";

@@ -94,19 +94,19 @@ class Areas {
     *
     * @param array  $config     Configuración del sistema.
     * @param string $idArea     Identificador del área a actualizar.
-    * @param string $update     Lista de campos y valores a actualizar en formato de cadena.
+    * @param array $update     Lista de campos y valores a actualizar en formato de cadena.
     * @param string $yearBd     Año de la base de datos (opcional). Si no se proporciona, se utiliza el valor de sesión.
     **/
     public static function actualizarAreas (
         array   $config,
         string  $idArea,
-        string  $update,
+        array   $update,
         string  $yearBd = ""
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+        [$updateSql, $updateValues] = BindSQL::prepararUpdateConArray($update);
 
         $sql = "UPDATE ".BD_ACADEMICA.".academico_areas SET {$updateSql} WHERE ar_id=? AND institucion=? AND year=?";
 

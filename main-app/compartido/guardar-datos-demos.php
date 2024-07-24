@@ -5,12 +5,12 @@ $idPaginaInterna = 'CM0042';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 
-$update = "
-    uss_celular='" . $_POST["celular"] . "', 
-    uss_institucion='" . $_POST["institucion"] . "', 
-    uss_institucion_municipio='" . $_POST["instMunicipio"] . "',
-    uss_solicitar_datos=0
-";
+$update = [
+    "uss_celular" => $_POST["celular"],
+    "uss_institucion" => $_POST["institucion"],
+    "uss_institucion_municipio" => $_POST["instMunicipio"],
+    "uss_solicitar_datos" => 0
+];
 UsuariosPadre::actualizarUsuarios($config, $_SESSION["id"], $update);
 
 try{

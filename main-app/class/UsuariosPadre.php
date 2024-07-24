@@ -511,13 +511,13 @@ class UsuariosPadre {
     public static function actualizarUsuarios (
         array   $config,
         string  $idUsuario,
-        string  $update,
+        array  $update,
         string  $yearBd = ""
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+        [$updateSql, $updateValues] = BindSQL::prepararUpdateConArray($update);
 
         $sql = "UPDATE ".BD_GENERAL.".usuarios SET {$updateSql}, uss_ultima_actualizacion=now() WHERE uss_id=? AND institucion=? AND year=?";
 

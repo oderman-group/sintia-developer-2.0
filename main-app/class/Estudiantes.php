@@ -1471,19 +1471,19 @@ class Estudiantes {
     *
     * @param array  $config         Configuración del sistema.
     * @param string $idMatricula    Identificador de matricula a actualizar.
-    * @param string $update         Lista de campos y valores a actualizar en formato de cadena.
+    * @param array  $update         Lista de campos y valores a actualizar en formato de cadena.
     * @param string $yearBd         Año de la base de datos (opcional). Si no se proporciona, se utiliza el valor de sesión.
     **/
     public static function actualizarMatriculasPorId (
         array   $config,
         string  $idMatricula,
-        string  $update,
+        array   $update,
         string  $yearBd = ""
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+        [$updateSql, $updateValues] = BindSQL::prepararUpdateConArray($update);
 
         $sql = "UPDATE ".BD_ACADEMICA.".academico_matriculas SET {$updateSql} WHERE mat_id=? AND institucion=? AND year=?";
 
@@ -1497,19 +1497,19 @@ class Estudiantes {
     *
     * @param array  $config     Configuración del sistema.
     * @param string $idUsuario  Identificador del id del usuario a actualizar.
-    * @param string $update     Lista de campos y valores a actualizar en formato de cadena.
+    * @param array  $update     Lista de campos y valores a actualizar en formato de cadena.
     * @param string $yearBd     Año de la base de datos (opcional). Si no se proporciona, se utiliza el valor de sesión.
     **/
     public static function actualizarMatriculasPorIdUsuario (
         array   $config,
         string  $idUsuario,
-        string  $update,
+        array   $update,
         string  $yearBd = ""
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+        [$updateSql, $updateValues] = BindSQL::prepararUpdateConArray($update);
 
         $sql = "UPDATE ".BD_ACADEMICA.".academico_matriculas SET {$updateSql} WHERE mat_id_usuario=? AND institucion=? AND year=?";
 
@@ -1522,18 +1522,18 @@ class Estudiantes {
     * Esta función ejecuta una consulta preparada para actualizar todos los registros de matriculas en la tabla 'academico_matriculas' de una institución.
     *
     * @param array  $config         Configuración del sistema.
-    * @param string $update         Lista de campos y valores a actualizar en formato de cadena.
+    * @param array  $update         Lista de campos y valores a actualizar en formato de cadena.
     * @param string $yearBd         Año de la base de datos (opcional). Si no se proporciona, se utiliza el valor de sesión.
     **/
     public static function actualizarMatriculasInstitucion (
         array   $config,
-        string  $update,
+        array   $update,
         string  $yearBd = ""
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+        [$updateSql, $updateValues] = BindSQL::prepararUpdateConArray($update);
 
         $sql = "UPDATE ".BD_ACADEMICA.".academico_matriculas SET {$updateSql} WHERE institucion=? AND year=?";
 

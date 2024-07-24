@@ -91,19 +91,19 @@ class Grados {
     *
     * @param array  $config     Configuración del sistema.
     * @param string $idCursos   Identificador del curso a actualizar.
-    * @param string $update     Lista de campos y valores a actualizar en formato de cadena.
+    * @param array  $update     Lista de campos y valores a actualizar en formato de cadena.
     * @param string $yearBd     Año de la base de datos (opcional). Si no se proporciona, se utiliza el valor de sesión.
     **/
     public static function actualizarCursos (
         array   $config,
         string  $idCursos,
-        string  $update,
+        array   $update,
         string  $yearBd = ""
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+        [$updateSql, $updateValues] = BindSQL::prepararUpdateConArray($update);
 
         $sql = "UPDATE ".BD_ACADEMICA.".academico_grados SET {$updateSql} WHERE gra_id=? AND institucion=? AND year=?";
 
@@ -116,18 +116,18 @@ class Grados {
     * Esta función ejecuta una consulta preparada para actualizar todos los cursos en la tabla 'academico_grados'.
     *
     * @param array  $config     Configuración del sistema.
-    * @param string $update     Lista de campos y valores a actualizar en formato de cadena.
+    * @param array  $update     Lista de campos y valores a actualizar en formato de cadena.
     * @param string $yearBd     Año de la base de datos (opcional). Si no se proporciona, se utiliza el valor de sesión.
     **/
     public static function actualizarTodosCursos (
         array   $config,
-        string  $update,
+        array   $update,
         string  $yearBd = ""
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        [$updateSql, $updateValues] = BindSQL::prepararUpdate($update);
+        [$updateSql, $updateValues] = BindSQL::prepararUpdateConArray($update);
 
         $sql = "UPDATE ".BD_ACADEMICA.".academico_grados SET {$updateSql} WHERE institucion=? AND year=?";
 

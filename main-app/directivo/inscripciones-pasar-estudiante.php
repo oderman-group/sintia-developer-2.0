@@ -33,7 +33,10 @@ if ($existe>0) {
 	}
 	$idNuevo = mysqli_insert_id($conexion);
 
-	$update = "mat_estado_matricula=4, mat_grupo=1";
+	$update = [
+		'mat_estado_matricula' => 4, 
+		'mat_grupo' => 1
+	];
 	Estudiantes::actualizarMatriculasPorId($config, $matricula, $update, $yearPasar);
 
 	//CONSULTAMOS DATOS DEL ESTUDIANTE

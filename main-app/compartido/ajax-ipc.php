@@ -13,7 +13,9 @@ Grados::eliminarIntensidadMateriaCurso($conexion, $config, $_POST["curso"], $_PO
 
 Grados::guardarIntensidadMateriaCurso($conexion, $conexionPDO, $config, $_POST["curso"], $_POST["materia"], $_POST["ih"]);
 
-$update = "car_ih=".$_POST["ih"]."";
+$update = [
+	'car_ih' => $_POST["ih"]
+];
 CargaAcademica::actualizarCargaPorCursoMateria($config, $_POST["curso"], $_POST["materia"], $update);
 
 ?>

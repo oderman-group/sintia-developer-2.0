@@ -207,13 +207,13 @@ require_once(ROOT_PATH."/main-app/class/Actividades.php");?>
 													
 													barraProgreso.innerHTML = "Subido totalmente(100%)";
 
-													if (peticion.status >= 200 && peticion.status < 300 && peticion.responseText != 'ERROR') {
+													if (peticion.status >= 200 && peticion.status < 300 && !peticion.responseText.includes('ERROR')) {
 														var respuesta = peticion.responseText;
 														setTimeout(redirect(), 2000);
 													} else {
 														
-														console.error('Error en la solicitud:', peticion.status, peticion.statusText, peticion.responseText);
-														barraProgreso.innerHTML = `Error en la solicitud: ${peticion.statusText} - ${peticion.responseText}`;
+														console.error('Error en la solicitud:', peticion);
+														barraProgreso.innerHTML = `Error en la solicitud: ${peticion.statusText}`;
 
 														// Remueve la clase antigua
 														barraProgreso.classList.remove("bg-success");

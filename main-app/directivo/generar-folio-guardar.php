@@ -24,7 +24,7 @@ if(!empty($_REQUEST["tipoEstudiantes"]) && $_REQUEST["tipoEstudiantes"]!=0){$fil
 
 	$consulta = Estudiantes::listarMatriculasFolio($config, $filtro, $year);
 	while($datos = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
-		$update = "mat_folio=".$folio."";
+		$update = ['mat_folio' => $folio];
 		Estudiantes::actualizarMatriculasPorId($config, $datos['mat_id'], $update);
 
 		$folio ++ ;

@@ -20,7 +20,12 @@ if(empty($rB['bol_id'])){
 
 	Boletin::guardarNotaBoletin($conexionPDO, "bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_observaciones, institucion, year, bol_id", [$_POST["carga"],$_POST["codEst"],$_POST["per"],$_POST["nota"], 4, 'Colocada DEF. por docente.', $config['conf_id_institucion'], $_SESSION["bd"]]);
 }else{
-	$update = "bol_nota_anterior=bol_nota, bol_nota='".$_POST["nota"]."', bol_observaciones='Colocada DEF. por docente.', bol_tipo=4";
+	$update = [
+		"bol_nota_anterior" => "bol_nota", 
+		"bol_nota"          => $_POST["nota"], 
+		"bol_observaciones" => 'Colocada DEF. por docente.', 
+		"bol_tipo"          => 4
+	];
 	Boletin::actualizarNotaBoletin($config, $rB['bol_id'], $update);
 }
 ?>

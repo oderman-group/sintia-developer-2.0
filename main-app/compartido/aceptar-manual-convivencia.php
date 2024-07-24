@@ -8,7 +8,7 @@ require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 $archivoSubido = new Archivos;
 $usuariosClase = new Usuarios;
 
-$update = "mat_manual=1";
+$update = ['mat_manual' => 1];
 Estudiantes::actualizarMatriculasPorIdUsuario($config, $_SESSION["id"], $update);
 
 $url= $usuariosClase->verificarTipoUsuario($datosUsuarioActual['uss_tipo'],'matricula.php');

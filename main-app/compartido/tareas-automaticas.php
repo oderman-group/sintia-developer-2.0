@@ -47,7 +47,9 @@ while($cargasDatos = mysqli_fetch_array($cargasConsulta, MYSQLI_BOTH)){
 			}
 		}
 		if($pararProceso==2){
-			$update = "car_periodo=car_periodo+1";
+			$update = [
+				'car_periodo' => 'car_periodo+1'
+			];
 			CargaAcademica::actualizarCargaPorID($config, $cargasDatos['car_id'], $update);
 		}
 	}

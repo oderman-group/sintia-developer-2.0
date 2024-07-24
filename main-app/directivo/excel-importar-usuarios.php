@@ -89,8 +89,11 @@ if($extension == 'xlsx'){
 						$datosUsuariosExistente = Usuarios::obtenerDatosUsuario($arrayIndividual['uss_documento']);
 
 						try {
-							
-							$camposActualizar = "";
+
+							$update = [
+								'uss_tipo' => 'uss_tipo',
+							];
+
 							if(!empty($_POST['actualizarCampo'])) {
 							
 								$camposFormulario = count($_POST['actualizarCampo']);
@@ -99,27 +102,27 @@ if($extension == 'xlsx'){
 									$cont = 0;
 									while ($cont < $camposFormulario) {
 										if($_POST['actualizarCampo'][$cont] == 1) {
-											$camposActualizar .= ", uss_tipo_documento='".$tipoDocumento."'";
+											$update['uss_tipo_documento'] = $tipoDocumento;
 										}
 
 										if($_POST['actualizarCampo'][$cont] == 2) {
-											$camposActualizar .= ", uss_nombre2='".$arrayIndividual['uss_nombre2']."'";
+											$update['uss_nombre2'] = $arrayIndividual['uss_nombre2'];
 										}
 
 										if($_POST['actualizarCampo'][$cont] == 3) {
-											$camposActualizar .= ", uss_apellido2='".$arrayIndividual['uss_apellido2']."'";
+											$update['uss_apellido2'] = $arrayIndividual['uss_apellido2'];
 										}
 
 										if($_POST['actualizarCampo'][$cont] == 4) {
-											$camposActualizar .= ", uss_genero='".$genero."'";
+											$update['uss_genero'] = $genero;
 										}
 
 										if($_POST['actualizarCampo'][$cont] == 5) {
-											$camposActualizar .= ", uss_celular='".$arrayIndividual['uss_celular']."'";
+											$update['uss_celular'] = $arrayIndividual['uss_celular'];
 										}
 
 										if($_POST['actualizarCampo'][$cont] == 6) {
-											$camposActualizar .= ", uss_email='".$arrayIndividual['uss_email']."'";
+											$update['uss_email'] = $arrayIndividual['uss_email'];
 										}
 										
 										$cont ++;
@@ -128,7 +131,7 @@ if($extension == 'xlsx'){
 							}
 
 							//Actualizamos el acudiente y los datos del formulario
-							$update = "uss_tipo=uss_tipo {$camposActualizar}";
+							
 							UsuariosPadre::actualizarUsuarios($config, $datosUsuariosExistente['uss_id'], $update);
 
 							$usuariosActualizados["FILA_".$f] = $datosUsuariosExistente['uss_documento'];

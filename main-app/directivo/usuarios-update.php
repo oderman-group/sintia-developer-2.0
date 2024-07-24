@@ -28,33 +28,33 @@ if (!empty($_FILES['fotoUss']['name'])) {
 	$destino = "../files/fotos";
 	move_uploaded_file($_FILES['fotoUss']['tmp_name'], $destino . "/" . $archivo);
 
-	$update = "uss_foto='" . $archivo . "'";
+	$update = ['uss_foto' => $archivo];
 	UsuariosPadre::actualizarUsuarios($config, $_POST["idR"], $update);
 	
 	if($_POST["tipoUsuario"]==4){
-		$update = "mat_foto=" . $archivo . "";
+		$update = ['mat_foto' => $archivo];
 		Estudiantes::actualizarMatriculasPorIdUsuario($config, $_POST["idR"], $update);
 	}
 }
 
-$update = "
-	uss_usuario=           '" . $_POST["usuario"] . "', 
-	uss_tipo=              " . $_POST["tipoUsuario"] . ", 
-	uss_nombre=            '" . mysqli_real_escape_string($conexion,$_POST["nombre"]) . "',
-	uss_email=             '" . strtolower($_POST["email"]) . "', 
-	uss_genero=            '" . $_POST["genero"] . "',
-	uss_celular=           '" . $_POST["celular"] . "',
-	uss_ocupacion=         '" . $_POST["ocupacion"] . "',
-	uss_lugar_expedicion=  '" . $_POST["lExpedicion"] . "',
-	uss_direccion=         '" . $_POST["direccion"] . "',
-	uss_telefono=          '" . $_POST["telefono"] . "',
-	uss_intentos_fallidos= '" . $_POST["intentosFallidos"] . "',
-	uss_tipo_documento=    '" . $_POST["tipoD"] . "', 
-	uss_apellido1=         '" . mysqli_real_escape_string($conexion,$_POST["apellido1"]) . "', 
-	uss_apellido2=         '" . mysqli_real_escape_string($conexion,$_POST["apellido2"]) . "', 
-	uss_nombre2=           '" . mysqli_real_escape_string($conexion,$_POST["nombre2"]) . "', 
-	uss_documento=         '" . $_POST["documento"] . "'
-";
+$update = [
+    "uss_usuario" => $_POST["usuario"],
+    "uss_tipo" => $_POST["tipoUsuario"],
+    "uss_nombre" => mysqli_real_escape_string($conexion, $_POST["nombre"]),
+    "uss_email" => strtolower($_POST["email"]),
+    "uss_genero" => $_POST["genero"],
+    "uss_celular" => $_POST["celular"],
+    "uss_ocupacion" => $_POST["ocupacion"],
+    "uss_lugar_expedicion" => $_POST["lExpedicion"],
+    "uss_direccion" => $_POST["direccion"],
+    "uss_telefono" => $_POST["telefono"],
+    "uss_intentos_fallidos" => $_POST["intentosFallidos"],
+    "uss_tipo_documento" => $_POST["tipoD"],
+    "uss_apellido1" => mysqli_real_escape_string($conexion, $_POST["apellido1"]),
+    "uss_apellido2" => mysqli_real_escape_string($conexion, $_POST["apellido2"]),
+    "uss_nombre2" => mysqli_real_escape_string($conexion, $_POST["nombre2"]),
+    "uss_documento" => $_POST["documento"]
+];
 UsuariosPadre::actualizarUsuarios($config, $_POST["idR"], $update);
 
 if (!empty($_POST["clave"]) && $_POST["cambiarClave"] == 1) {
@@ -67,14 +67,14 @@ if (!empty($_POST["clave"]) && $_POST["cambiarClave"] == 1) {
 
 	$claveEncriptada = SHA1($_POST["clave"]);
 
-	$update = "uss_clave= '" . $claveEncriptada . "'";
+	$update = ['uss_clave' => $claveEncriptada];
 	UsuariosPadre::actualizarUsuarios($config, $_POST["idR"], $update);
 
 }
 
 
 if ($_POST["tipoUsuario"] == 4) {
-	$update = "mat_email=" . strtolower($_POST["email"]) . "";
+	$update = ['mat_email' => strtolower($_POST["email"])];
 	Estudiantes::actualizarMatriculasPorIdUsuario($config, $_POST["idR"], $update);
 }
 try{

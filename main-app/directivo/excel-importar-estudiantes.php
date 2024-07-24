@@ -158,8 +158,11 @@ if($extension == 'xlsx'){
 						$datosEstudianteExistente = Estudiantes::obtenerDatosEstudiante($arrayIndividual['mat_documento']);
 
 						try {
-							
-							$camposActualizar = "";
+
+							$update = [
+								'mat_matricula' => 'mat_matricula'
+							];
+
 							if(!empty($_POST['actualizarCampo'])) {
 							
 								$camposFormulario = count($_POST['actualizarCampo']);
@@ -168,28 +171,28 @@ if($extension == 'xlsx'){
 									$cont = 0;
 									while ($cont < $camposFormulario) {
 										if($_POST['actualizarCampo'][$cont] == 1) {
-											$camposActualizar .= ", mat_grado='".$grado."'";
+											$update['mat_grado'] = $grado;
 										}
 
 										if($_POST['actualizarCampo'][$cont] == 2) {
-											$camposActualizar .= ", mat_grupo='".$grupo."'";
+											$update['mat_grupo'] = $grupo;
 										}
 
 										if($_POST['actualizarCampo'][$cont] == 3) {
-											$camposActualizar .= ", mat_tipo_documento='".$tipoDocumento."'";
+											$update['mat_tipo_documento'] = $tipoDocumento;
 										}
 
 										if($_POST['actualizarCampo'][$cont] == 4) {
-											$camposActualizar .= ", mat_acudiente='".$idAcudiente."'";
+											$update['mat_acudiente'] = $idAcudiente;
 										}
 
 										if($_POST['actualizarCampo'][$cont] == 5) {
-											$camposActualizar .= ", mat_nombre2='".$hojaActual->getCell('D'.$f)->getValue()."'";
+											$update['mat_nombre2'] = $hojaActual->getCell('D'.$f)->getValue();
 										}
 
 										if($_POST['actualizarCampo'][$cont] == 6) {
 
-											$matFechaNacimiento=$hojaActual->getCell('H'.$f)->getFormattedValue();
+											$matFechaNacimiento = $hojaActual->getCell('H'.$f)->getFormattedValue();
 											$fNacimiento = "0000-00-00";
 											if(!empty($matFechaNacimiento)) {
 												$arrayBuscar = array('-', '.', ' ', '.-');
@@ -203,7 +206,7 @@ if($extension == 'xlsx'){
 												$fNacimiento = $year.'-'.$mes.'-'.$dia;
 											}
 
-											$camposActualizar .= ", mat_fecha_nacimiento='".$fNacimiento."'";
+											$update['mat_fecha_nacimiento'] = $fNacimiento;
 										}
 										
 										$cont ++;
@@ -212,7 +215,7 @@ if($extension == 'xlsx'){
 							}
 
 							//Actualizamos el acudiente y los datos del formulario
-							$update = "mat_matricula=mat_matricula {$camposActualizar}";
+							
 							Estudiantes::actualizarMatriculasPorId($config, $datosEstudianteExistente['mat_id'], $update);
 
 							//Verificamos que el array no venga vacio y adicionalmente que tenga el campo acudiente seleccionado para actualizarce

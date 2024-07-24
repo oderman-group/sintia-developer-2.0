@@ -24,10 +24,10 @@ if (($ind[0] + $_POST["valor"]) > 100) {
 	exit();
 }
 
-$update = "
-	ind_nombre=" . $_POST["nombre"] . ", 
-	ind_valor=" . $_POST["valor"] . "
-";
+$update = [
+	'ind_nombre' => $_POST["nombre"], 
+	'ind_valor'  => $_POST["valor"]
+];
 Indicadores::actualizarIndicador($config, $_POST["idI"], $update);
 
 include("../compartido/guardar-historial-acciones.php");

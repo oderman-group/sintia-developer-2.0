@@ -32,16 +32,14 @@ if (empty($_SESSION["inst"])) {
 	require_once ROOT_PATH."/main-app/class/Conexion.php";
 	try{
 
-	//Conexion con el Servidor
-	$conexionInstancia = new Conexion;
-
-	$conexion = $conexionInstancia->conexion($servidorConexion, $usuarioConexion, $claveConexion, $bdActual);
+	//Conexion con el Servidor Mysql
+	$conexion = Conexion::newConnection('MYSQL');
 	
 	//Conexion con el Servidor PDO
-	$conexionPDO = $conexionInstancia->conexionPDO($servidorConexion, $usuarioConexion, $claveConexion, $bdActual);
+	$conexionPDO = Conexion::newConnection('PDO');
 
 	// Crear una instancia de PDO
-    $conexionPDO = new PDO("mysql:host=$servidorConexion;dbname=$bdActual", $usuarioConexion, $claveConexion);
+    $conexionPDO = new PDO("mysql:host=".SERVIDOR_CONEXION.";dbname=".BD_ADMIN, USUARIO_CONEXION, CLAVE_CONEXION);
 	$conexionPDO->exec("SET NAMES 'utf8mb4'");
 
     // Establecer el modo de error PDO a excepciones
@@ -63,10 +61,11 @@ if (empty($_SESSION["inst"])) {
 		header("Location:".REDIRECT_ROUTE."/index.php?".$exception);
 		exit();
 	}
+
 	if (!mysqli_set_charset($conexion, "utf8mb4")) 
     {
-      printf("Error cargando el conjunto de caracteres utf8mb4: %s\n", mysqli_error($link));
-      exit();
+    	printf("Error cargando el conjunto de caracteres utf8mb4: %s\n", mysqli_error($link));
+    	exit();
     }
 
 }

@@ -189,7 +189,7 @@ include("../compartido/head-informes.php") ?>
 				while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
 
 					//CONSULTAMOS LAS MATERIAS DEL AREA
-					$materias = Asignaturas::consultarAsignaturasArea($conexion, $config, $matricula["gra_id"], $matricula["gru_id"], $cargas["ar_id"], $inicio);
+					$materias = mysqli_query($conexion, "SELECT car_id FROM ".BD_ACADEMICA.".academico_materias am, ".BD_ACADEMICA.".academico_cargas car WHERE am.mat_area='" . $cargas["ar_id"] . "' AND am.mat_id=car_materia AND car_curso='" . $matricula["gra_id"] . "' AND car_grupo='" . $matricula["gru_id"] . "' AND am.institucion={$config['conf_id_institucion']} AND am.year={$inicio} AND car.institucion={$config['conf_id_institucion']} AND car.year={$inicio}");
 
 					$numMat = mysqli_num_rows($materias);
 
@@ -206,7 +206,13 @@ include("../compartido/head-informes.php") ?>
 					}
 
 					//OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES DE TODAS LAS MATERIAS DE UNA MISMA AREA
-					$boletin = Boletin::obtenerPromedioDiferentesCargas($config, $id, $mate, $inicio);
+					$consultaBoletin = mysqli_query($conexion, "SELECT avg(bol_nota) FROM ".BD_ACADEMICA.".academico_boletin 
+					WHERE bol_estudiante='" . $id . "' 
+					AND bol_carga IN(" . $mate . ") 
+					AND institucion={$config['conf_id_institucion']} 
+					AND year={$inicio}
+					");
+					$boletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH);
 
 					$nota = round($boletin[0], 1);
 					for ($n = 0; $n <= 5; $n++) {
@@ -220,7 +226,7 @@ include("../compartido/head-informes.php") ?>
 
 						<td><?= strtoupper($cargas["ar_nombre"]); ?></td>
 
-						<td><?= $nota; ?> (<?= strtoupper($desempenoA['notip_nombre']); ?>)</td>
+						<td><?= $nota; ?> (<?php if(!empty($desempenoA['notip_nombre'])) echo strtoupper($desempenoA['notip_nombre']); ?>)</td>
 
 						<td><?= $cargas["car_ih"] . " (" . $horas[$cargas["car_ih"]] . ")"; ?></td>
 
@@ -253,7 +259,7 @@ include("../compartido/head-informes.php") ?>
 					?>
 						<tr style="font-size:11px;">
 							<td><?= $mda["mat_nombre"]; ?></td>
-							<td><?= $notaDefMateria; ?> <?php if ($matricula["gra_id"] < 12) { ?> (<?= strtoupper($desempeno['notip_nombre']); ?>) <?php } ?></td>
+							<td><?= $notaDefMateria; ?> <?php if ($matricula["gra_id"] < 12) { ?> (<?php if(!empty($desempeno['notip_nombre'])) echo strtoupper($desempeno['notip_nombre']); ?>) <?php } ?></td>
 							<td><?= $mda["ipc_intensidad"] . " (" . $horas[$mda["ipc_intensidad"]] . ")"; ?></td>
 						</tr>
 					<?php } ?>

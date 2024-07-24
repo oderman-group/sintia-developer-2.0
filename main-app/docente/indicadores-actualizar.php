@@ -15,16 +15,16 @@ $porcentajePermitido = 100 - $sumaIndicadores[0];
 $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
 $porcentajeRestante = ($porcentajeRestante + $_POST["valorIndicador"]);
 
-$update = "
-	ind_nombre=".mysqli_real_escape_string($conexion,$_POST["contenido"])."
-";
+$update = [
+	'ind_nombre' => mysqli_real_escape_string($conexion,$_POST["contenido"])
+];
 Indicadores::actualizarIndicador($config, $_POST["idInd"], $update);
 
 //Si vamos a relacionar los indicadores con los SABERES
 if($datosCargaActual['car_saberes_indicador']==1){
-	$update="
-		ipc_evaluacion=" . $_POST["saberes"] . "
-	";
+	$update = [
+		'ipc_evaluacion' => $_POST["saberes"]
+	];
 	Indicadores::actualizarRelacionIndicadorCargas($config, $_POST["idR"], $update);
 }
 
@@ -34,9 +34,9 @@ if($datosCargaActual['car_valor_indicador']==1){
 	//Si el valor es mayor al adecuado lo ajustamos al porcentaje restante; Siempre que este último sea mayor a 0.
 	if($_POST["valor"]>$porcentajeRestante and $porcentajeRestante>0){$_POST["valor"] = $porcentajeRestante;}
 
-	$update="
-		ipc_valor=" . $_POST["valor"] . "
-	";
+	$update = [
+		'ipc_valor' => $_POST["valor"]
+	];
 	Indicadores::actualizarRelacionIndicadorCargas($config, $_POST["idR"], $update);
 }else{
 		//El sistema reparte los porcentajes automáticamente y equitativamente.

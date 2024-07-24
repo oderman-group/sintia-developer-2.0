@@ -16,7 +16,12 @@ if(empty($_POST["calificaciones"])) $_POST["calificaciones"] = '0';
 if(empty($_POST["fechaInforme"])) $_POST["fechaInforme"] = '2000-12-31';
 if(empty($_POST["posicion"])) $_POST["posicion"] = '0';
 
-$update = "car_valor_indicador=".$_POST["indicadores"].", car_configuracion=".$_POST["calificaciones"].", car_fecha_generar_informe_auto=".$_POST["fechaInforme"].", car_posicion_docente=".$_POST["posicion"]."";
+$update = [
+    'car_valor_indicador' => $_POST["indicadores"],
+    'car_configuracion' => $_POST["calificaciones"],
+    'car_fecha_generar_informe_auto' => $_POST["fechaInforme"],
+    'car_posicion_docente' => $_POST["posicion"]
+];
 CargaAcademica::actualizarCargaPorID($config, $cargaConsultaActual, $update);
 
 //Se recalcula valores de los indicadores cuando es automatico

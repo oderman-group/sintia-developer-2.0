@@ -9,10 +9,14 @@
 	$filtro = " AND car_curso='".$_POST["desde"]."'";
 	$numEstudiantesPromocionados = 0;
 	foreach ($_POST["estudiantes"] as $idEstudiantes) {
-		$cambiarEstado = !empty($_POST["estado".$idEstudiantes]) ? ", mat_estado_matricula=1" : "";
 		$grupo = (!empty($_POST["grupoPara"]) && $_POST["grupoPara"] != 0)  ? $_POST["grupoPara"] : $_POST["grupo".$idEstudiantes];
 
-		$update = "mat_grado=".$_POST["para"].", mat_grupo=".$grupo.", mat_promocionado=1 {$cambiarEstado}";
+		$update = [
+			'mat_grado'            => $_POST["para"], 
+			'mat_grupo'            => $grupo, 
+			'mat_promocionado'     => 1, 
+			'mat_estado_matricula' => !empty($_POST["estado".$idEstudiantes]) ? 1 : ''
+		];
 		Estudiantes::actualizarMatriculasPorId($config, $idEstudiantes, $update);
 
 		if (!empty($_POST['relacionCargas']) || $_POST['relacionCargas'] == 1) {
@@ -20,7 +24,9 @@
 			$consultaCargas = CargaAcademica::listarCargas($conexion, $config, "", $filtro,"mat_id, car_grupo");
 			while($datosCarga = mysqli_fetch_array($consultaCargas, MYSQLI_BOTH)){
 				
-				$update = "bol_carga=".$_POST["carga".$datosCarga['car_id']]."";
+				$update = [
+					'bol_carga' => $_POST["carga".$datosCarga['car_id']]
+				];
 				Boletin::actualizarBoletinCargaEstudiante($config, $datosCarga['car_id'], $idEstudiantes, $update);
 				
 				Calificaciones::transferirNivelacion($conexion, $config, $_POST["carga".$datosCarga['car_id']], $datosCarga['car_id'], $idEstudiantes);

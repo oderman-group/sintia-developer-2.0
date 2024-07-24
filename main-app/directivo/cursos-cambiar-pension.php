@@ -11,7 +11,9 @@
 	}
 	include("../compartido/historial-acciones-guardar.php");
 	
-	$update = "gra_valor_pension=0";
+	$update = [
+		'gra_valor_pension' => 0
+	];
 	Grados::actualizarTodosCursos($config, $update);
 	
 	include("../compartido/guardar-historial-acciones.php");

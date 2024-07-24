@@ -212,10 +212,18 @@ class Utilidades {
     
         // Divide el nombre de la tabla en partes basado en "_" y toma la palabra relevante.
         $parts = explode("_", $table);
-        $word  = count($parts) > 1 ? $parts[1] : $parts[0];
+        $word  = count($parts) > 2 ? $parts[2] : (count($parts) > 1 ? $parts[1] : $parts[0]);
     
         // Retorna las primeras tres letras de la palabra seleccionada en mayúsculas.
         return strtoupper(substr($word, 0, 3));
 
+    }
+
+    public static function setFinalZero($nota) {
+        if (is_int($nota)) {
+            return $nota.".0";
+        }
+
+        return $nota;
     }
 }
