@@ -172,6 +172,8 @@ $datosConsulta = Clases::traerDatosClases($conexion, $config, $idR);
 													<input type="text" name="video" class="form-control" autocomplete="off" value="<?=$datosConsulta['cls_video_url'];?>">
 												</div>
 											</div>
+
+											<?php if ($config['conf_id_institucion'] == DEVELOPER_PROD || $config['conf_id_institucion'] == DEVELOPER) {?>
 											<div class="form-group row">
 												<?php $urlVideo = $storage->getBucket()->object(FILE_VIDEO_CLASES . $datosConsulta["cls_video_clase"])->signedUrl(new DateTime('tomorrow'));
 												$existe = $storage->getBucket()->object(FILE_VIDEO_CLASES . $datosConsulta["cls_video_clase"])->exists();
@@ -194,7 +196,9 @@ $datosConsulta = Clases::traerDatosClases($conexion, $config, $idR);
 													<video id="videoElement" style="display: none;" autoplay></video>
 													<input type="file" id="cargarVideo" name="videoClase" style="display: none;" accept="video/*"></input>
 												</div>
-											</div>												
+											</div>
+											<?php }?>
+											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Archivo 1</label>
 												<div class="col-sm-4">
