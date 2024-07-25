@@ -178,6 +178,8 @@ if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodo
 												<input type="text" name="video" class="form-control" autocomplete="off">
 											</div>
 										</div>
+
+										<?php if ($config['conf_id_institucion'] == DEVELOPER_PROD || $config['conf_id_institucion'] == DEVELOPER) {?>
 										<div class="form-group row">
 											
 											<label class="col-sm-2 control-label">Grabar Video
@@ -194,6 +196,7 @@ if( CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodo
 												<input type="file" id="cargarVideo" name="videoClase" style="display: none;" accept="video/*"></input>
 											</div>
 										</div>
+										<?php }?>
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">Archivo 1</label>
