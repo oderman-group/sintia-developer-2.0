@@ -68,13 +68,23 @@ $grados = Grados::traerGradosGrupos($config, $_REQUEST["curso"], $_REQUEST["grup
 
 				<?php
 				$suma = 0;
-				$materias1 = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas WHERE car_curso='" . $_REQUEST["curso"] . "' AND car_grupo='" . $_REQUEST["grupo"] . "' AND institucion={$config['conf_id_institucion']} AND year={$year}");
+				$materias1 = CargaAcademica::traerCargasMateriasPorCursoGrupo($config, $_REQUEST["curso"], $_REQUEST["grupo"], $year);
 				while ($mat1 = mysqli_fetch_array($materias1, MYSQLI_BOTH)) {
 
+					$materias2 = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin 
+					WHERE bol_carga='". $mat1['car_id']. "' 
+					AND bol_estudiante='". $fila['mat_id']. "' 
+					AND year={$year} 
+					AND institucion={$config['conf_id_institucion']} 
+					AND bol_periodo='". $_REQUEST["per"]. "'
+					");
+
+					$materias2Data = mysqli_fetch_array($materias2, MYSQLI_BOTH);
+
 					$defini = 0;
-					if ($config['conf_reporte_sabanas_nota_indocador'] == 0) {
-						if (!empty($mat1['bol_nota'])) {
-							$defini = $mat1['bol_nota'];
+					if ($config['conf_reporte_sabanas_nota_indocador'] == '0') {
+						if (!empty($materias2Data['bol_nota'])) {
+							$defini = $materias2Data['bol_nota'];
 						}
 					} else {
 						//CONSULTA QUE ME TRAE LOS INDICADORES DE CADA MATERIA POR PERIODO
