@@ -7,6 +7,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
 require_once(ROOT_PATH."/main-app/class/Grados.php");
 require_once(ROOT_PATH."/main-app/class/Grupos.php");
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/componentes/botones-guardar.php");
 ?>
 
 <!--bootstrap -->

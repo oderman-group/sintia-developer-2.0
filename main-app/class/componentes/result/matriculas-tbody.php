@@ -133,7 +133,7 @@ foreach ($data["data"] as $resultado) {
 						<?php if (!empty($resultado['gra_nombre']) && Modulos::validarSubRol(['DT0083'])) { ?>
 							<li><a href="javascript:void(0);" data-toggle="modal" data-target="#cambiarGrupoModal<?= $resultado['mat_id']; ?>">Cambiar de grupo</a></li>
 						<?php } ?>
-						<?php if (Modulos::validarSubRol(['DT0074'])) {
+						<?php if (Modulos::validarSubRol(['DT0074']) && !empty($resultado['mat_id'])) {
 							$retirarRestaurar = 'Retirar';
 							if ($resultado['mat_estado_matricula'] == CANCELADO) {
 								$retirarRestaurar = 'Restaurar';
