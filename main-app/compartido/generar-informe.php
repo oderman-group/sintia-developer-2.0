@@ -13,9 +13,6 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 $conexionPDO = Conexion::newConnection('PDO');
 
-$config = Plataforma::sesionConfiguracion();
-$_SESSION["configuracion"] = $config;
-
 $grado =base64_decode($_GET["grado"]);
 $grupo =base64_decode($_GET["grupo"]);
 $carga = base64_decode($_GET["carga"]);
