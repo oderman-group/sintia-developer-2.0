@@ -1,6 +1,6 @@
 <?php
 require_once(ROOT_PATH."/main-app/class/Conexion.php");
-require_once(ROOT_PATH."/main-app/class/redisInstance.php");
+require_once(ROOT_PATH."/main-app/class/RedisInstance.php");
 
 class Autenticate {
 

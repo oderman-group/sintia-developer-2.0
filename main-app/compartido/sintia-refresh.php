@@ -6,7 +6,6 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/RedisInstance.php");
 
-require_once(ROOT_PATH."/main-app/class/redisInstance.php");
 $config = RedisInstance::getSystemConfiguration(true);
 
 $informacionInstConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_informacion

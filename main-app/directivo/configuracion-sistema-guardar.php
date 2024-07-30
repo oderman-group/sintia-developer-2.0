@@ -1,6 +1,6 @@
 <?php 
 include("session.php");
-require_once(ROOT_PATH."/main-app/class/redisInstance.php");
+require_once(ROOT_PATH."/main-app/class/RedisInstance.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0187';
