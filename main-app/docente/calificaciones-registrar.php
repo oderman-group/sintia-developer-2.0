@@ -333,7 +333,21 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 
 														<td>
 
-															<input type="text" style="text-align: center; color:<?=$colorNota;?>" step="<?=$cargaConsultaActual;?>" size="5" maxlength="3" value="<?php if(!empty($notas['cal_nota'])){ echo $notas['cal_nota'];}?>" name="<?=$notas['cal_nota'];?>" id="<?=$resultado['mat_id'];?>" data-cod-estudiante="<?=$resultado['mat_id'];?>" title="<?=$idR;?>" alt="<?=$resultado['mat_nombres'];?>" onChange="notasGuardar(this)" tabindex="<?=$contReg;?>">
+															<input 
+																type="text" 
+																style="text-align: center; color:<?=$colorNota;?>" 
+																step="<?=$cargaConsultaActual;?>" 
+																size="5" 
+																maxlength="3" 
+																value="<?php if(!empty($notas['cal_nota'])){ echo $notas['cal_nota'];}?>" 
+																name="<?php if(!empty($notas['cal_nota'])) echo $notas['cal_nota'];?>" 
+																id="<?=$resultado['mat_id'];?>" 
+																data-cod-estudiante="<?=$resultado['mat_id'];?>" 
+																title="<?=$idR;?>" 
+																alt="<?=$resultado['mat_nombres'];?>" 
+																onChange="notasGuardar(this)" 
+																tabindex="<?=$contReg;?>"
+															>
 
 															<?php if(!empty($notas['cal_nota'])){?>
 
@@ -351,13 +365,35 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 
 															<?php if(!empty($notas['cal_nota'])){?>
 
-															<input type="text" style="text-align: center;" size="5" step="<?=$cargaConsultaActual;?>" maxlength="3" name="<?=$notas['cal_nota'];?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="<?=$idR;?>" onChange="notaRecuperacion(this)">
+															<input 
+																type="text" 
+																style="text-align: center;" 
+																size="5" 
+																step="<?=$cargaConsultaActual;?>"
+																maxlength="3" 
+																name="<?=$notas['cal_nota'];?>" 
+																id="<?=$resultado['mat_id'];?>" 
+																alt="<?=$resultado['mat_nombres'];?>" 
+																title="<?=$idR;?>" 
+																onChange="notaRecuperacion(this)"
+															>
 
 															<?php }?>
 
 														</td>
 
-														<td><input type="text" value="<?php if(!empty($notas['cal_observaciones'])){ echo $notas['cal_observaciones'];}?>" name="O<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="<?=$idR;?>" onChange="guardarObservacion(this)" tabindex="10<?=$contReg;?>"></td>
+														<td>
+															<input 
+																type="text" 
+																value="<?php if(!empty($notas['cal_observaciones'])){ echo $notas['cal_observaciones'];}?>" 
+																name="O<?=$contReg;?>" 
+																id="<?=$resultado['mat_id'];?>" 
+																alt="<?=$resultado['mat_nombres'];?>" 
+																title="<?=$idR;?>" 
+																onChange="guardarObservacion(this)" 
+																tabindex="10<?=$contReg;?>"
+															>
+														</td>
 
                                                     </tr>
 
