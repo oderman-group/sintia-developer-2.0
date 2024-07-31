@@ -9,4 +9,38 @@
 			</div>
 		</div>
 	</div>
+	<script>
+    	$('#<?= $idModal; ?>').on('shown.bs.modal', function () {
+			const form = document.querySelector('#form-<?= $idModal ?>');
+
+			if (form) {
+				console.log('Formulario encontrado-<?= $idModal ?>');
+				form.addEventListener('submit', function(event) {
+					event.preventDefault();
+					console.log('Formulario enviado-<?= $idModal ?>');
+
+					const formData = new FormData(form);
+					const data = new URLSearchParams();
+					for (const pair of formData) {
+						data.append(pair[0], pair[1]);
+					}
+
+					fetch(form.action, {
+						method: form.method,
+						body: data,
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded'
+						}
+					})
+					.then(response => response.text())
+					.then(responseText => {
+						window.location.href = responseText;
+					})
+					.catch(error => console.error('Error:', error));
+				});
+			} else {
+				console.error('Formulario no encontrado-<?= $idModal ?>');
+			}
+		});
+	</script>
 </div>

@@ -1,6 +1,10 @@
 						
 <?php
-$acudiente = UsuariosPadre::sesionUsuario($datosEstudianteActual["mat_acudiente"]);
+require_once(ROOT_PATH."/main-app/class/Grados.php");
+$acudiente = [];
+if (!empty($datosEstudianteActual["mat_acudiente"])){
+	$acudiente = UsuariosPadre::sesionUsuario($datosEstudianteActual["mat_acudiente"]);
+}
 
 $classDiv="col-sm-12";
 if($config['conf_mostrar_pasos_matricula'] == 1){
@@ -55,8 +59,7 @@ if($config['conf_mostrar_pasos_matricula'] == 1){
 						                        <select class="form-control  select2" name="lNacimiento">
 						                            <option value="">Seleccione una opción</option>
 						                            <?php
-                                                    $opcionesG = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}
-													");
+													$opcionesG = Grados::traerGradosInstitucion($config);
                                                     while ($opg = mysqli_fetch_array($opcionesG, MYSQLI_BOTH)) {
                                                     ?>
 						                                <option value="<?= $opg['gra_id']; ?>" <?php if ($opg['gra_id'] == $datosEstudianteActual["mat_grado"]) {
@@ -148,11 +151,11 @@ if($config['conf_mostrar_pasos_matricula'] == 1){
 						                    </div>
 						                </div>
 						            -->
-
+									<?php if(!empty($acudiente)) {?>
                                         <h3>Datos Acudiente</h3>
                                         <p style="color: navy;"><?= $frases[325][$datosUsuarioActual['uss_idioma']]; ?></p>
 
-                                        <input type="hidden" name="idAcudiente" value="<?= $acudiente["uss_id"]; ?>">
+                                        <input type="hidden" name="idAcudiente" value="<?php if(!empty($acudiente["uss_id"])) echo $acudiente["uss_id"]; ?>">
 
                                         <div class="form-group row">
 						                    <label class="col-sm-2 control-label">ID</label>
@@ -195,6 +198,7 @@ if($config['conf_mostrar_pasos_matricula'] == 1){
 						                        <input type="text" value="<?= $acudiente["uss_ocupacion"]; ?>" name="ocupacion" class="form-control">
 						                    </div>
 						                </div>
+									<?php }?>
 
 
 

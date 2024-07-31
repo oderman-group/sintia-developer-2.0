@@ -9,10 +9,12 @@ if(isset($_SESSION["id"]) and $_SESSION["id"]!=""){
 	$_SESSION["id"] = $_SESSION["id"];
 }
 
+date_default_timezone_set("America/Bogota");//Zona horaria
+
 //seleccionamos la base de datos
 if (empty($_SESSION["inst"])) {
 	session_destroy();
-	require_once '../class/Utilidades.php';
+	require_once ROOT_PATH.'/main-app/class/Utilidades.php';
 	$directory = Utilidades::getDirectoryUserFromUrl($_SERVER['PHP_SELF']);
 	$page      = Utilidades::getPageFromUrl($_SERVER['PHP_SELF']);
 	header("Location:".REDIRECT_ROUTE."?error=4&urlDefault=".$page."&directory=".$directory);
@@ -30,17 +32,15 @@ if (empty($_SESSION["inst"])) {
 	require_once ROOT_PATH."/main-app/class/Conexion.php";
 	try{
 
-	//Conexion con el Servidor
-	$conexionInstancia = new Conexion;
-
-	$conexion = $conexionInstancia->conexion($servidorConexion, $usuarioConexion, $claveConexion, $bdActual);
+	//Conexion con el Servidor Mysql
+	$conexion = Conexion::newConnection('MYSQL');
 	
 	//Conexion con el Servidor PDO
-	$conexionPDO = $conexionInstancia->conexionPDO($servidorConexion, $usuarioConexion, $claveConexion, $bdActual);
+	$conexionPDO = Conexion::newConnection('PDO');
 
 	// Crear una instancia de PDO
-    $conexionPDO = new PDO("mysql:host=$servidorConexion;dbname=$bdActual", $usuarioConexion, $claveConexion);
-	$conexionPDO->exec("SET NAMES 'utf8'");
+    $conexionPDO = new PDO("mysql:host=".SERVIDOR_CONEXION.";dbname=".BD_ADMIN, USUARIO_CONEXION, CLAVE_CONEXION);
+	$conexionPDO->exec("SET NAMES 'utf8mb4'");
 
     // Establecer el modo de error PDO a excepciones
     $conexionPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -61,10 +61,11 @@ if (empty($_SESSION["inst"])) {
 		header("Location:".REDIRECT_ROUTE."/index.php?".$exception);
 		exit();
 	}
-	if (!mysqli_set_charset($conexion, "utf8")) 
+
+	if (!mysqli_set_charset($conexion, "utf8mb4")) 
     {
-      printf("Error cargando el conjunto de caracteres utf8: %s\n", mysqli_error($link));
-      exit();
+    	printf("Error cargando el conjunto de caracteres utf8mb4: %s\n", mysqli_error($link));
+    	exit();
     }
 
 }

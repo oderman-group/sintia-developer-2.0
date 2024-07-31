@@ -159,10 +159,20 @@ class componenteFiltro
                 $html .= " <li class='nav-item dropdown'>
                 <a class='nav-link dropdown-toggle' href='javascript:void(0);' id='navbarDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='color:#FFF;'>
                 {$filtro["texto"]}  ";
+                $decode = NULL;
                 if (!empty($filtro["get"])) {
                     if (!empty($_GET[$filtro["get"]])) {
                         $decode = base64_decode($_GET[$filtro["get"]]);
                         $html .= ": {$decode} ";
+                    }
+                }
+
+                $parametros = "";
+                if (isset($_GET) ) {
+                    foreach ($_GET as $key => $value) {
+                        if ($key != $filtro["get"]) {
+                            $parametros .= "&{$key}={$value}";
+                        }    
                     }
                 }
 
@@ -172,10 +182,20 @@ class componenteFiltro
                 ";
                 if (!empty($filtro["opciones"])) {
                     $html .= "<div class='dropdown-menu' aria-labelledby='navbarDropdown'>";
+                    $html .= "<form class='px-2 py-2' id='filtroForm'>";
                     foreach ($filtro["opciones"] as $opcion) {
-                        $style = !empty($opcion["style"]) ? "style='{$opcion["style"]}'" : "";
-                        $html .= "<a class='dropdown-item' href='{$opcion["url"]}'  {$style}>{$opcion["texto"]}</a>";
+                        if(!empty($filtro["tipo"]) && $filtro["tipo"] == 'check'){
+                            $html .= "<div class='form-check'>";
+                            $html .= "<input class='form-check-input {$filtro["get"]}-checkbox' type='checkbox' name='{$filtro["get"]}[]' value='{$opcion["ID"]}' id='{$filtro["get"]}{$opcion["ID"]}'>";
+                            $html .= "<label class='form-check-label' for='{$filtro["get"]}{$opcion["ID"]}'>{$opcion["texto"]}</label>";
+                            $html .= "</div>";
+                        }else{
+                            $style = !empty($opcion["style"]) ? "style='{$opcion["style"]}'" : "";
+                            $styleSelect = !empty($opcion["ID"]) && $opcion["ID"] == $decode ? "style='color: orange;'" : "";
+                            $html .= "<a class='dropdown-item' href='{$opcion["url"]}{$parametros}'  {$style} {$styleSelect}>{$opcion["texto"]}</a>";
+                        }
                     }
+                    $html .= "</form>";
                     $html .= "</div>";
                 }
                 if (!empty($filtro["html"])) {
@@ -184,6 +204,42 @@ class componenteFiltro
                     $html .= "</div>";
                 }
 
+                $html .= "<script>
+                                var {$filtro["get"]}Seleccionados = [];
+                            </script>";
+
+                if(!empty($filtro["tipo"]) && $filtro["tipo"] == 'check'){
+                    $html .= "
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                // Obtener todos los checkboxes del filtro
+                                var {$filtro["get"]}Checkboxes = document.querySelectorAll('.{$filtro["get"]}-checkbox');
+
+                                // Escuchar el evento de cambio en los checkboxes
+                                {$filtro["get"]}Checkboxes.forEach(function (checkbox) {
+                                    checkbox.addEventListener('change', function () {
+                                        // Obtener los valores seleccionados
+                                            {$filtro["get"]}Seleccionados = Array.from({$filtro["get"]}Checkboxes)
+                                            .filter(function (checkbox) {
+                                                return checkbox.checked;
+                                            })
+                                            .map(function (checkbox) {
+                                                return checkbox.value;
+                                            });
+
+                                        // Realizar la acción de filtrado con los checkboxes seleccionados
+                                        filtrarPor{$filtro["get"]}({$filtro["get"]}Seleccionados);
+                                    });
+                                });
+
+                                function filtrarPor{$filtro["get"]}({$filtro["get"]}Seleccionados) {
+                                    console.log('Checkboxes seleccionados:', {$filtro["get"]}Seleccionados);
+                                    {$this->id}_buscar();
+                                }
+                            });
+                        </script>
+                    ";
+                }
 
                 $html .= "</li>";
             }
@@ -206,10 +262,12 @@ class componenteFiltro
           });
         function {$this->id}_buscar(buscar){
             var valor = document.getElementById('input_{$this->id}').value;
+            var filtro2 = {'{$filtro["get"]}Seleccionados' : {$filtro["get"]}Seleccionados};
             var urlbase = '{$this->urlBase}'; 
             if(valor.length > 2){
                 var data = {
                     'valor': (valor),
+                    'filtro2': (filtro2),
                     'url': '{$this->urlFilter}'
                 };
                 data.filtros =JSON.parse('{$this->filtrosGet}');
@@ -217,6 +275,7 @@ class componenteFiltro
             }else if(valor.length == 0){
                 var data = {
                     'valor': (valor),
+                    'filtro2': (filtro2),
                     'url': '{$this->urlFilter}'
                 };
                 data.filtros =JSON.parse('{$this->filtrosGet}');
@@ -224,6 +283,7 @@ class componenteFiltro
             }else if(buscar){
                 var data = {
                     'valor': (valor),
+                    'filtro2': (filtro2),
                     'url': '{$this->urlFilter}'
                 };
                 data.filtros =JSON.parse('{$this->filtrosGet}');

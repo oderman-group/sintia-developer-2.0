@@ -27,7 +27,7 @@ foreach ($data["data"] as $resultado) {
 ?>
 	<tr id="reg<?= $resultado['fcu_id']; ?>" style="background-color:<?= $bgColor; ?>;">
 		<td><?= $contReg; ?></td>
-		<td><?= $resultado['fcu_id']; ?></td>
+		<td><?= $resultado['id_nuevo_movimientos']; ?></td>
 		<td>
 			<a href="<?= $_SERVER['PHP_SELF']; ?>?estadoFil=<?= base64_encode($estadoFil); ?>&usuario=<?= base64_encode($usuario) ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&tipo=<?= base64_encode($tipo); ?>&fecha=<?= base64_encode($resultado['fcu_fecha']); ?>" style="text-decoration: underline;"><?= $resultado['fcu_fecha']; ?></a>
 		</td>

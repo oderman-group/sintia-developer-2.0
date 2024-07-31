@@ -7,16 +7,16 @@ require_once(ROOT_PATH."/main-app/class/Inscripciones.php");
 
 $idInst="";
 if(!empty($_REQUEST["idInst"])){ $idInst=base64_decode($_REQUEST["idInst"]);}
+Inscripciones::iniciarTransacion();
 
-
-$year=$datosConfig["cfgi_year_inscripcion"];
+$year=$config["cfgi_year_inscripcion"];
 
 //DATOS SECRETARIA(O)
 $ussQuery = "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id = :idSecretaria AND institucion= :idInstitucion AND year= :year";
 $uss = $pdoI->prepare($ussQuery);
 $uss->bindParam(':idSecretaria', $datosInfo['info_secretaria_academica'], PDO::PARAM_STR);
-$uss->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
-$uss->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
+$uss->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
+$uss->bindParam(':year', $config['conf_agno'], PDO::PARAM_STR);
 $uss->execute();
 $datosUss = $uss->fetch();
 $nombreUss=strtoupper($datosUss['uss_nombre']." ".$datosUss['uss_apellido1']);
@@ -71,8 +71,8 @@ if ($newId > 0) {
     $estu->bindParam(':ussNombres', $_POST['nombreEstudiante'], PDO::PARAM_STR);
     $estu->bindParam(':ussTipoDocumento', $_POST['tipoDocumento'], PDO::PARAM_INT);
     $estu->bindParam(':ussApellido1', $_POST['apellido1'], PDO::PARAM_STR);
-    $estu->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
-    $estu->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
+    $estu->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
+    $estu->bindParam(':year', $config['conf_agno'], PDO::PARAM_STR);
     $estu->execute();
 
     //Acudiente
@@ -84,8 +84,8 @@ if ($newId > 0) {
     $acudiente->bindParam(':nombre', $_POST['nombreAcudiente'], PDO::PARAM_STR);
     $acudiente->bindParam(':email', $_POST['email'], PDO::PARAM_STR);
     $acudiente->bindParam(':celular', $_POST['celular'], PDO::PARAM_STR);
-    $acudiente->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
-    $acudiente->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
+    $acudiente->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
+    $acudiente->bindParam(':year', $config['conf_agno'], PDO::PARAM_STR);
     $acudiente->execute();
 
     //Padre
@@ -93,8 +93,8 @@ if ($newId > 0) {
     $padreId=Utilidades::generateCode("USS");
     $padre = $pdoI->prepare($padreQuery);
     $padre->bindParam(':codigo', $padreId, PDO::PARAM_STR);
-    $padre->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
-    $padre->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
+    $padre->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
+    $padre->bindParam(':year', $config['conf_agno'], PDO::PARAM_STR);
     $padre->execute();
 
     //Madre
@@ -102,13 +102,13 @@ if ($newId > 0) {
     $madreId=Utilidades::generateCode("USS");
     $madre = $pdoI->prepare($madreQuery);
     $madre->bindParam(':codigo', $madreId, PDO::PARAM_STR);
-    $madre->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
-    $madre->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
+    $madre->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
+    $madre->bindParam(':year', $config['conf_agno'], PDO::PARAM_STR);
     $madre->execute();
 
     //Matriculas
     $matriculasQuery = "INSERT INTO ".BD_ACADEMICA.".academico_matriculas(mat_id, mat_tipo_documento, mat_documento, mat_solicitud_inscripcion, mat_estado_matricula, mat_id_usuario, mat_primer_apellido, mat_nombres, mat_acudiente, mat_padre, mat_madre, mat_grado, mat_grupo, institucion, year)VALUES(:codigo, :tipoDocumento, :documento, :solicitud, 5, :idUss, :apellido1, :nombres, :acudiente, :padre, :madre, :grado, 1, :idInstitucion, :year)";
-    $codigoMAT = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_matriculas');
+    $codigoMAT = Utilidades::getNextIdSequence($pdoI, BD_ACADEMICA, 'academico_matriculas');
     $matriculas = $pdoI->prepare($matriculasQuery);
     $matriculas->bindParam(':codigo', $codigoMAT, PDO::PARAM_STR);
     $matriculas->bindParam(':tipoDocumento', $_POST['tipoDocumento'], PDO::PARAM_INT);
@@ -121,13 +121,13 @@ if ($newId > 0) {
     $matriculas->bindParam(':padre', $padreId, PDO::PARAM_STR);
     $matriculas->bindParam(':madre', $madreId, PDO::PARAM_STR);
     $matriculas->bindParam(':grado', $_POST['grado'], PDO::PARAM_INT);
-    $matriculas->bindParam(':idInstitucion', $datosConfig['conf_id_institucion'], PDO::PARAM_INT);
-    $matriculas->bindParam(':year', $datosConfig['conf_agno'], PDO::PARAM_STR);
+    $matriculas->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
+    $matriculas->bindParam(':year', $config['conf_agno'], PDO::PARAM_STR);
     $matriculas->execute();
 
     //Documentos
-    Inscripciones::guardarDocumentos($pdoI, $datosConfig, $codigoMAT);
-
+    Inscripciones::guardarDocumentos($pdoI, $config, $codigoMAT);
+    Inscripciones::finalizarTransacion();
 
     //Mensaje para correo
 

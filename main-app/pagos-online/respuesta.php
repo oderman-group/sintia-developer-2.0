@@ -1,4 +1,5 @@
 <?php
+session_start();
 include("../../conexion.php");
 ?>
 <!DOCTYPE html>
@@ -59,17 +60,7 @@ include("../../conexion.php");
       }
 
       if (!empty($jsonObject['data']['x_extra16'])) {
-        mysqli_query($conexion, "INSERT INTO " . BD_ADMIN . ".instituciones_modulos(ipmod_institucion, ipmod_modulo) VALUES ('" . $jsonObject['data']['x_extra6'] . "', '" . $jsonObject['data']['x_extra16'] . "')");
-    
-        $arregloModulos = array();
-        $modulosSintia = mysqli_query($conexion, "SELECT mod_id, mod_nombre FROM ".BD_ADMIN.".modulos
-        INNER JOIN ".BD_ADMIN.".instituciones_modulos ON ipmod_institucion='".$jsonObject['data']['x_extra6']."' AND ipmod_modulo=mod_id
-        WHERE mod_estado=1");
-        while($modI = mysqli_fetch_array($modulosSintia, MYSQLI_BOTH)){
-            $arregloModulos [$modI['mod_id']] = $modI['mod_nombre'];
-        }
-        
-        $_SESSION["modulos"] = $arregloModulos;
+
       }
     }
   }

@@ -5,12 +5,14 @@ require_once(ROOT_PATH."/main-app/modelo/conexion.php");
 require_once(ROOT_PATH."/main-app/class/Plataforma.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/Modulos.php");
+require_once(ROOT_PATH."/main-app/class/RedisInstance.php");
 
 $arregloModulos = $_SESSION["modulos"];
 
 $Utilidades = new Utilidades; 
 $Plataforma = new Plataforma;
-$config = $_SESSION["configuracion"];
+
+$config = RedisInstance::getSystemConfiguration();
 
 $informacion_inst = $_SESSION["informacionInstConsulta"];
 
@@ -62,5 +64,5 @@ require_once(ROOT_PATH . "/librerias/Firebase/vendor/autoload.php");
 use Kreait\Firebase\Factory;
 $factory = (new Factory)
 	->withServiceAccount(ROOT_PATH . '/librerias/Firebase/key/firebase_credentials.json')
-	->withDatabaseUri('https://sintia-firebase-default-rtdb.firebaseio.com');
+	->withDatabaseUri('https://sintia-app-default-rtdb.firebaseio.com');
 $storage = $factory->createStorage();

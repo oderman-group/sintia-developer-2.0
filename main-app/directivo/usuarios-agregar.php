@@ -147,6 +147,7 @@ $(document).ready(function() {
                 <div class="col-sm-9">
                     <span style="color: blue; font-size: 15px;" id="respuestaEmail"></span>
                     <span style="color: blue; font-size: 15px;" id="respuestaUsuario"></span>
+                    <span style="color: blue; font-size: 15px;" id="respuestaUsuario2"></span>
                         <?php include("../../config-general/mensajes-informativos.php"); ?>
 
                         <div class="panel">
@@ -168,7 +169,7 @@ $(document).ready(function() {
                                                 include("../compartido/error-catch-to-report.php");
                                             }
                                             ?>
-                                            <select class="form-control  select2" name="tipoUsuario" required <?=$disabledPermiso;?>>
+                                            <select class="form-control  select2" name="tipoUsuario" id="tipoUsuario" onchange="validarCantidadUsuarios(this)" required <?=$disabledPermiso;?>>
                                                 <option value="">Seleccione una opción</option>
                                                 <?php
 													while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
@@ -232,7 +233,7 @@ $(document).ready(function() {
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Documento</label>
                                         <div class="col-sm-4">
-                                            <input type="text" name="documento" class="form-control" value="<?=$datosUsuario['documento'];?>" <?=$disabledPermiso;?>>
+                                            <input type="text" name="documento" id="documento" class="form-control" data-id-usuario="0" oninput="validarDocumento(this)" value="<?=$datosUsuario['documento'];?>" <?=$disabledPermiso;?>>
                                         </div>
                                     </div>
 
@@ -306,14 +307,7 @@ $(document).ready(function() {
                                             </select>
                                         </div>
                                     </div>
-                                    <a href="javascript:void(0);" name="usuarios.php?cantidad=10" class="btn btn-secondary"
-                                        onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
-                                    <?php if(Modulos::validarPermisoEdicion()){?>
-                                        <button id="btnEnviar" type="submit" class="btn  btn-info">
-											<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-										</button>
-                                    <?php }?>
-
+                                    <?php $botones = new botonesGuardar("usuarios.php?cantidad=10",Modulos::validarPermisoEdicion()); ?>
                                     
                                 </form>
                             </div>

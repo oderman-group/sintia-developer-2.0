@@ -2,6 +2,8 @@
 <?php $idPaginaInterna = 'DT0021';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");
+require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
+require_once(ROOT_PATH."/main-app/class/Areas.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -62,12 +64,7 @@ if(!Modulos::validarPermisoEdicion()){
                                 	<div class="panel-body">
 
                                     <?php
-                                    try{
-                                        $consultaMateria=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE mat_id='".base64_decode($_GET["id"])."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]};");
-                                    } catch (Exception $e) {
-                                        include("../compartido/error-catch-to-report.php");
-                                    }
-                                    $rMateria=mysqli_fetch_array($consultaMateria, MYSQLI_BOTH);
+                                    $rMateria = Asignaturas::consultarDatosAsignatura($conexion, $config, base64_decode($_GET["id"]));
                                     ?>
                                    
 									<form name="formularioGuardar" action="asignaturas-actualizar.php" method="post" enctype="multipart/form-data">
@@ -100,11 +97,7 @@ if(!Modulos::validarPermisoEdicion()){
                                                 <select class="form-control  select2" name="areaM" required <?=$disabledPermiso;?>>
                                                     <option value="">Seleccione una opci n</option>
                                                 <?php
-                                                try{
-                                                    $cAreas=mysqli_query($conexion, "SELECT ar_id, ar_nombre, ar_posicion FROM ".BD_ACADEMICA.".academico_areas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]};");
-                                                } catch (Exception $e) {
-                                                    include("../compartido/error-catch-to-report.php");
-                                                }
+                                                $cAreas = Areas::traerAreasInstitucion($config);
                                                 while($rA=mysqli_fetch_array($cAreas, MYSQLI_BOTH)){
                                                     if($rMateria["mat_area"]==$rA["ar_id"]){
                                                         echo'<option value="'.$rA["ar_id"].'" selected>'.$rA["ar_nombre"].'</option>';
@@ -113,6 +106,19 @@ if(!Modulos::validarPermisoEdicion()){
                                                         }
                                                     }
                                                 ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Sumar en promedio general?
+                                                <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Deseas que esta asignatura cuente en la suma del promedio general en los informes?."><i class="fa fa-question"></i></button> 
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control  select2" name="sumarPromedio" <?= $disabledPermiso; ?>>
+                                                    <option value="">Seleccione una opción</option>
+                                                    <option value="<?=SI?>" <?=$rMateria["mat_sumar_promedio"] == SI ? "selected": "";?>><?=SI?></option>
+                                                    <option value="<?=NO?>" <?=$rMateria["mat_sumar_promedio"] == NO ? "selected": "";?>><?=NO?></option>
                                                 </select>
                                             </div>
                                         </div>
@@ -127,11 +133,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         <?php } ?>
 
 
-                                        <?php if(Modulos::validarPermisoEdicion()){?>
-										    <button type="submit" class="btn  btn-info">
-										<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-									</button>
-                                        <?php }?>
+                                     <?php $botones = new botonesGuardar("asignaturas.php",Modulos::validarPermisoEdicion()); ?>
                                     </form>
                                 </div>
                             </div>

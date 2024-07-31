@@ -120,6 +120,12 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 											<?php 
 												$idModal = "modal14"; $contenido = "matriculas-retiradas-modal.php";  include("../compartido/contenido-modal.php");
 												}
+												if(Modulos::validarSubRol(['DT0249','DT0251'])){
+											?>
+												<p><a href="javascript:void(0);"  data-toggle="modal" data-target="#modal15">15. Hoja de Matricula</a></p>
+											<?php 
+												$idModal = "modal15"; $contenido = "hoja-matricula-modal.php";  include("../compartido/contenido-modal.php");
+												}
 											?>
 										</div>
                                 	</div>
@@ -173,6 +179,14 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 										<header class="panel-heading panel-heading-green">INFORMES FINANCIEROS</header>
 										<div class="panel-body">
 											<p><a href="../compartido/reporte-movimientos.php" target="_blank">1. Informe de movimientos financieros</a></p>
+											<?php
+												if(Modulos::validarSubRol(['DT0331'])){
+											?>
+												<p><a href="javascript:void(0);"  data-toggle="modal" data-target="#modalFin2">2. Paz y salvo</a></p>
+											<?php 
+												$idModal = "modalFin2"; $contenido = "paz-salvo-modal.php";  include("../compartido/contenido-modal.php");
+												}
+											?>
 										</div>
                                 	</div>
 								</div>

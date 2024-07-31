@@ -164,6 +164,11 @@ class Utilidades {
      */
     public static function getNextIdSequence($conexionPDO, $bd, $table) {
 
+        if (empty($table) || empty($conexionPDO) || empty($bd)) {
+            throw new InvalidArgumentException('El nombre de la tabla, la bd o la conexión no pueden estar vacíos');
+            return null;
+        }
+
         global $config;
 
         $query = "SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_schema = :bd AND table_name = :table";
@@ -212,10 +217,28 @@ class Utilidades {
     
         // Divide el nombre de la tabla en partes basado en "_" y toma la palabra relevante.
         $parts = explode("_", $table);
-        $word  = count($parts) > 1 ? $parts[1] : $parts[0];
+        $word  = count($parts) > 2 ? $parts[2] : (count($parts) > 1 ? $parts[1] : $parts[0]);
     
         // Retorna las primeras tres letras de la palabra seleccionada en mayúsculas.
         return strtoupper(substr($word, 0, 3));
 
+    }
+
+    /**
+     * Adds a trailing zero to an integer value.
+     *
+     * This function checks if the provided value is an integer. If it is, the function appends a trailing ".0" to the integer.
+     * If the provided value is not an integer, the function returns the value as it is.
+     *
+     * @param mixed $nota The value to check and potentially modify.
+     *
+     * @return mixed The modified value with a trailing ".0" if the original value was an integer, or the original value if it was not an integer.
+     */
+    public static function setFinalZero($nota) {
+        if (is_int($nota)) {
+            return $nota.".0";
+        }
+
+        return $nota;
     }
 }

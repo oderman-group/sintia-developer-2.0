@@ -45,6 +45,7 @@ define('CHAT_TIPO_AUDIO', 4);
 define('FILE_CURSOS', "cursos/");
 define('FILE_PUBLICACIONES', "publicaciones/");
 define('FILE_TAREAS', "tareas/");
+define('FILE_VIDEO_CLASES', "video-clases/");
 define('FILE_TAREAS_ENTREGADAS', "tareas-entregadas/");
 
 
@@ -168,6 +169,10 @@ define('AREA', 'AREA');
 define('MATERIA', 'MATERIA');
 define('CURSO', 'CURSO');
 
+/* METODOS PARA OPEN AI*/
+define('TEXT_TO_IMAGE', 'TEXT_TO_IMAGE');
+define('TEXT_TO_TEXT', 'TEXT_TO_TEXT');
+
 define('PENDIENTE', 'PENDIENTE');
 define('PROCESO', 'PROCESO');
 define('FINALIZADO', 'FINALIZADO');
@@ -179,6 +184,13 @@ define('UNIVERSITY', 'UNIVERSITY');
 define('COMPANY', 'COMPANY');
 define('KINDERGARTEN', 'KINDERGARTEN');
 define('PEOPLE', 'PEOPLE');
+
+/** TIPOS DE PAQUETES **/
+define('PLANES', 'PLANES');
+define('ESPACIO', 'ESPACIO');
+define('USUARIOS', 'USUARIOS');
+define('MODULOS', 'MODULOS');
+define('PAQUETES', 'PAQUETES');
 
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':

@@ -6,9 +6,13 @@ $datosUsuarioActual['uss_tipo'] == TIPO_DEV
 || isset($_SESSION['acudiente']) 
 ) {
 
-  $backgroundColor = '#41c4c4';
-  if( $datosUsuarioActual['uss_tipo'] == TIPO_DEV || isset($_SESSION['devAdmin']) ) {
-      $backgroundColor = '#607d8b';
+  if (ENVIROMENT === 'PROD') {
+    $backgroundColor = '#e91e63';
+  } else {
+    $backgroundColor = '#41c4c4';
+    if( $datosUsuarioActual['uss_tipo'] == TIPO_DEV || isset($_SESSION['devAdmin']) ) {
+        $backgroundColor = '#607d8b';
+    }
   }
 ?>
   <div style="

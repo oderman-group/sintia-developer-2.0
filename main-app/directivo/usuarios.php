@@ -3,6 +3,7 @@
 <?php include("../compartido/historial-acciones-guardar.php"); ?>
 <?php include("../compartido/head.php");
 require_once '../class/Estudiantes.php';
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -191,11 +192,7 @@ if (!Modulos::validarPermisoEdicion()) {
 
 													$mostrarNumCargas = '';
 													if ($resultado['uss_tipo'] == TIPO_DOCENTE) {
-														try {
-															$consultaNumCarga = mysqli_query($conexion, "SELECT * FROM " . BD_ACADEMICA . ".academico_cargas WHERE car_docente='" . $resultado['uss_id'] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
-														}
+														$consultaNumCarga = CargaAcademica::traerCargasDocentes($config, $resultado['uss_id']);
 														$numCarga = mysqli_num_rows($consultaNumCarga);
 
 														$mostrarNumCargas = '<br><span style="font-size:9px; color:darkblue">(' . $numCarga . ' Cargas)</span>';
@@ -298,7 +295,7 @@ if (!Modulos::validarPermisoEdicion()) {
 																			<li><a href="usuarios-acudidos.php?id=<?= base64_encode($resultado['uss_id']); ?>">Acudidos</a></li>
 																		<?php } ?>
 
-																		<?php if ((!empty($numCarga) && $numCarga == 0 && $resultado['uss_tipo'] == TIPO_DOCENTE) || $resultado['uss_tipo'] == TIPO_ACUDIENTE || ($resultado['uss_tipo'] == TIPO_ESTUDIANTE && empty($tieneMatricula)) || $resultado['uss_tipo'] == TIPO_CLIENTE || $resultado['uss_tipo'] == TIPO_PROVEEDOR) { ?>
+																		<?php if ((isset($numCarga) && $numCarga == 0 && $resultado['uss_tipo'] == TIPO_DOCENTE) || $resultado['uss_tipo'] == TIPO_ACUDIENTE || ($resultado['uss_tipo'] == TIPO_ESTUDIANTE && empty($tieneMatricula)) || $resultado['uss_tipo'] == TIPO_CLIENTE || $resultado['uss_tipo'] == TIPO_PROVEEDOR) { ?>
 																			<li><a href="javascript:void(0);" title="<?= $objetoEnviar; ?>" name="usuarios-eliminar.php?id=<?= base64_encode($resultado['uss_id']); ?>" onClick="deseaEliminar(this)" id="<?= $resultado['uss_id']; ?>">Eliminar</a></li>
 																		<?php } ?>
 																	<?php } ?>
@@ -327,7 +324,10 @@ if (!Modulos::validarPermisoEdicion()) {
 
 									</div>
 								</div>
-								<?php include("enlaces-paginacion.php"); ?>
+								<?php 
+								include("enlaces-paginacion.php"); 
+								$consulta->free();
+								?>
 							</div>
 
 

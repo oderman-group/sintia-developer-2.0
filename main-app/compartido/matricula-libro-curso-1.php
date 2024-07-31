@@ -7,11 +7,15 @@ if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol(
 	exit();
 }
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
-require_once("../class/Estudiantes.php");
-require_once("../class/Plataforma.php");
-require_once("../class/Usuarios.php");
-require_once("../class/UsuariosPadre.php");
-require_once("../class/servicios/GradoServicios.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Plataforma.php");
+require_once(ROOT_PATH."/main-app/class/Usuarios.php");
+require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/servicios/GradoServicios.php");
+require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 $Plataforma = new Plataforma;
 
 $year=$_SESSION["bd"];
@@ -126,12 +130,9 @@ $contadorPeriodos=0;
 <body style="font-family:Arial;">
 <?php
 //CONSULTA QUE ME TRAE EL DESEMPEÑO
-$consultaDesempeno=mysqli_query($conexion, "SELECT notip_id, notip_nombre, notip_desde, notip_hasta FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria=".$config["conf_notas_categoria"]." AND institucion={$config['conf_id_institucion']} AND year={$year};");	
+$consultaDesempeno = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $year);
 //CONSULTA QUE ME TRAE LAS areas DEL ESTUDIANTE
-$consultaMatAreaEst=mysqli_query($conexion, "SELECT ar_id, car_ih FROM ".BD_ACADEMICA.".academico_cargas car
-INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car.car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id= am.mat_area AND ar.institucion={$config['conf_id_institucion']} AND ar.year={$year}
-WHERE car_curso='".$idGrado."' AND car_grupo='".$idGrupo."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year} GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
+$consultaMatAreaEst = CargaAcademica::traerCargasMateriasAreaPorCursoGrupo($config, $idGrado, $idGrupo, $year);
 $numeroPeriodos=$config["conf_periodo"];
 
 $nombreInforme = "REGISTRO DE VALORACIÓN";
@@ -184,29 +185,13 @@ if($config['conf_mostrar_encabezado_informes'] == 1){
 		$condicion2="4";
 		
 //CONSULTA QUE ME TRAE EL NOMBRE Y EL PROMEDIO DEL AREA
-$consultaNotdefArea=mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma, MAX(bol_periodo) AS periodo, ar_nombre FROM ".BD_ACADEMICA.".academico_materias am
-INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
-INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car.car_materia=am.mat_id AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
-INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=car.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
-WHERE bol_estudiante='".$matriculadosDatos['mat_id']."' and a.ar_id='".$fila["ar_id"]."' and bol_periodo in (".$condicion.") AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-GROUP BY ar_id;");
-//CONSULTA QUE ME TRAE LA DEFINITIVA POR MATERIA Y NOMBRE DE LA MATERIA
-$consultaAMat=mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,mat_nombre,mat_id,car_id,car_ih FROM ".BD_ACADEMICA.".academico_materias am
-INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
-INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car.car_materia=am.mat_id AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
-INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=car.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
-WHERE bol_estudiante='".$matriculadosDatos['mat_id']."' and a.ar_id='".$fila["ar_id"]."' and bol_periodo in (".$condicion.") AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-GROUP BY mat_id
-ORDER BY mat_id;");
-//CONSULTA QUE ME TRAE LAS DEFINITIVAS POR PERIODO
-$consultaAMatPer=mysqli_query($conexion, "SELECT bol_nota,bol_periodo,ar_nombre,mat_nombre,mat_id FROM ".BD_ACADEMICA.".academico_materias am
-INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
-INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car.car_materia=am.mat_id AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
-INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=car.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
-WHERE bol_estudiante='".$matriculadosDatos['mat_id']."' and a.ar_id='".$fila["ar_id"]."' and bol_periodo in (".$condicion.") AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-ORDER BY mat_id,bol_periodo
-;");
+$consultaNotdefArea = Boletin::obtenerDatosDelArea($matriculadosDatos['mat_id'], $fila["ar_id"], $condicion, $year);
 
+//CONSULTA QUE ME TRAE LA DEFINITIVA POR MATERIA Y NOMBRE DE LA MATERIA
+$consultaAMat = Boletin::obtenerDefinitivaYnombrePorMateria($matriculadosDatos['mat_id'], $fila["ar_id"], $condicion, $year);
+
+//CONSULTA QUE ME TRAE LAS DEFINITIVAS POR PERIODO
+$consultaAMatPer = Boletin::obtenerDefinitivaPorPeriodo($matriculadosDatos['mat_id'], $fila["ar_id"], $condicion, $year);
 
 $resultadoNotArea=mysqli_fetch_array($consultaNotdefArea, MYSQLI_BOTH);
 $numfilasNotArea=mysqli_num_rows($consultaNotdefArea);
@@ -274,7 +259,7 @@ while($fila2=mysqli_fetch_array($consultaAMat, MYSQLI_BOTH)){
 	   //if($totalPromedio2<$rDesempeno["desbasdesde"]){$materiasPerdidas++;}
 	    $msj='';
 	   if($totalPromedio2<$config[5]){
-			$consultaNivelaciones=mysqli_query($conexion, "SELECT * FROM  ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id_asg='".$fila2['car_id']."' AND niv_cod_estudiante='".$matriculadosDatos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
+			$consultaNivelaciones = Calificaciones::nivelacionEstudianteCarga($conexion, $config, $matriculadosDatos['mat_id'], $fila2['car_id'], $year);
 			$numNiv=mysqli_num_rows($consultaNivelaciones);
 			if($numNiv>0){
 				$nivelaciones = mysqli_fetch_array($consultaNivelaciones, MYSQLI_BOTH);
@@ -347,39 +332,20 @@ if (array_key_exists(10, $_SESSION["modulos"]) && $matriculadosDatos["mat_tipo_m
 		if(!empty($datosEstudianteActualMT)){
 
 //CONSULTA QUE ME TRAE LAS areas DEL ESTUDIANTE
-$consultaMatAreaEst=mysqli_query($conexion, "SELECT ar_id, car_ih FROM ".BD_ACADEMICA.".academico_cargas car
-INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car.car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id= am.mat_area AND ar.institucion={$config['conf_id_institucion']} AND ar.year={$year}
-WHERE  car_curso='" . $datosEstudianteActualMT["matcur_id_curso"] . "' AND car_grupo='" . $datosEstudianteActualMT["matcur_id_grupo"] . "' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year} GROUP BY ar.ar_id ORDER BY ar.ar_posicion ASC;");
+$consultaMatAreaEst = CargaAcademica::traerCargasMateriasAreaPorCursoGrupo($config, $datosEstudianteActualMT["matcur_id_curso"], $datosEstudianteActualMT["matcur_id_grupo"], $year);
 while($fila = mysqli_fetch_array($consultaMatAreaEst, MYSQLI_BOTH)){
 
 $condicion="1,2,3,4";
 $condicion2="4";
 
 //CONSULTA QUE ME TRAE EL NOMBRE Y EL PROMEDIO DEL AREA
-$consultaNotdefArea=mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre FROM ".BD_ACADEMICA.".academico_materias am
-INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
-INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car.car_materia=am.mat_id AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
-INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=car.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
-WHERE bol_estudiante='".$matriculadosDatos['mat_id']."' and a.ar_id='".$fila["ar_id"]."' and bol_periodo in (".$condicion.") AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-GROUP BY ar_id;");
-//CONSULTA QUE ME TRAE LA DEFINITIVA POR MATERIA Y NOMBRE DE LA MATERIA
-$consultaAMat=mysqli_query($conexion, "SELECT (SUM(bol_nota)/COUNT(bol_nota)) as suma,ar_nombre,mat_nombre,mat_id,car_id,car_ih FROM ".BD_ACADEMICA.".academico_materias am
-INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
-INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car.car_materia=am.mat_id AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
-INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=car.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
-WHERE bol_estudiante='".$matriculadosDatos['mat_id']."' and a.ar_id='".$fila["ar_id"]."' and bol_periodo in (".$condicion.") AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-GROUP BY mat_id
-ORDER BY mat_id;");
-//CONSULTA QUE ME TRAE LAS DEFINITIVAS POR PERIODO
-$consultaAMatPer=mysqli_query($conexion, "SELECT bol_nota,bol_periodo,ar_nombre,mat_nombre,mat_id FROM ".BD_ACADEMICA.".academico_materias am
-INNER JOIN ".BD_ACADEMICA.".academico_areas a ON a.ar_id=am.mat_area AND a.institucion={$config['conf_id_institucion']} AND a.year={$year}
-INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car.car_materia=am.mat_id AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}
-INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol.bol_carga=car.car_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
-WHERE bol_estudiante='".$matriculadosDatos['mat_id']."' and a.ar_id='".$fila["ar_id"]."' and bol_periodo in (".$condicion.") AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-ORDER BY mat_id,bol_periodo
-;");
+$consultaNotdefArea = Boletin::obtenerDatosDelArea($matriculadosDatos['mat_id'], $fila["ar_id"], $condicion, $year);
 
+//CONSULTA QUE ME TRAE LA DEFINITIVA POR MATERIA Y NOMBRE DE LA MATERIA
+$consultaAMat = Boletin::obtenerDefinitivaYnombrePorMateria($matriculadosDatos['mat_id'], $fila["ar_id"], $condicion, $year);
+
+//CONSULTA QUE ME TRAE LAS DEFINITIVAS POR PERIODO
+$consultaAMatPer = Boletin::obtenerDefinitivaPorPeriodo($matriculadosDatos['mat_id'], $fila["ar_id"], $condicion, $year);
 
 $resultadoNotArea=mysqli_fetch_array($consultaNotdefArea, MYSQLI_BOTH);
 $numfilasNotAreaMT=mysqli_num_rows($consultaNotdefArea);
@@ -439,7 +405,7 @@ if($totalPromedio2==1)	$totalPromedio2="1.0";	if($totalPromedio2==2)	$totalProme
 //if($totalPromedio2<$rDesempeno["desbasdesde"]){$materiasPerdidas++;}
 $msj='';
 if($totalPromedio2<$config[5]){
-	$consultaNivelaciones=mysqli_query($conexion, "SELECT * FROM  ".BD_ACADEMICA.".academico_nivelaciones WHERE niv_id_asg='".$fila2['car_id']."' AND niv_cod_estudiante='".$matriculadosDatos['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
+	$consultaNivelaciones = Calificaciones::nivelacionEstudianteCarga($conexion, $config, $matriculadosDatos['mat_id'], $fila2['car_id'], $year);
 	$numNiv=mysqli_num_rows($consultaNivelaciones);
 	if($numNiv>0){
 		$nivelaciones = mysqli_fetch_array($consultaNivelaciones, MYSQLI_BOTH);
@@ -539,9 +505,7 @@ if($periodoActual==4 && $numfilasNotArea > 0){
 	<tr>
 		<td align="center">
 			<?php
-				$consultaRector= mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$informacion_inst["info_rector"]."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-				$rector = mysqli_fetch_array($consultaRector, MYSQLI_BOTH);
-				// $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
+				$rector = UsuariosPadre::sesionUsuario($informacion_inst["info_rector"], "", $config['conf_id_institucion'], $year);
 				$nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
 				if(!empty($rector["uss_firma"]) && file_exists(ROOT_PATH.'/main-app/files/fotos/' . $rector['uss_firma'])){
 					echo '<img src="../files/fotos/'.$rector["uss_firma"].'" width="200"><br>';
@@ -558,9 +522,7 @@ if($periodoActual==4 && $numfilasNotArea > 0){
 		</td>
 		<td align="center">
 			<?php
-				$consultaSecretario= mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_id='".$informacion_inst["info_secretaria_academica"]."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-				$secretario = mysqli_fetch_array($consultaSecretario, MYSQLI_BOTH);
-				// $secretario = Usuarios::obtenerDatosUsuario($informacion_inst["info_secretaria_academica"]);
+				$secretario = UsuariosPadre::sesionUsuario($informacion_inst["info_secretaria_academica"], "", $config['conf_id_institucion'], $year);
 				$nombreScretario = UsuariosPadre::nombreCompletoDelUsuario($secretario);
 				if(!empty($secretario["uss_firma"]) && file_exists(ROOT_PATH.'/main-app/files/fotos/' . $secretario['uss_firma'])){
 					echo '<img src="../files/fotos/'.$secretario["uss_firma"].'" width="100"><br>';

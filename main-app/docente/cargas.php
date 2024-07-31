@@ -6,13 +6,13 @@ include("../compartido/head.php");
 require_once("../class/UsuariosPadre.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/Sysjobs.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
+
 $datosCargaActual = null;
+
 if( !empty($_SESSION["infoCargaActual"]) ) {
 	$datosCargaActual = $_SESSION["infoCargaActual"]['datosCargaActual'];
 }
-
-$config = Plataforma::sesionConfiguracion();
-$_SESSION["configuracion"] = $config;
 ?>
 </head>
 <style>
@@ -28,6 +28,11 @@ $_SESSION["configuracion"] = $config;
 </style>
  <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
+
+<div id="overlayInforme">
+	<div id="loader"></div>
+	<div id="loading-text">Generando informe…</div>
+</div>
 
 
     <div class="page-wrapper">
@@ -60,19 +65,13 @@ $_SESSION["configuracion"] = $config;
 						 <?php include("../../config-general/mensajes-informativos.php"); ?>
 
 							 <?php
-							 $cCargas = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
-							 INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$_SESSION["bd"]}
-							 INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$_SESSION["bd"]} {$filtroMT}
-							 INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$_SESSION["bd"]}
-							 WHERE car_docente='".$_SESSION["id"]."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$_SESSION["bd"]}
-							 ORDER BY CAST(car_posicion_docente AS SIGNED)
-							 ");
-							  $cargasCont = 1;
-							 $nCargas = mysqli_num_rows($cCargas);
-							 $mensajeCargas = new Cargas;
-							 $mensajeCargas->verificarNumCargas($nCargas);
-							 if ($nCargas > 0) {
-							 ?>
+							$cCargas = CargaAcademica::traerCargasDocentes($config, $_SESSION["id"]);
+							$cargasCont = 1;
+							$nCargas = mysqli_num_rows($cCargas);
+							$mensajeCargas = new Cargas;
+							$mensajeCargas->verificarNumCargas($nCargas);
+							if ($nCargas > 0) {
+							?>
 								
 							 <p>
 								 	<a href="../compartido/planilla-docentes.php?docente=<?=base64_encode($_SESSION["id"]);?>" target="_blank" style="text-decoration: underline;">Imprimir todas mis planillas</a>
@@ -138,7 +137,6 @@ $_SESSION["configuracion"] = $config;
                                                                     </button>
                                                                     <ul class="dropdown-menu" role="menu">
                                                                         <li><a rel="'.$configGenerarJobs.'-'.$numSinNotas.'-1" data-toggle="tooltip" data-placement="right" title="Lo hará usted manualmente como siempre." href="javascript:void(0);" name="../compartido/generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" onclick="mensajeGenerarInforme(this)">Forma tradicional</a></li>
-                                                                        <li><a rel="'.$configGenerarJobs.'-'.$numSinNotas.'-2" data-toggle="tooltip" data-placement="right" title="Deje que la plataforma lo haga por usted. Es genial!" id="'.$rCargas["car_id"].'" href="javascript:void(0);" name="../compartido/job-generar-informe.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&grado='.base64_encode($rCargas["car_curso"]).'&grupo='.base64_encode($rCargas["car_grupo"]).'" onclick="mensajeGenerarInforme(this)">Forma nueva</a></li>
                                                                     </ul>
                                                                 </div>
 															';

@@ -35,6 +35,7 @@ require_once(ROOT_PATH."/main-app/class/Plataforma.php");
 require_once(ROOT_PATH."/main-app/class/TipoUsuario.php");
 require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 require_once(ROOT_PATH."/main-app/class/Grupos.php");
+require_once(ROOT_PATH."/main-app/class/componentes/botones-guardar.php");
 
 $tituloDePagina = $frases[102][$datosUsuarioActual['uss_idioma']];
 if (!empty($datosPaginaActual)) {
@@ -201,6 +202,21 @@ if (!empty($datosPaginaActual)) {
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
+}
+
+#overlayInforme {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+	z-index: 9999;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	font-size: 20px;
 }
 
 #loader {

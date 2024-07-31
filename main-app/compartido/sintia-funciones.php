@@ -66,7 +66,15 @@ class Archivos {
 	function subirArchivoStorage($destino, $archivo, $nombreInputFile,$storage){		    
 		$localFilePath = $_FILES[$nombreInputFile]['tmp_name'];// Ruta del archivo local que deseas subir	
 		$cloudFilePath =  $destino .$archivo;// Ruta en el almacenamiento en la nube de Firebase donde deseas almacenar el archivo
-		$storage->getBucket()->upload(fopen($localFilePath, 'r'), ['name' => $cloudFilePath	]);
+		if(!empty($localFilePath) && !empty($cloudFilePath)) {
+			$storage->getBucket()->upload(fopen($localFilePath, 'r'), ['name' => $cloudFilePath	]);
+			
+		} else {
+			echo "_FILES: " . $_FILES . "<br>";
+			echo "localFilePath: " . $localFilePath . "<br>"; 
+			echo "cloudFilePath: " . $cloudFilePath . "<br>"; 
+			exit();
+		}
 	}
 
 	
@@ -79,7 +87,7 @@ class Usuarios{
 
 	
 
-	function verificarFoto($foto){
+	public static function verificarFoto($foto){
 
 		
 

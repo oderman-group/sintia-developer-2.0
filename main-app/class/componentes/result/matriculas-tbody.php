@@ -1,8 +1,8 @@
 <?php
 if (!empty($data["dataTotal"])) {
-	require_once("../UsuariosPadre.php");
-	require_once("../Estudiantes.php");
-	require_once("../Modulos.php");
+	require_once(ROOT_PATH . "/main-app/class/UsuariosPadre.php");
+	require_once(ROOT_PATH . "/main-app/class/Estudiantes.php");
+	require_once(ROOT_PATH . "/main-app/class/Modulos.php");
 	include(ROOT_PATH . "/main-app/compartido/sintia-funciones.php");
 }
 
@@ -10,18 +10,19 @@ $contReg = 1;
 $usuariosClase = new Usuarios;
 foreach ($data["data"] as $resultado) {
 
-	$acudiente = UsuariosPadre::sesionUsuario($resultado["mat_acudiente"]);
+	$acudiente = isset($resultado["mat_acudiente"]) ? UsuariosPadre::sesionUsuario($resultado["mat_acudiente"]) : null;
 
-	$bgColor = $resultado['uss_bloqueado'] == 1 ? '#ff572238' : '';
+	$bgColor = $resultado['uss_bloqueado'] == 1 ? 'style="background-color: #ff572238;"' : '';
 
 	$cheked = '';
 	if ($resultado['uss_bloqueado'] == 1) {
 		$cheked = 'checked';
 	}
 
-	$color = $resultado["mat_inclusion"] == 1 ? 'blue' : '';
+	$color = $resultado["mat_inclusion"] == 1 ? 'style="color: blue;' : '';
 
 	$nombreAcudiente = '';
+	$idAcudiente = '';
 	if (isset($acudiente['uss_id'])) {
 		$nombreAcudiente = UsuariosPadre::nombreCompletoDelUsuario($acudiente);
 		$idAcudiente = $acudiente['uss_id'];
@@ -58,7 +59,7 @@ foreach ($data["data"] as $resultado) {
 														{$resultado['mat_fecha_nacimiento']}
 														";
 ?>
-	<tr id="EST<?= $resultado['mat_id']; ?>" style="background-color:<?= $bgColor; ?>;">
+	<tr id="EST<?= $resultado['mat_id']; ?>" <?= $bgColor; ?>>
 		<td>
 			<?php if ($resultado["mat_compromiso"] == 1) { ?>
 				<a href="javascript:void(0);" title="Activar para la matricula" onClick="sweetConfirmacion('Alerta!','Deseas ejecutar esta accion?','question','estudiantes-activar.php?id=<?= base64_encode($resultado["mat_id"]); ?>')"><img src="../files/iconos/agt_action_success.png" height="20" width="20"></a>
@@ -93,7 +94,7 @@ foreach ($data["data"] as $resultado) {
 		<td><?= $resultado['mat_documento']; ?></td>
 		<?php $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado); ?>
 
-		<td style="color:<?= $color; ?>;"><?= $marcaMediaTecnica; ?><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="<?= Estudiantes::NombreCompletoDelEstudiante($resultado); ?>" data-content="<?= $infoTooltipEstudiante; ?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?= $nombre; ?></a></td>
+		<td <?= $color; ?>><?= $marcaMediaTecnica; ?><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="<?= Estudiantes::NombreCompletoDelEstudiante($resultado); ?>" data-content="<?= $infoTooltipEstudiante; ?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?= $nombre; ?></a></td>
 		<td><?= strtoupper($resultado['gra_nombre'] . " " . $resultado['gru_nombre']); ?></td>
 		<td><?= $resultado['uss_usuario']; ?></td>
 		<?php
@@ -132,7 +133,7 @@ foreach ($data["data"] as $resultado) {
 						<?php if (!empty($resultado['gra_nombre']) && Modulos::validarSubRol(['DT0083'])) { ?>
 							<li><a href="javascript:void(0);" data-toggle="modal" data-target="#cambiarGrupoModal<?= $resultado['mat_id']; ?>">Cambiar de grupo</a></li>
 						<?php } ?>
-						<?php if (Modulos::validarSubRol(['DT0074'])) {
+						<?php if (Modulos::validarSubRol(['DT0074']) && !empty($resultado['mat_id'])) {
 							$retirarRestaurar = 'Retirar';
 							if ($resultado['mat_estado_matricula'] == CANCELADO) {
 								$retirarRestaurar = 'Restaurar';
@@ -191,29 +192,22 @@ foreach ($data["data"] as $resultado) {
 					} ?>
 				</ul>
 			</div>
+			<?php
+				$_GET["id"] = base64_encode($resultado['mat_id']);
+				if (!empty($resultado['gra_nombre'])) {
+					$idModal = "cambiarGrupoModal" . $resultado['mat_id'];
+					$contenido = ROOT_PATH."/main-app/directivo/estudiantes-cambiar-grupo-modal.php";
+					include(ROOT_PATH."/main-app/compartido/contenido-modal.php");
+					
+				}
+
+				$idModal = "retirarModal" . $resultado['mat_id'];
+				$contenido = ROOT_PATH."/main-app/directivo/estudiantes-retirar-modal.php";
+				include(ROOT_PATH."/main-app/compartido/contenido-modal.php");
+			?>
 		</td>
 	</tr>
 <?php
-	$_GET["id"] = base64_encode($resultado['mat_id']);
-	if (!empty($resultado['gra_nombre'])) {
-		$idModal = "cambiarGrupoModal" . $resultado['mat_id'];
-		$contenido = "../directivo/estudiantes-cambiar-grupo-modal.php";
-		if (!empty($data["dataTotal"])) {
-			include("../../compartido/contenido-modal.php");
-		}else{
-			include("../compartido/contenido-modal.php");
-		}
-		
-	}
-
-	$idModal = "retirarModal" . $resultado['mat_id'];
-	$contenido = "../directivo/estudiantes-retirar-modal.php";
-	if (!empty($data["dataTotal"])) {
-		include("../../compartido/contenido-modal.php");
-	}else{
-		include("../compartido/contenido-modal.php");
-	}
-
 	$contReg++;
 }
 ?>

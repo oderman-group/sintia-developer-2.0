@@ -1,5 +1,5 @@
 <?php
-
+require_once(ROOT_PATH."/main-app/class/Areas.php");
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
     echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
     exit();
@@ -50,16 +50,24 @@ if (!Modulos::validarPermisoEdicion()) {
                     <select class="form-control  select2" name="areaM" required <?= $disabledPermiso; ?>>
                         <option value="">Seleccione una opción</option>
                         <?php
-                        try {
-                            $cAreas = mysqli_query($conexion, "SELECT ar_id, ar_nombre, ar_posicion FROM ".BD_ACADEMICA.".academico_areas WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]};");
-                        } catch (Exception $e) {
-                            include("../compartido/error-catch-to-report.php");
-                        }
+                        $cAreas = Areas::traerAreasInstitucion($config);
                         while ($rA = mysqli_fetch_array($cAreas, MYSQLI_BOTH)) {
                             echo '<option value="' . $rA["ar_id"] . '">' . $rA["ar_nombre"] . '</option>';
                         }
                         ?>
                     </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 control-label">Sumar en promedio general?</label>
+                <div class="col-sm-8">
+                    <select class="form-control  select2" name="sumarPromedio" <?= $disabledPermiso; ?>>
+                        <option value="">Seleccione una opción</option>
+                        <option value="<?=SI?>"><?=SI?></option>
+                        <option value="<?=NO?>"><?=NO?></option>
+                    </select>
+                    <span style="color: #6017dc;">Deseas que esta asignatura cuente en la suma del promedio general en los informes?.</span>
                 </div>
             </div>
 
@@ -73,11 +81,7 @@ if (!Modulos::validarPermisoEdicion()) {
             <?php } ?>
 
 
-            <?php if (Modulos::validarPermisoEdicion()) { ?>
-                <button type="submit" class="btn  btn-info">
-                    <i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-                </button>
-            <?php } ?>
+           <?php $botones = new botonesGuardar(null,Modulos::validarPermisoEdicion()); ?>
         </form>
     </div>
 </div>

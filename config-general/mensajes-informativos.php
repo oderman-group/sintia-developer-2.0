@@ -48,6 +48,16 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 ';
             break;
 
+            case 9:
+                $tipo = 'danger';
+                $mensaje = 'Su institución se encuentra desactivada. Por favor comúniquese con la administración de plataforma SINTIA.';
+            break;
+
+            case 10:
+                $tipo = 'secondary';
+                $mensaje = 'Error genérico: '.$_GET['genericError'];
+            break;
+
             case 'ER_DT_1':
                 $tipo = 'danger';
                 $mensaje = 'Este usuario(<b>' . $_GET["usuario"] . '</b>) ya existe para otra persona. Cambie el nombre de usuario por favor.';
@@ -277,6 +287,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
             case 'SC_GN_5':
                 $tipo = 'success';
                 base64_decode($_GET["estado"])==1 ? $mensaje = 'La respuesta cambio de estado a correcta' : $mensaje = 'La respuesta cambio de estado a incorrecta';
+            break;
+
+            case 'SC_GN_6':
+                $tipo = 'success';
+                $mensaje = 'Se te envío un correo con el nuevo usuarios de acceso.';
             break;
 
             default:

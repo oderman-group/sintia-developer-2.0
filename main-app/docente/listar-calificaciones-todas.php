@@ -4,16 +4,13 @@ $idPaginaInterna = 'DC0011';
 include("../compartido/historial-acciones-guardar.php");
 include("verificar-carga.php");
 include("../compartido/head.php");
-require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/Actividades.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
+require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 
-$consultaValores=mysqli_query($conexion, "SELECT
-(SELECT sum(act_valor) FROM ".BD_ACADEMICA.".academico_actividades 
-WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}),
-(SELECT count(*) FROM ".BD_ACADEMICA.".academico_actividades 
-WHERE act_id_carga='".$cargaConsultaActual."' AND act_periodo='".$periodoConsultaActual."' AND act_estado=1 AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]})
-");
-$valores = mysqli_fetch_array($consultaValores, MYSQLI_BOTH);
+$valores = Actividades::consultarValores($config, $cargaConsultaActual, $periodoConsultaActual);
 $porcentajeRestante = 100 - $valores[0];
 ?>
 
@@ -92,7 +89,7 @@ $porcentajeRestante = 100 - $valores[0];
                 <th style="width: 50px;">#</th>
                 <th style="width: 400px;"><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
                 <?php
-                    $cA = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id_carga='".$cargaConsultaActual."' AND act_estado=1 AND act_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                    $cA = Actividades::traerActividadesCarga($config, $cargaConsultaActual, $periodoConsultaActual);
                     while($rA = mysqli_fetch_array($cA, MYSQLI_BOTH)){
                     echo '<th style="text-align:center; font-size:11px; width:100px;"><a href="calificaciones-editar.php?idR='.base64_encode($rA['act_id']).'" title="'.$rA['act_descripcion'].'">'.$rA['act_id'].'<br>
                     '.$rA['act_descripcion'].'<br>
@@ -129,11 +126,10 @@ $porcentajeRestante = 100 - $valores[0];
                     </td>
 
                     <?php
-                        $cA = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_actividades WHERE act_id_carga='".$cargaConsultaActual."' AND act_estado=1 AND act_periodo='".$periodoConsultaActual."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                        $cA = Actividades::traerActividadesCarga($config, $cargaConsultaActual, $periodoConsultaActual);
                         while($rA = mysqli_fetch_array($cA, MYSQLI_BOTH)){
                         //LAS CALIFICACIONES
-                        $consultaNotasResultados=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_estudiante='".$resultado['mat_id']."' AND cal_id_actividad='".$rA['act_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                        $notasResultado = mysqli_fetch_array($consultaNotasResultados, MYSQLI_BOTH);
+                        $notasResultado = Calificaciones::traerCalificacionActividadEstudiante($config, $rA['act_id'], $resultado['mat_id']);
                     ?>
                         <td style="text-align:center;">
                             
@@ -172,7 +168,7 @@ $porcentajeRestante = 100 - $valores[0];
                         }
                     if($definitiva<$config[5] and $definitiva!="") $colorDef = $config[6]; elseif($definitiva>=$config[5]) $colorDef = $config[7]; else $colorDef = "black";
 
-                    $definitivaFinal=$definitiva;
+                    $definitivaFinal = Utilidades::setFinalZero($definitiva);
                     $atributosA='style="text-decoration:underline; color:'.$colorDef.';"';
                     if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
                         $atributosA='tabindex="0" role="button" data-toggle="popover" data-trigger="hover" title="Nota Cuantitativa: '.$definitiva.'" data-content="<b>Nota Cuantitativa:</b><br>'.$definitiva.'" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:'.$colorDef.';"';

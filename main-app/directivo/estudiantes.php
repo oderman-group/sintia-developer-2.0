@@ -7,10 +7,46 @@ require_once("../class/Estudiantes.php");
 require_once("../class/servicios/GradoServicios.php"); 
 require_once(ROOT_PATH."/main-app/class/Grupos.php");
 
+if (isset($_GET['mode']) && $_GET['mode'] === 'DEV') {
+	$redis = RedisInstance::getRedisInstance();
+
+	$arrayTest = [
+		[
+			'Nombre' => 'Jhon',
+			'Edad'   => 33,
+			'Genero' => 'M'
+		],
+		[
+			'Nombre' => 'Michelle',
+			'Edad'   => 24,
+			'Genero' => 'F'
+		],
+	];
+
+	$redis->set('jhonky', json_encode($arrayTest));
+	//echo $redis->ttl('jhonky'); exit();
+	print_r(json_decode($redis->get('jhonky'), true));
+	echo "<hr>";
+	
+	$redis->lPush("estudiantes", "Jhon");
+	$redis->lPush("estudiantes", "Cristal");
+	$redis->lPush("estudiantes", "Michelle");
+
+	$estudiantes = $redis->lRange("estudiantes", 0, 2);
+	
+	foreach($estudiantes as $valor) {
+		echo $valor."<br>";
+	}
+
+	exit();
+}
+
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
 }
+
+//$redis = RedisInstance::getRedisInstance();
 
 $jQueryTable = '';
 if($config['conf_doble_buscador'] == 1) {
@@ -50,6 +86,16 @@ if($config['conf_doble_buscador'] == 1) {
 								<?php include("../../config-general/mensajes-informativos.php"); ?>
 								<span id="respuestaCambiarEstado"></span>
 
+								<?php 
+								//include("includes/barra-superior-matriculas.php");	
+								// $matKeys = array_slice($keys, $inicio, $registros);
+								// foreach ($matKeys as $matKey){
+								// 	$matData = $redis->get($matKey);
+								// 	$resultado = json_decode($matData, true);
+								// }
+								// print_r($resultado); exit();
+								?>
+								
 								<?php include("includes/barra-superior-matriculas-componente.php");	?>
 
 									<?php
@@ -110,8 +156,8 @@ if($config['conf_doble_buscador'] == 1) {
 											
                                         <div>
 											
-                                    		<table <?php echo $jQueryTable;?> class="display" style="width:100%;">
-											<div id="gifCarga" class="gif-carga">
+                                    		<table <?=$jQueryTable;?> class="display" style="width:100%;">
+												<div id="gifCarga" class="gif-carga">
 													<img  alt="Cargando...">
 												</div>
                                                 <thead>
@@ -141,9 +187,10 @@ if($config['conf_doble_buscador'] == 1) {
 														$arraysDatos[$index] = $fila;
 														$index++;
 													}
+													$consulta->free();
 													$lista = $arraysDatos;
 													$data["data"] =$lista;
-													include("../class/componentes/result/matriculas-tbody.php");
+													include(ROOT_PATH . "/main-app/class/componentes/result/matriculas-tbody.php");
 													  ?>
                                                 </tbody>
                                             </table>
@@ -160,9 +207,6 @@ if($config['conf_doble_buscador'] == 1) {
             <!-- end page content -->
              <?php // include("../compartido/panel-configuracion.php");?>
         </div>
-		
-		
-		<?php $idModal="ModalSintia1"; $_GET["id"]=base64_encode(2803); $contenido="../compartido/noticias-agregar-modal.php"; include("../compartido/contenido-modal.php");?>
         <!-- end page container -->
         <?php include("../compartido/footer.php");?>
     </div>

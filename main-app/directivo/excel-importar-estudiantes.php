@@ -3,6 +3,8 @@ include("session.php");
 require_once("../class/Usuarios.php");
 require_once("../class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/Grados.php");
 require '../../librerias/Excel/vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -50,6 +52,7 @@ if($extension == 'xlsx'){
 			$acudientesExistentes    = array();
 			$acudientesNoCreados     = array();
 
+			$contE = 1;
 			while($f<=$numFilas){
 				
 				/*
@@ -72,12 +75,8 @@ if($extension == 'xlsx'){
 						$idAcudiente = $datosAcudienteExistente['uss_id'];
 						$acudientesExistentes["FILA_".$f] = $datosAcudienteExistente['uss_usuario'];
 					} else {
-						$idAcudiente=Utilidades::generateCode("USS");
-						try{
-							mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_idioma, institucion, year) VALUES ('".$idAcudiente."', '".$datosAcudiente['uss_usuario']."', '".$datosAcudiente['uss_clave']."', '".$datosAcudiente['uss_tipo']."', '".$datosAcudiente['uss_nombre']."', 1, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-						} catch (Exception $e) {
-							include("../compartido/error-catch-to-report.php");
-						}
+						$idAcudiente = UsuariosPadre::guardarUsuario($conexionPDO, "uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_idioma, institucion, year, uss_id", [$datosAcudiente['uss_usuario'], $datosAcudiente['uss_clave'], $datosAcudiente['uss_tipo'], $datosAcudiente['uss_nombre'], 1, $config['conf_id_institucion'], $_SESSION["bd"]]);
+						
 						$acudientesCreados["FILA_".$f] = $datosAcudiente['uss_usuario'];
 					}
 				} else {
@@ -125,17 +124,8 @@ if($extension == 'xlsx'){
 
 				$grado = "";
 				if(!empty($arrayIndividual['mat_grado'])) {
-					try{
-						$consulta= mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados 
-						WHERE gra_nombre='".$arrayIndividual['mat_grado']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-					} catch (Exception $e) {
-						include("../compartido/error-catch-to-report.php");
-					}
-
-					$num = mysqli_num_rows($consulta);
-
-					if($num > 0){
-						$datos=mysqli_fetch_array($consulta, MYSQLI_BOTH);
+					$datos = Grados::obtenerGradoPorNombre($config, $arrayIndividual['mat_grado']);
+					if(!empty($datos['gra_id'])){
 						$grado = $datos['gra_id'];
 					}
 					
@@ -168,8 +158,11 @@ if($extension == 'xlsx'){
 						$datosEstudianteExistente = Estudiantes::obtenerDatosEstudiante($arrayIndividual['mat_documento']);
 
 						try {
-							
-							$camposActualizar = "";
+
+							$update = [
+								'mat_matricula' => 'mat_matricula'
+							];
+
 							if(!empty($_POST['actualizarCampo'])) {
 							
 								$camposFormulario = count($_POST['actualizarCampo']);
@@ -178,28 +171,28 @@ if($extension == 'xlsx'){
 									$cont = 0;
 									while ($cont < $camposFormulario) {
 										if($_POST['actualizarCampo'][$cont] == 1) {
-											$camposActualizar .= ", mat_grado='".$grado."'";
+											$update['mat_grado'] = $grado;
 										}
 
 										if($_POST['actualizarCampo'][$cont] == 2) {
-											$camposActualizar .= ", mat_grupo='".$grupo."'";
+											$update['mat_grupo'] = $grupo;
 										}
 
 										if($_POST['actualizarCampo'][$cont] == 3) {
-											$camposActualizar .= ", mat_tipo_documento='".$tipoDocumento."'";
+											$update['mat_tipo_documento'] = $tipoDocumento;
 										}
 
 										if($_POST['actualizarCampo'][$cont] == 4) {
-											$camposActualizar .= ", mat_acudiente='".$idAcudiente."'";
+											$update['mat_acudiente'] = $idAcudiente;
 										}
 
 										if($_POST['actualizarCampo'][$cont] == 5) {
-											$camposActualizar .= ", mat_nombre2='".$hojaActual->getCell('D'.$f)->getValue()."'";
+											$update['mat_nombre2'] = $hojaActual->getCell('D'.$f)->getValue();
 										}
 
 										if($_POST['actualizarCampo'][$cont] == 6) {
 
-											$matFechaNacimiento=$hojaActual->getCell('H'.$f)->getFormattedValue();
+											$matFechaNacimiento = $hojaActual->getCell('H'.$f)->getFormattedValue();
 											$fNacimiento = "0000-00-00";
 											if(!empty($matFechaNacimiento)) {
 												$arrayBuscar = array('-', '.', ' ', '.-');
@@ -213,7 +206,7 @@ if($extension == 'xlsx'){
 												$fNacimiento = $year.'-'.$mes.'-'.$dia;
 											}
 
-											$camposActualizar .= ", mat_fecha_nacimiento='".$fNacimiento."'";
+											$update['mat_fecha_nacimiento'] = $fNacimiento;
 										}
 										
 										$cont ++;
@@ -222,12 +215,8 @@ if($extension == 'xlsx'){
 							}
 
 							//Actualizamos el acudiente y los datos del formulario
-							try{
-								mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_matriculas SET mat_matricula=mat_matricula $camposActualizar
-								WHERE mat_id='".$datosEstudianteExistente['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-							} catch (Exception $e) {
-								include("../compartido/error-catch-to-report.php");
-							}
+							
+							Estudiantes::actualizarMatriculasPorId($config, $datosEstudianteExistente['mat_id'], $update);
 
 							//Verificamos que el array no venga vacio y adicionalmente que tenga el campo acudiente seleccionado para actualizarce
 							if (!empty($_POST['actualizarCampo']) && in_array(4, $_POST['actualizarCampo'])) {
@@ -280,18 +269,15 @@ if($extension == 'xlsx'){
 
 						$arrayTodos[$f] = $arrayIndividual;
 
-						$idUsuarioEstudiante = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'usuarios');
-						try{
-							mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios(uss_id, uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_idioma, uss_bloqueado, uss_fecha_registro, uss_responsable_registro, uss_intentos_fallidos, uss_tipo_documento, uss_apellido1, uss_apellido2, uss_nombre2,uss_documento, institucion, year) VALUES ('".$idUsuarioEstudiante."', '".$arrayIndividual['mat_documento']."', '".$clavePorDefectoUsuarios."', 4, '".$arrayIndividual['mat_nombres']."', 0, 1, 0, now(), '".$_SESSION["id"]."', 0, '".$tipoDocumento."', '".$arrayIndividual['mat_primer_apellido']."', '".$arrayIndividual['mat_segundo_apellido']."', '".$arrayIndividual['mat_nombre2']."', '".$arrayIndividual['mat_documento']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-						} catch (Exception $e) {
-							include("../compartido/error-catch-to-report.php");
-						}
+						$idUsuarioEstudiante = UsuariosPadre::guardarUsuario($conexionPDO, "uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_idioma, uss_bloqueado, uss_fecha_registro, uss_responsable_registro, uss_intentos_fallidos, uss_tipo_documento, uss_apellido1, uss_apellido2, uss_nombre2,uss_documento, institucion, year, uss_id", [$arrayIndividual['mat_documento'], $clavePorDefectoUsuarios, 4, $arrayIndividual['mat_nombres'], 0, 1, 0, date("Y-m-d H:i:s"), $_SESSION["id"], 0, $tipoDocumento, $arrayIndividual['mat_primer_apellido'], $arrayIndividual['mat_segundo_apellido'], $arrayIndividual['mat_nombre2'], $arrayIndividual['mat_documento'], $config['conf_id_institucion'], $_SESSION["bd"]]);
 
-						$codigoMAT = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_matriculas');
+						$codigoMAT = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_matriculas').$contE;
 
 						$sql .= "('".$codigoMAT."', '".$arrayIndividual['mat_matricula']."', NOW(), '".$arrayIndividual['mat_primer_apellido']."', '".$arrayIndividual['mat_segundo_apellido']."', '".$arrayIndividual['mat_nombres']."', '".$grado."', '".$idUsuarioEstudiante."', '".$idAcudiente."', '".$arrayIndividual['mat_documento']."', '".$tipoDocumento."', '".$grupo."', '".$arrayIndividual['mat_direccion']."', '".$genero."', '".$fNacimiento."', '".$arrayIndividual['mat_barrio']."', '".$arrayIndividual['mat_celular']."', '".$email."', '".$estrato."', '".$arrayIndividual['mat_tipo_sangre']."', '".$arrayIndividual['mat_eps']."', '".$arrayIndividual['mat_nombre2']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]}),";
 
 						$estudiantesCreados["FILA_".$f] = $arrayIndividual['mat_documento'];
+
+						$contE++;
 
 					}
 				} else {

@@ -15,12 +15,13 @@ if (!empty($_GET['id'])) {
     $id = base64_decode($_GET['id']);;
 }
 
-$resultado = Asignaciones::traerDatosAsignaciones($conexion, $config, $id);
+$resultado = Asignaciones::traerDatosAsignacion($conexion, $config, $id);
+$cursos = !empty($resultado['gal_id_curso']) ? explode(",", $resultado['gal_id_curso']) : array();
 
 $iniciadas = Asignaciones::consultarCantAsignacionesEmpezadas($conexion, $config, $resultado['gal_id']);
 
 $disabledPermiso = "";
-if (!Modulos::validarPermisoEdicion() || $resultado['epag_estado'] != PENDIENTE) {
+if (!Modulos::validarPermisoEdicion() || $iniciadas > 0) {
     $disabledPermiso = "disabled";
 }
 ?>
@@ -58,7 +59,7 @@ if (!Modulos::validarPermisoEdicion() || $resultado['epag_estado'] != PENDIENTE)
                             <?php include("../compartido/texto-manual-ayuda.php"); ?>
                         </div>
                         <ol class="breadcrumb page-breadcrumb pull-right">
-                            <li><a class="parent-item" href="javascript:void(0);" name="asignaciones.php?idE=<?= base64_encode($resultado['epag_id_evaluacion']); ?>" onClick="deseaRegresar(this)">Asignaciones</a>&nbsp;<i class="fa fa-angle-right"></i></li>
+                            <li><a class="parent-item" href="javascript:void(0);" name="asignaciones.php?idE=<?= base64_encode($resultado['gal_id_evaluacion']); ?>" onClick="deseaRegresar(this)">Asignaciones</a>&nbsp;<i class="fa fa-angle-right"></i></li>
                             <li class="active"><?= $frases[165][$datosUsuarioActual['uss_idioma']]; ?> Asignación</li>
                         </ol>
                     </div>
@@ -75,25 +76,27 @@ if (!Modulos::validarPermisoEdicion() || $resultado['epag_estado'] != PENDIENTE)
 
 
                                 <form name="formularioGuardar" action="asignaciones-actualizar.php" method="post">
-                                    <input type="hidden" value="<?= $resultado['epag_id']; ?>" name="id">
-                                    <input type="hidden" value="<?= $resultado['epag_id_evaluacion']; ?>" name="idE">
+                                    <input type="hidden" value="<?= $resultado['gal_id']; ?>" name="id">
+                                    <input type="hidden" value="<?= $resultado['gal_id_evaluacion']; ?>" name="idE">
+                                    <input type="hidden" value="<?= $resultado['gal_tipo']; ?>" name="tipoEncuestaAnterior">
+                                    <input type="hidden" value="<?= $resultado['gal_id_evaluado']; ?>" name="evaluadoAnterior">
+                                    <input type="hidden" value="<?= $resultado['gal_tipo_evaluador']; ?>" name="evaluadorAnterior">
+                                    <input type="hidden" value="<?= $resultado['gal_id_curso']; ?>" name="evaluadorCursosAnterior">
+                                    <input type="hidden" value="<?= $resultado['gal_limite_evaluadores']; ?>" name="limiteEvaluadoresAnterior">
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Tipo de Encuesta
                                             <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="A que o quien se va a enfocar esta asignación."><i class="fa fa-question"></i></button>
                                         </label>
                                         <div class="col-sm-4">
-                                            <select class="form-control  select2" id="tipoEncuesta" name="tipoEncuesta" data-id-evaluado="<?= $resultado['epag_id_evaluado']; ?>" onchange="selectEvaluado(this)" <?= $disabledPermiso; ?>>
+                                            <select class="form-control  select2" id="tipoEncuesta" name="tipoEncuesta" data-id-evaluado="<?= $resultado['gal_id_evaluado']; ?>" onchange="selectEvaluado(this)" <?= $disabledPermiso; ?>>
                                                 <option value="">Escoja una opción</option>
-                                                <option value="<?=DIRECTIVO?>" <?=$resultado['epag_tipo'] == DIRECTIVO ? "selected": "";?>><?=DIRECTIVO?></option>
-                                                <option value="<?=DOCENTE?>" <?=$resultado['epag_tipo'] == DOCENTE ? "selected": "";?>><?=DOCENTE?></option>
-                                                <option value="<?=AREA?>" <?=$resultado['epag_tipo'] == AREA ? "selected": "";?>><?=AREA?></option>
-                                                <option value="<?=MATERIA?>" <?=$resultado['epag_tipo'] == MATERIA ? "selected": "";?>><?=MATERIA?></option>
-                                                <option value="<?=CURSO?>" <?=$resultado['epag_tipo'] == CURSO ? "selected": "";?>><?=CURSO?></option>
+                                                <option value="<?=DIRECTIVO?>" <?=$resultado['gal_tipo'] == DIRECTIVO ? "selected": "";?>><?=DIRECTIVO?></option>
+                                                <option value="<?=DOCENTE?>" <?=$resultado['gal_tipo'] == DOCENTE ? "selected": "";?>><?=DOCENTE?></option>
+                                                <option value="<?=AREA?>" <?=$resultado['gal_tipo'] == AREA ? "selected": "";?>><?=AREA?></option>
+                                                <option value="<?=MATERIA?>" <?=$resultado['gal_tipo'] == MATERIA ? "selected": "";?>><?=MATERIA?></option>
+                                                <option value="<?=CURSO?>" <?=$resultado['gal_tipo'] == CURSO ? "selected": "";?>><?=CURSO?></option>
                                             </select>
                                         </div>
-                                        <script>
-                                            $(document).ready(selectEvaluado(document.getElementById('tipoEncuesta')));
-                                        </script>
 
                                         <label class="col-sm-2 control-label">Evaluado
                                             <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Escoja los usuarios, curso, materia o areas que seran evaluadas."><i class="fa fa-question"></i></button>
@@ -107,27 +110,38 @@ if (!Modulos::validarPermisoEdicion() || $resultado['epag_estado'] != PENDIENTE)
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Evaluador
-                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Usuarios que realizara esta encuesta."><i class="fa fa-question"></i></button>
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Escoja el tipo de usuarios o cursos que realizaran esta encuesta."><i class="fa fa-question"></i></button>
                                         </label>
                                         <div class="col-sm-4">
-                                            <select class="form-control select2" name="evaluador" <?= $disabledPermiso; ?>>
+                                            <select class="form-control  select2" name="evaluador" id="evaluador" onchange="mostrarSelectCurso(this)" <?= $disabledPermiso; ?>>
                                                 <option value="">Escoja una opción</option>
-                                                <?php
-                                                    $consultaEvaluador = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-                                                    while ($datosEvaluador = mysqli_fetch_array($consultaEvaluador, MYSQLI_BOTH)) {
-                                                        $selected = $resultado['epag_id_evaluador'] == $datosEvaluador['uss_id'] ? "selected": "";
-                                                        echo '<option value="'.$datosEvaluador['uss_id'].'" '.$selected.'>'.UsuariosPadre::nombreCompletoDelUsuario($datosEvaluador).'</option>';
-                                                    }
-                                                ?>
+                                                <option value="<?=ACUDIENTE?>" <?=$resultado['gal_tipo_evaluador'] == ACUDIENTE ? "selected": "";?>><?=ACUDIENTE?></option>
+                                                <option value="<?=ESTUDIANTE?>" <?=$resultado['gal_tipo_evaluador'] == ESTUDIANTE ? "selected": "";?>><?=ESTUDIANTE?></option>
+                                                <option value="<?=DOCENTE?>" <?=$resultado['gal_tipo_evaluador'] == DOCENTE ? "selected": "";?>><?=DOCENTE?></option>
+                                                <option value="<?=DIRECTIVO?>" <?=$resultado['gal_tipo_evaluador'] == DIRECTIVO ? "selected": "";?>><?=DIRECTIVO?></option>
+                                                <option value="<?=CURSO?>" <?=$resultado['gal_tipo_evaluador'] == CURSO ? "selected": "";?>><?=CURSO?></option>
                                             </select>
                                         </div>
-                                        
-                                        <label class="col-sm-2 control-label">Estado</label>
-                                        <div class="col-sm-4"><?=$resultado['epag_estado'];?></div>
+
+                                        <div id="elementSelectCurso" style="display: none;">
+                                            <label class="col-sm-2 control-label">Escoje los cursos
+                                                <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Si el evaluador sera curso, especifique que cursos realizaran la encuesta."><i class="fa fa-question"></i></button>
+                                            </label>
+                                            <div class="col-sm-4">
+                                                <select class="form-control  select2-multiple" style="width: 100%;" multiple name="evaluadorCursos[]" <?= $disabledPermiso; ?>>
+                                                    <option value="">Escoja una opción</option>
+                                                    <?php
+                                                        $consultaCursos = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+                                                        while ($datosCursos = mysqli_fetch_array($consultaCursos, MYSQLI_BOTH)) {
+                                                    ?>
+                                                    <option value="<?=$datosCursos['gra_id']?>" <?=!empty($resultado['gal_id_curso']) && in_array($datosCursos['gra_id'], $cursos) ? "selected": "";?>><?=$datosCursos['gra_nombre']?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <input type="hidden" name="idLimite"value="<?=$resultado['gal_id'];?>">
                                         <label class="col-sm-2 control-label">Limite
                                             <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Con este campo determinas cuantos usuarios pueden realizar la encuesta."><i class="fa fa-question"></i></button>
                                         </label>
@@ -136,12 +150,7 @@ if (!Modulos::validarPermisoEdicion() || $resultado['epag_estado'] != PENDIENTE)
                                         </div>
                                     </div>
                                     
-                                    <a href="javascript:void(0);" name="asignaciones.php?idE=<?= base64_encode($resultado['epag_id_evaluacion']); ?>" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i><?= $frases[184][$datosUsuarioActual['uss_idioma']]; ?></a>
-                                    <?php if (Modulos::validarPermisoEdicion() && $resultado['epag_estado'] == PENDIENTE) { ?>
-                                        <button type="submit" class="btn  btn-info">
-                                            <i class="fa fa-save" aria-hidden="true"></i> <?= $frases[419][$datosUsuarioActual['uss_idioma']]; ?>
-                                        </button>
-                                    <?php } ?>
+                                    <?php $botones = new botonesGuardar("asignaciones.php?idE=".base64_encode($resultado['gal_id_evaluacion']),Modulos::validarPermisoEdicion()); ?>
                                 </form>
                             </div>
                         </div>
@@ -158,6 +167,7 @@ if (!Modulos::validarPermisoEdicion() || $resultado['epag_estado'] != PENDIENTE)
         <?php include("../compartido/footer.php"); ?>
     </div>
     <!-- start js include path -->
+    <script src="../js/Asignaciones.js" ></script>
     <script src="../../config-general/assets/plugins/jquery/jquery.min.js"></script>
     <script src="../../config-general/assets/plugins/popper/popper.js"></script>
     <script src="../../config-general/assets/plugins/jquery-blockui/jquery.blockui.min.js"></script>
@@ -189,6 +199,10 @@ if (!Modulos::validarPermisoEdicion() || $resultado['epag_estado'] != PENDIENTE)
     <script src="../../config-general/assets/js/pages/select2/select2-init.js"></script>
     <!-- end js include path -->
     <script src="../ckeditor/ckeditor.js"></script>
+    <script>
+        $(document).ready(mostrarSelectCurso(document.getElementById('evaluador')));
+        $(document).ready(selectEvaluado(document.getElementById('tipoEncuesta')));
+    </script>
     </body>
 
     <!-- Mirrored from radixtouch.in/templates/admin/smart/source/light/advance_form.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 18 May 2018 17:32:54 GMT -->

@@ -3,14 +3,11 @@ include("session.php");
 require_once("../class/Estudiantes.php");
 include("verificar-carga.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
-try{
-	$consultaNum=mysqli_query($conexion, "SELECT cal_id_actividad, cal_id_estudiante FROM ".BD_ACADEMICA.".academico_calificaciones 
-	WHERE cal_id_actividad='".$_POST["codNota"]."' AND cal_id_estudiante='".$_POST["codEst"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-} catch (Exception $e) {
-	include("../compartido/error-catch-to-report.php");
-}
-$num = mysqli_num_rows($consultaNum);
+require_once(ROOT_PATH."/main-app/class/Actividades.php");
+require_once(ROOT_PATH."/main-app/class/AjaxCalificaciones.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 
+$existeNota = Calificaciones::traerCalificacionActividadEstudiante($config, $_POST["codNota"], $_POST["codEst"]);
 
 $mensajeNot = 'Hubo un error al guardar las cambios';
 
@@ -19,72 +16,38 @@ if($_POST["operacion"]==1){
 	if(trim($_POST["nota"])==""){echo "<span style='color:red; font-size:16px;'>Digite una nota correcta</span>";exit();}
 	if($_POST["nota"]>$config[4]) $_POST["nota"] = $config[4]; if($_POST["nota"]<1) $_POST["nota"] = 1;
 
-	if($num==0){
-		$codigoCAL=Utilidades::generateCode("CAL");
-		try{
-			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='".$_POST["codNota"]."' AND cal_id_estudiante='".$_POST["codEst"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-		try{
-			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_calificaciones(cal_id, cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones, institucion, year)VALUES('".$codigoCAL."', '".$_POST["codEst"]."','".$_POST["nota"]."','".$_POST["codNota"]."', now(), 0, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-		try{
-			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id='".$_POST["codNota"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
+	if(empty($existeNota['cal_id'])){
+		Calificaciones::eliminarCalificacionActividadEstudiante($config, $_POST["codNota"], $_POST["codEst"]);
 		
+		Calificaciones::guardarNotaActividadEstudiante($conexionPDO, "cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones, institucion, year, cal_id", [$_POST["codEst"],$_POST["nota"],$_POST["codNota"], date("Y-m-d H:i:s"), 0, $config['conf_id_institucion'], $_SESSION["bd"]]);
+
+		Actividades::marcarActividadRegistrada($config, $_POST["codNota"]);
 	}else{
-		try{
-			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_calificaciones SET cal_nota='".$_POST["nota"]."', cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1 WHERE cal_id_actividad='".$_POST["codNota"]."' AND cal_id_estudiante='".$_POST["codEst"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-		try{
-			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1 WHERE act_id='".$_POST["codNota"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-		
+		$update = [
+			'cal_nota' => $_POST["nota"]
+		];
+		Calificaciones::actualizarNotaActividadEstudiante($config, $_POST["codNota"], $_POST["codEst"], $update);
+
+		Actividades::marcarActividadRegistrada($config, $_POST["codNota"]);
 	}
 	$mensajeNot = 'La nota se ha guardado correctamente para el estudiante <b>'.strtoupper($_POST["nombreEst"]).'</b>';
 }
 
 //Para guardar observaciones
 if($_POST["operacion"]==2){
-	$codigoCAL=Utilidades::generateCode("CAL");
-	if($num==0){
-		try{
-			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='".$_POST["codNota"]."' AND cal_id_estudiante='".$_POST["codEst"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-		try{
-			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_calificaciones(cal_id, cal_id_estudiante, cal_observaciones, cal_id_actividad, institucion, year)VALUES('".$codigoCAL."', '".$_POST["codEst"]."','".$_POST["nota"]."','".$_POST["codNota"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-		try{
-			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id='".$_POST["codNota"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
+	if(empty($existeNota['cal_id'])){
+		Calificaciones::eliminarCalificacionActividadEstudiante($config, $_POST["codNota"], $_POST["codEst"]);
 		
+		Calificaciones::guardarNotaActividadEstudiante($conexionPDO, "cal_id_estudiante, cal_observaciones, cal_id_actividad, institucion, year, cal_id", [$_POST["codEst"],$_POST["nota"],$_POST["codNota"], $config['conf_id_institucion'], $_SESSION["bd"]]);
+
+		Actividades::marcarActividadRegistrada($config, $_POST["codNota"]);
 	}else{
-		try{
-			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_calificaciones SET cal_observaciones='".$_POST["nota"]."' WHERE cal_id_actividad='".$_POST["codNota"]."' AND cal_id_estudiante='".$_POST["codEst"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-		try{
-			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1 WHERE act_id='".$_POST["codNota"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-		
+		$update = [
+			'cal_observaciones' => mysqli_real_escape_string($conexion,$_POST["nota"])
+		];
+		Calificaciones::actualizarNotaActividadEstudiante($config, $_POST["codNota"], $_POST["codEst"], $update);
+
+		Actividades::marcarActividadRegistrada($config, $_POST["codNota"]);
 	}
 	$mensajeNot = 'La observación se ha guardado correctamente para el estudiante <b>'.strtoupper($_POST["nombreEst"]).'</b>';
 }
@@ -97,44 +60,22 @@ if($_POST["operacion"]==3){
 	
 
 	while($estudiantes = mysqli_fetch_array($consultaE, MYSQLI_BOTH)){
-		try{
-			$consultaNumE=mysqli_query($conexion, "SELECT cal_id_actividad, cal_id_estudiante FROM ".BD_ACADEMICA.".academico_calificaciones 
-			WHERE cal_id_actividad='".$_POST["codNota"]."' AND cal_id_estudiante='".$estudiantes['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		} catch (Exception $e) {
-			include("../compartido/error-catch-to-report.php");
-		}
-		$numE = mysqli_num_rows($consultaNumE);
+
+		$existeNota = Calificaciones::traerCalificacionActividadEstudiante($config, $_POST["codNota"], $estudiantes['mat_id']);
 		
-		if($numE==0){
-			$codigoCAL=Utilidades::generateCode("CAL");
-			try{
-				mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad='".$_POST["codNota"]."' AND cal_id_estudiante='".$estudiantes['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-			} catch (Exception $e) {
-				include("../compartido/error-catch-to-report.php");
-			}
-			try{
-				mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_calificaciones(cal_id, cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones, institucion, year)VALUES('".$codigoCAL."', '".$estudiantes['mat_id']."','".$_POST["nota"]."','".$_POST["codNota"]."', now(), 0, {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-			} catch (Exception $e) {
-				include("../compartido/error-catch-to-report.php");
-			}
-			try{
-				mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id='".$_POST["codNota"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-			} catch (Exception $e) {
-				include("../compartido/error-catch-to-report.php");
-			}
+		if(empty($existeNota['cal_id'])){
+			Calificaciones::eliminarCalificacionActividadEstudiante($config, $_POST["codNota"], $estudiantes['mat_id']);
 			
+			Calificaciones::guardarNotaActividadEstudiante($conexionPDO, "cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones, institucion, year, cal_id", [$estudiantes['mat_id'],$_POST["nota"],$_POST["codNota"], date("Y-m-d H:i:s"), 0, $config['conf_id_institucion'], $_SESSION["bd"]]);
+			
+			Actividades::marcarActividadRegistrada($config, $_POST["codNota"]);
 		}else{
-			try{
-				mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_calificaciones SET cal_nota='".$_POST["nota"]."', cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1 WHERE cal_id_actividad='".$_POST["codNota"]."' AND cal_id_estudiante='".$estudiantes['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-			} catch (Exception $e) {
-				include("../compartido/error-catch-to-report.php");
-			}
-			try{
-				mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1 WHERE act_id='".$_POST["codNota"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-			} catch (Exception $e) {
-				include("../compartido/error-catch-to-report.php");
-			}
+			$update = [
+				"cal_nota" => $_POST["nota"]
+			];
+			Calificaciones::actualizarNotaActividadEstudiante($config, $_POST["codNota"], $estudiantes['mat_id'], $update);
 			
+			Actividades::marcarActividadRegistrada($config, $_POST["codNota"]);
 		}
 	}
 	$mensajeNot = 'Se ha guardado la misma nota para todos los estudiantes en esta actividad. La página se actualizará en unos segundos para que vea los cambios...';
@@ -142,25 +83,9 @@ if($_POST["operacion"]==3){
 
 //Para guardar recuperaciones
 if($_POST["operacion"]==4){
-	$codigo=Utilidades::generateCode("REC");
-	try{
-		$consultaNotaA=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_estudiante=".$_POST["codEst"]." AND cal_id_actividad='".$_POST["codNota"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-	$notaA = mysqli_fetch_array($consultaNotaA, MYSQLI_BOTH);
+	$notaA = Calificaciones::traerCalificacionActividadEstudiante($config, $_POST["codNota"], $_POST["codEst"]);
 	
-	try{
-		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_recuperaciones_notas(rec_id, rec_cod_estudiante, rec_nota, rec_id_nota, rec_fecha, rec_nota_anterior, institucion, year)VALUES('".$codigo."', '".$_POST["codEst"]."','".$_POST["nota"]."','".$_POST["codNota"]."', now(),'".$notaA['cal_nota']."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-	try{
-		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_calificaciones SET cal_nota='".$_POST["nota"]."', cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1 WHERE cal_id_actividad='".$_POST["codNota"]."' AND cal_id_estudiante='".$_POST["codEst"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-	} catch (Exception $e) {
-		include("../compartido/error-catch-to-report.php");
-	}
-	
+	AjaxCalificaciones::ajaxGuardarNotaRecuperacion($conexion, $config, $_POST["codEst"], $_POST["nombreEst"], $_POST["codNota"], $_POST["nota"], $notaA['cal_nota']);
 	
 	$mensajeNot = 'La nota de recuperación se ha guardado correctamente para el estudiante <b>'.strtoupper($_POST["nombreEst"]).'</b>';
 }

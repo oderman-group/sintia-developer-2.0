@@ -3,6 +3,8 @@ session_start();
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 include("../../config-general/config.php");
 require_once("../class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/Modulos.php");
+require_once(ROOT_PATH."/main-app/class/RedisInstance.php");
 
 $_SESSION['id']       = $_SESSION['devAdmin'];
 $_SESSION['admin']    = '';
@@ -22,9 +24,6 @@ $_SESSION["bd"]            = date("Y");
 unset( $_SESSION["admin"] );
 unset( $_SESSION["devAdmin"] );
 
-$config = Plataforma::sesionConfiguracion();
-$_SESSION["configuracion"] = $config;
-
 $_SESSION["datosUsuario"] = UsuariosPadre::sesionUsuario($_SESSION['id']);
 
 $datosUnicosInstitucionConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones 
@@ -32,15 +31,7 @@ WHERE ins_id='".$idInstitucion."' AND ins_enviroment='".ENVIROMENT."'");
 $datosUnicosInstitucion = mysqli_fetch_array($datosUnicosInstitucionConsulta, MYSQLI_BOTH);
 $_SESSION["datosUnicosInstitucion"] = $datosUnicosInstitucion;
 
-$arregloModulos = array();
-$modulosSintia = mysqli_query($conexion, "SELECT mod_id, mod_nombre FROM ".$baseDatosServicios.".modulos
-INNER JOIN ".$baseDatosServicios.".instituciones_modulos ON ipmod_institucion='".$_SESSION["idInstitucion"]."' AND ipmod_modulo=mod_id
-WHERE mod_estado=1");
-while($modI = mysqli_fetch_array($modulosSintia, MYSQLI_BOTH)){
-    $arregloModulos [$modI['mod_id']] = $modI['mod_nombre'];
-}
-
-$_SESSION["modulos"] = $arregloModulos;
+$_SESSION["modulos"] = RedisInstance::getModulesInstitution();
 
 $informacionInstConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_informacion WHERE info_institucion='" . $_SESSION["idInstitucion"] . "' AND info_year='" . $_SESSION["bd"] . "'");
 $informacion_inst = mysqli_fetch_array($informacionInstConsulta, MYSQLI_BOTH);

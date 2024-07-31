@@ -1,10 +1,13 @@
 <?php
-require_once(ROOT_PATH."/main-app/class/Grupos.php");
+$idPaginaInterna = 'DT0083';
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
     echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
     exit();
 }
-require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Grados.php");
+require_once(ROOT_PATH."/main-app/class/Grupos.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/componentes/botones-guardar.php");
 ?>
 
 <!--bootstrap -->
@@ -36,7 +39,7 @@ require_once("../class/Estudiantes.php");
         <div class="panel-body">
 
 
-            <form action="estudiantes-cambiar-grupo-estudiante.php" method="post" class="form-horizontal" enctype="multipart/form-data">
+            <form action="estudiantes-cambiar-grupo-estudiante.php" method="post" class="form-horizontal" enctype="multipart/form-data" id="form-<?= $idModal ?>">
                 <input type="hidden" value="<?= $e['mat_id']; ?>" name="estudiante">
 
 
@@ -83,8 +86,8 @@ require_once("../class/Estudiantes.php");
                         </select>
                     </div>
                 </div>
-
-                <input type="submit" class="btn btn-success" value="Hacer cambio" name="consultas">
+                <?php  
+                $botones = new botonesGuardar(null,Modulos::validarPermisoEdicion()); ?>
             </form>
         </div>
     </div>

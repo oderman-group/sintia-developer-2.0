@@ -1,5 +1,5 @@
 <?php
-if(!isset($_GET["ref"]) or $_GET["ref"]=="" or !is_numeric(base64_decode($_GET["ref"])) or $_SERVER['HTTP_REFERER']==""){
+if(!isset($_REQUEST["ref"]) or $_REQUEST["ref"]=="" or $_SERVER['HTTP_REFERER']==""){
     echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=220";</script>';
 	exit();	
 }
@@ -17,14 +17,26 @@ include("head.php");
 ?>
   </head>
   <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="font-family:Arial, Helvetica, sans-serif;">
-  <?php
-  $resultado = Estudiantes::obtenerDatosEstudiante(base64_decode($_GET["ref"]));
-  $acudiente1 = UsuariosPadre::sesionUsuario($resultado['mat_acudiente']);
-  $acudiente2 = UsuariosPadre::sesionUsuario($resultado['mat_acudiente2']);
-  $consultaTipo=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado['mat_tipo']."'");
-  $tipo = mysqli_fetch_array($consultaTipo, MYSQLI_BOTH);
-  ?>
-  
+<?php
+    $year=$_SESSION["bd"];
+    if(!empty($_POST["year"])){
+        $year=$_POST["year"];
+    }
+
+    $ref="";
+    if(!empty($_GET["ref"])){
+        $ref=base64_decode($_GET["ref"]);
+    }
+    if(!empty($_POST["ref"])){
+        $ref=$_POST["ref"];
+    }
+    $resultado = Estudiantes::obtenerDatosEstudiante($ref, $year);
+    $acudiente1 = UsuariosPadre::sesionUsuario($resultado['mat_acudiente']);
+    $acudiente2 = !empty($resultado['mat_acudiente2']) ? UsuariosPadre::sesionUsuario($resultado['mat_acudiente2']) : array();
+    $consultaTipo=mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".opciones_generales WHERE ogen_id='".$resultado['mat_tipo']."'");
+    $tipo = mysqli_fetch_array($consultaTipo, MYSQLI_BOTH);
+?>
+
 <table width="90%" cellpadding="5" cellspacing="0" border="0" align="center" style="font-size:10px;">
     <tr>
     	<td colspan="4" align="center"><img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" height="150"></td>

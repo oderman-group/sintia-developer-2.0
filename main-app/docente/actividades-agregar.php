@@ -171,10 +171,8 @@ require_once(ROOT_PATH."/main-app/class/Actividades.php");?>
                                             </div>
                                         </div>
 										
-										<a href="#" name="actividades.php" class="btn btn-secondary" onClick="deseaRegresar(this)"><i class="fa fa-long-arrow-left"></i>Regresar</a>
-										<button type="submit" class="btn  btn-info">
-											<i class="fa fa-save" aria-hidden="true"></i> Guardar cambios 
-										</button>
+										<?php 
+                            				$botones = new botonesGuardar("actividades.php",Modulos::validarPermisoEdicion()); ?>
 
 										
 										</form>
@@ -195,25 +193,34 @@ require_once(ROOT_PATH."/main-app/class/Actividades.php");?>
 
 												let peticion = new XMLHttpRequest();
 
+												var barraProgreso = document.getElementById("barra_estado");
+
 												peticion.upload.addEventListener("progress", (event) => {
 													let porcentaje = Math.round((event.loaded / event.total) * 100);
 
-													document.getElementById("barra_estado").innerHTML = porcentaje+"%";
-													document.getElementById("barra_estado").style.width = porcentaje+"%";
+													barraProgreso.innerHTML = porcentaje+"%";
+													barraProgreso.style.width = porcentaje+"%";
 
 												});
 
 												peticion.addEventListener("load", () => {
-													document.getElementById("barra_estado").innerHTML = "Subido totalmente(100%)";
+													
+													barraProgreso.innerHTML = "Subido totalmente(100%)";
 
-													if (peticion.status >= 200 && peticion.status < 300) {
+													if (peticion.status >= 200 && peticion.status < 300 && !peticion.responseText.includes('ERROR')) {
 														var respuesta = peticion.responseText;
-														console.log(respuesta); 
+														setTimeout(redirect(), 2000);
 													} else {
-														console.error('Error en la solicitud:', peticion.status, peticion.statusText);
-													}
+														
+														console.error('Error en la solicitud:', peticion);
+														barraProgreso.innerHTML = `Error en la solicitud: ${peticion.statusText}`;
 
-													setTimeout(redirect(), 2000);
+														// Remueve la clase antigua
+														barraProgreso.classList.remove("bg-success");
+
+														// Agrega la nueva clase
+														barraProgreso.classList.add("bg-danger");
+													}
 													
 													function redirect(){
 														location.href='actividades.php?success=SC_DT_1&id='+respuesta;

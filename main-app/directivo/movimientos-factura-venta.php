@@ -18,10 +18,10 @@ if (!empty($_GET["id"])) {
 $configFinanzas=Movimientos::configuracionFinanzas($conexion, $config);
 
 try{
-    $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas fcu
+    $consulta = mysqli_query($conexion, "SELECT fcu.*, uss.*, ciu.*, dep.*, fcu.id_nuevo AS id_nuevo_finanzas  FROM ".BD_FINANCIERA.".finanzas_cuentas fcu
     INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=fcu_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-    LEFT JOIN ".BD_ADMIN.".localidad_ciudades ON ciu_id=uss_lugar_nacimiento
-    LEFT JOIN ".BD_ADMIN.".localidad_departamentos ON dep_id=ciu_departamento
+    LEFT JOIN ".BD_ADMIN.".localidad_ciudades ciu ON ciu_id=uss_lugar_nacimiento
+    LEFT JOIN ".BD_ADMIN.".localidad_departamentos dep ON dep_id=ciu_departamento
     WHERE fcu_id='".$id."' AND fcu.institucion={$config['conf_id_institucion']} AND fcu.year={$_SESSION["bd"]}");
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
@@ -83,6 +83,7 @@ if ($resultado["fcu_tipo"] == FACTURA_COMPRA) {
                     <td align="left" width="55%">
                         <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" width="70%"><br><br>
                         <span style="font-weight:bold; margin: 0"><?=strtoupper($informacion_inst["info_nombre"])?></span><br>
+                        <span style="font-weight:bold; margin: 0">Nit: <?=$informacion_inst["info_nit"];?></span><br>
                         <?=$informacion_inst["info_direccion"]?><br>
                         Tel: <?=$informacion_inst["info_telefono"]?><br><br>
                         <table width="50%">
@@ -102,7 +103,7 @@ if ($resultado["fcu_tipo"] == FACTURA_COMPRA) {
                     </td>
                     <td align="right" width="45%" style="vertical-align: top;">
                         <h1 style="margin: 0px; font-size: 50px;"><?=$tituloGeneral;?></h1>
-                        <h3 style="margin: 0px; font-size: 13px;"><b>Número: <?=$resultado["fcu_id"];?></b></h3>
+                        <h3 style="margin: 0px; font-size: 13px;"><b>Número: <?=$resultado["id_nuevo_finanzas"];?></b></h3>
                         <h3 style="margin: 0px; font-size: 13px;">No responsable de IVA</h3>
                         <h3 style="margin: 0px; font-size: 13px;"><?=$tipoFactura;?></h3>
                     </td>

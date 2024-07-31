@@ -4,6 +4,7 @@ $idPaginaInterna = 'DT0063';
 include("../compartido/historial-acciones-guardar.php");
 include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Grados.php");
+require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -98,11 +99,7 @@ if(!Modulos::validarPermisoEdicion()){
 													<tr>
 														<th width="50%">Materia</th>
 														<?php
-														try{
-															$cursos = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"); 
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
-														}
+														$cursos = Grados::traerGradosInstitucion($config);
 														while($c = mysqli_fetch_array($cursos, MYSQLI_BOTH)){
 														?>
 														<th style="font-size:8px; text-align:center;"><?=$c['gra_nombre'];?></th>
@@ -113,21 +110,13 @@ if(!Modulos::validarPermisoEdicion()){
 												</thead>
 												<tbody>
 													<?php
-													try{
-														$materias = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_materias WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-													} catch (Exception $e) {
-														include("../compartido/error-catch-to-report.php");
-													}
+													$materias = Asignaturas::consultarTodasAsignaturas($conexion, $config);
 													while($m = mysqli_fetch_array($materias, MYSQLI_BOTH)){
 													?>
 													<tr id="data1">
 														<td><?=$m['mat_nombre'];?></td>
 														<?php
-														try{
-															$curso = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados WHERE institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}"); 
-														} catch (Exception $e) {
-															include("../compartido/error-catch-to-report.php");
-														}
+														$curso = Grados::traerGradosInstitucion($config);
 														while($c = mysqli_fetch_array($curso, MYSQLI_BOTH)){
 															$ipc = Grados::traerIntensidadMateriaCurso($conexion, $config, $c['gra_id'], $m['mat_id']); 
 														?>

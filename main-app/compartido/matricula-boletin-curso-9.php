@@ -7,13 +7,19 @@ if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol(
 	exit();
 }
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
-require_once("../class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
+require_once(ROOT_PATH."/main-app/class/Usuarios.php");
+require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 $year=$_SESSION["bd"];
 if(isset($_GET["year"])){
 $year=base64_decode($_GET["year"]);
 }
+
+$tamañoLogo = $_SESSION['idInstitucion'] == ICOLVEN ? 100 : 50;
 
 $modulo = 1;
 if(empty($_GET["periodo"])){
@@ -80,7 +86,7 @@ $contador_periodos=0;
 <body style="font-family:Arial;">
 
 <div align="center" style="margin-bottom:20px;">
-    <img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" width="100%"><br>
+	<img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" width="<?=$tamañoLogo?>%"><br>
     <!-- <?=$informacion_inst["info_nombre"]?><br>
     BOLETÍN DE CALIFICACIONES<br> -->
 </div> 
@@ -105,16 +111,16 @@ $contador_periodos=0;
 	</tr>
 	
 	<?php
-	$cargasConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car
-	INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion={$config['conf_id_institucion']} AND am.year={$year}
-	WHERE car_curso='".$datosUsr["mat_grado"]."' AND car_grupo='".$datosUsr["mat_grupo"]."' AND car.institucion={$config['conf_id_institucion']} AND car.year={$year}");
+	$cargasConsulta = CargaAcademica::traerCargasMateriasPorCursoGrupo($config, $datosUsr["mat_grado"], $datosUsr["mat_grupo"], $year);
 	$i=1;
 	while($cargas = mysqli_fetch_array($cargasConsulta, MYSQLI_BOTH)){
+		//DIRECTOR DE GRUPO
+		if($cargas["car_director_grupo"]==1){
+			$idDirector=$cargas["car_docente"];
+		}
 		$indicadores = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $cargas['car_id'], $periodoActual, $year);
 		
-		$consultaObservacion=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin
-		WHERE bol_carga='".$cargas['car_id']."' AND bol_periodo='".$periodoActual."' AND bol_estudiante='".$datosUsr["mat_id"]."' AND institucion={$config['conf_id_institucion']} AND year={$year}");
-		$observacion = mysqli_fetch_array($consultaObservacion, MYSQLI_BOTH);
+		$observacion = Boletin::traerNotaBoletinCargaPeriodo($config, $periodoActual, $datosUsr['mat_id'], $cargas['car_id'], $year);
 		
 		$colorFondo = '#FFF;';
 		if($i%2==0){$colorFondo = '#e0e0153b';}
@@ -155,24 +161,62 @@ if(@mysqli_num_rows($cndisiplina)>0){
     
     <tr style="font-weight:bold; background:#e0e0153b; height:25px; font-size:12px; text-align:center">
         <td width="8%">Periodo</td>
-        <!--<td width="8%">Nota</td>-->
         <td>Observaciones</td>
     </tr>
 <?php while($rndisiplina=mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)){
-// $consultaDesempenoND=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_notas_tipos WHERE notip_categoria='".$config[22]."' AND ".$rndisiplina["dn_nota"].">=notip_desde AND ".$rndisiplina["dn_nota"]."<=notip_hasta AND institucion={$config['conf_id_institucion']} AND year={$year}");
-// $desempenoND = mysqli_fetch_array($consultaDesempenoND, MYSQLI_BOTH);
 ?>
     <tr align="center" style="font-weight:bold; font-size:12px; height:20px;">
         <td><?=$rndisiplina["dn_periodo"]?></td>
-        <!--<td><?=$desempenoND[1]?></td>-->
-        <td align="left"><?="[".$rndisiplina["dn_id"]."] ".$rndisiplina["dn_observacion"]?></td>
+        <td align="left"><?=$rndisiplina["dn_observacion"]?></td>
     </tr>
 <?php }?>
 </table>
 <?php }?>
 	
-	<p>&nbsp;</p>
-	<div align="center"><img src="../files/firmas/firmalucy.jpeg" height="120"></div>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>   
+<!--******FIRMAS******-->   
+
+<table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
+	<tr>
+		<td align="center">
+			<?php
+				$directorGrupo = Usuarios::obtenerDatosUsuario($idDirector);
+				$nombreDirectorGrupo = UsuariosPadre::nombreCompletoDelUsuario($directorGrupo);
+				if(!empty($directorGrupo["uss_firma"])){
+					echo '<img src="../files/fotos/'.$directorGrupo["uss_firma"].'" width="100"><br>';
+				}else{
+					echo '<p>&nbsp;</p>
+						<p>&nbsp;</p>
+						<p>&nbsp;</p>';
+				}
+			?>
+			<p style="height:0px;"></p>_________________________________<br>
+			<p>&nbsp;</p>
+			<?=$nombreDirectorGrupo?><br>
+			Director(a) de grupo
+		</td>
+		<td align="center">
+			<?php
+				$rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
+				$nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
+				if(!empty($rector["uss_firma"])){
+					echo '<img src="../files/fotos/'.$rector["uss_firma"].'" width="100"><br>';
+				}else{
+					echo '<p>&nbsp;</p>
+						<p>&nbsp;</p>
+						<p>&nbsp;</p>';
+				}
+			?>
+			<p style="height:0px;"></p>_________________________________<br>
+			<p>&nbsp;</p>
+			<?=$nombreRector?><br>
+			Rector(a)
+		</td>
+	</tr>
+</table>
 		
  <div id="saltoPagina"></div>
                                     

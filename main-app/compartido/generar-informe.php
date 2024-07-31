@@ -1,13 +1,17 @@
 <?php
 session_start();
 $idPaginaInterna = 'CM0006';
-include("../../config-general/config.php");
-require_once("../class/Estudiantes.php");
+include($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/config.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/servicios/GradoServicios.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
+require_once ROOT_PATH."/main-app/class/Conexion.php";
+require_once(ROOT_PATH."/main-app/class/Indicadores.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
-$config = Plataforma::sesionConfiguracion();
-$_SESSION["configuracion"] = $config;
+$conexionPDO = Conexion::newConnection('PDO');
 
 $grado =base64_decode($_GET["grado"]);
 $grupo =base64_decode($_GET["grupo"]);
@@ -25,12 +29,14 @@ if($config['conf_porcentaje_completo_generar_informe']==1){
 		exit();
 	}
 }
-include("../docente/verificar-carga.php");
+
+$infoCarga = CargaAcademica::cargasDatosEnSesion($carga, $_SESSION["id"]);
+$datosCarga = $infoCarga['datosCargaActual'];
 
 //Consultamos los estudiantes del grado y grupo
-$consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
+$consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCarga);
 
-
+$contBol=1;
  while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 	 
 	//DEFINITIVAS
@@ -42,9 +48,7 @@ $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datos
 	$idNumericoEstudiante = preg_replace('/^MAT/', '', $estudiante); //Para ser usado en el codigo de los registros
 	 
 	//Consultamos si tiene registros en el boletín
-	$consultaBoletinDatos=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin 
-	WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$resultado['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-	$boletinDatos = mysqli_fetch_array($consultaBoletinDatos, MYSQLI_BOTH); 
+	$boletinDatos = Boletin::traerNotaBoletinCargaPeriodo($config, $periodo, $estudiante, $carga);
 
 	if($config['conf_porcentaje_completo_generar_informe']==2){
 		//Verificamos que el estudiante tenga sus notas al 100%
@@ -86,34 +90,21 @@ $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datos
 	 
 	
 	//Vamos a obtener las definitivas por cada indicador y la definitiva general de la asignatura
-	$notasPorIndicador = mysqli_query($conexion, "SELECT SUM((cal_nota*(act_valor/100))), act_id_tipo, ipc_valor FROM ".BD_ACADEMICA.".academico_calificaciones aac
-	INNER JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id=aac.cal_id_actividad AND aa.act_estado=1 AND aa.act_registrada=1 AND aa.act_periodo='".$periodo."' AND aa.act_id_carga='".$carga."' AND aa.institucion={$config['conf_id_institucion']} AND aa.year={$_SESSION["bd"]}
-	INNER JOIN ".BD_ACADEMICA.".academico_indicadores_carga ipc ON ipc.ipc_indicador=aa.act_id_tipo AND ipc.ipc_carga='".$carga."' AND ipc.ipc_periodo='".$periodo."' AND ipc.institucion={$config['conf_id_institucion']} AND ipc.year={$_SESSION["bd"]}
-	WHERE aac.cal_id_estudiante='".$resultado['mat_id']."' AND aac.institucion={$config['conf_id_institucion']} AND aac.year={$_SESSION["bd"]}
-	GROUP BY aa.act_id_tipo");
+	$notasPorIndicador = Calificaciones::traerNotasPorIndicador($config, $carga, $resultado['mat_id'], $periodo);
 	$sumaNotaIndicador = 0; 
+	
 	while($notInd = mysqli_fetch_array($notasPorIndicador, MYSQLI_BOTH)){
-		$consultaNum=mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion 
-		WHERE rind_carga='".$carga."' AND rind_estudiante='".$resultado['mat_id']."' AND rind_periodo='".$periodo."' AND rind_indicador='".$notInd[1]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
+		$consultaNum = Indicadores::consultaRecuperacionIndicadorPeriodo($config, $notInd[1], $resultado['mat_id'], $carga, $periodo);
 		$num = mysqli_num_rows($consultaNum);
-		$lineaError = __LINE__;
-		include("../compartido/reporte-errores.php");
 		
 		$sumaNotaIndicador  += $notInd[0];
 		
 		if($num==0){
-			$codigo=Utilidades::generateCode("RIN").$idNumericoEstudiante;
-			mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_indicadores_recuperacion WHERE rind_carga='".$carga."' AND rind_estudiante='".$resultado['mat_id']."' AND rind_periodo='".$periodo."' AND rind_indicador='".$notInd[1]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-			$lineaError = __LINE__;
-			include("../compartido/reporte-errores.php");
+			Indicadores::eliminarRecuperacionIndicadorPeriodo($config, $notInd[1], $resultado['mat_id'], $carga, $periodo);				
 			
-			mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_indicadores_recuperacion(rind_id, rind_fecha_registro, rind_estudiante, rind_carga, rind_nota, rind_indicador, rind_periodo, rind_actualizaciones, rind_nota_original, rind_nota_actual, rind_valor_indicador_registro, institucion, year)VALUES('".$codigo."', now(), '".$resultado['mat_id']."', '".$carga."', '".$notInd[0]."', '".$notInd[1]."', '".$periodo."', 0, '".$notInd[0]."', '".$notInd[0]."', '".$notInd[2]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-			$lineaError = __LINE__;
-			include("../compartido/reporte-errores.php");
+			Indicadores::guardarRecuperacionIndicador($conexionPDO, $config, $resultado['mat_id'], $carga, $notInd[0], $notInd[1], $periodo, $notInd[2]);
 		}else{
-			mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_indicadores_recuperacion SET rind_nota_anterior=rind_nota, rind_nota='".$notInd[0]."', rind_actualizaciones=rind_actualizaciones+1, rind_ultima_actualizacion=now(), rind_nota_actual='".$notInd[0]."', rind_tipo_ultima_actualizacion=1, rind_valor_indicador_actualizacion='".$notInd[2]."' WHERE rind_carga='".$carga."' AND rind_estudiante='".$resultado['mat_id']."' AND rind_periodo='".$periodo."' AND rind_indicador='".$notInd[1]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-			$lineaError = __LINE__;
-			include("../compartido/reporte-errores.php");
+			Indicadores::actualizarRecuperacionIndicador($config, $resultado['mat_id'], $carga, $notInd[0], $notInd[1], $periodo, $notInd[2]);
 		}
 	} 
 	
@@ -138,33 +129,37 @@ $consulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datos
 			"fecha de actualización" 		=> $fecha,
 			"porcentaje" 	=> $boletinDatos['bol_porcentaje']
 		];
-
-		mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_boletin SET bol_nota_anterior=bol_nota, bol_nota='".$definitiva."', bol_actualizaciones=bol_actualizaciones+1, bol_ultima_actualizacion=now(), bol_nota_indicadores='".$sumaNotaIndicador."', bol_tipo=1, bol_observaciones='Reemplazada', bol_porcentaje='".$porcentajeActual."', bol_historial_actualizacion='".json_encode($actualizacion)."' WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$resultado['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		$lineaError = __LINE__;
-		include("../compartido/reporte-errores.php");	
+	
+		$update = [
+			'bol_nota_anterior'    => 'bol_nota', 
+			'bol_nota'             => $definitiva, 
+			'bol_nota_indicadores' => $sumaNotaIndicador, 
+			'bol_tipo'             => 1, 
+			'bol_observaciones'    => 'Reemplazada', 
+			'bol_porcentaje'       => $porcentajeActual
+	];
+		Boletin::actualizarNotaBoletin($config, $boletinDatos['bol_id'], $update);
 	}elseif($caso == 1){
 		//Eliminamos por si acaso hay algún registro
-		mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".academico_boletin 
-		WHERE bol_carga='".$carga."' AND bol_periodo='".$periodo."' AND bol_estudiante='".$resultado['mat_id']."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-		$lineaError = __LINE__;
-		include("../compartido/reporte-errores.php");
+		if(!empty($boletinDatos['bol_id'])){
+			Boletin::eliminarNotaBoletinID($config, $boletinDatos['bol_id']);
+		}
 			
-		//INSERTAR LOS DATOS EN LA TABLA BOLETIN
-		$codigoBOL=Utilidades::generateCode("BOL").$idNumericoEstudiante;
-		mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_boletin(bol_id, bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_fecha_registro, bol_actualizaciones, bol_nota_indicadores, bol_porcentaje, institucion, year)VALUES('".$codigoBOL."', '".$carga."', '".$resultado['mat_id']."', '".$periodo."', '".$definitiva."', 1, now(), 0, '".$sumaNotaIndicador."', '".$porcentajeActual."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");	
-		$lineaError = __LINE__;
-		include("../compartido/reporte-errores.php");		
+		//INSERTAR LOS DATOS EN LA TABLA BOLETIN	
+		Boletin::guardarNotaBoletin($conexionPDO, "bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_fecha_registro, bol_actualizaciones, bol_nota_indicadores, bol_porcentaje, institucion, year, bol_id", [$carga, $estudiante, $periodo, $definitiva, 1, date("Y-m-d H:i:s"), 0, $sumaNotaIndicador, $porcentajeActual, $config['conf_id_institucion'], $_SESSION["bd"]]);
+		
+		$contBol++;
 	}
 	 
 		 	
 }
-mysqli_query($conexion, "UPDATE ".BD_ACADEMICA.".academico_cargas SET car_periodo=car_periodo+1 WHERE car_id='".$carga."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-$lineaError = __LINE__;
-include("../compartido/reporte-errores.php");
+
+$update = ['car_periodo' => $periodo+1];
+CargaAcademica::actualizarCargaPorID($config, $carga, $update);
 
 include("../compartido/guardar-historial-acciones.php");
 ?>
-	<script language="javascript">window.location.href="../docente/page-info.php?idmsg=109";</script>
+	<script language="javascript">window.location.href="../docente/page-info.php?idmsg=109&curso=<?=$_GET["grado"];?>&grupo=<?=$_GET["grupo"];?>&periodo=<?=$_GET["periodo"];?>";</script>
 <?php
 	exit();
 ?>

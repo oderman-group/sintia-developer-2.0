@@ -4,6 +4,7 @@
 <?php include("../compartido/head.php");?>
 <?php include("includes/variables-estudiantes-agregar.php");
 require_once(ROOT_PATH."/main-app/class/Grupos.php");
+require_once(ROOT_PATH."/main-app/class/Grados.php");
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
@@ -400,13 +401,13 @@ if(!Modulos::validarPermisoEdicion()){
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Contactos</label>
 												<div class="col-sm-2">
-													<input type="text" name="telefono" class="form-control" placeholder="Telefono" data-mask="999-9999" autocomplete="off" value="<?=$datosMatricula['telefono'];?>" <?=$disabledPermiso;?>>
+													<input type="text" name="telefono" class="form-control" placeholder="Telefono" <?=$_SESSION['idInstitucion'] != ICOLVEN ? 'data-mask="999-9999"' : "";?> autocomplete="off" value="<?=$datosMatricula['telefono'];?>" <?=$disabledPermiso;?>>
 												</div>
 												<div class="col-sm-2">
-													<input type="text" name="celular" class="form-control" placeholder="celular" data-mask="(999) 999-9999" autocomplete="off" value="<?=$datosMatricula['celular'];?>" <?=$disabledPermiso;?>>
+													<input type="text" name="celular" class="form-control" placeholder="celular" <?=$_SESSION['idInstitucion'] != ICOLVEN ? 'data-mask="(999) 999-9999"' : "";?> autocomplete="off" value="<?=$datosMatricula['celular'];?>" <?=$disabledPermiso;?>>
 												</div>
 												<div class="col-sm-2">
-													<input type="text" name="celular2" class="form-control" placeholder="celular #2" data-mask="(999) 999-9999" autocomplete="off" value="<?=$datosMatricula['celular2'];?>" <?=$disabledPermiso;?>>
+													<input type="text" name="celular2" class="form-control" placeholder="celular #2" <?=$_SESSION['idInstitucion'] != ICOLVEN ? 'data-mask="(999) 999-9999"' : "";?> autocomplete="off" value="<?=$datosMatricula['celular2'];?>" <?=$disabledPermiso;?>>
 												</div>
 											</div>								   
 									       
@@ -418,13 +419,10 @@ if(!Modulos::validarPermisoEdicion()){
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Curso <span style="color: red;">(*)</span></label>
 												<div class="col-sm-4">
-													<?php
-													$opcionesConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_grados
-													WHERE gra_estado=1 AND gra_tipo='".GRADO_GRUPAL."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
-													?>
 													<select class="form-control" name="grado" required <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<?php
+                                                		$opcionesConsulta = Grados::traerGradosInstitucion($config, GRADO_GRUPAL);
 														while($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)){
 															if($opcionesDatos['gra_id']==$datosMatricula['grado'])
 																echo '<option value="'.$opcionesDatos['gra_id'].'" selected>'.$opcionesDatos['gra_nombre'].'</option>';

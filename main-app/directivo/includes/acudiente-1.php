@@ -5,6 +5,7 @@
 											?>
                                             
 											<h2><b>ACUDIENTE 1</b></h2>
+											<input type="hidden" name="usuarioAcudiente" value="<?php if(isset($acudiente['uss_usuario'])){ echo $acudiente['uss_usuario'];}?>">
 
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Tipo de documento</label>
@@ -28,7 +29,7 @@
 												
 												<label class="col-sm-2 control-label">Documento <span style="color: red;">(*)</span></label>
 												<div class="col-sm-3">
-													<input type="text" name="documentoA" required class="form-control" autocomplete="off" value="<?php if(isset($acudiente['uss_usuario'])){ echo $acudiente['uss_usuario'];}?>" <?=$disabledPermiso;?>>
+													<input type="text" name="documentoA" required class="form-control" autocomplete="off" value="<?php if(isset($acudiente['uss_documento'])){ echo $acudiente['uss_documento'];}?>" <?=$disabledPermiso;?>>
 												</div>
 											</div>
 												
