@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!empty($_GET["grado"]) || !empty($_GET["grupo"]) || !empty($_GET["carga"]) || !empty($_GET["periodo"]) || !empty($_GET["tipoGrado"])) {
+if (empty($_GET["grado"]) || empty($_GET["grupo"]) || empty($_GET["carga"]) || empty($_GET["periodo"]) || empty($_GET["tipoGrado"])) {
 ?>
 	<script language="javascript">
 		window.location.href="../docente/page-info.php?idmsg=112";
