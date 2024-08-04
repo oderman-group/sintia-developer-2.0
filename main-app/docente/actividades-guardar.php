@@ -14,7 +14,7 @@ $codigo = Actividades::guardarActividad($conexion, $config, $_POST, $_FILES, $st
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 
-if (strpos($codigo, 'ACT') === 0) {
+if (strpos($codigo, 'TAR') === 0) {
     echo base64_encode($codigo);
 } else {
     echo 'ERROR '.$codigo;
