@@ -43,7 +43,7 @@ require_once(ROOT_PATH."/main-app/class/Grados.php");
                     <div class="form-group row">
                         <label class="col-sm-2 control-label"><?= $frases[211][$datosUsuarioActual['uss_idioma']]; ?></label>
                         <div class="col-sm-6">
-                            <input type="file" name="imagen" class="form-control">
+                            <input type="file" name="imagen" class="form-control" onChange="validarPesoArchivo(this)" accept=".png, .jpg, .jpeg">
                         </div>
                     </div>
 
@@ -91,7 +91,7 @@ require_once(ROOT_PATH."/main-app/class/Grados.php");
                     <div class="form-group row">
                         <label class="col-sm-2 control-label"><?= $frases[128][$datosUsuarioActual['uss_idioma']]; ?></label>
                         <div class="col-sm-6">
-                            <input type="file" name="archivo" class="form-control">
+                            <input type="file" name="archivo" onChange="validarPesoArchivo(this)"  class="form-control">
                         </div>
                     </div>
 
