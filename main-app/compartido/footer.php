@@ -145,6 +145,22 @@ if(typeof form !== 'undefined' && form !== null) {
 		}
 
 		btnSubmit.setAttribute("disabled", true);
+
+		let pageStatic = form.querySelector('input[name="pageStatic"]');
+
+		if (pageStatic != null && pageStatic.value === 'true') {
+			let btnSubmitOriginalText = btnSubmit.innerHTML;
+			btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> CARGANDO';
+
+			setTimeout(() => {
+				form.submit();
+				btnSubmit.removeAttribute("disabled");
+				btnSubmit.innerHTML = btnSubmitOriginalText;
+			}, 1000);
+
+			return false;
+		}
+
 		btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> GUARDANDO CAMBIOS';
 
 		setTimeout(() => {

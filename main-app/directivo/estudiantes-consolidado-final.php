@@ -54,6 +54,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                     <div class="panel-body">
 
                         <form name="formularioGuardar" action="estudiantes-consolidado-final-detalles2.php" method="post" target="_blank">
+                            <input type="hidden" name="pageStatic" value="true">
                             <input type="hidden" name="id" value="37">
 
 
