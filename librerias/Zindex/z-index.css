@@ -1,0 +1,9 @@
+div:where(.swal2-container) {
+    z-index: 10060 !important; 
+}
+
+.popover {
+
+    z-index: 10060 !important; 
+ 
+}

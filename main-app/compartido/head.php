@@ -90,6 +90,7 @@ if (!empty($datosPaginaActual)) {
 	<link rel="stylesheet" href="./../../config-general/assets/plugins/jquery-toast/dist/jquery.toast.min.css">
 	<script src="./../../config-general/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
     <link rel="stylesheet" href="./../../config-general/assets/plugins/sweetalert/sweetalert2.all.min.css">
+	<link rel="stylesheet" href="./../../librerias/Zindex/z-index.css">
 
 	<!-- libreria de animate.style -->
 	<link
