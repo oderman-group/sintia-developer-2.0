@@ -3,63 +3,58 @@ require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.ph
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/BindSQL.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
+require_once(ROOT_PATH."/main-app/class/RedisInstance.php");
+require_once(ROOT_PATH."/main-app/class/Actividades.php");
 
 class AjaxCalificaciones {
 
     /**
-     * Este metodo sirve para registrar las calificaciones de un estudiante
+     * Este metodo sirve para guardar las calificaciones de un estudiante
      * 
-     * @param mysqli    $conexion 
-     * @param array     $config 
-     * @param string    $codEstudiante 
-     * @param string    $nombreEst 
-     * @param string    $codNota
-     * @param double    $nota
-     * @param double    $notaAnterior
+     * @param array $data 
      * 
      * @return array // se retorna mensaje de confirmación
     **/
-    public static function ajaxGuardarNota($conexion, $config, $codEstudiante, $nombreEst, $codNota, $nota, $notaAnterior)
+    public static function ajaxGuardarNota($data): array
     {
         global $conexionPDO;
 
-        if(trim($nota)==""){
-            $datosMensaje=["heading"=>"Nota vacia","estado"=>"warning","mensaje"=>"Digite una nota correcta."];
-            return $datosMensaje;
-        }
-        if($nota>$config[4]) $nota = $config[4]; if($nota<$config[3]) $nota = $config[3];
+        $config = RedisInstance::getSystemConfiguration();
 
-        $sql = "SELECT cal_id_actividad, cal_id_estudiante FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad=? AND cal_id_estudiante=? AND institucion=? AND year=?";
-        $parametros = [$codNota, $codEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]];
-        $consultaNum = BindSQL::prepararSQL($sql, $parametros);
+        Calificaciones::eliminarCalificacionActividadEstudiante($config, $data['codNota'], $data['codEst'], $_SESSION["bd"]);
 
-        $num = mysqli_num_rows($consultaNum);
-    
-        if($num==0){
-            $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_calificaciones');
-    
-            $sql = "INSERT INTO ".BD_ACADEMICA.".academico_calificaciones(cal_id, cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones, institucion, year)VALUES(?, ?,?, ?, now(), ?, ?, ?)";
-            $parametros = [$codigo, $codEstudiante, $nota, $codNota, 0, $config['conf_id_institucion'], $_SESSION["bd"]];
-            $resultado = BindSQL::prepararSQL($sql, $parametros);
-            
-            $sql = "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id=? AND institucion=? AND year=?";
-            $parametros = [$codNota, $config['conf_id_institucion'], $_SESSION["bd"]];
-            $resultado = BindSQL::prepararSQL($sql, $parametros);
-    
-        }else{
-            if($notaAnterior==""){$notaAnterior = "0.0";}
-            
-            $sql = "UPDATE ".BD_ACADEMICA.".academico_calificaciones SET cal_nota=?, cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1, cal_nota_anterior=?, cal_tipo=1 WHERE cal_id_actividad=? AND cal_id_estudiante=? AND institucion=? AND year=?";
-            $parametros = [$nota, $notaAnterior, $codNota, $codEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]];
-            $resultado = BindSQL::prepararSQL($sql, $parametros);
-            
-            $sql = "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1 WHERE act_id=? AND institucion=? AND year=?";
-            $parametros = [$codNota, $config['conf_id_institucion'], $_SESSION["bd"]];
-            $resultado = BindSQL::prepararSQL($sql, $parametros);
-    
-        }
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_calificaciones');
 
-        $datosMensaje=["heading"=>"Cambios guardados","estado"=>"success","mensaje"=>"La nota se ha guardado correctamente para el estudiante <b>".strtoupper($nombreEst)."</b>"];
+        $sql = "INSERT INTO ".BD_ACADEMICA.".academico_calificaciones(cal_id, cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones, institucion, year)VALUES(?, ?,?, ?, now(), ?, ?, ?)";
+
+        $conexionPDO = Conexion::newConnection('PDO');
+        $conexionPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $asp = $conexionPDO->prepare($sql);
+
+        $cantidadModificaciones = 0;
+
+        $asp->bindParam(1, $codigo, PDO::PARAM_STR);
+        $asp->bindParam(2, $data['codEst'], PDO::PARAM_STR);
+        $asp->bindParam(3, $data['nota'], PDO::PARAM_STR);
+        $asp->bindParam(4, $data['codNota'], PDO::PARAM_STR);
+        $asp->bindParam(5, $cantidadModificaciones, PDO::PARAM_STR);
+        $asp->bindParam(6, $config['conf_id_institucion'], PDO::PARAM_INT);
+        $asp->bindParam(7, $_SESSION["bd"], PDO::PARAM_INT);
+
+        $asp->execute();
+
+        $rowCount = $asp->rowCount();
+
+        Actividades::marcarActividadRegistrada($config, $data['codNota'], $_SESSION["bd"]);
+
+        $datosMensaje = [
+            'success' => true,
+            "heading" => "Cambios guardados",
+            "estado"  => "success",
+            "mensaje" => "La nota se ha guardado correctamente para el estudiante <b>".strtoupper($data['nombreEst'])."</b>"
+        ];
 
         return $datosMensaje;
     }
@@ -119,59 +114,42 @@ class AjaxCalificaciones {
     /**
      * Este metodo sirve para registrar una nota masiva a los estudiantes
      * 
-     * @param mysqli    $conexion 
-     * @param PDO       $conexionPDO 
      * @param array     $datosCargaActual
      * @param string    $codNota
      * @param string    $nota
      * 
      * @return array // se retorna mensaje de confirmación
     **/
-    public static function ajaxGuardarNotasMasiva($conexion, $conexionPDO, $datosCargaActual, $codNota, $nota)
+    public static function ajaxGuardarNotasMasiva($datosCargaActual, $codNota, $nota)
     {
-        global $config;
-        if(trim($nota)==""){
-            $datosMensaje=["heading"=>"Nota vacia","estado"=>"warning","mensaje"=>"Digite una nota correcta."];
-            return $datosMensaje;
-        }
 
         $consultaE = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
-        
-        $cont = 1;
-        while($estudiantes = mysqli_fetch_array($consultaE, MYSQLI_BOTH)){
-            
-            $sql = "SELECT cal_id_actividad, cal_id_estudiante FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad=? AND cal_id_estudiante=? AND institucion=? AND year=?";
-            $parametros = [$codNota, $estudiantes['mat_id'], $config['conf_id_institucion'], $_SESSION["bd"]];
-            $consultaNumE = BindSQL::prepararSQL($sql, $parametros);
-            $numE = mysqli_num_rows($consultaNumE);
-            
-            if($numE==0){
-                $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_calificaciones').$cont; 
-		
-                $sql = "DELETE FROM ".BD_ACADEMICA.".academico_calificaciones WHERE cal_id_actividad=? AND cal_id_estudiante=? AND institucion=? AND year=?";
-                $parametros = [$codNota, $estudiantes['mat_id'], $config['conf_id_institucion'], $_SESSION["bd"]];
-                $resultado = BindSQL::prepararSQL($sql, $parametros);    
-            
-                $sql = "INSERT INTO ".BD_ACADEMICA.".academico_calificaciones(cal_id, cal_id_estudiante, cal_nota, cal_id_actividad, cal_fecha_registrada, cal_cantidad_modificaciones, institucion, year)VALUES(?, ?, ?, ?, now(), ?, ?, ?)";
-                $parametros = [$codigo, $estudiantes['mat_id'], $nota, $codNota, 0, $config['conf_id_institucion'], $_SESSION["bd"]];
-                $resultado = BindSQL::prepararSQL($sql, $parametros);
 
-                $cont ++;
-            }else{
-            
-                $sql = "UPDATE ".BD_ACADEMICA.".academico_calificaciones SET cal_nota=?, cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1 
-                WHERE cal_id_actividad=? AND cal_id_estudiante=? AND institucion=? AND year=?";
-                $parametros = [$nota, $codNota, $estudiantes['mat_id'], $config['conf_id_institucion'], $_SESSION["bd"]];
-                $resultado = BindSQL::prepararSQL($sql, $parametros);
+        while ($estudiantes = mysqli_fetch_array($consultaE, MYSQLI_BOTH)) {
+
+            $data = [
+                'codEst'       => $estudiantes['mat_id'],
+                'nombreEst'    => $estudiantes['mat_nombres'],
+                'codNota'      => $codNota,
+                'nota'         => $nota,
+                'notaAnterior' => null, //TODO: obtener la nota anterior
+                'target'       => 'GUARDAR_NOTA',
+            ];
+
+            $datosMensaje = Calificaciones::direccionarCalificacion($data);
+
+            if (!$datosMensaje['success']) {
+                return $datosMensaje;
             }
-        }
-        
-        $sql = "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id=? AND institucion=? AND year=?";
-        $parametros = [$codNota, $config['conf_id_institucion'], $_SESSION["bd"]];
-        $resultado = BindSQL::prepararSQL($sql, $parametros);
-    
 
-        $datosMensaje=["heading"=>"Cambios guardados","estado"=>"success","mensaje"=>'Se ha guardado la misma nota para todos los estudiantes en esta actividad. La página se actualizará en unos segundos para que vea los cambios...'];
+        }
+
+        $datosMensaje = [
+            'success' => true,
+            "heading" => "Cambios guardados",
+            "estado"  => "success",
+            "mensaje" => 'Se ha guardado la misma nota para todos los estudiantes en esta actividad. La página se actualizará en unos segundos para que vea los cambios...'
+        ];
 
         return $datosMensaje;
     }

@@ -3,6 +3,7 @@ include("session.php");
 include("verificar-carga.php");
 require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 require_once(ROOT_PATH."/main-app/class/AjaxCalificaciones.php");
+require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 
 Modulos::validarAccesoDirectoPaginas();
 
@@ -18,7 +19,7 @@ if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $period
 $idPaginaInterna = 'DC0102';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
-$datosMensaje = AjaxCalificaciones::ajaxGuardarNotasMasiva($conexion, $conexionPDO, $datosCargaActual, $_POST["codNota"], $_POST["nota"]);
+$datosMensaje = AjaxCalificaciones::ajaxGuardarNotasMasiva($datosCargaActual, $_POST["codNota"], $_POST["nota"]);
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 ?>

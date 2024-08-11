@@ -31,23 +31,26 @@ $fecha = date('Y-m-d', strtotime(str_replace('-', '/', $_POST["fecha"])));
 
 if(empty($_POST["bancoDatos"]) || $_POST["bancoDatos"]==0){
 	//Si los valores de las calificaciones son de forma automática.
-	if($datosCargaActual['car_configuracion']==0){
+	if ($datosCargaActual['car_configuracion'] == CONFIG_AUTOMATICO_CALIFICACIONES) {
 		//Insertamos la calificación
 		$idRegistro = Actividades::guardarCalificacionAutomatica($conexionPDO, $config, mysqli_real_escape_string($conexion,$_POST["contenido"]), $fecha, $cargaConsultaActual, $_POST["indicador"], $periodoConsultaActual, $infoCompartir, $_POST["evidencia"]);
 
 		//Actualizamos el valor de todas las actividades del indicador
 		Calificaciones::actualizarValorCalificacionesDeUnIndicador($conexion, $config, $cargaConsultaActual, $periodoConsultaActual, $indicadoresDatos);	
-	}else{
+	} else {
 	//Si los valores de las calificaciones son de forma manual.
-		if($porcentajeRestante<=0){
+		if ($porcentajeRestante <= 0) {
 			include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 			echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=212&restante='.$porcentajeRestante.'";</script>';
 			exit();
 		}
 
-		if(!is_numeric($_POST["valor"])){$_POST["valor"]=1;}
+		$_POST["valor"] = is_numeric($_POST["valor"]) ? $_POST["valor"] : 1;
+
 		//Si el valor es mayor al adecuado lo ajustamos al porcentaje restante; Siempre que este último sea mayor a 0.
-		if($_POST["valor"]>$porcentajeRestante and $porcentajeRestante>0){$_POST["valor"] = $porcentajeRestante;}
+		if($_POST["valor"] > $porcentajeRestante && $porcentajeRestante > 0) {
+			$_POST["valor"] = $porcentajeRestante;
+		}
 
 		//Insertamos la calificación
 		$idRegistro = Actividades::guardarCalificacionManual($conexionPDO, $config, mysqli_real_escape_string($conexion,$_POST["contenido"]), $fecha, $cargaConsultaActual, $_POST["indicador"], $periodoConsultaActual, $infoCompartir, $_POST["valor"]);
