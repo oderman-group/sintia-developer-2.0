@@ -168,7 +168,9 @@ $porcentajeRestante = 100 - $valores[0];
                             data-nota-anterior="<?php if(!empty($notasResultado['cal_nota'])) echo $notasResultado['cal_nota'];?>"
                             data-color-nota-anterior="<?=$colorNota;?>"
                             data-cod-nota="<?=$rA['act_id']?>"
-                            data-nombre-estudiante="<?=$resultado['mat_nombres']." ".$resultado['mat_primer_apellido'];?>" 
+                            data-valor-nota="<?=$rA['act_valor'];?>"
+                            data-origen="2"
+                            data-nombre-estudiante="<?=$resultado['mat_nombres']." ".$resultado['mat_primer_apellido'];?>"
                             value="<?php if(!empty($notasResultado['cal_nota'])) echo $notasResultado['cal_nota'];?>"
                             onChange="notasGuardar(this, 'fila_<?=$resultado['mat_id'];?>', 'tabla_notas')" 
                             tabindex="2" 
@@ -189,28 +191,41 @@ $porcentajeRestante = 100 - $valores[0];
                             >
                                 <i class="fa fa-times"></i>
                             </a>
-                            <?php if ($notasResultado['cal_nota'] < $config[5]) {?>
-                                <br><br>
-                                <input 
-                                    size="5"
-                                    title="<?=$rA['act_id']?>" 
-                                    id="<?=$resultado['mat_id'];?>" 
-                                    alt="<?=$resultado['mat_nombres'];?>" 
-                                    name="<?=$notasResultado['cal_nota'];?>" 
-                                    onChange="notaRecuperacion(this)" 
-                                    tabindex="2" 
-                                    style="font-size: 13px; text-align: center; border-color:tomato;" 
-                                    placeholder="Recup" 
-                                    <?=$disabledNotas;?>
-                                >
-                            <?php }?>
-                            
                         <?php }?>
+
+                        <?php
+                        $recuperacionVisibilidad = 'hidden';
+                        if (!empty($notasResultado['cal_nota']) && $notasResultado['cal_nota'] < $config[5]) {
+                            $recuperacionVisibilidad = 'visible';
+                        }
+                        ?>
+                        <p>
+                            <input
+                                data-id="recuperacion_<?=$resultado['mat_id'].$rA['act_id'];?>"
+                                size="5"
+                                title="<?=$rA['act_id'];?>" 
+                                id="<?=$resultado['mat_id'];?>" 
+                                alt="<?=$resultado['mat_nombres'];?>" 
+                                name="<?php if (!empty($notasResultado['cal_nota'])) echo $notasResultado['cal_nota'];?>" 
+                                onChange="notaRecuperacion(this)" 
+                                tabindex="2" 
+                                style="
+                                    font-size: 13px; 
+                                    text-align: center;
+                                    border-color:tomato;
+                                    visibility:<?=$recuperacionVisibilidad;?>;
+                                " 
+                                placeholder="Recup" 
+                                <?=$disabledNotas;?>
+                            >
+                        </p>
 
                         </td>
                     <?php		
                         }
-                    if($definitiva<$config[5] and $definitiva!="") $colorDef = $config[6]; elseif($definitiva>=$config[5]) $colorDef = $config[7]; else $colorDef = "black";
+                    if($definitiva<$config[5] && $definitiva!="") $colorDef = $config[6]; 
+                    elseif($definitiva>=$config[5]) $colorDef = $config[7]; 
+                    else $colorDef = "black";
 
                     $definitivaFinal = Utilidades::setFinalZero($definitiva);
                     $atributosA='style="text-decoration:underline; color:'.$colorDef.';"';
@@ -222,8 +237,24 @@ $porcentajeRestante = 100 - $valores[0];
                     }
                     ?>
 
-                    <td style="text-align:center;"><?=$porcentajeActual;?></td>
-                    <td style="color:<?php if($definitiva<$config[5] and $definitiva!="")echo $config[6]; elseif($definitiva>=$config[5]) echo $config[7]; else echo "black";?>; text-align:center; font-weight:bold;"><a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&carga=<?=base64_encode($cargaConsultaActual);?>" <?=$atributosA;?>><?=$definitivaFinal;?></a></td>
+                    <td style="text-align:center;"><?=$porcentajeActual;?><p>&nbsp;</p></td>
+                    <td 
+                        style="color:<?php 
+                            if($definitiva<$config[5] and $definitiva!="")echo $config[6]; 
+                            elseif($definitiva>=$config[5]) echo $config[7]; 
+                            else echo "black";?>; 
+                        text-align:center; 
+                        font-weight:bold;"
+                    >
+                        <a 
+                            id="definitiva_<?=$resultado['mat_id'];?>" 
+                            href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&carga=<?=base64_encode($cargaConsultaActual);?>" 
+                            <?=$atributosA;?>
+                        >
+                            <?php echo $definitivaFinal;?>
+                        </a>
+                        <p>&nbsp;</p>
+                    </td>
                 </tr>
                 <?php
                     $contReg++;

@@ -238,15 +238,7 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 
 											</div>
 
-											
-
-											
-
 										<span style="color: blue; font-size: 15px;" id="respRCT"></span>
-
-											
-
-											
 
                                         <div class="table-responsive">
 
@@ -380,21 +372,29 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 
 														<td>
 
-															<?php if(!empty($notas['cal_nota'])){?>
+															<?php 
+															$recuperacionVisibilidad = 'hidden';
+															if (!empty($notas['cal_nota']) && $notas['cal_nota'] < $config[5]) {
+																$recuperacionVisibilidad = 'visible';
+															}
+															?>
 
-															<input 
+															<input
+																data-id="recuperacion_<?=$resultado['mat_id'].$cargaConsultaActual;?>"
 																type="text" 
-																style="text-align: center;" 
 																size="5" 
 																step="<?=$cargaConsultaActual;?>"
-																name="<?=$notas['cal_nota'];?>" 
+																name="<?php if(!empty($notas['cal_nota'])) echo $notas['cal_nota'];?>" 
 																id="<?=$resultado['mat_id'];?>" 
 																alt="<?=$resultado['mat_nombres'];?>" 
 																title="<?=$idR;?>" 
 																onChange="notaRecuperacion(this)"
+																style="
+																	font-size: 13px; 
+																	text-align: center;
+																	visibility:<?=$recuperacionVisibilidad;?>;
+																" 
 															>
-
-															<?php }?>
 
 														</td>
 

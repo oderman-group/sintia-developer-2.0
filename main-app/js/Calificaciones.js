@@ -78,55 +78,80 @@ function niv(enviada){
  * Esta función sirve para registrar la notas de un estudiante
  * @param enviada //Datos enviados por imput
  */
-function notasGuardar(enviada, fila = null, tabla_notas = null){
-    var nota = enviada.value;
+function notasGuardar(enviada, fila = null, tabla_notas = null) {
+    var nota         = enviada.value;
+    var notaAnterior = enviada.getAttribute("data-nota-anterior") ?? 0;
 
-    if (alertValidarNota(nota)) {		
-		return false;
+    var NoEsValidaNota = alertValidarNota(nota);
+    
+    if (NoEsValidaNota) {
+        enviada.value = notaAnterior;
+        return;
 	}
-
+    
     // Puede ser null si es una actividad individual. En este caso se usa el id de la carga académica.
     var carga             = enviada.getAttribute("data-carga-actividad") ?? null;
-
+    
+    var input             = enviada.id;
 	var codEst            = enviada.getAttribute("data-cod-estudiante");
-	var notaAnterior      = enviada.getAttribute("data-nota-anterior") ?? 0;
     var colorNotaAnterior = enviada.getAttribute("data-color-nota-anterior") ?? '#000000';
 	var codNota           = enviada.getAttribute("data-cod-nota");	 
 	var nombreEst         = enviada.getAttribute("data-nombre-estudiante");
-    var input             = enviada.id;
-
+    var valorNota         = enviada.getAttribute("data-valor-nota") ?? 0;
+    var origen            = enviada.getAttribute("data-origen") ?? null;
+    
     var tabla_notas       = document.getElementById(tabla_notas);
     var tbody             = tabla_notas.querySelector("tbody");
     var filaCompleta      = document.getElementById(fila);
     var idColumna         = 'columna_'+input;
     var colunaNota        = filaCompleta.querySelector("td[id='"+idColumna+"']");
     var spinner           = document.createElement('span');
+    var hrefDefinitiva    = filaCompleta.querySelector("a[id='definitiva_"+codEst+"']");
+    var inputRecuperacion = filaCompleta.querySelector("input[data-id='recuperacion_"+codEst+""+carga+"']");
 
+    if (origen == 2) {
+        var sumaPorcentaje = 0;
+        var calculo        = 0;
+        
+        filaCompleta.querySelectorAll("input[data-origen='2']").forEach(input => {
+            if (input.value !== '') {
+                calculo         += input.value * parseFloat(input.getAttribute('data-valor-nota') / 100);
+                sumaPorcentaje  += parseFloat(input.getAttribute('data-valor-nota'));
+            }
+        });
+        
+        var definitiva      = calculo / (sumaPorcentaje / 100);
+        var colorDefinitiva = aplicarColorNota(definitiva);
+        
+        hrefDefinitiva.innerText = definitiva.toFixed(2);
+        hrefDefinitiva.style.color = colorDefinitiva ?  colorDefinitiva : '#000000';
+    }
+    
     tabla_notas.querySelectorAll("input").forEach(input => input.disabled = true);
-
+    
     tbody.querySelectorAll('a').forEach(a => {
         a.style.visibility = 'hidden';
     });
-
+    
     enviada.disabled = true;
-
+    
     spinner.className = 'spinner-border spinner-border-sm';
     spinner.setAttribute('role', 'status');
     spinner.setAttribute('aria-hidden', 'true');
     spinner.style.display = 'block';
     spinner.style.margin = '0 auto';
     spinner.style.marginBottom = '5px';
-
+    
     colunaNota.insertBefore(spinner, colunaNota.firstChild);
-
+    
 	var colorAplicado = aplicarColorNota(nota, input);
     
     notaCualitativa(nota, codEst, carga, colorAplicado)
     .then(function(res) {
-
+        
         let idHref = 'CU'+codEst+carga;
         let href   = document.getElementById(idHref);
-
+        
         if(!res.success) {
             console.error("Error al obtener la calificación cualitativa.");
             href.innerHTML    = '<span style="color:red;">Error al guardar la nota</span>';
@@ -138,17 +163,17 @@ function notasGuardar(enviada, fila = null, tabla_notas = null){
             tbody.querySelectorAll('a').forEach(a => {
                 a.style.visibility = 'visible';
             });
-
+            
             return;
         }
-
+        
         $('#respRCT').empty().hide().html("Guardando la nota, espere por favor...").show(1);
-
+        
         datos = "nota="+(nota)+
-			"&codNota="+(codNota)+
-			"&notaAnterior="+(notaAnterior)+
-			"&nombreEst="+(nombreEst)+
-			"&codEst="+(codEst);
+        "&codNota="+(codNota)+
+        "&notaAnterior="+(notaAnterior)+
+        "&nombreEst="+(nombreEst)+
+        "&codEst="+(codEst);
 
         return $.ajax({
             type: "POST",
@@ -156,6 +181,12 @@ function notasGuardar(enviada, fila = null, tabla_notas = null){
             data: datos,
             success: function(data) {
                 $('#respRCT').empty().hide().html(data).show(1);
+
+                if (nota < 3.5) {
+                    inputRecuperacion.style.visibility = 'visible';
+                } else {
+                    inputRecuperacion.style.visibility = 'hidden';
+                }
             },
             error: function(xhr, status, error) {
                 console.error("Error en la petición AJAX:", error);
