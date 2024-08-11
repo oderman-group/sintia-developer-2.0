@@ -143,97 +143,20 @@ th {
 																$estiloNotaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
 															}
 														?>
-															<td style="text-align:center;" id="columna_<?=$resultado['mat_id']."-".$rA['act_id'];?>">
-															<input 
-																size="5"
-																id="<?=$resultado['mat_id']."-".$rA['act_id'];?>" 
-																data-cod-estudiante="<?=$resultado['mat_id'];?>"
-																data-carga-actividad="<?=$rA['act_id'];?>"
-																data-nota-anterior="<?php if(!empty($notasResultado['cal_nota'])) echo $notasResultado['cal_nota'];?>"
-																data-color-nota-anterior="<?=$colorNota;?>"
-																data-cod-nota="<?=$rA['act_id']?>"
-																data-nombre-estudiante="<?=$resultado['mat_nombres']." ".$resultado['mat_primer_apellido'];?>" 
-																data-valor-nota="<?=$rA['act_valor'];?>"
-																data-origen="2"
-																value="<?php if(!empty($notasResultado['cal_nota'])){ echo $notasResultado['cal_nota'];}?>"
-																onChange="notasGuardar(this, 'fila_<?=$resultado['mat_id'];?>', 'tabla_notas')" 
-																tabindex="2" 
-																style="font-size: 13px; text-align: center; color:<?=$colorNota;?>;" 
-																<?=$habilitado;?>
-															>
 
-                        									<br><span id="CU<?=$resultado['mat_id'].$rA['act_id'];?>" style="font-size: 12px; color:<?=$colorNota;?>"><?=$estiloNotaFinal?></span>
-															<?php if(!empty($notasResultado['cal_nota'])){?>
-																<a 
-																	href="#" 
-																	title="<?=$objetoEnviar;?>" 
-																	id="<?=$notasResultado['cal_id'];?>" 
-																	name="calificaciones-nota-eliminar.php?id=<?=base64_encode($notasResultado['cal_id']);?>" onClick="deseaEliminar(this)" 
-																	<?=$deleteOculto;?>
-																>
-																	<i class="fa fa-times"></i>
-																</a>
-															<?php }?>
+															<?php include("td-calificaciones.php");?>
 
-																<?php
-																$recuperacionVisibilidad = 'hidden';
-																if (!empty($notasResultado['cal_nota']) && $notasResultado['cal_nota'] < $config[5]) {
-																	$recuperacionVisibilidad = 'visible';
-																}
-																?>
-																<p>
-																	<input
-																		data-id="recuperacion_<?=$resultado['mat_id'].$rA['act_id'];?>"
-																		size="5"
-																		id="<?=$resultado['mat_id'];?>" 
-																		title="<?=$rA['act_id'];?>" 
-																		alt="<?=$resultado['mat_nombres'];?>" 
-																		name="<?php if (!empty($notasResultado['cal_nota'])) echo $notasResultado['cal_nota'];?>" 
-																		onChange="notaRecuperacion(this)" 
-																		tabindex="2" 
-																		style="
-																			font-size: 13px; 
-																			text-align: center; 
-																			border-color:tomato;
-																			visibility:<?=$recuperacionVisibilidad;?>;
-																		" 
-																		placeholder="Recup"
-																		<?=$habilitado;?>
-																	>
-																</p>
-															
-
-															</td>
 														<?php		
-														 }
-														if($definitiva<$config[5] and $definitiva!="") $colorDef = $config[6]; elseif($definitiva>=$config[5]) $colorDef = $config[7]; else $colorDef = "black";
-
-														$definitivaFinal=$definitiva;
-														$atributosA='style="text-decoration:underline; color:'.$colorDef.';"';
-														if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
-															$atributosA='tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-content="<b>Nota Cuantitativa:</b><br>'.$definitiva.'" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:'.$colorDef.';"';
-									
-															$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $definitiva);
-															$definitivaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
 														}
+
+														include("td-porcentaje-definitiva.php");
 														?>
 
-														<td style="text-align:center;"><?=$porcentajeActual;?><p>&nbsp;</p></td>
-                                        				<td style="color:<?php if($definitiva<$config[5] and $definitiva!="")echo $config[6]; elseif($definitiva>=$config[5]) echo $config[7]; else echo "black";?>; text-align:center; font-weight:bold;">
-															<a
-																id="definitiva_<?=$resultado['mat_id'];?>"
-																href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&carga=<?=base64_encode($cargaConsultaActual);?>" 
-																<?=$atributosA;?>
-															>
-															<?=$definitivaFinal;?>
-															</a>
-															<p>&nbsp;</p>
-														</td>
                                                     </tr>
 													<?php
 														$contReg++;
-													  }
-													  ?>
+													}
+													?>
                                                 </tbody>
                                             </table>
 											

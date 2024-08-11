@@ -146,98 +146,13 @@ include("../compartido/sintia-funciones-js.php");
 						$arrayDatos = json_encode($arrayEnviar);
 						$objetoEnviar = htmlentities($arrayDatos);
 					?>
-						<td style="text-align:center;" id="columna_<?=$resultado['mat_id']."-".$rA['act_id'];?>">
-							<input 
-								size="5"
-								id="<?=$resultado['mat_id']."-".$rA['act_id'];?>" 
-								data-cod-estudiante="<?=$resultado['mat_id'];?>"
-								data-carga-actividad="<?=$rA['act_id'];?>"
-								data-nota-anterior="<?php if(!empty($notasResultado['cal_nota'])) echo $notasResultado['cal_nota'];?>"
-								data-cod-nota="<?=$rA['act_id']?>"
-								data-nombre-estudiante="<?=$resultado['mat_nombres']." ".$resultado['mat_primer_apellido'];?>" 
-								data-valor-nota="<?=$rA['act_valor'];?>"
-								data-origen="2"
-								value="<?php if (!empty($notasResultado['cal_nota'])) { echo $notasResultado['cal_nota']; } ?>"
-								onChange="notasGuardar(this, 'fila_<?=$resultado['mat_id'];?>', 'tabla_notas')" 
-								tabindex="2" 
-								style="
-									font-size: 13px; 
-									text-align: center; 
-									color:<?php 
-										if (!empty($notasResultado['cal_nota']) && $notasResultado['cal_nota'] < $config[5] && $notasResultado['cal_nota'] != "") echo $config[6]; 
-										elseif (!empty($notasResultado['cal_nota']) && $notasResultado['cal_nota'] >= $config[5]) echo $config[7]; 
-										else echo "black";
-									?>;
-								" 
-								<?= $habilitado; ?>
-							>
-							<br><span id="CU<?=$resultado['mat_id'].$rA['act_id'];?>" style="font-size: 12px;"></span>
-
-							<?php if (!empty($notasResultado['cal_nota'])) { ?>
-								<a 
-									href="#" 
-									title="<?= $objetoEnviar; ?>" 
-									id="<?= $notasResultado['cal_id']; ?>" 
-									name="calificaciones-nota-eliminar.php?id=<?= base64_encode($notasResultado['cal_id']); ?>" 
-									onClick="deseaEliminar(this)" 
-									<?= $deleteOculto; ?>
-								>
-									<i class="fa fa-times"></i>
-								</a>
-							<?php } ?>
-
-								<?php
-								$recuperacionVisibilidad = 'hidden';
-								if (!empty($notasResultado['cal_nota']) && $notasResultado['cal_nota'] < $config[5]) {
-									$recuperacionVisibilidad = 'visible';
-								}
-								?>
-								<p>
-									<input
-									    data-id="recuperacion_<?=$resultado['mat_id'].$rA['act_id'];?>"
-										size="5" 
-										id="<?= $resultado['mat_id']; ?>" 
-										title="<?=$rA['act_id'];?>" 
-										alt="<?= $resultado['mat_nombres']; ?>" 
-										name="<?php if (!empty($notasResultado['cal_nota'])) echo $notasResultado['cal_nota'];?>" 
-										onChange="notaRecuperacion(this)" 
-										tabindex="2" 
-										style="
-											font-size: 13px; 
-											text-align: center; 
-											border-color:tomato;
-											visibility:<?=$recuperacionVisibilidad;?>;
-										" 
-										placeholder="Recup" 
-										<?= $habilitado; ?>
-									>
-								</p>
-
-						</td>
+						<?php include("td-calificaciones.php");?>
 					<?php
 					}
-					if ($definitiva < $config[5] and $definitiva != "") $colorDef = $config[6];
-					elseif ($definitiva >= $config[5]) $colorDef = $config[7];
-					else $colorDef = "black";
+					
+					include("td-porcentaje-definitiva.php");
 					?>
 
-					<td style="text-align:center;"><?= $porcentajeActual; ?><p>&nbsp;</p></td>
-					<td
-						style="
-							color:<?php if ($definitiva < $config[5] and $definitiva != "") echo $config[6];
-										elseif ($definitiva >= $config[5]) echo $config[7];
-										else echo "black"; ?>; 
-							text-align:center; 
-							font-weight:bold;"
-					>
-										<a
-											id="definitiva_<?=$resultado['mat_id'];?>" 
-											href="calificaciones-estudiante.php?usrEstud=<?= base64_encode($resultado['mat_id_usuario']); ?>&periodo=<?= base64_encode($periodoConsultaActual); ?>&carga=<?= base64_encode($cargaConsultaActual); ?>" style="text-decoration:underline; color:<?= $colorDef; ?>;"
-										>
-											<?= $definitiva; ?>
-										</a>
-										<p>&nbsp;</p>
-					</td>
 				</tr>
 			<?php
 				$contReg++;
