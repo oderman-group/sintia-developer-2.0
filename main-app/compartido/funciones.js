@@ -209,6 +209,7 @@ function deseaEliminar(dato) {
     var registro = document.getElementById("reg" + id);
     var evaPregunta = document.getElementById("pregunta" + id);
     var publicacion = document.getElementById("PUB" + id);
+    var elementoGlobalBloquear = document.getElementsByName("elementoGlobalBloquear")[0];
 
     Swal.fire({
         title: 'Desea eliminar?',
@@ -223,6 +224,25 @@ function deseaEliminar(dato) {
         `,
     }).then((result) => {
         if (result.isConfirmed) {
+
+            if (elementoGlobalBloquear) {
+                elementoGlobalBloquear.style.position = 'relative';
+                var overlay = document.createElement('div');
+                overlay.style.position = 'absolute';
+                overlay.style.top = 0;
+                overlay.style.left = 0;
+                overlay.style.width = '100%';
+                overlay.style.height = '100%';
+                overlay.style.backgroundColor = 'rgba(128, 128, 128, 0.7)';
+                overlay.style.display = 'flex';
+                overlay.style.justifyContent = 'center';
+                overlay.style.alignItems = 'center';
+                overlay.style.color = 'white';
+                overlay.style.fontSize = '2em';
+                overlay.innerText = 'Eliminando el registro, por favor espere...';
+                elementoGlobalBloquear.appendChild(overlay);
+            }
+
             if (typeof id !== "undefined" && id !== "") {
 
                 if (typeof varObjet !== "undefined") {
@@ -303,6 +323,10 @@ function deseaEliminar(dato) {
                             hideAfter: 5000,
                             stack: 6
                         });
+
+                        if (elementoGlobalBloquear) {
+                            elementoGlobalBloquear.removeChild(overlay);
+                        }
 
                 }).catch(function(error) {
                     // handle error

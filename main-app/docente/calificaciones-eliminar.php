@@ -29,5 +29,5 @@ if($datosCargaActual['car_configuracion']==0){
 }
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
-echo '<script type="text/javascript">window.location.href="'.$_SERVER['HTTP_REFERER'].'&tab=2&error=ER_DT_3";</script>';
+echo '<script type="text/javascript">window.location.href="'.$_SERVER['HTTP_REFERER'].'?&tab=2&error=ER_DT_3";</script>';
 exit();

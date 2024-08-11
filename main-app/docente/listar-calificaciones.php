@@ -13,7 +13,7 @@ $porcentajeRestante = 100 - $valores[0];
 ?>
 </head>
 
-<div class="card card-topline-purple">
+<div class="card card-topline-purple" name="elementoGlobalBloquear">
 	<div class="card-head">
 		<header><?=$frases[6][$datosUsuarioActual['uss_idioma']];?></header>
 		<div class="tools">
@@ -139,7 +139,22 @@ $porcentajeRestante = 100 - $valores[0];
 							<ul class="dropdown-menu pull-left" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 23px, 0px); top: 0px; left: 0px; will-change: transform;">
 								<li><a href="calificaciones-registrar.php?idR=<?=base64_encode($resultado['act_id']);?>">Calificar</a></li>
 								<li><a href="calificaciones-editar.php?idR=<?=base64_encode($resultado['act_id']);?>">Editar</a></li>
-								<li><a href="#" title="<?=$objetoEnviar;?>" id="<?=$resultado['act_id'];?>" name="calificaciones-eliminar.php?idR=<?=base64_encode($resultado['act_id']);?>&idIndicador=<?=base64_encode($resultado['act_id_tipo']);?>&carga=<?=base64_encode($cargaConsultaActual);?>&periodo=<?=base64_encode($periodoConsultaActual);?>" onClick="deseaEliminar(this)">Eliminar</a></li>
+								<li>
+									<a 
+										href="#" 
+										title="<?=$objetoEnviar;?>" 
+										id="<?=$resultado['act_id'];?>" 
+										name="
+											calificaciones-eliminar.php?idR=<?=base64_encode($resultado['act_id']);?>
+											&idIndicador=<?=base64_encode($resultado['act_id_tipo']);?>
+											&carga=<?=base64_encode($cargaConsultaActual);?>
+											&periodo=<?=base64_encode($periodoConsultaActual);?>
+										" 
+										onClick="deseaEliminar(this)"
+									>
+										Eliminar
+									</a>
+								</li>
 							</ul>
 						</div>
 						
