@@ -1,8 +1,8 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+require_once ROOT_PATH."/main-app/class/Conexion.php";
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/BindSQL.php");
-require_once ROOT_PATH."/main-app/class/Conexion.php";
 require_once ROOT_PATH."/main-app/class/AjaxCalificaciones.php";
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
 
@@ -872,7 +872,6 @@ class Calificaciones {
         ";
 
         $conexionPDO = Conexion::newConnection('PDO');
-        $conexionPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $asp = $conexionPDO->prepare($sql);
 
@@ -927,7 +926,6 @@ class Calificaciones {
         $data['notaAnterior'] = empty($data['notaAnterior']) ? "0.0" : $data['notaAnterior'];
 
         $conexionPDO = Conexion::newConnection('PDO');
-        $conexionPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $asp = $conexionPDO->prepare($sql);
 

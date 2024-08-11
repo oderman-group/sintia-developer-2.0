@@ -12,7 +12,9 @@ require_once(ROOT_PATH."/main-app/class/Actividades.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 
 $idR="";
-if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
+if (!empty($_GET["idR"])) { 
+	$idR=base64_decode($_GET["idR"]);
+}
 
 $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 ?>
@@ -31,15 +33,13 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 
         <?php include("../compartido/encabezado.php");?>
 
-		
-
         <?php include("../compartido/panel-color.php");?>
 
         <!-- start page container -->
 
         <div class="page-container">
 
- 			<?php include("../compartido/menu.php");?>
+		<?php include("../compartido/menu.php");?>
 
 			<!-- start page content -->
 
@@ -57,8 +57,6 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 
 								<p style="font-size: 13px; color: darkblue;"><?=$calificacion['ind_nombre'];?></p>
 
-								
-
 								<?php include("../compartido/texto-manual-ayuda.php");?>
 
                             </div>
@@ -75,8 +73,6 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 
                     </div>
 
-                    
-
                     <div class="row">
 
                         <div class="col-md-12">
@@ -91,13 +87,9 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 
 									<?php include("info-carga-actual.php");?>
 
-									
-
 									<div class="panel">
 
 										<header class="panel-heading panel-heading-purple">TABLA DE VALORES</header>
-
-
 
 										<div class="panel-body">
 
@@ -187,8 +179,6 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 
 								</div>
 
-									
-
 								<div class="col-md-8 col-lg-9">
 
                                     <div class="card card-topline-purple">
@@ -208,14 +198,6 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
                                             </div>
 
                                         </div>
-
-										
-
-										
-
-									
-
-										
 
                                         <div class="card-body">
 
@@ -279,22 +261,19 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 													$colorNota = "black";
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 
-														 if($calificacion['act_registrada']==1){
+														if ($calificacion['act_registrada']==1) {
 
 															 //Consulta de calificaciones si ya la tienen puestas.
 															$notas = Calificaciones::traerCalificacionActividadEstudiante($config, $idR, $resultado['mat_id']);
 
-															 if(!empty($notas['cal_nota']) && $notas['cal_nota']<$config[5]) $colorNota = $config[6]; elseif(!empty($notas['cal_nota']) && $notas['cal_nota']>=$config[5]) $colorNota = $config[7];
+															if (!empty($notas['cal_nota']) && $notas['cal_nota'] < $config[5]) $colorNota = $config[6]; 
+															elseif(!empty($notas['cal_nota']) && $notas['cal_nota'] >= $config[5]) $colorNota = $config[7];
 
-														 }
+														}
 
-														 
+														$fotoEst = $usuariosClase->verificarFoto($resultado['uss_foto']);
 
-														 $fotoEst = $usuariosClase->verificarFoto($resultado['uss_foto']);
-
-													 ?>
-
-													
+													?>
 
 													<?php
 
@@ -317,8 +296,6 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 													$notaActual = !empty($notas['cal_nota']) ? $notas['cal_nota'] : '';
 
 													?>
-
-                                                    
 
 													<tr id="fila_<?=$resultado['mat_id'];?>">
 
@@ -414,16 +391,11 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
                                                     </tr>
 
 													<?php 
-
-														 $contReg++;
-
-													  }
+														$contReg++;
+													}
 
 													mysqli_free_result($consulta);
-
-															
-
-													  ?>
+													?>
 
                                                 </tbody>
 
@@ -436,10 +408,6 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
                                     </div>
 
                                 </div>
-
-								
-
-							
 
                             </div>
 
