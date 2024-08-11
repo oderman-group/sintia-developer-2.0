@@ -81,7 +81,7 @@ class Boletin {
      * ```
      */
     public static function obtenerDatosTipoDeNotas($categoria, $nota, string $yearBd    = ''){
-        global $conexion, $config;
+        global $config;
         $resultado = [];
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 

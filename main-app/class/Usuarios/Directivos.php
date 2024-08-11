@@ -8,7 +8,7 @@ class Directivos {
     protected $clave         = null;
     protected $email         = null;
 
-    protected $usuariosPadre;
+    protected UsuariosPadre $usuariosPadre;
 
     public function __construct(UsuariosPadre $usuariosPadre) {
         $this->usuariosPadre = $usuariosPadre;
