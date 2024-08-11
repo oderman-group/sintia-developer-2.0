@@ -48,9 +48,17 @@ require_once("../class/Estudiantes.php");
                                 html: true, // Habilitar contenido HTML
                                 content: function() {
                                     valor = document.getElementById("tipoBoletin");
-                                    return '<div id="myPopover" class="popover-content"><label id="lbl_tipo">Formato tipo ' + valor.value + '</label>' +
+                                    vacio= valor.value === null ||  valor.value === undefined ||  valor.value.trim() === '';
+                                    if(!vacio){
+                                        return '<div id="myPopover" class="popover-content"><label id="lbl_tipo">Formato tipo ' + valor.value + '</label>' +
                                         '<img id="img-boletin" src="../files/images/boletines/tipo' + valor.value + '.png" class="w-100" />' +
                                         '</div>';
+                                    }else{
+                                        return '<div id="myPopover" class="popover-content"><label id="lbl_tipo">Seleccione un tipo de formato.</label>' +
+                                           
+                                            '</div>';
+                                    }
+                                    
                                 }
                             });
                         });
@@ -168,9 +176,16 @@ require_once("../class/Estudiantes.php");
                                 html: true, // Habilitar contenido HTML
                                 content: function() {
                                     valor = document.getElementById("tipoBoletinEst");
-                                    return '<div id="myPopover" class="popover-content"><label id="lbl_tipoEst">Formato tipo ' + valor.value + '</label>' +
-                                        '<img id="img-boletinEst" src="../files/images/boletines/tipo' + valor.value + '.png" class="w-100" />' +
-                                        '</div>';
+                                    vacio= valor.value === null ||  valor.value === undefined ||  valor.value.trim() === '';
+                                    if(!vacio){
+                                        return '<div id="myPopover" class="popover-content"><label id="lbl_tipoEst">Formato tipo ' + valor.value + '</label>' +
+                                            '<img id="img-boletinEst" src="../files/images/boletines/tipo' + valor.value + '.png" class="w-100" />' +
+                                            '</div>';
+                                    }else{
+                                        return '<div id="myPopover" class="popover-content"><label id="lbl_tipoEst">Seleccione un tipo de formato.</label>' +
+                                           
+                                            '</div>';
+                                    }
                                 }
                             });
                         });
