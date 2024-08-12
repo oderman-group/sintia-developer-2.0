@@ -15,7 +15,7 @@ $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
 <div id="gifCarga" class="gif-carga">
     <img alt="Cargando...">
 </div>
-<div class="card card-topline-purple" id="idElemento">
+<div class="card card-topline-purple" id="idElemento" name="elementoGlobalBloquear">
     <div class="card-head">
         <header><?= $frases[63][$datosUsuarioActual['uss_idioma']]; ?></header>
         <div class="tools">

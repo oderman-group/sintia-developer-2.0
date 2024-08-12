@@ -68,7 +68,7 @@ th {
 											}
 											?>
 	
-											<table width="100%" border="1" rules="rows">
+											<table width="100%" border="1" rules="rows" id="tabla_notas">
                                                 <thead>
 												  <tr>
 													<th style="width: 50px;">#</th>
@@ -80,7 +80,15 @@ th {
 														'.$rA['act_descripcion'].'<br>
 														('.$rA['act_valor'].'%)</a><br>
 														<a href="#" name="calificaciones-eliminar.php?idR='.base64_encode($rA['act_id']).'&idIndicador='.base64_encode($rA['act_id_tipo']).'&carga='.base64_encode($cargaConsultaActual).'&periodo='.base64_encode($periodoConsultaActual).'" onClick="deseaEliminar(this)" '.$deleteOculto.'><i class="fa fa-times"></i></a><br>
-														<input type="text" style="text-align: center; font-weight: bold;" maxlength="3" size="10" title="0" name="'.$rA['act_id'].'" onChange="notasMasiva(this)" '.$habilitado.'>
+														<input 
+															type="text" 
+															style="text-align: center; font-weight: bold;"
+															size="10" 
+															title="0" 
+															name="'.$rA['act_id'].'" 
+															onChange="notasMasiva(this)" 
+														'.$habilitado.'
+														>
 														</th>';
 													 }
 													?>
@@ -107,7 +115,7 @@ th {
 														if(!empty($_GET["idEst"]) && $resultado['mat_id']==$_GET["idEst"]){$colorFondo = 'yellow;';}
 													?>
                                                     
-													<tr style="background-color: <?=$colorFondo;?>">
+													<tr style="background-color: <?=$colorFondo;?>" id="fila_<?=$resultado['mat_id'];?>">
                                                         <td style="text-align:center;" style="width: 100px;"><?=$contReg;?></td>
 														<td style="color: <?=$colorEstudiante;?>">
 														<?=$nombreCompleto?>
@@ -135,38 +143,20 @@ th {
 																$estiloNotaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
 															}
 														?>
-															<td style="text-align:center;">
-															<input size="5" maxlength="3" step="<?=$rA['act_id'];?>" name="<?=$notasResultado['cal_nota']?>" id="<?=$resultado['mat_id']."-".$rA['act_id'];?>" data-cod-estudiante="<?=$resultado['mat_id'];?>" title="<?=$rA['act_id'];?>" value="<?php if(!empty($notasResultado['cal_nota'])){ echo $notasResultado['cal_nota'];}?>" alt="<?=$resultado['mat_nombres'];?>" onChange="notasGuardar(this)" tabindex="2" style="font-size: 13px; text-align: center; color:<?=$colorNota;?>;" <?=$habilitado;?>>
-                        									<br><span id="CU<?=$resultado['mat_id'].$rA['act_id'];?>" style="font-size: 12px; color:<?=$colorNota;?>"><?=$estiloNotaFinal?></span>
-															<?php if(!empty($notasResultado['cal_nota'])){?>
-																<a href="#" title="<?=$objetoEnviar;?>" id="<?=$notasResultado['cal_id'];?>" name="calificaciones-nota-eliminar.php?id=<?=base64_encode($notasResultado['cal_id']);?>" onClick="deseaEliminar(this)" <?=$deleteOculto;?>><i class="fa fa-times"></i></a>
-																<?php if($notasResultado['cal_nota']<$config[5]){?>
-																	<br><br><input size="5" maxlength="3" id="<?=$resultado['mat_id'];?>" title="<?=$rA['act_id'];?>" alt="<?=$resultado['mat_nombres'];?>" name="<?=$notasResultado['cal_nota'];?>" onChange="notaRecuperacion(this)" tabindex="2" style="font-size: 13px; text-align: center; border-color:tomato;" placeholder="Recup" <?=$habilitado;?>>
-																<?php }?>
-															<?php }?>
 
-															</td>
+															<?php include("td-calificaciones.php");?>
+
 														<?php		
-														 }
-														if($definitiva<$config[5] and $definitiva!="") $colorDef = $config[6]; elseif($definitiva>=$config[5]) $colorDef = $config[7]; else $colorDef = "black";
-
-														$definitivaFinal=$definitiva;
-														$atributosA='style="text-decoration:underline; color:'.$colorDef.';"';
-														if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
-															$atributosA='tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-content="<b>Nota Cuantitativa:</b><br>'.$definitiva.'" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:'.$colorDef.';"';
-									
-															$estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $definitiva);
-															$definitivaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
 														}
+
+														include("td-porcentaje-definitiva.php");
 														?>
 
-														<td style="text-align:center;"><?=$porcentajeActual;?></td>
-                                        				<td style="color:<?php if($definitiva<$config[5] and $definitiva!="")echo $config[6]; elseif($definitiva>=$config[5]) echo $config[7]; else echo "black";?>; text-align:center; font-weight:bold;"><a href="calificaciones-estudiante.php?usrEstud=<?=base64_encode($resultado['mat_id_usuario']);?>&periodo=<?=base64_encode($periodoConsultaActual);?>&carga=<?=base64_encode($cargaConsultaActual);?>" <?=$atributosA;?>><?=$definitivaFinal;?></a></td>
                                                     </tr>
 													<?php
 														$contReg++;
-													  }
-													  ?>
+													}
+													?>
                                                 </tbody>
                                             </table>
 											

@@ -1,8 +1,10 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
+require_once ROOT_PATH."/main-app/class/Conexion.php";
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/BindSQL.php");
-require_once ROOT_PATH."/main-app/class/Conexion.php";
+require_once ROOT_PATH."/main-app/class/AjaxCalificaciones.php";
+require_once(ROOT_PATH."/main-app/class/Actividades.php");
 
 class Calificaciones {
 
@@ -734,6 +736,218 @@ class Calificaciones {
         $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
 
         return $resultado;
+    }
+
+    /**
+     * Validates a given grade (nota) to ensure it falls within the acceptable range.
+     *
+     * @param mixed $nota The grade to be validated. It should be a numeric value.
+     *
+     * @return array An associative array containing:
+     *               - 'success': A boolean indicating if the grade is valid.
+     *               - 'heading': A string message heading.
+     *               - 'estado': A string indicating the status ('danger', 'warning', 'success').
+     *               - 'mensaje': A string message providing details about the validation result.
+     */
+    public static function esCalificacionValida($nota): array 
+    {
+
+        $config = RedisInstance::getSystemConfiguration();
+
+        if (!is_numeric($nota)) {
+            return [
+                'success' => false,
+                'heading' => "Nota inválida",
+                'estado'  => 'danger',
+                'mensaje' => "La nota {$nota} no es válida. Ingrese un valor entero o decimal entre {$config['conf_nota_desde']} y {$config['conf_nota_hasta']}",
+            ];
+        }
+
+        if ($nota > $config['conf_nota_hasta']) {
+            return [
+                'success' => false,
+                'heading' => 'Nota superada',
+                'estado'  => 'warning',
+                'mensaje'   => 'La calificación supera el máximo permitido: '.$config['conf_nota_hasta'],
+            ];
+        }
+
+        if ($nota < $config['conf_nota_desde']) {
+            return [
+                'success' => false,
+                'heading' => 'Nota inferior',
+                'estado'  => 'warning',
+                'mensaje' => 'La calificación esta por debajo del mínimo permitido: '.$config['conf_nota_desde'],
+            ];
+        }
+
+        return [
+            'success' => true,
+            'heading' => 'Nota valida',
+            'estado'  => 'success',
+            'mensaje' => 'La calificación es valida: '.$nota,
+        ];
+    }
+
+    /**
+     * Directs the grade processing based on the provided data.
+     *
+     * This function validates the grade and determines whether to save a new grade or update an existing one.
+     *
+     * @param array $data An associative array containing the following keys:
+     *                    - 'target': The target for redirection.
+     *                    - 'nota': The grade to be processed.
+     *                    - 'codNota': The code of the activity.
+     *                    - 'codEst': The code of the student.
+     *                    - 'nombreEst': The name of the student.
+     *                    - 'notaAnterior' (optional): The previous grade.
+     *
+     * @return array An associative array containing:
+     *               - 'success': A boolean indicating if the operation was successful.
+     *               - 'heading': A string message heading.
+     *               - 'estado': A string indicating the status ('danger', 'warning', 'success').
+     *               - 'mensaje': A string message providing details about the operation result.
+    */
+    public static function direccionarCalificacion($data) {
+
+        if (!is_array($data) || !array_key_exists('target', $data)) {
+            return [
+                'success' => false,
+                'heading' => 'Error en la redirección',
+                'estado'  => 'danger',
+                'mensaje' => 'No se ha encontrado el target de la redirección',
+            ];
+        }
+
+        $esCalificacionValida = self::esCalificacionValida($data['nota']);
+
+        if (!$esCalificacionValida['success']) {
+            return $esCalificacionValida;
+        }
+
+        $hayRegistrosCalificaciones = self::hayRegistrosCalificaciones($data['codNota'], $data['codEst']);
+
+        if ($hayRegistrosCalificaciones == true || $hayRegistrosCalificaciones == 1) {
+            return self::actualizarCalificacion($data);
+        } else {
+            return AjaxCalificaciones::ajaxGuardarNota($data);
+        }
+
+        return [
+            'success' => false,
+            'heading' => 'Error en la redirección',
+            'estado'  => 'danger',
+            'mensaje' => 'El target de la redirección no es válido',
+        ];
+
+    }
+
+    /**
+     * Checks if there are existing grade records for a given activity and student.
+     *
+     * @param string $codNota The code of the activity.
+     * @param string $codEstudiante The code of the student.
+     *
+     * @return bool Returns true if there are existing grade records, false otherwise.
+     *
+     * @throws Exception If either the activity code or student code is empty.
+     */
+    public static function hayRegistrosCalificaciones($codNota, $codEstudiante): bool 
+    {
+        if (empty($codNota) || empty($codEstudiante)) {
+            throw new Exception('Debe ingresar código de actividad y código de estudiante');
+        }
+
+        $config = RedisInstance::getSystemConfiguration();
+
+        $sql = "
+        SELECT 
+            cal_id
+        FROM ".BD_ACADEMICA.".academico_calificaciones 
+        WHERE 
+            cal_id_actividad=:codNota
+        AND cal_id_estudiante=:codEst
+        AND institucion=:institucion
+        AND year=:year
+        ";
+
+        $conexionPDO = Conexion::newConnection('PDO');
+
+        $asp = $conexionPDO->prepare($sql);
+
+        $asp->bindParam(':codNota',      $codNota, PDO::PARAM_STR);
+        $asp->bindParam(':codEst',       $codEstudiante, PDO::PARAM_STR);
+        $asp->bindParam(':institucion',  $config['conf_id_institucion'], PDO::PARAM_INT);
+        $asp->bindParam(':year',         $_SESSION["bd"], PDO::PARAM_INT);
+
+        
+        $asp->execute();
+
+        $rowCount = $asp->rowCount();
+
+        if ($rowCount > 0) return true; else return false;
+    }
+
+    /**
+     * Updates the grade (calificación) of a student for a specific activity.
+     *
+     * This function updates the grade in the database, sets the modification date to the current date,
+     * increments the modification count, and updates the previous grade. It also marks the activity as registered.
+     *
+     * @param array $data An associative array containing the following keys:
+     *                    - 'nota': The new grade to be set.
+     *                    - 'notaAnterior': The previous grade (optional, defaults to "0.0" if not provided).
+     *                    - 'codNota': The code of the activity.
+     *                    - 'codEst': The code of the student.
+     *                    - 'nombreEst': The name of the student.
+     *
+     * @return array An associative array containing:
+     *               - 'heading': A string message heading.
+     *               - 'estado': A string indicating the status ('success').
+     *               - 'mensaje': A string message providing details about the operation result.
+     */
+    public static function actualizarCalificacion($data): array 
+    {
+        $config = RedisInstance::getSystemConfiguration();
+
+        $sql = "
+        UPDATE ".BD_ACADEMICA.".academico_calificaciones 
+        SET cal_nota                    = :nota, 
+            cal_fecha_modificada        = now(), 
+            cal_cantidad_modificaciones = cal_cantidad_modificaciones+1, 
+            cal_nota_anterior           = :notaAnterior, 
+            cal_tipo                    = 1 
+        WHERE cal_id_actividad          = :codNota 
+        AND cal_id_estudiante           = :codEst 
+        AND institucion                 = :institucion  
+        AND year                        = :year  
+        ";
+
+        $data['notaAnterior'] = empty($data['notaAnterior']) ? "0.0" : $data['notaAnterior'];
+
+        $conexionPDO = Conexion::newConnection('PDO');
+
+        $asp = $conexionPDO->prepare($sql);
+
+        $asp->bindParam(':nota',         $data['nota'], PDO::PARAM_STR);
+        $asp->bindParam(':notaAnterior', $data['notaAnterior'], PDO::PARAM_STR);
+        $asp->bindParam(':codNota',      $data['codNota'], PDO::PARAM_STR);
+        $asp->bindParam(':codEst',       $data['codEst'], PDO::PARAM_STR);
+        $asp->bindParam(':institucion',  $config['conf_id_institucion'], PDO::PARAM_INT);
+        $asp->bindParam(':year',         $_SESSION["bd"], PDO::PARAM_INT);
+
+        $asp->execute();
+
+        $rowCount = $asp->rowCount();
+
+        Actividades::marcarActividadRegistrada($config, $data['codNota'], $_SESSION["bd"]);
+
+        return [
+            'success' => true,
+            "heading" => "Cambios actualizados",
+            "estado"  => "success",
+            "mensaje" => "La nota se ha actualizado correctamente para el estudiante <b>".strtoupper($data['nombreEst'])."</b>"
+        ];
     }
 
 }

@@ -81,7 +81,7 @@ class Boletin {
      * ```
      */
     public static function obtenerDatosTipoDeNotas($categoria, $nota, string $yearBd    = ''){
-        global $conexion, $config;
+        global $config;
         $resultado = [];
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
@@ -267,7 +267,7 @@ class Boletin {
      */
     public static function obtenerPromedioPorTodasLasCargas(
         string $estudiante = '',
-        string $carga,
+        string $carga = '',
         string $yearBd     = ''
     )
     {

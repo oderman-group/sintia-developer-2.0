@@ -12,7 +12,9 @@ require_once(ROOT_PATH."/main-app/class/Actividades.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 
 $idR="";
-if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
+if (!empty($_GET["idR"])) { 
+	$idR=base64_decode($_GET["idR"]);
+}
 
 $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 ?>
@@ -31,15 +33,13 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 
         <?php include("../compartido/encabezado.php");?>
 
-		
-
         <?php include("../compartido/panel-color.php");?>
 
         <!-- start page container -->
 
         <div class="page-container">
 
- 			<?php include("../compartido/menu.php");?>
+		<?php include("../compartido/menu.php");?>
 
 			<!-- start page content -->
 
@@ -57,8 +57,6 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 
 								<p style="font-size: 13px; color: darkblue;"><?=$calificacion['ind_nombre'];?></p>
 
-								
-
 								<?php include("../compartido/texto-manual-ayuda.php");?>
 
                             </div>
@@ -75,8 +73,6 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 
                     </div>
 
-                    
-
                     <div class="row">
 
                         <div class="col-md-12">
@@ -91,13 +87,9 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 
 									<?php include("info-carga-actual.php");?>
 
-									
-
 									<div class="panel">
 
 										<header class="panel-heading panel-heading-purple">TABLA DE VALORES</header>
-
-
 
 										<div class="panel-body">
 
@@ -187,8 +179,6 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 
 								</div>
 
-									
-
 								<div class="col-md-8 col-lg-9">
 
                                     <div class="card card-topline-purple">
@@ -209,14 +199,6 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 
                                         </div>
 
-										
-
-										
-
-									
-
-										
-
                                         <div class="card-body">
 
 											<div class="row" style="margin-bottom: 10px;">
@@ -225,25 +207,24 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 
 													<p style="color: darkblue;">Utilice esta casilla para colocar la misma nota a todos los estudiantes. Esta opción <mark>reemplazará las notas existentes</mark> en esta actividad.</p>
 
-													<input type="text" style="text-align: center; font-weight: bold;" maxlength="3" size="10" title="0" onChange="notasMasiva(this)" name="<?=$idR;?>">
+													<input 
+														type="text" 
+														style="text-align: center; font-weight: bold;" 
+														size="10" 
+														title="0" 
+														onChange="notasMasiva(this)" 
+														name="<?=$idR;?>"
+													>
 
 												</div>
 
 											</div>
 
-											
-
-											
-
 										<span style="color: blue; font-size: 15px;" id="respRCT"></span>
-
-											
-
-											
 
                                         <div class="table-responsive">
 
-                                            <table class="table table-striped custom-table table-hover">
+                                            <table class="table table-striped custom-table table-hover" id="tabla_notas">
 
                                                 <thead>
 
@@ -280,22 +261,19 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 													$colorNota = "black";
 													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 
-														 if($calificacion['act_registrada']==1){
+														if ($calificacion['act_registrada']==1) {
 
 															 //Consulta de calificaciones si ya la tienen puestas.
 															$notas = Calificaciones::traerCalificacionActividadEstudiante($config, $idR, $resultado['mat_id']);
 
-															 if(!empty($notas['cal_nota']) && $notas['cal_nota']<$config[5]) $colorNota = $config[6]; elseif(!empty($notas['cal_nota']) && $notas['cal_nota']>=$config[5]) $colorNota = $config[7];
+															if (!empty($notas['cal_nota']) && $notas['cal_nota'] < $config[5]) $colorNota = $config[6]; 
+															elseif(!empty($notas['cal_nota']) && $notas['cal_nota'] >= $config[5]) $colorNota = $config[7];
 
-														 }
+														}
 
-														 
+														$fotoEst = $usuariosClase->verificarFoto($resultado['uss_foto']);
 
-														 $fotoEst = $usuariosClase->verificarFoto($resultado['uss_foto']);
-
-													 ?>
-
-													
+													?>
 
 													<?php
 
@@ -315,11 +293,11 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 														$estiloNotaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
 													}
 
+													$notaActual = !empty($notas['cal_nota']) ? $notas['cal_nota'] : '';
+
 													?>
 
-                                                    
-
-													<tr>
+													<tr id="fila_<?=$resultado['mat_id'];?>">
 
                                                         <td><?=$contReg;?></td>
 
@@ -331,16 +309,38 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 
 														</td>
 
-														<td>
+														<td id="columna_<?=$resultado['mat_id'];?>">
 
-															<input type="text" style="text-align: center; color:<?=$colorNota;?>" step="<?=$cargaConsultaActual;?>" size="5" maxlength="3" value="<?php if(!empty($notas['cal_nota'])){ echo $notas['cal_nota'];}?>" name="<?=$notas['cal_nota'];?>" id="<?=$resultado['mat_id'];?>" data-cod-estudiante="<?=$resultado['mat_id'];?>" title="<?=$idR;?>" alt="<?=$resultado['mat_nombres'];?>" onChange="notasGuardar(this)" tabindex="<?=$contReg;?>">
+															<input 
+																type="text" 
+																style="text-align: center; color:<?=$colorNota;?>" 
+																size="5"
+																value="<?php echo $notaActual;?>" 
+																id="<?=$resultado['mat_id'];?>" 
+																data-cod-estudiante="<?=$resultado['mat_id'];?>" 
+																data-carga-actividad="<?=$cargaConsultaActual;?>"
+																data-nota-anterior="<?php echo $notaActual;?>"
+																data-color-nota-anterior="<?=$colorNota;?>"
+																data-cod-nota="<?=$idR;?>"
+																data-nombre-estudiante="<?=$resultado['mat_nombres']." ".$resultado['mat_primer_apellido'];?>"
+																onChange="notasGuardar(this, 'fila_<?=$resultado['mat_id'];?>', 'tabla_notas')" 
+																tabindex="<?=$contReg;?>"
+															>
 
-															<?php if(!empty($notas['cal_nota'])){?>
+															<p id="CU<?=$resultado['mat_id'].$cargaConsultaActual;?>" style="font-size: 12px; color:<?=$colorNota;?>;"><?=$estiloNotaFinal?></p>
 
-															<a href="#" title="<?=$objetoEnviar;?>" id="<?=$notas['cal_id'];?>" name="calificaciones-nota-eliminar.php?id=<?=base64_encode($notas['cal_id']);?>" onClick="deseaEliminar(this)">X</a>
-
-															<?php }?>
-
+															<?php if (!empty($notas['cal_nota'])) {?>
+															<a 
+																href="#"
+																title="<?=$objetoEnviar;?>" 
+																id="<?=$notas['cal_id'];?>" 
+																name="calificaciones-nota-eliminar.php?id=<?=base64_encode($notas['cal_id']);?>" onClick="deseaEliminar(this)"
+																s
+															>
+																<i class="fa fa-trash"></i>
+															</a>
+														<?php }?>
+														
 														</td>
 
 														<?php if($config['conf_forma_mostrar_notas'] == CUALITATIVA){	?>
@@ -349,29 +349,53 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
 
 														<td>
 
-															<?php if(!empty($notas['cal_nota'])){?>
+															<?php 
+															$recuperacionVisibilidad = 'hidden';
+															if (!empty($notas['cal_nota']) && $notas['cal_nota'] < $config[5]) {
+																$recuperacionVisibilidad = 'visible';
+															}
+															?>
 
-															<input type="text" style="text-align: center;" size="5" step="<?=$cargaConsultaActual;?>" maxlength="3" name="<?=$notas['cal_nota'];?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="<?=$idR;?>" onChange="notaRecuperacion(this)">
-
-															<?php }?>
+															<input
+																data-id="recuperacion_<?=$resultado['mat_id'].$cargaConsultaActual;?>"
+																type="text" 
+																size="5" 
+																step="<?=$cargaConsultaActual;?>"
+																name="<?php if(!empty($notas['cal_nota'])) echo $notas['cal_nota'];?>" 
+																id="<?=$resultado['mat_id'];?>" 
+																alt="<?=$resultado['mat_nombres'];?>" 
+																title="<?=$idR;?>" 
+																onChange="notaRecuperacion(this)"
+																style="
+																	font-size: 13px; 
+																	text-align: center;
+																	visibility:<?=$recuperacionVisibilidad;?>;
+																" 
+															>
 
 														</td>
 
-														<td><input type="text" value="<?php if(!empty($notas['cal_observaciones'])){ echo $notas['cal_observaciones'];}?>" name="O<?=$contReg;?>" id="<?=$resultado['mat_id'];?>" alt="<?=$resultado['mat_nombres'];?>" title="<?=$idR;?>" onChange="guardarObservacion(this)" tabindex="10<?=$contReg;?>"></td>
+														<td>
+															<input 
+																type="text" 
+																value="<?php if(!empty($notas['cal_observaciones'])){ echo $notas['cal_observaciones'];}?>" 
+																name="O<?=$contReg;?>" 
+																id="<?=$resultado['mat_id'];?>" 
+																alt="<?=$resultado['mat_nombres'];?>" 
+																title="<?=$idR;?>" 
+																onChange="guardarObservacion(this)" 
+																tabindex="10<?=$contReg;?>"
+															>
+														</td>
 
                                                     </tr>
 
 													<?php 
-
-														 $contReg++;
-
-													  }
+														$contReg++;
+													}
 
 													mysqli_free_result($consulta);
-
-															
-
-													  ?>
+													?>
 
                                                 </tbody>
 
@@ -384,10 +408,6 @@ $calificacion = Actividades::consultarDatosActividadesIndicador($config, $idR);
                                     </div>
 
                                 </div>
-
-								
-
-							
 
                             </div>
 

@@ -13,9 +13,9 @@ class Conexion extends Conexion_Factory{
     }
 
     public static function getConexion() {
-        if (self::$conexionInstance == null) {
+        //if (self::$conexionInstance == null) {
             $conexionInstance = new Conexion;
-        }
+        //}
 
         return $conexionInstance;
     }
@@ -47,13 +47,13 @@ class Conexion extends Conexion_Factory{
      */
     protected function conexion()
     {
-        if($this->conexionMysql === null) {
+        //if($this->conexionMysql === null) {
             $this->conexionMysql = mysqli_connect(SERVIDOR_CONEXION, USUARIO_CONEXION, CLAVE_CONEXION, BD_ADMIN);
 
             if (mysqli_connect_errno()) {
                 die("Conexión MySQLi fallida: " . mysqli_connect_error());
             }
-        }
+        //}
 
         return $this->conexionMysql;
     }

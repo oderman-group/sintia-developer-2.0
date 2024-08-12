@@ -287,28 +287,20 @@ function tipoFolder(dato){
 
 }	
 
-		
-
-
- /**
+	/**
      * Esta funcion genera una alerta validadno la nota ingresada
      * 
      * @param nota
      * @return boolean 
      */
-function alertValidarNota(nota){	
-
-	if (nota><?=$config[4];?> || isNaN(nota) || nota < <?=$config[3];?>) {
-		Swal.fire('Nota '+nota+' no valida','Ingrese un valor numerico entre <?=$config[3];?> y <?=$config[4];?>')
+function alertValidarNota(nota) {	
+	if (nota > <?=$config[4];?> || isNaN(nota) || nota < <?=$config[3];?>) {
+		Swal.fire('Nota '+nota+' no es valida','Ingrese un valor numérico entre <?=$config[3];?> y <?=$config[4];?>');
 		return true;
-	}else{
-		return false;
-	}
+	} 
 	
-
+	return false;
 }
-	
-
 
 function archivoPeso(dato){
 
@@ -862,7 +854,7 @@ function usuariosChat(){
  * 
  * return void
  */
-function aplicarColorNota(nota, idInput) {
+function aplicarColorNota(nota, idInput = null) {
 
 	var aplicarColor = null;
 	
@@ -872,7 +864,12 @@ function aplicarColorNota(nota, idInput) {
 		aplicarColor = "<?=$config['conf_color_perdida'];?>";
 	}
 
-	document.getElementById(idInput).style.color=aplicarColor;
+	if (idInput != null) {
+		let input         = document.getElementById(idInput);
+		input.style.color = aplicarColor;
+	}
+
+	return aplicarColor;
 
 }
 

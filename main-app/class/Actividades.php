@@ -810,16 +810,16 @@ class Actividades {
      */
     public static function marcarActividadRegistrada(
         array  $config,
-        string $idActivida,
+        string $idActividad,
         string $yearBd = ""
     ){
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
         $sql = "UPDATE ".BD_ACADEMICA.".academico_actividades SET act_registrada=1, act_fecha_registro=now() WHERE act_id=? AND institucion=? AND year=?";
 
-        $parametros = [$idActivida, $config['conf_id_institucion'], $year];
+        $parametros = [$idActividad, $config['conf_id_institucion'], $year];
         
-        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**
