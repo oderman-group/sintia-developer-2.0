@@ -13,5 +13,6 @@ require_once(ROOT_PATH."/main-app/class/Clases.php");
 $codigo = Clases::guardarClases($conexion, $config, $_POST, $_FILES, $cargaConsultaActual, $periodoConsultaActual);
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
-echo base64_encode($codigo);
+
+echo '<script type="text/javascript">window.location.href="clases.php?success=SC_DT_1&id='.base64_encode($codigo).'";</script>';
 exit();
