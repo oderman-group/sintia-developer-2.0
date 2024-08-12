@@ -240,25 +240,29 @@ switch($_SERVER['HTTP_HOST']){
 
 switch (ENVIROMENT) {
         case 'LOCAL':
-        include(ROOT_PATH."/conexion-datos.php");
-        define('BD_PREFIX', 'odermangroup_');
+        include(ROOT_PATH."/conexion-datos-localhost.php");
+        define('BD_PREFIX', 'mobiliar_');
         define('EPAYCO_TEST', 'true');
+        define('EMAIL_METHOD', 'MAILPIT');
         break;
 
         case 'TEST':
         include(ROOT_PATH."/conexion-datos-developer.php");
         define('BD_PREFIX', 'mobiliar_');
         define('EPAYCO_TEST', 'true');
+        define('EMAIL_METHOD', 'NORMAL');
 	break;
 
         case 'PROD':
         include(ROOT_PATH."/conexion-datos-production.php");
         define('BD_PREFIX', 'mobiliar_');
         define('EPAYCO_TEST', 'false');
+        define('EMAIL_METHOD', 'NORMAL');
         break;
 
         default:
         include(ROOT_PATH."/conexion-datos.php");
         define('BD_PREFIX', 'odermangroup_');
+        define('EMAIL_METHOD', 'MAILPIT');
         break;
 }

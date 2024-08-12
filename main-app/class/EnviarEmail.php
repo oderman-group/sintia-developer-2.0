@@ -38,12 +38,21 @@ class EnviarEmail {
             //Server settings
             $mail->SMTPDebug = 0;                                       // Enable verbose debug output
             $mail->isSMTP();                                            // Set mailer to use SMTP
-            $mail->Host       = EMAIL_SERVER;  	                        // Specify main and backup SMTP servers
-            $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-            $mail->Username   = EMAIL_USER;              
-            $mail->Password   = EMAIL_PASSWORD;                     
-            $mail->SMTPSecure = 'ssl';                                  // Enable TLS encryption, `ssl` also accepted
-            $mail->Port       = 465;
+            if (EMAIL_METHOD == 'MAILPIT') {
+                $mail->Host       = EMAIL_SERVER_MAILPIT;
+                $mail->SMTPAuth   = SMTPAUTH_MAILPIT;
+                $mail->Username   = EMAIL_USER_MAILPIT;              
+                $mail->Password   = EMAIL_PASSWORD_MAILPIT;                     
+                $mail->SMTPSecure = SMTPSECURE_MAILPIT; 
+                $mail->Port       = PORT_SEND_EMAIL_MAILPIT;
+            } else {
+                $mail->Host       = EMAIL_SERVER;
+                $mail->SMTPAuth   = SMTPAUTH;
+                $mail->Username   = EMAIL_USER;                  
+                $mail->Password   = EMAIL_PASSWORD;                     
+                $mail->SMTPSecure = SMTPSECURE;
+                $mail->Port       = PORT_SEND_EMAIL;
+            }
 
             //Remitente
             $mail->setFrom(EMAIL_SENDER, NAME_SENDER);
