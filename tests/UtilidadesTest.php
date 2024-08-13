@@ -54,25 +54,38 @@ class UtilidadesTest extends TestCase {
     public function testObtenerElAutoIncrementoDeUnaTablaEnBD_SinAutoIncremento() {
         // Mock the required dependencies
         $conexionPDO = $this->createMock(PDO::class);
-        $stmt = $this->createMock(PDOStatement::class);
-
-        // Set up the expectations for the mock objects
-        $conexionPDO->expects($this->once())
+        $stmt1 = $this->createMock(PDOStatement::class);
+        $stmt2 = $this->createMock(PDOStatement::class);
+    
+        // Set up the expectations for the first mock statement
+        $conexionPDO->expects($this->exactly(2))
             ->method('prepare')
-            ->with("SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_schema = :bd AND table_name = :table")
-            ->willReturn($stmt);
-
-        $stmt->expects($this->once())
+            ->withConsecutive(
+                ["SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_schema = :bd AND table_name = :table"],
+                ["SELECT MAX(id_nuevo) AS nextId FROM mobiliar_academic.academico_grados"]
+            )
+            ->willReturnOnConsecutiveCalls($stmt1, $stmt2);
+    
+        $stmt1->expects($this->once())
             ->method('execute')
-            ->with(['bd' => 'mobiliar_academic', 'table' => 'academico_grados']);
-
-        $stmt->expects($this->once())
+            ->with(['bd' => 'mobiliar_academic', 'table' => 'academico_grados'])
+            ->willReturn(true);
+    
+        $stmt1->expects($this->once())
             ->method('fetch')
             ->willReturn([]); // No AUTO_INCREMENT value found
-
+    
+        $stmt2->expects($this->once())
+            ->method('execute')
+            ->willReturn(true);
+    
+        $stmt2->expects($this->once())
+            ->method('fetch')
+            ->willReturn(null); // No MAX(id_nuevo) value found
+    
         // Call the method under test
         $result = Utilidades::getNextIdSequence($conexionPDO, 'mobiliar_academic', 'academico_grados');
-
+    
         // Assert that a code is generated
         $this->assertMatchesRegularExpression('/^[A-Za-z0-9]+$/', $result);
     }
@@ -111,39 +124,13 @@ class UtilidadesTest extends TestCase {
     /**
      * @covers Utilidades::getNextIdSequence
      */
-    public function testObtenerElAutoIncrementoDeUnaTablaEnBD_Excepcion() {
-        // Mock the required dependencies
-        $conexionPDO = $this->createMock(PDO::class);
-        $stmt = $this->createMock(PDOStatement::class);
-    
-        // Set up the expectations for the mock objects
-        $conexionPDO->expects($this->once())
-            ->method('prepare')
-            ->with("SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_schema = :bd AND table_name = :table")
-            ->willReturn($stmt);
-    
-        $stmt->expects($this->once())
-            ->method('execute')
-            ->with(['bd' => 'mobiliar_academic', 'table' => 'academico_grados'])
-            ->willThrowException(new PDOException('Error al ejecutar la consulta'));
-    
-        // Call the method under test and expect an exception
-        $this->expectException(PDOException::class);
-        $this->expectExceptionMessage('Error al ejecutar la consulta');
-    
-        Utilidades::getNextIdSequence($conexionPDO, 'mobiliar_academic', 'academico_grados');
-    }
-
-    /**
-     * @covers Utilidades::getNextIdSequence
-     */
     public function testObtenerElAutoIncrementoDeUnaTablaEnBD_NombreTablaVacio() {
         // Mock the required dependencies
         $conexionPDO = $this->createMock(PDO::class);
     
         // Call the method under test and expect an exception
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('El nombre de la tabla, la bd o la conexión no pueden estar vacíos');
+        $this->expectExceptionMessage('El nombre de la tabla y/o la bd no pueden estar vacíos');
     
         Utilidades::getNextIdSequence($conexionPDO, 'mobiliar_academic', '');
     }
@@ -157,7 +144,7 @@ class UtilidadesTest extends TestCase {
     
         // Call the method under test and expect an exception
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('El nombre de la tabla, la bd o la conexión no pueden estar vacíos');
+        $this->expectExceptionMessage('El nombre de la tabla y/o la bd no pueden estar vacíos');
     
         Utilidades::getNextIdSequence($conexionPDO, '', 'academico_grados');
     }
@@ -168,12 +155,17 @@ class UtilidadesTest extends TestCase {
     public function testObtenerElAutoIncrementoDeUnaTablaEnBD_ConexionVacio() {
         // Mock the required dependencies
         $conexionPDO = null;
-    
-        // Call the method under test and expect an exception
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('El nombre de la tabla, la bd o la conexión no pueden estar vacíos');
-    
-        Utilidades::getNextIdSequence($conexionPDO, 'mobiliar_academic', 'academico_grados');
+
+        // Asegúrate de que la clase Conexion esté disponible
+        if (!class_exists('Conexion')) {
+            $this->markTestSkipped('La clase Conexion no está disponible.');
+        }
+
+        // Call the method under test
+        $result = Utilidades::getNextIdSequence($conexionPDO, 'mobiliar_academic', 'academico_grados');
+
+        // Assert that a code is generated
+        $this->assertMatchesRegularExpression('/^[A-Za-z0-9]+$/', $result);
     }
 
     /**

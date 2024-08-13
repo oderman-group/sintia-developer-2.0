@@ -27,7 +27,7 @@ require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 	if(empty($_POST["graSiguiente"])) {$_POST["graSiguiente"] = 1;}
 	if(empty($_POST["tipoG"])){ $_POST["tipoG"]=GRADO_GRUPAL;}
 
-	$codigoCurso = "GRA".strtotime("now");
+	$codigoCurso = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_grados');
 	
 
 		if(empty($_POST["imagen"])) {$_POST["imagen"] = '';}
