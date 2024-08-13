@@ -16,13 +16,14 @@ class AjaxCalificaciones {
      * 
      * @return array // se retorna mensaje de confirmación
     **/
-    public static function ajaxGuardarNota($data): array
+    public static function ajaxGuardarNota(array $data): array
     {
         global $conexionPDO;
 
         $config = RedisInstance::getSystemConfiguration();
 
-        Calificaciones::eliminarCalificacionActividadEstudiante($config, $data['codNota'], $data['codEst'], $_SESSION["bd"]);
+        $data['target'] = 'ELIMINAR_NOTA';
+        Calificaciones::direccionarCalificacion($data);
 
         $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_calificaciones');
 
@@ -134,6 +135,7 @@ class AjaxCalificaciones {
                 'nota'         => $nota,
                 'notaAnterior' => null, //TODO: obtener la nota anterior
                 'target'       => 'GUARDAR_NOTA',
+                'tipoNota'     => 1
             ];
 
             $datosMensaje = Calificaciones::direccionarCalificacion($data);
@@ -157,36 +159,44 @@ class AjaxCalificaciones {
     /**
      * Este metodo sirve para registrar las notas de recuperación de un estudiante
      * 
-     * @param mysqli    $conexion 
-     * @param array     $config 
-     * @param string    $codEstudiante 
-     * @param string    $nombreEst 
-     * @param string    $codNota
-     * @param double    $nota
-     * @param double    $notaAnterior
+     * @param array     $data 
      * 
      * @return array // se retorna mensaje de confirmación
     **/
-    public static function ajaxGuardarNotaRecuperacion($conexion, $config, $codEstudiante, $nombreEst, $codNota, $nota, $notaAnterior)
+    public static function ajaxGuardarNotaRecuperacion(array $data)
     {
-        if(trim($nota)==""){
-            $datosMensaje=["heading"=>"Nota vacia","estado"=>"warning","mensaje"=>"Digite una nota correcta."];
-            return $datosMensaje;
-        }
-        if($nota>$config[4]) $nota = $config[4]; if($nota<$config[3]) $nota = $config[3];
-        $codigo=Utilidades::generateCode("REC");
-        
-        try{
-            mysqli_query($conexion, "INSERT INTO ".BD_ACADEMICA.".academico_recuperaciones_notas(rec_id, rec_cod_estudiante, rec_nota, rec_id_nota, rec_fecha, rec_nota_anterior, institucion, year)VALUES('".$codigo."', '".$codEstudiante."','".$nota."','".$codNota."', now(),'".$notaAnterior."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
-        } catch (Exception $e) {
-            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
-        }
-        
-        $sql = "UPDATE ".BD_ACADEMICA.".academico_calificaciones SET cal_nota=?, cal_fecha_modificada=now(), cal_cantidad_modificaciones=cal_cantidad_modificaciones+1, cal_nota_anterior=?, cal_tipo=2 WHERE cal_id_actividad=? AND cal_id_estudiante=? AND institucion=? AND year=?";
-        $parametros = [$nota, $notaAnterior, $codNota, $codEstudiante, $config['conf_id_institucion'], $_SESSION["bd"]];
-        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        $conexionPDO = Conexion::newConnection('PDO');
 
-        $datosMensaje=["heading"=>"Cambios guardados","estado"=>"success","mensaje"=>"La nota de recuperación se ha guardado correctamente para el estudiante <b>".strtoupper($nombreEst)."</b>"];
+        $config = RedisInstance::getSystemConfiguration();
+
+        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_recuperaciones_notas');
+
+        $sql = "INSERT INTO ".BD_ACADEMICA.".academico_recuperaciones_notas(rec_id, rec_cod_estudiante, rec_nota, rec_id_nota, rec_fecha, rec_nota_anterior, institucion, year)VALUES(:codigo, :codEst, :nota, :codNota, now(), :notaAnterior, :institucion, :year)";
+        
+        $asp         = $conexionPDO->prepare($sql);
+
+        $asp->bindParam(':codigo',       $codigo, PDO::PARAM_STR);
+        $asp->bindParam(':codEst',       $data['codEst'], PDO::PARAM_STR);
+        $asp->bindParam(':nota',         $data['nota'], PDO::PARAM_STR);
+        $asp->bindParam(':codNota',      $data['codNota'], PDO::PARAM_STR);
+        $asp->bindParam(':notaAnterior', $data['notaAnterior'], PDO::PARAM_STR);
+        $asp->bindParam(':institucion',  $config['conf_id_institucion'], PDO::PARAM_INT);
+        $asp->bindParam(':year',         $_SESSION["bd"], PDO::PARAM_INT);
+
+        $asp->execute();
+
+        $rowCount = $asp->rowCount();
+
+        $data['target'] = 'ACTUALIZAR_NOTA';
+        Calificaciones::direccionarCalificacion($data);
+
+        $datosMensaje = [
+            'success'    => true,
+            "heading"    => "Cambios guardados",
+            "estado"     => "success",
+            "iconToast"  => "success",
+            "mensaje"    => "La nota de recuperación se ha guardado correctamente para el estudiante <b>".strtoupper($data['nombreEst'])."</b>"
+        ];
 
         return $datosMensaje;
     }

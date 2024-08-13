@@ -1,7 +1,21 @@
 <?php
 include("session.php");
 require_once("../class/AjaxNotas.php");
-$datosMensaje = AjaxNotas::ajaxNivelacionesRegistrar($_POST["codEst"],$_COOKIE["carga"],$_POST["nota"]);
+$data = [
+	'codEst'          => $_POST["codEst"],
+    'nombreEst'       => null,
+    'codNota'         => null,
+	'nota'            => $_POST["nota"],
+    'notaAnterior'    => null,
+	'tipoNota'        => 2,
+    'target'          => 'GUARDAR_NIVELACION_CARGA',
+	'carga'           => $_COOKIE["carga"],
+	'periodo'         => null,
+	'observaciones'   => 'Nivelación.',
+];
+
+$datosMensaje = Calificaciones::direccionarCalificacion($data);
+
 include("../compartido/guardar-historial-acciones.php");
 ?>
 <script type="text/javascript">

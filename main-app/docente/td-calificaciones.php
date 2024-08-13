@@ -21,8 +21,15 @@ $estiloNotaFinal = $estiloNotaFinal ?? null;
         style="font-size: 13px; text-align: center; color:<?=$colorNota;?>;" 
         <?=$habilitado;?>
     >
-    <br><span id="CU<?=$resultado['mat_id'].$rA['act_id'];?>" style="font-size: 12px; color:<?=$colorNota;?>;"><?=$estiloNotaFinal?></span>
-        
+
+    <br>
+    <span 
+        id="CU<?=$resultado['mat_id'].$rA['act_id'];?>" 
+        style="font-size: 12px; color:<?=$colorNota;?>;"
+    >
+        <?=$estiloNotaFinal;?>
+    </span>
+
     <?php
     if (isset($notasResultado) && $notasResultado['cal_nota']!="") {
     ?>

@@ -446,6 +446,39 @@ class Boletin {
     }
 
     /**
+     * Obtiene las notas de un estudiante para una carga académica y periodo específicos.
+     *
+     * @param string $carga La identificación de la carga académica.
+     * @param int $periodo El periodo académico para el cual se desea obtener las notas.
+     * @param string $estudiante La identificación del estudiante.
+     * @param string $yearBd El año académico para el cual se desea obtener las notas.
+     *
+     * @return array Un arreglo que contiene las notas del estudiante para la carga académica y periodo especificados.
+     */
+    public static function obtenerNotasEstudiantilesPorCargaPeriodo(string $carga, int $periodo, string $estudiante, string $yearBd)
+    {
+        global $config;
+        $resultado = [];
+
+        $sql = "
+        SELECT * FROM ".BD_ACADEMICA.".academico_boletin 
+        WHERE bol_carga=? 
+        AND bol_periodo=? 
+        AND bol_estudiante=? 
+        AND institucion=? 
+        AND year=?
+        ";
+
+        $parametros = [$carga, $periodo, $estudiante, $config['conf_id_institucion'], $yearBd];
+        $consulta   = BindSQL::prepararSQL($sql, $parametros);
+
+        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+
+        return $resultado;
+    }
+
+
+    /**
      * Obtiene la nota definitiva y nombre de una materia para un estudiante en un área y periodos académicos específicos.
      *
      * @param string $estudiante La identificación del estudiante.
@@ -989,7 +1022,10 @@ class Boletin {
 
         [$updateSql, $updateValues] = BindSQL::prepararUpdateConArray($update);
 
-        $sql = "UPDATE ".BD_ACADEMICA.".academico_boletin SET {$updateSql}, bol_actualizaciones=bol_actualizaciones+1, bol_ultima_actualizacion=now() WHERE bol_id=? AND institucion=? AND year=?";
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_boletin SET {$updateSql}, 
+        bol_actualizaciones=bol_actualizaciones+1, 
+        bol_ultima_actualizacion=now() 
+        WHERE bol_id=? AND institucion=? AND year=?";
 
         $parametros = array_merge($updateValues, [$idBoletin, $config['conf_id_institucion'], $year]);
 

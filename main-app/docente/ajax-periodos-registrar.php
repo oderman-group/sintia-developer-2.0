@@ -1,8 +1,23 @@
 <?php
 include("session.php");
-require_once("../class/AjaxNotas.php");
-$datosMensaje = AjaxNotas::ajaxPeriodosRegistrar($_POST["codEst"],$_COOKIE["carga"],$_POST["per"],$_POST["nota"],$_POST["notaAnterior"]);
-include("../compartido/guardar-historial-acciones.php");
+require_once(ROOT_PATH."/main-app/class/AjaxNotas.php");
+
+$data = [
+	'codEst'          => $_POST["codEst"],
+    'nombreEst'       => null,
+    'codNota'         => null,
+	'nota'            => $_POST["nota"],
+    'notaAnterior'    => $_POST["notaAnterior"],
+	'tipoNota'        => 2,
+    'target'          => 'GUARDAR_RECUPERACION_PERIODO',
+	'carga'           => $_COOKIE["carga"],
+	'periodo'         => $_POST["per"],
+	'observaciones'   => 'Recuperación de periodo.',
+];
+
+$datosMensaje = Calificaciones::direccionarCalificacion($data);
+
+include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 ?>
 <script type="text/javascript">
 function notifica(){

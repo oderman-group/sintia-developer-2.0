@@ -8,7 +8,9 @@ require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/Plataforma.php");
 $year = $agnoBD;
+$Plataforma = new Plataforma;
 ?>
 
 <?php
@@ -120,7 +122,7 @@ if (!Modulos::validarPermisoEdicion()) {
 			"&per=" + (per);
 		$.ajax({
 			type: "POST",
-			url: "../compartido/ajax-periodos-registrar.php",
+			url: "ajax-periodos-registrar.php",
 			data: datos,
 			success: function(data) {
 				$('#resp').empty().hide().html(data).show(1);
@@ -278,15 +280,18 @@ if (!Modulos::validarPermisoEdicion()) {
 													}
 											?>
 													<td style="text-align:center;" width="30px">
-														<input style="text-align:center; width:30px; 
+														<input 
+															style="
+																text-align:center; 
+																width:30px; 
 																color:<?= $color; ?>" 
-																value="<?php if (isset($boletin['bol_nota'])) {echo $boletin['bol_nota'];} ?>" 
-																name="<?= $carga['car_id']; ?>" id="<?= $resultado['mat_id']; ?>" 
-																onChange="def(this)" 
-																alt="<?= $p; ?>" 
-																title="Materia: <?= $carga['mat_nombre']; ?> - Periodo: <?= $p; ?>" 
-																<?= $disabled; ?> 
-																<?= $disabledPermiso; ?>
+															value="<?php if (isset($boletin['bol_nota'])) {echo $boletin['bol_nota'];} ?>" 
+															name="<?= $carga['car_id']; ?>" id="<?= $resultado['mat_id']; ?>" 
+															onChange="def(this)" 
+															alt="<?= $p; ?>" 
+															title="Materia: <?= $carga['mat_nombre']; ?> - Periodo: <?= $p; ?>" 
+															<?= $disabled; ?> 
+															<?= $disabledPermiso; ?>
 														/>
 														<br><?= $tipo;?>
 													</td>

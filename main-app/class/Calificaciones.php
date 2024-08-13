@@ -5,6 +5,8 @@ require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 require_once ROOT_PATH."/main-app/class/AjaxCalificaciones.php";
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
+require_once(ROOT_PATH."/main-app/class/AjaxNotas.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 class Calificaciones {
 
@@ -746,7 +748,7 @@ class Calificaciones {
      * @return array An associative array containing:
      *               - 'success': A boolean indicating if the grade is valid.
      *               - 'heading': A string message heading.
-     *               - 'estado': A string indicating the status ('danger', 'warning', 'success').
+     *               - 'estado': A string indicating the status ('error', 'warning', 'success').
      *               - 'mensaje': A string message providing details about the validation result.
      */
     public static function esCalificacionValida($nota): array 
@@ -756,10 +758,11 @@ class Calificaciones {
 
         if (!is_numeric($nota)) {
             return [
-                'success' => false,
-                'heading' => "Nota inválida",
-                'estado'  => 'danger',
-                'mensaje' => "La nota {$nota} no es válida. Ingrese un valor entero o decimal entre {$config['conf_nota_desde']} y {$config['conf_nota_hasta']}",
+                'success'   => false,
+                'heading'   => "Nota inválida",
+                "estado"    => "danger",
+                'iconToast' => "error",
+                'mensaje'   => "La nota {$nota} no es válida. Ingrese un valor entero o decimal entre {$config['conf_nota_desde']} y {$config['conf_nota_hasta']}",
             ];
         }
 
@@ -768,7 +771,7 @@ class Calificaciones {
                 'success' => false,
                 'heading' => 'Nota superada',
                 'estado'  => 'warning',
-                'mensaje'   => 'La calificación supera el máximo permitido: '.$config['conf_nota_hasta'],
+                'mensaje' => 'La calificación supera el máximo permitido: '.$config['conf_nota_hasta'],
             ];
         }
 
@@ -792,55 +795,181 @@ class Calificaciones {
     /**
      * Directs the grade processing based on the provided data.
      *
-     * This function validates the grade and determines whether to save a new grade or update an existing one.
+     * This function validates the provided data, verifies existing records, and routes the action to the appropriate method based on the 'target' key in the provided data array.
      *
-     * @param array $data An associative array containing the following keys:
-     *                    - 'target': The target for redirection.
-     *                    - 'nota': The grade to be processed.
-     *                    - 'codNota': The code of the activity.
-     *                    - 'codEst': The code of the student.
-     *                    - 'nombreEst': The name of the student.
+     * @param array $data An associative array containing someones the following keys:
+     *                    - 'target': The target action to be performed.
+     *                    - 'nota' (optional): The grade to be processed.
+     *                    - 'codNota' (optional): The code of the activity.
+     *                    - 'codEst' (optional): The code of the student.
+     *                    - 'nombreEst' (optional): The name of the student.
      *                    - 'notaAnterior' (optional): The previous grade.
+     *                    - 'tipoNota' (optional): The type of grade.
+     *                    - 'observaciones' (optional): Observations or comments.
      *
      * @return array An associative array containing:
      *               - 'success': A boolean indicating if the operation was successful.
      *               - 'heading': A string message heading.
-     *               - 'estado': A string indicating the status ('danger', 'warning', 'success').
+     *               - 'estado': A string indicating the status ('error', 'warning', 'success').
      *               - 'mensaje': A string message providing details about the operation result.
-    */
-    public static function direccionarCalificacion($data) {
+     */
+    public static function direccionarCalificacion(array $data) {
 
+        $validacion = self::validarDatos($data);
+
+        if (!$validacion['success']) {
+            return $validacion;
+        }
+
+        self::verificarRegistros($data);
+
+        return self::redireccionarAccion($data);
+
+    }
+
+
+    /**
+     * Validates the provided data array to ensure it contains the necessary keys and values.
+     *
+     * @param array $data An associative array containing the following keys:
+     *                    - 'target': The target action to be performed.
+     *                    - 'nota' (optional): The grade to be validated.
+     *
+     * @return array An associative array containing:
+     *               - 'success': A boolean indicating if the validation was successful.
+     *               - 'heading': A string message heading.
+     *               - 'estado': A string indicating the status ('error', 'warning', 'success').
+     *               - 'iconToast' (optional): A string indicating the icon to be used in a toast notification.
+     *               - 'mensaje': A string message providing details about the validation result.
+     */
+    private static function validarDatos(array $data) {
         if (!is_array($data) || !array_key_exists('target', $data)) {
             return [
                 'success' => false,
                 'heading' => 'Error en la redirección',
-                'estado'  => 'danger',
+                "estado"    => "danger",
+                'iconToast' => "error",
                 'mensaje' => 'No se ha encontrado el target de la redirección',
             ];
         }
 
-        $esCalificacionValida = self::esCalificacionValida($data['nota']);
-
-        if (!$esCalificacionValida['success']) {
-            return $esCalificacionValida;
-        }
-
-        $hayRegistrosCalificaciones = self::hayRegistrosCalificaciones($data['codNota'], $data['codEst']);
-
-        if ($hayRegistrosCalificaciones == true || $hayRegistrosCalificaciones == 1) {
-            return self::actualizarCalificacion($data);
-        } else {
-            return AjaxCalificaciones::ajaxGuardarNota($data);
-        }
-
-        return [
-            'success' => false,
-            'heading' => 'Error en la redirección',
-            'estado'  => 'danger',
-            'mensaje' => 'El target de la redirección no es válido',
+        $target_permitidos = [
+            'GUARDAR_NOTA', 
+            'ACTUALIZAR_NOTA', 
+            'ELIMINAR_NOTA', 
+            'RECUPERAR_NOTA', 
+            'GUARDAR_RECUPERACION_PERIODO',
+            'GUARDAR_NIVELACION_CARGA',
         ];
 
+        if (!in_array($data['target'], $target_permitidos)) {
+            return [
+                'success' => false,
+                'heading' => 'Target inválido',
+                "estado"    => "danger",
+                'iconToast' => "error",
+                'mensaje' => "El target {$data['target']} no es válido. Debe ser uno de los siguientes: ". implode(', ', $target_permitidos),
+            ];
+        }
+
+        if (array_key_exists('nota', $data) && !empty($data['nota'])) {
+            $esCalificacionValida = self::esCalificacionValida($data['nota']);
+            if (!$esCalificacionValida['success']) {
+                return $esCalificacionValida;
+            }
+        }
+
+        return ['success' => true];
     }
+
+
+    /**
+     * Verifies and updates the target action based on existing grade records.
+     *
+     * This function checks if there are existing grade records for a given activity and student.
+     * If the target action is 'RECUPERAR_NOTA' and no records are found, it returns an error response.
+     * If the target action is 'GUARDAR_NOTA' and records are found, it updates the target to 'ACTUALIZAR_NOTA'.
+     *
+     * @param array $data An associative array containing the following keys:
+     *                    - 'target': The target action to be performed.
+     *                    - 'codNota': The code of the activity.
+     *                    - 'codEst': The code of the student.
+     *                    - 'nombreEst': The name of the student.
+     *
+     * @return array The updated data array or an error response if no records are found for 'RECUPERAR_NOTA'.
+     */
+    private static function verificarRegistros(array &$data) {
+        if ($data['target'] == 'RECUPERAR_NOTA') {
+            $hayRegistrosCalificaciones = Calificaciones::hayRegistrosCalificaciones($data['codNota'], $data['codEst']);
+            if ($hayRegistrosCalificaciones != true || $hayRegistrosCalificaciones != 1) {
+                return [
+                    'success'   => false,
+                    "heading"   => "No hay registro de nota",
+                    "estado"    => "danger",
+                    'iconToast' => "error",
+                    "mensaje"   => "No hay registro de nota para la actividad <b>{$data['codNota']}</b> para el estudiante <b>".strtoupper($data['nombreEst'])."</b>"
+                ];
+            }
+        }
+
+        if ($data['target'] == 'GUARDAR_NOTA') {
+            $hayRegistrosCalificaciones = self::hayRegistrosCalificaciones($data['codNota'], $data['codEst']);
+            if ($hayRegistrosCalificaciones == true || $hayRegistrosCalificaciones == 1) {
+                $data['target'] = 'ACTUALIZAR_NOTA';
+            }
+        }
+
+        return $data;
+    }
+
+
+    /**
+     * Directs the grade processing based on the provided data.
+     *
+     * This function routes the action to the appropriate method based on the 'target' key in the provided data array.
+     *
+     * @param array $data An associative array containing the following keys:
+     *                    - 'target': The target action to be performed.
+     *                    - 'nota': The grade to be processed (optional, depending on the target).
+     *                    - 'codNota': The code of the activity (optional, depending on the target).
+     *                    - 'codEst': The code of the student (optional, depending on the target).
+     *                    - 'nombreEst': The name of the student (optional, depending on the target).
+     *                    - 'notaAnterior': The previous grade (optional, depending on the target).
+     *                    - 'tipoNota': The type of grade (optional, depending on the target).
+     *                    - 'observaciones': Observations or comments (optional, depending on the target).
+     *
+     * @return array An associative array containing:
+     *               - 'success': A boolean indicating if the operation was successful.
+     *               - 'heading': A string message heading.
+     *               - 'estado': A string indicating the status ('error', 'warning', 'success').
+     *               - 'mensaje': A string message providing details about the operation result.
+     */
+    private static function redireccionarAccion(array $data) {
+        switch ($data['target']) {
+            case 'GUARDAR_NOTA':
+                return AjaxCalificaciones::ajaxGuardarNota($data);
+            case 'ACTUALIZAR_NOTA':
+                return self::actualizarCalificacion($data);
+            case 'ELIMINAR_NOTA':
+                $config = RedisInstance::getSystemConfiguration();
+                return self::eliminarCalificacionActividadEstudiante($config, $data['codNota'], $data['codEst'], $_SESSION["bd"]);
+            case 'RECUPERAR_NOTA':
+                return AjaxCalificaciones::ajaxGuardarNotaRecuperacion($data);
+            case 'GUARDAR_RECUPERACION_PERIODO':
+                return self::ajaxPeriodosRegistrar($data);
+            case 'GUARDAR_NIVELACION_CARGA':
+                return AjaxNotas::ajaxNivelacionesRegistrar($data);
+            default:
+                return [
+                    'success'   => false,
+                    'heading'   => 'Error en la redirección',
+                    "estado"    => "danger",
+                    'iconToast' => "error",
+                    'mensaje'   => 'El target de la redirección no es válido',
+                ];
+        }
+    }
+
 
     /**
      * Checks if there are existing grade records for a given activity and student.
@@ -916,7 +1045,7 @@ class Calificaciones {
             cal_fecha_modificada        = now(), 
             cal_cantidad_modificaciones = cal_cantidad_modificaciones+1, 
             cal_nota_anterior           = :notaAnterior, 
-            cal_tipo                    = 1 
+            cal_tipo                    = :tipoNota 
         WHERE cal_id_actividad          = :codNota 
         AND cal_id_estudiante           = :codEst 
         AND institucion                 = :institucion  
@@ -931,6 +1060,7 @@ class Calificaciones {
 
         $asp->bindParam(':nota',         $data['nota'], PDO::PARAM_STR);
         $asp->bindParam(':notaAnterior', $data['notaAnterior'], PDO::PARAM_STR);
+        $asp->bindParam(':tipoNota',     $data['tipoNota'], PDO::PARAM_INT);
         $asp->bindParam(':codNota',      $data['codNota'], PDO::PARAM_STR);
         $asp->bindParam(':codEst',       $data['codEst'], PDO::PARAM_STR);
         $asp->bindParam(':institucion',  $config['conf_id_institucion'], PDO::PARAM_INT);
@@ -948,6 +1078,74 @@ class Calificaciones {
             "estado"  => "success",
             "mensaje" => "La nota se ha actualizado correctamente para el estudiante <b>".strtoupper($data['nombreEst'])."</b>"
         ];
+    }
+
+    /**
+     * Este metodo sirve para registrar la nota por periodo de un estudiante
+     * 
+     * @param int $codEstudiante 
+     * @param int $carga 
+     * @param int $periodo
+     * @param double $nota
+     * @param double $notaAnterior
+     * 
+     * @return array // se retorna mensaje de confirmación
+    **/
+    public static function ajaxPeriodosRegistrar(array $data)
+    {
+        global $config, $conexionPDO;        
+
+        $resultadoBoletin = Boletin::obtenerNotasEstudiantilesPorCargaPeriodo($data['carga'], $data['periodo'], $data['codEst'], $_SESSION["bd"]);
+
+        if (empty($resultadoBoletin['bol_id'])) {
+
+            Boletin::guardarNotaBoletin($conexionPDO, 
+            "
+                bol_carga, 
+                bol_estudiante, 
+                bol_periodo, 
+                bol_nota, 
+                bol_tipo, 
+                bol_observaciones, 
+                institucion, 
+                year,
+                bol_actualizaciones,
+                bol_fecha_registro,
+                bol_id
+            ", 
+            [
+                $data['carga'],
+                $data['codEst'],
+                $data['periodo'],
+                $data['nota'], 
+                $data['tipoNota'], 
+                $data['observaciones'] ?? 'Recuperación del periodo.', 
+                $config['conf_id_institucion'], 
+                $_SESSION["bd"],
+                0,
+                date("Y-m-d H:i:s"),
+            ]
+            );
+
+        } else {
+            $update = [
+                "bol_nota_anterior" => $data['notaAnterior'], 
+                "bol_nota"          => $data['nota'], 
+                "bol_observaciones" => $data['observaciones'] ?? 'Recuperación del periodo.', 
+                "bol_tipo"          => $data['tipoNota']
+            ];
+
+            Boletin::actualizarNotaBoletin($config, $resultadoBoletin['bol_id'], $update, $_SESSION["bd"]);
+        }
+
+        $datosMensaje = [
+            "heading" =>"Cambios guardados",
+            "estado"  =>"success",
+            'success" => true',
+            "mensaje" =>"Los cambios se ha guardado correctamente!."
+        ];
+
+        return $datosMensaje;
     }
 
 }

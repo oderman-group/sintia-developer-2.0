@@ -1,7 +1,22 @@
 <?php 
 include("session.php");
 require_once("../class/AjaxNotas.php");
-$datosMensaje = AjaxNotas::ajaxPeriodosRegistrar($_POST["codEst"],$_POST["carga"],$_POST["per"],$_POST["nota"],$_POST["notaAnterior"]);
+
+$data = [
+	'codEst'          => $_POST["codEst"],
+    'nombreEst'       => null,
+    'codNota'         => null,
+	'nota'            => $_POST["nota"],
+    'notaAnterior'    => $_POST["notaAnterior"],
+	'tipoNota'        => 2,
+    'target'          => 'GUARDAR_RECUPERACION_PERIODO',
+	'carga'           => $_POST["carga"],
+	'periodo'         => $_POST["per"],
+	'observaciones'   => 'Recuperación de periodo desde el directivo. RP.',
+];
+
+$datosMensaje = Calificaciones::direccionarCalificacion($data);
+
 include("../compartido/guardar-historial-acciones.php");
 ?>
 <script type="text/javascript">

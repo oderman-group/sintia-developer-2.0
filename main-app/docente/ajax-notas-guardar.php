@@ -25,6 +25,7 @@ $data = [
     'codNota'         => $_POST["codNota"],
 	'nota'            => $_POST["nota"],
     'notaAnterior'    => $_POST["notaAnterior"],
+	'tipoNota'        => 1,
     'target'          => 'GUARDAR_NOTA',
 ];
 

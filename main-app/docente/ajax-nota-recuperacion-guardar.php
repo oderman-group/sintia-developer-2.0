@@ -18,7 +18,17 @@ if( !CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $period
 $idPaginaInterna = 'DC0103';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
-$datosMensaje = AjaxCalificaciones::ajaxGuardarNotaRecuperacion($conexion,$config,$_POST["codEst"],$_POST["nombreEst"],$_POST["codNota"],$_POST["nota"],$_POST["notaAnterior"]);
+$data = [
+	'codEst'          => $_POST["codEst"],
+    'nombreEst'       => $_POST["nombreEst"],
+    'codNota'         => $_POST["codNota"],
+	'nota'            => $_POST["nota"],
+    'notaAnterior'    => $_POST["notaAnterior"],
+    'target'          => 'RECUPERAR_NOTA',
+	'tipoNota'        => 2,
+];
+
+$datosMensaje = Calificaciones::direccionarCalificacion($data);
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 ?>
@@ -31,8 +41,8 @@ function notifica(){
 		position: 'bottom-right',
         showHideTransition: 'slide',
 		loaderBg:'#ff6849',
-		icon: '<?=$datosMensaje['estado']?>',
-		hideAfter: 3000, 
+		icon: '<?=$datosMensaje['iconToast']?>',
+		hideAfter: 10000, 
 		stack: 6
 	});
 }
