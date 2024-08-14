@@ -387,9 +387,29 @@ class Asignaciones {
     {
         try {
             $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".general_evaluacion_asignar  AS asignar
-            INNER JOIN ".BD_ADMIN.".general_limite_asignacion ON gal_id=asignar.epag_id_limite
-            INNER JOIN ".BD_ADMIN.".general_evaluaciones ON evag_id=asignar.epag_id_evaluacion AND evag_visible=1 AND evag_institucion = {$config['conf_id_institucion']} AND evag_year = {$_SESSION["bd"]} 
-            WHERE asignar.epag_id_evaluador='{$idUsuario}' AND asignar.epag_estado IN ('".PENDIENTE."', '".PROCESO."') AND asignar.epag_institucion = {$config['conf_id_institucion']} AND asignar.epag_year = {$_SESSION["bd"]}");
+            INNER JOIN ".BD_ADMIN.".general_limite_asignacion 
+                                    ON gal_id=asignar.epag_id_limite
+            INNER JOIN ".BD_ADMIN.".general_evaluaciones 
+                                    ON evag_id=asignar.epag_id_evaluacion 
+                                    AND evag_visible=1 
+                                    AND evag_institucion = asignar.epag_institucion 
+                                    AND evag_year = asignar.epag_year 
+            WHERE asignar.epag_id_evaluador='{$idUsuario}' 
+            AND asignar.epag_estado IN ('".PENDIENTE."', '".PROCESO."') 
+            AND asignar.epag_institucion = {$config['conf_id_institucion']} 
+            AND asignar.epag_year = {$_SESSION["bd"]}
+            AND gal_limite_evaluadores > (
+                                            SELECT COUNT(*) as iniciadas 
+                                            FROM 
+                                            mobiliar_sintia_admin.general_evaluacion_asignar 
+                                            WHERE 
+                                            epag_estado!='".PENDIENTE."' 
+                                            AND epag_id_limite=asignar.epag_id_limite 
+                                            AND epag_id_evaluador!=asignar.epag_id_evaluador 
+                                            AND epag_institucion = asignar.epag_institucion 
+                                            AND epag_year = asignar.epag_year
+                                        )"
+                                    );
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }

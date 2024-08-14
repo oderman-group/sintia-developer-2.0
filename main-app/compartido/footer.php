@@ -131,29 +131,29 @@ LIMIT ".$empezar.",1
 <script>
 const forms = document.querySelectorAll('form[name="formularioGuardar"]');
 
-let form = forms[forms.length - 1]; // Obtener el último formulario del documento en caso de encontrar varias coincidencias.
+let formulario = forms[forms.length - 1]; // Obtener el último formulario del documento en caso de encontrar varias coincidencias.
 
-if(typeof form !== 'undefined' && form !== null) {
+if(typeof formulario !== 'undefined' && formulario !== null) {
 
-	const btnSubmit = form.querySelector('button[type=submit]');
+	const btnSubmit = formulario.querySelector('button[type=submit]');
 
 	btnSubmit.addEventListener("click", function() {
 		// Validar el formulario al enviarlo.
-		if (!form.checkValidity()) {
-			form.reportValidity();
+		if (!formulario.checkValidity()) {
+			formulario.reportValidity();
 			return false; // Si el formulario no es válido, detener el envío.
 		}
 
 		btnSubmit.setAttribute("disabled", true);
 
-		let pageStatic = form.querySelector('input[name="pageStatic"]');
+		let pageStatic = formulario.querySelector('input[name="pageStatic"]');
 
 		if (pageStatic != null && pageStatic.value === 'true') {
 			let btnSubmitOriginalText = btnSubmit.innerHTML;
 			btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> CARGANDO';
 
 			setTimeout(() => {
-				form.submit();
+				formulario.submit();
 				btnSubmit.removeAttribute("disabled");
 				btnSubmit.innerHTML = btnSubmitOriginalText;
 			}, 1000);
@@ -164,7 +164,7 @@ if(typeof form !== 'undefined' && form !== null) {
 		btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> GUARDANDO CAMBIOS';
 
 		setTimeout(() => {
-			form.submit();
+			formulario.submit();
 		}, 1000);
 
 		return false;
