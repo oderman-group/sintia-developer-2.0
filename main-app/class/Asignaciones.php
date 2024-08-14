@@ -398,7 +398,7 @@ class Asignaciones {
             AND asignar.epag_estado IN ('".PENDIENTE."', '".PROCESO."') 
             AND asignar.epag_institucion = {$config['conf_id_institucion']} 
             AND asignar.epag_year = {$_SESSION["bd"]}
-            AND gal_limite_evaluadores >= (
+            AND gal_limite_evaluadores > (
                                             SELECT COUNT(*) as iniciadas 
                                             FROM 
                                             mobiliar_sintia_admin.general_evaluacion_asignar 
