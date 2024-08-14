@@ -11,12 +11,25 @@ require_once("../class/UsuariosPadre.php");
     <div class="col-sm-12">
         <ul class="feed-blog">
         <?php	
-            $ultimasPaginas = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".seguridad_historial_acciones 
-            LEFT JOIN ".$baseDatosServicios.".paginas_publicidad ON pagp_id=hil_titulo AND pagp_navegable = 1
-            WHERE 
-            hil_id IN (SELECT MAX(hil_id) FROM ".$baseDatosServicios.".seguridad_historial_acciones GROUP BY hil_titulo, hil_usuario, hil_institucion)
-            AND hil_usuario= '".$datosUsuarioActual['uss_id']."' AND hil_institucion =".$config['conf_id_institucion']."
-            ORDER BY hil_id DESC LIMIT 5");										 
+            $queryOptimizado = "
+            SELECT *
+            FROM ".$baseDatosServicios.".seguridad_historial_acciones sha1
+            INNER JOIN (
+                SELECT hil_titulo, hil_usuario, hil_institucion, MAX(hil_id) AS max_hil_id
+                FROM ".$baseDatosServicios.".seguridad_historial_acciones
+                WHERE hil_usuario = '".$datosUsuarioActual['uss_id']."' 
+                AND hil_institucion = ".$config['conf_id_institucion']."
+                GROUP BY hil_titulo, hil_usuario, hil_institucion
+            ) sha2 ON sha1.hil_id = sha2.max_hil_id
+            INNER JOIN ".$baseDatosServicios.".paginas_publicidad pp ON pp.pagp_id = sha1.hil_titulo
+            WHERE pp.pagp_navegable = 1 
+            AND pp.pagp_pagina IS NOT NULL 
+            AND pp.pagp_ruta IS NOT NULL
+            ORDER BY sha1.hil_id DESC
+            LIMIT 5;
+            ";
+            
+            $ultimasPaginas = mysqli_query($conexion, $queryOptimizado);										 
             while($consultaReciente = mysqli_fetch_array($ultimasPaginas)){						                       
             ?>
             
