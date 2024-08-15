@@ -17,7 +17,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 include("../compartido/sintia-funciones.php");
 $archivoSubido = new Archivos;
-$usuariosClase = new Usuarios;
+$usuariosClase = new UsuariosFunciones;
 
 if (!empty($_POST["id"])) {
 	//GUARDAR EN CHAT GRUPAL

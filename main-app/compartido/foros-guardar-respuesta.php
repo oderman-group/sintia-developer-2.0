@@ -5,7 +5,7 @@ $idPaginaInterna = 'CM0033';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 require_once(ROOT_PATH."/main-app/class/Foros.php");
-$usuariosClase = new Usuarios;
+$usuariosClase = new UsuariosFunciones;
 
 Foros::guardarRespuesta($conexion, $config, $_POST);
 

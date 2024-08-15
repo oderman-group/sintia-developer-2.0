@@ -7,7 +7,7 @@ if (!empty($data["dataTotal"])) {
 }
 
 $contReg = 1;
-$usuariosClase = new Usuarios;
+$usuariosClase = new UsuariosFunciones;
 foreach ($data["data"] as $resultado) {
 
 	$acudiente = isset($resultado["mat_acudiente"]) ? UsuariosPadre::sesionUsuario($resultado["mat_acudiente"]) : null;

@@ -83,7 +83,7 @@ class Archivos {
 
 
 
-class Usuarios{
+class UsuariosFunciones{
 
 	
 

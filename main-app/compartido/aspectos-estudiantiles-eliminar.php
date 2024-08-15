@@ -4,7 +4,7 @@ Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'CM0018';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
-$usuariosClase = new Usuarios;
+$usuariosClase = new UsuariosFunciones;
 
 try{
     mysqli_query($conexion, "DELETE FROM ".BD_ACADEMICA.".matriculas_aspectos WHERE mata_id='" . $_GET["idA"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");

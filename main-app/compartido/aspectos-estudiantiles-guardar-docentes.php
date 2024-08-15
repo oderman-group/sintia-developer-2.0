@@ -6,7 +6,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
-$usuariosClase = new Usuarios;
+$usuariosClase = new UsuariosFunciones;
 
 //CONSUTLAR CARGA PARA DIRECTOR DE GRUPO
 $carga = CargaAcademica::traerCargaDirectorGrupo($config, $_POST["curso"]);

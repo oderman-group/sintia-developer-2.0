@@ -6,7 +6,7 @@ $idPaginaInterna = 'CM0022';
 include(ROOT_PATH . "/main-app/compartido/historial-acciones-guardar.php");
 include(ROOT_PATH . "/main-app/compartido/sintia-funciones.php");
 include(ROOT_PATH . "/main-app/class/SocialComentarios.php");
-$usuariosClase = new Usuarios;
+$usuariosClase = new UsuariosFunciones;
 $idnotica = $input['id'];
 $comentario = $input['comentario'];
 $tipo = $input['tipo'];

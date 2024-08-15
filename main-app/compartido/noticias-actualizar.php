@@ -5,7 +5,7 @@ $idPaginaInterna = 'CM0044';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
-$usuariosClase = new Usuarios;
+$usuariosClase = new UsuariosFunciones;
 $archivoSubido = new Archivos;
 
 $destinatarios=!empty($_POST["destinatarios"]) ? implode(',',$_POST["destinatarios"]) : "1,2,3,4,5";

@@ -6,7 +6,7 @@ $idPaginaInterna = 'CM0022';
 include(ROOT_PATH . "/main-app/compartido/historial-acciones-guardar.php");
 include(ROOT_PATH . "/main-app/compartido/sintia-funciones.php");
 include(ROOT_PATH . "/main-app/class/SocialReacciones.php");
-$usuariosClase = new Usuarios;
+$usuariosClase = new UsuariosFunciones;
 $idr = $input['id'];
 $r = $input['reaccion'];
 $postname = $input['postname'];

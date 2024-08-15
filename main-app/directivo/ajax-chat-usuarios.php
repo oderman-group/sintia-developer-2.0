@@ -5,7 +5,7 @@ include("../../config-general/consulta-usuario-actual.php");
 include("../compartido/sintia-funciones.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 //Instancia de Clases generales
-$usuariosClase = new Usuarios();
+$usuariosClase = new UsuariosFunciones();
 
 $consultaUsuariosOnline = UsuariosPadre::consultaUsuariosOnline($config, $_SESSION['id']);
 $consultaUsuariosOffline = UsuariosPadre::consultaUsuariosOffline($config, $_SESSION['id']);

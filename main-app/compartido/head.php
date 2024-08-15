@@ -163,7 +163,7 @@ function getFileVersion($filePath) {
 	<?php 
 	require_once("sintia-funciones.php");
 	//Instancia de Clases generales
-	$usuariosClase = new Usuarios();
+	$usuariosClase = new UsuariosFunciones();
 	?>
 	
 	<!-- Es necesaria para el loading de la pagina -->

@@ -4,7 +4,7 @@ include("../../config-general/config.php");
 include("../../config-general/consulta-usuario-actual.php");
 include("../compartido/sintia-funciones.php");
 //Instancia de Clases generales
-$usuariosClase = new Usuarios();
+$usuariosClase = new UsuariosFunciones();
 
 $busqueda = $_REQUEST["search"];
 $filtro = " AND (

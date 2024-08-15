@@ -6,7 +6,7 @@ if(!empty($input)){
 include("session-compartida.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/Clases.php");
-$usuariosClase = new Usuarios;
+$usuariosClase = new UsuariosFunciones;
 $response = array();
 try {
 $parametros = ["cpp_id_clase" => $_POST['idClase'], "institucion" => $config['conf_id_institucion'], "year" => $_SESSION["bd"]];
