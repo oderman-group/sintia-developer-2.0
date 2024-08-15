@@ -63,7 +63,7 @@ while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
     }
 
 
-    $fotoUsr = Usuarios::verificarFoto($resultado['uss_foto']);
+    $fotoUsr = UsuariosFunciones::verificarFoto($resultado['uss_foto']);
 
     $clasesNoticiaGlobal = '';
     if ($resultado['not_global'] == 'SI') {
