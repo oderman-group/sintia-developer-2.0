@@ -14,19 +14,24 @@ class UsuariosPadre {
      */
     public static function nombreCompletoDelUsuario($usuario)
     {
-        if (!is_array($usuario)) {
+        if (!is_array($usuario) || empty($usuario)) {
             return '--';
         }
-        $nombre = $usuario['uss_nombre'];
+
+        $nombre = !empty($usuario['uss_nombre']) ? $usuario['uss_nombre'] : 'N/A';
+
         if (!empty($usuario['uss_nombre2'])) {
             $nombre .= " " . $usuario['uss_nombre2'];
         }
+
         if (!empty($usuario['uss_apellido1'])) {
             $nombre .= " " . $usuario['uss_apellido1'];
         }
+
         if (!empty($usuario['uss_apellido2'])) {
             $nombre .= " " . $usuario['uss_apellido2'];
         }
+
         return strtoupper($nombre);
     }
 
