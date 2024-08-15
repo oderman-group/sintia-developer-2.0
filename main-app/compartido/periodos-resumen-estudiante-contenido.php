@@ -141,9 +141,8 @@ require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 															$decimal = $porcentajeGrado/100;
 															
 															//LAS CALIFICACIONES
-															$notasResultado = Boletin::traerNotaBoletinCargaPeriodo($config, $i, $datosEstudianteActual['mat_id'], $rCargas["car_id"]);
-															$numN = mysqli_num_rows($notasConsulta);
-															if($numN){
+															$notasResultado = Boletin::traerNotaBoletinCargaPeriodo($config, $i, $datosEstudianteActual['mat_id'], $rCargas["car_id"]);														
+															if(!empty($notasResultado)){
 																$n++;
 																$definitiva += $notasResultado['bol_nota']*$decimal;
 																$sumaPorcentaje += $decimal;

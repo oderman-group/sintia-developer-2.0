@@ -49,7 +49,7 @@ $reaccionesLista = SocialReacciones::contarReacciones($parametros);
                         <?php
                         if ($reaccionesUsuarioLista) {
                             foreach ($reaccionesUsuarioLista as $usuario) {
-                                $fotoUsrReaccion = Usuarios::verificarFoto($usuario['uss_foto']);
+                                $fotoUsrReaccion = UsuariosFunciones::verificarFoto($usuario['uss_foto']);
                         ?>
 
 

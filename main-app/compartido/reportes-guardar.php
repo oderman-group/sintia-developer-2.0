@@ -7,7 +7,7 @@ include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
-$usuariosClase = new Usuarios;
+$usuariosClase = new UsuariosFunciones;
 
 $datosEstudiante = Estudiantes::obtenerDatosEstudiante($_POST["estudiante"]);
 $nombre = trim(Estudiantes::NombreCompletoDelEstudiante($datosEstudiante));

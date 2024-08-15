@@ -11,7 +11,7 @@ if (empty($_SESSION["id"])) {
     $resultado['uss_id'] = $comentario["not_usuario"];
     $animate = "animate__animated animate__flipInX";
 }
-$fotoPerfilUsr = Usuarios::verificarFoto($comentario['uss_foto']);
+$fotoPerfilUsr = UsuariosFunciones::verificarFoto($comentario['uss_foto']);
 ?>
 <li id="comenttario-id-<?= $comentario['ncm_id']; ?>" class="<?= $animate ?>">
     <div class="comment-main-level">

@@ -5,7 +5,7 @@ $idPaginaInterna = 'CM0032';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 require_once(ROOT_PATH."/main-app/class/Foros.php");
-$usuariosClase = new Usuarios;
+$usuariosClase = new UsuariosFunciones;
 
 $idCom="";
 if(!empty($_GET["idCom"])){ $idCom=base64_decode($_GET["idCom"]);}

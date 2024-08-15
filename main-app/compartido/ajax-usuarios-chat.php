@@ -3,7 +3,7 @@ include("../modelo/conexion.php");
 
 include("../compartido/sintia-funciones.php");
 //Instancia de Clases generales
-$usuariosClase = new Usuarios();
+$usuariosClase = new UsuariosFunciones();
 
 										$datosConsultaChat = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss 
 										INNER JOIN ".$baseDatosServicios.".general_perfiles ON pes_id=uss_tipo

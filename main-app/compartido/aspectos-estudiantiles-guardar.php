@@ -5,7 +5,7 @@ $idPaginaInterna = 'CM0016';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
-$usuariosClase = new Usuarios;
+$usuariosClase = new UsuariosFunciones;
 
 $idInsercion=Utilidades::generateCode("MATA");
 try{
