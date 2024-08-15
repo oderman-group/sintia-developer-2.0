@@ -11,7 +11,7 @@ if (empty($_SESSION["id"])) {
     $resultado['uss_id'] = $respuesta["not_usuario"];
     $animate="animate__animated animate__flipInX";
 }
-$fotoPerfilUsr = Usuarios::verificarFoto($respuesta['uss_foto']);
+$fotoPerfilUsr = UsuariosFunciones::verificarFoto($respuesta['uss_foto']);
 ?>
 
 <li id="respuesta-id-<?= $respuesta['ncm_id']; ?>" class="<?= $animate?>">
