@@ -821,7 +821,10 @@ class Calificaciones {
             return $validacion;
         }
 
-        self::verificarRegistros($data);
+        $verificacion = self::verificarRegistros($data);
+        if (array_key_exists('success', $verificacion) && !$verificacion['success']) {
+            return $verificacion;
+        }
 
         return self::redireccionarAccion($data);
 
@@ -898,10 +901,11 @@ class Calificaciones {
      *
      * @return array The updated data array or an error response if no records are found for 'RECUPERAR_NOTA'.
      */
-    private static function verificarRegistros(array &$data) {
+    private static function verificarRegistros(array &$data): array 
+    {
         if ($data['target'] == 'RECUPERAR_NOTA') {
             $hayRegistrosCalificaciones = Calificaciones::hayRegistrosCalificaciones($data['codNota'], $data['codEst']);
-            if ($hayRegistrosCalificaciones != true || $hayRegistrosCalificaciones != 1) {
+            if (empty($hayRegistrosCalificaciones) || $hayRegistrosCalificaciones != true || $hayRegistrosCalificaciones != 1) {
                 return [
                     'success'   => false,
                     "heading"   => "No hay registro de nota",
