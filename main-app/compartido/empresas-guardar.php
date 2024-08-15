@@ -4,7 +4,7 @@ Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'CM0027';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
-$usuariosClase = new Usuarios;
+$usuariosClase = new UsuariosFunciones;
 
 $clave = rand(10000, 99999);
 

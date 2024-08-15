@@ -11,7 +11,7 @@ require_once(ROOT_PATH . "/main-app/compartido/sintia-funciones.php");
 require_once(ROOT_PATH . "/main-app/class/Utilidades.php");
 require_once(ROOT_PATH . "/main-app/class/Clases.php");
 $codigo = Utilidades::generateCode("CPP");
-$usuariosClase = new Usuarios;
+$usuariosClase = new UsuariosFunciones;
 $response = array();
 try {
     $codigo = Clases::guardarPreguntasClases($conexion, $config, $_POST);

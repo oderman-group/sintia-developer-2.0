@@ -4,7 +4,7 @@ Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'CM0019';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
-$usuariosClase = new Usuarios;
+$usuariosClase = new UsuariosFunciones;
 
 try{
     mysqli_query($conexion, "DELETE FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_id='" . $_GET["idA"] . "' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");

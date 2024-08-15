@@ -14,9 +14,11 @@ require_once(ROOT_PATH."/main-app/class/Usuarios.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
+require_once(ROOT_PATH."/main-app/class/Plataforma.php");
 
 $modulo = 1;
 
+$Plataforma = new Plataforma();
 ?>
 
 <!doctype html>

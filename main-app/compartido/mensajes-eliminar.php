@@ -4,7 +4,7 @@ Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'CM0039';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
-$usuariosClase = new Usuarios;
+$usuariosClase = new UsuariosFunciones;
 
 if (base64_decode($_GET["elm"]) == 1) {
     try{

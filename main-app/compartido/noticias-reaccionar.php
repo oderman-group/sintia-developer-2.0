@@ -4,7 +4,7 @@ Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'CM0022';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
-$usuariosClase = new Usuarios;
+$usuariosClase = new UsuariosFunciones;
 
 try{
     $reaccion = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".social_noticias_reacciones WHERE npr_usuario='" . $_SESSION["id"] . "' AND npr_noticia='" . base64_decode($_GET["idR"]) . "'"), MYSQLI_BOTH);

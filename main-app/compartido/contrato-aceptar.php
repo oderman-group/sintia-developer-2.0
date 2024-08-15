@@ -6,7 +6,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 $archivoSubido = new Archivos;
-$usuariosClase = new Usuarios;
+$usuariosClase = new UsuariosFunciones;
 
 $update = ['mat_contrato' => 1];
 Estudiantes::actualizarMatriculasPorIdUsuario($config, $_SESSION["id"], $update);
