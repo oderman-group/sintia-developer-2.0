@@ -140,14 +140,21 @@ if (!empty($datosPaginaActual)) {
 	
 	<!-- Axios -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
-	
-	<!-- Mis funciones JS -->
-	<script src="../compartido/funciones.js" ></script>
-	<script src="../js/Utilidades.js" ></script>
-	<script src="../js/Estudiantes.js" ></script>
-	<script src="../js/Docentes.js" ></script>
-	<script src="../js/Calificaciones.js" ></script>
-	<script src="../js/Movimientos.js" ></script>
+
+<?php
+// Función para obtener la fecha de modificación de un archivo
+function getFileVersion($filePath) {
+	return filemtime($filePath);
+}
+?>
+
+<!-- Mis funciones JS -->
+<script src="../compartido/funciones.js?v=<?php echo getFileVersion('../compartido/funciones.js'); ?>" ></script>
+<script src="../js/Utilidades.js?v=<?php echo getFileVersion('../js/Utilidades.js'); ?>" ></script>
+<script src="../js/Estudiantes.js?v=<?php echo getFileVersion('../js/Estudiantes.js'); ?>" ></script>
+<script src="../js/Docentes.js?v=<?php echo getFileVersion('../js/Docentes.js'); ?>" ></script>
+<script src="../js/Calificaciones.js?v=<?php echo getFileVersion('../js/Calificaciones.js'); ?>" ></script>
+<script src="../js/Movimientos.js?v=<?php echo getFileVersion('../js/Movimientos.js'); ?>" ></script>
 	
 	<?php 
 	include("sintia-funciones-js.php");
