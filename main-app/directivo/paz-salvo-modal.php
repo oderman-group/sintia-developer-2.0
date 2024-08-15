@@ -43,6 +43,7 @@ require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
                                     $filtro = ' AND mat_grado="' . $grado['gra_id'].'"';
                                     $opcionesConsulta = Estudiantes::listarEstudiantesEnGrados($filtro, '');
                                     while ($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)) {
+                                        if (empty($opcionesDatos['mat_id_usuario'])) continue;
                                     ?>
 
                                         <option value="<?= base64_encode($opcionesDatos['mat_id_usuario']); ?>">
