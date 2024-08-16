@@ -4,13 +4,12 @@ if (!empty($data["dataTotal"])) {
 	require_once(ROOT_PATH . "/main-app/class/Estudiantes.php");
 	require_once(ROOT_PATH . "/main-app/class/Modulos.php");
 	require_once(ROOT_PATH . "/main-app/compartido/sintia-funciones.php");
-	
 }
 
 $contReg = 1;
-$usuariosClase = new UsuariosFunciones;
+
 foreach ($data["data"] as $resultado) {
-	
+	$usuariosClase = new UsuariosFunciones;
 	$acudiente = isset($resultado["mat_acudiente"]) ? UsuariosPadre::sesionUsuario($resultado["mat_acudiente"]) : null;
 
 	$bgColor = $resultado['uss_bloqueado'] == 1 ? 'style="background-color: #ff572238;"' : '';
