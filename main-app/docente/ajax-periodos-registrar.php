@@ -1,18 +1,20 @@
 <?php
 include("session.php");
 require_once(ROOT_PATH."/main-app/class/AjaxNotas.php");
+require_once(ROOT_PATH."/main-app/docente/verificar-carga.php");
 
 $data = [
-	'codEst'          => $_POST["codEst"],
-    'nombreEst'       => null,
-    'codNota'         => null,
-	'nota'            => $_POST["nota"],
-    'notaAnterior'    => $_POST["notaAnterior"],
-	'tipoNota'        => 2,
-    'target'          => 'GUARDAR_RECUPERACION_PERIODO',
-	'carga'           => $_COOKIE["carga"],
-	'periodo'         => $_POST["per"],
-	'observaciones'   => 'Recuperación de periodo.',
+	'codEst'           => $_POST["codEst"],
+    'nombreEst'        => null,
+    'codNota'          => null,
+	'nota'             => $_POST["nota"],
+    'notaAnterior'     => $_POST["notaAnterior"],
+	'tipoNota'         => 2,
+    'target'           => Calificaciones::TIPO_GUARDAR_RECUPERACION_PERIODO,
+	'carga'            => $_COOKIE["carga"],
+	'periodo'          => $_POST["per"],
+	'observaciones'    => 'Recuperación de periodo.',
+	'datosCargaActual' => $datosCargaActual
 ];
 
 $datosMensaje = Calificaciones::direccionarCalificacion($data);
@@ -27,8 +29,8 @@ function notifica(){
 		position: 'bottom-right',
         showHideTransition: 'slide',
 		loaderBg:'#ff6849',
-		icon: '<?=$datosMensaje['estado']?>',
-		hideAfter: 3000, 
+		icon: '<?=$datosMensaje['iconToast']?>',
+		hideAfter: 10000, 
 		stack: 6
 	});
 }
