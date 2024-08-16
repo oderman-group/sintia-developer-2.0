@@ -5,6 +5,12 @@ require_once ROOT_PATH."/main-app/class/Conexion.php";
 
 class Boletin {
 
+    public const BOLETIN_TIPO_NOTA_NORMAL                 = 1; // Calculada por el sistema de acuerdo a las notas en las actividades.
+    public const BOLETIN_TIPO_NOTA_RECUPERACION_PERIODO   = 2; // La hace el docente o el directivo.
+    public const BOLETIN_TIPO_NOTA_RECUPERACION_INDICADOR = 3; // La hace el docente por los indicadores.
+    public const BOLETIN_TIPO_NOTA_DIRECTIVA              = 4; // La Colocar el directivo directamente.
+
+
     /**
     * Devuelve una lista de tipos de notas basados en la categoría proporcionada y el año académico seleccionado.
     *
