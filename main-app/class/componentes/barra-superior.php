@@ -250,17 +250,40 @@ class componenteFiltro
             <li class='nav-item'> <a class='nav-link' href='{$_SERVER['PHP_SELF']}' style='color:{$Plataforma->colorUno}'>Quitar filtros</a></li>";
         }
 
-        $html .= "   </ul> 
+        $html .= "   
+            </ul>
+            <style>
+                    
+                    #input_{$this->id}::placeholder {
+                        text-align: left;
+                    }
+
+                    #input_{$this->id} {
+                        text-align: left;
+                    }
+            </style> 
             <div class='form-inline my-2 my-lg-0'>
-                <input id='input_{$this->id}' class='form-control mr-sm-2' type='search' placeholder='{$frases[386][$datosUsuarioActual['uss_idioma']]}..' aria-label='Search' name='busqueda' >
+                <input id='input_{$this->id}' class='form-control mr-sm-2' style='width: 250px' type='search' 
+                data-toggle='tooltip' 
+                   data-placement='right' 
+                   title='{$frases[431][$datosUsuarioActual['uss_idioma']]}'
+                placeholder='{$frases[430][$datosUsuarioActual['uss_idioma']]}' aria-label='Search' name='busqueda' >
                 <button id='btn_{$this->id}' onclick='{$this->id}_buscar(true)' class='btn deepPink-bgcolor my-2 my-sm-0' type='buttom'>{$frases[8][$datosUsuarioActual['uss_idioma']]}</button>
             </div>
         </nav>
         <script type='text/javascript'>
         input_{$this->id}.addEventListener('keyup', function(event) {
-            {$this->id}_buscar()
+            if (event.key === 'Enter') {
+                {$this->id}_buscar()
+             }
           });
+        input_{$this->id}.addEventListener('input', function(event) {
+           if ( input_{$this->id}.value.trim() === '') {
+             {$this->id}_buscar()
+           }
+        });
         function {$this->id}_buscar(buscar){
+            document.getElementById('gifCarga').style.display = 'block';
             var valor = document.getElementById('input_{$this->id}').value;
             var filtro2 = {'{$filtro["get"]}Seleccionados' : {$filtro["get"]}Seleccionados};
             var urlbase = '{$this->urlBase}'; 
@@ -310,7 +333,7 @@ class componenteFiltro
         }
         function {$this->id}_responseHtml(dato){
             var tbody = document.getElementById('{$this->id}_result');
-            document.getElementById('gifCarga').style.display = 'block';
+           
             tbody.innerHTML = ''; 
             var data = {
                 'data': (dato),
