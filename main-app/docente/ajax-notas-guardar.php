@@ -26,7 +26,7 @@ $data = [
 	'nota'            => $_POST["nota"],
     'notaAnterior'    => $_POST["notaAnterior"],
 	'tipoNota'        => 1,
-    'target'          => 'GUARDAR_NOTA',
+    'target'          => Calificaciones::TIPO_GUARDAR_NOTA,
 ];
 
 $datosMensaje = Calificaciones::direccionarCalificacion($data);

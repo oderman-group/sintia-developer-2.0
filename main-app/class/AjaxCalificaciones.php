@@ -22,7 +22,7 @@ class AjaxCalificaciones {
 
         $config = RedisInstance::getSystemConfiguration();
 
-        $data['target'] = 'ELIMINAR_NOTA';
+        $data['target'] = Calificaciones::TIPO_ELIMINAR_NOTA;
         Calificaciones::direccionarCalificacion($data);
 
         $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_calificaciones');
@@ -134,7 +134,7 @@ class AjaxCalificaciones {
                 'codNota'      => $codNota,
                 'nota'         => $nota,
                 'notaAnterior' => null, //TODO: obtener la nota anterior
-                'target'       => 'GUARDAR_NOTA',
+                'target'       => Calificaciones::TIPO_GUARDAR_NOTA,
                 'tipoNota'     => 1
             ];
 
@@ -187,7 +187,7 @@ class AjaxCalificaciones {
 
         $rowCount = $asp->rowCount();
 
-        $data['target'] = 'ACTUALIZAR_NOTA';
+        $data['target'] = Calificaciones::TIPO_ACTUALIZAR_NOTA;
         Calificaciones::direccionarCalificacion($data);
 
         $datosMensaje = [

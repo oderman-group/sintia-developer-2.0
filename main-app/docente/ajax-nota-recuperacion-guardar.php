@@ -24,7 +24,7 @@ $data = [
     'codNota'         => $_POST["codNota"],
 	'nota'            => $_POST["nota"],
     'notaAnterior'    => $_POST["notaAnterior"],
-    'target'          => 'RECUPERAR_NOTA',
+    'target'          => Calificaciones::TIPO_RECUPERAR_NOTA,
 	'tipoNota'        => 2,
 ];
 
