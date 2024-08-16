@@ -71,7 +71,8 @@ th {
 											<table width="100%" border="1" rules="rows" id="tabla_notas">
                                                 <thead>
 												  <tr>
-													<th style="width: 50px;">#</th>
+													<th style="text-align:center; width: 30px;">#</th>
+													<th style="text-align:center; width: 30px;">ID</th>
 													<th style="width: 400px;"><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
 													<?php
 													$cA = Actividades::traerActividadesCarga($config, $cargaConsultaActual, $periodoConsultaActual);
@@ -116,7 +117,8 @@ th {
 													?>
                                                     
 													<tr style="background-color: <?=$colorFondo;?>" id="fila_<?=$resultado['mat_id'];?>">
-                                                        <td style="text-align:center;" style="width: 100px;"><?=$contReg;?></td>
+                                                        <td style="text-align:center; width: 100px;"><?=$contReg;?></td>
+														<td style="text-align:center; width: 100px;"><?=$resultado['mat_id'];?></td>
 														<td style="color: <?=$colorEstudiante;?>">
 														<?=$nombreCompleto?>
 														</td>
