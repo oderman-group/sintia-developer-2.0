@@ -286,9 +286,11 @@ class componenteFiltro
         $html .= "   
             </ul>
             <style>
+                    
                     #input_{$this->id}::placeholder {
                         text-align: left;
                     }
+
                     #input_{$this->id} {
                         text-align: left;
                     }
