@@ -257,19 +257,10 @@ class Utilidades {
      * @return mixed The modified value with a trailing ".0" if the original value was an integer, or the original value if it was not an integer.
      */
     public static function setFinalZero($nota) {
-        if (is_int($nota)) {
+        if (is_numeric($nota) && strlen($nota) == 1) {
             return $nota.".0";
         }
 
         return $nota;
-    }
-
-    public static function dd($var) {
-        $backtrace = debug_backtrace();
-
-        echo $var."<br>";
-        echo $backtrace[0]['file'] . ":". $backtrace[0]['line'] ." - ". $backtrace[1]['function'];
-        die();
-        return null;
     }
 }

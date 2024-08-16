@@ -26,6 +26,7 @@ class UtilidadesTest extends TestCase {
         $this->assertEquals('4.5', $this->utilidades->setFinalZero(4.5));
         $this->assertEquals('4.50', $this->utilidades->setFinalZero(4.5));
         $this->assertNotEquals('4.5.0', $this->utilidades->setFinalZero(4.5));
+        $this->assertEquals('5.0', $this->utilidades->setFinalZero('5'));
     }
 
     public static function casosDeUso(): array 
