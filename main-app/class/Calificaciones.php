@@ -10,6 +10,22 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 class Calificaciones {
 
+    public const TIPO_GUARDAR_NOTA                 = 'GUARDAR_NOTA'; 
+    public const TIPO_ACTUALIZAR_NOTA              = 'ACTUALIZAR_NOTA';
+    public const TIPO_ELIMINAR_NOTA                = 'ELIMINAR_NOTA';
+    public const TIPO_RECUPERAR_NOTA               = 'RECUPERAR_NOTA';
+    public const TIPO_GUARDAR_RECUPERACION_PERIODO = 'GUARDAR_RECUPERACION_PERIODO';
+    public const TIPO_GUARDAR_NIVELACION_CARGA     = 'GUARDAR_NIVELACION_CARGA';
+
+    public const TARGET_TIPOS_NOTAS_PERMITIDOS = [
+        self::TIPO_GUARDAR_NOTA,
+        self::TIPO_ACTUALIZAR_NOTA,
+        self::TIPO_ELIMINAR_NOTA,
+        self::TIPO_RECUPERAR_NOTA,
+        self::TIPO_GUARDAR_RECUPERACION_PERIODO,
+        self::TIPO_GUARDAR_NIVELACION_CARGA,
+    ];
+
     /**
      * Este metodo me re-calcula los valores de todas las actividades de un indicador
      * @param mysqli    $conexion
@@ -856,22 +872,13 @@ class Calificaciones {
             ];
         }
 
-        $target_permitidos = [
-            'GUARDAR_NOTA', 
-            'ACTUALIZAR_NOTA', 
-            'ELIMINAR_NOTA', 
-            'RECUPERAR_NOTA', 
-            'GUARDAR_RECUPERACION_PERIODO',
-            'GUARDAR_NIVELACION_CARGA',
-        ];
-
-        if (!in_array($data['target'], $target_permitidos)) {
+        if (!in_array($data['target'], self::TARGET_TIPOS_NOTAS_PERMITIDOS)) {
             return [
                 'success' => false,
                 'heading' => 'Target inválido',
                 "estado"    => "danger",
                 'iconToast' => "error",
-                'mensaje' => "El target {$data['target']} no es válido. Debe ser uno de los siguientes: ". implode(', ', $target_permitidos),
+                'mensaje' => "El target {$data['target']} no es válido. Debe ser uno de los siguientes: ". implode(', ', self::TARGET_TIPOS_NOTAS_PERMITIDOS),
             ];
         }
 
@@ -903,7 +910,7 @@ class Calificaciones {
      */
     private static function verificarRegistros(array &$data): array 
     {
-        if ($data['target'] == 'RECUPERAR_NOTA') {
+        if ($data['target'] == self::TIPO_RECUPERAR_NOTA) {
             $hayRegistrosCalificaciones = Calificaciones::hayRegistrosCalificaciones($data['codNota'], $data['codEst']);
             if (empty($hayRegistrosCalificaciones) || $hayRegistrosCalificaciones != true || $hayRegistrosCalificaciones != 1) {
                 return [
@@ -916,10 +923,34 @@ class Calificaciones {
             }
         }
 
-        if ($data['target'] == 'GUARDAR_NOTA') {
+        if ($data['target'] == self::TIPO_GUARDAR_NOTA) {
             $hayRegistrosCalificaciones = self::hayRegistrosCalificaciones($data['codNota'], $data['codEst']);
             if ($hayRegistrosCalificaciones == true || $hayRegistrosCalificaciones == 1) {
-                $data['target'] = 'ACTUALIZAR_NOTA';
+                $data['target'] = self::TIPO_ACTUALIZAR_NOTA;
+            }
+        }
+
+        if ($data['target'] == self::TIPO_GUARDAR_RECUPERACION_PERIODO) {
+            if ($data['periodo'] >= $data['datosCargaActual']['car_periodo']) {
+                return [
+                    'success'   => false,
+                    "heading"   => "El periodo actual es menor",
+                    "estado"    => "danger",
+                    'iconToast' => "error",
+                    "mensaje"   => "No es posible recuperar un periodo desde un periodo superior o igual al actual que es <b>{$data['periodo']}</b>"
+                ];
+            }
+        }
+
+        if ($data['target'] == self::TIPO_GUARDAR_NIVELACION_CARGA) {
+            if ($data['datosCargaActual']['car_periodo'] <= $data['datosCargaActual']['gra_periodos']) {
+                return [
+                    'success'   => false,
+                    "heading"   => "El periodo escolar aún no termina",
+                    "estado"    => "danger",
+                    'iconToast' => "error",
+                    "mensaje"   => "No es posible nivelar una asignatura cuando la carga está en un periodo vigente como el <b>{$data['periodo']}</b>"
+                ];
             }
         }
 
@@ -950,18 +981,18 @@ class Calificaciones {
      */
     private static function redireccionarAccion(array $data) {
         switch ($data['target']) {
-            case 'GUARDAR_NOTA':
+            case self::TIPO_GUARDAR_NOTA:
                 return AjaxCalificaciones::ajaxGuardarNota($data);
-            case 'ACTUALIZAR_NOTA':
+            case self::TIPO_ACTUALIZAR_NOTA:
                 return self::actualizarCalificacion($data);
-            case 'ELIMINAR_NOTA':
+            case self::TIPO_ELIMINAR_NOTA:
                 $config = RedisInstance::getSystemConfiguration();
                 return self::eliminarCalificacionActividadEstudiante($config, $data['codNota'], $data['codEst'], $_SESSION["bd"]);
-            case 'RECUPERAR_NOTA':
+            case self::TIPO_RECUPERAR_NOTA:
                 return AjaxCalificaciones::ajaxGuardarNotaRecuperacion($data);
-            case 'GUARDAR_RECUPERACION_PERIODO':
+            case self::TIPO_GUARDAR_RECUPERACION_PERIODO:
                 return self::ajaxPeriodosRegistrar($data);
-            case 'GUARDAR_NIVELACION_CARGA':
+            case self::TIPO_GUARDAR_NIVELACION_CARGA:
                 return AjaxNotas::ajaxNivelacionesRegistrar($data);
             default:
                 return [
@@ -1143,10 +1174,11 @@ class Calificaciones {
         }
 
         $datosMensaje = [
-            "heading" =>"Cambios guardados",
-            "estado"  =>"success",
-            'success" => true',
-            "mensaje" =>"Los cambios se ha guardado correctamente!."
+            "heading"   => "Cambios guardados",
+            "estado"    => "success",
+            "iconToast" => "success",
+            "success"   => true,
+            "mensaje"   => "Los cambios se han guardado correctamente!."
         ];
 
         return $datosMensaje;
