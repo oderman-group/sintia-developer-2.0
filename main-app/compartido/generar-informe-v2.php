@@ -112,15 +112,15 @@ while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 		"estado"           		 => 'GENERADO',
 	];
 
-	$numActualizacion                 = $boletinDatos['bol_actualizaciones'] >= 1 ? ($boletinDatos['bol_actualizaciones'] + 1) : '0';
-	$actualizacion["{$numActualizacion}"] = $nuevoArray;
+	$numActualizacion                 = $boletinDatos['bol_actualizaciones'] >= 1 ? ($boletinDatos['bol_actualizaciones'] + 1) : 1;
+	$actualizacion[$numActualizacion] = $nuevoArray;
 
 	$update = [
 		'bol_nota_indicadores'        => $sumaNotaIndicador,
 		'bol_tipo'                    => 1,
 		'bol_historial_actualizacion' => json_encode($actualizacion),
 		'bol_estado'				  => 'GENERADO',
-		'bol_actualizaciones'	      => $numActualizacion == '0' ? NULL : $numActualizacion,
+		'bol_actualizaciones'	      => $numActualizacion,
 	];
 
 	Boletin::actualizarNotaBoletin($config, $boletinDatos['bol_id'], $update);
