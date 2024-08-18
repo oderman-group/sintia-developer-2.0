@@ -1089,6 +1089,39 @@ class Boletin {
     }
 
     /**
+     * Updates the academic bulletin records based on the provided conditions.
+     *
+     * @param array  $config  Configuration array containing institution settings.
+     * @param array  $update  Associative array of columns and their new values to be updated.
+     * @param string $where   (Optional) SQL WHERE clause to specify which records to update. Defaults to 'bol_id=bol_id'.
+     * @param string $yearBd  (Optional) The academic year for which the information is desired. If not provided, the current session's academic year is used.
+     *
+     * @return void
+     */
+    public static function actualizarBoletin (
+        array   $config,
+        array   $update,
+        string  $where = 'bol_id=bol_id',
+        string  $yearBd = ""
+    ): void
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        [$updateSql, $updateValues] = BindSQL::prepararUpdateConArray($update);
+
+        $bolActualizaciones = !array_key_exists('bol_actualizaciones', $update) ? 'bol_actualizaciones=bol_actualizaciones+1,' : null;
+
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_boletin SET {$updateSql}, 
+        {$bolActualizaciones}
+        bol_ultima_actualizacion=now()
+        WHERE {$where} AND institucion=? AND year=?";
+
+        $parametros = array_merge($updateValues, [$config['conf_id_institucion'], $year]);
+
+        BindSQL::prepararSQL($sql, $parametros);
+    }
+
+    /**
      * Este metodo me actualiza el registro de un estudiante en el boletin segun lacarga
     **/
     public static function actualizarBoletinCargaEstudiante (
