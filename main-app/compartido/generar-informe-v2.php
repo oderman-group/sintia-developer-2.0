@@ -113,7 +113,7 @@ while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 	];
 
 	$numActualizacion                 = $boletinDatos['bol_actualizaciones'] >= 1 ? ($boletinDatos['bol_actualizaciones'] + 1) : '0';
-	$actualizacion[$numActualizacion] = $nuevoArray;
+	$actualizacion["{$numActualizacion}"] = $nuevoArray;
 
 	$update = [
 		'bol_nota_indicadores'        => $sumaNotaIndicador,
