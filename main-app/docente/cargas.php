@@ -143,7 +143,7 @@ if( !empty($_SESSION["infoCargaActual"]) ) {
 																				data-placement="right" 
 																				title="Lo hará usted manualmente como siempre." 
 																				href="javascript:void(0);" 
-																				name="../compartido/generar-informe.php?
+																				name="../compartido/generar-informe-v2.php?
 																					carga='.base64_encode($rCargas["car_id"]).'
 																					&periodo='.base64_encode($rCargas["car_periodo"]).'
 																					&grado='.base64_encode($rCargas["car_curso"]).'
