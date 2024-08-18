@@ -109,7 +109,7 @@ while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 		"nota_anterior" 		 => round($boletinDatos['bol_nota'], $config['conf_decimales_notas']),
 		"fecha_de_actualizacion" => $fecha,
 		"porcentaje" 	         => $boletinDatos['bol_porcentaje'],
-		"estado"           		 => 'GENERADO',
+		"estado"           		 => $boletinDatos['bol_estado'],
 	];
 
 	$numActualizacion                 = $boletinDatos['bol_actualizaciones'] >= 1 ? ($boletinDatos['bol_actualizaciones'] + 1) : 1;
