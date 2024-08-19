@@ -8,7 +8,7 @@ if($datosUsuarioActual['uss_tipo']==TIPO_DIRECTIVO){
 	$datosAceptacion = mysqli_fetch_array($aceptacion, MYSQLI_BOTH);
 
 	//Condición para mostrar o no el modal
-	if(empty($datosAceptacion[0]) AND $datosContrato['cont_fecha_modificacion'] > $datosAceptacion['cxu_fecha_aceptacion'] and $datosContrato['cont_visible']==='SI'){
+	if(empty($datosAceptacion[0]) AND !empty($datosContrato) && !empty($datosAceptacion) && $datosContrato['cont_fecha_modificacion'] > $datosAceptacion['cxu_fecha_aceptacion'] and $datosContrato['cont_visible']==='SI'){
 	?>
 
 	<div class="modal fade" id="modalContrato" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">

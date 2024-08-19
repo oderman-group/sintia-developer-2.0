@@ -36,7 +36,7 @@
                                     <header><?=$frases[10][$datosUsuarioActual['uss_idioma']];?></header>
                                 </div>
                                 <div class="card-body " id="bar-parent6">
-                                    <form action="../compartido/perfil-actualizar.php" method="post" enctype="multipart/form-data">
+                                    <form name="formularioGuardar" action="../compartido/perfil-actualizar.php" method="post" enctype="multipart/form-data">
 										<input type="hidden" name="tipoUsuario" value="<?=$usuarioPerfil['uss_tipo'];?>">
 										
                                         <div class="form-group row">
