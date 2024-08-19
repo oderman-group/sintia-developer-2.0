@@ -59,7 +59,29 @@ $institucionNombre = $institucion['ins_siglas'];
 
                         <?php
                             if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO || $datosUsuarioActual['uss_tipo'] == TIPO_DEV) {
+                                $sites = Instituciones::getSites();
+                                $numSites = mysqli_num_rows($sites);
+                                if($numSites > 0 && Modulos::validarSubRol(['DT0339'])) {
                         ?>
+                                    <li class="dropdown dropdown-user">
+                                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                        <i class="fa fa-home"></i>    
+                                        <span class="username username-hide-on-mobile"> SEDE ACTUAL: <b><?=$institucionNombre;?></b> </span>
+                                            <?php echo '<i class="fa fa-angle-down"></i>'; ?>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-default">
+                                            <?php
+                                            
+                                            while ($site = mysqli_fetch_array($sites, MYSQLI_BOTH)) {
+                                            ?>
+                                                <li><a href="cambiar-sede.php?idInstitucion=<?=base64_encode($site['ins_id']);?>"><?=$site['ins_siglas'];?></a></li>
+                                            <?php }?>
+                                        </ul>
+                                    </li>
+                        <?php 
+                                }
+                        ?>
+
                             <li class="dropdown dropdown-user">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                 <i class="fa fa-calendar-o"></i>    
@@ -86,6 +108,7 @@ $institucionNombre = $institucion['ins_siglas'];
                                     </ul>
                                 <?php }?>
                             </li>
+
                             <li class="dropdown dropdown-user">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                 <i class="fa fa-calendar-o"></i>    
@@ -229,7 +252,7 @@ $institucionNombre = $institucion['ins_siglas'];
                                     <li><a href="../directivo/solicitud-cancelacion.php"><i class="fa fa-cut"></i><?=$frases[367][$datosUsuarioActual['uss_idioma']];?></a></li>
                                 <?php }?>
                                 <?php if($datosUsuarioActual['uss_tipo'] == TIPO_DEV || ($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && Modulos::validarSubRol(["DT0332"]))){?>
-                                    <li><a href="consumo-plan.php"><i class="fa-solid fa-chart-pie"></i>Consumo Del Plan</a></li>
+                                    <li><a href="consumo-plan.php"><i class="fa fa-pie-chart"></i>Consumo Del Plan</a></li>
                                 <?php }?>
                                 <li><a href="../compartido/sintia-refresh.php" onClick="localStorage.clear();"><i class="fa fa-refresh"></i>Refrescar SINTIA</a></li>
                                 <li><a href="../controlador/salir.php" onClick="localStorage.clear();"><i class="icon-logout"></i><?=$frases[15][$datosUsuarioActual['uss_idioma']];?></a></li>
