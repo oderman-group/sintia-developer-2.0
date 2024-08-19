@@ -1,6 +1,12 @@
 <?php
+
+use Kreait\Firebase\Exception\DatabaseApiExceptionConverter;
+
 require_once(ROOT_PATH."/main-app/class/Conexion.php");
 require_once(ROOT_PATH."/main-app/class/RedisInstance.php");
+require_once(ROOT_PATH."/main-app/class/Usuarios.php");
+require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/Instituciones.php");
 
 class Autenticate {
 
@@ -9,6 +15,12 @@ class Autenticate {
     private function __construct() {
     }
 
+    /**
+     * Returns the singleton instance of the Autenticate class.
+     * If the instance does not exist, it creates one.
+     *
+     * @return Autenticate The singleton instance of the Autenticate class.
+     */
     public static function getInstance() {
         if (self::$instance === null) {
             self::$instance = new Autenticate;
@@ -86,5 +98,46 @@ class Autenticate {
         $redis->del($keysToDelete);
 
         header("Location:".$urlRedirect);
+    }
+
+    /**
+     * Switches the current institution for the user session.
+     *
+     * This function updates the session data to reflect the selected institution.
+     * It verifies if the current institution and the selected institution are linked,
+     * retrieves the necessary data for the selected institution, and updates the session variables accordingly.
+     *
+     * @param int $idInstitucion The ID of the institution to switch to.
+     *
+     * @throws Exception If there is no link between the current institution and the selected institution.
+     *
+     * @return void
+     */
+    public function switchInstitution(int $idInstitucion): void
+    {
+        if ($_SESSION["idInstitucion"] == $idInstitucion) {
+            return;
+        }
+
+        $areVinculed = Instituciones::areSitesVinculed($_SESSION["idInstitucion"], $idInstitucion);
+
+        if (!$areVinculed) {
+            throw new Exception("No se encuentra vinculo entre la institución actual y la seleccionada {$_SESSION["idInstitucion"]}, {$idInstitucion}.", -2);
+        }
+
+        $conexion = Conexion::newConnection('MYSQL');
+
+        $objetInstitution = Instituciones::getDataInstitution($idInstitucion);
+        $dataInstitution  = mysqli_fetch_array($objetInstitution, MYSQLI_ASSOC);
+        $primaryManager   = Usuarios::getManagerPrimaryFromInstitution($idInstitucion, $dataInstitution['ins_year_default']);
+
+        $_SESSION["idInstitucion"]           = $idInstitucion;
+        $_SESSION['id']                      = $primaryManager["uss_id"];
+        $_SESSION["inst"]                    = $dataInstitution['ins_bd'];
+        $_SESSION["bd"]                      = $dataInstitution['ins_year_default'];
+        $_SESSION["datosUnicosInstitucion"]  = $dataInstitution;
+        $_SESSION["modulos"]                 = RedisInstance::getModulesInstitution(true);
+        $_SESSION["informacionInstConsulta"] = Instituciones::getGeneralInformationFromInstitution($_SESSION["idInstitucion"], $_SESSION["bd"]);;
+        $_SESSION["datosUsuario"]            = UsuariosPadre::sesionUsuario($_SESSION['id']);
     }
 }

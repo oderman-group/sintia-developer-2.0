@@ -1,4 +1,6 @@
 <?php
+require_once(ROOT_PATH."/main-app/class/Conexion.php");
+
 class Usuarios {
     /**
      * Obtiene los datos de un usuario por ID de usuario o nombre de usuario.
@@ -139,6 +141,30 @@ class Usuarios {
         $sql = "UPDATE ".BD_GENERAL.".usuarios SET uss_bloqueado=? WHERE uss_tipo=? AND institucion=? AND year=?";
         $parametros = [$bloquearDesbloquear, $tipoUsuarios, $config['conf_id_institucion'], $_SESSION["bd"]];
         $resultado = BindSQL::prepararSQL($sql, $parametros);
+    }
+
+    public static function getManagerPrimaryFromInstitution(int $idInstitution, int $year)
+    {
+        $conexion = Conexion::newConnection('MYSQL');
+
+        $sql = "SELECT * FROM " . BD_GENERAL . ".usuarios 
+        WHERE uss_permiso1='".CODE_PRIMARY_MANAGER."' 
+        AND uss_tipo='".TIPO_DIRECTIVO."' 
+        AND uss_bloqueado = 0 
+        AND institucion=".$idInstitution." 
+        AND year=".$year."
+        LIMIT 1
+        ";
+
+        $consulta = mysqli_query($conexion, $sql);
+
+        if (mysqli_num_rows($consulta) == 0) {
+            throw new Exception("No se encontró un manager principal en la institución.", -1);
+        }
+
+        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+
+        return $resultado;
     }
 
 }
