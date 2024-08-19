@@ -401,7 +401,7 @@ class Asignaciones {
             AND gal_limite_evaluadores > (
                                             SELECT COUNT(*) as iniciadas 
                                             FROM 
-                                            mobiliar_sintia_admin.general_evaluacion_asignar 
+                                            ".BD_ADMIN.".general_evaluacion_asignar 
                                             WHERE 
                                             epag_estado!='".PENDIENTE."' 
                                             AND epag_id_limite=asignar.epag_id_limite 
