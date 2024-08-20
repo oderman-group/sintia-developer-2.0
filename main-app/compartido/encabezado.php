@@ -61,7 +61,7 @@ $institucionNombre = $institucion['ins_siglas'];
                             if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO || $datosUsuarioActual['uss_tipo'] == TIPO_DEV) {
                                 $sites = Instituciones::getSites();
                                 $numSites = mysqli_num_rows($sites);
-                                if($numSites > 0 && Modulos::validarSubRol(['DT0339'])) {
+                                if($numSites > 0 && Modulos::validarSubRol(['DT0339']) && !empty($datosUsuarioActual["uss_documento"])) {
                         ?>
                                     <li class="dropdown dropdown-user">
                                         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">

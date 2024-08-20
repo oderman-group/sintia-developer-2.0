@@ -48,8 +48,8 @@ $bodyTemplateRoute = ROOT_PATH.'/config-general/plantilla-email-2.php';
 EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute, null, null);
 
 try {
-	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".reporte_errores(rperr_numero, rperr_fecha, rperr_ip, rperr_usuario, rperr_pagina_referencia, rperr_pagina_actual, rperr_so, rperr_linea, rperr_institucion, rperr_error, rerr_request, rperr_year)
-	VALUES('".$numError."', now(), '".$_SERVER["REMOTE_ADDR"]."', '".$_SESSION["id"]."', '".$_SERVER['HTTP_REFERER']."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', '".$_SERVER['HTTP_USER_AGENT']."', '".$lineaError."', '".$config['conf_id_institucion']."','".$detalleError."', '".$request_data_sanitizado."', '".$_SESSION["bd"]."')");
+	mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".reporte_errores(rperr_numero, rperr_fecha, rperr_ip, rperr_usuario, rperr_pagina_referencia, rperr_pagina_actual, rperr_so, rperr_linea, rperr_institucion, rperr_error, rerr_request, rperr_year, rperr_trace_php)
+	VALUES('".$numError."', now(), '".$_SERVER["REMOTE_ADDR"]."', '".$_SESSION["id"]."', '".$_SERVER['HTTP_REFERER']."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', '".$_SERVER['HTTP_USER_AGENT']."', '".$lineaError."', '".$config['conf_id_institucion']."','".$detalleError."', '".$request_data_sanitizado."', '".$_SESSION["bd"]."', '".json_encode(debug_backtrace())."')");
 	$idReporteError = mysqli_insert_id($conexion);
 } catch (Exception $e) {
 	echo "Hay un inconveniente al guardar el error: ".$e->getMessage();
@@ -72,7 +72,7 @@ try {
 				<b>Detalle del error:</b> <?=$detalleError;?><br>
 				<b>Linea del error:</b> <?=$lineaError;?><br>
 				<b>Error trace:</b> <?=$e->getTraceAsString();?>
-				<p><?=debug_backtrace();?></p>
+				<p><?php print_r(debug_backtrace());?></p>
 			<?php }?>
 		</p>
 		

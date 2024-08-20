@@ -11,7 +11,7 @@ $idPaginaInterna = 'DT0339';
 $idInstitucion = base64_decode($_GET['idInstitucion']);
 
 try {
-    Autenticate::getInstance()->switchInstitution($idInstitucion);
+    Autenticate::getInstance()->switchInstitution($idInstitucion, $datosUsuarioActual);
 } catch (Exception $e) {
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }

@@ -7,6 +7,7 @@ require_once(ROOT_PATH."/main-app/class/RedisInstance.php");
 require_once(ROOT_PATH."/main-app/class/Usuarios.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/Instituciones.php");
+require_once(ROOT_PATH."/main-app/class/Usuarios/Directivo.php");
 
 class Autenticate {
 
@@ -109,14 +110,18 @@ class Autenticate {
      *
      * @param int $idInstitucion The ID of the institution to switch to.
      *
-     * @throws Exception If there is no link between the current institution and the selected institution.
+     * @throws Exception If there is any error occurs during the switch.
      *
      * @return void
      */
-    public function switchInstitution(int $idInstitucion): void
+    public function switchInstitution(int $idInstitucion, array $datosUsuarioActual): void
     {
         if ($_SESSION["idInstitucion"] == $idInstitucion) {
             return;
+        }
+
+        if (!in_array($datosUsuarioActual["uss_tipo"], [TIPO_DIRECTIVO, TIPO_DEV])) {
+            throw new Exception("Debes ser un usuario directivo o desarrollador para continuar. Tipo Actual: {$datosUsuarioActual["uss_tipo"]}", -4);
         }
 
         $areVinculed = Instituciones::areSitesVinculed($_SESSION["idInstitucion"], $idInstitucion);
@@ -125,14 +130,16 @@ class Autenticate {
             throw new Exception("No se encuentra vinculo entre la institución actual y la seleccionada {$_SESSION["idInstitucion"]}, {$idInstitucion}.", -2);
         }
 
-        $conexion = Conexion::newConnection('MYSQL');
+        if (empty($_SESSION["datosUsuario"]["uss_documento"])) {
+            throw new Exception("Debes tener registrado tu número de documento para continuar: {$datosUsuarioActual["uss_id"]}, {$datosUsuarioActual["uss_usuario"]}.", -3);
+        }
 
         $objetInstitution = Instituciones::getDataInstitution($idInstitucion);
         $dataInstitution  = mysqli_fetch_array($objetInstitution, MYSQLI_ASSOC);
-        $primaryManager   = Usuarios::getManagerPrimaryFromInstitution($idInstitucion, $dataInstitution['ins_year_default']);
+        $mySelf           = Directivo::getMyselfByDocument($datosUsuarioActual["uss_documento"], $datosUsuarioActual["uss_tipo"]);
 
         $_SESSION["idInstitucion"]           = $idInstitucion;
-        $_SESSION['id']                      = $primaryManager["uss_id"];
+        $_SESSION['id']                      = $mySelf["uss_id"];
         $_SESSION["inst"]                    = $dataInstitution['ins_bd'];
         $_SESSION["bd"]                      = $dataInstitution['ins_year_default'];
         $_SESSION["datosUnicosInstitucion"]  = $dataInstitution;
