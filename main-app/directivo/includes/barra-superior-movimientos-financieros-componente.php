@@ -45,43 +45,49 @@
     if (isset($_GET['estadoFil']) && $_GET['estadoFil'] == base64_encode(POR_COBRAR)) $estiloResaltadoPorCobrar = 'style="color: '.$Plataforma->colorUno.';"';
     require_once("../class/componentes/barra-superior.php");
 $opciones[0] = [
-    'texto' => 'Menú movimiento financiero',
-    'url' => 'movimientos-importar.php',
-    'permiso' => Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0105']),
-    'paginas' => $paginas = [
+    COMPB_OPCIONES_TEXTO   => 'Menú movimiento financiero',
+    COMPB_OPCIONES_URL     => 'movimientos-importar.php',
+    COMPB_OPCIONES_PERMISO => Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0105']),
+    COMPB_OPCIONES_PAGINAS => $paginas = [
         [
-            'texto' => 'Importar saldos',
-            'url' => 'movimientos-importar.php'
+            COMPB_OPCIONES_PAGINAS_TEXTO => 'Importar saldos',
+            COMPB_OPCIONES_PAGINAS_URL   => 'movimientos-importar.php'
         ]
     ]
 ];
 $filtroTipo = [
     [
-        'texto' => 'Fact. Venta',
-        'url' => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode($estadoFil) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode(1) . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
+        COMPB_FILTRO_LISTA_ID    => 1,
+        COMPB_FILTRO_LISTA_TEXTO => 'Fact. Venta',
+        COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode($estadoFil) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode(1) . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
     ],
     [
-        'texto' => 'Fact. Compra',
-        'url' => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode($estadoFil) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode(2) . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
+        COMPB_FILTRO_LISTA_ID    => 2,
+        COMPB_FILTRO_LISTA_TEXTO => 'Fact. Compra',
+        COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode($estadoFil) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode(2) . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
     ],
     [
-        'texto' => 'Ver Todos',
-        'url' => $_SERVER['PHP_SELF']
+        COMPB_FILTRO_LISTA_TEXTO => 'Ver Todos',
+        COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF']. "?estadoFil=" . base64_encode($estadoFil) ."=&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha),
+        COMPB_FILTRO_LISTA_STYLE => 'font-weight: bold; text-align: center;'
     ]
 
 ];
 $filtroEstado = [
     [
-        'texto' => 'Por Cobrar',
-        'url' => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode(POR_COBRAR) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode($tipo) . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
+        COMPB_FILTRO_LISTA_ID    => POR_COBRAR,
+        COMPB_FILTRO_LISTA_TEXTO => 'Por Cobrar',
+        COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode(POR_COBRAR) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode($tipo) . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
     ],
     [
-        'texto' => 'Cobradas',
-        'url' => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode(COBRADA) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode($tipo) . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
+        COMPB_FILTRO_LISTA_ID    => COBRADA,
+        COMPB_FILTRO_LISTA_TEXTO => 'Cobradas',
+        COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode(COBRADA) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode($tipo) . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
     ],
     [
-        'texto' => 'Ver Todos',
-        'url' => $_SERVER['PHP_SELF']
+        COMPB_FILTRO_LISTA_TEXTO => 'Ver Todos',
+        COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF']. "?estadoFil=&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta  . "&tipo=" . base64_encode($tipo) .  "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha),
+        COMPB_FILTRO_LISTA_STYLE => 'font-weight: bold; text-align: center;'
     ]
 
 ];
@@ -104,19 +110,21 @@ $html = "
                     <a class='dropdown-item' href='".$_SERVER['PHP_SELF']."' style='font-weight: bold; text-align: center;'>VER TODO</a>
 ";
 $filtros[0] = [
-    'get' => 'tipo',
-    'texto' => 'Filtrar por tipo',
-    'opciones' => $filtroTipo,
+    COMPB_FILTRO_GET    => 'tipo',
+    COMPB_FILTRO_TEXTO  => 'Filtrar por tipo',
+    COMPB_FILTRO_LISTA  => $filtroTipo,
 ];
 $filtros[1] = [
-    'get' => 'estadoFil',
-    'texto' => 'Filtrar por estado',
-    'opciones' => $filtroEstado,
+    COMPB_FILTRO_GET    => 'estadoFil',
+    COMPB_FILTRO_TEXTO  => 'Filtrar por estado',
+    COMPB_FILTRO_LISTA  => $filtroEstado,
 ];
 
 $filtros[2] = [
-    'texto' => 'Filtrar por Fecha',
-    'html' => $html,
+    COMPB_FILTRO_GET    => '',
+    COMPB_FILTRO_TEXTO  => 'Filtrar por Fecha',
+    COMPB_FILTRO_TIPO   => COMPB_FILTRO_TIPO_HTML,
+    COMPB_FILTRO_TIPO_HTML_CONTENIDO=> $html ,
 ];
 
 
