@@ -1,8 +1,8 @@
-<?php include("session.php");?>
+Utilidades::validarParametros($_GET);<?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0195';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");
-
+Utilidades::validarParametros($_GET);
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
