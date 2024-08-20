@@ -45,22 +45,22 @@ class componenteFiltro
         }
         if (!empty($opciones)) {
             foreach ($opciones as $indice => $opcion) {
-                if (!array_key_exists("texto", $opcion)) {
+                if (!array_key_exists(COMPB_OPCIONES_TEXTO, $opcion)) {
                     echo "En la opcion (" . $indice . ") del componente (" . $id . ")  no está la etiqueta texto en el array.";
                     exit();
                 }
-                if (!array_key_exists("permiso", $opcion)) {
+                if (!array_key_exists(COMPB_OPCIONES_PERMISO, $opcion)) {
                     echo "En la opcion (" . $indice . ") del componente (" . $id . ")  no está la etiqueta permiso en el array";
                     exit();
                 }
-                if (array_key_exists("paginas", $opcion)) {
-                    if (is_array($opcion["paginas"])) {
-                        foreach ($opcion["paginas"] as $indice2 => $page) {
-                            if (!array_key_exists("texto", $page)) {
+                if (array_key_exists(COMPB_OPCIONES_PAGINAS, $opcion)) {
+                    if (is_array($opcion[COMPB_OPCIONES_PAGINAS])) {
+                        foreach ($opcion[COMPB_OPCIONES_PAGINAS] as $indice2 => $page) {
+                            if (!array_key_exists(COMPB_OPCIONES_PAGINAS_TEXTO, $page)) {
                                 echo "En la opcion (" . $indice . ") del componente (" . $id . ")  en la pagina({$indice2}) no está la etiqueta texto en el array";
                                 exit();
                             }
-                            if (!array_key_exists("url", $page)) {
+                            if (!array_key_exists(COMPB_OPCIONES_PAGINAS_URL, $page)) {
                                 echo "En la opcion (" . $indice . ") del componente (" . $id . ")  en la pagina({$indice2}) no está la etiqueta url en el array";
                                 exit();
                             }
@@ -116,20 +116,20 @@ class componenteFiltro
             foreach ($this->opciones as $opcion) {
                 if ($opcion) {
 
-                    if (!empty($opcion["paginas"])) {
+                    if (!empty($opcion[COMPB_OPCIONES_PAGINAS])) {
                         $html .= "
                         <li class='nav-item dropdown'>
                         <a class='nav-link dropdown-toggle' href='javascript:void(0);' id='navbarDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='color:{$Plataforma->colorUno};'>
-                            {$opcion["texto"]}
+                            {$opcion[COMPB_OPCIONES_TEXTO]}
                             <span class='fa fa-angle-down'></span>
                         </a>";
                         $html .= "<div class='dropdown-menu' aria-labelledby='navbarDropdown'>";
-                        foreach ($opcion["paginas"] as $pagina) {
-                            $dataModal = !empty($pagina["data-target"]) ? "data-toggle='modal'  data-target='{$pagina["data-target"]}' " : "";
-                            $action = !empty($pagina["action"]) ? "onClick='{$pagina["action"]}' " : "";
-                            $permiso = !empty($pagina["permiso"]) ? $pagina["permiso"] : true;
+                        foreach ($opcion[COMPB_OPCIONES_PAGINAS] as $pagina) {
+                            $dataModal = !empty($pagina[COMPB_OPCIONES_PAGINAS_TARGET]) ? "data-toggle='modal'  data-target='{$pagina[COMPB_OPCIONES_PAGINAS_TARGET]}' " : "";
+                            $action = !empty($pagina[COMPB_OPCIONES_PAGINAS_ACTION]) ? "onClick='{$pagina[COMPB_OPCIONES_PAGINAS_ACTION]}' " : "";
+                            $permiso = !empty($pagina[COMPB_OPCIONES_PAGINAS_PERMISO]) ? $pagina[COMPB_OPCIONES_PAGINAS_PERMISO] : true;
                             if ($permiso) {
-                                $html .= "<a class='dropdown-item' href='{$pagina["url"]}' {$dataModal} {$action} >{$pagina["texto"]}</a>";
+                                $html .= "<a class='dropdown-item' href='{$pagina[COMPB_OPCIONES_PAGINAS_URL]}' {$dataModal} {$action} >{$pagina[COMPB_OPCIONES_PAGINAS_TEXTO]}</a>";
                             }
                             $divider = !empty($pagina["divider"]) ? true : false;
                             if ($divider) {
@@ -140,8 +140,8 @@ class componenteFiltro
                     } else {
                         $html .= "
                         <li class='nav-item'>
-                        <a class='nav-link' href='{$opcion["url"]}' style='color:{$Plataforma->colorUno};'>
-                        {$opcion["texto"]}
+                        <a class='nav-link' href='{$opcion[COMPB_OPCIONES_URL]}' style='color:{$Plataforma->colorUno};'>
+                        {$opcion[COMPB_OPCIONES_TEXTO]}
                         </a>";
                     }
                     $html .= "
@@ -158,19 +158,30 @@ class componenteFiltro
             foreach ($this->filtros as $filtro) {
                 $html .= " <li class='nav-item dropdown'>
                 <a class='nav-link dropdown-toggle' href='javascript:void(0);' id='navbarDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false' style='color:#FFF;'>
-                {$filtro["texto"]}  ";
+                {$filtro[COMPB_FILTRO_TEXTO]}  ";
+                // if(!empty($filtro[COMPB_FILTRO_SELECT])){
+                //     $html .= ": {$filtro[COMPB_FILTRO_LISTA][$filtro[COMPB_FILTRO_SELECT]][COMPB_FILTRO_LISTA_TEXTO]} ";
+                // }
                 $decode = NULL;
-                if (!empty($filtro["get"])) {
-                    if (!empty($_GET[$filtro["get"]])) {
-                        $decode = base64_decode($_GET[$filtro["get"]]);
-                        $html .= ": {$decode} ";
+                if (!empty($filtro[COMPB_FILTRO_GET])) {  //$filtro[COMPB_FILTRO_GET] debe ser el mismo nombre del filtro que viene desde la Url
+                    if (!empty($_GET[$filtro[COMPB_FILTRO_GET]])) {
+                        $decode = base64_decode($_GET[$filtro[COMPB_FILTRO_GET]]);
+                        $seleccionado = array_filter($filtro[COMPB_FILTRO_LISTA], 
+                                                    function($select) use($decode) { 
+                                                        if(!empty($select[COMPB_FILTRO_LISTA_ID])){
+                                                            return $select[COMPB_FILTRO_LISTA_ID] == $decode;
+                                                        };                                                 
+                                                    }
+                                                );
+                        $primerElemento = reset($seleccionado);
+                        $html .= ": {$primerElemento[COMPB_FILTRO_LISTA_TEXTO]} ";
                     }
                 }
 
                 $parametros = "";
                 if (isset($_GET) ) {
                     foreach ($_GET as $key => $value) {
-                        if ($key != $filtro["get"]) {
+                        if (!empty($filtro[COMPB_FILTRO_GET]) && $key != $filtro[COMPB_FILTRO_GET]) {
                             $parametros .= "&{$key}={$value}";
                         }    
                     }
@@ -180,46 +191,46 @@ class componenteFiltro
 					<span class='fa fa-angle-down'></span>
 				</a>
                 ";
-                if (!empty($filtro["opciones"])) {
+                if (!empty($filtro[COMPB_FILTRO_LISTA])) {
                     $html .= "<div class='dropdown-menu' aria-labelledby='navbarDropdown'>";
                     $html .= "<form class='px-2 py-2' id='filtroForm'>";
-                    foreach ($filtro["opciones"] as $opcion) {
-                        if(!empty($filtro["tipo"]) && $filtro["tipo"] == 'check'){
+                    foreach ($filtro[COMPB_FILTRO_LISTA] as $item) {
+                        if(!empty($filtro[COMPB_FILTRO_TIPO]) && $filtro[COMPB_FILTRO_TIPO] == COMPB_FILTRO_TIPO_CHECK){
                             $html .= "<div class='form-check'>";
-                            $html .= "<input class='form-check-input {$filtro["get"]}-checkbox' type='checkbox' name='{$filtro["get"]}[]' value='{$opcion["ID"]}' id='{$filtro["get"]}{$opcion["ID"]}'>";
-                            $html .= "<label class='form-check-label' for='{$filtro["get"]}{$opcion["ID"]}'>{$opcion["texto"]}</label>";
+                            $html .= "<input class='form-check-input {$filtro[COMPB_FILTRO_GET]}-checkbox' type='checkbox' name='{$filtro[COMPB_FILTRO_GET]}[]' value='{$item[COMPB_FILTRO_LISTA_ID]}' id='{$filtro[COMPB_FILTRO_GET]}{$item[COMPB_FILTRO_LISTA_ID]}'>";
+                            $html .= "<label class='form-check-label' for='{$filtro[COMPB_FILTRO_GET]}{$item[COMPB_FILTRO_LISTA_ID]}'>{$item[COMPB_FILTRO_LISTA_TEXTO]}</label>";
                             $html .= "</div>";
                         }else{
-                            $style = !empty($opcion["style"]) ? "style='{$opcion["style"]}'" : "";
-                            $styleSelect = !empty($opcion["ID"]) && $opcion["ID"] == $decode ? "style='color: orange;'" : "";
-                            $html .= "<a class='dropdown-item' href='{$opcion["url"]}{$parametros}'  {$style} {$styleSelect}>{$opcion["texto"]}</a>";
+                            $style = !empty($item[COMPB_FILTRO_LISTA_STYLE]) ? "style='{$item[COMPB_FILTRO_LISTA_STYLE]}'" : "";
+                            $styleSelect = !empty($item[COMPB_FILTRO_LISTA_ID]) && $item[COMPB_FILTRO_LISTA_ID] == $decode ? "style='color: orange;'" : "";
+                            $html .= "<a class='dropdown-item' href='{$item[COMPB_FILTRO_LISTA_URL]}{$parametros}'  {$style} {$styleSelect}>{$item[COMPB_FILTRO_LISTA_TEXTO]}</a>";
                         }
                     }
                     $html .= "</form>";
                     $html .= "</div>";
                 }
-                if (!empty($filtro["html"])) {
+                if (!empty($filtro[COMPB_FILTRO_TIPO]) && $filtro[COMPB_FILTRO_TIPO] == COMPB_FILTRO_TIPO_HTML) {
                     $html .= "<div class='dropdown-menu' aria-labelledby='navbarDropdown'>";
-                    $html .= $filtro["html"];
+                    $html .= $filtro[COMPB_FILTRO_TIPO_HTML_CONTENIDO];
                     $html .= "</div>";
                 }
 
                 $html .= "<script>
-                                var {$filtro["get"]}Seleccionados = [];
+                                var {$filtro[COMPB_FILTRO_GET]}Seleccionados = [];
                             </script>";
 
-                if(!empty($filtro["tipo"]) && $filtro["tipo"] == 'check'){
+                if(!empty($filtro[COMPB_FILTRO_TIPO]) && $filtro[COMPB_FILTRO_TIPO] == COMPB_FILTRO_TIPO_CHECK){
                     $html .= "
                         <script>
                             document.addEventListener('DOMContentLoaded', function () {
                                 // Obtener todos los checkboxes del filtro
-                                var {$filtro["get"]}Checkboxes = document.querySelectorAll('.{$filtro["get"]}-checkbox');
+                                var {$filtro[COMPB_FILTRO_GET]}Checkboxes = document.querySelectorAll('.{$filtro[COMPB_FILTRO_GET]}-checkbox');
 
                                 // Escuchar el evento de cambio en los checkboxes
-                                {$filtro["get"]}Checkboxes.forEach(function (checkbox) {
+                                {$filtro[COMPB_FILTRO_GET]}Checkboxes.forEach(function (checkbox) {
                                     checkbox.addEventListener('change', function () {
                                         // Obtener los valores seleccionados
-                                            {$filtro["get"]}Seleccionados = Array.from({$filtro["get"]}Checkboxes)
+                                            {$filtro[COMPB_FILTRO_GET]}Seleccionados = Array.from({$filtro[COMPB_FILTRO_GET]}Checkboxes)
                                             .filter(function (checkbox) {
                                                 return checkbox.checked;
                                             })
@@ -228,12 +239,12 @@ class componenteFiltro
                                             });
 
                                         // Realizar la acción de filtrado con los checkboxes seleccionados
-                                        filtrarPor{$filtro["get"]}({$filtro["get"]}Seleccionados);
+                                        filtrarPor{$filtro[COMPB_FILTRO_GET]}({$filtro[COMPB_FILTRO_GET]}Seleccionados);
                                     });
                                 });
 
-                                function filtrarPor{$filtro["get"]}({$filtro["get"]}Seleccionados) {
-                                    console.log('Checkboxes seleccionados:', {$filtro["get"]}Seleccionados);
+                                function filtrarPor{$filtro[COMPB_FILTRO_GET]}({$filtro[COMPB_FILTRO_GET]}Seleccionados) {
+                                    console.log('Checkboxes seleccionados:', {$filtro[COMPB_FILTRO_GET]}Seleccionados);
                                     {$this->id}_buscar();
                                 }
                             });
@@ -253,11 +264,9 @@ class componenteFiltro
         $html .= "   
             </ul>
             <style>
-                    
                     #input_{$this->id}::placeholder {
                         text-align: left;
                     }
-
                     #input_{$this->id} {
                         text-align: left;
                     }
@@ -285,7 +294,7 @@ class componenteFiltro
         function {$this->id}_buscar(buscar){
             document.getElementById('gifCarga').style.display = 'block';
             var valor = document.getElementById('input_{$this->id}').value;
-            var filtro2 = {'{$filtro["get"]}Seleccionados' : {$filtro["get"]}Seleccionados};
+            var filtro2 = {'{$filtro[COMPB_FILTRO_GET]}Seleccionados' : {$filtro[COMPB_FILTRO_GET]}Seleccionados};
             var urlbase = '{$this->urlBase}'; 
             if(valor.length > 2){
                 var data = {

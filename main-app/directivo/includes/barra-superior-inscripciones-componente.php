@@ -14,40 +14,41 @@ $grados = Grados::listarGrados(1);
 $count=0;
 while ($grado = mysqli_fetch_array($grados, MYSQLI_BOTH)) {
   $filtroCurso[$count] = [
-    'ID' => $grado['gra_id'],
-    'texto' => $grado['gra_nombre'],
-    'url' => $_SERVER['PHP_SELF']."?estado=".base64_encode($estado)."&curso=".base64_encode($grado['gra_id'])
+    COMPB_FILTRO_LISTA_ID    => $grado['gra_id'],
+    COMPB_FILTRO_LISTA_TEXTO => $grado['gra_nombre'],
+    COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF']."?estado=".base64_encode($estado)."&curso=".base64_encode($grado['gra_id'])
   ];
   $count++;
 }
 $filtroCurso[$count] = [
-  'texto' => 'VER TODOS',
-  'url' => $_SERVER['PHP_SELF'],
-  'style' => 'font-weight: bold; text-align: center;'
+  COMPB_FILTRO_LISTA_TEXTO => 'VER TODOS',
+  COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF']."?estado=".base64_encode($estado)."&curso=",
+  COMPB_FILTRO_LISTA_STYLE => 'font-weight: bold; text-align: center;'
 ];
 $count=0;
 foreach($ordenReal as $clave) {
   $filtroEstado[$count] = [
-    'ID' => $clave,
-    'texto' => $estadosSolicitud[$clave],
-    'url' => $_SERVER['PHP_SELF']."?estado=".base64_encode($clave)."&curso=".base64_encode($curso)
+    COMPB_FILTRO_LISTA_ID    => $clave,
+    COMPB_FILTRO_LISTA_TEXTO => $estadosSolicitud[$clave],
+    COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF']."?estado=".base64_encode($clave)."&curso=".base64_encode($curso)
   ];
   $count++;
 }
 $filtroEstado[$count] = [
-  'texto' => 'VER TODOS',
-  'url' => $_SERVER['PHP_SELF'],
-  'style' => 'font-weight: bold; text-align: center;'
+  COMPB_FILTRO_LISTA_TEXTO => 'VER TODOS',
+  COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF']."?estado=&curso=".base64_encode($curso),
+  COMPB_FILTRO_LISTA_STYLE => 'font-weight: bold; text-align: center;'
 ];
+
 $filtros[0] = [
-  'get' => 'curso',
-  'texto' => 'Filtrar por curso',
-  'opciones' => $filtroCurso,
+  COMPB_FILTRO_GET   => 'curso',
+  COMPB_FILTRO_TEXTO => 'Filtrar por curso',
+  COMPB_FILTRO_LISTA => $filtroCurso,
 ];
 $filtros[1] = [
-  'get' => 'estado',
-  'texto' => 'Filtrar por estado',
-  'opciones' => $filtroEstado,
+  COMPB_FILTRO_GET   => 'estado',
+  COMPB_FILTRO_TEXTO => 'Filtrar por estado',
+  COMPB_FILTRO_LISTA => $filtroEstado,
 ];
 
 
