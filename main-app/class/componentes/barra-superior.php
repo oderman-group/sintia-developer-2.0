@@ -353,6 +353,7 @@ class componenteFiltro
             .then(
                 function(response) {
                        tbody.innerHTML = response;
+                       cargarPopover();
                        document.getElementById('gifCarga').style.display = 'none';";
 
         if (!empty($this->metodo)) {

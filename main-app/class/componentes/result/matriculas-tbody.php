@@ -4,6 +4,7 @@ if (!empty($data["dataTotal"])) {
 	require_once(ROOT_PATH . "/main-app/class/Estudiantes.php");
 	require_once(ROOT_PATH . "/main-app/class/Modulos.php");
 	require_once(ROOT_PATH . "/main-app/compartido/sintia-funciones.php");
+	
 }
 
 $contReg = 1;
@@ -210,4 +211,8 @@ foreach ($data["data"] as $resultado) {
 <?php
 	$contReg++;
 }
-?>
+?> 
+
+<script>
+	cargarPopover();	
+</script>
