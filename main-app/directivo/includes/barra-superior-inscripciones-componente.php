@@ -14,6 +14,7 @@ $grados = Grados::listarGrados(1);
 $count=0;
 while ($grado = mysqli_fetch_array($grados, MYSQLI_BOTH)) {
   $filtroCurso[$count] = [
+    'ID' => $grado['gra_id'],
     'texto' => $grado['gra_nombre'],
     'url' => $_SERVER['PHP_SELF']."?estado=".base64_encode($estado)."&curso=".base64_encode($grado['gra_id'])
   ];
@@ -27,6 +28,7 @@ $filtroCurso[$count] = [
 $count=0;
 foreach($ordenReal as $clave) {
   $filtroEstado[$count] = [
+    'ID' => $clave,
     'texto' => $estadosSolicitud[$clave],
     'url' => $_SERVER['PHP_SELF']."?estado=".base64_encode($clave)."&curso=".base64_encode($curso)
   ];
