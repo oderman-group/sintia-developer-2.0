@@ -130,7 +130,7 @@ class Autenticate {
             throw new Exception("No se encuentra vinculo entre la institución actual y la seleccionada {$_SESSION["idInstitucion"]}, {$idInstitucion}.", -2);
         }
 
-        if (empty($_SESSION["datosUsuario"]["uss_documento"])) {
+        if (empty($datosUsuarioActual["uss_documento"])) {
             throw new Exception("Debes tener registrado tu número de documento para continuar: {$datosUsuarioActual["uss_id"]}, {$datosUsuarioActual["uss_usuario"]}.", -3);
         }
 
