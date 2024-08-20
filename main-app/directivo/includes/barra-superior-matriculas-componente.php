@@ -1,5 +1,4 @@
 <?php
-$filtro = '';
 $curso = '';
 if (!empty($_GET['curso'])) {
   $curso = base64_decode($_GET['curso']);
@@ -91,6 +90,7 @@ $grados = Grados::listarGrados(1);
 $count = 0;
 while ($grado = mysqli_fetch_array($grados, MYSQLI_BOTH)) {
   $filtroCurso[$count] = [
+    'ID' => $grado['gra_id'],
     'texto' => $grado['gra_nombre'],
     'url' => $_SERVER['PHP_SELF'] . "?estadoM=" . base64_encode($estadoM) . "&curso=" . base64_encode($grado['gra_id'])
   ];
@@ -109,6 +109,7 @@ $filtros[0] = [
 $count = 0;
 foreach ($estadosMatriculasEstudiantes as $clave => $valor) {
   $listaEstado[$count] = [
+    'ID' => $clave,
     'texto' => $valor,
     'url' => $_SERVER['PHP_SELF'] . "?estadoM=" . base64_encode($clave) . "&curso=" . base64_encode($curso)
   ];
@@ -120,7 +121,7 @@ $listaEstado[$count] = [
   'style' => 'font-weight: bold; text-align: center;'
 ];
 $filtros[1] = [
-  'get' => 'curso',
+  'get' => 'estado',
   'texto' => 'Filtrar por estados',
   'opciones' => $listaEstado,
 ];

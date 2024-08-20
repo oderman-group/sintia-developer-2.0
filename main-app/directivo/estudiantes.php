@@ -105,7 +105,9 @@ if($config['conf_doble_buscador'] == 1) {
 								// print_r($resultado); exit();
 								?>
 								
-								<?php include("includes/barra-superior-matriculas-componente.php");	?>
+								<?php
+								 $filtro="";
+								include("includes/barra-superior-matriculas-componente.php");	?>
 
 									<?php
 									if($config['conf_id_institucion'] == ICOLVEN){
