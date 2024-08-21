@@ -8,7 +8,7 @@ $urlOrigen = $explode[1];
 
 		<div class="modal-header">
 			<h4 class="modal-title" id="tituloModulo" align="center"></h4>
-			<a href="#" data-dismiss="modal" class="btn btn-danger" aria-label="Close" id="boton-cerrar-compra-modulo"><i class="fa fa-window-close"></i></a>
+			<a href="#" data-bs-dismiss="modal" class="btn btn-danger" aria-label="Close" id="boton-cerrar-compra-modulo"><i class="fa fa-window-close"></i></a>
 		</div>
 
 		<div class="modal-body" align="center">
