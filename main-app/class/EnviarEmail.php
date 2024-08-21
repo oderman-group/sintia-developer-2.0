@@ -116,7 +116,7 @@ class EnviarEmail {
 
         } catch (Exception $e) {
             self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$destinatario,$asunto,$body,ESTADO_EMAIL_ERROR,$e->getMessage());
-            include("../compartido/error-catch-to-report.php");
+            include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
         }
 
     }
