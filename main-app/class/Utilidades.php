@@ -27,8 +27,8 @@ class Utilidades {
     { 
         if (isset($get) ) {
             foreach ($get as $key => $value) {
-                 // validammos que las variables no sean null y  sean base64 
-                if (!empty($value) && !self::esBase64($value)) {                    
+                 // validammos que las variables no sean null y sea base64 
+                if (($key!='success' || $key!='error') && !empty($value) && !self::esBase64($value)) {                    
                     echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=303";</script>';
                     exit();
                 }    
@@ -55,19 +55,23 @@ class Utilidades {
  * // Ejemplo de uso:
  * $esValido = esBase64('VGhpcyBpcyBhIHZhbGlkIGJhc2U2NCBlbmNvZGVkIHN0cmluZw==');
  * 
- */    public static  function esBase64($string){  
-       
-        if (strlen($string) % 4 != 0) { // Primero, verifica si la longitud de la cadena es un múltiplo de 4
+ */    public static function esBase64($string){  
+        // Primero, verifica si la longitud de la cadena es un múltiplo de 4
+        if (strlen($string) % 4 != 0) {
             return false;
-        }        
-        if (preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $string) == false) {// Verifica si el contenido solo contiene caracteres válidos para base64
+        }
+        // Verifica si el contenido solo contiene caracteres válidos para base64        
+        if (preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $string) == false) {
             return false;
-        }        
-        $decoded = base64_decode($string, true);// Decodifica la cadena        
-        if ($decoded === false) {// Verifica si la cadena puede ser decodificada y recodificada
+        }
+        // Decodifica la cadena        
+        $decoded = base64_decode($string, true);
+        // Verifica si la cadena puede ser decodificada y recodificada        
+        if ($decoded === false) {
             return false;
-        }        
-        if (base64_encode($decoded) !== $string) {// Verifica si la cadena original coincide con la recodificada
+        }
+        // Verifica si la cadena original coincide con la recodificada        
+        if (base64_encode($decoded) !== $string) {
             return false;
         }
         return true;
