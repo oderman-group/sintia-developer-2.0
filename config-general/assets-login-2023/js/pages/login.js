@@ -15,10 +15,16 @@ form.addEventListener('submit', function (event) {
 
   form.classList.add('was-validated');
 
-  if (!emailInput.checkValidity() || !password.checkValidity()) {
+  if (!emailInput.checkValidity()) {
     emailInput.classList.add('is-invalid');
   } else {
     emailInput.classList.remove('is-invalid');
+  }
+
+  if (!password.checkValidity()) {
+    password.classList.add('is-invalid');
+  } else {
+    password.classList.remove('is-invalid');
   }
 
   // Verificar que se haya seleccionado una opción válida en el campo de Institución
