@@ -61,7 +61,7 @@ if(!isset($_GET['nodb'])) {
                                 <input type="text" class="form-control input-login" id="emailInput" name="Usuario"
                                     placeholder="Usuario" required>
                                 <label for="emailInput">Usuario</label>
-                                <div class="invalid-feedback">Por favor ingrese un correo electrónico válido.</div>
+                                <div class="invalid-feedback">Por favor ingrese un usuario válido.</div>
                             </div>
 
                             <div class="form-floating input-group mt-3">
@@ -72,7 +72,7 @@ if(!isset($_GET['nodb'])) {
                                     <i class="bi bi-eye-slash"></i>
                                 </button>
                                 <label for="password">Contraseña</label>
-                                <div class="invalid-feedback">usuario y/o contraseña invalido</div>
+                                <div class="invalid-feedback">Por favor ingresa tu contraseña para continuar</div>
                                 <div class="form-text" id="caps-lock-message" style="display: none;">Mayúsculas
                                     activadas</div>
                             </div><br>
