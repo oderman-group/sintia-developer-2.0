@@ -41,7 +41,7 @@ class Actividades {
         
         $sql = "INSERT INTO ".BD_ACADEMICA.".academico_actividad_tareas(tar_id, tar_titulo, tar_descripcion, tar_id_carga, tar_periodo, tar_estado, tar_fecha_disponible, tar_fecha_entrega, tar_impedir_retrasos, tar_archivo, tar_peso1, institucion, year) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
-        $parametros = [$codigo, mysqli_real_escape_string($conexion,$POST["titulo"]), mysqli_real_escape_string($conexion,$POST["contenido"]), $idCarga, $periodo, 1, $POST["desde"], $POST["hasta"], $POST["retrasos"], $archivo, $pesoMB, $config['conf_id_institucion'], $_SESSION["bd"]];
+        $parametros = [$codigo, $POST["titulo"], $POST["contenido"], $idCarga, $periodo, 1, $POST["desde"], $POST["hasta"], $POST["retrasos"], $archivo, $pesoMB, $config['conf_id_institucion'], $_SESSION["bd"]];
 
         $resultado = BindSQL::prepararSQL($sql, $parametros);
 
@@ -82,7 +82,7 @@ class Actividades {
         
         $sql = "UPDATE ".BD_ACADEMICA.".academico_actividad_tareas SET tar_titulo=?, tar_descripcion=?, tar_fecha_disponible=?, tar_fecha_entrega=?, tar_impedir_retrasos=? WHERE tar_id=? AND institucion=? AND year=?";
 
-        $parametros = [mysqli_real_escape_string($conexion,$POST["titulo"]), mysqli_real_escape_string($conexion,$POST["contenido"]), $POST["desde"], $POST["hasta"], $POST["retrasos"], $POST["idR"], $config['conf_id_institucion'], $_SESSION["bd"]];
+        $parametros = [mysqli_real_escape_string($conexion,trim($POST["titulo"])), $POST["contenido"], $POST["desde"], $POST["hasta"], $POST["retrasos"], $POST["idR"], $config['conf_id_institucion'], $_SESSION["bd"]];
         
         $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
