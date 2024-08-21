@@ -6,112 +6,128 @@ if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol(
 	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
 	exit();
 }
-include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
-    require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
-    require_once(ROOT_PATH."/main-app/class/Boletin.php");
-    require_once(ROOT_PATH."/main-app/class/Usuarios.php");
-    require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
-	require_once(ROOT_PATH."/main-app/class/servicios/GradoServicios.php");
-    require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
-    require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
-    $Plataforma = new Plataforma;
 
-    $year=$_SESSION["bd"];
-	if(isset($_POST["year"])){
-		$year=$_POST["year"];
-	}
-    if(isset($_GET["year"])){
-		$year=base64_decode($_GET["year"]);
-    }
+require_once(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
-	$periodoActual = 4;
-	if(isset($_POST["periodo"])){
-		$periodoActual=$_POST["periodo"];
-	}
-    if(isset($_GET["periodo"])){
-		$periodoActual=base64_decode($_GET["periodo"]);
-    }
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/Usuarios.php");
+require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
+require_once(ROOT_PATH."/main-app/class/servicios/GradoServicios.php");
+require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
+require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
+$Plataforma = new Plataforma;
 
-	$curso='';
-	if(isset($_POST["curso"])){
-		$curso=$_POST["curso"];
-	}
-	if(isset($_GET["curso"])){
-		$curso=base64_decode($_GET["curso"]);
-	}
+$year=$_SESSION["bd"];
 
-	$id='';
-	if(isset($_POST["id"])){
-		$id=$_POST["id"];
-	}
-	if(isset($_GET["id"])){
-		$id=base64_decode($_GET["id"]);
-	}
+if(isset($_POST["year"])) {
+    $year=$_POST["year"];
+}
 
-    switch($periodoActual){
-        case 1:
-            $periodoActuales = "Uno";
-            break;
-        case 2:
-            $periodoActuales = "Dos";
-            break;
-        case 3:
-            $periodoActuales = "Tres";
-            break;
-        case 4:
-            $periodoActuales = "Final";
-            break;
-        case 5:
-            $periodoActual = 4;
-            $periodoActuales = "Final";
-            break;
-    }
+if(isset($_GET["year"])) {
+    $year=base64_decode($_GET["year"]);
+}
 
-	$filtro = "";
-	if(!empty($_REQUEST["curso"])){$filtro .= " AND mat_grado='".$curso."'";}
+$periodoActual = 4;
 
-	if(!empty($_REQUEST["id"])){$filtro .= " AND mat_id='".$id."'";}
-	
-	$grupo="";
-	if(!empty($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'"; $grupo=$_REQUEST["grupo"];}
+if (isset($_POST["periodo"])) {
+    $periodoActual = $_POST["periodo"];
+}
 
-    $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
-    $numeroEstudiantes = mysqli_num_rows($matriculadosPorCurso);
+if (isset($_GET["periodo"])) {
+    $periodoActual = base64_decode($_GET["periodo"]);
+}
 
-    if ($numeroEstudiantes == 0) {
+$curso='';
 
-        $url= UsuariosPadre::verificarTipoUsuario($datosUsuarioActual['uss_tipo'],'page-info.php?idmsg=306');
-        echo '<script type="text/javascript">window.location.href="' . $url . '";</script>';
-        exit();
+if (isset($_POST["curso"])) {
+    $curso=$_POST["curso"];
+}
 
-    }
+if (isset($_GET["curso"])) {
+    $curso=base64_decode($_GET["curso"]);
+}
 
-    $idDirector="";
-    $periodosCursados=$periodoActual-1;
-    $colspan=7+$periodosCursados;
-    $contadorEstudiantes=0;
+$id = '';
+
+if (isset($_POST["id"])) {
+    $id=$_POST["id"];
+}
+
+if (isset($_GET["id"])) {
+    $id=base64_decode($_GET["id"]);
+}
+
+switch ($periodoActual) {
+    case 1:
+        $periodoActuales = "Uno";
+        break;
+    case 2:
+        $periodoActuales = "Dos";
+        break;
+    case 3:
+        $periodoActuales = "Tres";
+        break;
+    case 4:
+        $periodoActuales = "Final";
+        break;
+    case 5:
+        $periodoActual = 4;
+        $periodoActuales = "Final";
+        break;
+}
+
+$filtro = "";
+
+if(!empty($_REQUEST["curso"])){$filtro .= " AND mat_grado='".$curso."'";}
+
+if(!empty($_REQUEST["id"])){$filtro .= " AND mat_id='".$id."'";}
+
+$grupo="";
+
+if(!empty($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'"; $grupo=$_REQUEST["grupo"];}
+
+$matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
+$numeroEstudiantes    = mysqli_num_rows($matriculadosPorCurso);
+
+if ($numeroEstudiantes == 0) {
+    $url = UsuariosPadre::verificarTipoUsuario($datosUsuarioActual['uss_tipo'],'page-info.php?idmsg=306');
+    echo '<script type="text/javascript">window.location.href="' . $url . '";</script>';
+    exit();
+}
+
+$idDirector          = "";
+$periodosCursados    = $periodoActual - 1;
+$colspan             = 7 + $periodosCursados;
+$contadorEstudiantes = 0;
+
     while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)) {
-        $promedioGeneral = 0;
+        $promedioGeneral         = 0;
         $promedioGeneralPeriodos = 0;
-        $gradoActual = $matriculadosDatos['mat_grado'];
-        $grupoActual = $matriculadosDatos['mat_grupo'];
+        $gradoActual             = $matriculadosDatos['mat_grado'];
+        $grupoActual             = $matriculadosDatos['mat_grupo'];
+
         switch($matriculadosDatos["gru_id"]){
             case 1:
                 $grupo= "Uno";
-            break;
+                break;
             case 2:
                 $grupo= "Dos";
-            break;
+                break;
             case 3:
                 $grupo= "Tres";
-            break;
+                break;
             case 4:
                 $grupo= "Sin Grupo";
-            break;
+                break;
+            default:
+                $grupo= "Desconocido";
+                break;
         }
-		$materiasPerdidas=0;
+
+		$materiasPerdidas = 0;
         //METODO QUE ME TRAE EL NOMBRE COMPLETO DEL ESTUDIANTE
-        $nombreEstudainte=Estudiantes::NombreCompletoDelEstudiante($matriculadosDatos);
+        $nombreEstudainte = Estudiantes::NombreCompletoDelEstudiante($matriculadosDatos);
 	
         if($matriculadosDatos["mat_grado"]>=12 && $matriculadosDatos["mat_grado"]<=15) {$educacion = "PREESCOLAR";}	
         elseif($matriculadosDatos["mat_grado"]>=1 && $matriculadosDatos["mat_grado"]<=5) {$educacion = "PRIMARIA";}	
@@ -119,6 +135,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
         elseif($matriculadosDatos["mat_grado"]>=10 && $matriculadosDatos["mat_grado"]<=11) {$educacion = "MEDIA";}	
 
 ?>
+
 <!doctype html>
 <html class="no-js" lang="en">
     <head>
@@ -245,36 +262,48 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                         $notaMateriasPeriodosTotal=0;
                                         $ultimoPeriodo = $config["conf_periodos_maximos"];
                                         for($i=1;$i<=$periodoActual;$i++){
-                                                $datosPeriodos = Boletin::traerNotaBoletinCargaPeriodo($config, $i, $matriculadosDatos['mat_id'], $datosMaterias["car_id"], $year);
-                                                $notaMateriasPeriodos=$datosPeriodos['bol_nota'];
-                                                $notaMateriasPeriodos=round($notaMateriasPeriodos, 1);
-                                                $notaMateriasPeriodosTotal+=$notaMateriasPeriodos;
+                                                $datosPeriodos              = Boletin::traerNotaBoletinCargaPeriodo($config, 
+                                                                                                                    $i, 
+                                                                                                                    $matriculadosDatos['mat_id'], 
+                                                                                                                    $datosMaterias["car_id"], $year
+                                                                                );
+                                                $notaMateriasPeriodos       = $datosPeriodos['bol_nota'] ?? null;
+                                                $notaMateriasPeriodos       = !empty($notaMateriasPeriodos) ? round($notaMateriasPeriodos, 1) : 0;
+                                                $notaMateriasPeriodosTotal += $notaMateriasPeriodos;
 
-                                                $notaMateriasPeriodosFinal=$notaMateriasPeriodos;
-                                                if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                                $notaMateriasPeriodosFinal = $notaMateriasPeriodos;
+
+                                                if ($config['conf_forma_mostrar_notas'] == CUALITATIVA) {
                                                     $estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaMateriasPeriodos,$year);
-                                                    $notaMateriasPeriodosFinal= !empty($estiloNotaAreas['notip_nombre']) ? $estiloNotaAreas['notip_nombre'] : "";
-                                                    if($notaMateriasPeriodos<10){
+                                                    $notaMateriasPeriodosFinal = !empty($estiloNotaAreas['notip_nombre']) ? $estiloNotaAreas['notip_nombre'] : "";
+                                                    if ($notaMateriasPeriodos < 10) {
                                                         $notaMateriasPeriodosFinal="Bajo";
                                                     }
-                                                    if($notaMateriasPeriodos>50){
-                                                        $notaMateriasPeriodosFinal="Superior";
+
+                                                    if ($notaMateriasPeriodos > 50) {
+                                                        $notaMateriasPeriodosFinal = "Superior";
                                                     }
+
                                                 }
-                                                if (empty($datosPeriodos['bol_periodo'])){
+
+                                                if (empty($datosPeriodos['bol_periodo'])) {
                                                     $ultimoPeriodo -= 1;
                                                 }
                                     ?>
+
                                     <td align="center" style="background: #9ed8ed"><?=$notaMateriasPeriodosFinal?></td>
+
                                     <?php
                                         }//FIN FOR
 
                                         //ACOMULADO PARA LAS MATERIAS
                                         $notaAcomuladoMateria = $notaMateriasPeriodosTotal / $ultimoPeriodo;
                                         $notaAcomuladoMateria = round($notaAcomuladoMateria,1);
-                                        if(strlen($notaAcomuladoMateria) === 1 || $notaAcomuladoMateria == 10){
+
+                                        if (strlen($notaAcomuladoMateria) === 1 || $notaAcomuladoMateria == 10){
                                             $notaAcomuladoMateria = $notaAcomuladoMateria.".0";
                                         }
+
                                         $estiloNotaAcomuladoMaterias = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoMateria,$year);
                                         if($notaAcomuladoMateria<10){
                                             $estiloNotaAcomuladoMaterias['notip_nombre']="Bajo";
@@ -309,10 +338,11 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                 $promGeneralPer4=0;
                                 $ultimoPeriodoAreas = $config["conf_periodos_maximos"];
                                 for($i=1;$i<=$periodoActual;$i++){
-                                        $consultaAreasPeriodos = CargaAcademica::consultaAreasPeriodos($config, $i, $matriculadosDatos['mat_id'], $$datosAreas['ar_id'], $year);
+                                        $consultaAreasPeriodos = CargaAcademica::consultaAreasPeriodos($config, $i, $matriculadosDatos['mat_id'], $datosAreas['ar_id'], $year);
                                         $datosAreasPeriodos=mysqli_fetch_array($consultaAreasPeriodos, MYSQLI_BOTH);
                                         $notaAreasPeriodos = !empty($datosAreasPeriodos['notaArea']) ? round($datosAreasPeriodos['notaArea'], 1) : 0;
                                         $notaAreasPeriodosTotal+=$notaAreasPeriodos;
+
                                         switch($i){
                                             case 1:
                                                 $promGeneralPer1+=$notaAreasPeriodos;
@@ -328,12 +358,13 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 												break;
                                         }
 
-                                        if (empty($datosAreasPeriodos['bol_periodo'])){
+                                        if (empty($datosAreasPeriodos['bol_periodo'])) {
                                             $ultimoPeriodoAreas -= 1;
                                         }
 
-                                        $notaAreasPeriodosFinal=$notaAreasPeriodos;
-                                        if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                                        $notaAreasPeriodosFinal = $notaAreasPeriodos;
+
+                                        if ($config['conf_forma_mostrar_notas'] == CUALITATIVA) {
                                             $estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAreasPeriodos,$year);
                                             $notaAreasPeriodosFinal= !empty($estiloNotaAreas['notip_nombre']) ? $estiloNotaAreas['notip_nombre'] : "";
                                             if($notaAreasPeriodos<10){
@@ -344,21 +375,24 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                             }
                                         }
                             ?>
-                            <td align="center" style="background: #9ed8ed"><?=$notaAreasPeriodosFinal?></td>
+
+                            <td align="center" style="background: #9ed8ed"><?=$notaAreasPeriodosFinal;?></td>
                             <?php
                                 }
                         
                                 //ACOMULADO PARA LAS AREAS
                                 $notaAcomuladoArea = $notaAreasPeriodosTotal / $ultimoPeriodoAreas;
                                 $notaAcomuladoArea = round($notaAcomuladoArea,1);
-                                if(strlen($notaAcomuladoArea) === 1 || $notaAcomuladoArea == 10){
+                                if (strlen($notaAcomuladoArea) === 1 || $notaAcomuladoArea == 10) {
                                     $notaAcomuladoArea = $notaAcomuladoArea.".0";
                                 }
+
                                 $estiloNotaAcomuladoAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoArea,$year);
-                                if($notaAcomuladoArea<10){
+                                if ($notaAcomuladoArea < 10) {
                                     $estiloNotaAcomuladoAreas['notip_nombre']="Bajo";
                                 }
-                                if($notaAcomuladoArea>50){
+
+                                if ($notaAcomuladoArea > 50) {
                                     $estiloNotaAcomuladoAreas['notip_nombre']="Superior";
                                 }
 
@@ -372,33 +406,35 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                     <?php
 
                             //SUMA NOTAS DE LAS AREAS
-                            $sumaPromedioGeneral+=$notaArea;
+                            $sumaPromedioGeneral += $notaArea;
 
                             //SUMA NOTAS DE LAS AREAS PERIODOS ANTERIORES
-                            $sumaPromedioGeneralPeriodo1+=$promGeneralPer1;
-                            $sumaPromedioGeneralPeriodo2+=$promGeneralPer2;
-                            $sumaPromedioGeneralPeriodo3+=$promGeneralPer3;
-                            $sumaPromedioGeneralPeriodo4+=$promGeneralPer4;
+                            $sumaPromedioGeneralPeriodo1 += $promGeneralPer1;
+                            $sumaPromedioGeneralPeriodo2 += $promGeneralPer2;
+                            $sumaPromedioGeneralPeriodo3 += $promGeneralPer3;
+                            $sumaPromedioGeneralPeriodo4 += $promGeneralPer4;
                             
                         } //FIN WHILE DE LAS AREAS
 
                         //PROMEDIO DE LAS AREAS
-                        $promedioGeneral+=($sumaPromedioGeneral/$numAreas);
-                        $promedioGeneral= round($promedioGeneral,1);
+                        $promedioGeneral           += ($sumaPromedioGeneral/$numAreas);
+                        $promedioGeneral           = round($promedioGeneral,1);
                         $estiloNotaPromedioGeneral = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioGeneral,$year);
-                        if($promedioGeneral<10){
-                            $estiloNotaPromedioGeneral['notip_nombre']="Bajo";
+
+                        if ($promedioGeneral < 10) {
+                            $estiloNotaPromedioGeneral['notip_nombre'] = "Bajo";
                         }
-                        
                     ?>
             </tbody>
+
             <tfoot style="font-size: 13px;">
                 <tr style="font-weight:bold; background: #EAEAEA">
                     <td colspan="2">PROMEDIO GENERAL</td>
                     <?php
 					$promedioGeneralPeriodosTotal = 0;
                     for ($j = 1; $j <= $periodoActual; $j++) {
-                            switch($j){
+
+                            switch($j) {
                                 case 1:
                                     $sumaPromedioGeneralPeriodos=$sumaPromedioGeneralPeriodo1;
                                     break;
@@ -414,19 +450,21 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                             }
 
                             //PROMEDIO DE LAS AREAS PERIODOS ANTERIORES
-                            $promedioGeneralPeriodos=($sumaPromedioGeneralPeriodos/$numAreas);
-                            $promedioGeneralPeriodos= round($promedioGeneralPeriodos,1);
+                            $promedioGeneralPeriodos = ($sumaPromedioGeneralPeriodos/$numAreas);
+                            $promedioGeneralPeriodos = round($promedioGeneralPeriodos,1);
 							
-							$promedioGeneralPeriodosTotal+=$promedioGeneralPeriodos;
+							$promedioGeneralPeriodosTotal += $promedioGeneralPeriodos;
 
-                            $promedioGeneralPeriodosFinal=$promedioGeneralPeriodos;
-                            if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
+                            $promedioGeneralPeriodosFinal = $promedioGeneralPeriodos;
+
+                            if ($config['conf_forma_mostrar_notas'] == CUALITATIVA) {
                                 $estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioGeneralPeriodos,$year);
-                                $promedioGeneralPeriodosFinal= !empty($estiloNotaAreas['notip_nombre']) ? $estiloNotaAreas['notip_nombre'] : "";
-                                if($promedioGeneralPeriodos<10){
+                                $promedioGeneralPeriodosFinal = !empty($estiloNotaAreas['notip_nombre']) ? $estiloNotaAreas['notip_nombre'] : "";
+                                if ($promedioGeneralPeriodos < 10) {
                                     $promedioGeneralPeriodosFinal="Bajo";
                                 }
-                                if($promedioGeneralPeriodos>50){
+
+                                if ($promedioGeneralPeriodos > 50) {
                                     $promedioGeneralPeriodosFinal="Superior";
                                 }
                             }
