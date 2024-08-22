@@ -7,9 +7,9 @@ require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 
-include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
-include("verificar-carga.php");
-include("verificar-periodos-diferentes.php");
+require_once(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
+require_once("verificar-carga.php");
+require_once("verificar-periodos-diferentes.php");
 
 if(empty($_POST["indicadores"])) $_POST["indicadores"] = '0';
 if(empty($_POST["calificaciones"])) $_POST["calificaciones"] = '0';
