@@ -6,7 +6,21 @@ if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol(
 	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
 	exit();
 }
+?>
 
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <title>Libro Final</title>
+        <meta name="tipo_contenido" content="text/html;" http-equiv="content-type" charset="utf-8">
+        <!-- favicon -->
+        <link rel="shortcut icon" href="<?=$Plataforma->logo;?>" />
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    </head>
+
+    <body style="font-family:Arial; font-size:9px;">
+
+<?php
 require_once(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
@@ -18,7 +32,7 @@ require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 $Plataforma = new Plataforma;
 
-$year=$_SESSION["bd"];
+$year = $_SESSION["bd"];
 
 if(isset($_POST["year"])) {
     $year=$_POST["year"];
@@ -87,7 +101,7 @@ $grupo="";
 
 if(!empty($_REQUEST["grupo"])){$filtro .= " AND mat_grupo='".$_REQUEST["grupo"]."'"; $grupo=$_REQUEST["grupo"];}
 
-$matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
+$matriculadosPorCurso = Estudiantes::estudiantesConDatosParaLibroFinal($filtro, $year);
 $numeroEstudiantes    = mysqli_num_rows($matriculadosPorCurso);
 
 if ($numeroEstudiantes == 0) {
@@ -101,66 +115,45 @@ $periodosCursados    = $periodoActual - 1;
 $colspan             = 7 + $periodosCursados;
 $contadorEstudiantes = 0;
 
-    while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)) {
-        $promedioGeneral         = 0;
-        $promedioGeneralPeriodos = 0;
-        $gradoActual             = $matriculadosDatos['mat_grado'];
-        $grupoActual             = $matriculadosDatos['mat_grupo'];
+$consultaEstiloNota = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $year);
+$numEstiloNota      = mysqli_num_rows($consultaEstiloNota);
+$i = 1;
+$notasMostrarConEstilo = "";
 
-        switch($matriculadosDatos["gru_id"]){
-            case 1:
-                $grupo= "Uno";
-                break;
-            case 2:
-                $grupo= "Dos";
-                break;
-            case 3:
-                $grupo= "Tres";
-                break;
-            case 4:
-                $grupo= "Sin Grupo";
-                break;
-            default:
-                $grupo= "Desconocido";
-                break;
-        }
+while ($estiloNota = mysqli_fetch_array($consultaEstiloNota, MYSQLI_BOTH)) {
+    $diagonal = " / ";
 
-		$materiasPerdidas = 0;
-        //METODO QUE ME TRAE EL NOMBRE COMPLETO DEL ESTUDIANTE
-        $nombreEstudainte = Estudiantes::NombreCompletoDelEstudiante($matriculadosDatos);
-	
-        if($matriculadosDatos["mat_grado"]>=12 && $matriculadosDatos["mat_grado"]<=15) {$educacion = "PREESCOLAR";}	
-        elseif($matriculadosDatos["mat_grado"]>=1 && $matriculadosDatos["mat_grado"]<=5) {$educacion = "PRIMARIA";}	
-        elseif($matriculadosDatos["mat_grado"]>=6 && $matriculadosDatos["mat_grado"]<=9) {$educacion = "SECUNDARIA";}
-        elseif($matriculadosDatos["mat_grado"]>=10 && $matriculadosDatos["mat_grado"]<=11) {$educacion = "MEDIA";}	
+    if ($i == $numEstiloNota) {
+        $diagonal="";
+    }
 
+    $notasMostrarConEstilo .= $estiloNota['notip_nombre'].": ".$estiloNota['notip_desde']." - ".$estiloNota['notip_hasta'].$diagonal;
+    $i++;
+}
+
+mysqli_free_result($consultaEstiloNota);
+
+$logoInstitucional = '<img src="../files/images/logo/'.$informacion_inst["info_logo"].'" width="100%">';
+
+$periodosTD = "";
+for ($i=1; $i <= $periodoActual; $i++) {
+    $periodosTD .= '<td width="3%" style="background-color: #00adefad;">'.$i.'</td>';
+}
+
+while ($matriculadosDatos = mysqli_fetch_array($matriculadosPorCurso, MYSQLI_BOTH)) {
+    $promedioGeneral         = 0;
+    $promedioGeneralPeriodos = 0;
+    $gradoActual             = $matriculadosDatos['mat_grado'];
+    $grupoActual             = $matriculadosDatos['mat_grupo'];
+
+    $materiasPerdidas = 0;
+    //METODO QUE ME TRAE EL NOMBRE COMPLETO DEL ESTUDIANTE
+    $nombreEstudainte = Estudiantes::NombreCompletoDelEstudiante($matriculadosDatos);
 ?>
-
-<!doctype html>
-<html class="no-js" lang="en">
-    <head>
-        <title>Libro Final</title>
-        <meta name="tipo_contenido" content="text/html;" http-equiv="content-type" charset="utf-8">
-        <!-- favicon -->
-        <link rel="shortcut icon" href="<?=$Plataforma->logo;?>" />
-        <style>
-            #saltoPagina {
-                PAGE-BREAK-AFTER: always;
-            }
-
-			.divBordeado {
-				height: 3px;
-				border: 3px solid #9ed8ed;
-				background-color: #00ACFB;
-			}
-        </style>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-    </head>
-    <body style="font-family:Arial; font-size:9px;">
         <div style="margin: 15px 0;">
             <table width="100%" cellspacing="5" cellpadding="5" border="1" rules="all" style="font-size: 13px;">
                 <tr>
-                    <td rowspan="3" width="20%"><img src="../files/images/logo/<?=$informacion_inst["info_logo"]?>" width="100%"></td>
+                    <td rowspan="3" width="20%"><?=$logoInstitucional;?></td>
                     <td align="center" rowspan="3" width="25%">
                         <h3 style="font-weight:bold; color: #00adefad; margin: 0"><?=strtoupper($informacion_inst["info_nombre"])?></h3><br>
                         <?=$informacion_inst["info_direccion"]?><br>
@@ -175,28 +168,17 @@ $contadorEstudiantes = 0;
                 </tr>
                 <tr>
                     <td>Jornada:<br> <b style="color: #00adefad;"><?=strtoupper($informacion_inst["info_jornada"])?></b></td>
-                    <td>Documento:<br> <b style="color: #00adefad;">BOLETÍN DEFINITIVO DE NOTAS - EDUCACIÓN BÁSICA <?=strtoupper($educacion)?></b></td>
+                    <td>Documento:<br> <b style="color: #00adefad;">BOLETÍN DEFINITIVO DE NOTAS - EDUCACIÓN BÁSICA <?=strtoupper($matriculadosDatos["educacion"])?></b></td>
                 </tr>
             </table>
             <p>&nbsp;</p>
         </div>
+
         <table width="100%">
             <tr><td><div class="divBordeado">&nbsp;</div></td></tr>
             <tr style="text-align:center; font-size: 13px;">
                 <td style="color: #b2adad;">
-                    <?php
-                        $consultaEstiloNota = Boletin::listarTipoDeNotas($config["conf_notas_categoria"],$year);
-                        $numEstiloNota=mysqli_num_rows($consultaEstiloNota);
-                        $i=1;
-                        while($estiloNota = mysqli_fetch_array($consultaEstiloNota, MYSQLI_BOTH)){
-                            $diagonal=" / ";
-                            if($i==$numEstiloNota){
-                                $diagonal="";
-                            }
-                            echo $estiloNota['notip_nombre'].": ".$estiloNota['notip_desde']." - ".$estiloNota['notip_hasta'].$diagonal;
-                            $i++;
-                        }
-                    ?>
+                    <?php echo $notasMostrarConEstilo;?>
                 </td>
             </tr>
             <tr><td>&nbsp;</td></tr>
@@ -204,6 +186,7 @@ $contadorEstudiantes = 0;
                 <td>AÑO LECTIVO: <?=$year?></td>
             </tr>
         </table>
+
         <table width="100%" rules="all" border="1" style="font-size: 15px;">
             <thead>
                 <tr style="font-weight:bold; text-align:center;">
@@ -213,55 +196,62 @@ $contadorEstudiantes = 0;
                     <td width="3%" colspan="2"><a href="#" style="color:#000; text-decoration:none;">DEFINITIVA</a></td>
                 </tr>
                 <tr style="font-weight:bold; text-align:center;">
-                    <?php
-                        for($i=1;$i<=$periodoActual;$i++){
-                    ?>
-                        <td width="3%" style="background-color: #00adefad;"><?=$i?></td>
-                    <?php
-                        }
-                    ?>
+                    <?php echo $periodosTD;?>
                     <td width="3%">DEF</td>
                     <td width="3%">Desempeño</td>
                 </tr>
             </thead>
             <?php
-                $notasBoletin = Boletin::traerNotaBoletinEstudiante($config, $matriculadosDatos['mat_id'], $year);
-
-                if (!empty($notasBoletin)) {
+                if (!empty($matriculadosDatos['bol_id'])) {
             ?>
             <tbody>
                 <?php
-					$consultaAreas = Asignaturas::consultarAsignaturasCurso($conexion, $config, $gradoActual, $grupoActual, $year);
-                    
-                    $numAreas=mysqli_num_rows($consultaAreas);
-                    $sumaPromedioGeneral=0;
-                    $sumaPromedioGeneralPeriodo1=0;
-                    $sumaPromedioGeneralPeriodo2=0;
-                    $sumaPromedioGeneralPeriodo3=0;
-                    $sumaPromedioGeneralPeriodo4=0;
-                    while($datosAreas = mysqli_fetch_array($consultaAreas, MYSQLI_BOTH)){
+					$consultaAreas = Asignaturas::consultarAsignaturasCurso($conexion, 
+                                                                            $config, 
+                                                                            $gradoActual, 
+                                                                            $grupoActual, 
+                                                                            $year
+                                    );
 
-                        $consultaMaterias = CargaAcademica::consultaMaterias($config, $periodoActual, $matriculadosDatos['mat_id'], $datosAreas['car_curso'], $datosAreas['car_grupo'], $datosAreas['ar_id'], $year);
-                        $notaArea=0;
-                        $notaAreasPeriodos=0;
-                        while($datosMaterias = mysqli_fetch_array($consultaMaterias, MYSQLI_BOTH)){
+                    $numAreas                    = mysqli_num_rows($consultaAreas);
+                    $sumaPromedioGeneral         = 0;
+                    $sumaPromedioGeneralPeriodo1 = 0;
+                    $sumaPromedioGeneralPeriodo2 = 0;
+                    $sumaPromedioGeneralPeriodo3 = 0;
+                    $sumaPromedioGeneralPeriodo4 = 0;
+
+                    while ($datosAreas = mysqli_fetch_array($consultaAreas, MYSQLI_BOTH)) {
+
+                        $consultaMaterias = CargaAcademica::consultaMaterias($config, 
+                                                                            $periodoActual, 
+                                                                            $matriculadosDatos['mat_id'], 
+                                                                            $datosAreas['car_curso'], 
+                                                                            $datosAreas['car_grupo'], 
+                                                                            $datosAreas['ar_id'], 
+                                                                            $year
+                                            );
+                        $notaArea          = 0;
+                        $notaAreasPeriodos = 0;
+
+                        while ($datosMaterias = mysqli_fetch_array($consultaMaterias, MYSQLI_BOTH)) {
                             //DIRECTOR DE GRUPO
-                            if($datosMaterias["car_director_grupo"]==1){
-                                $idDirector=$datosMaterias["car_docente"];
+                            if ($datosMaterias["car_director_grupo"] == 1) {
+                                $idDirector = $datosMaterias["car_docente"];
                             }
 
                             //VARIABLES NECESARIAS
-                            $background='';
-                            $ih=$datosMaterias["car_ih"];
-                            if($datosAreas['numMaterias']>1){
+                            $background = '';
+                            $ih         = $datosMaterias["car_ih"];
+
+                            if ($datosAreas['numMaterias'] > 1) {
                 ?>
                                 <tr>
                                     <td><?=$datosMaterias['mat_nombre']?></td>
                                     <td align="center"><?=$datosMaterias['car_ih']?></td>
                                     <?php
-                                        $notaMateriasPeriodosTotal=0;
-                                        $ultimoPeriodo = $config["conf_periodos_maximos"];
-                                        for($i=1;$i<=$periodoActual;$i++){
+                                        $notaMateriasPeriodosTotal = 0;
+                                        $ultimoPeriodo             = $config["conf_periodos_maximos"];
+                                        for ($i=1; $i <= $periodoActual; $i++) {
                                                 $datosPeriodos              = Boletin::traerNotaBoletinCargaPeriodo($config, 
                                                                                                                     $i, 
                                                                                                                     $matriculadosDatos['mat_id'], 
@@ -274,10 +264,15 @@ $contadorEstudiantes = 0;
                                                 $notaMateriasPeriodosFinal = $notaMateriasPeriodos;
 
                                                 if ($config['conf_forma_mostrar_notas'] == CUALITATIVA) {
-                                                    $estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaMateriasPeriodos,$year);
+
+                                                    $estiloNotaAreas          = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'],
+                                                                                                                $notaMateriasPeriodos, 
+                                                                                                                $year
+                                                                                );
                                                     $notaMateriasPeriodosFinal = !empty($estiloNotaAreas['notip_nombre']) ? $estiloNotaAreas['notip_nombre'] : "";
+
                                                     if ($notaMateriasPeriodos < 10) {
-                                                        $notaMateriasPeriodosFinal="Bajo";
+                                                        $notaMateriasPeriodosFinal = "Bajo";
                                                     }
 
                                                     if ($notaMateriasPeriodos > 50) {
@@ -291,7 +286,7 @@ $contadorEstudiantes = 0;
                                                 }
                                     ?>
 
-                                    <td align="center" style="background: #9ed8ed"><?=$notaMateriasPeriodosFinal?></td>
+                                            <td align="center" style="background: #9ed8ed"><?=$notaMateriasPeriodosFinal?></td>
 
                                     <?php
                                         }//FIN FOR
@@ -304,25 +299,27 @@ $contadorEstudiantes = 0;
                                             $notaAcomuladoMateria = $notaAcomuladoMateria.".0";
                                         }
 
-                                        $estiloNotaAcomuladoMaterias = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoMateria,$year);
-                                        if($notaAcomuladoMateria<10){
-                                            $estiloNotaAcomuladoMaterias['notip_nombre']="Bajo";
+                                        $estiloNotaAcomuladoMaterias = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoMateria, $year);
+
+                                        if ($notaAcomuladoMateria < 10) {
+                                            $estiloNotaAcomuladoMaterias['notip_nombre'] = "Bajo";
                                         }
-                                        if($notaAcomuladoMateria>50){
-                                            $estiloNotaAcomuladoMaterias['notip_nombre']="Superior";
+
+                                        if ($notaAcomuladoMateria > 50) {
+                                            $estiloNotaAcomuladoMaterias['notip_nombre'] = "Superior";
                                         }
                                     ?>
                                     <td align="center"><?=$notaAcomuladoMateria?></td>
                                     <td align="center"><?=$estiloNotaAcomuladoMaterias['notip_nombre']?></td>
                                 </tr>
                     <?php
-                            $ih="";
-                            $ausencia="";
-                            $background='style="background: #EAEAEA"';
+                                $ih        = "";
+                                $ausencia  = "";
+                                $background = 'style="background: #EAEAEA"';
                             }
 
                             //NOTA PARA LAS AREAS
-                            if(!empty($datosMaterias['notaArea'])) $notaArea+=round($datosMaterias['notaArea'], 1);
+                            if (!empty($datosMaterias['notaArea'])) $notaArea+=round($datosMaterias['notaArea'], 1);
 
                         } //FIN WHILE DE LAS MATERIAS
                     ?>
@@ -331,30 +328,31 @@ $contadorEstudiantes = 0;
                             <td <?=$background?>><?=$datosAreas['ar_nombre']?></td>
                             <td align="center"><?=$ih?></td>
                             <?php
-                                $notaAreasPeriodosTotal=0;
-                                $promGeneralPer1=0;
-                                $promGeneralPer2=0;
-                                $promGeneralPer3=0;
-                                $promGeneralPer4=0;
-                                $ultimoPeriodoAreas = $config["conf_periodos_maximos"];
-                                for($i=1;$i<=$periodoActual;$i++){
+                                $notaAreasPeriodosTotal = 0;
+                                $promGeneralPer1        = 0;
+                                $promGeneralPer2        = 0;
+                                $promGeneralPer3        = 0;
+                                $promGeneralPer4        = 0;
+                                $ultimoPeriodoAreas     = $config["conf_periodos_maximos"];
+
+                                for ($i=1; $i <= $periodoActual; $i++) {
                                         $consultaAreasPeriodos = CargaAcademica::consultaAreasPeriodos($config, $i, $matriculadosDatos['mat_id'], $datosAreas['ar_id'], $year);
-                                        $datosAreasPeriodos=mysqli_fetch_array($consultaAreasPeriodos, MYSQLI_BOTH);
-                                        $notaAreasPeriodos = !empty($datosAreasPeriodos['notaArea']) ? round($datosAreasPeriodos['notaArea'], 1) : 0;
+                                        $datosAreasPeriodos = mysqli_fetch_array($consultaAreasPeriodos, MYSQLI_BOTH);
+                                        $notaAreasPeriodos  = !empty($datosAreasPeriodos['notaArea']) ? round($datosAreasPeriodos['notaArea'], 1) : 0;
                                         $notaAreasPeriodosTotal+=$notaAreasPeriodos;
 
-                                        switch($i){
+                                        switch ($i) {
                                             case 1:
-                                                $promGeneralPer1+=$notaAreasPeriodos;
+                                                $promGeneralPer1 += $notaAreasPeriodos;
                                                 break;
                                             case 2:
-                                                $promGeneralPer2+=$notaAreasPeriodos;
+                                                $promGeneralPer2 += $notaAreasPeriodos;
                                                 break;
                                             case 3:
-                                                $promGeneralPer3+=$notaAreasPeriodos;
+                                                $promGeneralPer3 += $notaAreasPeriodos;
                                                 break;
 											case 4:
-												$promGeneralPer4+=$notaAreasPeriodos;
+												$promGeneralPer4 += $notaAreasPeriodos;
 												break;
                                         }
 
@@ -365,24 +363,27 @@ $contadorEstudiantes = 0;
                                         $notaAreasPeriodosFinal = $notaAreasPeriodos;
 
                                         if ($config['conf_forma_mostrar_notas'] == CUALITATIVA) {
-                                            $estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAreasPeriodos,$year);
-                                            $notaAreasPeriodosFinal= !empty($estiloNotaAreas['notip_nombre']) ? $estiloNotaAreas['notip_nombre'] : "";
-                                            if($notaAreasPeriodos<10){
-                                                $notaAreasPeriodosFinal="Bajo";
+                                            $estiloNotaAreas        = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAreasPeriodos,$year);
+                                            $notaAreasPeriodosFinal = !empty($estiloNotaAreas['notip_nombre']) ? $estiloNotaAreas['notip_nombre'] : "";
+
+                                            if ($notaAreasPeriodos < 10) {
+                                                $notaAreasPeriodosFinal = "Bajo";
                                             }
-                                            if($notaAreasPeriodos>50){
-                                                $notaAreasPeriodosFinal="Superior";
+
+                                            if ($notaAreasPeriodos > 50) {
+                                                $notaAreasPeriodosFinal = "Superior";
                                             }
                                         }
                             ?>
 
-                            <td align="center" style="background: #9ed8ed"><?=$notaAreasPeriodosFinal;?></td>
+                                    <td align="center" style="background: #9ed8ed"><?=$notaAreasPeriodosFinal;?></td>
                             <?php
                                 }
-                        
+
                                 //ACOMULADO PARA LAS AREAS
                                 $notaAcomuladoArea = $notaAreasPeriodosTotal / $ultimoPeriodoAreas;
                                 $notaAcomuladoArea = round($notaAcomuladoArea,1);
+
                                 if (strlen($notaAcomuladoArea) === 1 || $notaAcomuladoArea == 10) {
                                     $notaAcomuladoArea = $notaAcomuladoArea.".0";
                                 }
@@ -396,7 +397,7 @@ $contadorEstudiantes = 0;
                                     $estiloNotaAcomuladoAreas['notip_nombre']="Superior";
                                 }
 
-								if($notaAcomuladoArea < $config['conf_nota_minima_aprobar']){
+								if ($notaAcomuladoArea < $config['conf_nota_minima_aprobar']) {
 									$materiasPerdidas++;
 								}
                             ?>
@@ -404,7 +405,6 @@ $contadorEstudiantes = 0;
                             <td align="center"><?=$estiloNotaAcomuladoAreas['notip_nombre']?></td>
                         </tr>
                     <?php
-
                             //SUMA NOTAS DE LAS AREAS
                             $sumaPromedioGeneral += $notaArea;
 
@@ -436,16 +436,16 @@ $contadorEstudiantes = 0;
 
                             switch($j) {
                                 case 1:
-                                    $sumaPromedioGeneralPeriodos=$sumaPromedioGeneralPeriodo1;
+                                    $sumaPromedioGeneralPeriodos = $sumaPromedioGeneralPeriodo1;
                                     break;
                                 case 2:
-                                    $sumaPromedioGeneralPeriodos=$sumaPromedioGeneralPeriodo2;
+                                    $sumaPromedioGeneralPeriodos = $sumaPromedioGeneralPeriodo2;
                                     break;
                                 case 3:
-                                    $sumaPromedioGeneralPeriodos=$sumaPromedioGeneralPeriodo3;
+                                    $sumaPromedioGeneralPeriodos = $sumaPromedioGeneralPeriodo3;
                                     break;
 								case 4:
-									$sumaPromedioGeneralPeriodos=$sumaPromedioGeneralPeriodo4;
+									$sumaPromedioGeneralPeriodos = $sumaPromedioGeneralPeriodo4;
 									break;
                             }
 
@@ -458,50 +458,57 @@ $contadorEstudiantes = 0;
                             $promedioGeneralPeriodosFinal = $promedioGeneralPeriodos;
 
                             if ($config['conf_forma_mostrar_notas'] == CUALITATIVA) {
-                                $estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioGeneralPeriodos,$year);
+                                $estiloNotaAreas              = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioGeneralPeriodos, $year);
                                 $promedioGeneralPeriodosFinal = !empty($estiloNotaAreas['notip_nombre']) ? $estiloNotaAreas['notip_nombre'] : "";
+
                                 if ($promedioGeneralPeriodos < 10) {
-                                    $promedioGeneralPeriodosFinal="Bajo";
+                                    $promedioGeneralPeriodosFinal = "Bajo";
                                 }
 
                                 if ($promedioGeneralPeriodos > 50) {
-                                    $promedioGeneralPeriodosFinal="Superior";
+                                    $promedioGeneralPeriodosFinal = "Superior";
                                 }
                             }
                     ?>
                     <td align="center"><?=$promedioGeneralPeriodosFinal;?></td>
                     <?php
 						}// FIN FOR
-                        
+
 						//ACOMULADO GENERAL
 						$notaAcomuladoTotal = $promedioGeneralPeriodosTotal / $ultimoPeriodoAreas;
 						$notaAcomuladoTotal = round($notaAcomuladoTotal,1);
 						if(strlen($notaAcomuladoTotal) === 1 || $notaAcomuladoTotal == 10){
 							$notaAcomuladoTotal = $notaAcomuladoTotal.".0";
 						}
-						$estiloNotaAcomuladoTotal = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoTotal,$year);
-						if($notaAcomuladoTotal<10){
-							$estiloNotaAcomuladoTotal['notip_nombre']="Bajo";
-						}
-						if($notaAcomuladoTotal>50){
-							$estiloNotaAcomuladoTotal['notip_nombre']="Superior";
+						$estiloNotaAcomuladoTotal = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoTotal, $year);
+
+						if ($notaAcomuladoTotal < 10) {
+							$estiloNotaAcomuladoTotal['notip_nombre'] = "Bajo";
 						}
 
-						$notaAcomuladoTotalFinal=$notaAcomuladoTotal;
-						if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
-							$estiloNotaAreas = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoTotal,$year);
-							$notaAcomuladoTotalFinal= !empty($estiloNotaAreas['notip_nombre']) ? $estiloNotaAreas['notip_nombre'] : "";
-							if($notaAcomuladoTotal<10){
+						if($notaAcomuladoTotal > 50) {
+							$estiloNotaAcomuladoTotal['notip_nombre'] = "Superior";
+						}
+
+						$notaAcomuladoTotalFinal = $notaAcomuladoTotal;
+
+						if ($config['conf_forma_mostrar_notas'] == CUALITATIVA) {
+							$estiloNotaAreas         = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaAcomuladoTotal,$year);
+							$notaAcomuladoTotalFinal = !empty($estiloNotaAreas['notip_nombre']) ? $estiloNotaAreas['notip_nombre'] : "";
+
+							if ($notaAcomuladoTotal < 10) {
 								$notaAcomuladoTotalFinal="Bajo";
 							}
-							if($notaAcomuladoTotal>50){
-								$notaAcomuladoTotalFinal="Superior";
+
+							if ($notaAcomuladoTotal > 50) {
+								$notaAcomuladoTotalFinal = "Superior";
 							}
 						}
                     ?>
                     <td align="center"><?=$notaAcomuladoTotalFinal?></td>
                     <td align="center"><?=$estiloNotaAcomuladoTotal['notip_nombre']?></td>
                 </tr>
+
 				<tr style="color:#000;">
 					<td style="padding-left: 10px;" colspan="8">
 						<h4 style="font-weight:bold; color: #00adefad;"><b>Observación definitiva:</b></h4>
@@ -538,16 +545,18 @@ $contadorEstudiantes = 0;
             <tr>
                 <td align="left">
                     <?php
-                        $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
+                        $rector       = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
                         $nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
-                        if(!empty($rector["uss_firma"]) && file_exists(ROOT_PATH.'/main-app/files/fotos/' . $rector['uss_firma'])){
+
+                        if (!empty($rector["uss_firma"]) && file_exists(ROOT_PATH.'/main-app/files/fotos/' . $rector['uss_firma'])) {
                             echo '<img src="../files/fotos/'.$rector["uss_firma"].'" width="100"><br>';
-                        }else{
+                        } else {
                             echo '<p>&nbsp;</p>
                                 <p>&nbsp;</p>
                                 <p>&nbsp;</p>';
                         }
                     ?>
+
                     <p style="height:0px;"></p>_________________________________<br>
                     <p>&nbsp;</p>
                     <?=$nombreRector?><br>
@@ -557,19 +566,36 @@ $contadorEstudiantes = 0;
         </table>
 
         <?php
-            $contadorEstudiantes++;
-            if($contadorEstudiantes!=$numeroEstudiantes && empty($_GET['id'])){
+            $contadorEstudiantes ++;
+            if ($contadorEstudiantes != $numeroEstudiantes && empty($_GET['id'])) {
         ?>
 
-        <div id="saltoPagina"></div>
+                <div id="saltoPagina"></div>
 <?php
             }
+?>
+
+<style>
+#saltoPagina {
+    PAGE-BREAK-AFTER: always;
+}
+
+.divBordeado {
+    height: 3px;
+    border: 3px solid #9ed8ed;
+    background-color: #00ACFB;
+}
+</style>
+
+<?php
     }//FIN WHILE MATRICULADOS
+
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 ?>
 
         <script type="application/javascript">
             print();
         </script>
+
     </body>
 </html>

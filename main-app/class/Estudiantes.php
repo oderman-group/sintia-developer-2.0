@@ -574,7 +574,88 @@ class Estudiantes {
         INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON mat.mat_grado=gra_id AND gra.institucion=mat.institucion AND gra.year=mat.year 
         WHERE mat.mat_eliminado=0 {$filtroCancelados} AND mat.institucion=? AND mat.year=? {$filtro} 
         GROUP BY mat.mat_id
-        ORDER BY mat.mat_grupo, mat.mat_primer_apellido";
+        ORDER BY mat.mat_grupo, mat.mat_primer_apellido
+        ";
+
+        $parametros = [$config['conf_id_institucion'], $year];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
+    }
+
+    /**
+     * Retrieves student data for the final book report.
+     *
+     * @param string $filtro Additional filter for the query.
+     * @param string $yearBd The academic year to filter the data. Defaults to the current session year if not provided.
+     *
+     * @return mysqli_result The result set containing the student data.
+     */
+    public static function estudiantesConDatosParaLibroFinal(
+        string    $filtro      = '',
+        string $yearBd    = ''
+    )
+    {
+        global $config;
+
+        $resultado        = [];
+        $year             = !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+        $filtroCancelados = $config['conf_mostrar_estudiantes_cancelados'] == NO ? "AND mat.mat_estado_matricula IN (".MATRICULADO.", ".ASISTENTE.")" : " AND mat.mat_estado_matricula IN (".MATRICULADO.", ".ASISTENTE.", ".CANCELADO.")";
+
+        $sql = "SELECT 
+                mat.mat_id, 
+                mat.mat_primer_apellido, 
+                mat.mat_segundo_apellido, 
+                mat.mat_nombres, 
+                mat.mat_nombre2, 
+                mat.mat_grado, 
+                mat.mat_grupo, 
+                mat.mat_estado_matricula, 
+                gru.gru_id, 
+                gru.gru_nombre, 
+                CASE 
+                    WHEN gru.gru_id = 1 THEN 'Uno'
+                    WHEN gru.gru_id = 2 THEN 'Dos'
+                    WHEN gru.gru_id = 3 THEN 'Tres'
+                    WHEN gru.gru_id = 4 THEN 'Sin Grupo'
+                    ELSE 'Desconocido'
+                END AS grupo,
+                CASE 
+                    WHEN gra.gra_id >= 12 AND gra.gra_id <= 15 THEN 'PREESCOLAR'
+                    WHEN gra.gra_id >= 1 AND gra.gra_id <= 5 THEN 'PRIMARIA'
+                    WHEN gra.gra_id >= 6 AND gra.gra_id <= 9 THEN 'SECUNDARIA'
+                    WHEN gra.gra_id >= 10 AND gra.gra_id <= 11 THEN 'MEDIA'
+                    ELSE 'DESCONOCIDO'
+                END AS educacion,
+                gra.gra_nombre,
+                bol.bol_id, 
+                bol.bol_estudiante
+            FROM 
+                mobiliar_academic_prod.academico_matriculas mat 
+            INNER JOIN 
+                mobiliar_academic_prod.academico_grupos gru 
+                ON gru.gru_id       = mat.mat_grupo 
+                AND gru.institucion = mat.institucion 
+                AND gru.year        = mat.year 
+            INNER JOIN 
+                mobiliar_academic_prod.academico_grados gra 
+                ON gra.gra_id       = mat.mat_grado 
+                AND gra.institucion = mat.institucion 
+                AND gra.year        = mat.year
+            LEFT JOIN 
+                mobiliar_academic_prod.academico_boletin bol 
+                ON bol.bol_estudiante = mat.mat_id
+            WHERE 
+                mat.mat_eliminado = 0 
+                {$filtroCancelados} 
+                AND mat.institucion = ? 
+                AND mat.year = ? 
+                {$filtro}
+            ORDER BY 
+                mat.mat_grupo, 
+                mat.mat_primer_apellido
+        ";
 
         $parametros = [$config['conf_id_institucion'], $year];
         
