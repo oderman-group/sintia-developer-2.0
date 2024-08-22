@@ -29,7 +29,11 @@ if($_POST["indicadores"] != $_POST["valorIndicadorActual"] && $_POST["indicadore
 		$sumaIndicadores = Indicadores::consultarSumaIndicadores($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 		$porcentajePermitido = 100 - $sumaIndicadores[0];
 		//El sistema reparte los porcentajes automáticamente y equitativamente.
-		$valorIgualIndicador = ($porcentajePermitido/($sumaIndicadores[2]));
+		$valorIgualIndicador = 0;
+
+		if (!empty($sumaIndicadores[2]) && $sumaIndicadores[2] > 0) {
+			$valorIgualIndicador = ($porcentajePermitido/($sumaIndicadores[2]));
+		}
 
 		//Actualiza todos valores de la misma carga y periodo; incluyendo el que acaba de crear.
 		Indicadores::actualizarValorIndicadores($conexion, $config, $cargaConsultaActual, $periodoConsultaActual, $valorIgualIndicador);
