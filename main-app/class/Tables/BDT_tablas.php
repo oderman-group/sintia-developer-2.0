@@ -41,7 +41,7 @@ class BDT_Tablas {
         }
         
         try {
-            $consulta = "SELECT * FROM ".static::$tableName." {$where}";
+            $consulta = "SELECT $campos FROM {$bd}.".static::$tableName." {$where}";
             $stmt = $conexionPDO->prepare($consulta);
 
             if ($stmt) {
