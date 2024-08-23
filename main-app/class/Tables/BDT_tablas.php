@@ -27,7 +27,7 @@ class BDT_Tablas {
      * @return PDOStatement|false Un objeto PDOStatement que contiene los resultados de la consulta o false en caso de error.
      * @throws Exception Si ocurre un error al preparar la consulta.
      */
-    public static function Select(Array $predicado = []) {
+    public static function Select(Array $predicado = [], $campos = '*', $bd = BD_ACADEMICA) {
         global $conexionPDO;
         $where = '';
 
@@ -40,7 +40,7 @@ class BDT_Tablas {
         }
         
         try {
-            $consulta = "SELECT * FROM ".static::$tableName." {$where}";
+            $consulta = "SELECT $campos FROM {$bd}.".static::$tableName." {$where}";
             $stmt = $conexionPDO->prepare($consulta);
 
             if ($stmt) {
