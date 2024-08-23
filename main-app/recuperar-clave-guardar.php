@@ -13,7 +13,7 @@ $institucion = mysqli_fetch_array($institucionConsulta, MYSQLI_BOTH);
 
 $yearArray = explode(",", $institucion['ins_years']);
 $yearStart = $yearArray[0];
-$yearEnd = $yearArray[1];
+$yearEnd = $institucion['ins_year_default'];
 
 $_SESSION["inst"] = $institucion['ins_bd'];
 $_SESSION["idInstitucion"] = $institucion['ins_id'];
