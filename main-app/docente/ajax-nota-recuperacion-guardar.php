@@ -20,11 +20,11 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
 $data = [
 	'codEst'          => $_POST["codEst"],
-    'nombreEst'       => $_POST["nombreEst"],
-    'codNota'         => $_POST["codNota"],
+	'nombreEst'       => $_POST["nombreEst"],
+	'codNota'         => $_POST["codNota"],
 	'nota'            => $_POST["nota"],
-    'notaAnterior'    => $_POST["notaAnterior"],
-    'target'          => Calificaciones::TIPO_RECUPERAR_NOTA,
+	'notaAnterior'    => $_POST["notaAnterior"],
+	'target'          => Calificaciones::TIPO_RECUPERAR_NOTA,
 	'tipoNota'        => 2,
 ];
 
@@ -39,7 +39,7 @@ function notifica(){
 		heading: '<?=$datosMensaje['heading']?>',  
 		text: '<?=$datosMensaje['mensaje']?>',
 		position: 'bottom-right',
-        showHideTransition: 'slide',
+		showHideTransition: 'slide',
 		loaderBg:'#ff6849',
 		icon: '<?=$datosMensaje['iconToast']?>',
 		hideAfter: 10000, 
