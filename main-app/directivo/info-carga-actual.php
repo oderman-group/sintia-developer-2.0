@@ -30,11 +30,11 @@
 													</li>
 													<li class="list-group-item">
 														<b>% <?=strtoupper($frases[63][$datosUsuarioActual['uss_idioma']]);?></b> 
-														<div class="profile-desc-item pull-right"><?=$configCargasArray[$datosCargaActual['car_valor_indicador']];?></div>
+														<div class="profile-desc-item pull-right"><?php if (!empty($configCargasArray[$datosCargaActual['car_valor_indicador']])) echo $configCargasArray[$datosCargaActual['car_valor_indicador']];?></div>
 													</li>
 													<li class="list-group-item">
 														<b>% <?=strtoupper($frases[6][$datosUsuarioActual['uss_idioma']]);?></b> 
-														<div class="profile-desc-item pull-right"><?=$configCargasArray[$datosCargaActual['car_configuracion']];?></div>
+														<div class="profile-desc-item pull-right"><?php if(!empty($configCargasArray[$datosCargaActual['car_configuracion']])) echo $configCargasArray[$datosCargaActual['car_configuracion']];?></div>
 													</li>
 													<li class="list-group-item">
 														<b>MAX. <?=strtoupper($frases[63][$datosUsuarioActual['uss_idioma']]);?></b> 

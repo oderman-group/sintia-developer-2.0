@@ -116,7 +116,7 @@ if(!isset($_GET['nodb'])) {
             </div>
         </div>
         <div class="logo-container vertical-center">
-            <lottie-player src="<?=$datosContactoSintia['dtc_animacion_login'];?>" background="transparent"
+            <lottie-player src="<?php if(!empty($datosContactoSintia['dtc_animacion_login'])) echo $datosContactoSintia['dtc_animacion_login'];?>" background="transparent"
                 speed="1" style="width: 100%; height: 100%;" loop autoplay></lottie-player>
             <!--<img src="JhormanTesterDavid.gif" alt="Sherman" style="width: 100%;">-->
         </div>

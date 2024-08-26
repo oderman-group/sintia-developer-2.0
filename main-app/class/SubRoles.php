@@ -532,8 +532,8 @@ class SubRoles {
     * @param int $subRoles
     *
     * @return int // se retorna el id del registro ingresado    */
-    public static function crearRolesUsuarioMasivos(array $usuarios=[],$subRol){
-        global $conexion, $baseDatosServicios,$config;
+    public static function crearRolesUsuarioMasivos(array $usuarios = [], $subRol = 0){
+        global $conexion, $baseDatosServicios, $config;
 
         $sqlinsert="INSERT INTO ".$baseDatosServicios.".sub_roles_usuarios(spu_id_sub_rol, spu_id_usuario, spu_institucion, spu_year) VALUES";
 

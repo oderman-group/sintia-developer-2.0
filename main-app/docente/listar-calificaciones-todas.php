@@ -86,7 +86,8 @@ $porcentajeRestante = 100 - $valores[0];
         <table class="table table-striped custom-table table-hover" id="tabla_notas">
             <thead>
                 <tr>
-                <th style="width: 50px;">#</th>
+                <th style="text-align:center; width: 30px;">#</th>
+                <th style="text-align:center; width: 30px;">ID</th>
                 <th style="width: 400px;"><?=$frases[61][$datosUsuarioActual['uss_idioma']];?></th>
                 <?php
                     $cA = Actividades::traerActividadesCarga($config, $cargaConsultaActual, $periodoConsultaActual);
@@ -129,7 +130,8 @@ $porcentajeRestante = 100 - $valores[0];
                 ?>
                 
                 <tr id="fila_<?=$resultado['mat_id'];?>">
-                    <td style="text-align:center;" style="width: 100px;"><?=$contReg;?></td>
+                    <td style="text-align:center; width: 100px;"><?=$contReg;?></td>
+                    <td style="text-align:center; width: 100px;"><?=$resultado['mat_id'];?></td>
 
                     <td style="color: <?=$colorEstudiante;?>">
                         <img src="../files/fotos/<?=$resultado['uss_foto'];?>" width="50">

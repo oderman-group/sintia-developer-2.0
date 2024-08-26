@@ -4,7 +4,7 @@ session_start();
 if (isset($_SESSION["idO"]) && $_SESSION["idO"]!="") {
 	$idSession = $_SESSION["idO"];
 } else {
-	$idSession = $_SESSION["id"];
+	$idSession = $_SESSION["id"] ?? null;
 }
 
 if (empty($idSession)) {

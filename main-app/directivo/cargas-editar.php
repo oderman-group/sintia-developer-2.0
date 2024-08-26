@@ -167,8 +167,8 @@ require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													$p = 1;
-													while($p<=$config[19]){
-														if($p==$datosEditar['car_periodo'])
+													while ($p <= $datosEditar['car_periodo']) {
+														if ($p == $datosEditar['car_periodo'])
 															echo '<option value="'.$p.'" selected>Periodo '.$p.'</option>';
 														else
 															echo '<option value="'.$p.'">Periodo '.$p.'</option>';	
@@ -244,6 +244,9 @@ require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
                                                 </select>
                                             </div>
                                         </div>
+
+										<hr>
+										<h3>Configuración y permisos adicionales</h3>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Permiso para generar informe</label>
@@ -259,11 +262,13 @@ require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Permiso para editar en periodos anteriores</label>
                                             <div class="col-sm-4">
-                                                <select class="form-control  select2" name="permiso2" <?=$disabledPermiso;?>>
+                                                <select class="form-control  select2" name="permiso2" disabled>
                                                     <option value="">Seleccione una opción</option>
 													<option value="1" <?php if($datosEditar["car_permiso2"]==1){echo 'selected';} ?>>SI</option>
-													<option value="0" <?php if($datosEditar["car_permiso2"]=='0'){echo 'selected';} ?>>NO</option>
+													<option value="0" <?php if($datosEditar["car_permiso2"]!=1){echo 'selected';} ?>>NO</option>
                                                 </select>
+
+												<span class="text-danger">Esta opción ha sido temporalmente deshabilitada.</span>
                                             </div>
 										</div>
 										

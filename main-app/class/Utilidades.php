@@ -1,4 +1,6 @@
 <?php
+require_once(dirname(__DIR__, 2) . '/config-general/constantes.php');
+require_once ROOT_PATH."/main-app/class/Conexion.php";
 class Utilidades {
 
     private static $codigoTemporal;
@@ -164,33 +166,53 @@ class Utilidades {
      */
     public static function getNextIdSequence($conexionPDO, $bd, $table) {
 
-        if (empty($table) || empty($conexionPDO) || empty($bd)) {
-            throw new InvalidArgumentException('El nombre de la tabla, la bd o la conexión no pueden estar vacíos');
+        if (empty($table) || empty($bd)) {
+            throw new InvalidArgumentException('El nombre de la tabla y/o la bd no pueden estar vacíos');
             return null;
+        }
+
+        if (!$conexionPDO instanceof PDO || empty($conexionPDO)) {
+            $conexionPDO = Conexion::newConnection('PDO');
         }
 
         global $config;
 
         $query = "SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_schema = :bd AND table_name = :table";
-    
+
         // Preparamos la consulta
         $stmt = $conexionPDO->prepare($query);
 
-        if ($stmt) {
-            // Ejecutamos la consulta pasando los parámetros necesarios
-            $stmt->execute(['bd' => $bd, 'table' => $table]);
-            
-            // Obtenemos el primer (y único) resultado
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        try {
+            if ($stmt) {
+                // Ejecutamos la consulta pasando los parámetros necesarios
+                $stmt->execute(['bd' => $bd, 'table' => $table]);
+                
+                // Obtenemos el primer (y único) resultado
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            $idInstitution = !empty($config['conf_id_institucion']) ? $config['conf_id_institucion'] : null;
-            $idUser        = !empty($_SESSION["id"])                ? $_SESSION["id"]                : null;
+                $idInstitution = !empty($config['conf_id_institucion']) ? $config['conf_id_institucion'] : null;
+                $idUser        = !empty($_SESSION["id"])                ? $_SESSION["id"]                : null;
 
-            $tablePrefix = self::getPrefixFromTableName($table);
-            
-            // Devolvemos el valor AUTO_INCREMENT o null si no se encontró
-            return !empty($row['AUTO_INCREMENT']) ? $tablePrefix . $row['AUTO_INCREMENT'] . $idInstitution . $idUser : self::generateCode(null);
-        } else {
+                $tablePrefix = self::getPrefixFromTableName($table);
+
+                if ($row['AUTO_INCREMENT'] <= 1 || is_null($row['AUTO_INCREMENT'])) {
+                    $queryMax = "SELECT MAX(id_nuevo) AS nextId FROM {$bd}.{$table};";
+                    $stmtMax = $conexionPDO->prepare($queryMax);
+
+                    if ($stmtMax) {
+                        $stmtMax->execute();
+                        $rowMax = $stmtMax->fetch(PDO::FETCH_ASSOC);
+                        $rowMax['nextId'] ++;
+                        return !empty($rowMax['nextId']) ? $tablePrefix . $rowMax['nextId'] . $idInstitution . $idUser : self::generateCode(null);
+                    }
+                }
+                
+                // Devolvemos el valor AUTO_INCREMENT o null si no se encontró
+                return !empty($row['AUTO_INCREMENT']) ? $tablePrefix . $row['AUTO_INCREMENT'] . $idInstitution . $idUser : self::generateCode(null);
+            } else {
+                return self::generateCode(null);
+            }
+        } catch (PDOException $e) {
             return self::generateCode(null);
         }
     }
@@ -235,7 +257,7 @@ class Utilidades {
      * @return mixed The modified value with a trailing ".0" if the original value was an integer, or the original value if it was not an integer.
      */
     public static function setFinalZero($nota) {
-        if (is_int($nota)) {
+        if (is_numeric($nota) && strlen($nota) == 1) {
             return $nota.".0";
         }
 

@@ -5,6 +5,12 @@ require_once ROOT_PATH."/main-app/class/Conexion.php";
 
 class Boletin {
 
+    public const BOLETIN_TIPO_NOTA_NORMAL                 = 1; // Calculada por el sistema de acuerdo a las notas en las actividades.
+    public const BOLETIN_TIPO_NOTA_RECUPERACION_PERIODO   = 2; // La hace el docente o el directivo.
+    public const BOLETIN_TIPO_NOTA_RECUPERACION_INDICADOR = 3; // La hace el docente por los indicadores.
+    public const BOLETIN_TIPO_NOTA_DIRECTIVA              = 4; // La Colocar el directivo directamente.
+
+
     /**
     * Devuelve una lista de tipos de notas basados en la categoría proporcionada y el año académico seleccionado.
     *
@@ -444,6 +450,39 @@ class Boletin {
 
         return $resultado;
     }
+
+    /**
+     * Obtiene las notas de un estudiante para una carga académica y periodo específicos.
+     *
+     * @param string $carga La identificación de la carga académica.
+     * @param int $periodo El periodo académico para el cual se desea obtener las notas.
+     * @param string $estudiante La identificación del estudiante.
+     * @param string $yearBd El año académico para el cual se desea obtener las notas.
+     *
+     * @return array Un arreglo que contiene las notas del estudiante para la carga académica y periodo especificados.
+     */
+    public static function obtenerNotasEstudiantilesPorCargaPeriodo(string $carga, int $periodo, string $estudiante, string $yearBd)
+    {
+        global $config;
+        $resultado = [];
+
+        $sql = "
+        SELECT * FROM ".BD_ACADEMICA.".academico_boletin 
+        WHERE bol_carga=? 
+        AND bol_periodo=? 
+        AND bol_estudiante=? 
+        AND institucion=? 
+        AND year=?
+        ";
+
+        $parametros = [$carga, $periodo, $estudiante, $config['conf_id_institucion'], $yearBd];
+        $consulta   = BindSQL::prepararSQL($sql, $parametros);
+
+        $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);
+
+        return $resultado;
+    }
+
 
     /**
      * Obtiene la nota definitiva y nombre de una materia para un estudiante en un área y periodos académicos específicos.
@@ -895,11 +934,59 @@ class Boletin {
     ){
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
-        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_boletin bol 
-        LEFT JOIN ".BD_ACADEMICA.".academico_notas_tipos ntp ON ntp.notip_categoria=? AND bol_nota>=ntp.notip_desde AND bol_nota<=ntp.notip_hasta AND ntp.institucion=bol.institucion AND ntp.year=bol.year
-        WHERE bol_estudiante=? AND bol_carga=? AND bol_periodo=? AND bol.institucion=? AND bol.year=?";
+        $sql = "
+        SELECT * FROM ".BD_ACADEMICA.".academico_boletin bol 
+        LEFT JOIN ".BD_ACADEMICA.".academico_notas_tipos ntp ON ntp.notip_categoria=? 
+        AND bol_nota>=ntp.notip_desde 
+        AND bol_nota<=ntp.notip_hasta 
+        AND ntp.institucion=bol.institucion 
+        AND ntp.year=bol.year
+        WHERE bol_estudiante=? 
+        AND bol_carga=? 
+        AND bol_periodo=? 
+        AND bol.institucion=? 
+        AND bol.year=?
+        ";
 
         $parametros = [$config["conf_notas_categoria"], $idEstudiante, $idCarga, $periodo, $config['conf_id_institucion'], $year];
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
+
+        return $resultado;
+    }
+
+    /**
+     * Retrieves the grades of a student for a specific academic load and period.
+     *
+     * @param array  $config       Configuration array containing institution settings.
+     * @param int    $periodo      The academic period number.
+     * @param string $idEstudiante The ID of the student.
+     * @param string $idCarga      The ID of the academic load.
+     * @param string $yearBd       (Optional) The academic year for which the information is desired. If not provided, the current session's academic year is used.
+     *
+     * @return array An associative array containing the student's grades for the specified academic load and period.
+     */
+    public static function obtenerNotasBoletin(
+        array  $config,
+        int    $periodo, 
+        string $idEstudiante,
+        string $idCarga,
+        string $yearBd = ""
+    ){
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $sql = "
+        SELECT * FROM ".BD_ACADEMICA.".academico_boletin bol 
+        WHERE bol_estudiante=? 
+        AND bol_carga=? 
+        AND bol_periodo=? 
+        AND bol.institucion=? 
+        AND bol.year=?
+        ";
+
+        $parametros = [$idEstudiante, $idCarga, $periodo, $config['conf_id_institucion'], $year];
 
         $resultado = BindSQL::prepararSQL($sql, $parametros);
 
@@ -989,11 +1076,49 @@ class Boletin {
 
         [$updateSql, $updateValues] = BindSQL::prepararUpdateConArray($update);
 
-        $sql = "UPDATE ".BD_ACADEMICA.".academico_boletin SET {$updateSql}, bol_actualizaciones=bol_actualizaciones+1, bol_ultima_actualizacion=now() WHERE bol_id=? AND institucion=? AND year=?";
+        $bolActualizaciones = !array_key_exists('bol_actualizaciones', $update) ? 'bol_actualizaciones=bol_actualizaciones+1,' : null;
+
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_boletin SET {$updateSql}, 
+        {$bolActualizaciones}
+        bol_ultima_actualizacion=now()
+        WHERE bol_id=? AND institucion=? AND year=?";
 
         $parametros = array_merge($updateValues, [$idBoletin, $config['conf_id_institucion'], $year]);
 
         $resultado = BindSQL::prepararSQL($sql, $parametros);
+    }
+
+    /**
+     * Updates the academic bulletin records based on the provided conditions.
+     *
+     * @param array  $config  Configuration array containing institution settings.
+     * @param array  $update  Associative array of columns and their new values to be updated.
+     * @param string $where   (Optional) SQL WHERE clause to specify which records to update. Defaults to 'bol_id=bol_id'.
+     * @param string $yearBd  (Optional) The academic year for which the information is desired. If not provided, the current session's academic year is used.
+     *
+     * @return void
+     */
+    public static function actualizarBoletin (
+        array   $config,
+        array   $update,
+        string  $where = 'bol_id=bol_id',
+        string  $yearBd = ""
+    ): void
+    {
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        [$updateSql, $updateValues] = BindSQL::prepararUpdateConArray($update);
+
+        $bolActualizaciones = !array_key_exists('bol_actualizaciones', $update) ? 'bol_actualizaciones=bol_actualizaciones+1,' : null;
+
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_boletin SET {$updateSql}, 
+        {$bolActualizaciones}
+        bol_ultima_actualizacion=now()
+        WHERE {$where} AND institucion=? AND year=?";
+
+        $parametros = array_merge($updateValues, [$config['conf_id_institucion'], $year]);
+
+        BindSQL::prepararSQL($sql, $parametros);
     }
 
     /**

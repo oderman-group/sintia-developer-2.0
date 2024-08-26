@@ -286,7 +286,7 @@
 							<?php }?>
 							
 							<li <?php agregarClass(MENU_PADRE,["DT0335","DT0336"]) ?> class="nav-item bg-warning">
-								<a href="#" class="nav-link nav-toggle bg-warning text-dark"><i class="fa-solid fa-cart-plus text-dark"></i>
+								<a href="#" class="nav-link nav-toggle bg-warning text-dark"><i class="fa fa-shopping-cart text-dark"></i>
 									<span class="title">Servicios SINTIA</span> <span class="arrow"></span>
 								</a>
 								<ul class="sub-menu bg-warning text-dark" <?php agregarClass(SUB_MENU,["DT0335","DT0336"])?>>

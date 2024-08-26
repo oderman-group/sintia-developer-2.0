@@ -229,13 +229,13 @@ class SysJobs {
      * 
      * @return void 
      */
-    public static function actualizarMensaje($id,$intento,$mensaje,$estado=JOBS_ESTADO_ERROR){
-        $intento=intval($intento)+1;
-        $datos = array(
-            "id" => $id,
-            "mensaje" => $mensaje,
-            "intentos" =>$intento,
-            "estado"=>$estado
+    public static function actualizarMensaje($id, $intento, $mensaje, $estado=JOBS_ESTADO_ERROR) {
+        $intento = intval($intento) + 1;
+        $datos   = array(
+            "id"       => $id,
+            "mensaje"  => $mensaje,
+            "intentos" => $intento,
+            "estado"   => $estado
         );
         self::actualizar($datos);
     }
