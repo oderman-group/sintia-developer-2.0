@@ -28,7 +28,7 @@ class Utilidades {
         if (isset($get) ) {
             foreach ($get as $key => $value) {
                  // validammos que los parametros no sean null y sea base64  excluyendo cuando la llave sea success y error 
-                if (($key!='success' AND $key!='error') && !empty($value) && !self::esBase64($value)) {                    
+                if ( $key!='success' && $key!='error' && !empty($value) && !self::esBase64($value)) {                    
                     echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=303";</script>';
                     exit();
                 }    
