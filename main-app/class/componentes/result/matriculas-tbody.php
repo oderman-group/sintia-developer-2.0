@@ -8,9 +8,9 @@ if (!empty($data["dataTotal"])) {
 }
 
 $contReg = 1;
-
+$usuariosClase = new UsuariosFunciones;
 foreach ($data["data"] as $resultado) {
-	$usuariosClase = new UsuariosFunciones;
+	
 	$acudiente = isset($resultado["mat_acudiente"]) ? UsuariosPadre::sesionUsuario($resultado["mat_acudiente"]) : null;
 
 	$bgColor = $resultado['uss_bloqueado'] == 1 ? 'style="background-color: #ff572238;"' : '';
