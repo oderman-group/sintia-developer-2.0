@@ -1,4 +1,4 @@
-Utilidades::validarParametros($_GET);<?php include("session.php");?>
+<?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0195';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");
