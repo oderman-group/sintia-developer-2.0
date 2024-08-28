@@ -4,7 +4,7 @@
 <?php include("../compartido/head.php");?>
 <?php
 require_once("../class/SubRoles.php");
-
+Utilidades::validarParametros($_GET);
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();

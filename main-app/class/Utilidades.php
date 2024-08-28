@@ -4,6 +4,79 @@ require_once ROOT_PATH."/main-app/class/Conexion.php";
 class Utilidades {
 
     private static $codigoTemporal;
+/**
+ * Validar los parámetros GET recibidos y redirigir si no son válidos.
+ *
+ * Esta función valida los parámetros recibidos en la variable GET ($get) asegurándose
+ * de que ninguno de ellos sea nulo y que todos estén codificados en base64. Si algún
+ * parámetro no cumple con estos requisitos, se redirige al usuario a una página de 
+ * información de error.
+ *
+ * @param array $get Array que contiene los parámetros GET a validar.
+ * 
+ * @return void Si algún parámetro no es válido, la función termina la ejecución del script
+ *              y redirige al usuario a una página de error.
+ *
+ * @example
+ * // Ejemplo de uso en una página PHP:
+ * validarParametros($_GET);
+ * 
+ * @throws Redireccion a 'page-info.php?idmsg=303' si un parámetro no es válido.
+ */
+    public static  function validarParametros($get)
+    { 
+        if (isset($get) ) {
+            foreach ($get as $key => $value) {
+                 // validammos que los parametros no sean null y sea base64  excluyendo cuando la llave sea success y error 
+                if ( $key!='success' && $key!='error' && !empty($value) && !self::esBase64($value)) {                    
+                    echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=303";</script>';
+                    exit();
+                }    
+            }
+        }
+       
+
+        
+    }
+    /**
+ * Verifica si una cadena es una codificación válida en base64.
+ *
+ * Esta función toma una cadena como entrada y realiza una serie de comprobaciones
+ * para determinar si la cadena está codificada en base64 de forma válida. Se realizan
+ * comprobaciones de longitud, contenido y la capacidad de codificación/decodificación
+ * para validar la cadena.
+ *
+ * @param string $string La cadena a verificar.
+ * 
+ * @return bool Devuelve `true` si la cadena es una codificación válida en base64,
+ *              de lo contrario, devuelve `false`.
+ * 
+ * @example
+ * // Ejemplo de uso:
+ * $esValido = esBase64('VGhpcyBpcyBhIHZhbGlkIGJhc2U2NCBlbmNvZGVkIHN0cmluZw==');
+ * 
+ */    public static function esBase64($string){  
+        // Primero, verifica si la longitud de la cadena es un múltiplo de 4
+        if (strlen($string) % 4 != 0) {
+            return false;
+        }
+        // Verifica si el contenido solo contiene caracteres válidos para base64        
+        if (preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $string) == false) {
+            return false;
+        }
+        // Decodifica la cadena        
+        $decoded = base64_decode($string, true);
+        // Verifica si la cadena puede ser decodificada y recodificada        
+        if ($decoded === false) {
+            return false;
+        }
+        // Verifica si la cadena original coincide con la recodificada        
+        if (base64_encode($decoded) !== $string) {
+            return false;
+        }
+        return true;
+    
+    }
 
     /**
      * Obtiene una representación de cadena de un valor.
