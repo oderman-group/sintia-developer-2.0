@@ -135,6 +135,6 @@ $filtros[1] = [
   componenteFiltro::COMPB_FILTRO_SELECT=> $estadoSelect,
 ];
 
-require_once("../class/componentes/componente-filtro.php");
+require_once("../class/componentes/componenteFiltro.php");
 $barraSuperior = new componenteFiltro('matriculas', 'filter-matriculas.php', 'matriculas-tbody.php', $filtros, $opciones);
 $barraSuperior->generarComponente();
