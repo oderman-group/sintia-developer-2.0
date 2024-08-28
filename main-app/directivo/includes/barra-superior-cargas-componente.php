@@ -1,5 +1,5 @@
 <?php
-require_once("../class/componentes/componente-filtro.php");
+require_once("../class/componentes/componenteFiltro.php");
 $grados = Grados::listarGrados(1);
 $count = 0;
 while ($grado = mysqli_fetch_array($grados, MYSQLI_BOTH)) {
