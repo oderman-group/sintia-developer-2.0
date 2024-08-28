@@ -12,7 +12,12 @@ if($datosUsuarioActual['uss_bloqueado']==1 && !strpos($_SERVER['PHP_SELF'], 'pag
 }
 
 //validamos si el usuario tiene encuestas pendientes
-$consultaAsignacionEncuesta = Asignaciones::traerAsignacionesUsuario($conexion, $config, $datosUsuarioActual['uss_id']);
+try {
+    $consultaAsignacionEncuesta = Asignaciones::traerAsignacionesUsuario($conexion, $config, $datosUsuarioActual['uss_id']);
+} catch (Exception $e) {
+    include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+}
+
 $numAsignacionesEncuesta = mysqli_num_rows($consultaAsignacionEncuesta);
 
 //Contamos si de esas pendientes tiene obligatorias
