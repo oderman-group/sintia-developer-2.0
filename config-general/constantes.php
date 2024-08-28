@@ -197,31 +197,7 @@ define('GENERAR_CON_PORCENTAJE_COMPLETO', 1);
 define('OMITIR_ESTUDIANTES_CON_PORCENTAJE_INCOMPLETO', 2);
 define('GENERAR_CON_CUALQUIER_PORCENTAJE', 3);
 
-/* VALORES COMPONETE BARRA SUPERIOR */
 
-define('COMPB_OPCIONES_TEXTO', 'opciones_texto');
-define('COMPB_OPCIONES_URL', 'opciones_url');
-define('COMPB_OPCIONES_PERMISO', 'opciones_permiso');
-define('COMPB_OPCIONES_PAGINAS', 'opciones_paginas');
-define('COMPB_OPCIONES_PAGINAS_TEXTO', 'opciones_paginas_texto');
-define('COMPB_OPCIONES_PAGINAS_URL', 'opciones_paginas_url');
-define('COMPB_OPCIONES_PAGINAS_ACTION', 'opciones_paginas_action');
-define('COMPB_OPCIONES_PAGINAS_PERMISO', 'opciones_paginas_permiso');
-define('COMPB_OPCIONES_PAGINAS_TARGET', 'opciones_paginas_target');
-define('COMPB_OPCIONES_PAGINAS_DIVIDER', 'opciones_paginas_divider');
-
-define('COMPB_FILTRO_GET', 'filtro_get');
-define('COMPB_FILTRO_TEXTO', 'filtro_texto');
-define('COMPB_FILTRO_SELECT', 'filtro_select');
-define('COMPB_FILTRO_LISTA', 'filtro_lista');
-define('COMPB_FILTRO_TIPO', 'filtro_tipo');
-define('COMPB_FILTRO_TIPO_CHECK', 'filtro_tipo_check');
-define('COMPB_FILTRO_TIPO_HTML', 'filtro_tipo_html');
-define('COMPB_FILTRO_TIPO_HTML_CONTENIDO', 'filtro_tipo_html_contenido');
-define('COMPB_FILTRO_LISTA_ID', 'filtro_lista_id');
-define('COMPB_FILTRO_LISTA_TEXTO', 'filtro_lista_texto');
-define('COMPB_FILTRO_LISTA_STYLE', 'filtro_lista_style');
-define('COMPB_FILTRO_LISTA_URL', 'filtro_lista_url');
 
 // define('COMPB_FILTRO_TEXTO', 'filtro_texto');
 
