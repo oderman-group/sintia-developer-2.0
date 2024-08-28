@@ -2,30 +2,29 @@
 
 class componenteFiltro
 {
-    /* VALORES COMPONETE BARRA SUPERIOR */
-public const COMPB_OPCIONES_TEXTO             ='opciones_texto';
-public const COMPB_OPCIONES_URL               ='opciones_url';
-public const COMPB_OPCIONES_PERMISO           ='opciones_permiso';
-public const COMPB_OPCIONES_PAGINAS           ='opciones_paginas';
-public const COMPB_OPCIONES_PAGINAS_TEXTO     ='opciones_paginas_texto';
-public const COMPB_OPCIONES_PAGINAS_URL       ='opciones_paginas_url';
-public const COMPB_OPCIONES_PAGINAS_ACTION    ='opciones_paginas_action';
-public const COMPB_OPCIONES_PAGINAS_PERMISO   ='opciones_paginas_permiso';
-public const COMPB_OPCIONES_PAGINAS_TARGET    ='opciones_paginas_target';
-public const COMPB_OPCIONES_PAGINAS_DIVIDER   ='opciones_paginas_divider';
-public const COMPB_FILTRO_GET                 ='filtro_get';
-public const COMPB_FILTRO_TEXTO               ='filtro_texto';
-public const COMPB_FILTRO_SELECT              ='filtro_select';
-public const COMPB_FILTRO_LISTA               ='filtro_lista';
-public const COMPB_FILTRO_TIPO                ='filtro_tipo';
-public const COMPB_FILTRO_TIPO_CHECK          ='filtro_tipo_check';
-public const COMPB_FILTRO_TIPO_HTML           ='filtro_tipo_html';
-public const COMPB_FILTRO_TIPO_HTML_CONTENIDO ='filtro_tipo_html_contenido';
-public const COMPB_FILTRO_LISTA_ID            ='filtro_lista_id';
-public const COMPB_FILTRO_LISTA_TEXTO         ='filtro_lista_texto';
-public const COMPB_FILTRO_LISTA_STYLE         ='filtro_lista_style';
-public const COMPB_FILTRO_LISTA_URL           ='filtro_lista_url';
-
+        /* VALORES COMPONETE BARRA SUPERIOR */
+    public const COMPB_OPCIONES_TEXTO             ='opciones_texto';
+    public const COMPB_OPCIONES_URL               ='opciones_url';
+    public const COMPB_OPCIONES_PERMISO           ='opciones_permiso';
+    public const COMPB_OPCIONES_PAGINAS           ='opciones_paginas';
+    public const COMPB_OPCIONES_PAGINAS_TEXTO     ='opciones_paginas_texto';
+    public const COMPB_OPCIONES_PAGINAS_URL       ='opciones_paginas_url';
+    public const COMPB_OPCIONES_PAGINAS_ACTION    ='opciones_paginas_action';
+    public const COMPB_OPCIONES_PAGINAS_PERMISO   ='opciones_paginas_permiso';
+    public const COMPB_OPCIONES_PAGINAS_TARGET    ='opciones_paginas_target';
+    public const COMPB_OPCIONES_PAGINAS_DIVIDER   ='opciones_paginas_divider';
+    public const COMPB_FILTRO_GET                 ='filtro_get';
+    public const COMPB_FILTRO_TEXTO               ='filtro_texto';
+    public const COMPB_FILTRO_SELECT              ='filtro_select';
+    public const COMPB_FILTRO_LISTA               ='filtro_lista';
+    public const COMPB_FILTRO_TIPO                ='filtro_tipo';
+    public const COMPB_FILTRO_TIPO_CHECK          ='filtro_tipo_check';
+    public const COMPB_FILTRO_TIPO_HTML           ='filtro_tipo_html';
+    public const COMPB_FILTRO_TIPO_HTML_CONTENIDO ='filtro_tipo_html_contenido';
+    public const COMPB_FILTRO_LISTA_ID            ='filtro_lista_id';
+    public const COMPB_FILTRO_LISTA_TEXTO         ='filtro_lista_texto';
+    public const COMPB_FILTRO_LISTA_STYLE         ='filtro_lista_style';
+    public const COMPB_FILTRO_LISTA_URL           ='filtro_lista_url';
     /**
      * @var string El ID del componente.
      */
