@@ -7,9 +7,9 @@ require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 
-include(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
-include("verificar-carga.php");
-include("verificar-periodos-diferentes.php");
+require_once(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
+require_once("verificar-carga.php");
+require_once("verificar-periodos-diferentes.php");
 
 if(empty($_POST["indicadores"])) $_POST["indicadores"] = '0';
 if(empty($_POST["calificaciones"])) $_POST["calificaciones"] = '0';
@@ -29,7 +29,11 @@ if($_POST["indicadores"] != $_POST["valorIndicadorActual"] && $_POST["indicadore
 		$sumaIndicadores = Indicadores::consultarSumaIndicadores($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
 		$porcentajePermitido = 100 - $sumaIndicadores[0];
 		//El sistema reparte los porcentajes automáticamente y equitativamente.
-		$valorIgualIndicador = ($porcentajePermitido/($sumaIndicadores[2]));
+		$valorIgualIndicador = 0;
+
+		if (!empty($sumaIndicadores[2]) && $sumaIndicadores[2] > 0) {
+			$valorIgualIndicador = ($porcentajePermitido/($sumaIndicadores[2]));
+		}
 
 		//Actualiza todos valores de la misma carga y periodo; incluyendo el que acaba de crear.
 		Indicadores::actualizarValorIndicadores($conexion, $config, $cargaConsultaActual, $periodoConsultaActual, $valorIgualIndicador);

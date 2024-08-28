@@ -122,7 +122,10 @@ require_once(ROOT_PATH."/main-app/class/Utilidades.php");
                                 if (!empty($notasResultado)) {
                                     $notasResultadoFinal = $notasResultado['bol_nota'];
                                     $notasAnteriorFinal  = $notasResultado['bol_nota_anterior'];
-                                    $atributosA          = 'style="text-decoration:underline; color:'.$color.';"';
+                                    $atributosA          = '
+                                        style="text-decoration:underline; color:'.$color.';"
+                                        title="'.$notasResultado['bol_porcentaje'].'%"
+                                    ';
 
                                     if ($config['conf_forma_mostrar_notas'] == CUALITATIVA) {
                                         $atributosA = '
@@ -131,7 +134,7 @@ require_once(ROOT_PATH."/main-app/class/Utilidades.php");
                                             data-toggle="popover" 
                                             data-trigger="hover" 
                                             title="Nota Cuantitativa: '.$notasResultado['bol_nota'].'" 
-                                            data-content="<b>Nota Cuantitativa:</b><br>'.$notasResultado['bol_nota'].'" 
+                                            data-content="<b>Nota Cuantitativa:</b><br>'.$notasResultado['bol_nota'].' ('.$notasResultado['bol_porcentaje'].'%)" 
                                             data-html="true" 
                                             data-placement="top" 
                                             style="
