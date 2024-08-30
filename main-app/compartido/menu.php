@@ -85,6 +85,14 @@
 							<?php include_once("menu-acudientes.php");?>
 							
 							<?php include_once("menu-estudiantes.php");?>
+
+							<li class="nav-item">
+	                            <a href="<?=REDIRECT_ROUTE."/releases.php";?>" target="_blank" class="nav-link nav-toggle">
+	                                <i class="fa fa-external-link-square"></i>
+	                                <span class="title">Lanzamientos</span>
+	                            </a>
+	                        </li>
+
 	                    </ul>
 	                </div>
                 </div>
