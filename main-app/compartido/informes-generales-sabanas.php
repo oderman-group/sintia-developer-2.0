@@ -21,6 +21,11 @@ if (!empty($_GET["per"])) {
 }
 
 $grados = Grados::traerGradosGrupos($config, $curso, $grupo);
+
+$year = $_SESSION["bd"];
+if (isset($_POST["year"])) {
+	$year = $_POST["year"];
+}
 ?>
 
 <head>
@@ -74,25 +79,38 @@ $grados = Grados::traerGradosGrupos($config, $curso, $grupo);
           <td><?= $nombre ?></td>
           <?php
           $suma = 0;
-          $materias1 = CargaAcademica::consultaInformeSabanas($fila['mat_id'], $per, $config, $curso, $grupo);
+          $materias1 = CargaAcademica::traerCargasMateriasPorCursoGrupo($config, $curso, $grupo);
           $numero = mysqli_num_rows($materias1);
           $def = '0.0';
           while ($mat1 = mysqli_fetch_array($materias1, MYSQLI_BOTH)) {
+  
+            $materias2 = mysqli_query($conexion, "SELECT * FROM ".BD_ACADEMICA.".academico_boletin 
+            WHERE bol_carga='". $mat1['car_id']. "' 
+            AND bol_estudiante='". $fila['mat_id']. "' 
+            AND year={$year} 
+            AND institucion={$config['conf_id_institucion']} 
+            AND bol_periodo='". $per. "'
+            ");
+
+            $materias2Data = mysqli_fetch_array($materias2, MYSQLI_BOTH);
+
             $defini = 0;
-            if (!empty($mat1['bol_nota'])) {
-              $defini = $mat1['bol_nota'];
+            if (!empty($materias2Data['bol_nota'])) {
+              $defini = $materias2Data['bol_nota'];
               $suma = ($suma + $defini);
             }
+  
             if ($defini < $config[5]) $color = 'red';
             else $color = 'blue';
 
             $notaEstudiante = "";
-            if (!empty($mat1['bol_nota'])) {
-              $notaEstudiante = $mat1['bol_nota'];
+            if (!empty($materias2Data['bol_nota'])) {
+              $notaEstudiante = $materias2Data['bol_nota'];
             }
 
             $notaEstudianteFinal = $notaEstudiante;
             $title = '';
+
             if ($notaEstudiante != "" && $config['conf_forma_mostrar_notas'] == CUALITATIVA) {
               $title = 'title="Nota Cuantitativa: ' . $notaEstudiante . '"';
               $notaEstudianteFinal = !empty($mat1['notip_nombre']) ? $mat1['notip_nombre'] : "";
