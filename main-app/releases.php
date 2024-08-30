@@ -117,7 +117,7 @@
           <p class="hotfix">- [HF] - Incrementar la velocidad en el proceso de generación de informes por parte de los docentes.</p>
         </div>
         <div class="release-footer">
-          Video de presentación: <a href="#" target="_blank">Ver video para la versión 3.0.1</a>
+          Video de presentación: <a href="https://www.loom.com/share/2c1815de20c240e788a756cf9e207ab0" target="_blank">Ver video para la versión 3.0.1</a>
         </div>
 
         <!-- Second Release Item -->
