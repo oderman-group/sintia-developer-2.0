@@ -1,6 +1,12 @@
 <?php
 $colorNota = $colorNota ?? null;
 $estiloNotaFinal = $estiloNotaFinal ?? null;
+
+$infoNotaModificada = null;
+if (!empty($notasResultado['cal_fecha_modificada'])) {
+    $infoNotaModificada = '<br>
+    <i class="fa fa-info-circle" title="Fecha de última modificación: '.$notasResultado['cal_fecha_modificada'].PHP_EOL.'Cantidad de modificaciones: '.$notasResultado['cal_cantidad_modificaciones'].PHP_EOL.'Nota anterior: '.$notasResultado['cal_nota_anterior'].'"></i>';
+}
 ?>
 
 <td style="text-align:center;" id="columna_<?=$resultado['mat_id']."-".$rA['act_id'];?>">
@@ -21,6 +27,8 @@ $estiloNotaFinal = $estiloNotaFinal ?? null;
         style="font-size: 13px; text-align: center; color:<?=$colorNota;?>;" 
         <?=$habilitado;?>
     >
+
+    <?=$infoNotaModificada;?>
 
     <br>
     <span 
