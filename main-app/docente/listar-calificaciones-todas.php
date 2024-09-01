@@ -78,7 +78,10 @@ $porcentajeRestante = 100 - $valores[0];
         
         <span id="respRCT"></span>
         <?php
-        $arrayEnviar = array("tipo"=>1, "descripcionTipo"=>"Para ocultar fila del registro.");
+        $arrayEnviar = [
+            "tipo"            => 1, 
+            "descripcionTipo" => "Para ocultar fila del registro."
+        ];
         $arrayDatos = json_encode($arrayEnviar);
         $objetoEnviar = htmlentities($arrayDatos);
         ?>
