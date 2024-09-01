@@ -16,7 +16,7 @@ require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once ROOT_PATH."/main-app/class/Conexion.php";
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
-require_once(ROOT_PATH."/main-app/class/tables/BDT_academico_cargas.php");
+require_once(ROOT_PATH."/main-app/class/Tables/BDT_academico_cargas.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
