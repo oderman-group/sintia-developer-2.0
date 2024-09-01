@@ -5,7 +5,7 @@ require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/Grados.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
-require_once(ROOT_PATH."/main-app/class/tables/BDT_academico_cargas.php");
+require_once(ROOT_PATH."/main-app/class/Tables/BDT_academico_cargas.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0167';
