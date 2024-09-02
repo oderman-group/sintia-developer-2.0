@@ -5,7 +5,7 @@ $server 		   = $servidorConexion;
 $user   		   = $usuarioConexion;
 $pass   		   = $claveConexion;
 $dbName 		   = $baseDatosAdmisiones;
-
+$conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion);
 if(!empty($_REQUEST['idInst'])){
 	$idInsti=base64_decode($_REQUEST['idInst']);
 	try{
