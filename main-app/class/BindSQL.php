@@ -16,10 +16,10 @@ class BindSQL
     public static function prepararSQL(
         string $sql,
         array $parametros,
-        $finalizartransacion =true
+        $finalizartransacion = true
     ) {
         global $conexion;
-        self::iniciarTransacion();       
+        self::iniciarTransacion();
         try {
             $consulta = mysqli_prepare($conexion, $sql);
 
@@ -32,6 +32,8 @@ class BindSQL
                         $tipoParametro .= 'd';
                     } else if (is_string($parametro)) {
                         $tipoParametro .= 's';
+                    } else if (is_array($parametro)) {
+                        $tipoParametro .= str_repeat('s', count($parametro));
                     } else if (is_bool($parametro)) {
                         $tipoParametro .= 'i';
                         $parametro = $parametro ? 1 : 0;
@@ -39,23 +41,32 @@ class BindSQL
                         $tipoParametro .= 's';
                     }
                 }
-            
+                // aplanamos los array por si hay un elemento tipo aarray
+                $miArrayPlano = [];
+                array_walk_recursive($parametros, function ($item) use (&$miArrayPlano) {
+                    $miArrayPlano[] = $item;
+                });
                 // Aplicar trim a cada valor en $parametros para eliminar comillas innecesarias
-                $parametros = array_map(function($value) {
-                    if($value != null){
-                        return trim($value, "'");
+                $miArrayPlano = array_map(function ($value) {
+
+                    if ($value != null) {
+                        if (is_string($value)) {
+                            return trim($value, "'");
+                        }else{
+                            return $value;
+                        }
                     } else {
                         return null;
                     }
-                }, $parametros);
-                
-                mysqli_stmt_bind_param($consulta, $tipoParametro, ...$parametros);
+                }, $miArrayPlano);
+
+                mysqli_stmt_bind_param($consulta, $tipoParametro, ...$miArrayPlano);
 
                 mysqli_stmt_execute($consulta);
 
                 $resultado = mysqli_stmt_get_result($consulta);
 
-                if($finalizartransacion){
+                if ($finalizartransacion) {
                     self::finalizarTransacion();
                 }
 
@@ -79,14 +90,14 @@ class BindSQL
     }
 
     // funcion para finalizar la transacion
-    public static function finalizarTransacion() 
+    public static function finalizarTransacion()
     {
         global $conexion;
         mysqli_query($conexion, "COMMIT");
     }
 
     // funcion para revertir la transacion
-    public static function revertirTransacion() 
+    public static function revertirTransacion()
     {
         global $conexion;
         mysqli_query($conexion, "ROLLBACK");
@@ -103,21 +114,38 @@ class BindSQL
      * @param array $update Un array asociativo con los nombres de columnas y los valores a actualizar.
      * @return array Un array con dos elementos: la cadena de actualización preparada y el array de valores.
      */
-    public static function prepararUpdateConArray(array $update){
-    
+    public static function prepararUpdateConArray(array $update)
+    {
+
         // Array para almacenar las partes preparadas
         $preparedParts = [];
         // Array para almacenar los valores
         $values = [];
-    
+
         // Iterar sobre cada parte
         foreach ($update as $key => $value) {
             // Añadir la parte preparada al array
             $preparedParts[] = "{$key}=?";
             $values[] = $value;
         }
-    
+
         // Unir las partes preparadas con comas y retornar
         return [implode(",", $preparedParts), $values];
+    }
+    /**
+     * resive un resultado de una consulta la devuelebe en un array.
+     *
+     * @param mysqli_result $resulsConsulta resultado de una consulta SQL ya ejecutada.
+     *
+     * @return array Arreglo de datos del resultado.
+     */
+    public static function resultArray(mysqli_result $resulsConsulta) // funcion para obtener datos en un array de una consulta
+    {
+
+        if ($resulsConsulta) {
+            return $resulsConsulta->fetch_all(MYSQLI_ASSOC);
+        } else {
+            return [];
+        }
     }
 }
