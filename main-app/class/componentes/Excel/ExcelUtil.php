@@ -14,7 +14,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class ExcelUtil extends Spreadsheet
 {
     public $sheet = [];
-    private $indice = 0;
+    public $indice = 0;
     public $spreadsheet;
     public const IMG_DEFAULT = ROOT_PATH . "/main-app/files/images/logo/sintia-logo-2023.png";
 
@@ -31,12 +31,11 @@ class ExcelUtil extends Spreadsheet
 
     public function agregarHoja($nombreHoja)
     {
-        // Crear una nueva hoja
-        $nuevaHoja = new Worksheet($this, $nombreHoja);
-        $this->addSheet($nuevaHoja);
-        $this->spreadsheet->setActiveSheetIndexByName($nombreHoja);
         $this->indice++;
-        $this->sheet[$this->indice] = $this->spreadsheet->getActiveSheet();
+        // Crear una nueva hoja
+        $nuevaHoja = $this->spreadsheet->createSheet();
+        $this->sheet[$this->indice] =  $nuevaHoja;        
+        $this->sheet[$this->indice] ->setTitle($nombreHoja);
     }
 
     public function ajustarTexto($celda)
@@ -58,11 +57,12 @@ class ExcelUtil extends Spreadsheet
         self::establecerColorFondo($celda,$Colorfondo);
         
     }
-    public function agregarTexto($celda, $titulo)
+    public function agregarTexto($celda, $titulo,$colorTexto = '000000',$Colorfondo = 'ffffff')
     {
         $this->sheet[$this->indice]->setCellValue($celda, $titulo);                                                           // asignamos los valores
         $this->sheet[$this->indice]->getColumnDimension(substr($celda, 0, 1))->setAutoSize(true);                            //auto tamaño de la columna J 
-
+        self::establecerColorTexto($celda,$colorTexto);
+        self::establecerColorFondo($celda,$Colorfondo);
     }
     public function textoTamano($celda, $size = 12)
     {
