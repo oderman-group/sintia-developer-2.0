@@ -1,6 +1,6 @@
 <?php
 
-class componenteFiltro
+class ComponenteFiltro
 {
         /* VALORES COMPONETE BARRA SUPERIOR */
     public const COMPB_OPCIONES_TEXTO             ='opciones_texto';
@@ -305,6 +305,11 @@ class componenteFiltro
             </div>
         </nav>
         <script type='text/javascript'>
+        function cargarPopover() {
+          $(document).ready(function() {			
+              $('[data-toggle=".'popover'."]').popover();
+          });
+        };
         input_{$this->id}.addEventListener('keyup', function(event) {
             if (event.key === 'Enter') {
                 {$this->id}_buscar()
@@ -394,6 +399,7 @@ class componenteFiltro
         }
         $html .= "});
         }
+
         </script>
         ";
 
