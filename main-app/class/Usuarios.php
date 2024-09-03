@@ -57,7 +57,7 @@ class Usuarios {
         global $conexion;
         $resultado = [];
 
-        $sql = "SELECT * FROM " . BD_GENERAL . ".usuarios WHERE (uss_email=? || uss_usuario=?) AND institucion=? AND year=?";
+        $sql = "SELECT id_nuevo,uss_email,uss_usuario,uss_documento,institucion,year FROM " . BD_GENERAL . ".usuarios WHERE (uss_email=? || uss_usuario=?) AND institucion=? AND year=?";
         $parametros = [$usuario, $usuario, $idInstitucion, $_SESSION["bd"]];
         $consulta = BindSQL::prepararSQL($sql, $parametros);
 
@@ -78,7 +78,7 @@ class Usuarios {
         global $conexion;
         $resultado = [];
 
-        $sql = "SELECT * FROM " . BD_GENERAL . ".usuarios WHERE (uss_email=? || uss_usuario=? || uss_documento=?)";
+        $sql = "SELECT id_nuevo,uss_email,uss_usuario,uss_documento,institucion,year FROM " . BD_GENERAL . ".usuarios WHERE (uss_email=? || uss_usuario=? || uss_documento=?)";
         $parametros = [$valor, $valor, $valor];
         $consulta = BindSQL::prepararSQL($sql, $parametros);
         $resultado = $consulta->fetch_all(MYSQLI_ASSOC);

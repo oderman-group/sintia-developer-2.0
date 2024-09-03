@@ -1,7 +1,3 @@
-<?php
-$explode = explode("main-app/", $_SERVER["REQUEST_URI"]);
-$urlOrigen = $explode[1];
-?>
 <!--bootstrap -->
 <link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
 <link href="../../config-general/assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css" rel="stylesheet" media="screen">
@@ -20,10 +16,11 @@ $urlOrigen = $explode[1];
 			<form action="recuperar-clave-guardar.php" method="post">
 			<div class="modal-body" align="center">
 				
-				<label>Selecciona el usaurio a recuperar la contraseña</label>
+				
 				<h2>
 					Usuarios encontrados
 				</h2>
+				<label>Selecciona el usaurio a recuperar la contraseña</label>
 				
 					<div class="form-group">
 
