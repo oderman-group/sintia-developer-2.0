@@ -66,6 +66,45 @@ class Usuarios {
         return $resultado;
     }
 
+        /**
+     * Obtiene los datos de un usuario para recuperar la clave por correo electrónico o nombre de usuario.
+     *
+     * @param int $valor valor del usuario ya puede se identificacion,documento ó correro electronico
+     *
+     * @return array Devuelve un conjunto de resultados de la consulta de usuarios para recuperar la clave.
+     */
+    public static function datosUsuarioRecuperarClave($valor)
+    {
+        global $conexion;
+        $resultado = [];
+
+        $sql = "SELECT * FROM " . BD_GENERAL . ".usuarios WHERE (uss_email=? || uss_usuario=? || uss_documento=?)";
+        $parametros = [$valor, $valor, $valor];
+        $consulta = BindSQL::prepararSQL($sql, $parametros);
+        $resultado = $consulta->fetch_all(MYSQLI_ASSOC);
+
+        return $resultado;
+    }
+            /**
+     * Obtiene los datos de un usuario para recuperar la clave por correo electrónico o nombre de usuario.
+     *
+     * @param int $id valor del usuario, puede ser identificacion,documento ó correro electronico
+     *
+     * @return array Devuelve un conjunto de resultados de la consulta de usuarios para recuperar la clave.
+     */
+    public static function datosUsuarioRecuperarClaveId($id)
+    {
+        global $conexion;
+        $resultado = [];
+
+        $sql = "SELECT * FROM " . BD_GENERAL . ".usuarios WHERE id_nuevo=?";
+        $parametros = [$id];
+        $consulta = BindSQL::prepararSQL($sql, $parametros);
+        $resultado = $consulta->fetch_all(MYSQLI_ASSOC);
+
+        return $resultado;
+    }
+
     /**
      * Guarda un registro de restauración de clave en la base de datos.
      *
