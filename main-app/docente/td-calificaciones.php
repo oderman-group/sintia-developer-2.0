@@ -26,6 +26,7 @@ if (!empty($notasResultado['cal_fecha_modificada'])) {
         tabindex="2" 
         style="font-size: 13px; text-align: center; color:<?=$colorNota;?>;" 
         <?=$habilitado;?>
+        title="<?php if(!empty($notasResultado['cal_nota'])) echo 'Valor en decimal: '.$notasResultado['cal_nota_equivalente_cien'];?>"
     >
 
     <?=$infoNotaModificada;?>
