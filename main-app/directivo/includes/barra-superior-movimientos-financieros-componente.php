@@ -43,51 +43,51 @@
     if (isset($_GET['estadoFil']) && $_GET['estadoFil'] == base64_encode(COBRADA)) $estiloResaltadoCobrado = 'style="color: '.$Plataforma->colorUno.';"';
     $estiloResaltadoPorCobrar = '';
     if (isset($_GET['estadoFil']) && $_GET['estadoFil'] == base64_encode(POR_COBRAR)) $estiloResaltadoPorCobrar = 'style="color: '.$Plataforma->colorUno.';"';
-    require_once("../class/componentes/componenteFiltro.php");
+    require_once("../class/componentes/ComponenteFiltro.php");
 $opciones[0] = [
-    componenteFiltro::COMPB_OPCIONES_TEXTO   => 'Menú movimiento financiero',
-    componenteFiltro::COMPB_OPCIONES_URL     => 'movimientos-importar.php',
-    componenteFiltro::COMPB_OPCIONES_PERMISO => Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0105']),
-    componenteFiltro::COMPB_OPCIONES_PAGINAS => $paginas = [
+    ComponenteFiltro::COMPB_OPCIONES_TEXTO   => 'Menú movimiento financiero',
+    ComponenteFiltro::COMPB_OPCIONES_URL     => 'movimientos-importar.php',
+    ComponenteFiltro::COMPB_OPCIONES_PERMISO => Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0105']),
+    ComponenteFiltro::COMPB_OPCIONES_PAGINAS => $paginas = [
         [
-            componenteFiltro::COMPB_OPCIONES_PAGINAS_TEXTO => 'Importar saldos',
-            componenteFiltro::COMPB_OPCIONES_PAGINAS_URL   => 'movimientos-importar.php'
+            ComponenteFiltro::COMPB_OPCIONES_PAGINAS_TEXTO => 'Importar saldos',
+            ComponenteFiltro::COMPB_OPCIONES_PAGINAS_URL   => 'movimientos-importar.php'
         ]
     ]
 ];
 $filtroTipo = [
     [
-        componenteFiltro::COMPB_FILTRO_LISTA_ID    => 1,
-        componenteFiltro::COMPB_FILTRO_LISTA_TEXTO => 'Fact. Venta',
-        componenteFiltro::COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode($estadoFil) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode(1) . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
+        ComponenteFiltro::COMPB_FILTRO_LISTA_ID    => 1,
+        ComponenteFiltro::COMPB_FILTRO_LISTA_TEXTO => 'Fact. Venta',
+        ComponenteFiltro::COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode($estadoFil) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode(1) . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
     ],
     [
-        componenteFiltro::COMPB_FILTRO_LISTA_ID    => 2,
-        componenteFiltro::COMPB_FILTRO_LISTA_TEXTO => 'Fact. Compra',
-        componenteFiltro::COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode($estadoFil) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode(2) . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
+        ComponenteFiltro::COMPB_FILTRO_LISTA_ID    => 2,
+        ComponenteFiltro::COMPB_FILTRO_LISTA_TEXTO => 'Fact. Compra',
+        ComponenteFiltro::COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode($estadoFil) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode(2) . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
     ],
     [
-        componenteFiltro::COMPB_FILTRO_LISTA_TEXTO => 'Ver Todos',
-        componenteFiltro::COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF']. "?estadoFil=" . base64_encode($estadoFil) ."=&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha),
-        componenteFiltro::COMPB_FILTRO_LISTA_STYLE => 'font-weight: bold; text-align: center;'
+        ComponenteFiltro::COMPB_FILTRO_LISTA_TEXTO => 'Ver Todos',
+        ComponenteFiltro::COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF']. "?estadoFil=" . base64_encode($estadoFil) ."=&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha),
+        ComponenteFiltro::COMPB_FILTRO_LISTA_STYLE => 'font-weight: bold; text-align: center;'
     ]
 
 ];
 $filtroEstado = [
     [
-        componenteFiltro::COMPB_FILTRO_LISTA_ID    => POR_COBRAR,
-        componenteFiltro::COMPB_FILTRO_LISTA_TEXTO => 'Por Cobrar',
-        componenteFiltro::COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode(POR_COBRAR) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode($tipo) . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
+        ComponenteFiltro::COMPB_FILTRO_LISTA_ID    => POR_COBRAR,
+        ComponenteFiltro::COMPB_FILTRO_LISTA_TEXTO => 'Por Cobrar',
+        ComponenteFiltro::COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode(POR_COBRAR) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode($tipo) . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
     ],
     [
-        componenteFiltro::COMPB_FILTRO_LISTA_ID    => COBRADA,
-        componenteFiltro::COMPB_FILTRO_LISTA_TEXTO => 'Cobradas',
-        componenteFiltro::COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode(COBRADA) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode($tipo) . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
+        ComponenteFiltro::COMPB_FILTRO_LISTA_ID    => COBRADA,
+        ComponenteFiltro::COMPB_FILTRO_LISTA_TEXTO => 'Cobradas',
+        ComponenteFiltro::COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF'] . "?estadoFil=" . base64_encode(COBRADA) . "&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta . "&tipo=" . base64_encode($tipo) . "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha)
     ],
     [
-        componenteFiltro::COMPB_FILTRO_LISTA_TEXTO => 'Ver Todos',
-        componenteFiltro::COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF']. "?estadoFil=&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta  . "&tipo=" . base64_encode($tipo) .  "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha),
-        componenteFiltro::COMPB_FILTRO_LISTA_STYLE => 'font-weight: bold; text-align: center;'
+        ComponenteFiltro::COMPB_FILTRO_LISTA_TEXTO => 'Ver Todos',
+        ComponenteFiltro::COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF']. "?estadoFil=&usuario=" . base64_encode($usuario) . "&desde=" . $desde . "&hasta=" . $hasta  . "&tipo=" . base64_encode($tipo) .  "&estadoM=" . base64_encode($estadoM) . "&fecha=" . base64_encode($fecha),
+        ComponenteFiltro::COMPB_FILTRO_LISTA_STYLE => 'font-weight: bold; text-align: center;'
     ]
 
 ];
@@ -110,24 +110,24 @@ $html = "
                     <a class='dropdown-item' href='".$_SERVER['PHP_SELF']."' style='font-weight: bold; text-align: center;'>VER TODO</a>
 ";
 $filtros[0] = [
-    componenteFiltro::COMPB_FILTRO_GET    => 'tipo',
-    componenteFiltro::COMPB_FILTRO_TEXTO  => 'Filtrar por tipo',
-    componenteFiltro::COMPB_FILTRO_LISTA  => $filtroTipo,
+    ComponenteFiltro::COMPB_FILTRO_GET    => 'tipo',
+    ComponenteFiltro::COMPB_FILTRO_TEXTO  => 'Filtrar por tipo',
+    ComponenteFiltro::COMPB_FILTRO_LISTA  => $filtroTipo,
 ];
 $filtros[1] = [
-    componenteFiltro::COMPB_FILTRO_GET    => 'estadoFil',
-    componenteFiltro::COMPB_FILTRO_TEXTO  => 'Filtrar por estado',
-    componenteFiltro::COMPB_FILTRO_LISTA  => $filtroEstado,
+    ComponenteFiltro::COMPB_FILTRO_GET    => 'estadoFil',
+    ComponenteFiltro::COMPB_FILTRO_TEXTO  => 'Filtrar por estado',
+    ComponenteFiltro::COMPB_FILTRO_LISTA  => $filtroEstado,
 ];
 
 $filtros[2] = [
-    componenteFiltro::COMPB_FILTRO_GET    => '',
-    componenteFiltro::COMPB_FILTRO_TEXTO  => 'Filtrar por Fecha',
-    componenteFiltro::COMPB_FILTRO_TIPO   => componenteFiltro::COMPB_FILTRO_TIPO_HTML,
-    componenteFiltro::COMPB_FILTRO_TIPO_HTML_CONTENIDO=> $html ,
+    ComponenteFiltro::COMPB_FILTRO_GET    => '',
+    ComponenteFiltro::COMPB_FILTRO_TEXTO  => 'Filtrar por Fecha',
+    ComponenteFiltro::COMPB_FILTRO_TIPO   => ComponenteFiltro::COMPB_FILTRO_TIPO_HTML,
+    ComponenteFiltro::COMPB_FILTRO_TIPO_HTML_CONTENIDO=> $html ,
 ];
 
 
-$barraSuperior = new componenteFiltro('movimientos', 'filter-movimientos.php','movimientos-tbody.php', $filtros, $opciones,'mostrarResultado');
+$barraSuperior = new ComponenteFiltro('movimientos', 'filter-movimientos.php','movimientos-tbody.php', $filtros, $opciones,'mostrarResultado');
 $barraSuperior->generarComponente();
 ?>

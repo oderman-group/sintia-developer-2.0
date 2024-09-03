@@ -61,14 +61,6 @@ if($config['conf_doble_buscador'] == 1) {
 	<link href="../../config-general/assets/css/cargando.css" rel="stylesheet" type="text/css"/>
 </head>
 <!-- END HEAD -->
-<script>
-	// Carga todos los popovers en la página
-	function cargarPopover() {
-		$(document).ready(function() {			
-			$('[data-toggle="popover"]').popover();
-		});
-	};
-</script>
 <?php include("../compartido/body.php"); //6 consultas para optmizar: Enuar ?>
     <div class="page-wrapper">
         <?php include("../compartido/encabezado.php"); //1 por otimizar, parece estar repetida ?>

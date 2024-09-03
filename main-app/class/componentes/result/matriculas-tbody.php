@@ -213,6 +213,3 @@ foreach ($data["data"] as $resultado) {
 }
 ?> 
 
-<script>
-	cargarPopover();	
-</script>
