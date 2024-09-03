@@ -336,4 +336,37 @@ class Utilidades {
 
         return $nota;
     }
+
+    /**
+     * Logs an error to the database and returns the ID of the inserted error report.
+     *
+     * This function captures details of an exception, sanitizes the data, and inserts it into the `reporte_errores` table.
+     * It logs various details such as the error code, line number, user information, and request data.
+     *
+     * @param Exception $e The exception object containing the error details to be logged.
+     *
+     * @return int The ID of the inserted error report in the database.
+     */
+    public static function logError(Exception $e): int
+    {
+        $numError     = $e->getCode();
+        $lineaError   = $e->getLine();
+        $aRemplezar   = array("'", '"', "#", "´");
+        $enRemplezo   = array("\'", "\"", "\#", "\´");
+        $detalleError = str_replace($aRemplezar, $enRemplezo, $e->getMessage());
+        $request_data = json_encode($_REQUEST);
+
+        global $conexion;
+        global $baseDatosServicios;
+        global $config;
+
+        $request_data_sanitizado = mysqli_real_escape_string($conexion, $request_data);
+
+        mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".reporte_errores(rperr_numero, rperr_fecha, rperr_ip, rperr_usuario, rperr_pagina_referencia, rperr_pagina_actual, rperr_so, rperr_linea, rperr_institucion, rperr_error, rerr_request, rperr_year, rperr_trace_php)
+        VALUES('".$numError."', now(), '".$_SERVER["REMOTE_ADDR"]."', '".$_SESSION["id"]."', '".$_SERVER['HTTP_REFERER']."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', '".$_SERVER['HTTP_USER_AGENT']."', '".$lineaError."', '".$config['conf_id_institucion']."','".$detalleError."', '".$request_data_sanitizado."', '".$_SESSION["bd"]."', '".json_encode(debug_backtrace())."')");
+
+        $idReporteError = mysqli_insert_id($conexion);
+
+        return $idReporteError;
+    }
 }
