@@ -9,8 +9,7 @@ $conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, 
 
 if(!empty($_POST["Usuario"])){
 	$datosUsuario = Usuarios::datosUsuarioRecuperarClave($_POST["Usuario"]);
-}
-if(!empty($_POST["usuarioId"])){
+} else if(!empty($_POST["usuarioId"])){
 	$datosUsuario = Usuarios::datosUsuarioRecuperarClaveId($_POST["usuarioId"]);
 }
 
@@ -53,6 +52,6 @@ if ($contar > 1) {
 	echo '<script>document.getElementById("form").submit();</script>';
 	exit();
 } else {
-	echo '<script type="text/javascript">window.location.href="recuperar-clave.php?error=1&inst=' . $institucion['ins_id'] . '";</script>';
+	echo '<script type="text/javascript">window.location.href="recuperar-clave.php?error=1";</script>';
 	exit();
 }
