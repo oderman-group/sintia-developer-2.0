@@ -6,6 +6,7 @@ include("verificar-carga.php");
 include("verificar-periodos-diferentes.php");
 include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
+require_once(ROOT_PATH."/main-app/class/Tables/BDT_academico_asignaciones_estudiantes.php");
 
 $idR="";
 if(!empty($_GET["idR"])){ $idR=base64_decode($_GET["idR"]);}
@@ -81,6 +82,13 @@ $datosConsulta = Actividades::traerDatosActividades($conexion, $config, $idR);
 										<input type="hidden" value="<?=$idR;?>" name="idR">
 
 											<div class="form-group row">
+												<label class="col-sm-2 control-label">Código</label>
+												<div class="col-sm-10">
+													<input type="text" name="codigo" class="form-control" value="<?=$datosConsulta['tar_id'];?>" readonly> 
+												</div>
+											</div>
+
+											<div class="form-group row">
 												<label class="col-sm-2 control-label">Titulo</label>
 												<div class="col-sm-10">
 													<input type="text" name="titulo" class="form-control" autocomplete="off" required value="<?=$datosConsulta['tar_titulo'];?>"> 
@@ -138,8 +146,31 @@ $datosConsulta = Actividades::traerDatosActividades($conexion, $config, $idR);
 												</div>
 											 </div>
 
-										
-										
+											 <div class="form-group row">
+												<label class="col-sm-2 control-label">Estudiantes</label>
+												<div class="col-sm-10">
+													<select id="multiple" style="width: 100%" class="form-control select2-multiple" multiple name="estudiantes[]">
+														<option value="">Seleccione una opción</option>
+														<?php
+															try {
+																$opcionesConsulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
+															} catch (Exception $e) {
+																include("../compartido/error-catch-to-report.php");
+															}
+
+															while ($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)) {
+																$predicado = [
+																	'asgest_id_estudiante' => $opcionesDatos['mat_id'],
+																	'asgest_id_asignacion' => $idR,
+																	'asgest_tipo'          => BDT_AcademicoAsignacionesEstudiantes::TIPO_TAREA,
+																];
+																$existe = BDT_AcademicoAsignacionesEstudiantes::numRows($predicado);
+														?>
+															<option value="<?=$opcionesDatos['mat_id'];?>" <?php if ($existe > 0) {echo "selected";}?>><?=Estudiantes::NombreCompletoDelEstudiante($opcionesDatos);?></option>
+														<?php }?>
+													</select>
+												</div>
+											</div>
 											 <?php 
                             				$botones = new botonesGuardar("actividades.php",Modulos::validarPermisoEdicion()); ?>
 
