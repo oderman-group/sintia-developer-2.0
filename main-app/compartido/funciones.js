@@ -714,6 +714,7 @@ function mensajeGenerarInforme(datos){
                     });
                 }
             }else{
+                document.getElementById("overlayInforme").style.display = "none";
                 return false;
             }
         });
