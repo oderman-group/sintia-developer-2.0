@@ -8,6 +8,8 @@ require_once("../class/servicios/GradoServicios.php");
 require_once(ROOT_PATH."/main-app/class/Grupos.php");
 require_once(ROOT_PATH."/main-app/class/RedisInstance.php");
 
+
+Utilidades::validarParametros($_GET);
 if (isset($_GET['mode']) && $_GET['mode'] === 'DEV') {
 	$redis = RedisInstance::getRedisInstance();
 
@@ -59,6 +61,14 @@ if($config['conf_doble_buscador'] == 1) {
 	<link href="../../config-general/assets/css/cargando.css" rel="stylesheet" type="text/css"/>
 </head>
 <!-- END HEAD -->
+<script>
+	// Carga todos los popovers en la página
+	function cargarPopover() {
+		$(document).ready(function() {			
+			$('[data-toggle="popover"]').popover();
+		});
+	};
+</script>
 <?php include("../compartido/body.php"); //6 consultas para optmizar: Enuar ?>
     <div class="page-wrapper">
         <?php include("../compartido/encabezado.php"); //1 por otimizar, parece estar repetida ?>
@@ -97,7 +107,9 @@ if($config['conf_doble_buscador'] == 1) {
 								// print_r($resultado); exit();
 								?>
 								
-								<?php include("includes/barra-superior-matriculas-componente.php");	?>
+								<?php
+								 $filtro="";
+								include("includes/barra-superior-matriculas-componente.php");	?>
 
 									<?php
 									if($config['conf_id_institucion'] == ICOLVEN){
@@ -178,7 +190,7 @@ if($config['conf_doble_buscador'] == 1) {
 													<?php
 													
 													include("includes/consulta-paginacion-estudiantes.php");
-													$filtroLimite = 'LIMIT '.$inicio.','.$registros;													
+													$filtroLimite = 'LIMIT 	1';													
 													$consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite, $cursoActual);
 													
 													$contReg = 1;

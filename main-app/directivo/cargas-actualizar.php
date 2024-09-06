@@ -5,6 +5,7 @@ require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/Grados.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/Tables/BDT_academico_cargas.php");
 
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0167';
@@ -70,15 +71,40 @@ include("../compartido/historial-acciones-guardar.php");
 			'car_observaciones_boletin'  => $_POST["observacionesBoletin"], 
 		];
 
-		if ($_POST["periodo"] != $_POST["periodoActual"]) {
+		$predicado = [
+			'car_id'      => $_POST["idR"],
+			'institucion' => $config['conf_id_institucion'],
+			'year'        => $_SESSION["bd"],
+		];
+
+		$campos = "car_periodo, car_estado, car_historico";
+
+		$datosCargaActualConsulta = BDT_AcademicoCargas::select($predicado, $campos, BD_ACADEMICA);
+		$datosCargaActual         = $datosCargaActualConsulta->fetchAll();
+
+		if ($_POST["periodo"] != $datosCargaActual[0]['car_periodo']) {
 			$update['car_estado'] = 'DIRECTIVO';
-			
+
+			$carHistoricoArray = [];
+			$carHistoricoCampo = $datosCargaActual[0]['car_historico'];
+
+			if (!empty($carHistoricoCampo)) {
+				$carHistoricoArray = json_decode($carHistoricoCampo, true);
+			}
+
+			$carHistoricoArray[$_POST["idR"].':'.time()] = [
+				'car_periodo_anterior' => (int) $datosCargaActual[0]['car_periodo'],
+				'car_estado_anterior'  => $datosCargaActual[0]['car_estado'],
+			];
+
+			$update['car_historico'] = json_encode($carHistoricoArray);
+
 			$updateBoletin = [
 				'bol_estado' => 'ABIERTO',
 			];
 
 			$where = "bol_carga={$_POST["idR"]} AND bol_periodo={$_POST["periodo"]}";
-		
+
 			Boletin::actualizarBoletin($config, $updateBoletin, $where);
 		}
 

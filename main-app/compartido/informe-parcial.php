@@ -1,7 +1,7 @@
 <?php
 include("session-compartida.php");
 $idPaginaInterna = 'DT0248';
-
+Utilidades::validarParametros($_GET);
 if ($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])) {
   echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
   exit();

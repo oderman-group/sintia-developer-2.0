@@ -4,6 +4,79 @@ require_once ROOT_PATH."/main-app/class/Conexion.php";
 class Utilidades {
 
     private static $codigoTemporal;
+/**
+ * Validar los parámetros GET recibidos y redirigir si no son válidos.
+ *
+ * Esta función valida los parámetros recibidos en la variable GET ($get) asegurándose
+ * de que ninguno de ellos sea nulo y que todos estén codificados en base64. Si algún
+ * parámetro no cumple con estos requisitos, se redirige al usuario a una página de 
+ * información de error.
+ *
+ * @param array $get Array que contiene los parámetros GET a validar.
+ * 
+ * @return void Si algún parámetro no es válido, la función termina la ejecución del script
+ *              y redirige al usuario a una página de error.
+ *
+ * @example
+ * // Ejemplo de uso en una página PHP:
+ * validarParametros($_GET);
+ * 
+ * @throws Redireccion a 'page-info.php?idmsg=303' si un parámetro no es válido.
+ */
+    public static  function validarParametros($get)
+    { 
+        if (isset($get) ) {
+            foreach ($get as $key => $value) {
+                 // validammos que los parametros no sean null y sea base64  excluyendo cuando la llave sea success y error 
+                if ( $key!='success' && $key!='error' && !empty($value) && !self::esBase64($value)) {                    
+                    echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=303";</script>';
+                    exit();
+                }    
+            }
+        }
+       
+
+        
+    }
+    /**
+ * Verifica si una cadena es una codificación válida en base64.
+ *
+ * Esta función toma una cadena como entrada y realiza una serie de comprobaciones
+ * para determinar si la cadena está codificada en base64 de forma válida. Se realizan
+ * comprobaciones de longitud, contenido y la capacidad de codificación/decodificación
+ * para validar la cadena.
+ *
+ * @param string $string La cadena a verificar.
+ * 
+ * @return bool Devuelve `true` si la cadena es una codificación válida en base64,
+ *              de lo contrario, devuelve `false`.
+ * 
+ * @example
+ * // Ejemplo de uso:
+ * $esValido = esBase64('VGhpcyBpcyBhIHZhbGlkIGJhc2U2NCBlbmNvZGVkIHN0cmluZw==');
+ * 
+ */    public static function esBase64($string){  
+        // Primero, verifica si la longitud de la cadena es un múltiplo de 4
+        if (strlen($string) % 4 != 0) {
+            return false;
+        }
+        // Verifica si el contenido solo contiene caracteres válidos para base64        
+        if (preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $string) == false) {
+            return false;
+        }
+        // Decodifica la cadena        
+        $decoded = base64_decode($string, true);
+        // Verifica si la cadena puede ser decodificada y recodificada        
+        if ($decoded === false) {
+            return false;
+        }
+        // Verifica si la cadena original coincide con la recodificada        
+        if (base64_encode($decoded) !== $string) {
+            return false;
+        }
+        return true;
+    
+    }
 
     /**
      * Obtiene una representación de cadena de un valor.
@@ -262,5 +335,38 @@ class Utilidades {
         }
 
         return $nota;
+    }
+
+    /**
+     * Logs an error to the database and returns the ID of the inserted error report.
+     *
+     * This function captures details of an exception, sanitizes the data, and inserts it into the `reporte_errores` table.
+     * It logs various details such as the error code, line number, user information, and request data.
+     *
+     * @param Exception $e The exception object containing the error details to be logged.
+     *
+     * @return int The ID of the inserted error report in the database.
+     */
+    public static function logError(Exception $e): int
+    {
+        $numError     = $e->getCode();
+        $lineaError   = $e->getLine();
+        $aRemplezar   = array("'", '"', "#", "´");
+        $enRemplezo   = array("\'", "\"", "\#", "\´");
+        $detalleError = str_replace($aRemplezar, $enRemplezo, $e->getMessage());
+        $request_data = json_encode($_REQUEST);
+
+        global $conexion;
+        global $baseDatosServicios;
+        global $config;
+
+        $request_data_sanitizado = mysqli_real_escape_string($conexion, $request_data);
+
+        mysqli_query($conexion, "INSERT INTO ".$baseDatosServicios.".reporte_errores(rperr_numero, rperr_fecha, rperr_ip, rperr_usuario, rperr_pagina_referencia, rperr_pagina_actual, rperr_so, rperr_linea, rperr_institucion, rperr_error, rerr_request, rperr_year, rperr_trace_php)
+        VALUES('".$numError."', now(), '".$_SERVER["REMOTE_ADDR"]."', '".$_SESSION["id"]."', '".$_SERVER['HTTP_REFERER']."', '".$_SERVER['PHP_SELF']."?".$_SERVER['QUERY_STRING']."', '".$_SERVER['HTTP_USER_AGENT']."', '".$lineaError."', '".$config['conf_id_institucion']."','".$detalleError."', '".$request_data_sanitizado."', '".$_SESSION["bd"]."', '".json_encode(debug_backtrace())."')");
+
+        $idReporteError = mysqli_insert_id($conexion);
+
+        return $idReporteError;
     }
 }

@@ -7,7 +7,7 @@ require_once(ROOT_PATH."/main-app/class/Grupos.php");
 require_once(ROOT_PATH."/main-app/class/Grados.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
-
+Utilidades::validarParametros($_GET);
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
@@ -78,6 +78,7 @@ require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 										<input type="hidden" value="<?=$datosEditar['car_curso'];?>" name="cursoActual">
 										<input type="hidden" value="<?=$datosEditar['car_grupo'];?>" name="grupoActual">
 										<input type="hidden" value="<?=$datosEditar['car_materia'];?>" name="asignaturaActual">
+										<input type="hidden" value="<?=$datosEditar['car_estado'];?>" name="cargaEstado">
 
 										<div class="form-group row">
 											<label class="col-sm-2 control-label">ID</label>

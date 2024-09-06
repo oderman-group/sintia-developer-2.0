@@ -1,12 +1,16 @@
-<?php include("session.php");?>
-<?php include("verificar-usuario.php");?>
-<?php $idPaginaInterna = 'ES0023';?>
-<?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("verificar-carga.php");?>
-<?php //include("verificar-pagina-bloqueada.php");?>
-<?php include("../compartido/head.php");
+<?php 
+include("session.php");
+include("verificar-usuario.php");
+$idPaginaInterna = 'ES0023';
+
+include("../compartido/historial-acciones-guardar.php");
+include("verificar-carga.php");
+include("../compartido/head.php");
+
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
-require_once(ROOT_PATH."/main-app/class/Grados.php");?>
+require_once(ROOT_PATH."/main-app/class/Grados.php");
+require_once(ROOT_PATH."/main-app/class/Tables/BDT_academico_asignaciones_estudiantes.php");
+?>
 	<!-- data tables -->
     <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -93,9 +97,16 @@ require_once(ROOT_PATH."/main-app/class/Grados.php");?>
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $consulta = Actividades::actividadesCargasPeriodos($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
-													$contReg=1; 
-													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+													$consulta = Actividades::actividadesCargasPeriodos($conexion, $config, $cargaConsultaActual, $periodoConsultaActual);
+													$contReg = 1; 
+
+													while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
+                                                        $mostrarActividadEstudiante = BDT_AcademicoAsignacionesEstudiantes::mostrarActividadesEstudiante($datosEstudianteActual['mat_id'], $resultado['tar_id']);
+
+                                                        if (!$mostrarActividadEstudiante) {
+                                                            continue;
+                                                        }
+
 														$fd = mysqli_fetch_array(mysqli_query($conexion, "SELECT DATEDIFF('".$resultado['tar_fecha_entrega']."','".date("Y-m-d")."')"), MYSQLI_BOTH);
 														$sd = mysqli_fetch_array(mysqli_query($conexion, "SELECT DATEDIFF('".$resultado['tar_fecha_disponible']."','".date("Y-m-d")."')"), MYSQLI_BOTH);
 													 ?>
