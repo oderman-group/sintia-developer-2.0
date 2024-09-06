@@ -73,13 +73,13 @@ class Usuarios {
      *
      * @return array Devuelve un conjunto de resultados de la consulta de usuarios para recuperar la clave.
      */
-    public static function buscarUsuariosRecuperarClave($valor)
+    public static function buscarUsuariosRecuperarClave($valor,$year)
     {
         global $conexion;
         $resultado = [];
 
-        $sql = "SELECT id_nuevo,uss_id,uss_nombre,uss_email,uss_usuario,uss_documento,institucion,year FROM " . BD_GENERAL . ".usuarios WHERE (uss_email=? || uss_usuario=? || uss_documento=?)";
-        $parametros = [$valor, $valor, $valor];
+        $sql = "SELECT id_nuevo,uss_id,uss_nombre,uss_email,uss_usuario,uss_documento,institucion,year FROM " . BD_GENERAL . ".usuarios WHERE (uss_email=? || uss_usuario=? || uss_documento=?) AND year=?";
+        $parametros = [$valor, $valor, $valor,$year];
         $consulta = BindSQL::prepararSQL($sql, $parametros);
         $resultado = $consulta->fetch_all(MYSQLI_ASSOC);
 
