@@ -1,17 +1,17 @@
 <?php
+
 require_once("index-logica.php");
-// session_start();
 
 if (isset($_POST['usuariosEncontrados'])) {
-    $usuario=base64_decode($_GET['valor']);
+    $usuario = base64_decode($_GET['valor']);
     $listaUsuarios = unserialize($_POST['usuariosEncontrados']);
     echo '<script type="text/javascript">
     window.onload = function() {
         $("#miModalUsuarios").modal("show");
     }
-  </script>';
-}else{
-    $usuario="";
+    </script>';
+} else {
+    $usuario = '';
 }
 ?>
 
@@ -30,14 +30,12 @@ if (isset($_POST['usuariosEncontrados'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" >
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" >
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" >
     <!-- Or for RTL support -->
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
-    <link href="../config-general/assets-login-2023/css/styles.css" rel="stylesheet" />
+    <link rel="stylesheet"  href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" >
+    <link href="../config-general/assets-login-2023/css/styles.css" rel="stylesheet" >
 
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
@@ -53,7 +51,7 @@ if (isset($_POST['usuariosEncontrados'])) {
                     <div class="col-md-8 offset-md-2" id="login">
                         <form method="post" action="recuperar-clave-guardar.php" class="needs-validation" novalidate>
 
-                            <?php include("../config-general/mensajes-informativos.php"); ?>
+                            <?php include '../config-general/mensajes-informativos.php'; ?>
 
                             <img class="mb-4" src="../config-general/assets-login-2023/img/logo.png" width="100">
 
@@ -86,9 +84,9 @@ if (isset($_POST['usuariosEncontrados'])) {
     </div>
 
     <?php 
-        if (isset($_POST['usuariosEncontrados'])) {
-            include("compartido/modal-lista-usuarios.php");
-        }
+    if (isset($_POST['usuariosEncontrados'])) {
+        include 'compartido/modal-lista-usuarios.php';
+    }
      ?>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

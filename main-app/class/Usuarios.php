@@ -57,7 +57,7 @@ class Usuarios {
         global $conexion;
         $resultado = [];
 
-        $sql = "SELECT id_nuevo,uss_email,uss_usuario,uss_documento,institucion,year FROM " . BD_GENERAL . ".usuarios WHERE (uss_email=? || uss_usuario=?) AND institucion=? AND year=?";
+        $sql = "SELECT * FROM " . BD_GENERAL . ".usuarios WHERE (uss_email=? || uss_usuario=?) AND institucion=? AND year=?";
         $parametros = [$usuario, $usuario, $idInstitucion, $_SESSION["bd"]];
         $consulta = BindSQL::prepararSQL($sql, $parametros);
 
@@ -73,12 +73,12 @@ class Usuarios {
      *
      * @return array Devuelve un conjunto de resultados de la consulta de usuarios para recuperar la clave.
      */
-    public static function datosUsuarioRecuperarClave($valor)
+    public static function buscarUsuariosRecuperarClave($valor)
     {
         global $conexion;
         $resultado = [];
 
-        $sql = "SELECT id_nuevo,uss_email,uss_usuario,uss_documento,institucion,year FROM " . BD_GENERAL . ".usuarios WHERE (uss_email=? || uss_usuario=? || uss_documento=?)";
+        $sql = "SELECT id_nuevo,uss_id,uss_nombre,uss_email,uss_usuario,uss_documento,institucion,year FROM " . BD_GENERAL . ".usuarios WHERE (uss_email=? || uss_usuario=? || uss_documento=?)";
         $parametros = [$valor, $valor, $valor];
         $consulta = BindSQL::prepararSQL($sql, $parametros);
         $resultado = $consulta->fetch_all(MYSQLI_ASSOC);
@@ -92,12 +92,12 @@ class Usuarios {
      *
      * @return array Devuelve un conjunto de resultados de la consulta de usuarios para recuperar la clave.
      */
-    public static function datosUsuarioRecuperarClaveId($id)
+    public static function buscarUsuarioIdNuevo($id)
     {
         global $conexion;
         $resultado = [];
 
-        $sql = "SELECT * FROM " . BD_GENERAL . ".usuarios WHERE id_nuevo=?";
+        $sql = "SELECT id_nuevo,uss_id,uss_nombre,uss_email,uss_usuario,uss_documento,institucion,year FROM " . BD_GENERAL . ".usuarios WHERE id_nuevo=?";
         $parametros = [$id];
         $consulta = BindSQL::prepararSQL($sql, $parametros);
         $resultado = $consulta->fetch_all(MYSQLI_ASSOC);
@@ -124,7 +124,7 @@ class Usuarios {
         }
 
         $sql = "UPDATE " . BD_GENERAL . ".usuarios SET uss_clave=?, uss_intentos_fallidos=0 WHERE uss_id=? AND institucion=? AND year=?";
-        $parametros = [SHA1($data['nueva_clave']), $data['usuario_id'], $data['institucion_id'], $data['institucion_agno']];
+        $parametros = [SHA1($data['nueva_clave']), $data['usuario_id'], $data['institucion_id'], ];
         $resultado = BindSQL::prepararSQL($sql, $parametros);
 
         return $idatosUsuarioltimoRegistro;
