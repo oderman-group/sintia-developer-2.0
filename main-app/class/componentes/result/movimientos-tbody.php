@@ -6,24 +6,30 @@ if (!empty($data["dataTotal"])) {
 }
 $contReg = 1;
 $estadosCuentas = array("", "Fact. Venta", "Fact. Compra");
-$estadoFil = !empty($filtros["estado"]) ? $filtros["estado"] : "";
-$tipo = !empty($filtros["tipo"]) ? $filtros["tipo"] : "";
-$desde = !empty($filtros["desde"]) ? $filtros["desde"] : "";
-$hasta = !empty($filtros["hasta"]) ? $filtros["hasta"] : "";
+$estadoFil      = !empty($filtros["estado"]) ? $filtros["estado"] : "";
+$tipo           = !empty($filtros["tipo"]) ? $filtros["tipo"] : "";
+$desde          = !empty($filtros["desde"]) ? $filtros["desde"] : "";
+$hasta          = !empty($filtros["hasta"]) ? $filtros["hasta"] : "";
 foreach ($data["data"] as $resultado) {
 	$bgColor = '';
-	if ($resultado['fcu_anulado'] == 1) $bgColor = '#ff572238';
+
+	if ($resultado['fcu_anulado'] == 1) {
+		$bgColor = '#ff572238';
+	}
+
 	$bgColorEstado = '#eeff0038';
 	$estado = 'Por Cobrar';
+
 	if ($resultado['fcu_status'] == COBRADA) {
 		$bgColorEstado = '#00F13A38';
 		$estado = 'Cobrada';
 	}
+
 	$vlrAdicional = !empty($resultado['fcu_valor']) ? $resultado['fcu_valor'] : 0;
 	$totalNeto    = Movimientos::calcularTotalNeto($conexion, $config, $resultado['fcu_id'], $vlrAdicional);
 	$abonos       = Movimientos::calcularTotalAbonado($conexion, $config, $resultado['fcu_id']);
 	$porCobrar    = $totalNeto - $abonos;
-	$usuario = UsuariosPadre::nombreCompletoDelUsuario($resultado);
+	$usuario      = UsuariosPadre::nombreCompletoDelUsuario($resultado);
 ?>
 	<tr id="reg<?= $resultado['fcu_id']; ?>" style="background-color:<?= $bgColor; ?>;">
 		<td><?= $contReg; ?></td>
@@ -32,9 +38,9 @@ foreach ($data["data"] as $resultado) {
 			<a href="<?= $_SERVER['PHP_SELF']; ?>?estadoFil=<?= base64_encode($estadoFil); ?>&usuario=<?= base64_encode($usuario) ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&tipo=<?= base64_encode($tipo); ?>&fecha=<?= base64_encode($resultado['fcu_fecha']); ?>" style="text-decoration: underline;"><?= $resultado['fcu_fecha']; ?></a>
 		</td>
 		<td><?= $resultado['fcu_detalle']; ?></td>
-		<td id="totalNeto<?= $resultado['fcu_id']; ?>" data-tipo="<?= $resultado['fcu_tipo'] ?>" data-anulado="<?= $resultado['fcu_anulado'] ?>" data-total-neto="<?= $totalNeto ?>">$<?=  !empty($totalNeto)?number_format($totalNeto, 0, ",", "."):0 ?></td>
-		<td data-abonos="<?= $abonos ?>">$<?= !empty($abonos)?number_format($abonos, 0, ",", "."):0 ?></td>
-		<td data-por-cobrar="<?= $porCobrar ?>">$<?= !empty($porCobrar)?number_format($porCobrar, 0, ",", "."):0 ?></td>
+		<td id="totalNeto<?= $resultado['fcu_id']; ?>" data-tipo="<?= $resultado['fcu_tipo'] ?>" data-anulado="<?= $resultado['fcu_anulado'] ?>" data-total-neto="<?= $totalNeto ?>">$<?= !empty($totalNeto) ? number_format($totalNeto, 0, ",", ".") : 0 ?></td>
+		<td data-abonos="<?= $abonos ?>">$<?= !empty($abonos) ? number_format($abonos, 0, ",", ".") : 0 ?></td>
+		<td data-por-cobrar="<?= $porCobrar ?>">$<?= !empty($porCobrar) ? number_format($porCobrar, 0, ",", ".") : 0 ?></td>
 		<td>
 			<a href="<?= $_SERVER['PHP_SELF']; ?>?estadoFil=<?= base64_encode($estadoFil); ?>&usuario=<?= base64_encode($usuario); ?>&desde=<?= $desde; ?>&hasta=<?= $hasta; ?>&tipo=<?= base64_encode($resultado['fcu_tipo']); ?>&fecha=<?= base64_encode($fecha); ?>" style="text-decoration: underline;"><?= $estadosCuentas[$resultado['fcu_tipo']]; ?></a>
 		</td>
