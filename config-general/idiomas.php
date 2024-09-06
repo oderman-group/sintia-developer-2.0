@@ -826,7 +826,7 @@ $frases[427][$l] = 'Reportes Gráficos';
 $frases[428][$l] = 'Respuestas';
 $frases[429][$l] = 'Cursos Adicionales';
 $frases[430][$l] = 'Búsqueda... (Presiona Enter) ';
-$frases[431][$l] = 'Presiona Enter Paara Buscar';
+$frases[431][$l] = 'Presiona Enter Para Buscar';
 
 //ENGLISH
 
