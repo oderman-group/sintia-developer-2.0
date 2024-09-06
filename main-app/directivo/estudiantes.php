@@ -182,7 +182,7 @@ if($config['conf_doble_buscador'] == 1) {
 													<?php
 													
 													include("includes/consulta-paginacion-estudiantes.php");
-													$filtroLimite = 'LIMIT 	1';													
+													$filtroLimite = 'LIMIT '.$inicio.','.$registros;												
 													$consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite, $cursoActual);
 													
 													$contReg = 1;
