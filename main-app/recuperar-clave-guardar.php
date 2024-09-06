@@ -7,8 +7,10 @@ require_once(ROOT_PATH . "/main-app/class/EnviarEmail.php");
 
 $conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
 
+$year_actual=date('Y');
+
 if (!empty($_POST['Usuario'])) {
-    $datosUsuario = Usuarios::buscarUsuariosRecuperarClave($_POST['Usuario']);
+    $datosUsuario = Usuarios::buscarUsuariosRecuperarClave($_POST['Usuario'],$year_actual);
 } elseif (!empty($_POST['usuarioId'])) {
     $datosUsuario = Usuarios::buscarUsuarioIdNuevo($_POST['usuarioId']);
 }
@@ -20,7 +22,7 @@ if ($usuariosEncontrados == 1) {
 	if (!empty($datosUsuario)) {
 		$data = [
 			'institucion_id'   => $datosUsuario['institucion'],
-			'institucion_agno' => date('Y'),
+			'institucion_agno' => $year_actual,
 			'usuario_id'       => $datosUsuario['uss_id'],
 			'usuario_email'    => $datosUsuario['uss_email'],
 			'usuario_nombre'   => $datosUsuario['uss_nombre'],
