@@ -825,7 +825,7 @@ $frases[426][$l] = 'Tarifa';
 $frases[427][$l] = 'Reportes Gráficos';
 $frases[428][$l] = 'Respuestas';
 $frases[429][$l] = 'Cursos Adicionales';
-$frases[430][$l] = 'Búsqueda.. (Presiona Enter) ';
+$frases[430][$l] = 'Búsqueda... (Presiona Enter) ';
 $frases[431][$l] = 'Presiona Enter Para Buscar';
 
 //ENGLISH
@@ -1641,5 +1641,5 @@ $frases[427][$l] = 'Graphic Reports';
 $frases[428][$l] = 'Answers';
 $frases[429][$l] = 'Additional courses';
 
-$frases[430][$l] = 'Search.. (Press Enter)';
+$frases[430][$l] = 'Search... (Press Enter)';
 $frases[431][$l] = 'Press Enter To Search';
