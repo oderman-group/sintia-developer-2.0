@@ -24,21 +24,22 @@ class Utilidades {
  * @throws Redireccion a 'page-info.php?idmsg=303' si un parámetro no es válido.
  */
     public static  function validarParametros($get)
-    { 
-        if (isset($get) ) {
+    {
+        if (isset($get)) {
             foreach ($get as $key => $value) {
-                 // validammos que los parametros no sean null y sea base64  excluyendo cuando la llave sea success y error 
-                if ( $key!='success' && $key!='error' && !empty($value) && !self::esBase64($value)) {                    
-                    echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=303";</script>';
+                // validammos que los parametros no sean null y sea base64  excluyendo cuando la llave sea success y error 
+                if ($key != 'success' && $key != 'error' && !empty($value) && !self::esBase64($value)) {
+                    echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=307";</script>';
                     exit();
-                }    
+                } elseif (!empty($value) && !self::esAlfanumerico(base64_decode($value))) { // validamos que el resultado es codificado es  alfanumerico            
+                    echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=307";</script>';
+                    exit();
+                }
             }
         }
-       
-
-        
     }
-    /**
+
+ /**
  * Verifica si una cadena es una codificación válida en base64.
  *
  * Esta función toma una cadena como entrada y realiza una serie de comprobaciones
@@ -76,6 +77,24 @@ class Utilidades {
         }
         return true;
     
+    }
+    /**
+     * Verifica si una cadena es una codificación válida en alfanumerica.
+     *
+     * Esta función toma una cadena como entrada y realiza una serie de comprobaciones
+     * para determinar si la cadena es alfanumerica forma válida.
+     *
+     * @param string $valor La cadena a verificar.
+     * 
+     * @return bool Devuelve `true` si la cadena es una codificación válida en base64,
+     *              de lo contrario, devuelve `false`.
+     * 
+     * @example
+     * // Ejemplo de uso:
+     * $esValido = esAlfanumerico('nombre123');
+     *  */
+    public static function esAlfanumerico($valor) {
+        return ctype_alnum($valor);
     }
 
     /**

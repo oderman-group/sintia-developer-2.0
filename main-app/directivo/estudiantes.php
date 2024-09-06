@@ -10,6 +10,7 @@ require_once(ROOT_PATH."/main-app/class/RedisInstance.php");
 
 
 Utilidades::validarParametros($_GET);
+
 if (isset($_GET['mode']) && $_GET['mode'] === 'DEV') {
 	$redis = RedisInstance::getRedisInstance();
 
