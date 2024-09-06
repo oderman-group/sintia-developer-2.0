@@ -1,4 +1,5 @@
 <?php
+
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 include(ROOT_PATH."/main-app/class/Asignaciones.php");
 
@@ -22,10 +23,10 @@ $numAsignacionesEncuesta = mysqli_num_rows($consultaAsignacionEncuesta);
 
 //Contamos si de esas pendientes tiene obligatorias
 $asignacionesObligatorias = 0;
-if ($numAsignacionesEncuesta > 0){
+if ($numAsignacionesEncuesta > 0) {
 	foreach ($consultaAsignacionEncuesta as $arrayAsignaciones) {
-		if($arrayAsignaciones['evag_obligatoria'] == 1){
-			$asignacionesObligatorias ++;
+		if ($arrayAsignaciones['evag_obligatoria'] == 1) {
+			$asignacionesObligatorias++;
 		}
 	}
 }
