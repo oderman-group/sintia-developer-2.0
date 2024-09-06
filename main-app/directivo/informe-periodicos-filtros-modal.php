@@ -2,10 +2,13 @@
 require_once(ROOT_PATH . "/main-app/class/Grupos.php");
 require_once(ROOT_PATH . "/main-app/class/Grados.php");
 $idPaginaInterna = 'DT0340';
+
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
     echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
     exit();
-} ?>
+} 
+
+?>
 
 <!--select2-->
 <link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
@@ -19,7 +22,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
             <div class="form-group row">
                 <label class="col-sm-2 control-label">Curso</label>
                 <div class="col-sm-8">
-                    <select class="form-control  select2" style="width: 810.666px;" name="grado" id="grado" required onchange="habilitarGrupos()">
+                    <select class="form-control  select2" style="width: 810.666px;" name="gradoInforme" id="gradoInforme" required onchange="habilitarGrupos()">
                         <option value="">Seleccione una opción</option>
                         <?php
                         $opcionesConsulta = Grados::traerGradosInstitucion($config);
@@ -36,8 +39,8 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
             <div class="form-group row">
                 <label class="col-sm-2 control-label">Grupos</label>
                 <div class="col-sm-4">
-                <span id="mensajeGrupos" style="color: #6017dc; display:none;">Espere un momento mientras se cargan los grupos.</span>
-                    <select class="form-control  select2" style="width: 810.666px;" id="grupos" name="grupos[]" multiple disabled onchange="habilitarMaterias()">
+                    <span id="mensajeGrupos" style="color: #6017dc; display:none;">Espere un momento mientras se cargan los grupos.</span>
+                    <select class="form-control  select2" style="width: 810.666px;" id="gruposInforme" name="gruposInforme[]" multiple disabled onchange="habilitarMaterias()">
 
                     </select>
 
@@ -47,8 +50,8 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
             <div class="form-group row" id="carga-container">
                 <label class="col-sm-2 control-label">Materias</label>
                 <div class="col-sm-8">
-                <span id="mensajeMaterias" style="color: #6017dc; display:none;">Espere un momento mientras se cargan las materias.</span>
-                    <select class="form-control  select2" style="width: 810.666px;" name="materias[]" id="materias" multiple disabled>
+                    <span id="mensajeMaterias" style="color: #6017dc; display:none;">Espere un momento mientras se cargan las materias.</span>
+                    <select class="form-control  select2" style="width: 810.666px;" name="materiasInforme[]" id="materiasInforme" multiple disabled>
                     </select>
 
 
@@ -60,9 +63,9 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
     </div>
 </div>
 <script>
-    var selectcurso = $('#grado');
-    var selectgrupos = $('#grupos');
-    var selectmaterias = $('#materias');
+    var selectcurso = $('#gradoInforme');
+    var selectgrupos = $('#gruposInforme');
+    var selectmaterias = $('#materiasInforme');
     async function habilitarGrupos() {
         var curso = selectcurso.val();
         var url = "../compartido/ajax_grupos_curso.php";
@@ -73,17 +76,17 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
         selectgrupos.empty();
         selectmaterias.empty();
         resultado = await metodoFetchAsync(url, data, 'json', false);
-        resultData = resultado["data"];       
+        resultData = resultado["data"];
         if (resultData["ok"]) {
-            resultData["result"];           
+            resultData["result"];
             // Itera sobre el JSON y añade cada opción
             resultData["result"].forEach(function(opcion) {
                 var nuevaOpcion = new Option(opcion.gru_nombre, opcion.car_grupo, false, false);
                 selectgrupos.append(nuevaOpcion);
             });
-           var grupos = document.getElementById('grupos');
-           grupos.removeAttribute('disabled');
-           $('#mensajeGrupos').hide();
+            var grupos = document.getElementById('gruposInforme');
+            grupos.removeAttribute('disabled');
+            $('#mensajeGrupos').hide();
         }
     }
     async function habilitarMaterias() {
@@ -97,19 +100,17 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
         resultado = await metodoFetchAsync(url, data, 'json', false);
         resultData = resultado["data"];
         if (resultData["ok"]) {
-            resultData["result"];            
+            resultData["result"];
             // Itera sobre el JSON y añade cada opción
             resultData["result"].forEach(function(opcion) {
-                var nuevaOpcion = new Option( opcion.mat_id+'. '+opcion.mat_nombre, opcion.mat_id, false, false);
+                var nuevaOpcion = new Option(opcion.mat_id + '. ' + opcion.mat_nombre, opcion.mat_id, false, false);
                 selectmaterias.append(nuevaOpcion);
             });
             $('#mensajeMaterias').hide();
-            var materias = document.getElementById('materias');
+            var materias = document.getElementById('materiasInforme');
             materias.removeAttribute('disabled');
         }
     }
-
-    
 </script>
 <!--select2-->
 <script src="../../config-general/assets/plugins/select2/js/select2.js"></script>

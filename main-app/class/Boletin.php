@@ -107,14 +107,14 @@ class Boletin {
      * @param array  $listaDesemp La categoría de notas para la cual se desea obtener información.
      * @param string $nota La nota para la cual se desea obtener información.
      */
-    public static function obtenerDatosTipoDeNotasCargadas($listaDesemp, $nota){
-        $encontrado=null;
+    public static function obtenerDatosTipoDeNotasCargadas($listaDesemp, $nota) {
+        $encontrado = null;
         foreach ($listaDesemp as $item) {
-            if ($nota>=$item['notip_desde'] && $nota<=$item['notip_hasta']) {
+            if ($nota >= $item['notip_desde'] && $nota <= $item['notip_hasta']) {
                 $encontrado = $item;
                 break;  // Detenemos la búsqueda una vez encontrado
             }
-        }        
+        }
         return $encontrado;
     }
 

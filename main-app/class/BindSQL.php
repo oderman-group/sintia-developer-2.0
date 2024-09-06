@@ -24,30 +24,14 @@ class BindSQL
             $consulta = mysqli_prepare($conexion, $sql);
 
             if ($consulta) {
-                $tipoParametro = '';
-                foreach ($parametros as $parametro) {
-                    if (is_int($parametro)) {
-                        $tipoParametro .= 'i';
-                    } else if (is_float($parametro)) {
-                        $tipoParametro .= 'd';
-                    } else if (is_string($parametro)) {
-                        $tipoParametro .= 's';
-                    } else if (is_array($parametro)) {
-                        $tipoParametro .= str_repeat('s', count($parametro));
-                    } else if (is_bool($parametro)) {
-                        $tipoParametro .= 'i';
-                        $parametro = $parametro ? 1 : 0;
-                    } else {
-                        $tipoParametro .= 's';
-                    }
-                }
+                $tipoParametro = self::validartipoValor($parametros);                
                 // aplanamos los array por si hay un elemento tipo aarray
-                $miArrayPlano = [];
-                array_walk_recursive($parametros, function ($item) use (&$miArrayPlano) {
-                    $miArrayPlano[] = $item;
+                $arrayUnificado = [];
+                array_walk_recursive($parametros, function ($item) use (&$arrayUnificado) {
+                    $arrayUnificado[] = $item;
                 });
                 // Aplicar trim a cada valor en $parametros para eliminar comillas innecesarias
-                $miArrayPlano = array_map(function ($value) {
+                $arrayUnificado = array_map(function ($value) {
 
                     if ($value != null) {
                         if (is_string($value)) {
@@ -58,9 +42,9 @@ class BindSQL
                     } else {
                         return null;
                     }
-                }, $miArrayPlano);
+                }, $arrayUnificado);
 
-                mysqli_stmt_bind_param($consulta, $tipoParametro, ...$miArrayPlano);
+                mysqli_stmt_bind_param($consulta, $tipoParametro, ...$arrayUnificado);
 
                 mysqli_stmt_execute($consulta);
 
@@ -80,6 +64,27 @@ class BindSQL
             self::revertirTransacion();
             include(ROOT_PATH . "/main-app/compartido/error-catch-to-report.php");
         }
+    }
+
+    private static function validartipoValor(array $valoresArray){
+        $tipoParametro = '';
+        foreach ($valoresArray as $valor) {
+            if (is_int($valor)) {
+                $tipoParametro .= 'i';
+            } elseif (is_float($valor)) {
+                $tipoParametro .= 'd';
+            } elseif (is_string($valor)) {
+                $tipoParametro .= 's';
+            } elseif (is_array($valor)) { 
+               $tipoParametro .= self::validartipoValor($valor);
+            } elseif (is_bool($valor)) {
+                $tipoParametro .= 'i';
+                $valor = $valor ? 1 : 0;
+            } else {
+                $tipoParametro .= 's';
+            }
+        }
+        return $tipoParametro;
     }
 
     // funcion para Iniciar la transacio
@@ -139,7 +144,7 @@ class BindSQL
      *
      * @return array Arreglo de datos del resultado.
      */
-    public static function resultArray(mysqli_result $resulsConsulta) // funcion para obtener datos en un array de una consulta
+    public static function resultadoArray(mysqli_result $resulsConsulta) // funcion para obtener datos en un array de una consulta
     {
 
         if ($resulsConsulta) {
