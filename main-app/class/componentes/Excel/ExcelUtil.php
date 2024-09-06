@@ -34,8 +34,8 @@ class ExcelUtil extends Spreadsheet
         $this->indice++;
         // Crear una nueva hoja
         $nuevaHoja = $this->spreadsheet->createSheet();
-        $this->sheet[$this->indice] =  $nuevaHoja;        
-        $this->sheet[$this->indice] ->setTitle($nombreHoja);
+        $this->sheet[$this->indice] =  $nuevaHoja;
+        $this->sheet[$this->indice]->setTitle($nombreHoja);
     }
 
     public function ajustarTexto($celda)
@@ -47,23 +47,24 @@ class ExcelUtil extends Spreadsheet
         }
     }
 
-    public function agregarTitulo($celda, $titulo, $size = 12, $colorTexto = '000000',$Colorfondo = 'ffffff')
+    public function agregarTitulo($celda, $titulo, $size = 12, $colorTexto = '000000', $Colorfondo = 'ffffff')
     {
         $this->sheet[$this->indice]->setCellValue($celda, $titulo);                                                            // asignamos los valores
         self::textoNegrita($celda);
         self::textoTamano($celda, $size);
         self::centrarTexto($celda);
-        self::establecerColorTexto($celda,$colorTexto);
-        self::establecerColorFondo($celda,$Colorfondo);
-        
+        self::establecerColorTexto($celda, $colorTexto);
+        self::establecerColorFondo($celda, $Colorfondo);
     }
-    public function agregarTexto($celda, $titulo,$colorTexto = '000000',$Colorfondo = 'ffffff')
+
+    public function agregarTexto($celda, $titulo, $colorTexto = '000000', $Colorfondo = 'ffffff')
     {
         $this->sheet[$this->indice]->setCellValue($celda, $titulo);                                                           // asignamos los valores
         $this->sheet[$this->indice]->getColumnDimension(substr($celda, 0, 1))->setAutoSize(true);                            //auto tamaño de la columna J 
-        self::establecerColorTexto($celda,$colorTexto);
-        self::establecerColorFondo($celda,$Colorfondo);
+        self::establecerColorTexto($celda, $colorTexto);
+        self::establecerColorFondo($celda, $Colorfondo);
     }
+
     public function textoTamano($celda, $size = 12)
     {
         $this->sheet[$this->indice]->getStyle($celda)->getFont()->setSize($size);                                               // cambiamos el tamño de la fuente
@@ -89,6 +90,7 @@ class ExcelUtil extends Spreadsheet
     {
         $this->sheet[$this->indice]->getStyle($rangoCeldas)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($colorHex);
     }
+
     public function establecerColorTexto($rangoCeldas, $colorHex)
     {
         $this->sheet[$this->indice]->getStyle($rangoCeldas)->getFont()->getColor()->setARGB($colorHex);
@@ -98,7 +100,6 @@ class ExcelUtil extends Spreadsheet
     {
         $this->sheet[$this->indice]->getStyle($rangoCeldas)->getBorders()->getAllBorders()->getColor()->setARGB($colorHex);
     }
-
 
     public function agregarImagenLogo($celda = 'A1', $rutaImagen = self::IMG_DEFAULT, $offsetX = 0, $offsetY = 0)
     {
@@ -114,7 +115,7 @@ class ExcelUtil extends Spreadsheet
     function validarFormatoCelda($celda)
     {
         // Expresión regular para validar el formato de celda
-       $patron = '/^[A-Z][1-9][0-9]*$/';
+        $patron = '/^[A-Z][1-9][0-9]*$/';
         // Verifica si el parámetro cumple con el patrón
         return preg_match($patron, $celda) === 1;
     }
@@ -122,11 +123,10 @@ class ExcelUtil extends Spreadsheet
     function validarRangosCelda($rangos)
     {
         // Expresión regular para validar los rangos de una celda
-       $patron = '/^[A-Z]+[1-9]\d*:[A-Z]+[1-9]\d*$/';
+        $patron = '/^[A-Z]+[1-9]\d*:[A-Z]+[1-9]\d*$/';
         // Verifica si el parámetro cumple con el patrón
         return preg_match($patron, $rangos) === 1;
     }
-
 
     public function descargarExcel($nombreArchivo = "archivo.xlsx")
     {
