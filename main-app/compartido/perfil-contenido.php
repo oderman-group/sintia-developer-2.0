@@ -126,6 +126,21 @@
                                                 <input type="text" value="<?=$usuarioPerfil["uss_apellido2"];?>" name="apellido2" class="form-control" style="text-transform: uppercase;">
                                             </div>
                                         </div>
+
+                                        <?php if ($usuarioPerfil['uss_tipo'] == TIPO_DIRECTIVO) {?>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 control-label">Documento</label>
+                                                <div class="col-sm-4">
+                                                    <input 
+                                                        type="text" 
+                                                        name="documento" 
+                                                        id="documento" 
+                                                        class="form-control" 
+                                                        value="<?=$usuarioPerfil['uss_documento'];?>"
+                                                    >
+                                                </div>
+                                            </div>
+                                        <?php }?>
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[181][$datosUsuarioActual['uss_idioma']];?></label>

@@ -5,7 +5,6 @@ include("../compartido/historial-acciones-guardar.php");
 include("verificar-carga.php");
 
 //Hay acciones que solo son permitidos en periodos diferentes al actual.
-include("verificar-periodos-iguales.php");
 include("../compartido/head.php");
 
 require_once("../class/Estudiantes.php");
