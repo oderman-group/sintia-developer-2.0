@@ -88,7 +88,7 @@ class Informes
             $parametros = [$config['conf_id_institucion'], $_SESSION["bd"], $cursos, $grupos, $materias];
 
             $resultado = BindSQL::prepararSQL($sql, $parametros);
-            $resultadoArray = BindSQL::resultArray($resultado);
+            $resultadoArray = BindSQL::resultadoArray($resultado);
         } catch (Exception $e) {
             echo "Excepción catpurada: " . $e->getMessage();
             exit();
