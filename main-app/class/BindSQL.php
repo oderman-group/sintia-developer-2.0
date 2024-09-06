@@ -25,13 +25,13 @@ class BindSQL
 
             if ($consulta) {
                 $tipoParametro = self::validartipoValor($parametros);                
-                // aplanamos los array por si hay un elemento tipo aarray
-                $arrayUnificado = [];
-                array_walk_recursive($parametros, function ($item) use (&$arrayUnificado) {
-                    $arrayUnificado[] = $item;
+                // aplanamos los array por si hay un elemento tipo aarray (unificamos los parametros con los array)
+                $arrayParametrosPreparadosUnificados = [];
+                array_walk_recursive($parametros, function ($item) use (&$arrayParametrosPreparadosUnificados) {
+                    $arrayParametrosPreparadosUnificados[] = $item;
                 });
                 // Aplicar trim a cada valor en $parametros para eliminar comillas innecesarias
-                $arrayUnificado = array_map(function ($value) {
+                $arrayParametrosPreparadosUnificados = array_map(function ($value) {
 
                     if ($value != null) {
                         if (is_string($value)) {
@@ -42,9 +42,9 @@ class BindSQL
                     } else {
                         return null;
                     }
-                }, $arrayUnificado);
+                }, $arrayParametrosPreparadosUnificados);
 
-                mysqli_stmt_bind_param($consulta, $tipoParametro, ...$arrayUnificado);
+                mysqli_stmt_bind_param($consulta, $tipoParametro, ...$arrayParametrosPreparadosUnificados);
 
                 mysqli_stmt_execute($consulta);
 
