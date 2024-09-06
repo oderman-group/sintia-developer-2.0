@@ -136,7 +136,7 @@ class Autenticate {
 
         $objetInstitution = Instituciones::getDataInstitution($idInstitucion);
         $dataInstitution  = mysqli_fetch_array($objetInstitution, MYSQLI_ASSOC);
-        $mySelf           = Directivo::getMyselfByDocument($datosUsuarioActual["uss_documento"], $datosUsuarioActual["uss_tipo"]);
+        $mySelf           = Directivo::getMyselfByDocument($datosUsuarioActual["uss_documento"], $datosUsuarioActual["uss_tipo"], $idInstitucion);
 
         $_SESSION["idInstitucion"]           = $idInstitucion;
         $_SESSION['id']                      = $mySelf["uss_id"];
