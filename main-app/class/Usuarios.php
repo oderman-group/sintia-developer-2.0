@@ -124,7 +124,7 @@ class Usuarios {
         }
 
         $sql = "UPDATE " . BD_GENERAL . ".usuarios SET uss_clave=?, uss_intentos_fallidos=0 WHERE uss_id=? AND institucion=? AND year=?";
-        $parametros = [SHA1($data['nueva_clave']), $data['usuario_id'], $data['institucion_id'], ];
+        $parametros = [SHA1($data['nueva_clave']), $data['usuario_id'], $data['institucion_id'], $data['institucion_agno']];
         $resultado = BindSQL::prepararSQL($sql, $parametros);
 
         return $idatosUsuarioltimoRegistro;
