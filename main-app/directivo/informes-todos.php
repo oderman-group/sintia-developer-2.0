@@ -219,7 +219,13 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                             <p><a href="../compartido/excel-inscripciones.php" target="_blank">1. Exportar inscripciones</a></p>
 											<?php } if(Modulos::validarSubRol(['DT0244'])){?>
                                             <p><a href="../compartido/excel-estudiantes.php" target="_blank">2. Exportar matrículas</a></p>
-											<?php }?>
+											<?php }if(Modulos::validarSubRol(['DT0340'])){
+											?>
+												<p><a href="javascript:void(0);" data-toggle="modal" data-target="#modalCont7" >3. Exportar informe periodico</a></p>
+											<?php 
+												$idModal = "modalCont7"; $contenido = "informe-periodicos-filtros-modal.php";  include("../compartido/contenido-modal.php");
+												}
+											?>
 										</div>
                                 	</div>
 								</div>

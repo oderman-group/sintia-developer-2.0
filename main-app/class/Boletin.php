@@ -101,6 +101,22 @@ class Boletin {
 
         return $resultado;
     }
+        /**
+     * Obtiene los datos asociados a un tipo de notas basados en la categoría y la nota proporcionadas dependeindo de una lista ya cargada.
+     * este metho es para evitar la multiples consultas a la base de datos sino buscar la informacion a una consulta ya cargada
+     * @param array  $listaDesemp La categoría de notas para la cual se desea obtener información.
+     * @param string $nota La nota para la cual se desea obtener información.
+     */
+    public static function obtenerDatosTipoDeNotasCargadas($listaDesemp, $nota) {
+        $encontrado = null;
+        foreach ($listaDesemp as $item) {
+            if ($nota >= $item['notip_desde'] && $nota <= $item['notip_hasta']) {
+                $encontrado = $item;
+                break;  // Detenemos la búsqueda una vez encontrado
+            }
+        }
+        return $encontrado;
+    }
 
     /**
      * Obtiene el puesto y el promedio de estudiantes en un grado y grupo específicos para un periodo académico determinado.

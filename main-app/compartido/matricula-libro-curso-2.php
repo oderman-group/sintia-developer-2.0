@@ -297,7 +297,7 @@ $contadorEstudiantes = 0;
                                         }//FIN FOR
 
                                         //ACOMULADO PARA LAS MATERIAS
-                                        $notaAcomuladoMateria = $notaMateriasPeriodosTotal / $ultimoPeriodo;
+                                        $notaAcomuladoMateria = $notaMateriasPeriodosTotal / $config["conf_periodos_maximos"];
                                         $notaAcomuladoMateria = round($notaAcomuladoMateria,1);
 
                                         if (strlen($notaAcomuladoMateria) === 1 || $notaAcomuladoMateria == 10){
@@ -381,7 +381,7 @@ $contadorEstudiantes = 0;
                                 }
                         
                                 //ACOMULADO PARA LAS AREAS
-                                $notaAcomuladoArea = $notaAreasPeriodosTotal / $ultimoPeriodoAreas;
+                                $notaAcomuladoArea = $notaAreasPeriodosTotal / $config["conf_periodos_maximos"];
                                 $notaAcomuladoArea = round($notaAcomuladoArea,1);
                                 if (strlen($notaAcomuladoArea) === 1 || $notaAcomuladoArea == 10) {
                                     $notaAcomuladoArea = $notaAcomuladoArea.".0";
@@ -474,7 +474,7 @@ $contadorEstudiantes = 0;
 						}// FIN FOR
                         
 						//ACOMULADO GENERAL
-						$notaAcomuladoTotal = $promedioGeneralPeriodosTotal / $ultimoPeriodoAreas;
+						$notaAcomuladoTotal = $promedioGeneralPeriodosTotal / $config["conf_periodos_maximos"];
 						$notaAcomuladoTotal = round($notaAcomuladoTotal,1);
 						if(strlen($notaAcomuladoTotal) === 1 || $notaAcomuladoTotal == 10){
 							$notaAcomuladoTotal = $notaAcomuladoTotal.".0";
