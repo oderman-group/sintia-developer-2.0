@@ -1184,4 +1184,45 @@ class Calificaciones {
         return $datosMensaje;
     }
 
+    /**
+     * This function retrieves the current percentage of the student's activities completed.
+     *
+     * @param string $codEstudiante The unique identifier of the student.
+     * @param int $carga The unique identifier of the student's load.
+     * @param int $periodo The current period of the student's load.
+     *
+     * @return float The current percentage of the student's activities completed.
+     *
+     * @throws Exception If the database connection fails.
+     */
+    public static function obtenerPorcentajeActualEstudiante($codEstudiante, $carga, $periodo) {
+        $conexionPDO = Conexion::newConnection('PDO');
+        $config      = RedisInstance::getSystemConfiguration();
+
+        $sql = "SELECT SUM(aa.act_valor) AS porcentajeActual 
+                FROM ".BD_ACADEMICA.".academico_calificaciones ac 
+                INNER JOIN 
+                    ".BD_ACADEMICA.".academico_actividades aa 
+                        ON aa.act_id = ac.cal_id_actividad 
+                        AND aa.act_estado = 1
+                        AND aa.act_registrada = 1
+                        AND aa.act_id_carga = '".$carga."'
+                        AND aa.act_periodo = ".$periodo."
+                        AND aa.institucion = ".$config['conf_id_institucion']."
+                        AND aa.year = ".$_SESSION["bd"]."
+                WHERE ac.cal_id_estudiante = '".$codEstudiante."'
+                AND ac.cal_nota IS NOT NULL
+        ";
+
+        $asp = $conexionPDO->prepare($sql);
+        $asp->execute();
+        $filas = $asp->fetchAll(PDO::FETCH_ASSOC);
+
+        if (empty($filas)) {
+            return 0;
+        }
+
+        return $filas[0]['porcentajeActual'];
+    }
+
 }
