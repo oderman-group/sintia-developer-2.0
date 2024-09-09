@@ -32,6 +32,8 @@ abstract class BDT_Tablas implements BDT_Interface{
         global $conexionPDO;
         $where = '';
 
+        $campos ??= '*';
+
         if( !empty($predicado) ) {
             $where = "WHERE ";
             foreach( $predicado as $clave => $valor ) {
