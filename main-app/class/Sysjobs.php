@@ -14,12 +14,12 @@ class SysJobs {
     public static function registrar($tipo, $prioridad, array $parametros = [], $msj ='')
     {
         global $config;
-        $parametrosBuscar = array(
-            "tipo" =>$tipo,
+        $parametrosBuscar = [
+            "tipo"        => $tipo,
             "responsable" => $_SESSION['id'],
-            "parametros" => json_encode($parametros),
-            "agno"=>$config['conf_agno']
-        );
+            "parametros"  => json_encode($parametros),
+            "agno"        => $config['conf_agno']
+        ];
        
         $buscarJobs=self::consultar($parametrosBuscar);
         $cantidad = mysqli_num_rows($buscarJobs);
@@ -162,20 +162,26 @@ class SysJobs {
     public static function consultar(array $parametrosBusqueda = [])
     {
         global $conexion, $baseDatosServicios;
-        $resultado = [];
-        $andEstado=empty($parametrosBusqueda["estado"])?" ":"AND job_estado='".$parametrosBusqueda["estado"]."'";
-        $andParametros=empty($parametrosBusqueda["parametros"])?" ":"AND job_parametros='".$parametrosBusqueda["parametros"]."'";
+        $resultado     = [];
+        $andEstado     = empty($parametrosBusqueda["estado"]) ? " " : "AND job_estado='".$parametrosBusqueda["estado"]."'";
+        $andParametros = empty($parametrosBusqueda["parametros"]) ? " " : "AND job_parametros='".$parametrosBusqueda["parametros"]."'";
        
-        $sqlExecute="SELECT * FROM ".$baseDatosServicios.".sys_jobs
-        LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss.institucion=job_id_institucion AND uss_id = job_responsable AND uss.year={$parametrosBusqueda["agno"]}
-        LEFT JOIN ".$baseDatosServicios .".instituciones ON ins_id = job_id_institucion
-        WHERE job_tipo = '".$parametrosBusqueda["tipo"]."'
-        AND job_responsable ='".$parametrosBusqueda["responsable"]."'
-        AND job_year='".$parametrosBusqueda["agno"]."'
-        AND job_ambiente='".ENVIROMENT."'
-        ".$andParametros
-         .$andEstado."       
-        ORDER BY job_fecha_creacion";
+        $sqlExecute = "SELECT * FROM ".$baseDatosServicios.".sys_jobs
+            LEFT JOIN ".BD_GENERAL.".usuarios uss 
+                ON uss.institucion=job_id_institucion 
+                AND uss_id = job_responsable 
+                AND uss.year={$parametrosBusqueda["agno"]}
+            LEFT JOIN ".$baseDatosServicios .".instituciones 
+                ON ins_id = job_id_institucion
+            WHERE job_tipo = '".$parametrosBusqueda["tipo"]."'
+            AND job_responsable ='".$parametrosBusqueda["responsable"]."'
+            AND job_year='".$parametrosBusqueda["agno"]."'
+            AND job_ambiente='".ENVIROMENT."'
+            ".$andParametros
+            .$andEstado."
+            ORDER BY job_fecha_creacion
+        ";
+
         try {
             $resultado = mysqli_query($conexion,$sqlExecute);
         } catch (Exception $e) {
