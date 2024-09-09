@@ -20,6 +20,7 @@ require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
+require_once(ROOT_PATH."/main-app/class/Tables/BDT_academico_cargas.php");
 
 $conexionPDO = Conexion::newConnection('PDO');
 
@@ -182,7 +183,54 @@ while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 	}
 }
 
-$update = ['car_periodo' => $periodo+1];
+$periodoSiguiente = $periodo + 1;
+$carHistoricoArray = [];
+
+try {
+    $predicado = [
+        'car_id'      => $carga,
+        'institucion' => $config['conf_id_institucion'],
+        'year'        => $_SESSION["bd"],
+    ];
+
+    $campos = "car_periodo, car_estado, car_historico";
+
+    $datosCargaActualConsulta = BDT_AcademicoCargas::select($predicado, $campos, BD_ACADEMICA);
+    $datosCargaActual         = $datosCargaActualConsulta->fetchAll();
+    $carHistoricoCampo        = $datosCargaActual[0]['car_historico'];
+
+    if (!empty($carHistoricoCampo)) {
+
+        $carHistoricoArray     = json_decode($carHistoricoCampo, true);
+        $keys                  = array_keys($carHistoricoArray);
+        $lastKey               = end($keys);
+        $lastCarHistoricoArray = $carHistoricoArray[$lastKey];
+
+        if (
+            $datosCargaActual[0]['car_estado'] == 'DIRECTIVO' && 
+            !empty($lastCarHistoricoArray['car_periodo_anterior']) && 
+            $lastCarHistoricoArray['car_periodo_anterior'] != $datosCargaActual[0]['car_periodo']
+        ) {
+            $periodoSiguiente = $lastCarHistoricoArray['car_periodo_anterior'];
+        }
+
+    }
+
+    $carHistoricoArray[$carga.':'.time()] = [
+        'car_periodo_anterior' => $datosCargaActual[0]['car_periodo'],
+        'car_estado_anterior'  => $datosCargaActual[0]['car_estado'],
+        'car_forma_generacion' => 'MANUAL',
+    ];
+} catch (PDOException $e) {
+    include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+}
+
+$update = [
+    'car_estado'    => 'SINTIA',
+    'car_periodo'   => $periodoSiguiente,
+    'car_historico' => json_encode($carHistoricoArray),
+];
+
 CargaAcademica::actualizarCargaPorID($config, $carga, $update);
 
 include("../compartido/guardar-historial-acciones.php");
