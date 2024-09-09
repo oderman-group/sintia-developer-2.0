@@ -18,7 +18,7 @@ require_once(ROOT_PATH."/main-app/class/Tables/BDT_academico_cargas.php");
 
 $parametrosBuscar = [
     "tipo"   => JOBS_TIPO_GENERAR_INFORMES,
-    "estado" => JOBS_ESTADO_PROCESO
+    "estado" => JOBS_ESTADO_PROCESADO
 ];
 
 BindSQL::iniciarTransacion();
