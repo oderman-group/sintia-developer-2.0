@@ -189,7 +189,15 @@ try {
                 );
             }
         }
+
+        $datos = [
+            "id"      => $resultadoJobs['job_id'],
+            "estado"  => JOBS_ESTADO_PROCESADO,
+        ];
+    
+        SysJobs::actualizar($datos);
     }
+
     BindSQL::finalizarTransacion();
 } catch (Exception $e) {
     echo $e;
