@@ -135,12 +135,12 @@ if( !empty($_SESSION["infoCargaActual"]) ) {
 												$buscarJobs     = SysJobs::consultar($parametrosBuscar);
 												$jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
 
-												$configGenerarJobs=$config['conf_porcentaje_completo_generar_informe'];
+												$configGenerarJobs = $config['conf_porcentaje_completo_generar_informe'];
 
-												$consultaListaEstudantesSinNotas =Estudiantes::listarEstudiantesNotasFaltantes($rCargas["car_id"],$rCargas["car_periodo"],$rCargas["gra_tipo"]);
-												$numSinNotas=mysqli_num_rows($consultaListaEstudantesSinNotas);
+												$consultaListaEstudantesSinNotas = Estudiantes::listarEstudiantesNotasFaltantes($rCargas["car_id"],$rCargas["car_periodo"],$rCargas["gra_tipo"]);
+												$numSinNotas = mysqli_num_rows($consultaListaEstudantesSinNotas);
 
-												$btnGenerarInforme='
+												$btnGenerarInforme = '
                                                                 <div class="btn-group mt-2">
                                                                     <button type="button" class="btn red">Generar Informe</button>
                                                                     <button type="button" class="btn red dropdown-toggle m-r-20" data-toggle="dropdown">
@@ -190,22 +190,23 @@ if( !empty($_SESSION["infoCargaActual"]) ) {
                                                                 </div>
 															';
 
-												$alertaNotasFaltantes='
-															<div class="alert alert-danger mt-2" role="alert" style="margin-right: 20px;">
-																<a target="_blank" href="calificaciones-faltantes.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&get='.base64_encode(100).'">El informe no se puede generar, coloque las notas a todos los estudiantes para generar el informe.</a>
-															</div>
-															';
+												$alertaNotasFaltantes = '
+													<div class="alert alert-danger mt-2" role="alert" style="margin-right: 20px;">
+														<a target="_blank" href="calificaciones-faltantes.php?carga='.base64_encode($rCargas["car_id"]).'&periodo='.base64_encode($rCargas["car_periodo"]).'&get='.base64_encode(100).'">El informe no se puede generar, coloque las notas a todos los estudiantes para generar el informe.</a>
+													</div>
+												';
 												
-												if(empty($jobsEncontrado)){
+												if (empty($jobsEncontrado)) {
 													$mensajeI = $btnGenerarInforme;
-													if($configGenerarJobs==1 && $numSinNotas>0){
+													if ($configGenerarJobs == 1 && $numSinNotas > 0) {
 														$mensajeI = $alertaNotasFaltantes;
 													}
-												}else{
+												} else {
 													$intento = intval($jobsEncontrado["job_intentos"]);
-													switch($jobsEncontrado["job_estado"]){
-														case JOBS_ESTADO_ERROR:														
-															if($configGenerarJobs == 1) {
+
+													switch ($jobsEncontrado["job_estado"]) {
+														case JOBS_ESTADO_ERROR:
+															if ($configGenerarJobs == 1) {
 																$mensajeI = '<div class="alert alert-danger mt-3" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
 															} else {
 																$mensajeI = $btnGenerarInforme
@@ -214,11 +215,11 @@ if( !empty($_SESSION["infoCargaActual"]) ) {
 														break;
 
 														case JOBS_ESTADO_PENDIENTE:
-															if($intento==0){
+															if ($intento == 0) {
 																$mensajeI ='<div class="alert alert-success mt-3" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].'</div>';
-															}elseif($intento>0 && $seleccionado){
+															} elseif ($intento > 0 && $seleccionado) {
 																$mensajeI ='<div class="alert alert-warning-select mt-3" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].' <br><br>(La plataforma ha echo <b>'.$intento.'</b> intentos.)</div>';
-															}elseif($intento>0){
+															} elseif ($intento > 0) {
 																$mensajeI ='<div class="alert alert-warning mt-3" role="alert" style="margin-right: 20px;">'.$jobsEncontrado["job_mensaje"].' <br><br>(La plataforma ha echo <b>'.$intento.'</b> intentos.)</div>';
 															}
 														break;
@@ -227,21 +228,28 @@ if( !empty($_SESSION["infoCargaActual"]) ) {
 															$mensajeI ='<div class="alert alert-success mt-3" role="alert" style="margin-right: 20px;">El informe está en proceso.</div>';
 														break;
 
+														case JOBS_ESTADO_PROCESADO:
+															$mensajeI ='<div class="alert alert-success mt-3" role="alert" style="margin-right: 20px;">El informe está en proceso.</div>';
+														break;
+
 														default:
 															$mensajeI = $btnGenerarInforme;
-															if($configGenerarJobs==1 && $numSinNotas>0){
+
+															if ($configGenerarJobs == 1 && $numSinNotas > 0) {
 																$mensajeI = $alertaNotasFaltantes;
 															}
+
 															break;
 													}
 												}
 												
-											  }	
+											}
 										}
-										
-										$induccionEntrar = '';
+
+										$induccionEntrar  = '';
 										$induccionSabanas = '';
-										if($cargasCont == 1){
+
+										if ($cargasCont == 1) {
 											$induccionEntrar = 'data-hint="Haciendo click sobre el nombre o sobre la imagen puedes entrar a administrar esta carga académica."';
 											$induccionSabanas = 'data-hint="Puedes ver las sábanas de cada uno de los periodos pasados."';
 										}
