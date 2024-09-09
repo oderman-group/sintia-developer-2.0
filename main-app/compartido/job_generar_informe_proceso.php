@@ -15,6 +15,9 @@ require_once(ROOT_PATH."/main-app/class/RedisInstance.php");
 require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 require_once(ROOT_PATH."/main-app/class/Tables/BDT_temp_calculo_boletin_estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Tables/BDT_academico_cargas.php");
+require_once(ROOT_PATH."/main-app/class/Plataforma.php");
+
+$Plataforma = new Plataforma();
 
 $parametrosBuscar = [
     "tipo"   => JOBS_TIPO_GENERAR_INFORMES,
@@ -52,7 +55,8 @@ try {
         $contenidoMensaje = "<h1>Resultado final</h1>";
         $contenidoMensaje .= '<table border="1" width="100%" rules="group">';
         $contenidoMensaje .= '<thead>';
-        $contenidoMensaje .= '<tr>
+        $contenidoMensaje .= '<tr style="background-color:'.$Plataforma->colorUno.'; color:#FFF; text-align:center;">
+        <th>Nro.</th>
         <th>ID Estudiante</th>
         <th>Nombre Estudiante</th>
         <th>Estado</th>
@@ -68,19 +72,25 @@ try {
 
         $contenidoMensaje .= '<tbody>';
 
+        $contadorEstudiantes = 1;
+
         while ($estudianteResultado = $consultaListaEstudante->fetch(PDO::FETCH_ASSOC)) {
             $nombreEstudiante = 'NN';
+
             if (!empty($estudianteResultado['tcbe_datos_estudiante'])) {
                 $datosEstudiante = json_decode($estudianteResultado['tcbe_datos_estudiante'], true);
                 $nombreEstudiante = Estudiantes::NombreCompletoDelEstudiante($datosEstudiante);
             }
 
             $contenidoMensaje .= '<tr>';
-            $contenidoMensaje .= '<td>'.$estudianteResultado['tcbe_id_estudiante'].'</td>';
+            $contenidoMensaje .= '<td style="text-align:center;">'.$contadorEstudiantes.'</td>';
+            $contenidoMensaje .= '<td style="text-align:center;">'.$estudianteResultado['tcbe_id_estudiante'].'</td>';
             $contenidoMensaje .= '<td>'.$nombreEstudiante.'</td>';
-            $contenidoMensaje .= '<td>'.$estudianteResultado['tcbe_estado'].'</td>';
+            $contenidoMensaje .= '<td style="text-align:center;">'.$estudianteResultado['tcbe_estado'].'</td>';
             $contenidoMensaje .= '<td>'.$estudianteResultado['tcbe_error_msg'].'</td>';
             $contenidoMensaje .= '</tr>';
+
+            $contadorEstudiantes ++;
         }
 
         $contenidoMensaje .= '</tbody>';
