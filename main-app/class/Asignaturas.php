@@ -476,4 +476,71 @@ class Asignaturas {
         
         $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
+        /**
+     * Lista  las materias relacionadas a los cursos y grupos selecionados tenienedo en cuenta las cargas.
+     * 
+     * @param array $cursos - un array que tiene los cursos selecionados
+     * @param array $grupos - un array que tiene los grupos selecionados
+     *
+     * @return array - Un conjunto de resultados (`array`)
+     *
+     */
+    public static function listarMateriasCursosGrups($cursos, $grupos)
+    {
+        global $config;
+        // Preparar los placeholders para la consulta
+        $in_cursos = implode(', ', array_fill(0, count($cursos), '?'));
+        $in_grupos = implode(', ', array_fill(0, count($grupos), '?'));
+        $sql = "SELECT DISTINCT car_materia,
+                mat_id,
+                mat_nombre,
+                mat_siglas 
+                FROM " . BD_ACADEMICA . ".academico_cargas car
+               INNER JOIN " . BD_ACADEMICA . ".academico_materias mate ON
+               (
+                    mate.institucion=car.institucion
+                    AND mate.year=car.year
+                    AND mate.mat_id=car_materia
+                )
+                WHERE car.institucion=? 
+                AND car.year=?
+                AND car_curso IN($in_cursos)
+                AND car_grupo IN($in_grupos)
+                AND car_activa=1
+                ORDER BY mat_nombre";
+
+        $parametros = [$config['conf_id_institucion'], $_SESSION["bd"], $cursos, $grupos];
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        $resultado = BindSQL::resultadoArray($resultado);
+        return $resultado;
+    }
+
+    /**
+     * Lista  las materias relacionadas a los cursos y grupos selecionados tenienedo en cuenta las cargas.
+     * 
+     * @param string $idMateria - un String de el id de la materia.
+     *
+     * @return array - Un conjunto de resultados (`array`)
+     *
+     */
+    public static function consultarMateria($idMateria)
+    {
+        global $config;
+        $sql = "SELECT 
+                mat_id,
+                mat_nombre,
+                mat_siglas 
+                FROM " . BD_ACADEMICA . ".academico_materias mate
+                 WHERE mate.institucion=? 
+                AND mate.year=?
+                AND mat_id =?
+                LIMIT 1";
+
+        $parametros = [$config['conf_id_institucion'], $_SESSION["bd"], $idMateria];
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        $resultado = BindSQL::resultadoArray($resultado)[0];
+        return $resultado;
+    }
 }

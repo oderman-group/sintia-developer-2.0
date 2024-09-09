@@ -26,12 +26,21 @@ class Directivo {
         return $this->usuarios->getManagerPrimaryFromInstitution($idInstitution, $year);
     }
 
-    public static function getMyselfByDocument(string $document, int $tipoUsuario) {
+    public static function getMyselfByDocument(
+        string $document, 
+        int $tipoUsuario, 
+        int $idInstitution
+    ): array
+    {
         $conexion = Conexion::newConnection('MYSQL');
-        $sql = "SELECT * FROM ".BD_GENERAL.".usuarios WHERE uss_tipo=".$tipoUsuario." AND uss_documento='".$document."'";
+        $sql = "SELECT * FROM ".BD_GENERAL.".usuarios 
+        WHERE uss_tipo=".$tipoUsuario." 
+        AND uss_documento='".$document."'
+        AND institucion=".$idInstitution."
+        ";
         $consulta = mysqli_query($conexion, $sql);
 
-        if(mysqli_num_rows($consulta) == 0) {
+        if (mysqli_num_rows($consulta) == 0) {
             throw new Exception("No se encontró ningún usuario que coincida con el documento especificado: {$document}.", -1);
         }
 

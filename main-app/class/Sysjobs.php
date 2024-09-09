@@ -1,7 +1,9 @@
 <?php
 require_once 'UsuariosPadre.php';
+
 class SysJobs {
-     /**
+
+    /**
      * Esta funci&oacute;n  crea &oacute; actualiza si ya existe un registro, llamando las funcions de crear o  atualizar 
      * 
      * @param string $tipo
@@ -14,19 +16,21 @@ class SysJobs {
     public static function registrar($tipo, $prioridad, array $parametros = [], $msj ='')
     {
         global $config;
-        $parametrosBuscar = array(
-            "tipo" =>$tipo,
+
+        $parametrosBuscar = [
+            "tipo"        => $tipo,
             "responsable" => $_SESSION['id'],
-            "parametros" => json_encode($parametros),
-            "agno"=>$config['conf_agno']
-        );
-       
-        $buscarJobs=self::consultar($parametrosBuscar);
+            "parametros"  => json_encode($parametros),
+            "agno"        => $config['conf_agno']
+        ];
+
+        $buscarJobs = self::consultar($parametrosBuscar);
         $cantidad = mysqli_num_rows($buscarJobs);
-        if($cantidad<1){
-            switch($tipo) {
+
+        if ($cantidad < 1) {
+            switch ($tipo) {
                 case JOBS_TIPO_GENERAR_INFORMES:
-                    $msj=" El informe ya se est&aacute; generando.";
+                    $msj = " El informe ya se est&aacute; generando.";
                 break;
 
                 case JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL:
@@ -37,32 +41,32 @@ class SysJobs {
                     $msj = ' No se identific&oacute; el tipo de proceso.';
                 break;
             }
-            
 
-            $idRegistro =self::crear($tipo,$prioridad,$parametros,$msj);
-            $mensaje="Se realiz&oacute; exitosamente el proceso de ".$tipo." con el c&oacute;digo ".$idRegistro.". Te enviaremos un mensaje al correo interno de la plataforma cuando haya finalizado este proceso.";
-        }else{
+            $idRegistro = self::crear($tipo,$prioridad,$parametros,$msj);
+            $mensaje    = "Se realiz&oacute; exitosamente el proceso de ".$tipo." con el c&oacute;digo ".$idRegistro.". Te enviaremos un mensaje al correo interno de la plataforma cuando haya finalizado este proceso.";
+        } else {
             $jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
-            $idRegistro = $jobsEncontrado["job_id"];           
-            if($jobsEncontrado["job_estado"]==JOBS_ESTADO_ERROR){          
-                $datos = array(
-                    "estado" =>JOBS_ESTADO_PENDIENTE,
-                    "intentos" =>'0',
-                    "id" => $jobsEncontrado['job_id'],
-                    "mensaje" => 'La petici&oacute;n de generaci&oacute;n de informe se envi&oacute; nuevamente.'
-                );
+            $idRegistro     = $jobsEncontrado["job_id"];
+
+            if ($jobsEncontrado["job_estado"]==JOBS_ESTADO_ERROR) {
+                $datos = [
+                    "estado"   => JOBS_ESTADO_PENDIENTE,
+                    "intentos" => '0',
+                    "id"       => $jobsEncontrado['job_id'],
+                    "mensaje"  => 'La petici&oacute;n de generaci&oacute;n de informe se envi&oacute; nuevamente.'
+                ];
+
                 self::actualizar($datos);
-                $mensaje="Se actualiz&oacute; exitosamente el proceso de ".$tipo." con el c&oacute;digo ".$idRegistro." Te enviaremos un mensaje al correo interno de la plataforma cuando haya finalizado este proceso.";
-            }else{
-                $mensaje="Proceso ".$tipo." con el c&oacute;digo ".$idRegistro." ya está marcado como".$jobsEncontrado["job_intentos"];               
+
+                $mensaje = "Se actualiz&oacute; exitosamente el proceso de ".$tipo." con el c&oacute;digo ".$idRegistro." Te enviaremos un mensaje al correo interno de la plataforma cuando haya finalizado este proceso.";
+            } else {
+                $mensaje = "Proceso ".$tipo." con el c&oacute;digo ".$idRegistro." ya está marcado como".$jobsEncontrado["job_intentos"];
             }
-            
-            
-            
-           
+
         }
         return $mensaje;
     }
+
     /**
      * Esta funci&oacute;n  crea  un registro de en la tabla sys_jobs
      * 
@@ -73,10 +77,12 @@ class SysJobs {
      * 
      * @return String // se retorna el id del registro
      */
-    public static function crear($tipo,$prioridad,array $parametros = [],$mensaje ='')
+    public static function crear($tipo, $prioridad, array $parametros = [], $mensaje ='')
     {
-        global $conexion, $baseDatosServicios,$config;
-        $idRegistro = -1;        
+        global $conexion, $baseDatosServicios, $config;
+
+        $idRegistro = -1;
+
         try {
             $sqlUpdate="INSERT INTO ".$baseDatosServicios.".sys_jobs(
                 job_estado, 
@@ -89,7 +95,9 @@ class SysJobs {
                 job_year, 
                 job_intentos,
                 job_prioridad,
-                job_ambiente)
+                job_ambiente,
+                job_host
+                )
             VALUES(
                 '".JOBS_ESTADO_PENDIENTE."',
                 '".$tipo."',
@@ -101,12 +109,12 @@ class SysJobs {
                 '".$config['conf_agno']."', 
                 '0', 
                 '".$prioridad."',
-                '".ENVIROMENT."'
+                '".ENVIROMENT."',
+                '".$_SERVER['HTTP_HOST']."'
             )";
             mysqli_query($conexion,$sqlUpdate);
             $idRegistro = mysqli_insert_id($conexion);
-       
-            
+
         } catch (Exception $e) {
             echo "Excepci&oacute;n catpurada: ".$e->getMessage();
             exit();
@@ -124,34 +132,38 @@ class SysJobs {
     public static function actualizar(array $datos = [])
     {
         global $conexion, $baseDatosServicios;
-        if(isset($datos["intentos"]) && !is_null($datos["intentos"])){
+
+        if (isset($datos["intentos"]) && !is_null($datos["intentos"])) {
             $intento = intval($datos["intentos"]);
-            if($intento>3){               
-                $datos["estado"]=JOBS_ESTADO_ERROR;
+
+            if ($intento > 3) {
+                $datos["estado"] = JOBS_ESTADO_ERROR;
             }
         }
-        
-        $setIntentos=empty($datos["intentos"]) ? "" : ",job_intentos='".$datos["intentos"]."'";
-        $setEstado=empty($datos["estado"])?"":",job_estado='".$datos["estado"]."'";
-        $setMensaje=empty($datos["mensaje"])?"":",job_mensaje='".$datos["mensaje"]."'";
-        $setPrioridad=empty($datos["prioriedad"])?"":",job_prioriedad='".$datos["prioriedad"]."'";
+
+        $setIntentos  = empty($datos["intentos"]) ? "" : ",job_intentos='".$datos["intentos"]."'";
+        $setEstado    = empty($datos["estado"]) ? "" : ",job_estado='".$datos["estado"]."'";
+        $setMensaje   = empty($datos["mensaje"]) ? "" : ",job_mensaje='".$datos["mensaje"]."'";
+        $setPrioridad = empty($datos["prioriedad"]) ? "" : ",job_prioriedad='".$datos["prioriedad"]."'";
 
         $sqlUpdate="UPDATE ".$baseDatosServicios.".sys_jobs
-        SET job_fecha_modificacion=NOW(), job_host = '".$_SERVER['HTTP_HOST']."'"
-         .$setIntentos
-         .$setEstado
-         .$setMensaje
-         .$setPrioridad.
-         " WHERE job_id='".$datos["id"]."'";
+        SET job_fecha_modificacion=NOW(), 
+        job_host='".$_SERVER['HTTP_HOST']."'"
+        .$setIntentos
+        .$setEstado
+        .$setMensaje
+        .$setPrioridad.
+        " WHERE job_id='".$datos["id"]."'";
 
         try {
-            mysqli_query($conexion,$sqlUpdate);
+            mysqli_query($conexion, $sqlUpdate);
         } catch (Exception $e) {
             echo "Excepci&oacute;n catpurada: ".$e->getMessage();
             exit();
         }
     }
-     /**
+
+    /**
      * Esta funci&oacute;n  consulta el registro en la tabla sys_jobs 
      * hay que tener en ceunta que siempre debe venir en el array $parametros
      *  los parametros["tipo"], parametros["responsable"] , parametros["agno"] 
@@ -162,22 +174,40 @@ class SysJobs {
     public static function consultar(array $parametrosBusqueda = [])
     {
         global $conexion, $baseDatosServicios;
-        $resultado = [];
-        $andEstado=empty($parametrosBusqueda["estado"])?" ":"AND job_estado='".$parametrosBusqueda["estado"]."'";
-        $andParametros=empty($parametrosBusqueda["parametros"])?" ":"AND job_parametros='".$parametrosBusqueda["parametros"]."'";
-       
-        $sqlExecute="SELECT * FROM ".$baseDatosServicios.".sys_jobs
-        LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss.institucion=job_id_institucion AND uss_id = job_responsable AND uss.year={$parametrosBusqueda["agno"]}
-        LEFT JOIN ".$baseDatosServicios .".instituciones ON ins_id = job_id_institucion
-        WHERE job_tipo = '".$parametrosBusqueda["tipo"]."'
-        AND job_responsable ='".$parametrosBusqueda["responsable"]."'
-        AND job_year='".$parametrosBusqueda["agno"]."'
-        AND job_ambiente='".ENVIROMENT."'
-        ".$andParametros
-         .$andEstado."       
-        ORDER BY job_fecha_creacion";
+
+        $carga = "";
+        $periodo = "";
+
+        // si hay parametros los toma en cuenta para la busqueda
+        if (!empty($parametrosBusqueda['parametros'])) {
+            $parametrosArray = json_decode($parametrosBusqueda['parametros'], true);
+            $carga           = $parametrosArray["carga"];
+            $periodo         = $parametrosArray["periodo"];
+        }
+
+        $andEstado     = empty($parametrosBusqueda["estado"]) ? " " : "AND job_estado='".$parametrosBusqueda["estado"]."'";
+
+        $andParametros = empty($parametrosBusqueda["parametros"]) ? " " : 
+        "AND JSON_EXTRACT(job_parametros, '$.carga') = '".$carga."' AND JSON_EXTRACT(job_parametros, '$.periodo') = '".$periodo."'";
+
+        $sqlExecute = "SELECT * FROM ".$baseDatosServicios.".sys_jobs
+            LEFT JOIN ".BD_GENERAL.".usuarios uss 
+                ON uss.institucion=job_id_institucion 
+                AND uss_id = job_responsable 
+                AND uss.year={$parametrosBusqueda["agno"]}
+            LEFT JOIN ".$baseDatosServicios .".instituciones 
+                ON ins_id = job_id_institucion
+            WHERE job_tipo = '".$parametrosBusqueda["tipo"]."'
+            AND job_responsable ='".$parametrosBusqueda["responsable"]."'
+            AND job_year='".$parametrosBusqueda["agno"]."'
+            AND job_ambiente='".ENVIROMENT."'
+            ".$andParametros
+            .$andEstado."
+            ORDER BY job_fecha_creacion
+        ";
+
         try {
-            $resultado = mysqli_query($conexion,$sqlExecute);
+            $resultado = mysqli_query($conexion, $sqlExecute);
         } catch (Exception $e) {
             echo "Excepci&oacute;n catpurada: ".$e->getMessage();
             exit();
@@ -185,7 +215,8 @@ class SysJobs {
 
         return $resultado;
     }
-     /**
+
+    /**
      * Esta funci&oacute;n  lista los registros en la tabla sys_jobs 
      * hay que tener en ceunta que siempre debe venir en el array $parametros
      * los parametros["estado"]
@@ -195,11 +226,12 @@ class SysJobs {
      */
     public static function listar(array $parametrosBusqueda = []) {
         global $conexion, $baseDatosServicios;
-        $resultado = null;
-        $andEstado=empty($parametrosBusqueda["estado"])?JOBS_ESTADO_PENDIENTE:$parametrosBusqueda["estado"];
-        $andTipo=empty($parametrosBusqueda["tipo"])?" ":"AND job_tipo='".$parametrosBusqueda["tipo"]."' ";
-        $andResponsable=empty($parametrosBusqueda["responsable"])?" ":"AND job_responsable='".$parametrosBusqueda["responsable"]."' ";
-        $andAgno=empty($parametrosBusqueda["agno"])?" ":"AND job_year='".$parametrosBusqueda["agno"]."' ";
+
+        $resultado      = null;
+        $andEstado      = empty($parametrosBusqueda["estado"]) ? JOBS_ESTADO_PENDIENTE : $parametrosBusqueda["estado"];
+        $andTipo        = empty($parametrosBusqueda["tipo"]) ? " " : "AND job_tipo='".$parametrosBusqueda["tipo"]."' ";
+        $andResponsable = empty($parametrosBusqueda["responsable"]) ? " " : "AND job_responsable='".$parametrosBusqueda["responsable"]."' ";
+        $andAgno        = empty($parametrosBusqueda["agno"]) ? " " : "AND job_year='".$parametrosBusqueda["agno"]."' ";
         
         $sqlExecute="SELECT * FROM ".$baseDatosServicios.".sys_jobs
         LEFT JOIN ".$baseDatosServicios .".instituciones ON ins_id = job_id_institucion
@@ -219,6 +251,7 @@ class SysJobs {
 
         return $resultado;
     }
+
     /**
      * Esta funci&oacute;n  actauliza los intentos de cada crob jobs ejecutado
      * 
@@ -226,19 +259,20 @@ class SysJobs {
      * @param array $intento 
      * @param array $mensaje 
      * 
-     * 
      * @return void 
      */
     public static function actualizarMensaje($id, $intento, $mensaje, $estado=JOBS_ESTADO_ERROR) {
         $intento = intval($intento) + 1;
-        $datos   = array(
+        $datos   = [
             "id"       => $id,
             "mensaje"  => $mensaje,
             "intentos" => $intento,
             "estado"   => $estado
-        );
+        ];
+
         self::actualizar($datos);
     }
+
     /**
      * Esta función  envia mensajes al usuario responsable del cron jobs, notificando el estado
      * 
@@ -249,36 +283,44 @@ class SysJobs {
      * 
      * @return void 
      */
-    public static  function enviarMensaje($destinatario, $contenido, $idJob, $tipo, $estado, $informacionAdicional = ''){
-        global $conexion,$baseDatosServicios,$config;       
-        
-        $para=$destinatario;
+    public static  function enviarMensaje(
+        $destinatario, 
+        $contenido, 
+        $idJob, 
+        $tipo, 
+        $estado, 
+        $informacionAdicional = ''
+    ) {
+        global $conexion, $baseDatosServicios, $config;
+
+        $para   = $destinatario;
         $asunto = '';
 
-        switch($estado) {
+        switch ($estado) {
             case JOBS_ESTADO_FINALIZADO:
 
-                if( $tipo == JOBS_TIPO_GENERAR_INFORMES) {
+                if ($tipo == JOBS_TIPO_GENERAR_INFORMES) {
                     $asunto = "El informe fue generado correctamente | Carga:{$informacionAdicional['carga']} - Periodo:{$informacionAdicional['periodo']} ";
-                } else if( $tipo == JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL ) {
+                } elseif ($tipo == JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL) {
                     $asunto = "La importaci&oacute;n de estudiantes fue completada correctamente ";
                 }
-                
-            break;
+                break;
 
             case JOBS_ESTADO_ERROR:
-                if( $tipo == JOBS_TIPO_GENERAR_INFORMES) {
+
+                if ($tipo == JOBS_TIPO_GENERAR_INFORMES) {
                     $asunto = "El informe present&oacute; un error | Carga:{$informacionAdicional['carga']} - Periodo:{$informacionAdicional['periodo']}";
-                } else if( $tipo == JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL ) {
+                } elseif ($tipo == JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL) {
                     $asunto = "La importaci&oacute;n de estudiantes present&oacute; un problema. ";
                 }
-            break;
+                break;
 
             default:
             $asunto = 'Asunto inesperado!';
             break;
-        }   
-        try{
+        }
+
+        try {
             $remitenteConsulta = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_permiso1='" .CODE_DEV_MODULE_PERMISSION. "' limit 1");
 			$remitente = mysqli_fetch_array($remitenteConsulta); 
 			$destinatario = UsuariosPadre::sesionUsuario($destinatario);
@@ -290,6 +332,6 @@ class SysJobs {
         } catch (Exception $e) {
             echo "Excepci&oacute;n catpurada: ".$e->getMessage();
             exit();
-         }
+        }
     }
 }

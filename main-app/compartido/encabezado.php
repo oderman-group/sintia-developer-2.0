@@ -58,10 +58,11 @@ $institucionNombre = $institucion['ins_siglas'];
                     	<li><a href="javascript:;" class="fullscreen-btn"><i class="fa fa-arrows-alt"></i></a></li>
 
                         <?php
-                            if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO || $datosUsuarioActual['uss_tipo'] == TIPO_DEV) {
-                                $sites = Instituciones::getSites();
+                            if ($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO || $datosUsuarioActual['uss_tipo'] == TIPO_DEV) {
+                                $sites    = Instituciones::getSites();
                                 $numSites = mysqli_num_rows($sites);
-                                if($numSites > 0 && Modulos::validarSubRol(['DT0339']) && !empty($datosUsuarioActual["uss_documento"])) {
+
+                                if ($numSites > 0 && Modulos::validarSubRol(['DT0339']) && !empty($datosUsuarioActual["uss_documento"])) {
                         ?>
                                     <li class="dropdown dropdown-user">
                                         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -71,8 +72,18 @@ $institucionNombre = $institucion['ins_siglas'];
                                         </a>
                                         <ul class="dropdown-menu dropdown-menu-default">
                                             <?php
-                                            
+                                            require_once(ROOT_PATH."/main-app/class/Usuarios/Directivo.php");
+
                                             while ($site = mysqli_fetch_array($sites, MYSQLI_BOTH)) {
+                                                try {
+                                                    $mySelf = Directivo::getMyselfByDocument(
+                                                        $datosUsuarioActual["uss_documento"], 
+                                                        $datosUsuarioActual["uss_tipo"], 
+                                                        $site['ins_id']
+                                                    );
+                                                } catch (Exception $e) {
+                                                    continue;
+                                                }
                                             ?>
                                                 <li><a href="cambiar-sede.php?idInstitucion=<?=base64_encode($site['ins_id']);?>"><?=$site['ins_siglas'];?></a></li>
                                             <?php }?>
