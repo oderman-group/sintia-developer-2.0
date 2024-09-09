@@ -175,9 +175,20 @@ class SysJobs {
     {
         global $conexion, $baseDatosServicios;
 
-        $resultado     = [];
+        $carga = "";
+        $periodo = "";
+
+        // si hay parametros los toma en cuenta para la busqueda
+        if (!empty($parametrosBusqueda['parametros'])) {
+            $parametrosArray = json_decode($parametrosBusqueda['parametros'], true);
+            $carga           = $parametrosArray["carga"];
+            $periodo         = $parametrosArray["periodo"];
+        }
+
         $andEstado     = empty($parametrosBusqueda["estado"]) ? " " : "AND job_estado='".$parametrosBusqueda["estado"]."'";
-        $andParametros = empty($parametrosBusqueda["parametros"]) ? " " : "AND job_parametros='".$parametrosBusqueda["parametros"]."'";
+
+        $andParametros = empty($parametrosBusqueda["parametros"]) ? " " : 
+        "AND JSON_EXTRACT(job_parametros, '$.carga') = '".$carga."' AND JSON_EXTRACT(job_parametros, '$.periodo') = '".$periodo."'";
 
         $sqlExecute = "SELECT * FROM ".$baseDatosServicios.".sys_jobs
             LEFT JOIN ".BD_GENERAL.".usuarios uss 
@@ -196,7 +207,7 @@ class SysJobs {
         ";
 
         try {
-            $resultado = mysqli_query($conexion,$sqlExecute);
+            $resultado = mysqli_query($conexion, $sqlExecute);
         } catch (Exception $e) {
             echo "Excepci&oacute;n catpurada: ".$e->getMessage();
             exit();
