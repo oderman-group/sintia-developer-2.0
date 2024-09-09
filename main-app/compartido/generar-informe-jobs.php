@@ -145,6 +145,13 @@ try {
 
             }
 
+            $datos = [
+                "id"      => $resultadoJobs['job_id'],
+                "estado"  => JOBS_ESTADO_PROCESADO,
+            ];
+        
+            SysJobs::actualizar($datos);
+
         } else {
             if ($intento >= 3) {
                 $mensaje = "<a target=\"_blank\" href=\"../docente/calificaciones-faltantes.php?
@@ -190,12 +197,6 @@ try {
             }
         }
 
-        $datos = [
-            "id"      => $resultadoJobs['job_id'],
-            "estado"  => JOBS_ESTADO_PROCESADO,
-        ];
-    
-        SysJobs::actualizar($datos);
     }
 
     BindSQL::finalizarTransacion();
