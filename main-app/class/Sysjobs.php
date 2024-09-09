@@ -89,7 +89,9 @@ class SysJobs {
                 job_year, 
                 job_intentos,
                 job_prioridad,
-                job_ambiente)
+                job_ambiente,
+                job_host
+                )
             VALUES(
                 '".JOBS_ESTADO_PENDIENTE."',
                 '".$tipo."',
@@ -101,7 +103,8 @@ class SysJobs {
                 '".$config['conf_agno']."', 
                 '0', 
                 '".$prioridad."',
-                '".ENVIROMENT."'
+                '".ENVIROMENT."',
+                '".$_SERVER['HTTP_HOST']."'
             )";
             mysqli_query($conexion,$sqlUpdate);
             $idRegistro = mysqli_insert_id($conexion);

@@ -201,7 +201,15 @@ try {
 
     BindSQL::finalizarTransacion();
 } catch (Exception $e) {
-    echo $e;
+
+    $datos = [
+        "id"      => $resultadoJobs['job_id'],
+        "estado"  => JOBS_ESTADO_ERROR,
+        "mensaje" => $e->getMessage(),
+    ];
+
+    SysJobs::actualizar($datos);
+
     BindSQL::revertirTransacion();
 }
 
