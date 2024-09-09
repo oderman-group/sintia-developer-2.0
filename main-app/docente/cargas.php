@@ -88,40 +88,51 @@ if( !empty($_SESSION["infoCargaActual"]) ) {
 								 
 								 
 									<?php
-									while($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)){
-									    $ultimoAcceso = 'Nunca';
-										$fondoCargaActual = '#FFF';
-										$seleccionado=false;
+									while ($rCargas = mysqli_fetch_array($cCargas, MYSQLI_BOTH)) {
 
-										if(!empty($rCargas['car_ultimo_acceso_docente'])){$ultimoAcceso = $rCargas['car_ultimo_acceso_docente'];}
-										if(!empty($_COOKIE["carga"]) && $rCargas['car_id']==$_COOKIE["carga"]){$fondoCargaActual = 'cornsilk'; $seleccionado=true;}
-										
-										$cargaSP = $rCargas["car_id"];
+										$ultimoAcceso     = 'Nunca';
+										$fondoCargaActual = '#FFF';
+										$seleccionado     = false;
+
+										if (!empty($rCargas['car_ultimo_acceso_docente'])) {
+											$ultimoAcceso = $rCargas['car_ultimo_acceso_docente'];
+										}
+
+										if (!empty($_COOKIE["carga"]) && $rCargas['car_id']==$_COOKIE["carga"]) {
+											$fondoCargaActual = 'cornsilk'; 
+											$seleccionado     = true;
+										}
+
+										$cargaSP   = $rCargas["car_id"];
 										$periodoSP = $rCargas["car_periodo"];
+
 										include("../suma-porcentajes.php");
-										
-										if($rCargas["car_periodo"]>$rCargas["gra_periodos"]){
+
+										if ($rCargas["car_periodo"] > $rCargas["gra_periodos"]) {
 											$mensajeI = "<span style='color:blue;'>Terminado</span>";
-										  }else{
-											  if($spcr[0]<96){
+										} else {
+
+											if ($spcr[0] < 96) {
 													$mensajeI = $spcr[0];
-											  }elseif($rCargas["car_permiso1"]==0){
+											} elseif ($rCargas["car_permiso1"] == 0) {
 												$mensajeI = 'Sin permiso para generar';
-											  }else{
-												$parametros = array(
-													"carga" =>$rCargas["car_id"],
-													"periodo" =>$rCargas["car_periodo"],
-													"grado" => $rCargas["car_curso"],
-													"grupo"=>$rCargas["car_grupo"]
-												);
+											} else {
+
+												$parametros = [
+													"carga"   => $rCargas["car_id"],
+													"periodo" => $rCargas["car_periodo"],
+													"grado"   => $rCargas["car_curso"],
+													"grupo"   => $rCargas["car_grupo"]
+												];
 												
-												$parametrosBuscar = array(
-													"tipo" =>JOBS_TIPO_GENERAR_INFORMES,
+												$parametrosBuscar = [
+													"tipo"        => JOBS_TIPO_GENERAR_INFORMES,
 													"responsable" => $_SESSION['id'],
-													"parametros" => json_encode($parametros),
-													"agno"=>$config['conf_agno']
-												);
-												$buscarJobs=SysJobs::consultar($parametrosBuscar);
+													"parametros"  => json_encode($parametros),
+													"agno"        => $config['conf_agno']
+												];
+
+												$buscarJobs     = SysJobs::consultar($parametrosBuscar);
 												$jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
 
 												$configGenerarJobs=$config['conf_porcentaje_completo_generar_informe'];
@@ -153,6 +164,26 @@ if( !empty($_SESSION["infoCargaActual"]) ) {
 																				onclick="mensajeGenerarInforme(this)"
 																			>
 																				Forma tradicional
+																			</a>
+																		</li>
+																		<li>
+																			<a 
+																				rel="'.$configGenerarJobs.'-'.$numSinNotas.'-2" 
+																				data-toggle="tooltip" 
+																				data-placement="right"
+																				title="Se programara la generación de informe y se te notificará cuando esté listo" 
+																				id="'.$rCargas["car_id"].'" 
+																				href="javascript:void(0);" 
+																				name="../compartido/job-generar-informe.php?
+																					carga='.base64_encode($rCargas["car_id"]).'
+																					&periodo='.base64_encode($rCargas["car_periodo"]).'
+																					&grado='.base64_encode($rCargas["car_curso"]).'
+																					&grupo='.base64_encode($rCargas["car_grupo"]).'
+																					&tipoGrado='.base64_encode($rCargas["gra_tipo"]).'
+																				" 
+																				onclick="mensajeGenerarInforme(this)"
+																			>
+																				Forma nueva
 																			</a>
 																		</li>
                                                                     </ul>
