@@ -931,7 +931,11 @@ class Calificaciones {
         }
 
         if ($data['target'] == self::TIPO_GUARDAR_RECUPERACION_PERIODO) {
-            if ($data['periodo'] >= $data['datosCargaActual']['car_periodo']) {
+            if (
+                $data['periodo'] >= $data['datosCargaActual']['car_periodo'] && 
+                $_SESSION["datosUsuario"]['uss_tipo'] != TIPO_DIRECTIVO && 
+                $_SESSION["datosUsuario"]['uss_tipo'] != TIPO_DEV
+            ) {
                 return [
                     'success'   => false,
                     "heading"   => "El periodo actual es menor",
