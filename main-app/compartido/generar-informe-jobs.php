@@ -19,8 +19,8 @@ require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 require_once(ROOT_PATH."/main-app/class/Tables/BDT_temp_calculo_boletin_estudiantes.php");
 
 $parametrosBuscar = [
-    "tipo"   =>JOBS_TIPO_GENERAR_INFORMES,
-    "estado" =>JOBS_ESTADO_PENDIENTE
+    "tipo"   => JOBS_TIPO_GENERAR_INFORMES,
+    "estado" => JOBS_ESTADO_PENDIENTE
 ];
 
 BindSQL::iniciarTransacion();
@@ -202,6 +202,8 @@ try {
     BindSQL::finalizarTransacion();
 } catch (Exception $e) {
 
+    Utilidades::logError($e);
+
     $datos = [
         "id"      => $resultadoJobs['job_id'],
         "estado"  => JOBS_ESTADO_ERROR,
@@ -213,12 +215,11 @@ try {
     BindSQL::revertirTransacion();
 }
 
-function minutosTranscurridos($fecha_i,$fecha_f)
+function minutosTranscurridos($fecha_i, $fecha_f)
 {
     $intervalo = $fecha_i->diff($fecha_f);
-    $minutos = $intervalo->i;
-    $segundos = $intervalo->s;
+    $minutos   = $intervalo->i;
+    $segundos  = $intervalo->s;
+
     return " Finaliz&oacute; en: <i> {$minutos} min y {$segundos} seg.</i>";
 }
-
-exit();
