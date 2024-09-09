@@ -149,7 +149,7 @@ try {
                 "id"      => $resultadoJobs['job_id'],
                 "estado"  => JOBS_ESTADO_PROCESADO,
             ];
-        
+
             SysJobs::actualizar($datos);
 
         } else {
