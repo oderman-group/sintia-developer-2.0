@@ -14,7 +14,7 @@ $parametros = [
     "grupo"   => base64_decode($_GET['grupo'])
 ];
 
-try{
+try {
     $mensaje = SysJobs::registrar(JOBS_TIPO_GENERAR_INFORMES, JOBS_PRIORIDAD_BAJA, $parametros);
 } catch (Exception $e) {
     include("../compartido/error-catch-to-report.php");
