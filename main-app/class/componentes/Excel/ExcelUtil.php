@@ -1,6 +1,6 @@
 <?php
 include_once("session-compartida.php");
-require_once(ROOT_PATH . "/vendor/autoload.php");
+require_once(ROOT_PATH . "/librerias/PhpOffice/vendor/autoload.php");
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
