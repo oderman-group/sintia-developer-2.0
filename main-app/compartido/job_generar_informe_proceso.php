@@ -26,7 +26,7 @@ BindSQL::iniciarTransacion();
 try {
     $listadoCrobjobs = SysJobs::listar($parametrosBuscar);
 
-    while ($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)) { 
+    while ($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)) {
 
         $parametros    = json_decode($resultadoJobs["job_parametros"], true);
         $institucionId = $resultadoJobs["job_id_institucion"];
@@ -156,6 +156,6 @@ try {
     }
     BindSQL::finalizarTransacion();
 } catch (Exception $e) {
-    echo $e;
+    Utilidades::logError($e);
     BindSQL::revertirTransacion();
 }
