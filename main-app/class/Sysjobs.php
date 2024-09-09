@@ -135,12 +135,13 @@ class SysJobs {
         }
         
         $setIntentos=empty($datos["intentos"]) ? "" : ",job_intentos='".$datos["intentos"]."'";
-        $setEstado=empty($datos["estado"])?"":",job_estado='".$datos["estado"]."'";
-        $setMensaje=empty($datos["mensaje"])?"":",job_mensaje='".$datos["mensaje"]."'";
-        $setPrioridad=empty($datos["prioriedad"])?"":",job_prioriedad='".$datos["prioriedad"]."'";
+        $setEstado=empty($datos["estado"]) ? "" : ",job_estado='".$datos["estado"]."'";
+        $setMensaje=empty($datos["mensaje"]) ? "" : ",job_mensaje='".$datos["mensaje"]."'";
+        $setPrioridad=empty($datos["prioriedad"]) ? "" : ",job_prioriedad='".$datos["prioriedad"]."'";
 
         $sqlUpdate="UPDATE ".$baseDatosServicios.".sys_jobs
-        SET job_fecha_modificacion=NOW(), job_host = '".$_SERVER['HTTP_HOST']."'"
+        SET job_fecha_modificacion=NOW(), 
+        job_host = '".$_SERVER['HTTP_HOST']."'"
          .$setIntentos
          .$setEstado
          .$setMensaje
