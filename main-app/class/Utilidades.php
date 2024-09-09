@@ -27,11 +27,8 @@ class Utilidades {
     {
         if (isset($get)) {
             foreach ($get as $key => $value) {
-                // validammos que los parametros no sean null y sea base64  excluyendo cuando la llave sea success y error 
-                if ($key != 'success' && $key != 'error' && !empty($value) && !self::esBase64($value)) {
-                    echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=307";</script>';
-                    exit();
-                } elseif (!empty($value) && !self::esAlfanumerico(base64_decode($value))) { // validamos que el resultado es codificado es  alfanumerico            
+                // validammos que los parametros no sean null y sea base64  excluyendo cuando la llave sea success y error  y validamos que el resultado es codificado es  alfanumerico   
+                if ($key != 'success' && $key != 'error' && !empty($value) && (!self::esBase64($value) || !self::esAlfanumerico(base64_decode($value)))) {
                     echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=307";</script>';
                     exit();
                 }
