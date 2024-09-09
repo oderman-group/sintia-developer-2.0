@@ -623,35 +623,35 @@ function minimoUno(data) {
     }
 }
 
-function mensajeGenerarInforme(datos){
+function mensajeGenerarInforme(datos) {
 
-    document.getElementById("overlayInforme").style.display = "flex";
-
-    arrayInfo   = datos.rel.split('-');
-    var config= arrayInfo[0];
-    var sinNotas= arrayInfo[1];
-    var opcion= arrayInfo[2];
-    var url = datos.name;
+    var arrayInfo = datos.rel.split('-');
+    var config    = arrayInfo[0];
+    var sinNotas  = arrayInfo[1];
+    var opcion    = arrayInfo[2];
+    var url       = datos.name;
     
-    if(opcion==2){   
+    if (opcion == 2) {
         var id = datos.id;
         var contenedorMensaje = document.getElementById('mensajeI'+id);
         var nuevoContenido = '<div class="alert alert-success mt-2" role="alert" style="margin-right: 20px;">El informe ya se está generando.</div>';
     }
 
     var mensajeSinNotas='';
-    if(sinNotas>0){
+
+    if (sinNotas > 0) {
         var mensajeSinNotas='Tienes estudiantes a los que les faltan notas por registrar. ';
     }
 
-    if(config==1){
-        if(opcion==1){
+    if (config == 1) {
+
+        if (opcion == 1) {
+            document.getElementById("overlayInforme").style.display = "flex";
             window.location.href = url;
         }
-        if(opcion==2){            
-            axios.get(url).then(function(response) {
 
-                    document.getElementById("overlayInforme").style.display = "none";
+        if (opcion == 2) {
+            axios.get(url).then(function(response) {
 
                     contenedorMensaje.innerHTML = nuevoContenido;
         
@@ -672,14 +672,15 @@ function mensajeGenerarInforme(datos){
                 window.location.href = url;
             });
         }
-    }else{
-        if(config==2){
+    } else {
+        if (config ==2 ) {
             var mensaje= mensajeSinNotas+'El informe se generará omitiendo los estudiantes que les falten notas por registrar.';
         }
-        if(config==3){
+
+        if (config == 3) {
             var mensaje= mensajeSinNotas+'El informe se generará guardando los estudiantes con el porcentaje que tienen actualmente.';
         }
-        
+
         Swal.fire({
             title: 'Generar informe',
             text: mensaje+' Desea continuar con la generación de este informe?',
@@ -689,13 +690,15 @@ function mensajeGenerarInforme(datos){
             cancelButtonText: 'No'
         }).then((result) => {
             if (result.isConfirmed) {
-                if(opcion==1){
+                if (opcion == 1) {
+                    document.getElementById("overlayInforme").style.display = "flex";
                     window.location.href = url;
                 }
-                if(opcion==2){            
+
+                if (opcion == 2) {
                     axios.get(url).then(function(response) {
                             contenedorMensaje.innerHTML = nuevoContenido;
-                
+
                             $.toast({
                                 heading: 'Acción realizada',
                                 text: 'El informe ya se está generando.',
@@ -713,7 +716,7 @@ function mensajeGenerarInforme(datos){
                         window.location.href = url;
                     });
                 }
-            }else{
+            } else {
                 document.getElementById("overlayInforme").style.display = "none";
                 return false;
             }
