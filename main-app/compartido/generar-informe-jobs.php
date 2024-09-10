@@ -103,7 +103,7 @@ try {
             while ($estudianteResultado = mysqli_fetch_array($consultaListaEstudante, MYSQLI_ASSOC)) {
                 $estudiante = $estudianteResultado["mat_id"];
 
-                $porcentajeActual = Calificaciones::obtenerPorcentajeActualEstudiante($carga, $periodo, $estudiante);
+                $porcentajeActual = Calificaciones::obtenerPorcentajeActualEstudiante($estudiante, $carga, $periodo);
 
                 //Consultamos si tiene registros en el boletín
                 $boletinDatos = Boletin::traerNotaBoletinCargaPeriodo($config, $periodo, $estudiante, $carga, $anio);
@@ -137,7 +137,7 @@ try {
                 try {
                     BDT_tempCalculoBoletinEstudiantes::Insert($datosParaInsertar, BD_ADMIN);
                 } catch (Exception $e) {
-                    $mensaje = $mensaje."<br><br>".$e->getMessage();
+                    echo $e->getMessage();
                     $finalizado = false;
                 }
 
@@ -202,9 +202,11 @@ try {
     BindSQL::finalizarTransacion();
 } catch (Exception $e) {
 
+    BindSQL::revertirTransacion();
+
     echo $e->getMessage();
 
-    //Utilidades::logError($e);
+    Utilidades::logError($e);
 
     $datos = [
         "id"      => $resultadoJobs['job_id'],
@@ -214,7 +216,6 @@ try {
 
     SysJobs::actualizar($datos);
 
-    BindSQL::revertirTransacion();
 }
 
 function minutosTranscurridos($fecha_i, $fecha_f)
