@@ -1,5 +1,5 @@
 <?php
-require_once("../class/componentes/ComponenteFiltro.php");
+require_once("../class/componentes/componenteFiltro.php");
 $curso = '';
 if (!empty($_GET['curso'])) {
   $curso = base64_decode($_GET['curso']);
