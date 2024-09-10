@@ -2,17 +2,13 @@
 include_once("session-compartida.php");
 require_once(ROOT_PATH . "/main-app/class/componentes/Excel/ExcelUtil.php");
 require_once(ROOT_PATH . "/main-app/class/Utilidades.php");
-require_once(ROOT_PATH . "/vendor/autoload.php");
+
 require_once(ROOT_PATH . "/main-app/class/Asignaturas.php");
 require_once(ROOT_PATH . "/main-app/class/Boletin.php");
 
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
+
 use PhpOffice\PhpSpreadsheet\Style\Border;
-use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
-// use PhpOffice\PhpSpreadsheet\Reader\Html;
+
 require_once("../class/Informes.php");
 
 $num = 0;
