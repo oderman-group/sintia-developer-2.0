@@ -202,7 +202,9 @@ try {
     BindSQL::finalizarTransacion();
 } catch (Exception $e) {
 
-    Utilidades::logError($e);
+    echo $e->getMessage();
+
+    //Utilidades::logError($e);
 
     $datos = [
         "id"      => $resultadoJobs['job_id'],
