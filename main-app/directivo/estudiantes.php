@@ -189,12 +189,14 @@ if($config['conf_doble_buscador'] == 1) {
 													$contReg = 1;
 
 													$index = 0;
-													$arraysDatos = array();																									
-													while ($fila = $consulta->fetch_assoc()) {
-														$arraysDatos[$index] = $fila;
-														$index++;
+													$arraysDatos = array();
+													if (!empty($consulta)) {
+														while ($fila = $consulta->fetch_assoc()) {
+															$arraysDatos[$index] = $fila;
+															$index++;
+														}
+														$consulta->free();
 													}
-													$consulta->free();
 													$lista = $arraysDatos;
 													$data["data"] =$lista;
 													include(ROOT_PATH . "/main-app/class/componentes/result/matriculas-tbody.php");
