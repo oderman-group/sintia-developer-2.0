@@ -131,7 +131,7 @@ foreach ($data["data"] as $resultado) {
 						<?php } ?>
 
 
-						<?php if (!empty($resultado['gra_nombre']) && Modulos::validarSubRol(['DT0083'])) { ?>
+						<?php if (!empty($resultado['gra_nombre']) && Modulos::validarSubRol(['DT0083']) &&  empty($marcaMediaTecnica)) { ?>
 							<li><a href="javascript:void(0);" data-toggle="modal" data-target="#cambiarGrupoModal<?= $resultado['mat_id']; ?>">Cambiar de grupo</a></li>
 						<?php } ?>
 						<?php if (Modulos::validarSubRol(['DT0074']) && !empty($resultado['mat_id'])) {
@@ -195,11 +195,10 @@ foreach ($data["data"] as $resultado) {
 			</div>
 			<?php
 				$_GET["id"] = base64_encode($resultado['mat_id']);
-				if (!empty($resultado['gra_nombre'])) {
+				if (!empty($resultado['gra_nombre']) && empty($marcaMediaTecnica)) {
 					$idModal = "cambiarGrupoModal" . $resultado['mat_id'];
-					$contenido = ROOT_PATH."/main-app/directivo/estudiantes-cambiar-grupo-modal.php";
-					include(ROOT_PATH."/main-app/compartido/contenido-modal.php");
-					
+					$contenido = ROOT_PATH . "/main-app/directivo/estudiantes-cambiar-grupo-modal.php";
+					include(ROOT_PATH . "/main-app/compartido/contenido-modal.php");
 				}
 
 				$idModal = "retirarModal" . $resultado['mat_id'];

@@ -1,21 +1,29 @@
 <?php
 require_once("../class/componentes/componenteFiltro.php");
 $curso = '';
+$cursoActual=null;
+
 if (!empty($_GET['curso'])) {
   $curso = base64_decode($_GET['curso']);
   $filtro .= " AND mat_grado='" . $curso . "'";
+  $cursoActual=GradoServicios::consultarCurso($curso);
+  if (!empty($cursoActual) && $cursoActual["gra_tipo"] == GRADO_INDIVIDUAL) {
+    $filtro = "";
+  }
 }
+
 $estadoM = '';
 if (!empty($_GET['estadoM'])) {
   $estadoM = base64_decode($_GET['estadoM']);
-  $filtro .= " AND mat_estado_matricula='" . $estadoM . "'";
+  $filtro .= " AND mat_estado_matricula='" . $estadoM . "'";  
 }
+
 $opciones[0] = [
   ComponenteFiltro::COMPB_OPCIONES_TEXTO   => 'Promedios estudiantiles',
   ComponenteFiltro::COMPB_OPCIONES_URL     => 'estudiantes-promedios.php',
   ComponenteFiltro::COMPB_OPCIONES_PERMISO => Modulos::validarSubRol(['DT0002'])
 ];
-$cursoActual=GradoServicios::consultarCurso($curso);
+
 $opciones[1] = [
   ComponenteFiltro::COMPB_OPCIONES_TEXTO   => 'Menú matriculas',
   ComponenteFiltro::COMPB_OPCIONES_PERMISO => Modulos::validarSubRol(['DT0077', 'DT0080', 'DT0075']),
@@ -111,9 +119,6 @@ foreach ($estadosMatriculasEstudiantes as $clave => $valor) {
     ComponenteFiltro::COMPB_FILTRO_LISTA_TEXTO => $valor,
     ComponenteFiltro::COMPB_FILTRO_LISTA_URL   => $_SERVER['PHP_SELF'] . "?estadoM=" . base64_encode($clave) . "&curso=" . base64_encode($curso)    
   ];
-  if(!empty($estadoM) && $estadoM==$clave){
-    $estadoSelect=$count;
-  };
   $count++;
 }
 $listaEstado[$count] = [
@@ -133,7 +138,6 @@ $filtros[1] = [
   ComponenteFiltro::COMPB_FILTRO_GET   => 'estadoM',
   ComponenteFiltro::COMPB_FILTRO_TEXTO => 'Filtrar por estados',
   ComponenteFiltro::COMPB_FILTRO_LISTA => $listaEstado,
-  ComponenteFiltro::COMPB_FILTRO_SELECT=> $estadoSelect,
 ];
 
 $barraSuperior = new ComponenteFiltro('matriculas', 'filter-matriculas.php', 'matriculas-tbody.php', $filtros, $opciones);
