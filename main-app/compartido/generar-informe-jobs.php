@@ -126,12 +126,15 @@ try {
 
                 //Insertamos en la tabla temporal
                 $datosParaInsertar = [
-                    'tcbe_id_estudiante'      => $estudiante,
-                    'tcbe_id_carga_academica' => $carga,
-                    'tcbe_periodo'            => $periodo,
-                    'tcbe_id_job_referencia'  => $resultadoJobs['job_id'],
-                    'tcbe_estado'             => 'PENDIENTE',
-                    'tcbe_datos_estudiante'   => json_encode($estudianteResultado),
+                    'tcbe_id_estudiante'        => $estudiante,
+                    'tcbe_id_carga_academica'   => $carga,
+                    'tcbe_periodo'              => $periodo,
+                    'tcbe_id_job_referencia'    => $resultadoJobs['job_id'],
+                    'tcbe_estado'               => 'PENDIENTE',
+                    'tcbe_datos_estudiante'     => json_encode($estudianteResultado),
+                    'tcbe_calcular_indicadores' => $_SESSION["idInstitucion"] == ICOLVEN || 
+                                                   $_SESSION["idInstitucion"] == DEVELOPER || 
+                                                   $_SESSION["idInstitucion"] == DEVELOPER_PROD ? 1 : 0
                 ];
 
                 try {
