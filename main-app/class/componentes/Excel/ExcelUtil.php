@@ -1,6 +1,6 @@
 <?php
 include_once("session-compartida.php");
-require_once(ROOT_PATH . "/librerias/PhpOffice/vendor/autoload.php");
+require_once(ROOT_PATH . "/librerias/ExcelPhp/vendor/autoload.php");
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -8,8 +8,6 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Reader\Html;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class ExcelUtil extends Spreadsheet
 {
@@ -132,6 +130,18 @@ class ExcelUtil extends Spreadsheet
     {
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header("Content-Disposition: attachment;filename=\"$nombreArchivo\"");
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($this);
+        $writer->save('php://output');
+    }
+
+    public function descargarPDF($nombreArchivo = "archivo.pdf")
+    {
+
+        // Generar y descargar el PDF
+        header('Content-Type: application/pdf');
         header("Content-Disposition: attachment;filename=\"$nombreArchivo\"");
         header('Cache-Control: max-age=0');
 
