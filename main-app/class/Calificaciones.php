@@ -582,6 +582,68 @@ class Calificaciones {
     }
 
     /**
+     * Calculates the final grade for a student based on the activities and their respective percentages.
+     *
+     * @param string $idIndicador The ID of the indicator.
+     * @param string $idCarga The ID of the load.
+     * @param string $idEstudiante The ID of the student.
+     * @param int $periodo The period.
+     *
+     * @return array An associative array containing the final grade and its percentage.
+     */
+    public static function definitivaIndicadorEstudiante(
+        string $idIndicador, 
+        string $idCarga, 
+        string $idEstudiante,
+        int    $periodo
+    ){
+        $conexionPDO = Conexion::newConnection('PDO');
+        $config = RedisInstance::getSystemConfiguration();
+
+        $sql = "SELECT
+                    subquery.act_id_carga,
+                    subquery.cal_id_estudiante, 
+                    SUM(subquery.valorDecimal) AS totalValorDecimal,
+                    SUM(subquery.equivalenteCien) AS totalEquivalenteCien,
+                    CASE 
+                        WHEN SUM(subquery.valorDecimal) <> 0 THEN 
+                            ROUND(SUM(subquery.equivalenteCien) / SUM(subquery.valorDecimal), ".$config['conf_decimales_notas'].")
+                        ELSE 0 
+                    END AS definitiva,
+                    ROUND(SUM(subquery.valorDecimal) * 100, 2) AS valorPorcentual
+                FROM (
+                    SELECT 
+                        ac.cal_id_estudiante, 
+                        ac.cal_id_actividad, 
+                        ac.cal_nota, 
+                        ac.cal_nota_equivalente_cien, 
+                        aa.act_valor, 
+                        aa.act_id_tipo,
+                        aa.act_id_carga,
+                        (aa.act_valor / 100) AS valorDecimal, 
+                        (ac.cal_nota * (aa.act_valor / 100)) AS equivalenteCien
+                    FROM mobiliar_academic_prod.academico_calificaciones ac 
+                    INNER JOIN mobiliar_academic_prod.academico_actividades aa 
+                        ON act_id = ac.cal_id_actividad 
+                        AND act_id_tipo = '".$idIndicador."'
+                        AND act_estado = 1
+                        AND aa.institucion = ".$config['conf_id_institucion']."
+                        AND aa.year = ".$_SESSION["bd"]."
+                        AND aa.act_periodo = ".$periodo."
+                        AND aa.act_id_carga = '".$idCarga."'
+                    WHERE ac.cal_id_estudiante = '".$idEstudiante."'
+                ) AS subquery
+                GROUP BY subquery.cal_id_estudiante
+            ";
+
+        $stmt = $conexionPDO->prepare($sql);
+        $stmt->execute();
+
+        $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $resultados;
+    }
+
+    /**
      * Este metodo me trae la nota de un indicador
      */
     public static function consultaNotaIndicadoresPromedio(

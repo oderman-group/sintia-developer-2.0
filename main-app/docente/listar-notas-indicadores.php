@@ -125,19 +125,25 @@ require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
                         while ($rA = mysqli_fetch_array($cA, MYSQLI_BOTH)) {
 
                             //LAS CALIFICACIONES
-                            $sumaNotas = Calificaciones::consultaSumaNotaIndicadores($config, $rA['ipc_indicador'], $cargaConsultaActual, $resultado['mat_id'], $periodoConsultaActual);
+                            $sumaNotas = Calificaciones::definitivaIndicadorEstudiante($rA['ipc_indicador'], $cargaConsultaActual, $resultado['mat_id'], $periodoConsultaActual)[0];
 
-                            $notasResultado = round($sumaNotas[0] / ($rA['ipc_valor'] / 100), $config['conf_decimales_notas']);
+                            $notasResultado = $sumaNotas['definitiva'] ?? 0;
 
-                            if($notasResultado<$config[5] and $notasResultado!="") $colorNota = $config[6]; elseif($notasResultado>=$config[5]) $colorNota = $config[7]; else $colorNota = "black";
+                            if ($notasResultado < $config[5] && $notasResultado != "")
+                                $colorNota = $config[6]; 
+                            elseif ($notasResultado >= $config[5]) 
+                                $colorNota = $config[7];
+                            else 
+                                $colorNota = "black";
+
+                            $notasResultadoFinal = $notasResultado;
+                            $atributosA          = 'style="text-decoration:underline; color:'.$colorNota.';"';
+
+                            if ($config['conf_forma_mostrar_notas'] == CUALITATIVA) {
+                                $atributosA = 'tabindex="0" role="button" data-toggle="popover" data-trigger="hover" title="Nota Cuantitativa: '.$notasResultado.' ('.$sumaNotas['valorPorcentual'].'%)" data-content="<b>Nota Cuantitativa:</b><br>'.$notasResultado.'" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:'.$colorNota.';"';
         
-                            $notasResultadoFinal=$notasResultado;
-                            $atributosA='style="text-decoration:underline; color:'.$colorNota.';"';
-                            if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
-                                $atributosA='tabindex="0" role="button" data-toggle="popover" data-trigger="hover" title="Nota Cuantitativa: '.$notasResultado.'" data-content="<b>Nota Cuantitativa:</b><br>'.$notasResultado.'" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:'.$colorNota.';"';
-        
-                                $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasResultado);
-                                $notasResultadoFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                                $estiloNota          = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notasResultado);
+                                $notasResultadoFinal = !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
                             }
 
                         ?>
@@ -154,15 +160,15 @@ require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
                         elseif ($definitiva >= $config[5]) $colorDef = $config[7];
                         else $colorDef = "black";
 
-                        $definitivaFinal=$definitiva;
-                        $atributosA='style="text-decoration:underline; color:'.$colorDef.';"';
-                        if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
-                            $atributosA='tabindex="0" role="button" data-toggle="popover" data-trigger="hover" title="Nota Cuantitativa: '.$definitiva.'" data-content="<b>Nota Cuantitativa:</b><br>'.$definitiva.'" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:'.$colorDef.';"';
-    
-                            $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $definitiva);
-                            $definitivaFinal= !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
-                        }
+                        $definitivaFinal = $definitiva;
+                        $atributosA      = 'style="text-decoration:underline; color:'.$colorDef.';"';
 
+                        if ($config['conf_forma_mostrar_notas'] == CUALITATIVA) {
+                            $atributosA = 'tabindex="0" role="button" data-toggle="popover" data-trigger="hover" title="Nota Cuantitativa: '.$definitiva.'" data-content="<b>Nota Cuantitativa:</b><br>'.$definitiva.'" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000; color:'.$colorDef.';"';
+
+                            $estiloNota      = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $definitiva);
+                            $definitivaFinal = !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
+                        }
                         ?>
 
 
