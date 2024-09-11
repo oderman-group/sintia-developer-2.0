@@ -227,61 +227,61 @@ try {
             }
 
             $estiloNota = Boletin::obtenerDatosTipoDeNotasCargadas($listaTipoNotas, $registro["bol_nota"]);
-            $color = "";
-            $texto = "";
+            $Colorfondo = "ffffff";
+            $texto = "000000";
 
             switch ($estiloNota['notip_nombre']) {
                 case $listaTipoNotas[3]["notip_nombre"]:
-                    $color = $ColorSuperior;
+                    $Colorfondo = $ColorSuperior;
                     $texto = $ColorTextoClaro;
                     break;
                 case $listaTipoNotas[2]["notip_nombre"]:
-                    $color = $ColorAlto;
+                    $Colorfondo = $ColorAlto;
                     $texto = $ColorTextoOscuro;
                     break;
                 case $listaTipoNotas[1]["notip_nombre"]:
-                    $color = $ColorBasico;
+                    $Colorfondo = $ColorBasico;
                     $texto = $ColorTextoClaro;
                     break;
                 case $listaTipoNotas[0]["notip_nombre"]:
-                    $color = $ColorBajo;
+                    $Colorfondo = $ColorBajo;
                     $texto = $ColorTextoClaro;
                     break;
             }
 
             if ($registro["bol_periodo"] == '1') {
-                $excelUtil->agregarTexto('G' . $num, $registro["bol_nota"], $texto, $color);
+                $excelUtil->agregarTexto('G' . $num, $registro["bol_nota"], $texto, $Colorfondo);
                 $excelUtil->centrarTexto('G' . $num);
                 continue;
             }
 
             if ($registro["bol_periodo"] == '2') {
-                $excelUtil->agregarTexto('H' . $num, $registro["bol_nota"], $texto, $color);
+                $excelUtil->agregarTexto('H' . $num, $registro["bol_nota"], $texto, $Colorfondo);
                 $excelUtil->centrarTexto('H' . $num);
                 continue;
             }
 
             if ($registro["bol_periodo"] == '3') {
-                $excelUtil->agregarTexto('I' . $num, $registro["bol_nota"], $texto, $color);
+                $excelUtil->agregarTexto('I' . $num, $registro["bol_nota"], $texto, $Colorfondo);
                 $excelUtil->centrarTexto('I' . $num);
                 continue;
             }
 
             if ($registro["bol_periodo"] == '4') {
-                $excelUtil->agregarTexto('J' . $num, $registro["bol_nota"], $texto, $color);
+                $excelUtil->agregarTexto('J' . $num, $registro["bol_nota"], $texto, $Colorfondo);
                 $excelUtil->centrarTexto('J' . $num);
                 continue;
             }
 
             if ($registro["bol_periodo"] == '5') {
-                $excelUtil->agregarTexto('K' . $num, $registro["bol_nota"], $texto, $color);
+                $excelUtil->agregarTexto('K' . $num, $registro["bol_nota"], $texto, $Colorfondo);
                 $excelUtil->centrarTexto('K' . $num);
                 continue;
             }
         }
         // 
         // "Informe_periodico_".date("d/m/Y")."-SINTIA.xls"
-        $excelUtil->descargarExcel("Informe_periodico_" . date("d/m/Y") . "-SINTIA.xlsx");
+        $excelUtil->descargarPDF("Informe_periodico_" . date("d/m/Y") . "-SINTIA.pdf");
     }
 
     exit;
