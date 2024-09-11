@@ -72,11 +72,13 @@ class Estudiantes {
                 
                 $resultado = BindSQL::prepararSQL($sql, $parametros);
             }else{
+                
                 $parametros = [
-                    'matcur_id_curso'=>$cursoActual["gra_id"],
-                    'matcur_id_institucion'=>$config['conf_id_institucion'],
-                    'limite'=>$filtroLimite,
-                    'arreglo'=>false
+                    'matcur_id_curso'       => $cursoActual["gra_id"],
+                    'matcur_id_institucion' => $config['conf_id_institucion'],
+                    'limite'                => $filtroLimite,
+                    'and'                   => $filtroAdicional,
+                    'arreglo'               => false
                 ];
                 $resultado = MediaTecnicaServicios::listarEstudiantes($parametros);
                 }
