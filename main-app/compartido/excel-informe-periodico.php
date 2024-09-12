@@ -6,7 +6,6 @@ require_once(ROOT_PATH . "/main-app/class/Utilidades.php");
 require_once(ROOT_PATH . "/main-app/class/Asignaturas.php");
 require_once(ROOT_PATH . "/main-app/class/Boletin.php");
 
-
 use PhpOffice\PhpSpreadsheet\Style\Border;
 
 require_once("../class/Informes.php");
@@ -281,7 +280,7 @@ try {
         }
         // 
         // "Informe_periodico_".date("d/m/Y")."-SINTIA.xls"
-        $excelUtil->descargarPDF("Informe_periodico_" . date("d/m/Y") . "-SINTIA.pdf");
+        $excelUtil->descargarExcel("Informe_periodico_" . date("d/m/Y") . "-SINTIA.xlsx");
     }
 
     exit;
