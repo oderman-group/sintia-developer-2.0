@@ -26,10 +26,16 @@ $parametrosBuscar = [
 
 BindSQL::iniciarTransacion();
 
+echo 'Comenzando el proceso de calcular las defitivas de los informes en estado procesado...'."\n";
+
 try {
     $listadoCrobjobs = SysJobs::listar($parametrosBuscar);
 
+    echo 'Se encontraron '.mysqli_num_rows($listadoCrobjobs).' jobs para calcular las definitivas.'."\n";
+
     while ($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)) {
+
+        echo 'Procesando job ID: '.$resultadoJobs['job_id']."\n";
 
         $parametros    = json_decode($resultadoJobs["job_parametros"], true);
         $institucionId = $resultadoJobs["job_id_institucion"];
@@ -70,6 +76,8 @@ try {
 
         $consultaListaEstudante  = BDT_tempCalculoBoletinEstudiantes::Select($predicado, null, BD_ADMIN);
 
+        echo 'Se encontraron '.BDT_tempCalculoBoletinEstudiantes::numRows($predicado).' estudiantes para el job ID: '.$resultadoJobs['job_id']."\n";
+
         $contenidoMensaje .= '<tbody>';
 
         $contadorEstudiantes = 1;
@@ -81,6 +89,8 @@ try {
                 $datosEstudiante = json_decode($estudianteResultado['tcbe_datos_estudiante'], true);
                 $nombreEstudiante = Estudiantes::NombreCompletoDelEstudiante($datosEstudiante);
             }
+
+            echo 'Procesando estudiante: '.$estudianteResultado['tcbe_id_estudiante'].' - '.$nombreEstudiante."\n";
 
             $contenidoMensaje .= '<tr>';
             $contenidoMensaje .= '<td style="text-align:center;">'.$contadorEstudiantes.'</td>';
@@ -105,6 +115,8 @@ try {
             JOBS_ESTADO_FINALIZADO, 
             $informacionAdicional
         );
+
+        echo 'Enviando notificación al responsable del job finalizado...'."\n";
 
         $periodoSiguiente = $periodo + 1;
         $carHistoricoArray = [];
@@ -142,19 +154,23 @@ try {
             $carHistoricoArray[$carga.':'.time()] = [
                 'car_periodo_anterior' => $datosCargaActual[0]['car_periodo'],
                 'car_estado_anterior'  => $datosCargaActual[0]['car_estado'],
-                'car_forma_generacion' => 'JOB',
+                'car_forma_generacion' => BDT_AcademicoCargas::GENERACION_AUTO,
             ];
+
+            echo 'Revisamos el historico de la carga...'."\n";
         } catch (PDOException $e) {
             include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
         }
 
         $update = [
-            'car_estado'    => 'SINTIA',
+            'car_estado'    => BDT_AcademicoCargas::ESTADO_SINTIA,
             'car_periodo'   => $periodoSiguiente,
             'car_historico' => json_encode($carHistoricoArray),
         ];
 
         CargaAcademica::actualizarCargaPorID($config, $carga, $update);
+
+        echo 'Actualizamos la carga en la base de datos...'."\n";
 
         $datos = [
             "id"      => $resultadoJobs['job_id'],
@@ -163,9 +179,13 @@ try {
 
         SysJobs::actualizar($datos);
 
+        echo 'Job finalizado correctamente...'."\n";
+        echo "<hr>";
+
     }
     BindSQL::finalizarTransacion();
 } catch (Exception $e) {
+    echo 'Error durante el proceso de calcular las definitivas de los informes en estado procesado: '.$e->getMessage()."\n";
     Utilidades::logError($e);
     BindSQL::revertirTransacion();
 }
