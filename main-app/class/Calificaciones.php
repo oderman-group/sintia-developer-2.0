@@ -622,8 +622,8 @@ class Calificaciones {
                         aa.act_id_carga,
                         (aa.act_valor / 100) AS valorDecimal, 
                         (ac.cal_nota * (aa.act_valor / 100)) AS equivalenteCien
-                    FROM mobiliar_academic_prod.academico_calificaciones ac 
-                    INNER JOIN mobiliar_academic_prod.academico_actividades aa 
+                    FROM ".BD_ACADEMICA.".academico_calificaciones ac 
+                    INNER JOIN ".BD_ACADEMICA.".academico_actividades aa 
                         ON act_id = ac.cal_id_actividad 
                         AND act_id_tipo = '".$idIndicador."'
                         AND act_estado = 1
