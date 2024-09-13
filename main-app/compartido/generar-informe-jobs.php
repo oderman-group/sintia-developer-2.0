@@ -112,12 +112,12 @@ try {
 
             $consultaListaEstudante  = Estudiantes::listarEstudiantesEnGrados($filtroAdicional, "", $cursoActual, $grupo, $anio);
 
-            echo 'Se encontraron '.mysqli_num_rows($consultaListaEstudante).' estudiantes para generar informes.'."<br>";
+            echo '<p>Se encontraron '.mysqli_num_rows($consultaListaEstudante).' estudiantes para generar informes.'."</p>";
 
             while ($estudianteResultado = mysqli_fetch_array($consultaListaEstudante, MYSQLI_ASSOC)) {
                 $estudiante = $estudianteResultado["mat_id"];
 
-                echo 'Procesando estudiante ID: '.$estudiante."<br>";
+                echo 'Procesando estudiante ID: '.$estudiante."<br><br>";
 
                 $porcentajeActual = Calificaciones::obtenerPorcentajeActualEstudiante($estudiante, $carga, $periodo);
 

@@ -26,7 +26,7 @@ $parametrosBuscar = [
 
 BindSQL::iniciarTransacion();
 
-echo 'Comenzando el proceso de calcular las defitivas de los informes en estado procesado...'."<br>";
+echo 'Comenzando el proceso de calcular las definitivas de los informes en estado procesado...'."<br>";
 
 try {
     $listadoCrobjobs = SysJobs::listar($parametrosBuscar);
@@ -76,7 +76,7 @@ try {
 
         $consultaListaEstudante  = BDT_tempCalculoBoletinEstudiantes::Select($predicado, null, BD_ADMIN);
 
-        echo 'Se encontraron '.$consultaListaEstudante->rowCount().' estudiantes para el job ID: '.$resultadoJobs['job_id']."<br>";
+        echo '<p>Se encontraron '.$consultaListaEstudante->rowCount().' estudiantes para el job ID: '.$resultadoJobs['job_id']."</p>";
 
         $contenidoMensaje .= '<tbody>';
 
@@ -90,7 +90,7 @@ try {
                 $nombreEstudiante = Estudiantes::NombreCompletoDelEstudiante($datosEstudiante);
             }
 
-            echo 'Procesando estudiante: '.$estudianteResultado['tcbe_id_estudiante'].' - '.$nombreEstudiante."<br>";
+            echo 'Procesando estudiante: '.$estudianteResultado['tcbe_id_estudiante'].' - '.$nombreEstudiante."<br><br>";
 
             $contenidoMensaje .= '<tr>';
             $contenidoMensaje .= '<td style="text-align:center;">'.$contadorEstudiantes.'</td>';
