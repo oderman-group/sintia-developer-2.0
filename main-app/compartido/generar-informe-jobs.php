@@ -117,7 +117,7 @@ try {
             while ($estudianteResultado = mysqli_fetch_array($consultaListaEstudante, MYSQLI_ASSOC)) {
                 $estudiante = $estudianteResultado["mat_id"];
 
-                echo 'Procesando estudiante ID: '.$estudiante."<br><br>";
+                echo 'Procesando estudiante ID: '.$estudiante." - ".$estudianteResultado['mat_nombres']."<br>";
 
                 $porcentajeActual = Calificaciones::obtenerPorcentajeActualEstudiante($estudiante, $carga, $periodo);
 
@@ -155,7 +155,7 @@ try {
 
                 try {
                     BDT_tempCalculoBoletinEstudiantes::Insert($datosParaInsertar, BD_ADMIN);
-                    echo 'Estudiante insertado correctamente.'."<br>";
+                    echo 'Estudiante insertado correctamente.'."<br><br>";
                 } catch (Exception $e) {
                     echo $e->getMessage();
                     $finalizado = false;
