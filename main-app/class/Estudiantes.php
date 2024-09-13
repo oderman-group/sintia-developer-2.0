@@ -163,24 +163,81 @@ class Estudiantes {
         $resultado = [];
 
         if($tipoGrado==GRADO_GRUPAL){
-            $sqlString= "SELECT mat.*, sum(act_valor) as acumulado FROM ".BD_ACADEMICA.".academico_matriculas mat
-            INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car_id=? AND car.institucion=mat.institucion AND car.year=mat.year
-            INNER JOIN ".BD_ACADEMICA.".academico_calificaciones aac ON aac.cal_id_estudiante=mat.mat_id AND aac.institucion=mat.institucion AND aac.year=mat.year 
-            LEFT JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id=aac.cal_id_actividad and aa.act_id_carga=car_id and aa.act_periodo=? and aa.act_registrada=1 and aa.act_estado=1 AND aa.institucion=mat.institucion AND aa.year=mat.year
-            WHERE mat.mat_eliminado=0 AND (mat.mat_estado_matricula=1 OR mat.mat_estado_matricula=2) AND mat.mat_grado=car_curso AND mat.mat_grupo=car_grupo AND mat.institucion=? AND mat.year=?
-            GROUP BY mat.mat_id
-            HAVING acumulado < ".PORCENTAJE_MINIMO_GENERAR_INFORME." OR acumulado IS NULL
-            ORDER BY mat.mat_primer_apellido, mat.mat_segundo_apellido, mat.mat_nombres";
+          $sqlString = "SELECT 
+                        mat.*
+                        ,SUM(IF(cal_nota IS NOT NULL, act_valor, 0)) AS acumulado
+                        FROM 
+                        ".BD_ACADEMICA.".academico_matriculas mat
+
+                        INNER JOIN ".BD_ACADEMICA.".academico_cargas car 
+                        ON  car.institucion = mat.institucion 
+                        AND car.year        = mat.year
+                        AND car_curso       = mat.mat_grado
+                        AND car_grupo       = mat.mat_grupo
+                        AND car_activa      = 1
+
+                        INNER JOIN ".BD_ACADEMICA.".academico_actividades act 
+                        ON  act.institucion = mat.institucion
+                        AND act.year        = mat.year
+                        AND act_estado      = 1
+                        AND act_id_carga    = car_id
+
+                        LEFT JOIN ".BD_ACADEMICA.".academico_calificaciones aac 
+                        ON  aac.institucion       = mat.institucion 
+                        AND aac.year              = mat.year
+                        AND aac.cal_id_estudiante = mat.mat_id
+                        AND aac.cal_id_actividad  = act_id
+
+                        WHERE car_id             = ?
+                        AND   act_periodo        = ? 
+                        AND   mat.institucion    = ?
+                        AND   mat.year           = ?
+                        AND   mat.mat_eliminado  = 0 
+                        AND   (mat.mat_estado_matricula=".MATRICULADO."  OR mat.mat_estado_matricula=".ASISTENTE." ) 
+                        
+                        GROUP BY mat.mat_id
+
+                        HAVING acumulado < ".PORCENTAJE_MINIMO_GENERAR_INFORME."  OR acumulado IS NULL
+                        ORDER BY mat.mat_primer_apellido, mat.mat_segundo_apellido, mat.mat_nombres";
         }else{
-            $sqlString= "SELECT mat.*, sum(act_valor) as acumulado FROM ".BD_ADMIN.".mediatecnica_matriculas_cursos
-            INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_id=matcur_id_matricula AND mat.mat_eliminado=0 AND (mat.mat_estado_matricula=1 OR mat.mat_estado_matricula=2) AND mat.institucion=matcur_id_institucion AND mat.year=matcur_years
-            INNER JOIN ".BD_ACADEMICA.".academico_cargas car ON car_id=? AND car.institucion=matcur_id_institucion AND car.year=matcur_years
-            INNER JOIN ".BD_ACADEMICA.".academico_calificaciones aac ON aac.cal_id_estudiante=mat.mat_id AND aac.institucion=matcur_id_institucion AND aac.year=matcur_years 
-            LEFT JOIN ".BD_ACADEMICA.".academico_actividades aa ON aa.act_id=aac.cal_id_actividad and aa.act_id_carga=car_id and aa.act_periodo=? and aa.act_registrada=1 and aa.act_estado=1 AND aa.institucion=matcur_id_institucion AND aa.year=matcur_years
-            WHERE matcur_id_curso=car_curso AND matcur_id_grupo=car_grupo AND matcur_estado='".ACTIVO."' AND matcur_id_institucion=? AND matcur_years=?
-            GROUP BY mat.mat_id
-            HAVING acumulado < ".PORCENTAJE_MINIMO_GENERAR_INFORME." OR acumulado IS NULL
-            ORDER BY mat.mat_primer_apellido, mat.mat_segundo_apellido, mat.mat_nombres";
+          $sqlString = "SELECT
+                        mat.*
+                        ,SUM(IF(cal_nota IS NOT NULL, act_valor, 0)) AS acumulado
+                        FROM 
+                        ".BD_ADMIN.".mediatecnica_matriculas_cursos matcur
+
+                        INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat 
+                        ON   mat_id=matcur_id_matricula 
+                        AND  mat.mat_eliminado=0 
+                        AND (mat.mat_estado_matricula=".MATRICULADO."  OR mat.mat_estado_matricula=".ASISTENTE." ) 
+                        AND  mat.institucion=matcur_id_institucion 
+                        AND  mat.year=matcur_years
+
+                        INNER JOIN ".BD_ACADEMICA.".academico_cargas car 
+                        ON  car.institucion = mat.institucion 
+                        AND car.year        = mat.year
+                        AND car_id          = ?
+
+                        INNER JOIN ".BD_ACADEMICA.".academico_actividades act 
+                        ON  act.institucion = mat.institucion
+                        AND act.year        = mat.year
+                        AND act_estado      = 1
+                        AND act_id_carga    = car_id
+
+                        LEFT JOIN ".BD_ACADEMICA.".academico_calificaciones aac 
+                        ON  aac.institucion       = mat.institucion 
+                        AND aac.year              = mat.year
+                        AND aac.cal_id_estudiante = mat.mat_id
+                        AND aac.cal_id_actividad  = act_id
+                                    
+                        WHERE act_periodo            = ?
+                        AND   matcur_id_institucion  = ?
+                        AND   matcur_years           = ?
+                        AND   matcur_estado          = '".ACTIVO."'
+                        
+                        GROUP BY mat.mat_id 
+                        HAVING acumulado < ".PORCENTAJE_MINIMO_GENERAR_INFORME."  OR acumulado IS NULL
+                        ORDER BY mat.mat_primer_apellido, mat.mat_segundo_apellido, mat.mat_nombres";
         }
     
         $parametros = [$carga, $periodo, $config['conf_id_institucion'], $_SESSION["bd"]];
