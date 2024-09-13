@@ -11,6 +11,9 @@ class Boletin {
     public const BOLETIN_TIPO_NOTA_RECUPERACION_INDICADOR = 3; // La hace el docente por los indicadores.
     public const BOLETIN_TIPO_NOTA_DIRECTIVA              = 4; // La Colocar el directivo directamente.
 
+    public const ESTADO_ABIERTO  = 'ABIERTO';
+    public const ESTADO_GENERADO = 'GENERADO';
+
 
     /**
     * Devuelve una lista de tipos de notas basados en la categoría proporcionada y el año académico seleccionado.

@@ -78,7 +78,7 @@ while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 
 	if (!empty($boletinDatos['bol_id'])) {
 		//Si ya existe un registro previo de definitiva TIPO 1
-		if ($boletinDatos['bol_tipo'] == 1) {
+		if ($boletinDatos['bol_tipo'] == Boletin::BOLETIN_TIPO_NOTA_NORMAL) {
 
 			if($boletinDatos['bol_nota'] != $definitiva || $boletinDatos['bol_porcentaje'] != $porcentajeActual) {
 				$caso = 2; //Se cambia la definitiva que tenía por la que viene. Sea menor o mayor.
@@ -87,7 +87,7 @@ while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 				continue;
 			}
 
-		} elseif ($boletinDatos['bol_tipo'] == 2) { //Si ya existe un registro previo de recuperación de periodo TIPO 2
+		} elseif ($boletinDatos['bol_tipo'] == Boletin::BOLETIN_TIPO_NOTA_RECUPERACION_PERIODO) { //Si ya existe un registro previo de recuperación de periodo TIPO 2
 
 			//Si la definitiva que viene está perdida 
 			if ($definitiva < $config[5]) {
@@ -97,7 +97,7 @@ while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 				$caso = 4; //Se reemplaza la nota de recuperación actual por la definitiva que viene. Igual está ganada y no requiere de recuperación.
 			}
 
-		} elseif (($boletinDatos['bol_tipo'] == 3 || $boletinDatos['bol_tipo'] == 4)) { //Si ya existe un registro previo de recuperación por Indicadores TIPO 3
+		} elseif (($boletinDatos['bol_tipo'] == Boletin::BOLETIN_TIPO_NOTA_RECUPERACION_INDICADOR || $boletinDatos['bol_tipo'] == Boletin::BOLETIN_TIPO_NOTA_DIRECTIVA)) { //Si ya existe un registro previo de recuperación por Indicadores TIPO 3
 			$caso = 5; //Se actualiza la definitiva que viene y se cambia la recuperación del Indicador a nota anterior. 
 		}
 	}
@@ -160,6 +160,7 @@ while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 			'bol_observaciones'           => 'Reemplazada',
 			'bol_porcentaje'              => $porcentajeActual,
 			'bol_historial_actualizacion' => json_encode($actualizacion),
+			'bol_estado'                  => Boletin::ESTADO_GENERADO,
 		];
 
 		Boletin::actualizarNotaBoletin($config, $boletinDatos['bol_id'], $update);
@@ -170,12 +171,37 @@ while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 			Boletin::eliminarNotaBoletinID($config, $boletinDatos['bol_id']);
 		}
 
-		//INSERTAR LOS DATOS EN LA TABLA BOLETIN	
+		//INSERTAR LOS DATOS EN LA TABLA BOLETIN - Para el campo bol_id el código se genera automáticamente en el método guardarNotaBoletin
 		Boletin::guardarNotaBoletin(
 			$conexionPDO, 
-			"bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_fecha_registro, bol_actualizaciones, bol_nota_indicadores, bol_porcentaje, institucion, year, bol_id", 
+			"
+				bol_carga, 
+				bol_estudiante, 
+				bol_periodo, 
+				bol_nota, 
+				bol_tipo, 
+				bol_fecha_registro, 
+				bol_actualizaciones, 
+				bol_nota_indicadores, 
+				bol_porcentaje, 
+				institucion, 
+				year, 
+				bol_estado, 
+				bol_id
+			", 
 			[
-				$carga, $estudiante, $periodo, $definitiva, 1, date("Y-m-d H:i:s"), 0, $sumaNotaIndicador, $porcentajeActual, $config['conf_id_institucion'], $_SESSION["bd"]
+				$carga, 
+				$estudiante, 
+				$periodo, 
+				$definitiva, 
+				1, 
+				date("Y-m-d H:i:s"), 
+				0, 
+				$sumaNotaIndicador, 
+				$porcentajeActual, 
+				$config['conf_id_institucion'], 
+				$_SESSION["bd"], 
+				Boletin::ESTADO_GENERADO
 			]
 		);
 
@@ -207,7 +233,7 @@ try {
         $lastCarHistoricoArray = $carHistoricoArray[$lastKey];
 
         if (
-            $datosCargaActual[0]['car_estado'] == 'DIRECTIVO' && 
+            $datosCargaActual[0]['car_estado'] == BDT_AcademicoCargas::ESTADO_DIRECTIVO && 
             !empty($lastCarHistoricoArray['car_periodo_anterior']) && 
             $lastCarHistoricoArray['car_periodo_anterior'] != $datosCargaActual[0]['car_periodo']
         ) {
@@ -219,14 +245,14 @@ try {
     $carHistoricoArray[$carga.':'.time()] = [
         'car_periodo_anterior' => $datosCargaActual[0]['car_periodo'],
         'car_estado_anterior'  => $datosCargaActual[0]['car_estado'],
-        'car_forma_generacion' => 'MANUAL',
+        'car_forma_generacion' => BDT_AcademicoCargas::GENERACION_MANUAL,
     ];
 } catch (PDOException $e) {
     include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
 }
 
 $update = [
-    'car_estado'    => 'SINTIA',
+    'car_estado'    => BDT_AcademicoCargas::ESTADO_SINTIA,
     'car_periodo'   => $periodoSiguiente,
     'car_historico' => json_encode($carHistoricoArray),
 ];

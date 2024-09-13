@@ -10,47 +10,54 @@ require_once(ROOT_PATH."/main-app/class/Tables/BDT_academico_cargas.php");
 Modulos::validarAccesoDirectoPaginas();
 $idPaginaInterna = 'DT0167';
 
-if(!Modulos::validarSubRol([$idPaginaInterna])){
+if (!Modulos::validarSubRol([$idPaginaInterna])) {
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
 }
+
 include("../compartido/historial-acciones-guardar.php");
 
-	$existeCarga=false;
-	if($_POST["docente"]!=$_POST["docenteActual"] || $_POST["curso"]!=$_POST["cursoActual"] || $_POST["grupo"]!=$_POST["grupoActual"] || $_POST["asignatura"]!=$_POST["asignaturaActual"]){
+	$existeCarga = false;
+
+	if (
+		$_POST["docente"] != $_POST["docenteActual"] || 
+		$_POST["curso"] != $_POST["cursoActual"] || 
+		$_POST["grupo"] != $_POST["grupoActual"] || 
+		$_POST["asignatura"] != $_POST["asignaturaActual"]
+	) {
 		$existeCarga = CargaAcademica::validarExistenciaCarga($_POST["docente"], $_POST["curso"], $_POST["grupo"], $_POST["asignatura"]);
 	}
 
 	if (!$existeCarga) {
 
 		if ($_POST["periodo"] != $_POST["periodoActual"]) {
-			$parametros = array(
-				"carga" 	=>$_POST["idR"],
-				"periodo" 	=>$_POST["periodo"],
+			$parametros = [
+				"carga" 	=> $_POST["idR"],
+				"periodo" 	=> $_POST["periodo"],
 				"grado" 	=> $_POST["curso"],
-				"grupo"		=>$_POST["grupo"]
-			);
+				"grupo"		=> $_POST["grupo"]
+			];
 
-			$parametrosBuscar = array(
-				"tipo" 			=>JOBS_TIPO_GENERAR_INFORMES,
+			$parametrosBuscar = [
+				"tipo" 			=> JOBS_TIPO_GENERAR_INFORMES,
 				"responsable" 	=> $_POST["docente"],
 				"parametros" 	=> json_encode($parametros),
-				"agno"			=>$config['conf_agno'],
-				"estado"		=>JOBS_ESTADO_FINALIZADO
-			);
+				"agno"			=> $config['conf_agno'],
+				"estado"		=> JOBS_ESTADO_FINALIZADO
+			];
 
-			$buscarJobs=SysJobs::consultar($parametrosBuscar);
-			if(mysqli_num_rows($buscarJobs)>0){
+			$buscarJobs = SysJobs::consultar($parametrosBuscar);
+
+			if (mysqli_num_rows($buscarJobs) > 0) {
 				$jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
 
-				try{
+				try {
 					mysqli_query($conexion, "DELETE FROM ".$baseDatosServicios.".sys_jobs WHERE job_id='".$jobsEncontrado["job_id"]."'");
 				} catch (Exception $e) {
 					include("../compartido/error-catch-to-report.php");
 				}
 			}
 
-			
 		}
 
 		$update = [
@@ -83,7 +90,7 @@ include("../compartido/historial-acciones-guardar.php");
 		$datosCargaActual         = $datosCargaActualConsulta->fetchAll();
 
 		if ($_POST["periodo"] != $datosCargaActual[0]['car_periodo']) {
-			$update['car_estado'] = 'DIRECTIVO';
+			$update['car_estado'] = BDT_AcademicoCargas::ESTADO_DIRECTIVO;
 
 			$carHistoricoArray = [];
 			$carHistoricoCampo = $datosCargaActual[0]['car_historico'];
@@ -100,7 +107,7 @@ include("../compartido/historial-acciones-guardar.php");
 			$update['car_historico'] = json_encode($carHistoricoArray);
 
 			$updateBoletin = [
-				'bol_estado' => 'ABIERTO',
+				'bol_estado' => Boletin::ESTADO_ABIERTO,
 			];
 
 			$where = "bol_carga='{$_POST["idR"]}' AND bol_periodo={$_POST["periodo"]}";
@@ -114,9 +121,9 @@ include("../compartido/historial-acciones-guardar.php");
 		
 		Grados::guardarIntensidadMateriaCurso($conexion, $conexionPDO, $config, $_POST["curso"], $_POST["asignatura"], $_POST["ih"]);
 
-		$mensaje='success=SC_DT_2';
-	}else{
-		$mensaje='error=ER_DT_20';
+		$mensaje = 'success=SC_DT_2';
+	} else {
+		$mensaje = 'error=ER_DT_20';
 	}
 
 include("../compartido/guardar-historial-acciones.php");
