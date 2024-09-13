@@ -239,9 +239,9 @@ class SysJobs {
         AND job_ambiente='".ENVIROMENT."'
         ".$andTipo
         . $andResponsable
-        .$andAgno."            
+        .$andAgno."
         ORDER BY job_prioridad,job_fecha_creacion
-        LIMIT 0, 20
+        LIMIT 0, 10
         ";
         try {
             $resultado = mysqli_query($conexion,$sqlExecute);
