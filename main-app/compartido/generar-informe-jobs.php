@@ -25,10 +25,16 @@ $parametrosBuscar = [
 
 BindSQL::iniciarTransacion();
 
+echo 'Comenzando el proceso de generación de informes...'."\n";
+
 try {
     $listadoCrobjobs = SysJobs::listar($parametrosBuscar);
 
+    echo 'Se encontraron '.mysqli_num_rows($listadoCrobjobs).' jobs para generar informes.'."\n";
+
     while ($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)) {
+
+        echo 'Procesando job ID: '.$resultadoJobs['job_id']."\n";
 
         $datos = [
             "id"      => $resultadoJobs['job_id'],
@@ -36,6 +42,8 @@ try {
         ];
 
         SysJobs::actualizar($datos);
+
+        echo 'Se actualizó el estado del job a EN PROCESO.'."\n";
 
         // fecha1 es la primera fecha
         $fechaInicio   = new DateTime();
@@ -74,6 +82,8 @@ try {
         $mensaje                 = "";
 
         if ($config['conf_porcentaje_completo_generar_informe'] == GENERAR_CON_PORCENTAJE_COMPLETO) {
+            echo 'Ingresamos a verificación de porcentaje completo para los estudiantes.'."\n";
+
             $consultaListaEstudantesError = Estudiantes::listarEstudiantesNotasFaltantes($carga, $periodo, $cursoActual["gra_tipo"]);
 
             //Verificamos que el estudiante tenga sus notas al 100%
@@ -93,6 +103,8 @@ try {
                 }
 
                 $finalizado = false;
+
+                echo 'Existen estudiantes con notas incompletas por lo tanto no se pudo generar el informe.'."\n";
             }
         }
 
@@ -100,8 +112,12 @@ try {
 
             $consultaListaEstudante  = Estudiantes::listarEstudiantesEnGrados($filtroAdicional, "", $cursoActual, $grupo, $anio);
 
+            echo 'Se encontraron '.mysqli_num_rows($consultaListaEstudante).' estudiantes para generar informes.'."\n";
+
             while ($estudianteResultado = mysqli_fetch_array($consultaListaEstudante, MYSQLI_ASSOC)) {
                 $estudiante = $estudianteResultado["mat_id"];
+
+                echo 'Procesando estudiante ID: '.$estudiante."\n";
 
                 $porcentajeActual = Calificaciones::obtenerPorcentajeActualEstudiante($estudiante, $carga, $periodo);
 
@@ -130,7 +146,7 @@ try {
                     'tcbe_id_carga_academica'   => $carga,
                     'tcbe_periodo'              => $periodo,
                     'tcbe_id_job_referencia'    => $resultadoJobs['job_id'],
-                    'tcbe_estado'               => 'PENDIENTE',
+                    'tcbe_estado'               => BDT_tempCalculoBoletinEstudiantes::ESTADO_ESTUDIANTE_PENDIENTE,
                     'tcbe_datos_estudiante'     => json_encode($estudianteResultado),
                     'tcbe_calcular_indicadores' => $_SESSION["idInstitucion"] == ICOLVEN || 
                                                    $_SESSION["idInstitucion"] == DEVELOPER || 
@@ -139,6 +155,7 @@ try {
 
                 try {
                     BDT_tempCalculoBoletinEstudiantes::Insert($datosParaInsertar, BD_ADMIN);
+                    echo 'Estudiante insertado correctamente.'."\n";
                 } catch (Exception $e) {
                     echo $e->getMessage();
                     $finalizado = false;
@@ -154,6 +171,8 @@ try {
             ];
 
             SysJobs::actualizar($datos);
+
+            echo 'Actualizamos el estado del job a procesado.'."\n";
 
         } else {
             if ($intento >= 3) {
@@ -172,6 +191,8 @@ try {
                     JOBS_ESTADO_FINALIZADO
                 );
 
+                echo 'Actualizamos el estado del job a finalizado porque ya se han hecho '.$intento.' intentos.'."\n";
+
                 SysJobs::enviarMensaje(
                     $resultadoJobs['job_responsable'],
                     $mensaje.$listadoEstudiantesError,
@@ -180,6 +201,8 @@ try {
                     JOBS_ESTADO_ERROR, 
                     $informacionAdicional
                 );
+
+                echo 'Enviamos un mensaje al responsable del job.'."\n";
             } else {
                 $texto = "";
 
@@ -197,8 +220,14 @@ try {
                     $mensaje,
                     JOBS_ESTADO_PENDIENTE
                 );
+
+                echo 'Actualizamos el estado del job a pendiente y haremos otro intento más tarde.'."\n";
             }
         }
+
+        echo "Job finalizado."."\n";
+
+        echo "<hr>";
 
     }
 
