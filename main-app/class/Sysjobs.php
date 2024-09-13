@@ -42,13 +42,13 @@ class SysJobs {
                 break;
             }
 
-            $idRegistro = self::crear($tipo,$prioridad,$parametros,$msj);
+            $idRegistro = self::crear($tipo, $prioridad, $parametros, $msj);
             $mensaje    = "Se realiz&oacute; exitosamente el proceso de ".$tipo." con el c&oacute;digo ".$idRegistro.". Te enviaremos un mensaje al correo interno de la plataforma cuando haya finalizado este proceso.";
         } else {
             $jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
             $idRegistro     = $jobsEncontrado["job_id"];
 
-            if ($jobsEncontrado["job_estado"]==JOBS_ESTADO_ERROR) {
+            if ($jobsEncontrado["job_estado"] == JOBS_ESTADO_ERROR || $jobsEncontrado["job_estado"] == JOBS_ESTADO_FINALIZADO) {
                 $datos = [
                     "estado"   => JOBS_ESTADO_PENDIENTE,
                     "intentos" => '0',
@@ -58,12 +58,15 @@ class SysJobs {
 
                 self::actualizar($datos);
 
-                $mensaje = "Se actualiz&oacute; exitosamente el proceso de ".$tipo." con el c&oacute;digo ".$idRegistro." Te enviaremos un mensaje al correo interno de la plataforma cuando haya finalizado este proceso.";
+                $mensaje = $jobsEncontrado["job_estado"] == JOBS_ESTADO_ERROR ? 
+                                                            "Se actualiz&oacute; exitosamente el proceso de ".$tipo." con el c&oacute;digo ".$idRegistro." Te enviaremos un mensaje al correo interno de la plataforma cuando haya finalizado este proceso." : 
+                                                            "El informe ya se est&aacute; generando.";
             } else {
                 $mensaje = "Proceso ".$tipo." con el c&oacute;digo ".$idRegistro." ya está marcado como".$jobsEncontrado["job_intentos"];
             }
 
         }
+
         return $mensaje;
     }
 
