@@ -103,6 +103,10 @@ try {
             $contadorEstudiantes ++;
         }
 
+        BDT_tempCalculoBoletinEstudiantes::Delete($predicado);
+
+        echo 'Eliminando datos de la tabla temporal...'."<br>";
+
         $contenidoMensaje .= '</tbody>';
         $contenidoMensaje .= '</table>';
 
