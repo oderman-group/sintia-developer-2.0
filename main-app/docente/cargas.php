@@ -157,7 +157,7 @@ if( !empty($_SESSION["infoCargaActual"]) ) {
                                                                                 " 
                                                                                 onclick="mensajeGenerarInforme(this)"
                                                                             >
-                                                                                Forma tradicional
+                                                                                Manualmente
                                                                             </a>
                                                                         </li>
                                                                         <li>
@@ -177,7 +177,7 @@ if( !empty($_SESSION["infoCargaActual"]) ) {
                                                                                 " 
                                                                                 onclick="mensajeGenerarInforme(this)"
                                                                             >
-                                                                                Forma nueva
+                                                                                Automático
                                                                             </a>
                                                                         </li>
                                                                     </ul>
