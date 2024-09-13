@@ -26,16 +26,16 @@ $parametrosBuscar = [
 
 BindSQL::iniciarTransacion();
 
-echo 'Comenzando el proceso de calcular las defitivas de los informes en estado procesado...'."\n";
+echo 'Comenzando el proceso de calcular las defitivas de los informes en estado procesado...'."<br>";
 
 try {
     $listadoCrobjobs = SysJobs::listar($parametrosBuscar);
 
-    echo 'Se encontraron '.mysqli_num_rows($listadoCrobjobs).' jobs para calcular las definitivas.'."\n";
+    echo 'Se encontraron '.mysqli_num_rows($listadoCrobjobs).' jobs para calcular las definitivas.'."<br>";
 
     while ($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)) {
 
-        echo 'Procesando job ID: '.$resultadoJobs['job_id']."\n";
+        echo 'Procesando job ID: '.$resultadoJobs['job_id']."<br>";
 
         $parametros    = json_decode($resultadoJobs["job_parametros"], true);
         $institucionId = $resultadoJobs["job_id_institucion"];
@@ -76,7 +76,7 @@ try {
 
         $consultaListaEstudante  = BDT_tempCalculoBoletinEstudiantes::Select($predicado, null, BD_ADMIN);
 
-        echo 'Se encontraron '.BDT_tempCalculoBoletinEstudiantes::numRows($predicado).' estudiantes para el job ID: '.$resultadoJobs['job_id']."\n";
+        echo 'Se encontraron '.$consultaListaEstudante->rowCount().' estudiantes para el job ID: '.$resultadoJobs['job_id']."<br>";
 
         $contenidoMensaje .= '<tbody>';
 
@@ -90,7 +90,7 @@ try {
                 $nombreEstudiante = Estudiantes::NombreCompletoDelEstudiante($datosEstudiante);
             }
 
-            echo 'Procesando estudiante: '.$estudianteResultado['tcbe_id_estudiante'].' - '.$nombreEstudiante."\n";
+            echo 'Procesando estudiante: '.$estudianteResultado['tcbe_id_estudiante'].' - '.$nombreEstudiante."<br>";
 
             $contenidoMensaje .= '<tr>';
             $contenidoMensaje .= '<td style="text-align:center;">'.$contadorEstudiantes.'</td>';
@@ -116,7 +116,7 @@ try {
             $informacionAdicional
         );
 
-        echo 'Enviando notificación al responsable del job finalizado...'."\n";
+        echo 'Enviando notificación al responsable del job finalizado...'."<br>";
 
         $periodoSiguiente = $periodo + 1;
         $carHistoricoArray = [];
@@ -157,7 +157,7 @@ try {
                 'car_forma_generacion' => BDT_AcademicoCargas::GENERACION_AUTO,
             ];
 
-            echo 'Revisamos el historico de la carga...'."\n";
+            echo 'Revisamos el historico de la carga...'."<br>";
         } catch (PDOException $e) {
             include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
         }
@@ -170,7 +170,7 @@ try {
 
         CargaAcademica::actualizarCargaPorID($config, $carga, $update);
 
-        echo 'Actualizamos la carga en la base de datos...'."\n";
+        echo 'Actualizamos la carga en la base de datos...'."<br>";
 
         $datos = [
             "id"      => $resultadoJobs['job_id'],
@@ -179,7 +179,7 @@ try {
 
         SysJobs::actualizar($datos);
 
-        echo 'Job finalizado correctamente...'."\n";
+        echo 'Job finalizado correctamente...'."<br>";
         echo "<hr>";
 
     }
