@@ -163,7 +163,7 @@ class Estudiantes {
         $resultado = [];
 
         if($tipoGrado==GRADO_GRUPAL){
-            $sqlString= "SELECT 
+          $sqlString = "SELECT 
                         mat.*
                         ,SUM(IF(cal_nota IS NOT NULL, act_valor, 0)) AS acumulado
                         FROM 
@@ -188,31 +188,30 @@ class Estudiantes {
                         AND aac.cal_id_estudiante = mat.mat_id
                         AND aac.cal_id_actividad  = act_id
 
-
                         WHERE car_id             = ?
                         AND   act_periodo        = ? 
                         AND   mat.institucion    = ?
                         AND   mat.year           = ?
                         AND   mat.mat_eliminado  = 0 
-                        AND   (mat.mat_estado_matricula=1 OR mat.mat_estado_matricula=2) 
+                        AND   (mat.mat_estado_matricula=".MATRICULADO."  OR mat.mat_estado_matricula=".ASISTENTE." ) 
                         
                         GROUP BY mat.mat_id
 
-                        HAVING acumulado < 99 OR acumulado IS NULL
-                        ORDER BY mat.mat_primer_apellido, mat.mat_segundo_apellido, mat.mat_nombres;";
+                        HAVING acumulado < ".PORCENTAJE_MINIMO_GENERAR_INFORME."  OR acumulado IS NULL
+                        ORDER BY mat.mat_primer_apellido, mat.mat_segundo_apellido, mat.mat_nombres";
         }else{
-            $sqlString= "SELECT
+          $sqlString = "SELECT
                         mat.*
                         ,SUM(IF(cal_nota IS NOT NULL, act_valor, 0)) AS acumulado
                         FROM 
                         ".BD_ADMIN.".mediatecnica_matriculas_cursos matcur
 
                         INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat 
-                        ON mat_id=matcur_id_matricula 
-                        AND mat.mat_eliminado=0 
-                        AND (mat.mat_estado_matricula=1 OR mat.mat_estado_matricula=2) 
-                        AND mat.institucion=matcur_id_institucion 
-                        AND mat.year=matcur_years
+                        ON   mat_id=matcur_id_matricula 
+                        AND  mat.mat_eliminado=0 
+                        AND (mat.mat_estado_matricula=".MATRICULADO."  OR mat.mat_estado_matricula=".ASISTENTE." ) 
+                        AND  mat.institucion=matcur_id_institucion 
+                        AND  mat.year=matcur_years
 
                         INNER JOIN ".BD_ACADEMICA.".academico_cargas car 
                         ON  car.institucion = mat.institucion 
