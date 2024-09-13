@@ -333,8 +333,15 @@ require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 											</div>
 										</div>
 
+										<div class="form-group row">
+											<label class="col-sm-2 control-label">Estado actual</label>
+											<div class="col-sm-4">
+												<input type="text" name="estadoActual" class="form-control" value="<?=$datosEditar['car_estado'];?>" readonly>
+											</div>
+										</div>
+
 										<?php $botones = new botonesGuardar("cargas.php",Modulos::validarPermisoEdicion()); ?>
-									 </form>
+									</form>
                                 </div>
                             </div>
                         </div>
