@@ -9,7 +9,7 @@ if (!empty($_GET['estado'])) {
   $estado = base64_decode($_GET['estado']);
   $filtro .= " AND asp_estado_solicitud='".$estado."'";
 }
-require_once("../class/componentes/ComponenteFiltro.php");
+require_once("../class/componentes/componenteFiltro.php");
 $grados = Grados::listarGrados(1);
 $count=0;
 while ($grado = mysqli_fetch_array($grados, MYSQLI_BOTH)) {
