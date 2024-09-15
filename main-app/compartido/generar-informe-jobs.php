@@ -28,13 +28,13 @@ BindSQL::iniciarTransacion();
 echo 'Comenzando el proceso de generación de informes...'."<br>";
 
 try {
-    $listadoCrobjobs = SysJobs::listar($parametrosBuscar);
+    $listadoCrobjobsActualizar = SysJobs::listar($parametrosBuscar);
 
-    echo 'Se encontraron '.mysqli_num_rows($listadoCrobjobs).' jobs para generar informes.'."<br>";
+    echo 'Se encontraron '.mysqli_num_rows($listadoCrobjobsActualizar).' jobs para generar informes.'."<br>";
 
     // Actualizamos todos los jobs seleccionados a en PROCESO de una vez para evitar colisiones con otro job
-    if (mysqli_num_rows($listadoCrobjobs) > 0) {
-        while($resultadoJobsActualizar = mysqli_fetch_array($listadoCrobjobs, MYSQLI_ASSOC)) {
+    if (mysqli_num_rows($listadoCrobjobsActualizar) > 0) {
+        while($resultadoJobsActualizar = mysqli_fetch_array($listadoCrobjobsActualizar, MYSQLI_ASSOC)) {
             $datos = [
                 "id"     => $resultadoJobsActualizar['job_id'],
                 "estado" => JOBS_ESTADO_PROCESO,
@@ -44,7 +44,18 @@ try {
 
             echo 'Actualizado a en PROCESO el job con ID: '.$resultadoJobsActualizar['job_id']."<br>";
         }
+        mysqli_free_result($listadoCrobjobsActualizar);
+    } else {
+        //Evitamos que el job continue si no hay jobs pendientes
+        exit();
     }
+
+    $parametrosBuscar = [
+        "tipo"   => JOBS_TIPO_GENERAR_INFORMES,
+        "estado" => JOBS_ESTADO_PROCESO
+    ];
+
+    $listadoCrobjobs = SysJobs::listar($parametrosBuscar);
 
     while ($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)) {
 

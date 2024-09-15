@@ -29,9 +29,34 @@ BindSQL::iniciarTransacion();
 echo 'Comenzando el proceso de calcular las definitivas de los informes en estado procesado...'."<br>";
 
 try {
-    $listadoCrobjobs = SysJobs::listar($parametrosBuscar);
+    $listadoCrobjobsActualizar = SysJobs::listar($parametrosBuscar);
 
-    echo 'Se encontraron '.mysqli_num_rows($listadoCrobjobs).' jobs para calcular las definitivas.'."<br>";
+    echo 'Se encontraron '.mysqli_num_rows($listadoCrobjobsActualizar).' jobs para calcular las definitivas.'."<br>";
+
+    // Actualizamos todos los jobs seleccionados a en PROCESO de una vez para evitar colisiones con otro job
+    if (mysqli_num_rows($listadoCrobjobsActualizar) > 0) {
+        while($resultadoJobsActualizar = mysqli_fetch_array($listadoCrobjobsActualizar, MYSQLI_ASSOC)) {
+            $datos = [
+                "id"     => $resultadoJobsActualizar['job_id'],
+                "estado" => JOBS_ESTADO_ENCOLADO,
+            ];
+
+            SysJobs::actualizar($datos);
+
+            echo 'Actualizado a ENCOLADO el job con ID: '.$resultadoJobsActualizar['job_id']."<br>";
+        }
+        mysqli_free_result($listadoCrobjobsActualizar);
+    } else {
+        //Evitamos que el job continue si no hay jobs pendientes
+        exit();
+    }
+
+    $parametrosBuscar = [
+        "tipo"   => JOBS_TIPO_GENERAR_INFORMES,
+        "estado" => JOBS_ESTADO_ENCOLADO
+    ];
+
+    $listadoCrobjobs = SysJobs::listar($parametrosBuscar);
 
     while ($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)) {
 
