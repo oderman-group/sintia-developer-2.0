@@ -43,7 +43,7 @@
     if (isset($_GET['estadoFil']) && $_GET['estadoFil'] == base64_encode(COBRADA)) $estiloResaltadoCobrado = 'style="color: '.$Plataforma->colorUno.';"';
     $estiloResaltadoPorCobrar = '';
     if (isset($_GET['estadoFil']) && $_GET['estadoFil'] == base64_encode(POR_COBRAR)) $estiloResaltadoPorCobrar = 'style="color: '.$Plataforma->colorUno.';"';
-    require_once(ROOT_PATH."/main-app/class/componentes/ComponenteFiltro.php");
+    require_once(ROOT_PATH."/main-app/class/componentes/ComponenteFiltros.php");
 $opciones[0] = [
     ComponenteFiltro::COMPB_OPCIONES_TEXTO   => 'Menú movimiento financiero',
     ComponenteFiltro::COMPB_OPCIONES_URL     => 'movimientos-importar.php',
