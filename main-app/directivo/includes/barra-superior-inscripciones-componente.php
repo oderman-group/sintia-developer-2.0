@@ -54,5 +54,3 @@ $filtros[1] = [
 
 $barraSuperior = new ComponenteFiltro('inscripciones', 'filter-inscripciones.php', 'inscripciones-tbody.php',$filtros,null,'crearDatos');
 $barraSuperior->generarComponente();
-?>
-
