@@ -32,18 +32,23 @@ try {
 
     echo 'Se encontraron '.mysqli_num_rows($listadoCrobjobs).' jobs para generar informes.'."<br>";
 
+    // Actualizamos todos los jobs seleccionados a en PROCESO de una vez para evitar colisiones con otro job
+    if (mysqli_num_rows($listadoCrobjobs) > 0) {
+        while($resultadoJobsActualizar = mysqli_fetch_array($listadoCrobjobs, MYSQLI_ASSOC)) {
+            $datos = [
+                "id"     => $resultadoJobsActualizar['job_id'],
+                "estado" => JOBS_ESTADO_PROCESO,
+            ];
+
+            SysJobs::actualizar($datos);
+
+            echo 'Actualizado a en PROCESO el job con ID: '.$resultadoJobsActualizar['job_id']."<br>";
+        }
+    }
+
     while ($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)) {
 
         echo 'Procesando job ID: '.$resultadoJobs['job_id']."<br>";
-
-        $datos = [
-            "id"      => $resultadoJobs['job_id'],
-            "estado"  => JOBS_ESTADO_PROCESO,
-        ];
-
-        SysJobs::actualizar($datos);
-
-        echo 'Se actualizó el estado del job a EN PROCESO.'."<br>";
 
         // fecha1 es la primera fecha
         $fechaInicio   = new DateTime();
