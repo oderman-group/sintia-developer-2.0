@@ -10,6 +10,8 @@ require_once("../class/servicios/MatriculaServicios.php");
 require_once("../compartido/includes/includeSelectSearch.php");
 require_once(ROOT_PATH . "/main-app/class/Grupos.php");
 
+Utilidades::validarParametros($_GET);
+
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
     echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
     exit();
