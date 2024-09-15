@@ -1,5 +1,5 @@
 <?php
-require_once("../class/componentes/componenteFiltro.php");
+require_once("../class/componentes/ComponenteFiltro.php");
 $curso = '';
 $cursoActual=null;
 
