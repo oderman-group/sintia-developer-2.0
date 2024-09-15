@@ -149,9 +149,11 @@ class SysJobs {
         $setMensaje   = empty($datos["mensaje"]) ? "" : ",job_mensaje='".$datos["mensaje"]."'";
         $setPrioridad = empty($datos["prioriedad"]) ? "" : ",job_prioriedad='".$datos["prioriedad"]."'";
 
+        $hostOrDocumentRoot = $_SERVER['HTTP_HOST'] ? $_SERVER['HTTP_HOST'] : $_SERVER['DOCUMENT_ROOT'];
+
         $sqlUpdate="UPDATE ".$baseDatosServicios.".sys_jobs
         SET job_fecha_modificacion=NOW(), 
-        job_host='".$_SERVER['HTTP_HOST']."'"
+        job_host='".$hostOrDocumentRoot."'"
         .$setIntentos
         .$setEstado
         .$setMensaje
