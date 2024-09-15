@@ -1,5 +1,5 @@
 <?php
-require_once("../class/componentes/ComponenteFiltro.php");
+require_once(ROOT_PATH."/main-app/class/componentes/ComponenteFiltro.php");
 $curso = '';
 $cursoActual=null;
 
