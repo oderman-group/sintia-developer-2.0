@@ -10,6 +10,8 @@ include("../compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 include("../compartido/head.php");
 
+Utilidades::validarParametros($_GET);
+
 $id="";
 if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
 

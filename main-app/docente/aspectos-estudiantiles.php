@@ -1,7 +1,11 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DC0064';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php include("../compartido/head.php");?>
+<?php include("../compartido/head.php");
+
+Utilidades::validarParametros($_GET);
+
+?>
 
 
 <!--bootstrap -->
