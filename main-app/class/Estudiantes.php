@@ -1355,32 +1355,44 @@ class Estudiantes {
     * para la institución y año especificados en la configuración.
     *
     * @param array   $config      Configuración general del sistema.
-    * @param string  $yearBd      Año de la base de datos a utilizar (opcional). Si no se proporciona, se utiliza el año de la sesión.
+    * @param string  $yearBd      Año de la base de datos a utilizar (opcional). Si no se proporciona, se utiliza el año de la sesión.    
+    * @param array   $selectConsulta - valores de los select que se van a nececitar para las consultas
     * @return mixed  El resultado de la consulta, que contiene las matrículas de los aspirantes.
     */
     public static function listarMatriculasAspirantes(
         array   $config, 
-        string  $filtro = "", 
-        string  $limite = "", 
-        string  $yearBd = ""
+        string  $filtro       = "", 
+        string  $limite       = "", 
+        string  $yearBd       = "",
+        array $selectConsulta = [] 
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+        $stringSelect="*";
+        if (!empty($selectConsulta)) {
+        $stringSelect=implode(", ", $selectConsulta);
+        };
+        $sql = " SELECT 
+                 $stringSelect  
+                 FROM ".BD_ACADEMICA.".academico_matriculas mat
 
-        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
-        INNER JOIN ".BD_ADMISIONES.".aspirantes 
-            ON asp_id=mat.mat_solicitud_inscripcion 
-            AND asp_oculto = '".BDT_Aspirante::ESTADO_OCULTO_FALSO."'
-        LEFT JOIN ".BD_ACADEMICA.".academico_grados gra 
-            ON gra_id=asp_grado 
-            AND gra.institucion=mat.institucion 
-            AND gra.year=mat.year
-        WHERE mat.mat_estado_matricula=".EN_INSCRIPCION." 
-        AND mat.institucion=? 
-        AND mat.year=? 
-        {$filtro}
-        ORDER BY mat.mat_primer_apellido  {$limite}
-        ";
+                 INNER JOIN ".BD_ADMISIONES.".aspirantes 
+                 ON asp_id    = mat.mat_solicitud_inscripcion
+                 
+                 LEFT JOIN ".BD_ACADEMICA.".academico_grados gra 
+                 ON gra_id            = asp_grado 
+                 AND gra.institucion  = mat.institucion 
+                 AND gra.year         = mat.year
+
+                 WHERE mat.mat_estado_matricula = ".EN_INSCRIPCION." 
+                 AND mat.institucion            = ? 
+                 AND mat.year                   = ? 
+                
+                 {$filtro}
+                 
+                 ORDER BY mat.mat_primer_apellido  
+                 
+                 {$limite}";
 
         $parametros = [$config['conf_id_institucion'], $year];
         
