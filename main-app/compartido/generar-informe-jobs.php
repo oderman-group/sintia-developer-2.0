@@ -17,6 +17,14 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 require_once(ROOT_PATH."/main-app/class/RedisInstance.php");
 require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 require_once(ROOT_PATH."/main-app/class/Tables/BDT_temp_calculo_boletin_estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Tables/BDT_sys_jobs.php");
+;
+
+$cantidadActualizados = BDT_SysJobs::updateStautusToPendingWhenLongTimeInProcess();
+
+if ($cantidadActualizados > 0) {
+    echo 'Se han actualizado '.$cantidadActualizados.' jobs que tenian demasiado tiempo en proceso.'."<br>";
+}
 
 $parametrosBuscar = [
     "tipo"   => JOBS_TIPO_GENERAR_INFORMES,
@@ -129,6 +137,22 @@ try {
             $consultaListaEstudante  = Estudiantes::listarEstudiantesEnGrados($filtroAdicional, "", $cursoActual, $grupo, $anio);
 
             echo '<p>Se encontraron '.mysqli_num_rows($consultaListaEstudante).' estudiantes para generar informes.'."</p>";
+
+            if (mysqli_num_rows($consultaListaEstudante) > Estudiantes::MAXIMOS_ESTUDIANTES_CURSO) {
+                echo 'No se puede generar el informe porque la lista de estudiantes es muy grande (máximo '.Estudiantes::MAXIMOS_ESTUDIANTES_CURSO.' estudiantes).'."<br>";
+
+                $datos = [
+                    "id"     => $resultadoJobs['job_id'],
+                    "estado" => JOBS_ESTADO_ERROR,
+                    "mensaje" => 'No se puede generar el informe porque la lista de estudiantes es muy grande (máximo '.Estudiantes::MAXIMOS_ESTUDIANTES_CURSO.' estudiantes).'
+                ];
+    
+                SysJobs::actualizar($datos);
+    
+                echo 'Actualizado a en PROCESO el job con ID: '.$resultadoJobsActualizar['job_id']."<br>";
+
+                continue;
+            }
 
             while ($estudianteResultado = mysqli_fetch_array($consultaListaEstudante, MYSQLI_ASSOC)) {
                 $estudiante = $estudianteResultado["mat_id"];

@@ -7,6 +7,8 @@ require_once(ROOT_PATH."/main-app/class/Tables/BDT_aspirante.php");
 
 class Estudiantes {
 
+    public const MAXIMOS_ESTUDIANTES_CURSO = 50;
+
     /**
      * Esta función lista estudiantes según varios parámetros.
      *
