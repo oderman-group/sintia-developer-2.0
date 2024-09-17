@@ -4,57 +4,19 @@ if (!empty($data["dataTotal"])) {
 	require_once("../Modulos.php");
 }
 
-$permisoReportesNotas     = false;
-if (Modulos::validarSubRol(['DT0238'])) {
-	$permisoReportesNotas = true;
-}
-
-$permisoedicion    = false;
-if (Modulos::validarSubRol(['DT0049', 'DT0148', 'DT0129'])) {
-	$permisoedicion = true;
-}
-
-$permisoEditar     = false;
-if (Modulos::validarSubRol(['DT0049'])) {
-	$permisoeditar = true;
-}
-
-$permisoEliminar     = false;
-if (Modulos::validarSubRol(['DT0148'])) {
-	$permisoEliminar = true;
-}
-
-$permisoAutologin     = false;
-if (Modulos::validarSubRol(['DT0129'])) {
-	$permisoAutologin = true;
-}
-
-$permisoHorarios     = false;
-if (Modulos::validarSubRol(['DT0041'])) {
-	$permisoHorarios = true;
-}
-
-$permisoResumen    = false;
-if (Modulos::validarSubRol(['DT0111'])) {
-	$permisoResumen = true;
-}
-
-$permisoIndicadores     = false;
-if (Modulos::validarSubRol(['DT0034'])) {
-	$permisoIndicadores = true;
-}
-
-$permisoPlanilla     = false;
-if (Modulos::validarSubRol(['DT0239'])) {
-	$permisoPlanilla = true;
-}
-
-$permisoPlanillaNotas     = false;
-if (Modulos::validarSubRol(['DT0237'])) {
-	$permisoPlanillaNotas = true;
-}
+$permisoReportesNotas = Modulos::validarSubRol(['DT0238']);
+$permisoedicion       = Modulos::validarSubRol(['DT0049','DT0148','DT0129']);
+$permisoEditar        = Modulos::validarSubRol(['DT0049']);
+$permisoEliminar      = Modulos::validarSubRol(['DT0148']);
+$permisoAutologin     = Modulos::validarSubRol(['DT0129']);
+$permisoHorarios      = Modulos::validarSubRol(['DT0041']);
+$permisoResumen       = Modulos::validarSubRol(['DT0111']);
+$permisoIndicadores   = Modulos::validarSubRol(['DT0034']);
+$permisoPlanilla      = Modulos::validarSubRol(['DT0239']);
+$permisoPlanillaNotas = Modulos::validarSubRol(['DT0237']);
 
 $contReg = 1;
+
 foreach ($data["data"] as $resultado) {
 	//Para calcular el porcentaje de actividades en las cargas
 	$cargaSP = $resultado['car_id'];
