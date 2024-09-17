@@ -1369,9 +1369,11 @@ class Estudiantes {
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
         $stringSelect="*";
+
         if (!empty($selectConsulta)) {
-        $stringSelect=implode(", ", $selectConsulta);
+            $stringSelect = implode(", ", $selectConsulta);
         };
+
         $sql = " SELECT 
                  $stringSelect  
                  FROM ".BD_ACADEMICA.".academico_matriculas mat
