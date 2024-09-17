@@ -1,5 +1,13 @@
 <?php
 $idPaginaInterna = 'DT0083';
+
+if (empty($_SESSION["id"])) {
+	include("session.php");
+	$input = json_decode(file_get_contents("php://input"), true);
+	if (!empty($input)) {
+		$_GET = $input;
+	}
+}
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
     echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
     exit();
@@ -9,19 +17,6 @@ require_once(ROOT_PATH."/main-app/class/Grupos.php");
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/componentes/botones-guardar.php");
 ?>
-
-<!--bootstrap -->
-<link href="../../config-general/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
-<link href="../../config-general/assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css" rel="stylesheet" media="screen">
-<!-- Theme Styles -->
-<link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
-<!-- dropzone -->
-<link href="../../config-general/assets/plugins/dropzone/dropzone.css" rel="stylesheet" media="screen">
-<!--tagsinput-->
-<link href="../../config-general/assets/plugins/jquery-tags-input/jquery-tags-input.css" rel="stylesheet">
-<!--select2-->
-<link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
-<link href="../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
 
 
 <div class="col-sm-12">
@@ -34,12 +29,7 @@ require_once(ROOT_PATH."/main-app/class/componentes/botones-guardar.php");
     $e = Estudiantes::obtenerDatosEstudiante($id);
     ?>
 
-    <div class="panel">
-        <header class="panel-heading panel-heading-purple">Cambiar de grupo</header>
-        <div class="panel-body">
-
-
-            <form action="estudiantes-cambiar-grupo-estudiante.php" method="post" class="form-horizontal" enctype="multipart/form-data" id="form-<?= $idModal ?>">
+<form action="estudiantes-cambiar-grupo-estudiante.php" method="post" class="form-horizontal" enctype="multipart/form-data" id="form-<?= $idModal ?>">
                 <input type="hidden" value="<?= $e['mat_id']; ?>" name="estudiante">
 
 
@@ -89,6 +79,4 @@ require_once(ROOT_PATH."/main-app/class/componentes/botones-guardar.php");
                 <?php  
                 $botones = new botonesGuardar(null,Modulos::validarPermisoEdicion()); ?>
             </form>
-        </div>
-    </div>
 </div>
