@@ -4,6 +4,8 @@
 <?php include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Areas.php");
 
+$parametrosobligatorios =["id"];
+
 Utilidades::validarParametros($_GET);
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){

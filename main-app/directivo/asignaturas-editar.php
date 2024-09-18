@@ -5,7 +5,9 @@
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 require_once(ROOT_PATH."/main-app/class/Areas.php");
 
-Utilidades::validarParametros($_GET);
+$parametrosobligatorios =["id"];
+
+Utilidades::validarParametros($_GET,$parametrosobligatorios);
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
