@@ -122,7 +122,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                                 <tbody id="inscripciones_result">
                                                 <?php
                                                     include("includes/consulta-paginacion-inscripciones.php");
-                                                    $consulta = Estudiantes::listarMatriculasAspirantes($config, $filtro, "LIMIT $inicio,$registros");
+                                                    $consulta = Estudiantes::listarMatriculasAspirantes($config, $filtro, "LIMIT $inicio, $registros");
                                                     $data =$barraSuperior->builderArray($consulta);
 													include("../class/componentes/result/inscripciones-tbody.php");
                                                  ?>
