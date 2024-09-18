@@ -22,7 +22,9 @@ $filtroLimite = 'LIMIT 0'.','.$config['conf_num_registros'];
 $result = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite, $cursoActual,$valor);
 
 $index = 0;
-$arraysDatos = array();
+
+$arraysDatos = [];
+
 if (!empty($result)) {
     while ($fila = $result->fetch_assoc()) {
         $arraysDatos[$index] = $fila;

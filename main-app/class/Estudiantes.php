@@ -63,6 +63,7 @@ class Estudiantes {
                 OR CONCAT(TRIM(mat_segundo_apellido), ' ', TRIM(mat_nombre2)) LIKE '%".$busqueda."%'
                 OR CONCAT(TRIM(mat_segundo_apellido), ' ', TRIM(mat_primer_apellido)) LIKE '%".$busqueda."%'
                 OR CONCAT(TRIM(mat_nombre2), ' ', TRIM(mat_segundo_apellido)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(gra_nombre), ' ', TRIM(mat_segundo_apellido)) LIKE '%".$busqueda."%'
             )";
         }
         try {

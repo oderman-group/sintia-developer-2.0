@@ -18,10 +18,8 @@ $result = CargaAcademica::listarCargas($conexion, $config,  "", $filtro, "mat_id
 $index = 0;
 
 
-$arraysDatos = array();
+$arraysDatos = [];
 
-
-$arraysDatos = array();
 if (!empty($result)) {
     while ($fila = $result->fetch_assoc()) {
         $arraysDatos[$index] = $fila;
