@@ -37,7 +37,7 @@ require_once("../class/Estudiantes.php");
                             }
                             while ($datosBoletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH)) {
                             ?>
-                                <option value="<?= $datosBoletin['ogen_id']; ?>" ><?= $datosBoletin['ogen_nombre']; ?></option>
+                                <option <?php if($config['conf_formato_boletin'] == $datosBoletin['ogen_id']){ echo "selected";} ?> value="<?= $datosBoletin['ogen_id']; ?>" ><?= $datosBoletin['ogen_nombre']; ?></option>
                             <?php } ?>
                         </select>
                     </div>

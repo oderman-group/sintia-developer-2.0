@@ -166,33 +166,68 @@ if($idPaginaInterna == 'DV0032'){ $configDEV =1; $institucion = "de <b>".$datosC
                     </div>
 
                     <div class="form-group row">
+                        <label class="col-sm-2 control-label">Formato de boletin</label>
+                        <div class="col-sm-2">
+                            <select class="form-control  select2" id="formatoBoletin" name="formatoBoletin" onChange="cambiarTipoBoletin()" <?=$disabledPermiso;?>>
+                                <?php 
+                                $consultaBoletin = mysqli_query($conexion, "SELECT * FROM " . BD_ADMIN . ".opciones_generales WHERE ogen_grupo=15");
+                                while ($datosBoletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH)) {
+                                ?>
+                                    <option value="<?=$datosBoletin['ogen_id']; ?>" <?php if($datosConfiguracion['conf_formato_boletin'] == $datosBoletin['ogen_id']){ echo "selected";} ?>><?=$datosBoletin['ogen_nombre'];?></option>
+                                <?php }?>
+                            </select>
+                        </div>
+                        <button type="button" title="Ver formato boletin" class="btn btn-sm" data-toggle="popover_boletin" ><i class="fa fa-eye"></i></button>
+                        <script>
+                                $(document).ready(function() {
+                                $('[data-toggle="popover_boletin"]').popover({
+                                    html: true, // Habilitar contenido HTML
+                                    content: function () {
+                                        valorB = document.getElementById("formatoBoletin");
+                                        return '<div id="myPopoverBol" class="popover-content"><label id="lbl_tipo_bol">Estilo Boletin '+valorB.value+'</label>'+
+                                        '<img id="img-boletin-true" src="../files/images/boletines/tipo'+valorB.value+'.png" class="w-100" />'+'</div>';}
+                                    });
+                                });
+                                function cambiarTipoBoletin() {
+                                    var imagen_boletin = document.getElementById('img-boletin-true'); 
+                                    if (imagen_boletin) {
+                                        var valor    = document.getElementById("formatoBoletin");  
+                                        var lbl_tipo = document.getElementById('lbl_tipo_bol');
+                                        imagen_boletin.src ="../files/images/boletines/tipo"+valor.value+".png";
+                                        lbl_tipo.textContent='Estilo Boletin '+valor.value;
+                                    }
+                                }
+                        </script>
+                    </div>
+
+                    <div class="form-group row">
                         <label class="col-sm-2 control-label">Estilo de certificado</label>
                         <div class="col-sm-2">
-                            <select class="form-control  select2" id="tipoCertificado" name="certificado" onchange="cambiarTipo()" <?=$disabledPermiso;?>>
+                            <select class="form-control  select2" id="tipoCertificado" name="certificado" onChange="cambiarTipo()" <?=$disabledPermiso;?>>
                                 <option value="1" <?php if($datosConfiguracion['conf_certificado']==1){ echo "selected";} ?>>Certificado 1</option>
                                 <option value="2" <?php if($datosConfiguracion['conf_certificado']==2){ echo "selected";} ?>>Certificado 2</option>
                                 <option value="3" <?php if($datosConfiguracion['conf_certificado']==3){ echo "selected";} ?>>Certificado 3</option>
                             </select>
                         </div>
-                        <button type="button" titlee="Ver formato certificado" class="btn btn-sm" data-toggle="popover" ><i class="fa fa-eye"></i></button>
+                        <button type="button" title="Ver formato certificado" class="btn btn-sm" data-toggle="popover" ><i class="fa fa-eye"></i></button>
                         <script>
-                                $(document).ready(function(){
+                                $(document).ready(function() {
                                 $('[data-toggle="popover"]').popover({
                                     html: true, // Habilitar contenido HTML
                                     content: function () {
                                         valor = document.getElementById("tipoCertificado");
-                                    return '<div id="myPopover" class="popover-content"><label id="lbl_tipo">Estilo Certificado '+valor.value+'</label>'+
-                                    '<img id="img-boletin" src="../files/images/certificados/tipo'+valor.value+'.png" class="w-100" />'+                                                       
-                                    '</div>';}
-                                    });                                                    
+                                        return '<div id="myPopover" class="popover-content"><label id="lbl_tipo">Estilo Certificado '+valor.value+'</label>'+
+                                        '<img id="img-boletin" src="../files/images/certificados/tipo'+valor.value+'.png" class="w-100" />'+'</div>';}
+                                    });
                                 });
-                                function cambiarTipo(){  
-                                    var imagen_boletin = document.getElementById('img-boletin'); 
-                                    if(imagen_boletin){                                                     
-                                    var valor = document.getElementById("tipoCertificado");  
-                                    var lbl_tipo = document.getElementById('lbl_tipo');
-                                    imagen_boletin.src ="../files/images/certificados/tipo"+valor.value+".png";
-                                    lbl_tipo.textContent='Estilo Certificado '+valor.value;
+                                function cambiarTipo() {
+                                    var imagen_boletin = document.getElementById('img-boletin');
+
+                                    if (imagen_boletin) {
+                                        var valor    = document.getElementById("tipoCertificado");
+                                        var lbl_tipo = document.getElementById('lbl_tipo');
+                                        imagen_boletin.src ="../files/images/certificados/tipo"+valor.value+".png";
+                                        lbl_tipo.textContent='Estilo Certificado '+valor.value;
                                     }
                                 }
                         </script>

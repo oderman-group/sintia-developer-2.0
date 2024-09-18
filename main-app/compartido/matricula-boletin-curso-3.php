@@ -19,6 +19,14 @@ if(isset($_GET["year"])){
     $year=base64_decode($_GET["year"]);
 }
 
+if (empty($_GET["periodo"])) {
+
+    $periodoActual = 1;
+} else {
+
+    $periodoActual = base64_decode($_GET["periodo"]);
+}
+
 $filtro = "";
 if (!empty($_GET["id"])) {
 
@@ -33,7 +41,7 @@ if(!empty($_REQUEST["grupo"])){
     $filtro .= " AND mat_grupo='".base64_decode($_REQUEST["grupo"])."'";
 }
 
-$estudiantesCache = 'estudiantes_' . base64_decode($_REQUEST["curso"]) . '_' .base64_decode($_REQUEST["grupo"]) . '.json';
+$estudiantesCache = 'estudiantes_' . base64_decode($_REQUEST["curso"]) . '_' .base64_decode($_REQUEST["grupo"]) . '_P' .$periodoActual. '.json';
 
 if (!empty($_GET["id"])) {
 
@@ -44,7 +52,7 @@ if (!empty($_GET["id"])) {
         $rows[] = $resultado;
     }
 
-} else if (!file_exists($estudiantesCache)) {
+} else if (!file_exists($estudiantesCache) && empty($_GET['refreshStudents'])) {
     $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
     $rows = [];
 
@@ -54,7 +62,7 @@ if (!empty($_GET["id"])) {
 
     file_put_contents($estudiantesCache, json_encode($rows));
 
-    $ruta = "matricula-boletin-curso-3.php?id=".$id."&periodo=".$_GET["periodo"]."&curso=".$_REQUEST["curso"]."&grupo=".$_REQUEST["grupo"]."&year=".$_GET["year"];
+    $ruta = "matricula-boletin-curso-3.php?id=".$_GET["id"]."&periodo=".$_GET["periodo"]."&curso=".$_REQUEST["curso"]."&grupo=".$_REQUEST["grupo"]."&year=".$_GET["year"];
 
     echo '<script type="text/javascript">window.location.href="'.$ruta.'";</script>';
 	exit();
@@ -66,14 +74,6 @@ if (!empty($_GET["id"])) {
 $tamañoLogo = $_SESSION['idInstitucion'] == ICOLVEN ? 100 : 50;
 
 $modulo = 1;
-
-if (empty($_GET["periodo"])) {
-
-    $periodoActual = 1;
-} else {
-
-    $periodoActual = base64_decode($_GET["periodo"]);
-}
 
 //$periodoActual=2;
 
@@ -101,26 +101,16 @@ foreach($rows as $matriculadosDatos) {
     $materiasPerdidas = 0;
 
     //======================= DATOS DEL ESTUDIANTE MATRICULADO =========================
-    $usr =Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos['mat_id'],$year);
+    $usr = Estudiantes::obtenerDatosEstudiantesParaBoletin($matriculadosDatos['mat_id'],$year);
     $num_usr = mysqli_num_rows($usr);
+
+
+    if ($num_usr == 0) {
+        continue;
+    }
 
     $datosUsr = mysqli_fetch_array($usr, MYSQLI_BOTH);
     $nombre = Estudiantes::NombreCompletoDelEstudiante($datosUsr);	
-
-    if ($num_usr == 0) {
-
-?>
-
-        <script type="text/javascript">
-            window.close();
-        </script>
-
-    <?php
-
-        exit();
-    }
-
-
 
     $contador_periodos = 0;
 
