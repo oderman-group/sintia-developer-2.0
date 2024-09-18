@@ -4,6 +4,7 @@ include("php-funciones.php");
 require_once("../class/EnviarEmail.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/Inscripciones.php");
+require_once(ROOT_PATH."/main-app/class/Tables/BDT_aspirante.php");
 
 $idInst="";
 if(!empty($_REQUEST["idInst"])){ $idInst=base64_decode($_REQUEST["idInst"]);}
@@ -21,7 +22,12 @@ $uss->execute();
 $datosUss = $uss->fetch();
 $nombreUss=strtoupper($datosUss['uss_nombre']." ".$datosUss['uss_apellido1']);
 
-$estQuery = "SELECT * FROM aspirantes WHERE asp_documento = :documento AND asp_institucion = :institucion AND asp_agno = :years";
+$estQuery = "SELECT * FROM aspirantes 
+WHERE asp_documento = :documento 
+AND asp_institucion = :institucion 
+AND asp_agno = :years
+AND asp_oculto = ".BDT_Aspirante::ESTADO_OCULTO_FALSO."
+";
 $est = $pdo->prepare($estQuery);
 $est->bindParam(':documento', $_POST['documento'], PDO::PARAM_INT);
 $est->bindParam(':institucion', $idInst, PDO::PARAM_INT);
