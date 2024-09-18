@@ -55,7 +55,8 @@ try {
 	cfgi_mostrar_banner='" . $mostrarBanner . "',
 	cfgi_mostrar_politicas='" . $_POST["mostrarPoliticas"] . "',
 	cfgi_texto_info_cuenta='" . $datosCuenta . "',
-	cfgi_year_inscripcion='" . $_POST["yearInscripcion"] . "'
+	cfgi_year_inscripcion='" . $_POST["yearInscripcion"] . "',
+	cfgi_frase_formulario_inscripcion_2='" . $_POST["fraseDos"] . "'
 	WHERE cfgi_id='".$_POST["id"]."'");
 } catch (Exception $e) {
 	include("../compartido/error-catch-to-report.php");
