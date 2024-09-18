@@ -13,6 +13,7 @@ class Utilidades {
  * información de error.
  *
  * @param array $get Array que contiene los parámetros GET a validar.
+ * @param array $parametrosObligatorios si viene lleno los parametros declarados seran obligatorios
  * 
  * @return void Si algún parámetro no es válido, la función termina la ejecución del script
  *              y redirige al usuario a una página de error.
@@ -23,13 +24,24 @@ class Utilidades {
  * 
  * @throws Redireccion a 'page-info.php?idmsg=303' si un parámetro no es válido.
  */
-    public static  function validarParametros($get)
+    public static  function validarParametros($get,$parametrosObligatorios=[])
     {
         if (isset($get)) {
+            
+            $faltaObligatorio=false;
+            foreach ($parametrosObligatorios as $parametro) {
+            // validamos que existen los parametros obligatorios
+                if (!isset($get[$parametro])) {
+                    echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=307&msj='.$parametro.' Es un parametro obligatorio";</script>';                    
+                    exit();                  
+                }
+            }
+                
+
             foreach ($get as $key => $value) {
                 // validammos que los parametros no sean null y sea base64  excluyendo cuando la llave sea success , error,summary  y validamos que el resultado es codificado es  alfanumerico   
                 if ($key != 'success' && $key != 'error' &&  $key != 'summary' && !empty($value) && (!self::esBase64($value) || !self::esAlfanumerico(base64_decode($value)))) {
-                    echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=307";</script>';
+                    echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=307&msj=Estás intentando acceder de manera incorrecta"</script>';
                     exit();
                 }
             }

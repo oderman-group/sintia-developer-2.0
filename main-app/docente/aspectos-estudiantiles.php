@@ -3,6 +3,8 @@
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");
 
+$parametrosobligatorios =["idR"];
+
 Utilidades::validarParametros($_GET);
 
 ?>
