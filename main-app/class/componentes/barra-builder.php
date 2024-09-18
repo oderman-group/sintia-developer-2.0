@@ -13,9 +13,9 @@ if (count($acceso) > 5) {
 if ($content == 'json') {    
     $valor =  !empty($input['valor']) ? $input['valor'] : "";
     $filtro2 =  !empty($input['filtro2']) ? $input['filtro2'] : "";
-    $response = array();
-    $parametros = array();
-    $filtrosDecode = array();
+    $response = [];
+    $parametros = [];
+    $filtrosDecode = [];
     if (!empty($input['valor'])) {
         $parametros['valor'] = $input['valor'];
     }
