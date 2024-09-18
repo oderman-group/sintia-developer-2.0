@@ -5,7 +5,7 @@ if (!empty($data["dataTotal"])) {
 }
 $contReg = 1;
 foreach ($data["data"] as $resultado) {
-	$observacion = strip_tags($resultado['asp_observacion']);
+	$observacion = !empty($resultado['asp_observacion']) ? strip_tags($resultado['asp_observacion']) : "";
 	$infoTooltipEstudiante = "<b>Nombre acudiente:</b><br>
                           {$resultado['asp_nombre_acudiente']}<br>
                           <b>Celular:</b><br>
