@@ -947,6 +947,22 @@ $datosMadre = $madre->fetch();
 
             </div>
 
+            <h3 class="mb-4" style="text-align: center;">3. DOCUMENTACIÓN DEL ACUDIENTE</h3>
+
+            <div class="p-3 mb-2 bg-secondary text-white">Debe cargar solo un archivo por cada campo. Si necesita cargar más de un archivo en un solo campo por favor comprimalos(.ZIP, .RAR) y los carga.</div>
+
+            <div class="form-row">
+
+                <div class="form-group col-md-6">
+                    <label>1. Certificado laboral <span class="text-primary">(En formato .jpg, .png, .jpeg)</span> </label>
+                    <input type="file" class="form-control" name="cartaLaboral">
+                    <?php if (!empty($datosDocumentos['matd_carta_laboral']) and file_exists('files/otros/' . $datosDocumentos['matd_carta_laboral'])) { ?>
+                        <p><a href="files/otros/<?= $datosDocumentos['matd_carta_laboral']; ?>" target="_blank" class="link"><?= $datosDocumentos['matd_carta_laboral']; ?></a></p>
+                    <?php } ?>
+                </div>
+
+            </div>
+
 
 
 

@@ -77,7 +77,7 @@ class Inscripciones extends BindSQL{
      * 
      * @return array $resultado
     **/
-    public static function configuracionAdmisiones($conexion,$baseDatosAdmisiones,$idInsti,$year){
+    public static function configuracionAdmisiones($conexion, $baseDatosAdmisiones, $idInsti, $year){
         $resultado = [];
 
         try {
@@ -228,6 +228,17 @@ class Inscripciones extends BindSQL{
                 $certificado = $POST['certificadoA'];
             }
 
+            if (!empty($FILES['cartaLaboral']['name'])) {
+	            $destino = ROOT_PATH.'/main-app/admisiones/files/otros';
+                $explode = explode(".", $FILES['cartaLaboral']['name']);
+                $extension = end($explode);
+                $cartaLaboral = uniqid('cert_') . "." . $extension;
+                @unlink($destino . "/" . $cartaLaboral);
+                move_uploaded_file($FILES['cartaLaboral']['tmp_name'], $destino . "/" . $cartaLaboral);
+            } else {
+                $cartaLaboral = $POST['cartaLaboral'];
+            }
+
             $documentosQuery = "UPDATE ".BD_ACADEMICA.".academico_matriculas_documentos SET
             matd_pazysalvo = :pazysalvo, 
             matd_observador = :observador, 
@@ -236,7 +247,8 @@ class Inscripciones extends BindSQL{
             matd_vacunas = :vacunas, 
             matd_boletines_actuales = :boletines,
             matd_documento_identidad = :documentoIde,
-            matd_certificados = :certificado
+            matd_certificados = :certificado,
+            matd_carta_laboral  = :cartaLaboral
             WHERE matd_matricula = :idMatricula AND institucion= :idInstitucion AND year= :year";
             $documentos = $conexionPDO->prepare($documentosQuery);
 
@@ -249,6 +261,7 @@ class Inscripciones extends BindSQL{
             $documentos->bindParam(':documentoIde', $documentoIde, PDO::PARAM_STR);
             $documentos->bindParam(':recomendacion', $recomendacion, PDO::PARAM_STR);
             $documentos->bindParam(':certificado', $certificado, PDO::PARAM_STR);
+            $documentos->bindParam(':cartaLaboral', $cartaLaboral, PDO::PARAM_STR);
             $documentos->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
             $documentos->bindParam(':year', $year, PDO::PARAM_STR);
 
