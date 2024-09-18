@@ -6,6 +6,8 @@ require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 
 class Estudiantes {
 
+    public const MAXIMOS_ESTUDIANTES_CURSO = 50;
+
     /**
      * Esta función lista estudiantes según varios parámetros.
      *

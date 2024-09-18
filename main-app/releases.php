@@ -89,7 +89,7 @@
     <h5>Navegación</h5>
     <a href="#version-3-0-0">Versión 3.0.0 - 15 de julio, 2024</a>
     <a href="#version-3-0-1">Versión 3.0.1 - 30 de agosto, 2024</a>
-    <a href="#version-3-0-2">Versión 3.0.2 - 09 de septiembre, 2024</a>
+    <a href="#version-3-0-2">Versión 3.0.2 - 15 de septiembre, 2024</a>
     <a href="#version-3-0-3">Versión 3.0.3 - 23 de septiembre, 2024</a>
   </div>
 
@@ -106,6 +106,16 @@
         <h5>Historial de Cambios</h5>
       </div>
       <div class="card-body">
+
+        <!-- First Release Item -->
+        <div class="release-item">
+          <h6 id="version-3-0-2">Versión 3.0.2 <span class="badge badge-pill badge-release-date">15 de septiembre, 2024</span></h6>
+          <p>- [PES-1078] - Permitir actualizar documento desde el perfil a los usuarios directivos.</p>
+          <p>- [PES-1078] - Dar la posibilidad de ver el listado de sedes y cambiarse entre ellas.</p>
+        </div>
+        <div class="release-footer">
+          Video de presentación: <a href="https://www.loom.com/share/1b05fa3c4a5044fb8104c90622b2ba77" target="_blank">Ver video para la versión 3.0.2</a>
+        </div>
 
         <!-- First Release Item -->
         <div class="release-item">
@@ -141,20 +151,12 @@
       <div class="card-body">
 
         <div class="release-item">
-          <h6 id="version-3-0-2">Versión 3.0.2 <span class="badge badge-pill badge-warning">09 de septiembre, 2024</span></h6>
+          <h6 id="version-3-0-3">Versión 3.0.2 <span class="badge badge-pill badge-warning">23 de septiembre, 2024</span></h6>
           <p>- [PES-1038] - Mejorar la búsqueda en la pagina de matrículas y cargas académicas.</p>
           <p>- [PES-1042] - Permitir a los directivos generar los informes, por periodos, de las cargas académicas desde su panel.</p>
           <p>- [PES-1074] - Permitirle al docente visibilizar la nota anterior y la ultima modificación de las notas de los estudiantes.</p>
-          <p>- [PES-1078] - Permitir actualizar documento desde el perfil a los usuarios directivos.</p>
-          <p>- [PES-1078] - Dar la posibilidad de ver el listado de sedes y cambiarse entre ellas.</p>
           <p>- [PES-1085] - Exportar a excel informe periódico para enviar a SEC. EDUCACIÓN</p>
           <p>- [PES-1086] - Permtir a los docentes asignar estudiantes específicos a las tareas en casa.</p>
-        </div>
-        <div class="release-footer"></div>
-
-        <div class="release-item">
-          <h6 id="version-3-0-3">Versión 3.0.3 <span class="badge badge-pill badge-warning">23 de septiembre, 2024</span></h6>
-          <p>- [PES-1043] - Permitir a los directivos generar los informes por curso y periodo, de las cargas académicas desde su panel.</p>
         </div>
         <div class="release-footer"></div>
 
