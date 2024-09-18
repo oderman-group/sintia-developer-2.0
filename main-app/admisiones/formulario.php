@@ -972,11 +972,17 @@ $datosMadre = $madre->fetch();
             </div>
 
 
-            <div class="p-2 mt-4 mb-4 bg-warning text-dark" style="text-align: center;">
+            <div class="p-2 mt-4 mb-4 bg-info text-white" style="text-align: center;">
 
                     <p style="font-size: 20px; font-weight: bold;">
                     Tenga en cuenta que debe tener completa toda la documentación cargada en la plataforma para que su solicitud continúe el proceso de admisión y sea agendada la respectiva entrevista y examen de admisión según sea el caso.
                 </p>
+
+                </div>
+
+                <div class="p-2 mt-4 mb-4 bg-warning text-dark" style="text-align: center;">
+
+                    <p style="font-size: 20px; font-weight: bold;"><?=$config['cfgi_frase_formulario_inscripcion_2'];?></p>
 
                 </div>
 
