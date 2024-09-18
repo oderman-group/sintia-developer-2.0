@@ -104,7 +104,11 @@ class Inscripciones extends BindSQL{
         try {
 
             //Documentos
-            $documentosQuery = "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas_documentos WHERE matd_matricula = :id AND institucion= :idInstitucion AND year= :year";
+            $documentosQuery = "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas_documentos 
+            WHERE matd_matricula = :id 
+            AND institucion= :idInstitucion 
+            AND year= :year
+            ";
             $documentos = $conexionPDO->prepare($documentosQuery);
             $documentos->bindParam(':id', $id, PDO::PARAM_STR);
             $documentos->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
@@ -305,4 +309,31 @@ class Inscripciones extends BindSQL{
         
         $resultado = BindSQL::prepararSQL($sql, $parametros);
     }
+
+    /**
+     * Actualiza el estado de un aspirante a oculto.
+     *
+     * @param string $aspiranteId El ID del aspirante que se desea actualizar.
+     *
+     * @return bool Retorna true si la actualización fue exitosa, de lo contrario false.
+     */
+    public static function actualizarEstadoAspirante(string $aspiranteId): bool {
+
+        $conexionPDO = Conexion::newConnection('PDO');
+
+        $query = "UPDATE ".BD_ADMISIONES.".aspirantes SET asp_oculto = ".BDT_Aspirante::ESTADO_OCULTO_VERDADERO." 
+        WHERE asp_id=:aspirante";
+        $pdo = $conexionPDO->prepare($query);
+
+        $pdo->bindParam(':aspirante', $aspiranteId, PDO::PARAM_STR);
+
+        if ($pdo) {
+            $pdo->execute();
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
 }
