@@ -66,7 +66,8 @@ try {
 	conf_reporte_sabanas_nota_indocador='" . $_POST["notasReporteSabanas"] . "',
 	conf_doble_buscador='" . $_POST["dobleBuscador"] . "',
 	conf_libro_final='" . $_POST["libroFinal"] . "',
-	conf_estampilla_certificados='" . $_POST["estampilla"] . "'
+	conf_estampilla_certificados='" . $_POST["estampilla"] . "',
+	conf_formato_boletin='" . $_POST["formatoBoletin"] . "'
 
 	WHERE conf_id='".$_POST['id']."'");
 } catch (Exception $e) {
