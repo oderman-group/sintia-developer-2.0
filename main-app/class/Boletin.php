@@ -1170,4 +1170,152 @@ class Boletin {
         return $resultado;
     }
 
+    public static function datosBoletin(
+        string  $grado,
+        string  $grupo,
+        string  $periodo,
+        string  $year,
+        string  $idEstudiante=""
+    ) {
+        global $conexion, $config;
+
+        $year = empty($year) ?  $_SESSION["bd"] : $year;
+        
+        $andEstudiante="";
+
+        if (!empty($idEstudiante)) {
+            $andEstudiante = "AND   bol_estudiante  = " . $idEstudiante;
+        }
+        $sql = "
+                 SELECT
+                    car.car_id,
+					are.ar_id,
+					ind.ind_id,
+                    mat.*,                   
+					ind.ind_nombre,                   
+                    gra.gra_nombre,
+                    gru.gru_nombre,
+                    ar_nombre,
+                    mate.mat_nombre,
+                    car.car_ih,
+                    car.car_director_grupo,
+                    car.car_docente,
+                    docen.*,
+                    indv.*,
+                    bol.*,
+                    disi.*
+                FROM " . BD_ACADEMICA . ".academico_matriculas mat
+
+                LEFT JOIN " . BD_ACADEMICA . ".academico_cargas car 
+                ON  car.institucion = mat.institucion 
+                AND car.year        = mat.year
+                AND car.car_grupo   = mat.mat_grupo
+                AND car.car_curso   = mat.mat_grado
+
+                LEFT JOIN " . BD_GENERAL . ".usuarios docen
+				ON  docen.institucion  = car.institucion
+                AND docen.year         = car.year
+				AND docen.uss_id       = car.car_docente
+            
+                INNER JOIN " . BD_ACADEMICA . ".academico_materias mate 
+                ON  mate.institucion = car.institucion
+                AND mate.year        = car.year
+                AND mate.mat_id      = car.car_materia
+
+                INNER JOIN " . BD_ACADEMICA . ".academico_grados gra 
+                ON  gra.institucion = mat.institucion 
+                AND gra.year        = mat.year
+                AND gra.gra_id      = mat.mat_grado
+								
+			    INNER JOIN " . BD_ACADEMICA . ".academico_grupos gru 
+                ON  gru.institucion = mat.institucion 
+                AND gru.year        = mat.year
+                AND gru.gru_id      = mat.mat_grupo
+
+                INNER JOIN " . BD_ACADEMICA . ".academico_areas are 
+                ON  are.institucion = car.institucion
+                AND are.year        = car.year
+                AND are.ar_id       = mate.mat_area
+
+                LEFT JOIN " . BD_ACADEMICA . ".academico_boletin bol
+                ON    bol.institucion = mat.institucion 
+                AND   bol.year        = mat.year
+                AND   bol_estudiante  = mat.mat_id
+                AND   bol_carga       = car.car_id
+                AND   bol_periodo     = ?
+
+                INNER JOIN " . BD_ACADEMICA . ".academico_indicadores_carga indc 
+                ON  indc.institucion  = car.institucion
+                AND indc.year         = car.year
+                AND indc.ipc_periodo  = bol.bol_periodo
+                AND indc.ipc_carga    = bol.bol_carga
+
+                INNER JOIN " . BD_ACADEMICA . ".academico_indicadores ind 
+                ON ind.institucion    = car.institucion
+                AND ind.year          = car.year
+                AND ind.ind_id        = indc.ipc_indicador
+
+                LEFT JOIN (
+                SELECT
+                cal_id_estudiante,
+                act_id_tipo,
+                act_id_carga,
+                SUM(act_valor) as valor_porcentaje_indicador,
+                SUM(cal_nota_equivalente_cien) as indicador_porcentual,
+                SUM(cal_nota_equivalente_cien)/SUM(act_valor)*100 as valor_indicador
+
+                FROM " . BD_ACADEMICA . ".academico_calificaciones cal
+
+                INNER JOIN " . BD_ACADEMICA . ".academico_actividades act 
+                ON  act_id=cal_id_actividad 
+                AND cal.institucion=act.institucion
+                AND cal.year=act.year
+                and act_estado=1
+
+                WHERE act.act_periodo     = ?
+                AND cal.institucion       = ?
+                AND cal.year              = ?
+                AND cal.cal_nota          IS NOT NULL
+                GROUP BY act.act_id_carga, act.act_periodo, act.act_id_tipo, cal.cal_id_estudiante, cal.institucion, cal.year
+                ) AS indv
+                ON   indv.cal_id_estudiante = bol.bol_estudiante
+                    AND  indv.act_id_tipo   = indc.ipc_indicador
+                    AND  indv.act_id_carga  = car.car_id
+
+                LEFT JOIN " . BD_DISCIPLINA . ".disiplina_nota disi 
+                ON  disi.institucion       = bol.institucion
+                AND disi.year              = bol.year
+                AND disi.dn_cod_estudiante = bol_estudiante
+                AND disi.dn_periodo        <= bol.bol_periodo
+                    
+
+
+                WHERE mat.mat_grado            = ?
+                AND   mat.mat_grupo            = ?
+                AND   mat.institucion          = ?
+                $andEstudiante
+                AND   mat.year                 = ?
+                AND   mat.mat_eliminado        = 0
+                AND ( mat.mat_estado_matricula = " . MATRICULADO . " OR mat.mat_estado_matricula=" . ASISTENTE . ") 
+
+
+                ORDER BY mat.mat_id,are.ar_posicion;
+        
+        ";
+        $parametros = [$periodo, $periodo, $config['conf_id_institucion'], $year, $grado, $grupo, $config['conf_id_institucion'], $year];
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
+    }
+    public static function determinarRango($valor ,$data) {
+        foreach ($data as $array) {
+            if ($valor >= $array['notip_desde'] && $valor <= $array['notip_hasta']) {
+                return $array; // Devuelve el array que contiene el valor en su rango
+            }
+        }
+        return $array=["notip_nombre" => "Fuera del rango permitido"]; //
+    }
+    
 }
+
