@@ -77,7 +77,7 @@ include("../compartido/historial-acciones-guardar.php");
 				'bol_estado' => 'ABIERTO',
 			];
 
-			$where = "bol_carga={$_POST["idR"]} AND bol_periodo={$_POST["periodo"]}";
+			$where = "bol_carga='{$_POST["idR"]}' AND bol_periodo={$_POST["periodo"]}";
 		
 			Boletin::actualizarBoletin($config, $updateBoletin, $where);
 		}
