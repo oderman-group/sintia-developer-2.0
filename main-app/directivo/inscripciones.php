@@ -115,9 +115,18 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                                 <tbody id="inscripciones_result">
                                                 <?php
                                                     include("includes/consulta-paginacion-inscripciones.php");
-                                                    $consulta = Estudiantes::listarMatriculasAspirantes($config, $filtro, "LIMIT $inicio,$registros");
+                                                    $selectSql = ["mat_id","mat_documento","gra_nombre",
+																  "asp_observacion","asp_nombre_acudiente","asp_celular_acudiente",
+																  "asp_documento_acudiente","asp_id","asp_fecha","asp_comprobante","mat_nombres",
+																  "asp_agno","asp_email_acudiente","asp_estado_solicitud"];
+
+                                                    $filtroLimite = 'LIMIT '.$inicio.','.$registros;
+                                                    
+                                                    $consulta = Estudiantes::listarMatriculasAspirantes($config, $filtro, $filtroLimite,"",$selectSql);
+                                                    
                                                     $data =$barraSuperior->builderArray($consulta);
-													include("../class/componentes/result/inscripciones-tbody.php");
+													
+                                                    include("../class/componentes/result/inscripciones-tbody.php");
                                                  ?>
                                                 </tbody>
                                             </table>

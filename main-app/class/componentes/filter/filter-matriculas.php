@@ -13,16 +13,18 @@ if (!empty($filtrosDecode['curso'])) {
     }
 }
 
-
-
 if (!empty($filtrosDecode['estadoM'])) {
     $filtro .= " AND mat_estado_matricula='" . $filtrosDecode['estadoM'] . "'";
 }
 
-$result = Estudiantes::listarEstudiantes(0, $filtro, "LIMIT 0, 20", $cursoActual,$valor);
+$filtroLimite = 'LIMIT 0'.','.$config['conf_num_registros'];
+
+$result = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite, $cursoActual,$valor);
 
 $index = 0;
-$arraysDatos = array();
+
+$arraysDatos = [];
+
 if (!empty($result)) {
     while ($fila = $result->fetch_assoc()) {
         $arraysDatos[$index] = $fila;
