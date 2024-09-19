@@ -1287,6 +1287,7 @@ class Boletin {
                 AND disi.year              = bol.year
                 AND disi.dn_cod_estudiante = bol_estudiante
                 AND disi.dn_periodo        <= bol.bol_periodo
+                AND disi.dn_id_carga        =car.car_id
                     
 
 
@@ -1299,7 +1300,7 @@ class Boletin {
                 AND ( mat.mat_estado_matricula = " . MATRICULADO . " OR mat.mat_estado_matricula=" . ASISTENTE . ") 
 
 
-                ORDER BY mat.mat_id,are.ar_posicion;
+                ORDER BY mat.mat_id,are.ar_posicion,car.car_id,ind.ind_id;
         
         ";
         $parametros = [$periodo, $periodo, $config['conf_id_institucion'], $year, $grado, $grupo, $config['conf_id_institucion'], $year];

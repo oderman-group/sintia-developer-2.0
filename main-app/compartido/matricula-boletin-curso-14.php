@@ -132,20 +132,29 @@ if ($periodoActual == 4) $periodoActuales = "Final";
         $mat_area_car = "";
         $mat_area_car_ind = "";
         $directorGrupo = "";
-        
+        $observacionesConvivencia=[];
+        $indicadores=[];
         $length = count($listaDatos);
         foreach ($listaDatos  as $index => $registro) {
+
             if ($index < $length - 1) {
                 $siguienteRegistro = $listaDatos[$index + 1];
             }else{
                 $ultimoRegistro=true;
             }
 
+            if(!empty($registro["dn_id"])){
+                if (!array_key_exists($registro["dn_id"], $observacionesConvivencia)) {
+                    $observacionesConvivencia[$registro["dn_id"]] = ["observacion"=>$registro["dn_observacion"],
+                    "periodo"=>$registro["dn_periodo"]];
+                }
+            }
             if ($mat_id != $registro["mat_id"]) {
                 $contarAreas = 0;
                 $contarCargas = 0;
                 $conteoEstudiante++;
                 $nombre = Estudiantes::NombreCompletoDelEstudiante($registro);
+               
         ?>
                 <tr>
                     <td>
@@ -188,13 +197,13 @@ if ($periodoActual == 4) $periodoActuales = "Final";
                 <table width="100%" cellspacing="0" cellpadding="0" rules="all" border="1" align="left">
                     <tr style="font-weight:bold; background-color:#2e537dab; border-color:#000; height:40px; color:#000; font-size:12px;">
 
-                        <td width="2%" align="center"> NO</td>
+                        <td width="3%" align="center"> NO</td>
 
                         <td width="20%" align="center">AREAS/ ASIGNATURAS</td>
 
-                        <td width="2%" align="center">I.H</td>
+                        <td width="3%" align="center">I.H</td>
 
-                        <td width="2%" align="center">NOTA</td>
+                        <td width="3%" align="center">NOTA</td>
 
                     </tr>
                 </table>
@@ -226,17 +235,17 @@ if ($periodoActual == 4) $periodoActuales = "Final";
 
             ?>
 
-                <table width="100%" id="tblBoletin2" cellspacing="0" cellpadding="0" rules="all" border="1" align="left">
+                <table width="100%"  cellspacing="0" cellpadding="0" rules="all" border="1" align="left">
 
                     <tr bgcolor="#EAEAEA" style="font-size:12px;">
 
-                        <td width="2%" align="center"><?= $contarCargas; ?></td>
+                        <td width="3%" align="center"><?= $contarCargas; ?></td>
 
                         <td width="20%" style="font-size:12px; height:35px; font-weight:bold;background:#EAEAEA;"><?php echo $registro["mat_nombre"]; ?></td>
 
-                        <td width="2%" align="center" style="font-weight:bold; font-size:12px;background:#EAEAEA;"><?php echo $registro["car_ih"]; ?></td>
+                        <td width="3%" align="center" style="font-weight:bold; font-size:12px;background:#EAEAEA;"><?php echo $registro["car_ih"]; ?></td>
 
-                        <td width="2%">&nbsp;</td>
+                        <td width="3%">&nbsp;</td>
 
                     </tr>
                 </table>
@@ -244,12 +253,10 @@ if ($periodoActual == 4) $periodoActuales = "Final";
             <?php
                 $mat_area_car = $registro["mat_id"] . '-' . $registro["ar_id"] . '-' . $registro["car_id"];
             }
-            
-            // if ($mat_area_car_ind != $registro["mat_id"] . '-' .  $registro["ar_id"] . '-' . $registro["car_id"] . '-' . $registro["ind_id"]) {
-            $contarIndicadores++;
 
+            if ($mat_area_car_ind != $registro["mat_id"] . '-' .  $registro["ar_id"] . '-' . $registro["car_id"] . '-' . $registro["ind_id"]) {
+            $contarIndicadores++;
             $nota_indicador = $registro["valor_indicador"];
-        
             
             $desempeno= Boletin::determinarRango($nota_indicador, $tiposNotas);
             $leyendaRI = "";
@@ -268,28 +275,35 @@ if ($periodoActual == 4) $periodoActuales = "Final";
 
             if ($nota_indicador == 5) $nota_indicador = "5.0";
             ?>
-            <table width="100%" id="tblBoletin2" cellspacing="0" cellpadding="0" rules="all" border="1" align="left">
+            <table width="100%"  cellspacing="0" cellpadding="0" rules="all" border="1" align="left">
 
                 <tr bgcolor="#FFF" style="font-size:12px;">
 
-                    <td width="2%" align="center">&nbsp;</td>
+                    <td width="3%" align="center">&nbsp;</td>
 
                     <td width="20%" style="font-size:12px; height:15px;"><?php echo "    " . $contarIndicadores . "." . $registro["ind_nombre"]; ?></td>
 
-                    <td width="2%">&nbsp;</td>
+                    <td width="3%">&nbsp;</td>
                    
-                    <td width="2%" align="center" style="font-weight:bold; font-size:12px;"><?= $valorNota . " " . $leyendaRI; ?></td>
+                    <td width="3%" align="center" style="font-weight:bold; font-size:12px;"><?= $valorNota . " " . $leyendaRI; ?></td>
 
 
                 </tr>
-                <?php if (!empty($registro['bol_observaciones_boletin']) && $mat_area_car != $siguienteRegistro["mat_id"] . '-' .  $siguienteRegistro["ar_id"] . '-' . $siguienteRegistro["car_id"]) { ?>
+             
+
+            </table>
+            <?php
+                $mat_area_car_ind =  $registro["mat_id"] . '-' .  $registro["ar_id"] . '-' . $registro["car_id"]. '-' . $registro["ind_id"];
+              } ?>
+               <table  width="100%"  cellspacing="0" cellpadding="0" rules="all" border="1" align="left">
+                  <?php if (!empty($registro['bol_observaciones_boletin']) && $mat_area_car != $siguienteRegistro["mat_id"] . '-' .  $siguienteRegistro["ar_id"] . '-' . $siguienteRegistro["car_id"]) { ?>
                     <tr>
 
                         <td colspan="4">
 
                             <h5 align="center">Observaciones</h5>
 
-                            <p align="center" style="margin-left: 5px; font-size: 11px; margin-top: -10px; margin-bottom: 5px; font-style: italic;">
+                            <p  style="margin-left: 5px; font-size: 11px; margin-top: -10px; margin-bottom: 5px; font-style: italic;">
 
                                 <?= $registro['bol_observaciones_boletin']; ?>
 
@@ -298,15 +312,13 @@ if ($periodoActual == 4) $periodoActuales = "Final";
                         </td>
 
                     </tr>
+                    </table>
                 <?php  } ?>
-
-            </table>
-            <?php
-            //     $mat_area_car_ind =  $registro["mat_id"] . '-' .  $registro["ar_id"] . '-' . $registro["car_id"];
-            // }
+              <?php            
             if ($mat_id != $siguienteRegistro["mat_id"] ||  $ultimoRegistro==1) {
+                
 
-                if (!empty($registro["dn_observacion"])) {
+                if (!empty($observacionesConvivencia)) {
             ?>
                     <p>&nbsp;</p>
                     <p>&nbsp;</p>
@@ -328,20 +340,18 @@ if ($periodoActual == 4) $periodoActuales = "Final";
                         </tr>
 
                         <?php
-
-
-
+                         foreach($observacionesConvivencia as $observacion){
                         ?>
 
                         <tr align="center" style="font-weight:bold; font-size:12px; height:20px;">
 
-                            <td><?= $registro["dn_periodo"] ?></td>
+                            <td><?= $observacion["periodo"]?></td>
 
-                            <td align="left"><?= $registro["dn_observacion"] ?></td>
+                            <td align="left"><?= $observacion["observacion"] ?></td>
 
                         </tr>
 
-                        <?php  ?>
+                        <?php  } ?>
 
                     </table>
                 <?php
@@ -409,6 +419,8 @@ if ($periodoActual == 4) $periodoActuales = "Final";
 
 </body>
 
-
+<script type="application/javascript">
+        print();
+    </script>
 
 </html>
