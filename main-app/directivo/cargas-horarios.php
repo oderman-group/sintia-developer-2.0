@@ -11,7 +11,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	exit();
 }?>
 	<!-- data tables -->
-    <link href="../../config-general/assets/plugins/datatables/plugins/bootstrcargas-horarios.phpap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
+    <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>

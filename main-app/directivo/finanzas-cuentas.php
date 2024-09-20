@@ -12,9 +12,9 @@ include("../compartido/historial-acciones-guardar.php");
 require_once("../class/Estudiantes.php");
 include("../compartido/head.php");
 
-$parametrosobligatorios =["id"];
+$parametrosObligatorios =["id"];
 
-Utilidades::validarParametros($_GET,$parametrosobligatorios);
+Utilidades::validarParametros($_GET,$parametrosObligatorios);
 
 $id="";
 if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
