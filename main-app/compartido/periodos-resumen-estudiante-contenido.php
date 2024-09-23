@@ -1,4 +1,10 @@
 <?php
+
+
+$parametrosObligatorios =["carga"];
+
+Utilidades::validarParametros($_GET,$parametrosObligatorios);
+
 if(($datosUsuarioActual['uss_tipo']==3 or $datosUsuarioActual['uss_tipo']==4) and $config['conf_sin_nota_numerica']==1){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=218";</script>';
 	exit();

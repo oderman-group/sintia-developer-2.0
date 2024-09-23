@@ -355,10 +355,10 @@ switch($_GET["idmsg"]){
 	break;
 		
 	case 307:
-		$color = 'red';
+		$color  = 'red';
 		$titulo = 'SIN INFORMACIÓN';
-		$texto = 'Estás intentando a acceder de manera incorrecta.';
-		$url1 = 'javascript:history.go(-1)';
+		$texto  = $_GET["msj"];
+		$url1   = 'javascript:history.go(-1)';
 		$boton1 = 'REGRESAR';
 		$lottie = 'https://lottie.host/7a874211-5ebc-4d51-9d95-0e8f045d6a34/eDJ7X3tubH.json';
 	break;
