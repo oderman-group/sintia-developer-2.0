@@ -13,7 +13,7 @@ require_once(ROOT_PATH . "/main-app/class/Usuarios.php");
 require_once(ROOT_PATH . "/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH . "/main-app/class/Boletin.php");
 require_once(ROOT_PATH . "/main-app/class/Indicadores.php");
-require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php");
+require_once(ROOT_PATH . "/main-app/class/Utilidades.php");
 
 $year = $_SESSION["bd"];
 if (isset($_GET["year"])) {
@@ -61,6 +61,7 @@ if (!empty($_GET["id"])) {
 
 
 $tamañoLogo = $_SESSION['idInstitucion'] == ICOLVEN ? 100 : 50;
+
 
 
 if ($periodoActual == 1) $periodoActuales = "Primero";
@@ -141,9 +142,11 @@ if ($periodoActual == 4) $periodoActuales = "Final";
                 $ultimoRegistro = true;
             }
 
-            if (!empty($registro["dn_id"])) {
-                if (!array_key_exists($registro["dn_id"], $observacionesConvivencia)) {
-                    $observacionesConvivencia[$registro["dn_id"]] = [
+            if (!empty($registro["dn_id"])&& !empty($registro["dn_observacion"])) {
+                if (!array_key_exists($registro["mat_id"], $observacionesConvivencia)) {
+                    $observacionesConvivencia[$registro["mat_id"]] = [
+                        "id" => $registro["dn_id"],
+                        "estudiante" => $registro["dn_cod_estudiante"],
                         "observacion" => $registro["dn_observacion"],
                         "periodo" => $registro["dn_periodo"]
                     ];
@@ -224,15 +227,8 @@ if ($periodoActual == 4) $periodoActuales = "Final";
                             } else {
                                 $valorNota = $desempeno["notip_nombre"];
                             }
-                            if ($nota_indicador == 1) $nota_indicador = "1.0";
-
-                            if ($nota_indicador == 2) $nota_indicador = "2.0";
-
-                            if ($nota_indicador == 3) $nota_indicador = "3.0";
-
-                            if ($nota_indicador == 4) $nota_indicador = "4.0";
-
-                            if ($nota_indicador == 5) $nota_indicador = "5.0";
+                            
+                            $nota_indicador=Utilidades::setFinalZero($nota_indicador);
                         ?>
 
                         <tr bgcolor="#FFF" style="font-size:12px;">
@@ -254,7 +250,7 @@ if ($periodoActual == 4) $periodoActuales = "Final";
                         <?php  } ?>
                         <?php if ($mat_id != $siguienteRegistro["mat_id"] ||  $ultimoRegistro == 1) {?>
                         </table>
-                        <?php if (!empty($observacionesConvivencia)) { ?>
+                        <?php if (!empty($observacionesConvivencia[$registro["mat_id"]])) { ?>
                         <p>&nbsp;</p>
                         <p>&nbsp;</p>
                         <p>&nbsp;</p>
@@ -269,6 +265,7 @@ if ($periodoActual == 4) $periodoActuales = "Final";
 
                             <?php
                             foreach ($observacionesConvivencia as $observacion) {
+                                if( $observacion["estudiante"] == $registro["mat_id"]){
                             ?>
 
                                 <tr align="center" style="font-weight:bold; font-size:12px; height:20px;">
@@ -279,7 +276,7 @@ if ($periodoActual == 4) $periodoActuales = "Final";
 
                                 </tr>
 
-                            <?php  } ?>
+                            <?php  } } ?>
 
                         </table>
                         <?php } ?>
