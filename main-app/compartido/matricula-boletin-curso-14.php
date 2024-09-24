@@ -13,7 +13,7 @@ require_once(ROOT_PATH . "/main-app/class/Usuarios.php");
 require_once(ROOT_PATH . "/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH . "/main-app/class/Boletin.php");
 require_once(ROOT_PATH . "/main-app/class/Indicadores.php");
-require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php");
+require_once(ROOT_PATH . "/main-app/class/Utilidades.php");
 
 $year = $_SESSION["bd"];
 if (isset($_GET["year"])) {
@@ -43,23 +43,25 @@ if (!empty($_GET["periodo"])) {
 if (!empty($_GET["year"])) {
     $year = base64_decode($_GET["year"]);
 }
-$idEstudiante='';
+$idEstudiante = '';
 if (!empty($_GET["id"])) {
 
     $filtro = " AND mat_id='" . base64_decode($_GET["id"]) . "'";
     $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
-    $estudiante =$matriculadosPorCurso->fetch_assoc();
+    $estudiante = $matriculadosPorCurso->fetch_assoc();
     if (!empty($estudiante)) {
         $idEstudiante = $estudiante["mat_id"];
         $grado        = $estudiante["mat_grado"];
         $grupo        = $estudiante["mat_grupo"];
     } else {
+        echo "Excepción catpurada: Estudiante no encontrado ";
         exit();
     }
 }
 
 
 $tamañoLogo = $_SESSION['idInstitucion'] == ICOLVEN ? 100 : 50;
+
 
 
 if ($periodoActual == 1) $periodoActuales = "Primero";
@@ -104,19 +106,17 @@ if ($periodoActual == 4) $periodoActuales = "Final";
 
     <?php
     $listaDatos = [];
-    $tiposNotas= [];
-    $cosnultaTiposNotas = Boletin::listarTipoDeNotas($config["conf_notas_categoria"],$year);
+    $tiposNotas = [];
+    $cosnultaTiposNotas = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $year);
     while ($row = $cosnultaTiposNotas->fetch_assoc()) {
         $tiposNotas[] = $row;
     }
     if (!empty($grado) && !empty($grupo) && !empty($periodo) && !empty($year)) {
-        $datos = Boletin::datosBoletin($grado, $grupo, $periodo, $year ,$idEstudiante);
-    }
-    while ($row = $datos->fetch_assoc()) {
-        $listaDatos[] = $row;
-    }
-
-    ?>
+        $datos = Boletin::datosBoletinIndicadores($grado, $grupo, $periodo, $year, $idEstudiante);
+        while ($row = $datos->fetch_assoc()) {
+            $listaDatos[] = $row;
+        }
+    } ?>
 
 
     <table width="100%" cellspacing="0" cellpadding="0" rules="all" border="0" align="center">
@@ -132,21 +132,31 @@ if ($periodoActual == 4) $periodoActuales = "Final";
         $mat_area_car = "";
         $mat_area_car_ind = "";
         $directorGrupo = "";
-        
+        $observacionesConvivencia = [];
+        $indicadores = [];
         $length = count($listaDatos);
         foreach ($listaDatos  as $index => $registro) {
             if ($index < $length - 1) {
                 $siguienteRegistro = $listaDatos[$index + 1];
-            }else{
-                $ultimoRegistro=true;
+            } else {
+                $ultimoRegistro = true;
             }
 
+            if (!empty($registro["dn_id"])&& !empty($registro["dn_observacion"])) {
+                if (!array_key_exists($registro["mat_id"], $observacionesConvivencia)) {
+                    $observacionesConvivencia[$registro["mat_id"]] = [
+                        "id" => $registro["dn_id"],
+                        "estudiante" => $registro["dn_cod_estudiante"],
+                        "observacion" => $registro["dn_observacion"],
+                        "periodo" => $registro["dn_periodo"]
+                    ];
+                }
+            }
             if ($mat_id != $registro["mat_id"]) {
                 $contarAreas = 0;
                 $contarCargas = 0;
                 $conteoEstudiante++;
-                $nombre = Estudiantes::NombreCompletoDelEstudiante($registro);
-        ?>
+                $nombre = Estudiantes::NombreCompletoDelEstudiante($registro);?>
                 <tr>
                     <td>
                         <div align="center" style="margin-bottom:20px;">
@@ -156,7 +166,6 @@ if ($periodoActual == 4) $periodoActuales = "Final";
                 </tr>
 
                 <table width="100%" cellspacing="5" cellpadding="5" border="0" rules="none">
-
                     <tr>
 
                         <td>Documento:<br> <?= strpos($registro["mat_documento"], '.') !== true && is_numeric($registro["mat_documento"]) ? number_format($registro["mat_documento"], 0, ",", ".") : $registro["mat_documento"]; ?></td>
@@ -168,9 +177,6 @@ if ($periodoActual == 4) $periodoActuales = "Final";
                         <td>&nbsp;</td>
 
                     </tr>
-
-
-
                     <tr>
 
                         <td>Jornada:<br> Mañana</td>
@@ -182,226 +188,152 @@ if ($periodoActual == 4) $periodoActuales = "Final";
                         <td>Fecha Impresión:<br> <?= date("d/m/Y H:i:s"); ?></td>
 
                     </tr>
-
                 </table>
                 <p>&nbsp;</p>
                 <table width="100%" cellspacing="0" cellpadding="0" rules="all" border="1" align="left">
                     <tr style="font-weight:bold; background-color:#2e537dab; border-color:#000; height:40px; color:#000; font-size:12px;">
-
-                        <td width="2%" align="center"> NO</td>
-
-                        <td width="20%" align="center">AREAS/ ASIGNATURAS</td>
-
-                        <td width="2%" align="center">I.H</td>
-
-                        <td width="2%" align="center">NOTA</td>
-
+                        <td width="2%"  align="center"> NO</td>
+                        <td width="20%" align="center"> AREAS/ ASIGNATURAS</td>
+                        <td width="2%"  align="center"> I.H</td>
+                        <td width="2%"  align="center"> NOTA</td>
                     </tr>
-                </table>
-            <?php
-                $mat_id       = $registro["mat_id"];
-            }
-            if ($mat_area != $registro["mat_id"] . '-' . $registro["ar_id"]) {
-                $contarAreas++;
-
-            ?>
-                <table width="100%" cellspacing="0" cellpadding="0" rules="all" border="1" align="left">
-
+                   <?php $mat_id = $registro["mat_id"]; }?>
+                   <?php if ($mat_area != $registro["mat_id"] . '-' . $registro["ar_id"]) {
+                             $contarAreas++;?>
                     <tr style="background-color: #b9b91730" style="font-size:12px;">
-
                         <td colspan="4" style="font-size:12px; height:25px; font-weight:bold;"><?php echo  $registro["ar_nombre"]; ?></td>
-
                     </tr>
-                </table>
-            <?php
-                $mat_area     = $registro["mat_id"] . '-' . $registro["ar_id"];
-            }
-            if ($mat_area_car != $registro["mat_id"] . '-' .  $registro["ar_id"] . '-' . $registro["car_id"]) {
-                $contarCargas++;
-                $contarIndicadores = 0;
-
-                if ($registro["car_director_grupo"] == 1) {
-                    $directorGrupo = $registro;
-                }
-
-            ?>
-
-                <table width="100%" id="tblBoletin2" cellspacing="0" cellpadding="0" rules="all" border="1" align="left">
-
+                    <?php $mat_area = $registro["mat_id"] . '-' . $registro["ar_id"]; } ?>
+                    <?php if ( $mat_area_car != $registro["mat_id"] . '-' .  $registro["ar_id"] . '-' . $registro["car_id"]) {
+                            $contarCargas++;
+                            $contarIndicadores = 0;
+                            if ($registro["car_director_grupo"] == 1) {
+                                $directorGrupo = $registro;
+                            } ?>
                     <tr bgcolor="#EAEAEA" style="font-size:12px;">
-
                         <td width="2%" align="center"><?= $contarCargas; ?></td>
-
                         <td width="20%" style="font-size:12px; height:35px; font-weight:bold;background:#EAEAEA;"><?php echo $registro["mat_nombre"]; ?></td>
-
                         <td width="2%" align="center" style="font-weight:bold; font-size:12px;background:#EAEAEA;"><?php echo $registro["car_ih"]; ?></td>
-
                         <td width="2%">&nbsp;</td>
-
                     </tr>
-                </table>
-
-            <?php
-                $mat_area_car = $registro["mat_id"] . '-' . $registro["ar_id"] . '-' . $registro["car_id"];
-            }
-            
-            // if ($mat_area_car_ind != $registro["mat_id"] . '-' .  $registro["ar_id"] . '-' . $registro["car_id"] . '-' . $registro["ind_id"]) {
-            $contarIndicadores++;
-
-            $nota_indicador = $registro["valor_indicador"];
-        
-            
-            $desempeno= Boletin::determinarRango($nota_indicador, $tiposNotas);
-            $leyendaRI = "";
-            if($config["conf_forma_mostrar_notas"]== CUANTITATIVA){
-                $valorNota =  $nota_indicador;
-            }else{
-                $valorNota =$desempeno["notip_nombre"];
-            }
-            if ($nota_indicador == 1) $nota_indicador = "1.0";
-
-            if ($nota_indicador == 2) $nota_indicador = "2.0";
-
-            if ($nota_indicador == 3) $nota_indicador = "3.0";
-
-            if ($nota_indicador == 4) $nota_indicador = "4.0";
-
-            if ($nota_indicador == 5) $nota_indicador = "5.0";
-            ?>
-            <table width="100%" id="tblBoletin2" cellspacing="0" cellpadding="0" rules="all" border="1" align="left">
-
-                <tr bgcolor="#FFF" style="font-size:12px;">
-
-                    <td width="2%" align="center">&nbsp;</td>
-
-                    <td width="20%" style="font-size:12px; height:15px;"><?php echo "    " . $contarIndicadores . "." . $registro["ind_nombre"]; ?></td>
-
-                    <td width="2%">&nbsp;</td>
-                   
-                    <td width="2%" align="center" style="font-weight:bold; font-size:12px;"><?= $valorNota . " " . $leyendaRI; ?></td>
-
-
-                </tr>
-                <?php if (!empty($registro['bol_observaciones_boletin']) && $mat_area_car != $siguienteRegistro["mat_id"] . '-' .  $siguienteRegistro["ar_id"] . '-' . $siguienteRegistro["car_id"]) { ?>
-                    <tr>
-
-                        <td colspan="4">
-
-                            <h5 align="center">Observaciones</h5>
-
-                            <p align="center" style="margin-left: 5px; font-size: 11px; margin-top: -10px; margin-bottom: 5px; font-style: italic;">
-
-                                <?= $registro['bol_observaciones_boletin']; ?>
-
-                            </p>
-
-                        </td>
-
-                    </tr>
-                <?php  } ?>
-
-            </table>
-            <?php
-            //     $mat_area_car_ind =  $registro["mat_id"] . '-' .  $registro["ar_id"] . '-' . $registro["car_id"];
-            // }
-            if ($mat_id != $siguienteRegistro["mat_id"] ||  $ultimoRegistro==1) {
-
-                if (!empty($registro["dn_observacion"])) {
-            ?>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <p>&nbsp;</p>
-                    <table width="100%" cellspacing="0" cellpadding="0" rules="all" border="1" align="center">
-
-                        <tr style="font-weight:bold; background:#2e537dab; border-color:#036; height:40px; font-size:12px; text-align:center">
-
-                            <td colspan="3">OBSERVACIONES DE CONVIVENCIA</td>
-
-                        </tr>
-
-                        <tr style="font-weight:bold; background:#b9b91730; height:25px; color:#000; font-size:12px; text-align:center">
-
-                            <td width="8%">Periodo</td>
-
-                            <td>Observaciones</td>
-
-                        </tr>
-
-                        <?php
-
-
-
+                    <?php $mat_area_car = $registro["mat_id"] . '-' . $registro["ar_id"] . '-' . $registro["car_id"]; } ?>
+                    <?php if ($mat_area_car_ind != $registro["mat_id"] . '-' .  $registro["ar_id"] . '-' . $registro["car_id"] . '-' . $registro["ind_id"]) {
+                            $contarIndicadores++;
+                            $nota_indicador = $registro["valor_indicador"];
+                            $desempeno = Boletin::determinarRango($nota_indicador, $tiposNotas);
+                            $leyendaRI = "";
+                            if ($config["conf_forma_mostrar_notas"] == CUANTITATIVA) {
+                                $valorNota =  $nota_indicador;
+                            } else {
+                                $valorNota = $desempeno["notip_nombre"];
+                            }
+                            
+                            $nota_indicador=Utilidades::setFinalZero($nota_indicador);
                         ?>
 
-                        <tr align="center" style="font-weight:bold; font-size:12px; height:20px;">
+                        <tr bgcolor="#FFF" style="font-size:12px;">
+                            <td width="2%" align="center">&nbsp;</td>
+                            <td width="20%" style="font-size:12px; height:15px;"><?php echo "    " . $contarIndicadores . "." . $registro["ind_nombre"]; ?></td>
+                            <td width="2%">&nbsp;</td>
+                            <td width="2%" align="center" style="font-weight:bold; font-size:12px;"><?= $valorNota . " " . $leyendaRI; ?></td>
+                        </tr>                
+                        <?php $mat_area_car_ind =  $registro["mat_id"] . '-' .  $registro["ar_id"] . '-' . $registro["car_id"] . '-' . $registro["ind_id"]; } ?>           
+                        <?php if (!empty($registro['bol_observaciones_boletin']) && $mat_area_car != $siguienteRegistro["mat_id"] . '-' .  $siguienteRegistro["ar_id"] . '-' . $siguienteRegistro["car_id"] ||  $ultimoRegistro == 1) { ?>
+                        <tr>
+                            <td colspan="4">
+                                <h5 align="center">Observaciones</h5>
+                                <p style="margin-left: 5px; font-size: 11px; margin-top: -10px; margin-bottom: 5px; font-style: italic;">
+                                    <?= $registro['bol_observaciones_boletin']; ?>
+                                </p>
+                            </td>
+                        </tr>                       
+                        <?php  } ?>
+                        <?php if ($mat_id != $siguienteRegistro["mat_id"] ||  $ultimoRegistro == 1) {?>
+                        </table>
+                        <?php if (!empty($observacionesConvivencia[$registro["mat_id"]])) { ?>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <table width="100%" cellspacing="0" cellpadding="0" rules="all" border="1" align="center">
+                            <tr style="font-weight:bold; background:#2e537dab; border-color:#036; height:40px; font-size:12px; text-align:center">
+                                <td colspan="3">OBSERVACIONES DE CONVIVENCIA</td>
+                            </tr>
+                            <tr style="font-weight:bold; background:#b9b91730; height:25px; color:#000; font-size:12px; text-align:center">
+                                <td width="8%">Periodo</td>
+                                <td>Observaciones</td>
+                            </tr>
 
-                            <td><?= $registro["dn_periodo"] ?></td>
-
-                            <td align="left"><?= $registro["dn_observacion"] ?></td>
-
-                        </tr>
-
-                        <?php  ?>
-
-                    </table>
-                <?php
-                }
-                ?>
-                <p>&nbsp;</p>
-                <p>&nbsp;</p>
-                <p>&nbsp;</p>
-                <table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
-                    <tr>
-                        <td align="center" width="50%">
                             <?php
-
-                            $nombreDirectorGrupo = UsuariosPadre::nombreCompletoDelUsuario($directorGrupo);
-                            if (!empty($directorGrupo["uss_firma"])) {
-                                echo '<img src="../files/fotos/' . $directorGrupo["uss_firma"] . '" width="15%"><br>';
-                            } else {
-                                echo '<p>&nbsp;</p>
-                                <p>&nbsp;</p>
-                                <p>&nbsp;</p>';
-                            }
+                            foreach ($observacionesConvivencia as $observacion) {
+                                if( $observacion["estudiante"] == $registro["mat_id"]){
                             ?>
-                            _________________________________<br>
-                            <p>&nbsp;</p>
-                            <?= $nombreDirectorGrupo ?><br>
-                            Director(a) de grupo
-                        </td>
-                        <td align="center" width="50%">
-                            <?php
-                            $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
-                            $nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
-                            if (!empty($rector["uss_firma"])) {
-                                echo '<img src="../files/fotos/' . $rector["uss_firma"] . '" width="25%"><br>';
-                            } else {
-                                echo '<p>&nbsp;</p>
-                                <p>&nbsp;</p>
-                                <p>&nbsp;</p>';
-                            }
-                            ?>
-                            _________________________________<br>
-                            <p>&nbsp;</p>
-                            <?= $nombreRector ?><br>
-                            Rector(a)
-                        </td>
-                    </tr>
-                </table>
-                <div align="center" style="font-size:10px; margin-top:5px; margin-bottom: 10px;">
 
-                    <img src="https://plataformasintia.com/images/logo.png" height="50"><br>
+                                <tr align="center" style="font-weight:bold; font-size:12px; height:20px;">
 
-                    ESTE DOCUMENTO FUE GENERADO POR:<br>
+                                    <td><?= $observacion["periodo"] ?></td>
 
-                    SINTIA - SISTEMA INTEGRAL DE GESTI&Oacute;N INSTITUCIONAL
+                                    <td align="left"><?= $observacion["observacion"] ?></td>
 
-                </div>
-        <?php
-            }
-        } ?>
+                                </tr>
 
-       
+                            <?php  } } ?>
+
+                        </table>
+                        <?php } ?>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
+                            <tr>
+                                <td align="center" width="50%">
+                                    <?php
+
+                                    $nombreDirectorGrupo = UsuariosPadre::nombreCompletoDelUsuario($directorGrupo);
+                                    if (!empty($directorGrupo["uss_firma"])) {
+                                        echo '<img src="../files/fotos/' . $directorGrupo["uss_firma"] . '" width="15%"><br>';
+                                    } else {
+                                        echo '<p>&nbsp;</p>
+                                            <p>&nbsp;</p>
+                                            <p>&nbsp;</p>';
+                                    }
+                                    ?>
+                                    _________________________________<br>
+                                    <p>&nbsp;</p>
+                                    <?= $nombreDirectorGrupo ?><br>
+                                    Director(a) de grupo
+                                </td>
+                                <td align="center" width="50%">
+                                    <?php
+                                    $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
+                                    $nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
+                                    if (!empty($rector["uss_firma"])) {
+                                        echo '<img src="../files/fotos/' . $rector["uss_firma"] . '" width="25%"><br>';
+                                    } else {
+                                        echo '<p>&nbsp;</p>
+                                            <p>&nbsp;</p>
+                                            <p>&nbsp;</p>';
+                                    }
+                                    ?>
+                                    _________________________________<br>
+                                    <p>&nbsp;</p>
+                                    <?= $nombreRector ?><br>
+                                    Rector(a)
+                                </td>
+                            </tr>
+                        </table>
+                        <div align="center" style="font-size:10px; margin-top:5px; margin-bottom: 10px;">
+
+                            <img src="https://plataformasintia.com/images/logo.png" height="50"><br>
+
+                            ESTE DOCUMENTO FUE GENERADO POR:<br>
+
+                            SINTIA - SISTEMA INTEGRAL DE GESTI&Oacute;N INSTITUCIONAL
+
+                        </div>
+                        <?php } ?>
+        <?php } ?>
+
+
     </table>
 
     </div>
@@ -409,6 +341,8 @@ if ($periodoActual == 4) $periodoActuales = "Final";
 
 </body>
 
-
+<script type="application/javascript">
+    print();
+</script>
 
 </html>
