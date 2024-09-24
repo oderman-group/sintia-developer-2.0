@@ -127,7 +127,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 																  "asp_documento_acudiente","asp_id","asp_fecha","asp_comprobante","mat_nombres",
 																  "asp_agno","asp_email_acudiente","asp_estado_solicitud"];
 
-                                                    $filtroLimite = 'LIMIT '.$inicio.','.$registros;
+                                                    $filtroLimite = '';
                                                     
                                                     $consulta = Estudiantes::listarMatriculasAspirantes($config, $filtro, $filtroLimite,"",$selectSql);
                                                     
