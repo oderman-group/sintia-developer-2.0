@@ -94,7 +94,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                         </div>
                                         
                                         <div class="table">
-                                    		<table class="display" style="width:100%;">
+                                    		<table id="example1" class="display"  style="width:100%;" style="width:100%;">
                                             <div id="gifCarga" class="gif-carga">
 										        <img   alt="Cargando...">
 									        </div>
@@ -120,7 +120,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 																  "asp_documento_acudiente","asp_id","asp_fecha","asp_comprobante","mat_nombres",
 																  "asp_agno","asp_email_acudiente","asp_estado_solicitud"];
 
-                                                    $filtroLimite = 'LIMIT '.$inicio.','.$registros;
+                                                    $filtroLimite = '';
                                                     
                                                     $consulta = Estudiantes::listarMatriculasAspirantes($config, $filtro, $filtroLimite,"",$selectSql);
                                                     
@@ -132,7 +132,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                             </table>
                                             </div>
                                         </div>
-                      				    <?php include("enlaces-paginacion.php");?>
+                      				    <!-- <?php include("enlaces-paginacion.php");?> -->
                                     </div>
                                 </div>
                             </div>

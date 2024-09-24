@@ -5,6 +5,15 @@ require_once("../../class/CargaAcademica.php");
 if (!empty($filtrosDecode['curso'])) {
     $filtro .= " AND car_curso='" . $filtrosDecode['curso'] . "'";
 }
+if (!empty($filtrosDecode["grupo"])) {
+    $filtro .= " AND car_grupo='" . base64_decode($filtrosDecode["grupo"]) . "'";
+}
+if (!empty($filtrosDecode["docente"])) {
+    $filtro .= " AND car_docente='" . base64_decode($filtrosDecode["docente"]) . "'";
+}
+if (!empty($filtrosDecode["asignatura"])) {
+    $filtro .= " AND car_materia='" . base64_decode($filtrosDecode["asignatura"]) . "'";
+}
 
 $selectSql = ["car_id","car_periodo","car_curso","car_ih","car_permiso2",
 			  "car_indicador_automatico","car_maximos_indicadores",
