@@ -2,6 +2,24 @@
 <?php $idPaginaInterna = 'DT0023';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");
+  require_once("../class/Estudiantes.php");
+
+$parametrosObligatorios =["idR"];
+
+Utilidades::validarParametros($_GET,$parametrosObligatorios);
+
+$idR="";
+
+if (!empty($_GET["idR"])) {
+    $idR = base64_decode($_GET["idR"]);
+}
+
+$datosEditar = Estudiantes::obtenerDatosEstudiantePorIdUsuario($idR);
+
+if( empty($datosEditar) ){
+	echo '<script type="text/javascript">window.location.href="page-info.php?error=ER_DT_16";</script>';
+	exit();
+}
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
