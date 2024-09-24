@@ -47,6 +47,7 @@ class ComponenteFiltro
      */
     private $urlHtml;
     private $urlBase;
+    private $buscador;
 
     /**
      * @var int metodo por el cual se enviara el resultado obtenido del fetch. este debe estar en la direccion:
@@ -57,7 +58,7 @@ class ComponenteFiltro
      * @var string Son los filtros pasados por $_GET.
      */
     private $filtrosGet;
-    public function __construct($id, $urlFilter, $urlHtml = '', $filtros = array(), $opciones = array(), $metodo = '')
+    public function __construct($id, $urlFilter, $urlHtml = '', $filtros = array(), $opciones = array(), $metodo = '' ,$buscador=true)
     {
         $protocolo = '';
         if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
@@ -102,6 +103,7 @@ class ComponenteFiltro
         $this->urlBase = $protocolo . $_SERVER['HTTP_HOST'] . '/app-sintia/main-app/class/componentes/barra-builder.php';
         $this->metodo = $metodo;
         $this->filtros = $filtros;
+        $this->buscador = $buscador;
         $queryString = $_SERVER['QUERY_STRING']; // Parsear la cadena de consulta y almacenar los parámetros en un array
         parse_str($queryString, $parametros); // Convertir el array a JSON
         $filtrosGet = json_encode($parametros);
@@ -294,20 +296,26 @@ class ComponenteFiltro
                     #input_{$this->id} {
                         text-align: left;
                     }
-            </style> 
-            <div class='form-inline my-2 my-lg-0'>
+            </style> ";
+        
+        $display=$this->buscador?'block':'none';
+        $html .= " 
+            <div class='form-inline my-2 my-lg-0' style='display:$display;'>
                 <input id='input_{$this->id}' class='form-control mr-sm-2' style='width: 250px' type='search' 
                 data-toggle='tooltip' 
                    data-placement='right' 
                    title='{$frases[431][$datosUsuarioActual['uss_idioma']]}'
                 placeholder='{$frases[430][$datosUsuarioActual['uss_idioma']]}' aria-label='Search' name='busqueda' >
                 <button id='btn_{$this->id}' onclick='{$this->id}_buscar(true)' class='btn deepPink-bgcolor my-2 my-sm-0' type='buttom'>{$frases[8][$datosUsuarioActual['uss_idioma']]}</button>
-            </div>
+            </div>";
+            
+        $html .= "    
         </nav>
         <script type='text/javascript'>
         function cargarPopover() {
           $(document).ready(function() {			
               $('[data-toggle=".'popover'."]').popover();
+           
           });
         };
         input_{$this->id}.addEventListener('keyup', function(event) {
@@ -389,9 +397,13 @@ class ComponenteFiltro
             .then((res) => res.text()).catch((error) => console.error('Error:', error))
             .catch((error) => console.error('Error:', error))
             .then(
-                function(response) {
+                function(response) { 
+                        if ($.fn.DataTable.isDataTable('#example1')) {
+                            $('#example1').DataTable().clear().destroy(); // Destruir y limpiar
+                        }                     
                        tbody.innerHTML = response;
                        cargarPopover();
+                        $('#example1').DataTable();
                        document.getElementById('gifCarga').style.display = 'none';";
 
         if (!empty($this->metodo)) {

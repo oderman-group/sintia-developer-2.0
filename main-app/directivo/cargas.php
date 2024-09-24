@@ -95,7 +95,7 @@ if($config['conf_doble_buscador'] == 1) {
 											</div>
 											
                                         <div>
-                                    		<table <?php echo $jQueryTable;?> class="display" style="width:100%;">
+                                    		<table id="example1" class="display"  style="width:100%;">
 												<div id="gifCarga" class="gif-carga">
 													<img  alt="Cargando...">
 												</div>
@@ -115,7 +115,7 @@ if($config['conf_doble_buscador'] == 1) {
 													<tbody id="cargas_result">
 													<?php
 													include("includes/consulta-paginacion-cargas.php");
-													$filtroLimite = 'LIMIT '.$inicio.','.$registros;
+													$filtroLimite = '';
 													$selectSql = ["car_id","car_periodo","car_curso","car_ih","car_permiso2",
 																	"car_indicador_automatico","car_maximos_indicadores",
 																	"car_docente","gra_tipo","am.mat_id",
@@ -139,7 +139,7 @@ if($config['conf_doble_buscador'] == 1) {
                           </div>
                       </div>
                       </div>
-                      <?php include("enlaces-paginacion.php");?>
+                      <!-- <?php include("enlaces-paginacion.php");?> -->
                                 </div>
                             </div>
                         </div>

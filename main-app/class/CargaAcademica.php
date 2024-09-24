@@ -391,7 +391,7 @@ class CargaAcademica {
         string $filtroMT = "", 
         string $filtro = "", 
         string $order = "car_id", 
-        string $limit = "LIMIT 0, 2000",
+        string $limit = "",
         string $valueIlike = "",
         array  $filtro2 = array(),
         array $selectConsulta=[]  
@@ -421,7 +421,7 @@ class CargaAcademica {
                 OR CONCAT(TRIM(uss_nombre), TRIM(uss_apellido1)) LIKE '%".$busqueda."%'
             )";
         }
-        if(!empty($filtro2)){
+        if(!empty($filtro2)){           
             if(!empty($filtro2['periodoSeleccionados'])){
                 $arrayPeriodos=$filtro2['periodoSeleccionados'];
                 $periodos = implode(", ", $arrayPeriodos);
@@ -429,27 +429,7 @@ class CargaAcademica {
             }
         }
         try {
-            $sql = "WITH Actividades AS (
-                    SELECT 
-                        act_id_carga, 
-                        SUM(act_valor) AS suma_actividades
-                    FROM ".BD_ACADEMICA.".academico_actividades 
-                    WHERE act_estado  = 1
-                    AND   institucion = ".$config['conf_id_institucion']."
-                    AND   year        = ".$_SESSION["bd"]."
-                    GROUP BY act_id_carga),
-                    Actividades_Registradas AS (
-                    SELECT
-                       act_id_carga,
-                       SUM(act_valor) AS suma_actividades_registradas
-                    FROM ".BD_ACADEMICA.".academico_actividades
-                    WHERE act_estado   = 1
-                    AND act_registrada = 1
-                    AND institucion    = ".$config['conf_id_institucion']."
-                    AND year           = ".$_SESSION["bd"]."
-                    GROUP BY act_id_carga
-                    )
-                    SELECT 
+            $sql = "SELECT 
                     $stringSelect 
                     ,car.id_nuevo AS id_nuevo_carga ,
                     COUNT(matri.id_nuevo) as cantidad_estudaintes,
@@ -496,11 +476,42 @@ class CargaAcademica {
                     AND matcur_id_institucion         = car.institucion 
                     AND matcur_years                  = car.year
 
-                    LEFT JOIN Actividades activ
-					ON activ.act_id_carga = car.car_id
 
-                    LEFT JOIN Actividades_Registradas activ_reg
-					ON activ_reg.act_id_carga = car.car_id
+
+                    LEFT JOIN (
+                                SELECT
+                                act_id_carga,
+                                act_periodo,
+                                SUM(act_valor) AS suma_actividades
+
+                                FROM ".BD_ACADEMICA.".academico_actividades 
+                                WHERE act_estado  = 1
+                                AND   institucion = ".$config['conf_id_institucion']."
+                                AND   year        = ".$_SESSION["bd"]."
+                                GROUP BY act_id_carga,act_periodo
+                            )
+                    AS  activ
+                    ON  activ.act_id_carga = car.car_id
+	                AND activ.act_periodo  = car.car_periodo
+
+                    LEFT JOIN (
+                                SELECT
+                                act_id_carga,
+                                act_periodo,
+                                SUM(act_valor) AS suma_actividades_registradas
+
+                                FROM ".BD_ACADEMICA.".academico_actividades 
+                                WHERE act_estado  = 1
+                                AND   act_registrada = 1
+                                AND   institucion = ".$config['conf_id_institucion']."
+                                AND   year        = ".$_SESSION["bd"]."
+                                GROUP BY act_id_carga,act_periodo
+                            )
+                    AS  activ_reg
+                    ON  activ_reg.act_id_carga = car.car_id
+	                AND activ_reg.act_periodo  = car.car_periodo
+
+
                     
                     WHERE car.institucion             = ? 
                     AND car.year                      = ? 
