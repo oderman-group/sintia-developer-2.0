@@ -1170,7 +1170,7 @@ class Boletin {
         return $resultado;
     }
 
-    public static function datosBoletin(
+    public static function datosBoletinIndicadores(
         string  $grado,
         string  $grupo,
         string  $periodo,
@@ -1304,6 +1304,125 @@ class Boletin {
         
         ";
         $parametros = [$periodo, $periodo, $config['conf_id_institucion'], $year, $grado, $grupo, $config['conf_id_institucion'], $year];
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
+    }
+    
+    public static function datosBoletinPeriodos(
+        string  $grado,
+        string  $grupo,
+        array  $periodos,
+        string  $year,
+        string  $idEstudiante=""
+    ) {
+        global $conexion, $config;
+
+        $year = empty($year) ?  $_SESSION["bd"] : $year;
+        
+        $andEstudiante="";
+
+        if (!empty($idEstudiante)) {
+            $andEstudiante = "AND   bol_estudiante  = " . $idEstudiante;
+        }
+         // Preparar los placeholders para la consulta
+         $in_periodos = implode(', ', array_fill(0, count($periodos), '?'));
+         $in_periodos2 = implode(', ', $periodos);
+        $sql = "
+                 SELECT                   
+					are.ar_id,
+                    gra.gra_nombre,
+                    gru.gru_nombre, 
+                    car.car_id,
+                    car.car_director_grupo,
+	                are.ar_id,
+	                are.ar_nombre,
+	                mate.mat_id as id_materia,
+	                mate.mat_nombre,
+	                car_ih,
+	                mate.mat_valor,
+	                bol.bol_periodo,
+	                bol.bol_nota,
+	                disi.dn_observacion,
+                    aus.aus_ausencias,
+                    mat.*
+                   
+                    
+                FROM " . BD_ACADEMICA . ".academico_matriculas mat
+
+                LEFT JOIN " . BD_ACADEMICA . ".academico_cargas car 
+                ON  car.institucion = mat.institucion 
+                AND car.year        = mat.year
+                AND car.car_grupo   = mat.mat_grupo
+                AND car.car_curso   = mat.mat_grado
+
+                LEFT JOIN " . BD_GENERAL . ".usuarios docen
+				ON  docen.institucion  = car.institucion
+                AND docen.year         = car.year
+				AND docen.uss_id       = car.car_docente
+            
+                INNER JOIN " . BD_ACADEMICA . ".academico_materias mate 
+                ON  mate.institucion = car.institucion
+                AND mate.year        = car.year
+                AND mate.mat_id      = car.car_materia
+
+                INNER JOIN " . BD_ACADEMICA . ".academico_grados gra 
+                ON  gra.institucion = mat.institucion 
+                AND gra.year        = mat.year
+                AND gra.gra_id      = mat.mat_grado
+								
+			    INNER JOIN " . BD_ACADEMICA . ".academico_grupos gru 
+                ON  gru.institucion = mat.institucion 
+                AND gru.year        = mat.year
+                AND gru.gru_id      = mat.mat_grupo
+
+                INNER JOIN " . BD_ACADEMICA . ".academico_areas are 
+                ON  are.institucion = car.institucion
+                AND are.year        = car.year
+                AND are.ar_id       = mate.mat_area
+
+                LEFT JOIN " . BD_ACADEMICA . ".academico_boletin bol
+                ON    bol.institucion = mat.institucion 
+                AND   bol.year        = mat.year
+                AND   bol_estudiante  = mat.mat_id
+                AND   bol_carga       = car.car_id
+                AND   bol_periodo     IN ($in_periodos2)
+
+                LEFT JOIN " . BD_ACADEMICA . ".academico_clases cls 
+                ON  cls.institucion       = bol.institucion
+                AND cls.year              = bol.year
+                AND cls.cls_id_carga      = car.car_id
+                AND cls.cls_periodo       = bol.bol_periodo
+
+
+                LEFT JOIN " . BD_ACADEMICA . ".academico_ausencias aus 
+                ON  aus.institucion       = bol.institucion
+                AND aus.year              = bol.year
+                AND aus.aus_id_clase      = cls.cls_id
+                AND aus.aus_id_estudiante = mat.mat_id
+              
+
+                LEFT JOIN " . BD_DISCIPLINA . ".disiplina_nota disi 
+                ON  disi.institucion       = bol.institucion
+                AND disi.year              = bol.year
+                AND disi.dn_cod_estudiante = bol_estudiante
+                AND disi.dn_periodo        = bol.bol_periodo
+                AND disi.dn_id_carga       = car.car_id
+                    
+
+
+                WHERE mat.mat_grado            = ?
+                AND   mat.mat_grupo            = ?
+                AND   mat.institucion          = ?
+                $andEstudiante
+                AND   mat.year                 = ?
+                AND   mat.mat_eliminado        = 0
+                AND ( mat.mat_estado_matricula = " . MATRICULADO . " OR mat.mat_estado_matricula=" . ASISTENTE . ") 
+               
+                ORDER BY mat.mat_id,are.ar_posicion,car.car_id,bol.bol_periodo
+                ";
+        $parametros = [$grado, $grupo, $config['conf_id_institucion'], $year];
 
         $resultado = BindSQL::prepararSQL($sql, $parametros);
 
