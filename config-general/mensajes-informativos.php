@@ -182,19 +182,25 @@ if(isset($_GET['error']) || isset($_GET['success'])){
     }    
     
     /* MENSAJES DE EXITO */
-    else if(isset($_GET['success'])){
+    else if(isset($_GET['success'])){       
         switch($_GET['success']){
             case 'SC_DT_1':
+                $parametrosObligatorios =["id"];
+                Utilidades::validarParametros($_GET,$parametrosObligatorios);
                 $tipo = 'success';
                 $mensaje = 'El registro fue creado correctamente con el ID único: <b>' . base64_decode($_GET["id"]) . '</b>';
             break;
 
             case 'SC_DT_2':
+                $parametrosObligatorios =["id"];
+                Utilidades::validarParametros($_GET,$parametrosObligatorios);
                 $tipo = 'success';
                 $mensaje = 'El registro fue actualizado correctamente para el ID único: <b>' . base64_decode($_GET["id"]) . '</b>';
             break;
 
-            case 'SC_DT_3':
+            case 'SC_DT_3': 
+                $parametrosObligatorios =["id"];
+                Utilidades::validarParametros($_GET,$parametrosObligatorios);
                 $tipo = 'success';
                 $mensaje = 'El registro fue eliminado correctamente para el ID único: <b>' . base64_decode($_GET["id"]) . '</b>';
             break;
