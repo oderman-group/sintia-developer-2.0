@@ -75,7 +75,7 @@ $filasAfectadas = $stmt->rowCount();
 
 $nombreCompleto=$_POST['nombre'].' '.$_POST['primerApellidos'].' '.$_POST['segundoApellidos'];
 $aspQuery = 'UPDATE '.$baseDatosAdmisiones.'.aspirantes SET asp_estado_solicitud = 4, asp_nombre = :nombre 
-WHERE asp_id = :id AND asp_estado_solicitud IN (8)';
+WHERE asp_id = :id AND asp_estado_solicitud IN (3, 8)';
 $asp = $conexionPDO->prepare($aspQuery);
 $asp->bindParam(':id', $_POST['solicitud'], PDO::PARAM_INT);
 $asp->bindParam(':nombre', $nombreCompleto, PDO::PARAM_STR);
