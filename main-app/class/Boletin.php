@@ -1258,11 +1258,16 @@ class Boletin {
                 LEFT JOIN (
                 SELECT
                 cal_id_estudiante,
-                act_id_tipo,
                 act_id_carga,
+                act.act_id_tipo,
+                act_id,
+                act_descripcion,
+                act_periodo,
                 SUM(act_valor) as valor_porcentaje_indicador,
                 SUM(cal_nota_equivalente_cien) as indicador_porcentual,
-                SUM(cal_nota_equivalente_cien)/SUM(act_valor)*100 as valor_indicador
+                SUM(cal_nota_equivalente_cien)/SUM(act_valor)*100 as valor_indicador,
+                cal.institucion,
+                cal.year
 
                 FROM " . BD_ACADEMICA . ".academico_calificaciones cal
 
@@ -1276,7 +1281,7 @@ class Boletin {
                 AND cal.institucion       = ?
                 AND cal.year              = ?
                 AND cal.cal_nota          IS NOT NULL
-                GROUP BY act.act_id_carga, act.act_periodo, act.act_id_tipo, cal.cal_id_estudiante, cal.institucion, cal.year
+                GROUP BY cal.cal_id_estudiante,act.act_periodo,act.act_id_carga,act.act_id_tipo,cal.institucion,cal.year
                 ) AS indv
                 ON   indv.cal_id_estudiante = bol.bol_estudiante
                     AND  indv.act_id_tipo   = indc.ipc_indicador

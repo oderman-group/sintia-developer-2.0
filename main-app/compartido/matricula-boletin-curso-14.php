@@ -116,7 +116,9 @@ if ($periodoActual == 4) $periodoActuales = "Final";
         while ($row = $datos->fetch_assoc()) {
             $listaDatos[] = $row;
         }
-    } ?>
+    } 
+    $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
+    ?>
 
 
     <table width="100%" cellspacing="0" cellpadding="0" rules="all" border="0" align="center">
@@ -143,14 +145,12 @@ if ($periodoActual == 4) $periodoActuales = "Final";
             }
 
             if (!empty($registro["dn_id"])&& !empty($registro["dn_observacion"])) {
-                if (!array_key_exists($registro["mat_id"], $observacionesConvivencia)) {
-                    $observacionesConvivencia[$registro["mat_id"]] = [
+                    $observacionesConvivencia[$registro["mat_id"]][] = [
                         "id" => $registro["dn_id"],
                         "estudiante" => $registro["dn_cod_estudiante"],
                         "observacion" => $registro["dn_observacion"],
                         "periodo" => $registro["dn_periodo"]
                     ];
-                }
             }
             if ($mat_id != $registro["mat_id"]) {
                 $contarAreas = 0;
@@ -264,17 +264,13 @@ if ($periodoActual == 4) $periodoActuales = "Final";
                             </tr>
 
                             <?php
-                            foreach ($observacionesConvivencia as $observacion) {
+                            foreach ($observacionesConvivencia[$registro["mat_id"]] as $observacion) {
                                 if( $observacion["estudiante"] == $registro["mat_id"]){
                             ?>
-
-                                <tr align="center" style="font-weight:bold; font-size:12px; height:20px;">
-
-                                    <td><?= $observacion["periodo"] ?></td>
-
-                                    <td align="left"><?= $observacion["observacion"] ?></td>
-
-                                </tr>
+                              <tr align="center" style="font-weight:bold; font-size:12px; height:20px;">
+                                  <td><?= $observacion["periodo"] ?></td>
+                                  <td align="left"><?= $observacion["observacion"] ?></td>
+                              </tr>
 
                             <?php  } } ?>
 
@@ -283,53 +279,8 @@ if ($periodoActual == 4) $periodoActuales = "Final";
                         <p>&nbsp;</p>
                         <p>&nbsp;</p>
                         <p>&nbsp;</p>
-                        <table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
-                            <tr>
-                                <td align="center" width="50%">
-                                    <?php
-
-                                    $nombreDirectorGrupo = UsuariosPadre::nombreCompletoDelUsuario($directorGrupo);
-                                    if (!empty($directorGrupo["uss_firma"])) {
-                                        echo '<img src="../files/fotos/' . $directorGrupo["uss_firma"] . '" width="15%"><br>';
-                                    } else {
-                                        echo '<p>&nbsp;</p>
-                                            <p>&nbsp;</p>
-                                            <p>&nbsp;</p>';
-                                    }
-                                    ?>
-                                    _________________________________<br>
-                                    <p>&nbsp;</p>
-                                    <?= $nombreDirectorGrupo ?><br>
-                                    Director(a) de grupo
-                                </td>
-                                <td align="center" width="50%">
-                                    <?php
-                                    $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
-                                    $nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
-                                    if (!empty($rector["uss_firma"])) {
-                                        echo '<img src="../files/fotos/' . $rector["uss_firma"] . '" width="25%"><br>';
-                                    } else {
-                                        echo '<p>&nbsp;</p>
-                                            <p>&nbsp;</p>
-                                            <p>&nbsp;</p>';
-                                    }
-                                    ?>
-                                    _________________________________<br>
-                                    <p>&nbsp;</p>
-                                    <?= $nombreRector ?><br>
-                                    Rector(a)
-                                </td>
-                            </tr>
-                        </table>
-                        <div align="center" style="font-size:10px; margin-top:5px; margin-bottom: 10px;">
-
-                            <img src="https://plataformasintia.com/images/logo.png" height="50"><br>
-
-                            ESTE DOCUMENTO FUE GENERADO POR:<br>
-
-                            SINTIA - SISTEMA INTEGRAL DE GESTI&Oacute;N INSTITUCIONAL
-
-                        </div>
+                        <?php include("../compartido/firmas-informes.php") ?>
+                        <?php include("../compartido/footer-informes.php") ?>
                         <?php } ?>
         <?php } ?>
 
