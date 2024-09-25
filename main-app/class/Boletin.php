@@ -1329,7 +1329,7 @@ class Boletin {
         $andEstudiante="";
 
         if (!empty($idEstudiante)) {
-            $andEstudiante = "AND   bol_estudiante  = " . $idEstudiante;
+            $andEstudiante = "AND   mat.mat_id  = " . $idEstudiante;
         }
          // Preparar los placeholders para la consulta
          $in_periodos = implode(', ', array_fill(0, count($periodos), '?'));
@@ -1356,6 +1356,7 @@ class Boletin {
                     disi.dn_cod_estudiante,
 	                disi.dn_observacion,
                     aus.aus_ausencias,
+                    docen.*,
                     mat.*
                    
                     

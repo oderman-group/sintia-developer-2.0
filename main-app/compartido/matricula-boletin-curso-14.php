@@ -281,6 +281,7 @@ if ($periodoActual == 4) $periodoActuales = "Final";
                         <p>&nbsp;</p>
                         <?php include("../compartido/firmas-informes.php") ?>
                         <?php include("../compartido/footer-informes.php") ?>
+                        <div id="saltoPagina"></div>
                         <?php } ?>
         <?php } ?>
 

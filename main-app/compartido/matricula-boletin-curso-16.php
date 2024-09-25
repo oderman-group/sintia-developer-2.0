@@ -70,6 +70,8 @@ if ($periodoSeleccionado == 3) $periodoActuales = "Tercero";
 
 if ($periodoSeleccionado == 4) $periodoActuales = "Final";
 
+
+
 ?>
 
 <!doctype html>
@@ -100,13 +102,19 @@ if ($periodoSeleccionado == 4) $periodoActuales = "Final";
         while ($row = $datos->fetch_assoc()) {
             $listaDatos[] = $row;
         }
-    } 
-    
+    }
+
     $conCargas = CargaAcademica::traerIndicadoresCargasPorCursoGrupo($config, $grado, $grupo, $periodoSeleccionado, $year);
     while ($row = mysqli_fetch_array($conCargas, MYSQLI_BOTH)) {
         $indicadoresCarga[] = $row;
     }
-    
+
+    $puestosCurso = [];
+    $consultaPuestos = Boletin::obtenerPuestoYpromedioEstudiante($periodo, $grado, $grupo, $year);
+    while ($puesto = mysqli_fetch_array($consultaPuestos, MYSQLI_BOTH)) {
+        $puestosCurso[$puesto['bol_estudiante']] = $puesto['puesto'];
+    }
+
     ?>
 
 
@@ -122,7 +130,7 @@ if ($periodoSeleccionado == 4) $periodoActuales = "Final";
     $directorGrupo = "";
     $promedioMateria = 0;
     $totalIh = 0;
-    $totalFallasPeriodo =[];
+    $totalFallasPeriodo = [];
     $totalNotasPeriodo = [];
     $promedioMateria = 0;
     $observacionesConvivencia = [];
@@ -152,9 +160,6 @@ if ($periodoSeleccionado == 4) $periodoActuales = "Final";
             $conteoEstudiante++;
             $nombre = Estudiantes::NombreCompletoDelEstudiante($registro);
     ?>
-
-            <!-- <tr>
-                    <td> -->
             <div>
                 <div style="float:left; width:50%"><img src="../files/images/logo/<?= $informacion_inst["info_logo"] ?>" width="80"></div>
                 <div style="float:right; width:50%">
@@ -163,7 +168,7 @@ if ($periodoSeleccionado == 4) $periodoActuales = "Final";
                             <td>C&oacute;digo:<br> <?= strpos($registro["mat_documento"], '.') !== true && is_numeric($registro["mat_documento"]) ? number_format($registro["mat_documento"], 0, ",", ".") : $registro["mat_documento"]; ?></td>
                             <td>Nombre:<br> <?= $nombre ?></td>
                             <td>Grado:<br> <?= $registro["gra_nombre"] . " " . $registro["gru_nombre"]; ?></td>
-                            <td>Puesto Curso:<br> <?= "1 de 2"; ?></td>
+                            <td>Puesto Curso:<br> <?= isset($puestosCurso[$estudiante["mat_id"]]) ? $puestosCurso[$estudiante["mat_id"]] : 'N/A'; ?><?= " de " . count($puestosCurso); ?></td>
                         </tr>
 
                         <tr>
@@ -176,10 +181,6 @@ if ($periodoSeleccionado == 4) $periodoActuales = "Final";
                     <p>&nbsp;</p>
                 </div>
             </div>
-            <!-- </td>
-                </tr> -->
-            <!-- <tr>
-                    <td> -->
             <table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1">
                 <thead>
                     <tr style="font-weight:bold; text-align:center;">
@@ -276,10 +277,53 @@ if ($periodoSeleccionado == 4) $periodoActuales = "Final";
                 </tfoot>
             </table>
             <p>&nbsp;</p>
+            <table width="100%" cellspacing="5" cellpadding="5" rules="none" border="0">
+                <tr>
+                    <td width="40%">
+                        ________________________________________________________________<br>
+                        <?php if (!empty($directorGrupo['uss_nombre'])) echo strtoupper($directorGrupo['uss_nombre']); ?><br>
+                        DIRECTOR DE CURSO
+                    </td>
+                    <td width="20%">
+                        <table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1">
+                            <?php
+                            $contador = 1;
+                            foreach ($tiposNotas as $desemp) {
+                                if ($contador % 2 == 1) {
+                                    $fondoFila = '#EAEAEA';
+                                } else {
+                                    $fondoFila = '#FFF';
+                                } ?>
+                                <tr style="background:<?= $fondoFila; ?>">
+                                    <td><?= $desemp['notip_nombre']; ?></td>
+                                    <td align="center"><?= $desemp['notip_desde'] . " - " . $desemp['notip_hasta']; ?></td>
+                                </tr>
+                            <?php $contador++;
+                            } ?>
+                        </table>
+                    </td>
+
+                    <?php
+                    $msjPromocion = '';
+                    if ($periodoSeleccionado == $config['conf_periodos_maximos']) {
+                        if ($materiasPerdidas == 0) {
+                            $msjPromocion = 'PROMOVIDO';
+                        } else {
+                            $msjPromocion = 'NO PROMOVIDO';
+                        }
+                    }
+
+                    ?>
+                    <td width="60%">
+                        <p style="font-weight:bold;">Observaciones: <b><?= $msjPromocion; ?></b></p>
+                        ______________________________________________________________________<br><br>
+                        ______________________________________________________________________<br><br>
+                        ______________________________________________________________________
+                    </td>
+                </tr>
+            </table>
             <p>&nbsp;</p>
-            <p>&nbsp;</p>
-            
-            <div id="saltoPagina"></div>
+
             <table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1">
                 <thead>
                     <tr style="font-weight:bold; text-align:center;">
@@ -289,7 +333,7 @@ if ($periodoSeleccionado == 4) $periodoActuales = "Final";
                 </thead>
 
                 <?php
-                 foreach ($indicadoresCarga as $datosCargas) {
+                foreach ($indicadoresCarga as $datosCargas) {
                 ?>
                     <tbody>
                         <tr style="color:#585858;">
@@ -303,10 +347,10 @@ if ($periodoSeleccionado == 4) $periodoActuales = "Final";
                 }
                 ?>
             </table>
-
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
             <div id="saltoPagina"></div>
-            <p>&nbsp;</p>
-            <p>&nbsp;</p>
+
         <?php
                 $totalIh = 0;
                 $totalFallasPeriodo = [];

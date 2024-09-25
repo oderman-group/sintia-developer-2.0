@@ -14,7 +14,7 @@ require_once(ROOT_PATH . "/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH . "/main-app/class/Boletin.php");
 require_once(ROOT_PATH . "/main-app/class/Indicadores.php");
 require_once(ROOT_PATH . "/main-app/class/Utilidades.php");
-require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
+require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php");
 
 $year = $_SESSION["bd"];
 if (isset($_GET["year"])) {
@@ -60,11 +60,7 @@ if (!empty($_GET["id"])) {
     }
 }
 
-
 $tamañoLogo = $_SESSION['idInstitucion'] == ICOLVEN ? 100 : 50;
-
-
-
 
 switch ($periodoSeleccionado) {
     case 1:
@@ -90,32 +86,21 @@ for ($i = 1; $i <= $periodoSeleccionado; $i++) {
     $periodos[$i] = $i;
 }
 ?>
-
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-
-
-
 <!doctype html>
-
 <html class="no-js" lang="en">
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 
 <head>
-
     <meta name="tipo_contenido" content="text/html;" http-equiv="content-type" charset="utf-8">
-
     <title>Boletín</title>
-
-    <style>
-        #saltoPagina {
-
+    <style>       
+     #saltoPagina {
             PAGE-BREAK-AFTER: always;
-
         }
     </style>
-
 </head>
 <?php
+// Cosnultas iniciales
 $listaDatos = [];
 $tiposNotas = [];
 $cosnultaTiposNotas = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $year);
@@ -136,32 +121,40 @@ $puestoCurso = [];
 while ($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)) {
     $puestoCurso[$puesto['bol_estudiante']] = $puesto['puesto'];
 }
-$listaIndicadores=[];
+
+$listaCargas = [];
 $conCargasDos = CargaAcademica::traerCargasMateriasPorCursoGrupo($config, $grado, $grupo, $year);
 while ($row = $conCargasDos->fetch_assoc()) {
-    $listaIndicadores[] = $row;
+    
+    $indicadores = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $row['car_id'], $periodoSeleccionado, $year);
+    $listaIndicadores = [];
+    while ($row2 = $indicadores->fetch_assoc()) {
+        $listaIndicadores[]=$row2 ; 
+    }
+    $row['indicadores'] = $listaIndicadores;
+    $listaCargas[] = $row;
 }
 $colspan = 5 + $celdas;
 ?>
 
-
-<?php
-$conteoEstudiante = 0;
-$contarIndicadores = 0;
-$contarAreas = 0;
-$contarCargas = 0;
-$mat_id = "";
-$mat_ar = "";
-$mat_ar_car = "";
-$mat_ar_car_periodo = "";
-$directorGrupo = "";
+<?php 
+// se reparte la informacion en arrays
+$conteoEstudiante         = 0;
+$contarIndicadores        = 0;
+$contarAreas              = 0;
+$contarCargas             = 0;
+$mat_id                   = "";
+$mat_ar                   = "";
+$mat_ar_car               = "";
+$mat_ar_car_periodo       = "";
+$directorGrupo            = "";
 $observacionesConvivencia = [];
-$estudiantes = [];
-$areas = [];
-$cargas = [];
-$notasPeriodos = [];
+$estudiantes              = [];
+$areas                    = [];
+$cargas                   = [];
+$notasPeriodos            = [];
 foreach ($listaDatos  as $registro) {
-
+    // Observacion por estudainte
     if (!empty($registro["dn_id"]) && !empty($registro["dn_observacion"])) {
         $observacionesConvivencia[$registro["mat_id"]][] = [
             "id"          => $registro["dn_id"],
@@ -170,6 +163,7 @@ foreach ($listaDatos  as $registro) {
             "periodo"     => $registro["dn_periodo"]
         ];
     }
+    // Datos del estudiante
     if ($mat_id != $registro["mat_id"]) {
         $contarAreas = 0;
         $contarCargas = 0;
@@ -187,11 +181,9 @@ foreach ($listaDatos  as $registro) {
         ];
         $mat_id = $registro["mat_id"];
     }
+    // Datos de las areas
     if ($mat_ar != $registro["mat_id"] . '-' . $registro["ar_id"]) {
-        $contarAreas++;
-        if ($registro["car_director_grupo"] == 1) {
-            $directorGrupo = $registro;
-        }
+        $contarAreas++;        
         $areas[$registro["mat_id"]][$registro["ar_id"]] = [
             "ar_id"        => $registro['ar_id'],
             "nro"          => $contarAreas,
@@ -199,8 +191,12 @@ foreach ($listaDatos  as $registro) {
         ];
         $mat_ar = $registro["mat_id"] . '-' . $registro["ar_id"];
     }
+    // Datos de las cargas
     if ($mat_ar_car != $registro["mat_id"] . '-' . $registro["ar_id"] . '-' . $registro["car_id"]) {
         $contarCargas++;
+        if ($registro["car_director_grupo"] == 1) {
+            $directorGrupo = $registro;
+        }
         $cargas[$registro["mat_id"]][$registro["ar_id"]][$registro['car_id']] = [
             "car_id"                    => $registro['car_id'],
             "nro"                       => $contarCargas,
@@ -214,6 +210,7 @@ foreach ($listaDatos  as $registro) {
         ];
         $mat_ar_car =  $registro["mat_id"] . '-' . $registro["ar_id"] . '-' . $registro["car_id"];
     }
+    // Datos de los periodos
     if ($mat_ar_car_periodo != $registro["mat_id"] . '-' . $registro["ar_id"] . '-' . $registro["car_id"] . '-' . $registro["bol_periodo"]) {
         $notasPeriodos[$registro["mat_id"]][$registro["ar_id"]][$registro['car_id']][$registro["bol_periodo"]] = [
             "car_id"                    => $registro['car_id'],
@@ -227,7 +224,7 @@ foreach ($listaDatos  as $registro) {
     }
 } ?>
 
-<body style="font-family:Arial;"></body>
+<body style="font-family:Arial;">
 <?php foreach ($estudiantes  as  $estudiante) {
     $totalNotasPeriodo = [];
 ?>
@@ -240,7 +237,7 @@ foreach ($listaDatos  as $registro) {
             <td>Documento:<br> <?= strpos($estudiante["mat_documento"], '.') !== true && is_numeric($estudiante["mat_documento"]) ? number_format($estudiante["mat_documento"], 0, ",", ".") : $estudiante["mat_documento"]; ?></td>
             <td>Nombre:<br> <?= $estudiante["nombre"]; ?></td>
             <td>Grado:<br> <?= $estudiante["gra_nombre"] . " " . $estudiante["gru_nombre"]; ?></td>
-            <td>Puesto Curso:<br> <?= $puestoCurso[$estudiante["mat_id"]] ?></td>
+            <td>Puesto Curso:<br> <?= isset($puestoCurso[$estudiante["mat_id"]])?$puestoCurso[$estudiante["mat_id"]]:'N/A' ?></td>
         </tr>
         <tr>
             <td>Jornada:<br> Mañana</td>
@@ -284,7 +281,9 @@ foreach ($listaDatos  as $registro) {
                     <?php
                     $promedioMateria = 0;
                     for ($j = 1; $j <= $periodoSeleccionado; $j++) {
-                        $nota = $notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["bol_nota"];
+                        $nota =isset($notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["bol_nota"])
+                               ? $notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["bol_nota"]
+                               :0;
                         $desempeno = Boletin::determinarRango($nota, $tiposNotas);
                         $promedioMateria += $nota;
 
@@ -334,12 +333,31 @@ foreach ($listaDatos  as $registro) {
                 <td style=" font-size:12px;"><?= $desempenoAcumuladoTotal["notip_nombre"] ?></td>
             <?php
             }
-            $promedioFinal = ($promedioFinal/ $periodoSeleccionado);
+            $promedioFinal = ($promedioFinal / $periodoSeleccionado);
             $promedioFinal = round($promedioFinal, 2);
             $desempenoTotal = Boletin::determinarRango($promedioFinal, $tiposNotas);
             ?>
             <td style=" font-size:12px;"><?= $promedioFinal ?></td>
-            <td style=" font-size:12px;"><?= $desempenoTotal["notip_nombre"]?></td>
+            <td style=" font-size:12px;"><?= $desempenoTotal["notip_nombre"] ?></td>
+        </tr>
+        <tr bgcolor="#EAEAEA" style="font-size:12px; text-align:center;">
+            <td colspan="3" style="text-align:left;  font-size:12px;">AUSENCIAS</td>
+
+            <?php
+            $promedioFinal = 0;
+            for ($j = 1; $j <= $periodoSeleccionado; $j++) {
+                
+            ?>
+
+                <td colspan="2" style=" font-size:12px;"><?= $avumuladoPj ?></td>
+            <?php
+            }
+            $promedioFinal = ($promedioFinal / $periodoSeleccionado);
+            $promedioFinal = round($promedioFinal, 2);
+            $desempenoTotal = Boletin::determinarRango($promedioFinal, $tiposNotas);
+            ?>
+            <td style=" font-size:12px;"><?= $promedioFinal ?></td>
+            <td style=" font-size:12px;"><?= $desempenoTotal["notip_nombre"] ?></td>
         </tr>
     </table>
     <td>&nbsp;</td>
@@ -356,7 +374,6 @@ foreach ($listaDatos  as $registro) {
             ?>
         </tr>
     </table>
-    <p>&nbsp;</p>
     <?php if (!empty($observacionesConvivencia[$estudiante["mat_id"]])) {
         usort($observacionesConvivencia[$estudiante["mat_id"]], function ($a, $b) {
             return $a['periodo'] - $b['periodo']; // Orden ascendente por 'periodo'
@@ -366,7 +383,7 @@ foreach ($listaDatos  as $registro) {
             <tr style=" background:#00adefad; border-color:#036; font-size:12px; text-align:center">
                 <td colspan="3">OBSERVACIONES DE CONVIVENCIA</td>
             </tr>
-            <tr  style=" background:#EAEAEA; color:#000; font-size:12px; text-align:center">
+            <tr style=" background:#EAEAEA; color:#000; font-size:12px; text-align:center">
                 <td width="8%">Periodo</td>
                 <td>Observaciones</td>
             </tr>
@@ -384,46 +401,37 @@ foreach ($listaDatos  as $registro) {
         </table>
     <?php } ?>
     <?php include("../compartido/firmas-informes.php") ?>
-    <div id="saltoPagina"></div>
-    <?php include("../compartido/footer-informes.php") ?>
-    <p>&nbsp;</p>
     <p>&nbsp;</p>
     <table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1" align="center" style="font-size:10px;">
-            <thead>
-                <tr style="font-weight:bold; text-align:center; background-color: #00adefad;">
-                    <td width="30%">Asignatura</td>
-                    <td width="70%">Indicadores de desempeño</td>
-                </tr>
-            </thead>
+        <thead>
+            <tr style="font-weight:bold; text-align:center; background-color: #00adefad;">
+                <td width="30%">Asignatura</td>
+                <td width="70%">Indicadores de desempeño</td>
+            </tr>
+        </thead>
 
-            <?php
-            foreach ($listaIndicadores as $datosCargasDos) {
-
-                
-            ?>
-                <tbody>
-                    <tr style="color:#000;">
-                        <td><?= $datosCargasDos['mat_nombre']; ?><br><span style="color:#C1C1C1;"><?= UsuariosPadre::nombreCompletoDelUsuario($datosCargasDos); ?></span></td>
-                        <td>                        
-                            <?php
-                            //INDICADORES
-                            $indicadores = Indicadores::traerCargaIndicadorPorPeriodo($conexion, $config, $datosCargasDos['car_id'], $periodoSeleccionado, $year);
-                            while ($indicador = mysqli_fetch_array($indicadores, MYSQLI_BOTH)) {
-                            ?>
-                
-                        <?= $indicador['ind_nombre']; ?><br>
-                    
-                <?php
-                            }
-                ?>
+        <?php
+        foreach ($listaCargas as $carga) { ?>
+            <tbody>
+                <tr style="color:#000;">
+                    <td><?= $carga['mat_nombre']; ?><br><span style="color:#C1C1C1;"><?= UsuariosPadre::nombreCompletoDelUsuario($carga); ?></span></td>
+                    <td>
+                        <?php
+                        //INDICADORES
+                        foreach ($carga["indicadores"] as $indicador) {?>
+                            <?= $indicador['ind_nombre']; ?><br>
+                        <?php
+                        }
+                        ?>
                     </td>
                 </tr>
-                </tbody>
-            <?php
-            }
-            ?>
-        </table>
-
+            </tbody>
+        <?php
+        }
+        ?>
+    </table>
+    <?php include("../compartido/footer-informes.php") ?>
+    <div id="saltoPagina"></div>
 <?php  }  ?>
 </body>
 

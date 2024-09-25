@@ -192,7 +192,9 @@ $cargas;
 ?>
 
 <body style="font-family:Arial;"></body>
-<?php foreach ($estudiantes  as  $estudiante) {  ?>
+<?php foreach ($estudiantes  as  $estudiante) { 
+     $fallasAcumuladas = 0;
+    ?>
     <div align="center" style="margin-bottom:20px;">
         <img src="../files/images/logo/<?= $informacion_inst["info_logo"] ?>" width="<?= $tamañoLogo ?>%"><br>
     </div>
@@ -271,8 +273,7 @@ $cargas;
     <p>&nbsp;</p>
     <?php include("../compartido/firmas-informes.php") ?>
     <?php include("../compartido/footer-informes.php") ?>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
+    <div id="saltoPagina"></div>
 
 <?php  }  ?>
 </body>
