@@ -486,27 +486,6 @@ $configAdmisiones = Inscripciones::configuracionAdmisiones($conexion, BD_ADMISIO
                                                 </div>
 
                                             </div>
-
-
-                                            <hr class="my-4">
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="gridCheck" required>
-                                                    <label class="form-check-label" for="gridCheck">
-                                                        Estoy suficientemente informado del Manual de Convivencia y del Sistema Institucional de Evaluación que rigen en el <b><?= strtoupper($informacion_inst['info_nombre']) ?></b>, según aparecen en la página web y en caso de ser aceptado me comprometo a acatarlos y cumplirlos fiel y cabalmente.
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="p-2 mt-4 mb-4 bg-info text-white" style="text-align: center;">
-                                                <p style="font-size: 20px; font-weight: bold;">
-                                                    Tenga en cuenta que debe tener completa toda la documentación cargada en la plataforma para que su solicitud continúe el proceso de admisión y sea agendada la respectiva entrevista y examen de admisión según sea el caso.
-                                                </p>
-                                            </div>
-                                            <div class="p-2 mt-4 mb-4 bg-warning text-dark" style="text-align: center;">
-
-                                                <p style="font-size: 20px; font-weight: bold;"><?=$configAdmisiones['cfgi_frase_formulario_inscripcion_2'];?></p>
-
-                                            </div>
                                         </fieldset>
 
                                         <?php $botones = new botonesGuardar("inscripciones.php",Modulos::validarPermisoEdicion()); ?>
