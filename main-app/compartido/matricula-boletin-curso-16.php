@@ -122,8 +122,8 @@ if ($periodoSeleccionado == 4) $periodoActuales = "Final";
     $directorGrupo = "";
     $promedioMateria = 0;
     $totalIh = 0;
-    $totalFallasPeriodo[1] = 0;
-    $totalNotasPeriodo[1] = 0;
+    $totalFallasPeriodo =[];
+    $totalNotasPeriodo = [];
     $promedioMateria = 0;
     $observacionesConvivencia = [];
     $materiasPerdidas = 0;
@@ -278,51 +278,7 @@ if ($periodoSeleccionado == 4) $periodoActuales = "Final";
             <p>&nbsp;</p>
             <p>&nbsp;</p>
             <p>&nbsp;</p>
-            <table width="100%" cellspacing="5" cellpadding="5" rules="none" border="0">
-                <tr>
-                    <td width="40%">
-                        ________________________________________________________________<br>
-                        <?php if (!empty($directorGrupo['uss_nombre'])) echo strtoupper($directorGrupo['uss_nombre']); ?><br>
-                        DIRECTOR DE CURSO
-                    </td>
-                    <td width="20%">
-                        <table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1">
-                            <?php
-                            $contador = 1;
-                            foreach ($tiposNotas as $desemp) {
-                                if ($contador % 2 == 1) {
-                                    $fondoFila = '#EAEAEA';
-                                } else {
-                                    $fondoFila = '#FFF';
-                                } ?>
-                                <tr style="background:<?= $fondoFila; ?>">
-                                    <td><?= $desemp['notip_nombre']; ?></td>
-                                    <td align="center"><?= $desemp['notip_desde'] . " - " . $desemp['notip_hasta']; ?></td>
-                                </tr>
-                            <?php $contador++;
-                            } ?>
-                        </table>
-                    </td>
-
-                    <?php
-                    $msjPromocion = '';
-                    if ($periodoSeleccionado == $config['conf_periodos_maximos']) {
-                        if ($materiasPerdidas == 0) {
-                            $msjPromocion = 'PROMOVIDO';
-                        } else {
-                            $msjPromocion = 'NO PROMOVIDO';
-                        }
-                    }
-
-                    ?>
-                    <td width="60%">
-                        <p style="font-weight:bold;">Observaciones: <b><?= $msjPromocion; ?></b></p>
-                        ______________________________________________________________________<br><br>
-                        ______________________________________________________________________<br><br>
-                        ______________________________________________________________________
-                    </td>
-                </tr>
-            </table>
+            
             <div id="saltoPagina"></div>
             <table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1">
                 <thead>

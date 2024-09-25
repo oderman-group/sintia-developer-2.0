@@ -1349,6 +1349,11 @@ class Boletin {
 	                mate.mat_valor,
 	                bol.bol_periodo,
 	                bol.bol_nota,
+                    bol.bol_tipo,
+                    bol.bol_observaciones_boletin,
+                    disi.dn_id,
+                    disi.dn_periodo,
+                    disi.dn_cod_estudiante,
 	                disi.dn_observacion,
                     aus.aus_ausencias,
                     mat.*

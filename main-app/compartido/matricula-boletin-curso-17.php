@@ -120,7 +120,6 @@ $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
 <?php
 $conteoEstudiante = 0;
 $contarIndicadores = 0;
-$ultimoRegistro = false;
 $contarCargas = 0;
 $mat_id = "";
 $mat_car = "";
@@ -130,13 +129,7 @@ $observacionesConvivencia = [];
 $estudiantes = [];
 $indicadores = [];
 $cargas = [];
-$length = count($listaDatos);
 foreach ($listaDatos  as $index => $registro) {
-    if ($index < $length - 1) {
-        $siguienteRegistro = $listaDatos[$index + 1];
-    } else {
-        $ultimoRegistro = true;
-    }
 
     if (!empty($registro["dn_id"]) && !empty($registro["dn_observacion"])) {
         $observacionesConvivencia[$registro["mat_id"]][] = [
@@ -151,13 +144,13 @@ foreach ($listaDatos  as $index => $registro) {
         $conteoEstudiante++;
         $nombre = Estudiantes::NombreCompletoDelEstudiante($registro);
         $estudiantes[$registro["mat_id"]] = [
-            "mat_id" => $registro["mat_id"],
-            "nombre" => $nombre,
-            "documento" => $registro["mat_documento"],
-            "nro" => $conteoEstudiante,
-            "mat_matricula" => $registro["mat_matricula"],
-            "gra_nombre" => $registro["gra_nombre"],
-            "gru_nombre" => $registro["gru_nombre"],
+            "mat_id"          => $registro["mat_id"],
+            "nombre"          => $nombre,
+            "documento"       => $registro["mat_documento"],
+            "nro"             => $conteoEstudiante,
+            "mat_matricula"   => $registro["mat_matricula"],
+            "gra_nombre"      => $registro["gra_nombre"],
+            "gru_nombre"      => $registro["gru_nombre"],
         ];
         $mat_id = $registro["mat_id"];
     }
@@ -168,25 +161,25 @@ foreach ($listaDatos  as $index => $registro) {
             $directorGrupo = $registro;
         }
         $cargas[$registro["mat_id"]][$registro["car_id"]] = [
-            "car_id" => $registro['car_id'],
-            "nro" => $contarCargas,
-            "mat_nombre" => $registro['mat_nombre'],
-            "docente" => $registro,
-            "bol_nota" => $registro['bol_nota'],
-            "bol_tipo" => $registro['bol_tipo'],
+            "car_id"                    => $registro['car_id'],
+            "nro"                       => $contarCargas,
+            "mat_nombre"                => $registro['mat_nombre'],
+            "docente"                   => $registro,
+            "bol_nota"                  => $registro['bol_nota'],
+            "bol_tipo"                  => $registro['bol_tipo'],
             "bol_observaciones_boletin" => $registro['bol_observaciones_boletin'],
-            "car_ih" => $registro['car_ih'],
+            "car_ih"                    => $registro['car_ih'],
         ];
         $mat_car = $registro["mat_id"] . '-' . $registro["car_id"];
     }
     if ($mat_car_ind != $registro["mat_id"] . '-' . $registro["car_id"] . '-' . $registro["ind_id"]) {
         $contarIndicadores++;
         $indicadores[$registro["mat_id"]][$registro["car_id"]][] = [
-            "ind_id" => $registro["ind_id"],
-            "car_id" => $registro['car_id'],
-            "nro" => $contarIndicadores,
+            "ind_id"          => $registro["ind_id"],
+            "car_id"          => $registro['car_id'],
+            "nro"             => $contarIndicadores,
             "valor_indicador" => $registro['valor_indicador'],
-            "ind_nombre" => $registro['ind_nombre']
+            "ind_nombre"      => $registro['ind_nombre']
         ];
         $mat_car_ind = $registro["mat_id"] . '-' . $registro["car_id"] . '-' . $registro["ind_id"];
     }
