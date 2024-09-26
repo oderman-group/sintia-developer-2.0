@@ -1,7 +1,7 @@
 <?php
 $busqueda = '';
 if (!empty($_GET['busqueda'])) {
-  $busqueda = $_GET['busqueda'];
+  $busqueda = base64_decode($_GET['busqueda']);
   $filtro .= " AND (
   mat_id LIKE '%" . $busqueda . "%' 
   OR mat_nombres LIKE '%" . $busqueda . "%' 
