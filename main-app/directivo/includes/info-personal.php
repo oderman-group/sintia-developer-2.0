@@ -253,6 +253,31 @@
 													</select>
 												</div>
 											</div>
+
+											<div class="form-group row">
+												<label class="col-sm-2 control-label">Grupo étnico?</label>
+												<div class="col-sm-2">
+													<select class="form-control  select2" name="grupoEtnico" <?=$disabledPermiso;?>>
+														<option value="">Seleccione una opción</option>
+														<option value="1" <?php if ($datosEstudianteActual['mat_etnia'] == 1) echo "selected"; ?>>Ninguno</option>
+                                                        <option value="2" <?php if ($datosEstudianteActual['mat_etnia'] == 2) echo "selected"; ?>>Afrocolombianos</option>
+                                                        <option value="3" <?php if ($datosEstudianteActual['mat_etnia'] == 3) echo "selected"; ?>>Raizales</option>
+                                                        <option value="4" <?php if ($datosEstudianteActual['mat_etnia'] == 4) echo "selected"; ?>>Indigena</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="form-group row">
+												<label class="col-sm-2 control-label">Tiene alguna limitación o discapacidad?</label>
+												<div class="col-sm-2">
+													<select class="form-control  select2" name="discapacidad" <?=$disabledPermiso;?>>
+														<option value="">Seleccione una opción</option>
+														<option value="1"<?php if ($datosEstudianteActual['mat_tiene_discapacidad'] == 1){echo "selected";}?>>Ninguna</option>
+														<option value="2"<?php if ($datosEstudianteActual['mat_tiene_discapacidad'] == 2){echo "selected";}?>>Si</option>
+														<option value="3"<?php if ($datosEstudianteActual['mat_tiene_discapacidad'] == 3){echo "selected";}?>>No</option>
+													</select>
+												</div>
+											</div>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Direcci&oacute;n</label>

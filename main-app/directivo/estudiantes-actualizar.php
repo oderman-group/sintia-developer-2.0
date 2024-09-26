@@ -47,31 +47,43 @@ if($config['conf_mostrar_pasos_matricula'] == 1){
 	";
 }
 
-if($config['conf_id_institucion'] == ICOLVEN){
+if ($config['conf_id_institucion'] == ICOLVEN) {
 	require_once("apis-sion-modify-student.php");
 }
-$fechaNacimiento="";
-$fechaNacimientoU="";
-if(!empty($_POST["fNac"])){
-	$fechaNacimiento="mat_fecha_nacimiento='" . $_POST["fNac"] . "', ";
-	$fechaNacimientoU="uss_fecha_nacimiento='" . $_POST["fNac"] . "', ";
-}
-$_POST["ciudadR"] = trim($_POST["ciudadR"]);
-if($_POST["va_matricula"]==""){$_POST["va_matricula"]=0;}
 
-$esMediaTecnica=!is_null($_POST["tipoMatricula"]);
-if(!$esMediaTecnica){
+$fechaNacimiento  = "";
+$fechaNacimientoU = "";
+
+if (!empty($_POST["fNac"])) {
+	$fechaNacimiento  = "mat_fecha_nacimiento='" . $_POST["fNac"] . "', ";
+	$fechaNacimientoU = "uss_fecha_nacimiento='" . $_POST["fNac"] . "', ";
+}
+
+$_POST["ciudadR"] = trim($_POST["ciudadR"]);
+
+if ($_POST["va_matricula"] == "") {
+	$_POST["va_matricula"] = 0;
+}
+
+$esMediaTecnica = !is_null($_POST["tipoMatricula"]);
+
+if (!$esMediaTecnica) {
 	$datosEstudianteActual = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
 	$_POST["tipoMatricula"]=$datosEstudianteActual["mat_tipo_matricula"];
 }
-if(empty($_POST["tipoMatricula"])){ $_POST["tipoMatricula"]=GRADO_GRUPAL;}
 
-$procedencia=$_POST["lNac"];
-if(!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])){
-	$procedencia=$_POST["ciudadPro"];
+if (empty($_POST["tipoMatricula"])) {
+	$_POST["tipoMatricula"] = GRADO_GRUPAL;
 }
+
+$procedencia = $_POST["lNac"];
+
+if (!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])) {
+	$procedencia = $_POST["ciudadPro"];
+}
+
 if (!empty($_FILES['fotoMat']['name'])) {
-	$explode = explode(".", $_FILES['fotoMat']['name']);
+	$explode   = explode(".", $_FILES['fotoMat']['name']);
 	$extension = end($explode);
 
 	if($extension != 'jpg' && $extension != 'png'){
@@ -96,10 +108,11 @@ $update = [
 	'uss_fecha_nacimiento' => !empty($_POST["fNac"]) ? $_POST["fNac"] : NULL,
 	'uss_usuario'          => $_POST["nDoc"]	
 ];
+
 UsuariosPadre::actualizarUsuarios($config, $_POST["idU"], $update);
 
 //ACTUALIZAR EL ACUDIENTE 1	
-if($_POST["documentoA"]!=""){
+if ($_POST["documentoA"]!="") {
 
 	$datosIdAcudiente = Estudiantes::obtenerDatosEstudiante($_POST["id"]);
 
@@ -114,7 +127,7 @@ if($_POST["documentoA"]!=""){
 		include("../compartido/error-catch-to-report.php");
 	}		
 
-	if(!empty($acudiente)){
+	if (!empty($acudiente)) {
 
 		$update = [
 			"uss_usuario" => $_POST["usuarioAcudiente"],
@@ -133,7 +146,7 @@ if($_POST["documentoA"]!=""){
 		];
 		UsuariosPadre::actualizarUsuarios($config, $acudiente['uss_id'], $update);
 		$idAcudiente = $acudiente['uss_id'];
-	}else{
+	} else {
 		$idAcudiente = UsuariosPadre::guardarUsuario($conexionPDO, "uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_ocupacion, uss_email, uss_fecha_nacimiento, uss_permiso1, uss_genero, uss_celular, uss_foto, uss_idioma, uss_tipo_documento, uss_lugar_expedicion, uss_direccion, uss_apellido1, uss_apellido2, uss_nombre2, uss_documento, uss_tema_sidebar, uss_tema_header, uss_tema_logo, institucion, year, uss_id", [$_POST["documentoA"], $clavePorDefectoUsuarios, 3, mysqli_real_escape_string($conexion,$_POST["nombreA"]), 0, $_POST["ocupacionA"], $_POST["email"], $_POST["fechaNA"], 0, $_POST["generoA"], $_POST["celular"], 'default.png', 1, $_POST["tipoDAcudiente"], $_POST["lugardA"], $_POST["direccion"], mysqli_real_escape_string($conexion,$_POST["apellido1A"]), mysqli_real_escape_string($conexion,$_POST["apellido2A"]), mysqli_real_escape_string($conexion,$_POST["nombre2A"]), $_POST["documentoA"], 'cyan-sidebar-color', 'header-indigo', 'logo-indigo', $config['conf_id_institucion'], $_SESSION["bd"]]);
 	}
 
@@ -145,9 +158,10 @@ if($_POST["documentoA"]!=""){
 		WHERE upe_id_estudiante='".$_POST["id"]."' AND institucion={$config['conf_id_institucion']} AND year={$_SESSION["bd"]}");
 	} catch (Exception $e) {
 		include("../compartido/error-catch-to-report.php");
-	}	
+	}
 
-	$idInsercion=Utilidades::generateCode("UPE");
+	$idInsercion  =Utilidades::generateCode("UPE");
+
 	try {
 		mysqli_query($conexion, "INSERT INTO ".BD_GENERAL.".usuarios_por_estudiantes(upe_id, upe_id_usuario, upe_id_estudiante, institucion, year)VALUES('" .$idInsercion . "', '".$idAcudiente."', '".$_POST["id"]."', {$config['conf_id_institucion']}, {$_SESSION["bd"]})");
 	} catch (Exception $e) {
@@ -157,8 +171,7 @@ if($_POST["documentoA"]!=""){
 
 
 //ACTUALIZAR EL ACUDIENTE 2
-if(!empty($_POST["idAcudiente2"])){
-
+if (!empty($_POST["idAcudiente2"])) {
 
     $update = [
 		"uss_usuario" => $_POST["documentoA2"],
@@ -174,24 +187,24 @@ if(!empty($_POST["idAcudiente2"])){
 		"uss_nombre2" => $_POST["nombre2A2"],
 		"uss_documento" => $_POST["documentoA2"]
 	];
+
     UsuariosPadre::actualizarUsuarios($config, $_POST["idAcudiente2"], $update);
-}else {
-	if(!empty($_POST["documentoA2"])){
+} else {
+	if (!empty($_POST["documentoA2"])) {
 	
 		try {
 			$existeAcudiente2 = Usuarios::validarExistenciaUsuario($_POST["documentoA2"]);
 		} catch (Exception $e) {
 			include("../compartido/error-catch-to-report.php");
 		}
-	
-		if($existeAcudiente2>0){
+
+		if ($existeAcudiente2 > 0) {
 	
 			try {
 				$acudiente2 = Usuarios::obtenerDatosUsuario($_POST["documentoA2"]);
 			} catch (Exception $e) {
 				include("../compartido/error-catch-to-report.php");
 			}
-
 
 			$update = [
 				"uss_usuario" => $_POST["documentoA2"],
@@ -209,18 +222,20 @@ if(!empty($_POST["idAcudiente2"])){
 			];
 			UsuariosPadre::actualizarUsuarios($config, $acudiente2['uss_id'], $update);
 			$idAcudiente2 = $acudiente2['uss_id'];
-		}else{
+		} else {
 			$idAcudiente2 = UsuariosPadre::guardarUsuario($conexionPDO, "uss_usuario, uss_clave, uss_tipo, uss_nombre, uss_estado, uss_ocupacion, uss_email, uss_permiso1, uss_genero, uss_celular, uss_foto, uss_portada, uss_idioma, uss_tema, uss_lugar_expedicion, uss_direccion, uss_apellido1, uss_apellido2, uss_nombre2, uss_documento, institucion, year, uss_id", [$_POST["documentoA2"],$clavePorDefectoUsuarios,3,$_POST["nombreA2"],0,$_POST["ocupacionA2"],$_POST["email"],0,$_POST["generoA2"],$_POST["celular"], 'default.png', 'default.png', 1, 'green', $_POST["lugardA2"], $_POST["direccion"], $_POST["apellido1A2"], $_POST["apellido2A2"], $_POST["nombre2A2"],$_POST["documentoA2"], $config['conf_id_institucion'], $_SESSION["bd"]]);
 		}
-	
+
 		$update = ['mat_acudiente2' => $idAcudiente2];
 		Estudiantes::actualizarMatriculasPorId($config, $_POST["id"], $update);
 	}
 }
+
 include("../compartido/guardar-historial-acciones.php");
 
-$estadoSintia=true;
-$mensajeSintia='La información del estudiante se actualizó correctamente en SINTIA.';
+$estadoSintia  = true;
+$mensajeSintia = 'La información del estudiante se actualizó correctamente en SINTIA.';
 
 echo '<script type="text/javascript">window.location.href="estudiantes-editar.php?id='.base64_encode($_POST["id"]).'&stadsion='.base64_encode($estado).'&msgsion='.base64_encode($mensaje).'&stadsintia='.base64_encode($estadoSintia).'&msgsintia='.base64_encode($mensajeSintia).'";</script>';
+
 exit();
