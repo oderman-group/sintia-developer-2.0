@@ -25,6 +25,7 @@ foreach ($listaDatos  as $registro) {
             "periodo"     => $registro["dn_periodo"]
         ];
     }
+
     if (!empty($registro["niv_id"]) && !empty($registro["niv_definitiva"])) {
         $nivelaciones[$registro["mat_id"]][$registro["niv_id_asg"]] = [
             "id"          => $registro["niv_id"],
@@ -33,6 +34,7 @@ foreach ($listaDatos  as $registro) {
             "fecha"       => $registro["niv_fecha_nivelacion"]
         ];
     }
+    
     // Datos del estudiante
     if ($mat_id != $registro["mat_id"]) {
         $contarAreas = 0;

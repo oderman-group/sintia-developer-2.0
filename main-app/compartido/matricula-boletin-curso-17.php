@@ -15,40 +15,23 @@ require_once(ROOT_PATH . "/main-app/class/Boletin.php");
 require_once(ROOT_PATH . "/main-app/class/Indicadores.php");
 require_once(ROOT_PATH . "/main-app/class/Utilidades.php");
 
-$year = $_SESSION["bd"];
-if (isset($_GET["year"])) {
-    $year = base64_decode($_GET["year"]);
-}
+$year =isset($_GET["year"])?base64_decode($_GET["year"]):$_SESSION["bd"];;
 
-if (empty($_GET["periodo"])) {
+$periodoActual = empty($_GET["periodo"])?1:base64_decode($_GET["periodo"]);
 
-    $periodoActual = 1;
-} else {
+$grado =!empty($_GET["curso"])? base64_decode($_GET["curso"]):1;
 
-    $periodoActual = base64_decode($_GET["periodo"]);
-}
+$grupo =!empty($_GET["grupo"])? base64_decode($_GET["grupo"]):1;
+    
+$periodo = !empty($_GET["periodo"])?base64_decode($_GET["periodo"]):1;
 
-if (!empty($_GET["curso"])) {
-    $grado = base64_decode($_GET["curso"]);
-}
-
-if (!empty($_GET["grupo"])) {
-    $grupo = base64_decode($_GET["grupo"]);
-}
-
-if (!empty($_GET["periodo"])) {
-    $periodo = base64_decode($_GET["periodo"]);
-}
-
-if (!empty($_GET["year"])) {
-    $year = base64_decode($_GET["year"]);
-}
 $idEstudiante = '';
 if (!empty($_GET["id"])) {
 
     $filtro = " AND mat_id='" . base64_decode($_GET["id"]) . "'";
     $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
     $estudiante = $matriculadosPorCurso->fetch_assoc();
+
     if (!empty($estudiante)) {
         $idEstudiante = $estudiante["mat_id"];
         $grado        = $estudiante["mat_grado"];
@@ -57,6 +40,7 @@ if (!empty($_GET["id"])) {
         echo "Excepción catpurada: Estudiante no encontrado ";
         exit();
     }
+    
 }
 
 
@@ -64,13 +48,20 @@ $tamañoLogo = $_SESSION['idInstitucion'] == ICOLVEN ? 100 : 50;
 
 
 
-if ($periodoActual == 1) $periodoActuales = "Primero";
-
-if ($periodoActual == 2) $periodoActuales = "Segundo";
-
-if ($periodoActual == 3) $periodoActuales = "Tercero";
-
-if ($periodoActual == 4) $periodoActuales = "Final";
+switch ($periodoActual) {
+    case 1:
+        $periodoActuales = "Primero";
+        break;
+    case 2:
+        $periodoActuales = "Segundo";
+        break;
+    case 3:
+        $periodoActuales = "Tercero";
+        break;
+    case 4:
+        $periodoActuales = "Final";
+        break;
+}
 
 ?>
 
@@ -102,12 +93,15 @@ if ($periodoActual == 4) $periodoActuales = "Final";
 $listaDatos = [];
 $tiposNotas = [];
 $cosnultaTiposNotas = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $year);
+
 while ($row = $cosnultaTiposNotas->fetch_assoc()) {
     $tiposNotas[] = $row;
 }
 
 if (!empty($grado) && !empty($grupo) && !empty($periodo) && !empty($year)) {
+
     $datos = Boletin::datosBoletinIndicadores($grado, $grupo, $periodo, $year, $idEstudiante);
+
     while ($row = $datos->fetch_assoc()) {
         $listaDatos[] = $row;
     }
@@ -132,6 +126,7 @@ $cargas = [];
 foreach ($listaDatos  as $index => $registro) {
 
     if (!empty($registro["dn_id"]) && !empty($registro["dn_observacion"])) {
+
         $observacionesConvivencia[$registro["mat_id"]][$registro["dn_periodo"]] = [
             "id" => $registro["dn_id"],
             "estudiante" => $registro["dn_cod_estudiante"],
@@ -139,10 +134,12 @@ foreach ($listaDatos  as $index => $registro) {
             "periodo" => $registro["dn_periodo"]
         ];
     }
+
     if ($mat_id != $registro["mat_id"]) {
         $contarCargas = 0;
         $conteoEstudiante++;
         $nombre = Estudiantes::NombreCompletoDelEstudiante($registro);
+
         $estudiantes[$registro["mat_id"]] = [
             "mat_id"          => $registro["mat_id"],
             "nombre"          => $nombre,
@@ -152,14 +149,18 @@ foreach ($listaDatos  as $index => $registro) {
             "gra_nombre"      => $registro["gra_nombre"],
             "gru_nombre"      => $registro["gru_nombre"],
         ];
+
         $mat_id = $registro["mat_id"];
     }
+
     if ($mat_car != $registro["mat_id"] . '-' . $registro["car_id"]) {
         $contarIndicadores = 0;
         $contarCargas++;
+
         if ($registro["car_director_grupo"] == 1) {
             $directorGrupo = $registro;
         }
+
         $cargas[$registro["mat_id"]][$registro["car_id"]] = [
             "car_id"                    => $registro['car_id'],
             "nro"                       => $contarCargas,
@@ -170,10 +171,13 @@ foreach ($listaDatos  as $index => $registro) {
             "bol_observaciones_boletin" => $registro['bol_observaciones_boletin'],
             "car_ih"                    => $registro['car_ih'],
         ];
+
         $mat_car = $registro["mat_id"] . '-' . $registro["car_id"];
     }
+
     if ($mat_car_ind != $registro["mat_id"] . '-' . $registro["car_id"] . '-' . $registro["ind_id"]) {
         $contarIndicadores++;
+
         $indicadores[$registro["mat_id"]][$registro["car_id"]][] = [
             "ind_id"          => $registro["ind_id"],
             "car_id"          => $registro['car_id'],
@@ -181,8 +185,10 @@ foreach ($listaDatos  as $index => $registro) {
             "valor_indicador" => $registro['valor_indicador'],
             "ind_nombre"      => $registro['ind_nombre']
         ];
+        
         $mat_car_ind = $registro["mat_id"] . '-' . $registro["car_id"] . '-' . $registro["ind_id"];
     }
+
 }
 
 $observacionesConvivencia;
