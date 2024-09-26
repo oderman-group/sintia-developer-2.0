@@ -24,9 +24,11 @@ if (!empty($_GET["curso"])) {
     $grado = base64_decode($_GET["curso"]);
 }
 
+$grupo = 1;
 if (!empty($_GET["grupo"])) {
     $grupo = base64_decode($_GET["grupo"]);
 }
+
 $periodos = [];
 if (empty($_GET["periodo"])) {
     $periodoSeleccionado = 1;
@@ -92,7 +94,7 @@ if ($periodoSeleccionado == 4) $periodoActuales = "Final";
     <?php
     $listaDatos = [];
     $tiposNotas = [];
-    $indicadoresCarga = [];
+    
     $cosnultaTiposNotas = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $year);
     while ($row = $cosnultaTiposNotas->fetch_assoc()) {
         $tiposNotas[] = $row;
@@ -104,6 +106,7 @@ if ($periodoSeleccionado == 4) $periodoActuales = "Final";
         }
     }
 
+    $indicadoresCarga = [];
     $conCargas = CargaAcademica::traerIndicadoresCargasPorCursoGrupo($config, $grado, $grupo, $periodoSeleccionado, $year);
     while ($row = mysqli_fetch_array($conCargas, MYSQLI_BOTH)) {
         $indicadoresCarga[] = $row;
@@ -118,258 +121,212 @@ if ($periodoSeleccionado == 4) $periodoActuales = "Final";
     ?>
 
 
-    <!-- <table width="100%" cellspacing="0" cellpadding="0" rules="all" border="0" align="center"> -->
+    <?php include("../compartido/agrupar-datos-boletin-periodos.php") ?>
 
+    <body style="font-family:Arial; font-size:9px;"></body>
     <?php
-    $conteoEstudiante = 0;
-    $ultimoRegistro = false;
-    $contarCargas = 0;
-    $mat_id = "";
-    $mat_car = "";
-    $mat_car_periodo = "";
-    $directorGrupo = "";
-    $promedioMateria = 0;
-    $totalIh = 0;
-    $totalFallasPeriodo = [];
-    $totalNotasPeriodo = [];
-    $promedioMateria = 0;
-    $observacionesConvivencia = [];
-    $materiasPerdidas = 0;
-    $length = count($listaDatos);
-    foreach ($listaDatos  as $index => $registro) {
-        if ($index < $length - 1) {
-            $siguienteRegistro = $listaDatos[$index + 1];
-        } else {
-            $siguienteRegistro["bol_periodo"] = "";
-            $siguienteRegistro["mat_id"] = "";
-            $ultimoRegistro = true;
-        }
-
-        if (!empty($registro["dn_id"]) && !empty($registro["dn_observacion"])) {
-            if (!array_key_exists($registro["mat_id"], $observacionesConvivencia)) {
-                $observacionesConvivencia[$registro["mat_id"]] = [
-                    "id" => $registro["dn_id"],
-                    "estudiante" => $registro["dn_cod_estudiante"],
-                    "observacion" => $registro["dn_observacion"],
-                    "periodo" => $registro["dn_periodo"]
-                ];
-            }
-        }
-        if ($mat_id != $registro["mat_id"]) {
-            $contarCargas = 0;
-            $conteoEstudiante++;
-            $nombre = Estudiantes::NombreCompletoDelEstudiante($registro);
+    foreach ($estudiantes  as $estudiante) {
+        $totalNotasPeriodo = [];
+        $fallasPeriodo     = [];
+        $totalIh           = 0;
+        $contarCargas      = 0;
+        $materiasPerdidas  = 0;
     ?>
-            <div>
-                <div style="float:left; width:50%"><img src="../files/images/logo/<?= $informacion_inst["info_logo"] ?>" width="80"></div>
-                <div style="float:right; width:50%">
-                    <table width="100%" cellspacing="5" cellpadding="5" border="1" rules="all">
-                        <tr>
-                            <td>C&oacute;digo:<br> <?= strpos($registro["mat_documento"], '.') !== true && is_numeric($registro["mat_documento"]) ? number_format($registro["mat_documento"], 0, ",", ".") : $registro["mat_documento"]; ?></td>
-                            <td>Nombre:<br> <?= $nombre ?></td>
-                            <td>Grado:<br> <?= $registro["gra_nombre"] . " " . $registro["gru_nombre"]; ?></td>
-                            <td>Puesto Curso:<br> <?= isset($puestosCurso[$estudiante["mat_id"]]) ? $puestosCurso[$estudiante["mat_id"]] : 'N/A'; ?><?= " de " . count($puestosCurso); ?></td>
-                        </tr>
-
-                        <tr>
-                            <td>Jornada:<br> Mañana</td>
-                            <td>Sede:<br> <?= $informacion_inst["info_nombre"] ?></td>
-                            <td>Periodo:<br> <b><?= $periodoSeleccionado . " (" . $year . ")"; ?></b></td>
-                            <td>Fecha Impresión:<br> <?= date("d/m/Y H:i:s"); ?></td>
-                        </tr>
-                    </table>
-                    <p>&nbsp;</p>
-                </div>
-            </div>
-            <table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1">
-                <thead>
-                    <tr style="font-weight:bold; text-align:center;">
-                        <td width="20%" rowspan="2">ASIGNATURAS</td>
-                        <td width="2%" rowspan="2">I.H.</td>
-
-                        <?php for ($j = 1; $j <= $periodoSeleccionado; $j++) { ?>
-                            <td width="3%" colspan="3"> Periodo<?= $j ?></td>
-                        <?php } ?>
-                        <td width="3%" colspan="3">Final</td>
+        <div>
+            <div style="float:left; width:50%"><img src="../files/images/logo/<?= $informacion_inst["info_logo"] ?>" width="80"></div>
+            <div style="float:right; width:50%">
+                <table width="100%" cellspacing="5" cellpadding="5" border="1" rules="all">
+                    <tr>
+                        <td>C&oacute;digo:<br> <?= strpos($estudiante["mat_documento"], '.') !== true && is_numeric($estudiante["mat_documento"]) ? number_format($estudiante["mat_documento"], 0, ",", ".") : $estudiante["mat_documento"]; ?></td>
+                        <td>Nombre:<br> <?= $nombre ?></td>
+                        <td>Grado:<br> <?= $estudiante["gra_nombre"] . " " . $estudiante["gru_nombre"]; ?></td>
+                        <td>Puesto Curso:<br> <?= isset($puestosCurso[$estudiante["mat_id"]]) ? $puestosCurso[$estudiante["mat_id"]] : 'N/A'; ?><?= " de " . count($puestosCurso); ?></td>
                     </tr>
-                    <tr style="font-weight:bold; text-align:center;">
-                        <?php for ($j = 1; $j <= $periodoSeleccionado; $j++) { ?>
-                            <td width="3%">Fallas</td>
-                            <td width="3%">Nota</td>
-                            <td width="3%">Nivel</td>
-                        <?php } ?>
+
+                    <tr>
+                        <td>Jornada:<br> Mañana</td>
+                        <td>Sede:<br> <?= $informacion_inst["info_nombre"] ?></td>
+                        <td>Periodo:<br> <b><?= $periodoSeleccionado . " (" . $year . ")"; ?></b></td>
+                        <td>Fecha Impresión:<br> <?= date("d/m/Y H:i:s"); ?></td>
+                    </tr>
+                </table>
+                <p>&nbsp;</p>
+            </div>
+        </div>
+        <table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1">
+            <thead>
+                <tr style="font-weight:bold; text-align:center;">
+                    <td width="20%" rowspan="2">ASIGNATURAS</td>
+                    <td width="2%" rowspan="2">I.H.</td>
+
+                    <?php for ($j = 1; $j <= $periodoSeleccionado; $j++) { ?>
+                        <td width="3%" colspan="3"> Periodo <?= $j ?></td>
+                    <?php } ?>
+                    <td width="3%" colspan="3">Final</td>
+                </tr>
+                <tr style="font-weight:bold; text-align:center;">
+                    <?php for ($j = 1; $j <= $periodoSeleccionado; $j++) { ?>
+                        <td width="3%">Fallas</td>
                         <td width="3%">Nota</td>
                         <td width="3%">Nivel</td>
-                        <td width="3%">Hab</td>
-                    </tr>
-                </thead>
-            <?php $mat_id = $registro["mat_id"];
-        } ?>
-            <?php if ($mat_car != $registro["mat_id"] . '-' . $registro["car_id"]) {
-                $contarCargas++;
-                $fondoFila = ($contarCargas % 2 == 1) ? '#EAEAEA' : '#FFF';
-                $directorGrupo = ($registro["car_director_grupo"] == 1) ? $registro : null;
-                $totalIh += $registro['car_ih'];
+                    <?php } ?>
+                    <td width="3%">Nota</td>
+                    <td width="3%">Nivel</td>
+                    <td width="3%">Hab</td>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($areas[$estudiante["mat_id"]]  as  $area) {  ?>
+                    <?php foreach ($cargas[$estudiante["mat_id"]][$area["ar_id"]]  as  $carga) {
+                        $fondoFila = ($carga["nro"] % 2 == 1) ? '#EAEAEA' : '#FFF';
+                        $totalIh += $registro['car_ih'];
+                        $contarCargas++;
+                    ?>
+                        <tr style="background:<?= $fondoFila; ?>">
+                            <td><?= $carga['mat_nombre']; ?></td>
+                            <td align="center"><?= $carga['car_ih']; ?></td>
+                            <?php
+                            $promedioMateria = 0;
+                            for ($j = 1; $j <= $periodoSeleccionado; $j++) {
+                                $nota = isset($notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["bol_nota"])
+                                    ? $notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["bol_nota"]
+                                    : 0;
+                                $fallas = isset($notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["aus_ausencias"])
+                                    ? $notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["aus_ausencias"]
+                                    : 0;
+                                $desempeno = Boletin::determinarRango($nota, $tiposNotas);
+                                $promedioMateria += $nota;
+                                if (isset($totalNotasPeriodo[$j])) {
+                                    $totalNotasPeriodo[$j] += $nota;
+                                } else {
+                                    $totalNotasPeriodo[$j] = $nota;
+                                }
+                                if (isset($fallasPeriodo[$j])) {
+                                    $fallasPeriodo[$j] += $fallas;
+                                } else {
+                                    $fallasPeriodo[$j] = $fallas;
+                                }
+                            ?>
+                                <td align="center"><?= $fallas == 0 ? '' : intval($fallas); ?></td>
+                                <td align="center"><?= $nota ?></td>
+                                <td align="center"><?= $desempeno["notip_nombre"] ?></td>
+                            <?php }
+                            $promedioFinal = round(($promedioMateria / $periodoSeleccionado), 2);	// SI PERDIÓ LA MATERIA A FIN DE AÑO
+                            if($promedioMateria<$config["conf_nota_minima_aprobar"]){
+                                $notaNivelacion=isset($nivelacion[$estudiante["mat_id"]][$carga["car_id"]]['niv_definitiva'])?
+                                $nivelacion[$estudiante["mat_id"]][$carga["car_id"]]['niv_definitiva']:0;                                ;
+                                if($notaNivelacion>=$config["conf_nota_minima_aprobar"]){
+                                    $promedioMateriaFinal = $notaNivelacion;
+                                }else{
+                                    $materiasPerdidas++;
+                                }	
+                            }
+                            $desempenoFinal = Boletin::determinarRango($promedioFinal, $tiposNotas);
+                            ?>
+                            <td align="center"><?= $promedioFinal == 0 ? '' : $promedioFinal; ?></td>
+                            <td align="center"><?= $desempenoFinal["notip_nombre"]  ?></td>
+                            <td align="center">&nbsp;</td>
+                        </tr>
+                    <?php } ?>
+                <?php } ?>
+            </tbody>
+            <tfoot>
+                <tr style="font-weight:bold; text-align:center;">
+                    <td style="text-align:left;">PROMEDIO/TOTAL</td>
+                    <td><?= $totalIh; ?></td>
+                    <?php
+                    $promedioTotal = 0;
+                    for ($j = 1; $j <= $periodoSeleccionado; $j++) {
+                        $promedioGeneral = round($totalNotasPeriodo[$j] / $contarCargas, 2);
+                        $promedioTotal += $promedioGeneral;
+                        $desempenoGeneral = Boletin::determinarRango($promedioGeneral, $tiposNotas);
+                    ?>
+                        <td><?= $fallasPeriodo[$j] == 0 ? '' : $fallasPeriodo[$j]; ?></td>
+                        <td><?= $promedioGeneral ?></td>
+                        <td><?= $desempenoGeneral["notip_nombre"] ?></td>
+                    <?php } ?>
+                    <?php
+                    $promedioTotal = round($promedioTotal / $periodoSeleccionado, 2);
+                    $desempenoTotal = Boletin::determinarRango($promedioTotal, $tiposNotas); ?>
+                    <td><?= $promedioTotal ?></td>
+                    <td><?= $desempenoTotal["notip_nombre"] ?></td>
+                    <td>-</td>
+                </tr>
+            </tfoot>
+
+        </table>
+        <p>&nbsp;</p>
+        <table width="100%" cellspacing="5" cellpadding="5" rules="none" border="0">
+            <tr>
+                <td width="40%">
+                    ________________________________________________________________<br>
+                    <?php if (!empty($directorGrupo['uss_nombre'])) echo strtoupper($directorGrupo['uss_nombre']); ?><br>
+                    DIRECTOR DE CURSO
+                </td>
+                <td width="20%">
+                    <table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1">
+                        <?php
+                        $contador = 1;
+                        foreach ($tiposNotas as $desemp) {
+                            if ($contador % 2 == 1) {
+                                $fondoFila = '#EAEAEA';
+                            } else {
+                                $fondoFila = '#FFF';
+                            } ?>
+                            <tr style="background:<?= $fondoFila; ?>">
+                                <td><?= $desemp['notip_nombre']; ?></td>
+                                <td align="center"><?= $desemp['notip_desde'] . " - " . $desemp['notip_hasta']; ?></td>
+                            </tr>
+                        <?php $contador++;
+                        } ?>
+                    </table>
+                </td>
+
+                <?php
+                $msjPromocion = '';
+                if ($periodoSeleccionado == $config['conf_periodos_maximos']) {
+                    if ($materiasPerdidas == 0) {
+                        $msjPromocion = 'PROMOVIDO';
+                    } else {
+                        $msjPromocion = 'NO PROMOVIDO';
+                    }
+                }
+
+                ?>
+                <td width="60%">
+                    <p style="font-weight:bold;">Observaciones: <b><?= $msjPromocion; ?></b></p>
+                    ______________________________________________________________________<br><br>
+                    ______________________________________________________________________<br><br>
+                    ______________________________________________________________________
+                </td>
+            </tr>
+        </table>
+        <div id="saltoPagina"></div>
+        <table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1">
+            <thead>
+                <tr style="font-weight:bold; text-align:center;">
+                    <td width="30%">Asignaturas</td>
+                    <td width="70%">Contenidos Evaluados</td>
+                </tr>
+            </thead>
+
+            <?php
+            foreach ($indicadoresCarga as $datosCargas) {
             ?>
                 <tbody>
-                    <tr style="background:<?= $fondoFila; ?>">
-                        <td><?= $registro['mat_nombre']; ?></td>
-                        <td align="center"><?= $registro['car_ih']; ?></td>
-                    <?php $mat_car = $registro["mat_id"] . '-' . $registro["car_id"];
-                } ?>
-                    <?php if ($mat_car_periodo != $registro["mat_id"] . '-' . $registro["car_id"] . '-' . $registro["bol_periodo"]) {
-                        $nota = $registro["bol_nota"];
-                        if (isset($totalFallasPeriodo[$registro["bol_periodo"]])) {
-                            $totalFallasPeriodo[$registro["bol_periodo"]] += $registro['aus_ausencias'];
-                        } else {
-                            $totalFallasPeriodo[$registro["bol_periodo"]] = $registro['aus_ausencias'];
-                        }
-
-                        $promedioMateria += $nota;
-
-                        if (isset($totalNotasPeriodo[$registro["bol_periodo"]])) {
-                            $totalNotasPeriodo[$registro["bol_periodo"]] += $nota;
-                        } else {
-                            $totalNotasPeriodo[$registro["bol_periodo"]] = $nota;
-                        }
-                        $desempeno = Boletin::determinarRango($nota, $tiposNotas);
-                    ?>
-                        <td align="center"><?= intval($registro['aus_ausencias']); ?></td>
-                        <td align="center"><?= $registro['bol_nota']; ?></td>
-                        <td align="center"><?= $desempeno["notip_nombre"] ?></td>
-                    <?php $mat_car_periodo = $registro["mat_id"] . '-' . $registro["car_id"] . '-' . $registro["bol_periodo"];
-                    } ?>
-                    <?php if ($siguienteRegistro["bol_periodo"] <= $registro["bol_periodo"]) {
-                        $promedioFinal = round($promedioMateria / $periodoSeleccionado, 2);
-                        $desempenoFinal = Boletin::determinarRango($promedioFinal, $tiposNotas); ?>
-                        <td align="center"><?= $promedioFinal; ?></td>
-                        <td align="center"><?= $desempenoFinal["notip_nombre"]; ?></td>
-                        <td align="center">&nbsp;</td>
+                    <tr style="color:#585858;">
+                        <td><?= $datosCargas['mat_nombre']; ?><br>
+                            <span style="color:#C1C1C1;"><?= UsuariosPadre::nombreCompletoDelUsuario($datosCargas); ?></span>
+                        </td>
+                        <td><?= $datosCargas['ind_nombre']; ?></td>
                     </tr>
                 </tbody>
-            <?php $promedioMateria = 0;
-                    } else {
-                        continue;
-                    } ?>
-            <?php if ($mat_id != $siguienteRegistro["mat_id"] ||  $ultimoRegistro == 1) { ?>
-                <tfoot>
-                    <tr style="font-weight:bold; text-align:center;">
-                        <td style="text-align:left;">PROMEDIO/TOTAL</td>
-                        <td><?= $totalIh; ?></td>
-                        <?php
-                        $promedioTotal = 0;
-                        for ($j = 1; $j <= $periodoSeleccionado; $j++) {
-                            $promedioGeneral = round($totalNotasPeriodo[$j] / $contarCargas, 2);
-                            $promedioTotal += $promedioGeneral;
-                            $desempenoGeneral = Boletin::determinarRango($promedioGeneral, $tiposNotas);
-                        ?>
-                            <td><?= $totalFallasPeriodo[$j]; ?></td>
-                            <td><?= $promedioGeneral ?></td>
-                            <td><?= $desempenoGeneral["notip_nombre"] ?></td>
-                        <?php } ?>
-                        <?php
-                        $promedioTotal = round($promedioTotal / $periodoSeleccionado, 2);
-                        $desempenoTotal = Boletin::determinarRango($promedioTotal, $tiposNotas); ?>
-                        <td><?= $promedioTotal ?></td>
-                        <td><?= $desempenoTotal["notip_nombre"] ?></td>
-                        <td>-</td>
-                    </tr>
-                </tfoot>
-            </table>
-            <p>&nbsp;</p>
-            <table width="100%" cellspacing="5" cellpadding="5" rules="none" border="0">
-                <tr>
-                    <td width="40%">
-                        ________________________________________________________________<br>
-                        <?php if (!empty($directorGrupo['uss_nombre'])) echo strtoupper($directorGrupo['uss_nombre']); ?><br>
-                        DIRECTOR DE CURSO
-                    </td>
-                    <td width="20%">
-                        <table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1">
-                            <?php
-                            $contador = 1;
-                            foreach ($tiposNotas as $desemp) {
-                                if ($contador % 2 == 1) {
-                                    $fondoFila = '#EAEAEA';
-                                } else {
-                                    $fondoFila = '#FFF';
-                                } ?>
-                                <tr style="background:<?= $fondoFila; ?>">
-                                    <td><?= $desemp['notip_nombre']; ?></td>
-                                    <td align="center"><?= $desemp['notip_desde'] . " - " . $desemp['notip_hasta']; ?></td>
-                                </tr>
-                            <?php $contador++;
-                            } ?>
-                        </table>
-                    </td>
-
-                    <?php
-                    $msjPromocion = '';
-                    if ($periodoSeleccionado == $config['conf_periodos_maximos']) {
-                        if ($materiasPerdidas == 0) {
-                            $msjPromocion = 'PROMOVIDO';
-                        } else {
-                            $msjPromocion = 'NO PROMOVIDO';
-                        }
-                    }
-
-                    ?>
-                    <td width="60%">
-                        <p style="font-weight:bold;">Observaciones: <b><?= $msjPromocion; ?></b></p>
-                        ______________________________________________________________________<br><br>
-                        ______________________________________________________________________<br><br>
-                        ______________________________________________________________________
-                    </td>
-                </tr>
-            </table>
-            <p>&nbsp;</p>
-
-            <table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1">
-                <thead>
-                    <tr style="font-weight:bold; text-align:center;">
-                        <td width="30%">Asignaturas</td>
-                        <td width="70%">Contenidos Evaluados</td>
-                    </tr>
-                </thead>
-
-                <?php
-                foreach ($indicadoresCarga as $datosCargas) {
-                ?>
-                    <tbody>
-                        <tr style="color:#585858;">
-                            <td><?= $datosCargas['mat_nombre']; ?><br>
-                                <span style="color:#C1C1C1;"><?= UsuariosPadre::nombreCompletoDelUsuario($datosCargas); ?></span>
-                            </td>
-                            <td><?= $datosCargas['ind_nombre']; ?></td>
-                        </tr>
-                    </tbody>
-                <?php
-                }
-                ?>
-            </table>
-            <p>&nbsp;</p>
-            <p>&nbsp;</p>
-            <div id="saltoPagina"></div>
-
-        <?php
-                $totalIh = 0;
-                $totalFallasPeriodo = [];
-                $totalNotasPeriodo = [];
-            } ?>
-        <!-- </td>
-                </tr> -->
-
-
-
-
-
-
-    <?php } ?>
-
-
-    <!-- </table> -->
-
-
+            <?php
+            }
+            ?>
+        </table>
+    <?php }; ?>
+    <div id="saltoPagina"></div>
 
 
 </body>

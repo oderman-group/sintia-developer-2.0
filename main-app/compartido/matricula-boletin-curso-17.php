@@ -132,7 +132,7 @@ $cargas = [];
 foreach ($listaDatos  as $index => $registro) {
 
     if (!empty($registro["dn_id"]) && !empty($registro["dn_observacion"])) {
-        $observacionesConvivencia[$registro["mat_id"]][] = [
+        $observacionesConvivencia[$registro["mat_id"]][$registro["dn_periodo"]] = [
             "id" => $registro["dn_id"],
             "estudiante" => $registro["dn_cod_estudiante"],
             "observacion" => $registro["dn_observacion"],

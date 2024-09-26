@@ -32,6 +32,7 @@ if (!empty($_GET["curso"])) {
     $grado = base64_decode($_GET["curso"]);
 }
 
+$grupo = 1;
 if (!empty($_GET["grupo"])) {
     $grupo = base64_decode($_GET["grupo"]);
 }
@@ -145,7 +146,7 @@ if ($periodoActual == 4) $periodoActuales = "Final";
             }
 
             if (!empty($registro["dn_id"])&& !empty($registro["dn_observacion"])) {
-                    $observacionesConvivencia[$registro["mat_id"]][] = [
+                    $observacionesConvivencia[$registro["mat_id"]][$registro["dn_periodo"]] = [
                         "id" => $registro["dn_id"],
                         "estudiante" => $registro["dn_cod_estudiante"],
                         "observacion" => $registro["dn_observacion"],

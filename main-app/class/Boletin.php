@@ -1203,6 +1203,7 @@ class Boletin {
                     docen.*,
                     indv.*,
                     bol.*,
+                    niv.*,
                     disi.*
                 FROM " . BD_ACADEMICA . ".academico_matriculas mat
 
@@ -1213,13 +1214,13 @@ class Boletin {
                 AND car.car_curso   = mat.mat_grado
 
                 LEFT JOIN " . BD_GENERAL . ".usuarios docen
-				ON  docen.institucion  = car.institucion
-                AND docen.year         = car.year
+				ON  docen.institucion  = mat.institucion
+                AND docen.year         = mat.year
 				AND docen.uss_id       = car.car_docente
             
                 INNER JOIN " . BD_ACADEMICA . ".academico_materias mate 
-                ON  mate.institucion = car.institucion
-                AND mate.year        = car.year
+                ON  mate.institucion = mat.institucion
+                AND mate.year        = mat.year
                 AND mate.mat_id      = car.car_materia
 
                 INNER JOIN " . BD_ACADEMICA . ".academico_grados gra 
@@ -1233,8 +1234,8 @@ class Boletin {
                 AND gru.gru_id      = mat.mat_grupo
 
                 INNER JOIN " . BD_ACADEMICA . ".academico_areas are 
-                ON  are.institucion = car.institucion
-                AND are.year        = car.year
+                ON  are.institucion = mat.institucion
+                AND are.year        = mat.year
                 AND are.ar_id       = mate.mat_area
 
                 LEFT JOIN " . BD_ACADEMICA . ".academico_boletin bol
@@ -1245,15 +1246,21 @@ class Boletin {
                 AND   bol_periodo     = ?
 
                 INNER JOIN " . BD_ACADEMICA . ".academico_indicadores_carga indc 
-                ON  indc.institucion  = car.institucion
-                AND indc.year         = car.year
+                ON  indc.institucion  = mat.institucion
+                AND indc.year         = mat.year
                 AND indc.ipc_periodo  = bol.bol_periodo
                 AND indc.ipc_carga    = bol.bol_carga
 
                 INNER JOIN " . BD_ACADEMICA . ".academico_indicadores ind 
-                ON ind.institucion    = car.institucion
-                AND ind.year          = car.year
+                ON ind.institucion    = mat.institucion
+                AND ind.year          = mat.year
                 AND ind.ind_id        = indc.ipc_indicador
+
+                LEFT JOIN " . BD_ACADEMICA . ".academico_nivelaciones niv 
+                ON  niv.institucion        = mat.institucion
+                AND niv.year               = mat.year
+                AND niv.niv_cod_estudiante = mat.mat_id
+                AND niv.niv_id_asg         = car.car_id
 
                 LEFT JOIN (
                 SELECT
@@ -1445,7 +1452,7 @@ class Boletin {
                 return $array; // Devuelve el array que contiene el valor en su rango
             }
         }
-        return $array=["notip_nombre" => "Fuera del rango permitido"]; //
+        return $array=["notip_nombre" => " "]; //
     }
     
 }

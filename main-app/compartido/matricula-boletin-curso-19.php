@@ -33,6 +33,7 @@ if (!empty($_GET["curso"])) {
     $grado = base64_decode($_GET["curso"]);
 }
 
+$grupo = 1;
 if (!empty($_GET["grupo"])) {
     $grupo = base64_decode($_GET["grupo"]);
 }
@@ -158,92 +159,7 @@ if ($grado >= 12 && $grado <= 15) {
 }
 ?>
 
-<?php
-// se reparte la informacion en arrays
-$conteoEstudiante         = 0;
-$contarIndicadores        = 0;
-$contarAreas              = 0;
-$contarCargas             = 0;
-$mat_id                   = "";
-$mat_ar                   = "";
-$mat_ar_car               = "";
-$mat_ar_car_periodo       = "";
-$directorGrupo            = "";
-$observacionesConvivencia = [];
-$estudiantes              = [];
-$areas                    = [];
-$cargas                   = [];
-$notasPeriodos            = [];
-foreach ($listaDatos  as $registro) {
-    // Observacion por estudainte
-    if (!empty($registro["dn_id"]) && !empty($registro["dn_observacion"])) {
-        $observacionesConvivencia[$registro["mat_id"]][] = [
-            "id"          => $registro["dn_id"],
-            "estudiante"  => $registro["dn_cod_estudiante"],
-            "observacion" => $registro["dn_observacion"],
-            "periodo"     => $registro["dn_periodo"]
-        ];
-    }
-    // Datos del estudiante
-    if ($mat_id != $registro["mat_id"]) {
-        $contarAreas = 0;
-        $contarCargas = 0;
-
-        $conteoEstudiante++;
-        $nombre = Estudiantes::NombreCompletoDelEstudiante($registro);
-        $estudiantes[$registro["mat_id"]] = [
-            "mat_id"        => $registro["mat_id"],
-            "nombre"        => $nombre,
-            "mat_documento" => $registro["mat_documento"],
-            "nro"           => $conteoEstudiante,
-            "mat_matricula" => $registro["mat_matricula"],
-            "gra_nombre"    => $registro["gra_nombre"],
-            "gru_nombre"    => $registro["gru_nombre"],
-        ];
-        $mat_id = $registro["mat_id"];
-    }
-    // Datos de las areas
-    if ($mat_ar != $registro["mat_id"] . '-' . $registro["ar_id"]) {
-        $contarAreas++;
-        if ($registro["car_director_grupo"] == 1) {
-            $directorGrupo = $registro;
-        }
-        $areas[$registro["mat_id"]][$registro["ar_id"]] = [
-            "ar_id"        => $registro['ar_id'],
-            "nro"          => $contarAreas,
-            "ar_nombre"    => $registro['ar_nombre']
-        ];
-        $mat_ar = $registro["mat_id"] . '-' . $registro["ar_id"];
-    }
-    // Datos de las cargas
-    if ($mat_ar_car != $registro["mat_id"] . '-' . $registro["ar_id"] . '-' . $registro["car_id"]) {
-        $contarCargas++;
-        $cargas[$registro["mat_id"]][$registro['car_id']] = [
-            "car_id"                    => $registro['car_id'],
-            "nro"                       => $contarCargas,
-            "mat_nombre"                => $registro['mat_nombre'],
-            "docente"                   => $registro,
-            "bol_periodo"               => $registro["bol_periodo"],
-            "bol_nota"                  => $registro['bol_nota'],
-            "bol_tipo"                  => $registro['bol_tipo'],
-            "bol_observaciones_boletin" => $registro['bol_observaciones_boletin'],
-            "car_ih"                    => $registro['car_ih'],
-        ];
-        $mat_ar_car =  $registro["mat_id"] . '-' . $registro["ar_id"] . '-' . $registro["car_id"];
-    }
-    // Datos de los periodos
-    if ($mat_ar_car_periodo != $registro["mat_id"] . '-' . $registro["ar_id"] . '-' . $registro["car_id"] . '-' . $registro["bol_periodo"]) {
-        $notasPeriodos[$registro["mat_id"]][$registro['car_id']][$registro["bol_periodo"]] = [
-            "car_id"                    => $registro['car_id'],
-            "bol_periodo"               => $registro["bol_periodo"],
-            "bol_nota"                  => $registro['bol_nota'],
-            "bol_tipo"                  => $registro['bol_tipo'],
-            "bol_observaciones_boletin" => $registro['bol_observaciones_boletin'],
-            "aus_ausencias"             => $registro['aus_ausencias'],
-        ];
-        $mat_ar_car_periodo =  $registro["mat_id"] . '-' . $registro["ar_id"] . '-' . $registro["car_id"] . '-' . $registro["bol_periodo"];
-    }
-} ?>
+<?php include("../compartido/agrupar-datos-boletin-periodos.php") ?>
 
 <body style="font-family:Arial;">
     <?php foreach ($estudiantes  as  $estudiante) {
@@ -327,62 +243,65 @@ foreach ($listaDatos  as $registro) {
             <tbody>
                 <?php 
                 $cantidadMaterias = 0;
-                foreach ($cargas[$estudiante["mat_id"]] as $carga) {
-                    $cantidadMaterias++;
+                foreach ($areas[$estudiante["mat_id"]]  as  $area) {  ?>
+                    <?php                    
+                    foreach ($cargas[$estudiante["mat_id"]][$area["ar_id"]] as $carga) {
+                        $cantidadMaterias++;
                     ?>
-                    <tr>
-                        <td><?= $carga["mat_nombre"] ?></td>
-                        <td align="center"><?= $carga['car_ih'] ?></td>
-                        <?php
-                        $promedioMateria = 0;
-                        $fallasAcumuladas = 0;
-                        for ($j = 1; $j <= $periodoSeleccionado; $j++) {
-                            $nota = isset($notasPeriodos[$estudiante["mat_id"]][$carga["car_id"]][$j]["bol_nota"])
-                                ? $notasPeriodos[$estudiante["mat_id"]][$carga["car_id"]][$j]["bol_nota"]
-                                : 0;
-                            $fallas = isset($notasPeriodos[$estudiante["mat_id"]][$carga["car_id"]][$j]["aus_ausencias"])
-                                ? $notasPeriodos[$estudiante["mat_id"]][$carga["car_id"]][$j]["aus_ausencias"]
-                                : 0;
-                            $nota =      Boletin::agregarDecimales($nota);
-                            $desempeno = Boletin::determinarRango($nota, $tiposNotas);
-                            $promedioMateria += $nota;
-                            $fallasAcumuladas += $fallas;
-                            if (isset($totalNotasPeriodo[$j])) {
-                                $totalNotasPeriodo[$j] += $nota;
-                            } else {
-                                $totalNotasPeriodo[$j] = $nota;
-                            }
-                            $background = $j != $periodoSeleccionado ? 'background: #9ed8ed;' : '';
-                        ?>
-                            <td align="center" align="center" style=" <?= $background ?> font-size:12px;"><?= $nota ?></td>
-                        <?php }
-                        ?>
-                        <td align="center"><?= $desempeno['notip_nombre'] ?></td>
-                        <?php
-                        $notaAcumulada = $promedioMateria / $periodoSeleccionado;
-                        $notaAcumulada = round($notaAcumulada, 2);
-                        $desempenoAcumulado = Boletin::determinarRango($notaAcumulada, $tiposNotas); ?>
-                        <td align="center"> <?= $fallasAcumuladas ?></td>
-                        <td align="center" style=" font-size:12px;"><?= $notaAcumulada ?></td>
-                        <td align="center" style=" font-size:12px;"><?= $desempenoAcumulado["notip_nombre"] ?></td>
-                    </tr>
+                        <tr>
+                            <td><?= $carga["mat_nombre"] ?></td>
+                            <td align="center"><?= $carga['car_ih'] ?></td>
+                            <?php
+                            $promedioMateria = 0;
+                            $fallasAcumuladas = 0;
+                            for ($j = 1; $j <= $periodoSeleccionado; $j++) {
+                                $nota = isset($notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["bol_nota"])
+                                    ? $notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["bol_nota"]
+                                    : 0;
+                                $fallas = isset($notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["aus_ausencias"])
+                                    ? $notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["aus_ausencias"]
+                                    : 0;
+                                $nota =      Boletin::agregarDecimales($nota);
+                                $desempeno = Boletin::determinarRango($nota, $tiposNotas);
+                                $promedioMateria  += $nota;
+                                $fallasAcumuladas += $fallas;
+                                if (isset($totalNotasPeriodo[$j])) {
+                                    $totalNotasPeriodo[$j] += $nota;
+                                } else {
+                                    $totalNotasPeriodo[$j] = $nota;
+                                }
+                                $background = $j != $periodoSeleccionado ? 'background: #9ed8ed;' : '';
+                            ?>
+                                <td align="center" align="center" style=" <?= $background ?> font-size:12px;"><?= $nota ?></td>
+                            <?php }
+                            ?>
+                            <td align="center"><?= $desempeno['notip_nombre'] ?></td>
+                            <?php
+                            $notaAcumulada = $promedioMateria / $periodoSeleccionado;
+                            $notaAcumulada = round($notaAcumulada, 2);
+                            $desempenoAcumulado = Boletin::determinarRango($notaAcumulada, $tiposNotas); ?>
+                            <td align="center"> <?= $fallasAcumuladas ?></td>
+                            <td align="center" style=" font-size:12px;"><?= $notaAcumulada ?></td>
+                            <td align="center" style=" font-size:12px;"><?= $desempenoAcumulado["notip_nombre"] .'-'.$cantidadMaterias?></td>
+                        </tr>
+                    <?php } ?>
                 <?php } ?>
             </tbody>
             <tfoot style="font-weight:bold; font-size: 13px;">
                 <tr style="background: #EAEAEA">
                     <td colspan="2">PROMEDIO GENERAL</td>
                     <?php
-                     $promedioFinal = 0;
+                    $promedioFinal = 0;
                     for ($j = 1; $j <= $periodoSeleccionado; $j++) {
                         $acumuladoPj = ($totalNotasPeriodo[$j] / $cantidadMaterias);
                         $acumuladoPj = round($acumuladoPj, 2);
                         $promedioFinal += $acumuladoPj;
                         $desempenoAcumuladoTotal = Boletin::determinarRango($acumuladoPj, $tiposNotas);
-                        
+
                     ?>
-                    <td align="center"><?= $acumuladoPj ?></td>
+                        <td align="center"><?= $acumuladoPj ?></td>
                     <?php } ?>
-                    <td align="center"><?= $desempenoAcumuladoTotal["notip_nombre"]?></td>
+                    <td align="center"><?= $desempenoAcumuladoTotal["notip_nombre"] ?></td>
                     <td align="center"></td>
                     <td align="center"></td>
                     <td align="center"></td>
@@ -392,9 +311,9 @@ foreach ($listaDatos  as $registro) {
         <p>&nbsp;</p>
         <table style="font-size: 15px;" width="80%" cellspacing="5" cellpadding="5" rules="all" border="1" align="right">
             <tr style="background-color: #EAEAEA;">
-             
-                <td align="center" width="40%">Puesto en el curso <b><?=isset($puestosCurso[$estudiante["mat_id"]])?$puestosCurso[$estudiante["mat_id"]]:'N/A' ?></b> entre <b><?=count($puestosCurso)?></b> Estudiantes.</td>
-                <td align="center" width="40%">Puesto en el colegio <b><?=isset($puestosInstitucion[$estudiante["mat_id"]])?$puestosInstitucion[$estudiante["mat_id"]]:'N/A' ?></b> entre <b><?=count($puestosInstitucion)?></b> Estudiantes.</td>
+
+                <td align="center" width="40%">Puesto en el curso <b><?= isset($puestosCurso[$estudiante["mat_id"]]) ? $puestosCurso[$estudiante["mat_id"]] : 'N/A' ?></b> entre <b><?= count($puestosCurso) ?></b> Estudiantes.</td>
+                <td align="center" width="40%">Puesto en el colegio <b><?= isset($puestosInstitucion[$estudiante["mat_id"]]) ? $puestosInstitucion[$estudiante["mat_id"]] : 'N/A' ?></b> entre <b><?= count($puestosInstitucion) ?></b> Estudiantes.</td>
             </tr>
         </table>
         <p>&nbsp;</p>
