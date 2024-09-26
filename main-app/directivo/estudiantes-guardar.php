@@ -20,15 +20,17 @@ $_POST["ciudadR"] = trim($_POST["ciudadR"]);
 $parametrosPost='&tipoD='.base64_encode($_POST["tipoD"]).'&documento='.base64_encode($_POST["nDoc"]).'&religion='.base64_encode($_POST["religion"]).'&email='.base64_encode($_POST["email"]).'&direcion='.base64_encode($_POST["direccion"]).'&barrio='.base64_encode($_POST["barrio"]).'&telefono='.base64_encode($_POST["telefono"]).'&celular='.base64_encode($_POST["celular"]).'&estrato='.base64_encode($_POST["estrato"]).'&genero='.base64_encode($_POST["genero"]).'&nacimiento='.base64_encode($_POST["fNac"]).'&apellido1='.base64_encode($_POST["apellido1"]).'&apellido2='.base64_encode($_POST["apellido2"]).'&nombre='.base64_encode($_POST["nombres"]).'&grado='.base64_encode($_POST["grado"]).'&grupo='.base64_encode($_POST["grupo"]).'&tipoE='.base64_encode($_POST["tipoEst"]).'&lugarEx='.base64_encode($_POST["lugarD"]).'&lugarNac='.base64_encode($_POST["lNac"]).'&matricula='.base64_encode($_POST["matricula"]).'&folio='.base64_encode($_POST["folio"]).'&tesoreria='.base64_encode($_POST["codTesoreria"]).'&vaMatricula='.base64_encode($_POST["va_matricula"]).'&inclusion='.base64_encode($_POST["inclusion"]).'&extran='.base64_encode($_POST["extran"]).'&tipoSangre='.base64_encode($_POST["tipoSangre"]).'&eps='.base64_encode($_POST["eps"]).'&celular2='.base64_encode($_POST["celular2"]).'&ciudadR='.base64_encode($_POST["ciudadR"]).'&nombre2='.base64_encode($_POST["nombre2"]).'&documentoA='.base64_encode($_POST["documentoA"]).'&nombreA='.base64_encode($_POST["nombreA"]).'&ocupacionA='.base64_encode($_POST["ocupacionA"]).'&generoA='.base64_encode($_POST["generoA"]).'&expedicionA='.base64_encode($_POST["lugardA"]).'&tipoDocA='.base64_encode($_POST["tipoDAcudiente"]).'&apellido1A='.base64_encode($_POST["apellido1A"]).'&apellido2A='.base64_encode($_POST["apellido2A"]).'&nombre2A='.base64_encode($_POST["nombre2A"]).'&matestM='.base64_encode($_POST["matestM"]);
 
 //COMPROBAMOS QUE TODOS LOS CAMPOS NECESARIOS ESTEN LLENOS
-if(trim($_POST["nDoc"])=="" or trim($_POST["apellido1"])=="" or trim($_POST["nombres"])=="" or trim($_POST["grado"])=="" or trim($_POST["documentoA"])==""){
+if (trim($_POST["nDoc"])=="" or trim($_POST["apellido1"])=="" or trim($_POST["nombres"])=="" or trim($_POST["grado"])=="" or trim($_POST["documentoA"])=="") {
 
 	include("../compartido/guardar-historial-acciones.php");
 	echo '<script type="text/javascript">window.location.href="estudiantes-agregar.php?error=ER_DT_4'.$parametrosPost.'";</script>';
 	exit();
 }
+
 //VALIDAMOS QUE EL ESTUDIANTE NO SE ENCUENTRE CREADO
 $valiEstudiante = Estudiantes::validarExistenciaEstudiante($_POST["nDoc"]);
-if($valiEstudiante > 0){
+
+if ($valiEstudiante > 0) {
 
 	include("../compartido/guardar-historial-acciones.php");
 	echo '<script type="text/javascript">window.location.href="estudiantes-agregar.php?error=ER_DT_5'.$parametrosPost.'";</script>';
@@ -37,8 +39,9 @@ if($valiEstudiante > 0){
 
 $result_numMat = strtotime("now");
 
-
-if(empty($_POST["tipoMatricula"])){ $_POST["tipoMatricula"]=GRADO_GRUPAL;}
+if (empty($_POST["tipoMatricula"])) {
+	$_POST["tipoMatricula"]=GRADO_GRUPAL;
+}
 
 //Establecer valores por defecto cuando los campos vengan vacíos
 if(empty($_POST["va_matricula"]))  $_POST["va_matricula"]  = 0;
@@ -56,13 +59,16 @@ if(empty($_POST["tipoMatricula"])) $_POST["tipoMatricula"] = GRADO_GRUPAL;
 
 
 //Api solo para Icolven
-$estado='';
-$mensaje='';
-if($config['conf_id_institucion'] == ICOLVEN){
+$estado  ='';
+$mensaje ='';
+
+if ($config['conf_id_institucion'] == ICOLVEN) {
 	require_once("apis-sion-create-student.php");
 }
-$procedencia=$_POST["lNacM"];
-if(!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])){
+
+$procedencia = $_POST["lNacM"];
+
+if (!empty($_POST["ciudadPro"]) && !is_numeric($_POST["ciudadPro"])) {
 	$procedencia=$_POST["ciudadPro"];
 }
 
