@@ -46,7 +46,7 @@ if (md5($_POST['idInst']) != $_POST['iditoken']) {
 }
 
 $nombreCompleto=$_POST['nombreEstudiante'].' '.$_POST['apellido1'];
-$sql = "INSERT INTO aspirantes(asp_institucion, asp_tipo_documento, asp_documento, asp_nombre, asp_email_acudiente, asp_nombre_acudiente, asp_celular_acudiente, asp_agno, asp_estado_solicitud, asp_documento_acudiente, asp_grado)VALUES(:institucion, :tipoDocumento, :documento, :nombreEstudiante, :email, :nombreAcudiente, :celular, '".$year."', 8, :documentoAcudiente, :grado)";
+$sql = "INSERT INTO aspirantes(asp_institucion, asp_tipo_documento, asp_documento, asp_nombre, asp_email_acudiente, asp_nombre_acudiente, asp_celular_acudiente, asp_agno, asp_estado_solicitud, asp_documento_acudiente, asp_grado, asp_hizo_proceso_antes)VALUES(:institucion, :tipoDocumento, :documento, :nombreEstudiante, :email, :nombreAcudiente, :celular, '".$year."', 8, :documentoAcudiente, :grado, :hizoProceso)";
 $stmt = $pdo->prepare($sql);
 
 $stmt->bindParam(':institucion', $idInst, PDO::PARAM_INT);
@@ -58,6 +58,7 @@ $stmt->bindParam(':nombreAcudiente', $_POST['nombreAcudiente'], PDO::PARAM_STR);
 $stmt->bindParam(':celular', $_POST['celular'], PDO::PARAM_STR);
 $stmt->bindParam(':documentoAcudiente', $_POST['documentoAcudiente'], PDO::PARAM_STR);
 $stmt->bindParam(':grado', $_POST['grado'], PDO::PARAM_INT);
+$stmt->bindParam(':hizoProceso', $_POST['procesoAdmisionAntes'], PDO::PARAM_INT);
 
 $stmt->execute();
 

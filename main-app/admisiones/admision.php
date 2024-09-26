@@ -88,18 +88,22 @@ $num = $grados->rowCount();
                                 <option value="139">PEP</option>
                             </select>
                         </div>
+
                         <div class="form-group col-md-3">
                             <label for="documento">Número de documento</label>
                             <input type="text" class="form-control" id="documento" name="documento" required>
                         </div>
+
                         <div class="form-group col-md-3">
                             <label for="apellido1">Primer apellido</label>
                             <input type="text" class="form-control" id="apellido1" name="apellido1" required>
                         </div>
+
                         <div class="form-group col-md-3">
                             <label for="nombreEstudiante">Nombre</label>
                             <input type="text" class="form-control" id="nombreEstudiante" name="nombreEstudiante" required>
                         </div>
+
                         <div class="form-group col-md-3">
                             <label for="grado">Grado al que aspira</label>
                             <select id="grado" name="grado" class="form-control" required>
@@ -111,6 +115,16 @@ $num = $grados->rowCount();
                                 <?php } ?>
                             </select>
                         </div>
+
+                        <div class="form-group col-md-4">
+                            <label>Anteriormente hizo el proceso de admisión? <span style="color:red;">(*)</span></label>
+                            <select class="form-control" name="procesoAdmisionAntes" required>
+                                <option value="">--Seleccione una opción--</option>
+                                <option value="1">SI</option>
+                                <option value="2">NO</option>
+                            </select>
+                        </div>
+
                     </div>
                     <h3>2. Datos del acudiente</h3>
                     <div class="form-row">
