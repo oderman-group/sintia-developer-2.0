@@ -8,7 +8,7 @@ require_once(ROOT_PATH."/main-app/class/Grados.php");
 require_once(ROOT_PATH."/main-app/class/Actividades.php");
 require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 
-Utilidades::validarParametros($_GET);
+Utilidades::validarParametros($_GET,["carga","docente"]);
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
