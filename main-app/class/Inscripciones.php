@@ -236,7 +236,7 @@ class Inscripciones extends BindSQL{
                 @unlink($destino . "/" . $cartaLaboral);
                 move_uploaded_file($FILES['cartaLaboral']['tmp_name'], $destino . "/" . $cartaLaboral);
             } else {
-                $cartaLaboral = $POST['cartaLaboral'];
+                $cartaLaboral = !empty($POST['cartaLaboral']) ? $POST['cartaLaboral'] : null;
             }
 
             $documentosQuery = "UPDATE ".BD_ACADEMICA.".academico_matriculas_documentos SET
