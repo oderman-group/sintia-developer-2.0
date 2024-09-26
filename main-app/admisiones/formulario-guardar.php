@@ -45,7 +45,9 @@ mat_institucion_procedencia = :institucionProcedencia,
 mat_lugar_colegio_procedencia = :iLugarProcedencia,
 mat_lugar_expedicion = :lugarExp,
 mat_motivo_retiro_anterior = :motivoRetiro,
-mat_foto = :foto
+mat_foto = :foto,
+mat_etnia = :etnia,
+mat_tiene_discapacidad = :discapacidad
 WHERE mat_id = :idMatricula AND institucion= :idInstitucion AND year= :year";
 $stmt = $pdoI->prepare($sql);
 
@@ -70,6 +72,8 @@ $stmt->bindParam(':motivoRetiro', $_POST['motivo'], PDO::PARAM_STR);
 $stmt->bindParam(':foto', $foto, PDO::PARAM_STR);
 $stmt->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
 $stmt->bindParam(':year', $yearConsultar, PDO::PARAM_STR);
+$stmt->bindParam(':etnia', $_POST['grupoEtnico'], PDO::PARAM_STR);
+$stmt->bindParam(':discapacidad', $_POST['discapacidad'], PDO::PARAM_STR);
 
 $stmt->execute();
 $filasAfectadas = $stmt->rowCount();
@@ -126,7 +130,8 @@ uss_direccion = :dirpadre,
 uss_email = :emailpadre,
 uss_ocupacion = :ocupacionpadre,
 uss_religion = :religionpadre,
-uss_tipo_documento = :tipodocpadre
+uss_tipo_documento = :tipodocpadre,
+uss_estado_civil = :estadocivilpadre
 WHERE uss_id = :padre AND institucion= :idInstitucion AND year= :year";
 $padre = $pdoI->prepare($padreQuery);
 
@@ -142,6 +147,7 @@ $padre->bindParam(':religionpadre', $_POST['religionPadre'], PDO::PARAM_STR);
 $padre->bindParam(':tipodocpadre', $_POST['tipoDocumentoPadre'], PDO::PARAM_STR);
 $padre->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
 $padre->bindParam(':year', $yearConsultar, PDO::PARAM_STR);
+$padre->bindParam(':estadocivilpadre', $_POST['estadoCivilPadre'], PDO::PARAM_STR);
 
 $padre->execute();
 $filasAfectadasPad = $padre->rowCount();
@@ -158,7 +164,8 @@ uss_direccion = :dirmadre,
 uss_email = :emailmadre,
 uss_ocupacion = :ocupacionmadre,
 uss_religion = :religionmadre,
-uss_tipo_documento = :tipodocmadre
+uss_tipo_documento = :tipodocmadre,
+uss_estado_civil = :estadocivilmadre
 WHERE uss_id = :madre AND institucion= :idInstitucion AND year= :year";
 $madre = $pdoI->prepare($madreQuery);
 
@@ -174,6 +181,7 @@ $madre->bindParam(':religionmadre', $_POST['religionMadre'], PDO::PARAM_STR);
 $madre->bindParam(':tipodocmadre', $_POST['tipoDocumentoMadre'], PDO::PARAM_STR);
 $madre->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
 $madre->bindParam(':year', $yearConsultar, PDO::PARAM_STR);
+$madre->bindParam(':estadocivilmadre', $_POST['estadoCivilMadre'], PDO::PARAM_STR);
 
 $madre->execute();
 $filasAfectadasMad = $madre->rowCount();

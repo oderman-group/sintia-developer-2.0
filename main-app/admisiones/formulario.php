@@ -2,6 +2,7 @@
 include("bd-conexion.php");
 include("php-funciones.php");
 require_once(ROOT_PATH."/main-app/class/Inscripciones.php");
+require_once(ROOT_PATH."/main-app/class/Tables/BDT_opciones_generales.php");
 
 $id="";
 if(!empty($_GET["id"])){ $id=base64_decode($_GET["id"]);}
@@ -277,10 +278,28 @@ $datosMadre = $madre->fetch();
                     <input type="date" class="form-control" name="fechaNacimiento" value="<?= $datos['mat_fecha_nacimiento']; ?>" required>
 
                 </div>
+            </div>
 
+            <div class="form-row">
 
+                <div class="form-group col-md-4">
+                    <label>Grupo étnico <span style="color:red;">(*)</span></label>
+                    <select class="form-control" name="grupoEtnico" required>
+                        <option value="1" <?php if ($datos['mat_etnia'] == 1) echo "selected"; ?>>Ninguno</option>
+                        <option value="2" <?php if ($datos['mat_etnia'] == 2) echo "selected"; ?>>Afrocolombianos</option>
+                        <option value="3" <?php if ($datos['mat_etnia'] == 3) echo "selected"; ?>>Raizales</option>
+                        <option value="4" <?php if ($datos['mat_etnia'] == 4) echo "selected"; ?>>Indigena</option>
+                    </select>
+                </div>
 
-
+                <div class="form-group col-md-4">
+                    <label>Tiene alguna limitación o discapacidad? <span style="color:red;">(*)</span></label>
+                    <select class="form-control" name="discapacidad" required>
+                        <option value="1" <?php if ($datos['mat_tiene_discapacidad'] == 1) echo "selected"; ?>>Ninguna</option>
+                        <option value="2" <?php if ($datos['mat_tiene_discapacidad'] == 2) echo "selected"; ?>>SI</option>
+                        <option value="3" <?php if ($datos['mat_tiene_discapacidad'] == 3) echo "selected"; ?>>NO</option>
+                    </select>
+                </div>
 
             </div>
 
@@ -542,6 +561,24 @@ $datosMadre = $madre->fetch();
 
                 </div>
 
+                <?php
+                $opcionesGenerales = BDT_OpcionesGenerales::Select(['ogen_grupo' => 8]);
+                ?>
+
+                <div class="form-group col-md-4">
+                    <label>Estado civil <span style="color:red;">(*)</span></label>
+                    <select class="form-control" name="estadoCivilPadre" required>
+                        <option value="0">Seleccione</option>
+                        <?php
+                        while ($opcionesGeneralesEstadoCivil = $opcionesGenerales->fetch()) {
+                            $selected = '';
+                            if ($datosPadre['uss_estado_civil'] == $opcionesGeneralesEstadoCivil['ogen_id']) 
+                                $selected = "selected";
+                            echo '<option value="'. $opcionesGeneralesEstadoCivil['ogen_id']. '" '.$selected.'>'. $opcionesGeneralesEstadoCivil['ogen_nombre']. '</option>';
+                        }?>
+                    </select>
+                </div>
+
 
 
             </div>
@@ -682,6 +719,25 @@ $datosMadre = $madre->fetch();
 
                     <input type="text" class="form-control" name="ocupacionMadre" value="<?= $datosMadre['uss_ocupacion']; ?>">
 
+                </div>
+
+                <?php
+                $opcionesGenerales = BDT_OpcionesGenerales::Select(['ogen_grupo' => 8]);
+                ?>
+
+                <div class="form-group col-md-4">
+                    <label>Estado civil <span style="color:red;">(*)</span></label>
+                    <select class="form-control" name="estadoCivilMadre" required>
+                        <option value="0">Seleccione</option>
+                        <?php
+                        while ($opcionesGeneralesEstadoCivil = $opcionesGenerales->fetch()) {
+                            $selected = '';
+                            if ($datosMadre['uss_estado_civil'] == $opcionesGeneralesEstadoCivil['ogen_id']) 
+                                $selected = "selected";
+
+                            echo '<option value="'. $opcionesGeneralesEstadoCivil['ogen_id']. '" '.$selected.'>'. $opcionesGeneralesEstadoCivil['ogen_nombre']. '</option>';
+                        }?>
+                    </select>
                 </div>
 
 
