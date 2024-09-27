@@ -37,11 +37,11 @@ require_once("../class/Estudiantes.php");
                             }
                             while ($datosBoletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH)) {
                             ?>
-                                <option value="<?= $datosBoletin['ogen_id']; ?>" ><?= $datosBoletin['ogen_nombre']; ?></option>
+                                <option <?php if($config['conf_formato_boletin'] == $datosBoletin['ogen_id']){ echo "selected";} ?> value="<?= $datosBoletin['ogen_id']; ?>" ><?= $datosBoletin['ogen_nombre']; ?></option>
                             <?php } ?>
                         </select>
                     </div>
-                    <button type="button" titlee="Ver formato del boletin" class="btn btn-sm" data-toggle="popover"><i class="fa fa-eye"></i></button>
+                    <button type="button" title="Ver formato del boletin" class="btn btn-sm" data-toggle="popover"><i class="fa fa-eye"></i></button>
                     <script>
                         $(document).ready(function() {
                             $('[data-toggle="popover"]').popover({
@@ -115,7 +115,11 @@ require_once("../class/Estudiantes.php");
                             <?php
                             $p = 1;
                             while ($p <= $config[19]) {
-                                echo '<option value="' . $p . '">Periodo ' . $p . '</option>';
+                                $selected = '';
+                                if($p == $config['conf_periodo']) {
+                                    $selected ='selected';
+                                }
+                                echo '<option value="' . $p . '" '.$selected.'>Periodo ' . $p . '</option>';
                                 $p++;
                             }
                             ?>
@@ -165,11 +169,11 @@ require_once("../class/Estudiantes.php");
                             }
                             while ($datosBoletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH)) {
                             ?>
-                                <option value="<?= $datosBoletin['ogen_id']; ?>" ><?= $datosBoletin['ogen_nombre']; ?></option>
+                                <option <?php if($config['conf_formato_boletin'] == $datosBoletin['ogen_id']){ echo "selected";} ?> value="<?= $datosBoletin['ogen_id']; ?>" ><?= $datosBoletin['ogen_nombre']; ?></option>
                             <?php } ?>
                         </select>
                     </div>
-                    <button type="button" titlee="Ver formato del boletin" class="btn btn-sm" data-toggle="popover_2"><i class="fa fa-eye"></i></button>
+                    <button type="button" title="Ver formato del boletin" class="btn btn-sm" data-toggle="popover_2"><i class="fa fa-eye"></i></button>
                     <script>
                         $(document).ready(function() {
                             $('[data-toggle="popover_2"]').popover({
@@ -244,7 +248,12 @@ require_once("../class/Estudiantes.php");
                             <?php
                             $p = 1;
                             while ($p <= $config[19]) {
-                                echo '<option value="' . $p . '">Periodo ' . $p . '</option>';
+                                $selected = '';
+                                if($p == $config['conf_periodo']) {
+                                    $selected ='selected';
+                                }
+
+                                echo '<option value="' . $p . '" '.$selected.'>Periodo ' . $p . '</option>';
                                 $p++;
                             }
                             ?>

@@ -12,6 +12,7 @@ include(ROOT_PATH."/main-app/compartido/head.php");
 
 include(ROOT_PATH."/main-app/admisiones/php-funciones.php");
 require_once(ROOT_PATH."/main-app/class/Inscripciones.php");
+require_once(ROOT_PATH."/main-app/class/Tables/BDT_opciones_generales.php");
 
 $id = "";
 if (!empty($_GET["id"])) {
@@ -33,8 +34,17 @@ $num = $grados->rowCount();
 
 //Estudiante
 $estQuery = "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
-LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=mat_acudiente AND uss.institucion= :idInstitucion AND uss.year= :year
-WHERE mat_solicitud_inscripcion = :id AND mat.institucion= :idInstitucion AND mat.year= :year";
+LEFT JOIN ".BD_GENERAL.".usuarios uss 
+    ON uss_id=mat_acudiente 
+    AND uss.institucion= :idInstitucion 
+    AND uss.year= :year
+LEFT JOIN ".BD_ADMISIONES.".aspirantes
+    ON asp_id = mat_solicitud_inscripcion
+WHERE 
+    mat_solicitud_inscripcion = :id 
+    AND mat.institucion= :idInstitucion 
+    AND mat.year= :year
+";
 $est = $conexionPDO->prepare($estQuery);
 $est->bindParam(':id', $id, PDO::PARAM_INT);
 $est->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
@@ -63,6 +73,13 @@ $madre->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_I
 $madre->bindParam(':year', $_SESSION["bd"], PDO::PARAM_STR);
 $madre->execute();
 $datosMadre = $madre->fetch();
+
+$configAdmisiones = Inscripciones::configuracionAdmisiones($conexion, BD_ADMISIONES, $config['conf_id_institucion'], $_SESSION["bd"]);
+
+$procesoAnterior = [
+    1 => 'SI',
+    2 => 'NO'
+];
 ?>
     <!-- steps -->
     <link rel="stylesheet" href="../../config-general/assets/plugins/steps/steps.css"> 
@@ -136,11 +153,20 @@ $datosMadre = $madre->fetch();
                                                     </div>
                                                 </div>
                                             <?php }?>
+
+                                            <div class="form-group row">
+                                                <div class="form-group col-md-4">
+                                                    <label>Anteriormente hizo el proceso de admisión? </label>
+                                                    <?php if(!empty($datos['asp_hizo_proceso_antes'])) echo $procesoAnterior[$datos['asp_hizo_proceso_antes']]; ?>
+                                                </div>
+                                            </div>
+
                                             <div class="form-group row">
                                                 <div class="form-group col-md-4">
                                                     <label>Nombres <span style="color:red;">(*)</span> </label>
                                                     <input type="text" class="form-control" name="nombre" value="<?= $datos['mat_nombres']; ?>" required>
                                                 </div>
+
                                                 <div class="form-group col-md-3">
                                                     <label>Primer Apellido <span style="color:red;">(*)</span></label>
                                                     <input type="text" class="form-control" name="primerApellidos" value="<?= $datos['mat_primer_apellido']; ?>" required>
@@ -191,6 +217,30 @@ $datosMadre = $madre->fetch();
                                                     <input type="date" class="form-control" name="fechaNacimiento" value="<?= $datos['mat_fecha_nacimiento']; ?>" required>
                                                 </div>
                                             </div>
+
+                                            <div class="form-row">
+
+                                                <div class="form-group col-md-4">
+                                                    <label>Grupo étnico <span style="color:red;">(*)</span></label>
+                                                    <select class="form-control" name="grupoEtnico" required>
+                                                        <option value="1" <?php if ($datos['mat_etnia'] == 1) echo "selected"; ?>>Ninguno</option>
+                                                        <option value="2" <?php if ($datos['mat_etnia'] == 2) echo "selected"; ?>>Afrocolombianos</option>
+                                                        <option value="3" <?php if ($datos['mat_etnia'] == 3) echo "selected"; ?>>Raizales</option>
+                                                        <option value="4" <?php if ($datos['mat_etnia'] == 4) echo "selected"; ?>>Indigena</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="form-group col-md-4">
+                                                    <label>Tiene alguna limitación o discapacidad? <span style="color:red;">(*)</span></label>
+                                                    <select class="form-control" name="discapacidad" required>
+                                                        <option value="1" <?php if ($datos['mat_tiene_discapacidad'] == 1) echo "selected"; ?>>Ninguna</option>
+                                                        <option value="2" <?php if ($datos['mat_tiene_discapacidad'] == 2) echo "selected"; ?>>SI</option>
+                                                        <option value="3" <?php if ($datos['mat_tiene_discapacidad'] == 3) echo "selected"; ?>>NO</option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+
                                             <div class="form-group row">
                                                 <div class="form-group col-md-4">
                                                     <label>Dirección <span style="color:red;">(*)</span></label>
@@ -291,6 +341,23 @@ $datosMadre = $madre->fetch();
                                                     <label>Ocupación<span style="color:red;">(*)</span> </label>
                                                     <input type="text" class="form-control" name="ocupacionPadre" value="<?= $datosPadre['uss_ocupacion']; ?>">
                                                 </div>
+                                                <?php
+                                                $opcionesGenerales = BDT_OpcionesGenerales::Select(['ogen_grupo' => 8]);
+                                                ?>
+
+                                                <div class="form-group col-md-4">
+                                                    <label>Estado civil <span style="color:red;">(*)</span></label>
+                                                    <select class="form-control" name="estadoCivilPadre" required>
+                                                        <option value="0">Seleccione</option>
+                                                        <?php
+                                                        while ($opcionesGeneralesEstadoCivil = $opcionesGenerales->fetch()) {
+                                                            $selected = '';
+                                                            if ($datosPadre['uss_estado_civil'] == $opcionesGeneralesEstadoCivil['ogen_id']) 
+                                                                $selected = "selected";
+                                                            echo '<option value="'. $opcionesGeneralesEstadoCivil['ogen_id']. '" '.$selected.'>'. $opcionesGeneralesEstadoCivil['ogen_nombre']. '</option>';
+                                                        }?>
+                                                    </select>
+                                                </div>
                                             </div>
                                             <h5 class="mb-4">INFORMACIÓN DE LA MADRE</h5>
                                             <div class="form-group row">
@@ -342,6 +409,24 @@ $datosMadre = $madre->fetch();
                                                 <div class="form-group col-md-4">
                                                     <label>Ocupación<span style="color:red;">(*)</span> </label>
                                                     <input type="text" class="form-control" name="ocupacionMadre" value="<?= $datosMadre['uss_ocupacion']; ?>">
+                                                </div>
+                                                <?php
+                                                $opcionesGenerales = BDT_OpcionesGenerales::Select(['ogen_grupo' => 8]);
+                                                ?>
+
+                                                <div class="form-group col-md-4">
+                                                    <label>Estado civil <span style="color:red;">(*)</span></label>
+                                                    <select class="form-control" name="estadoCivilMadre" required>
+                                                        <option value="0">Seleccione</option>
+                                                        <?php
+                                                        while ($opcionesGeneralesEstadoCivil = $opcionesGenerales->fetch()) {
+                                                            $selected = '';
+                                                            if ($datosMadre['uss_estado_civil'] == $opcionesGeneralesEstadoCivil['ogen_id']) 
+                                                                $selected = "selected";
+
+                                                            echo '<option value="'. $opcionesGeneralesEstadoCivil['ogen_id']. '" '.$selected.'>'. $opcionesGeneralesEstadoCivil['ogen_nombre']. '</option>';
+                                                        }?>
+                                                    </select>
                                                 </div>
                                             </div>
                                             <h5 class="mb-4">INFORMACIÓN DEL ACUDIENTE <span style="color:red;">(El acudiente es quien se reportará en la DIAN en la información exógena)</span></h5>
@@ -469,19 +554,20 @@ $datosMadre = $madre->fetch();
                                                     <?php } ?>
                                                 </div>
                                             </div>
-                                            <hr class="my-4">
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="gridCheck" required>
-                                                    <label class="form-check-label" for="gridCheck">
-                                                        Estoy suficientemente informado del Manual de Convivencia y del Sistema Institucional de Evaluación que rigen en el <b><?= strtoupper($informacion_inst['info_nombre']) ?></b>, según aparecen en la página web y en caso de ser aceptado me comprometo a acatarlos y cumplirlos fiel y cabalmente.
-                                                    </label>
+
+                                            <h3 class="mb-4" style="text-align: center;">3. DOCUMENTACIÓN DEL ACUDIENTE</h3>
+                                            <div class="p-3 mb-2 bg-secondary text-white">Debe cargar solo un archivo por cada campo. Si necesita cargar más de un archivo en un solo campo por favor comprimalos(.ZIP, .RAR) y los carga.</div>
+
+                                            <div class="form-row">
+
+                                                <div class="form-group col-md-6">
+                                                    <label>1. Certificado laboral <span class="text-primary">(En formato .jpg, .png, .jpeg)</span> </label>
+                                                    <input type="file" class="form-control" name="cartaLaboral">
+                                                    <?php if (!empty($datosDocumentos['matd_carta_laboral']) and file_exists(ROOT_PATH.'/main-app/admisiones/files/otros/' . $datosDocumentos['matd_carta_laboral'])) { ?>
+                                                        <p><a href="<?=REDIRECT_ROUTE?>/admisiones/files/otros/<?= $datosDocumentos['matd_carta_laboral']; ?>" target="_blank" class="link"><?= $datosDocumentos['matd_carta_laboral']; ?></a></p>
+                                                    <?php } ?>
                                                 </div>
-                                            </div>
-                                            <div class="p-2 mt-4 mb-4 bg-warning text-dark" style="text-align: center;">
-                                                <p style="font-size: 20px; font-weight: bold;">
-                                                    Tenga en cuenta que debe tener completa toda la documentación cargada en la plataforma para que su solicitud continúe el proceso de admisión y sea agendada la respectiva entrevista y examen de admisión según sea el caso.
-                                                </p>
+
                                             </div>
                                         </fieldset>
 

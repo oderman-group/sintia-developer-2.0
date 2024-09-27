@@ -83,6 +83,13 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                         <p>El aspirante se ha borrado correctamente.</p>
                                     </div>
                                     <?php } ?>
+
+                                    <?php if (isset($_GET["msg"]) and base64_decode($_GET["msg"]) == 3) { ?>
+                                    <div class="alert alert-block alert-success">
+                                        <h4 class="alert-heading">Apisrante ocultado!</h4>
+                                        <p>El aspirante se ha ocultado correctamente.</p>
+                                    </div>
+                                    <?php } ?>
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
                                             <header><?=$frases[390][$datosUsuarioActual['uss_idioma']];?></header>
@@ -115,7 +122,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                                 <tbody id="inscripciones_result">
                                                 <?php
                                                     include("includes/consulta-paginacion-inscripciones.php");
-                                                    $consulta = Estudiantes::listarMatriculasAspirantes($config, $filtro, "LIMIT $inicio,$registros");
+                                                    $consulta = Estudiantes::listarMatriculasAspirantes($config, $filtro, "LIMIT $inicio, $registros");
                                                     $data =$barraSuperior->builderArray($consulta);
 													include("../class/componentes/result/inscripciones-tbody.php");
                                                  ?>

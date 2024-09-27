@@ -203,6 +203,13 @@ if(!Modulos::validarPermisoEdicion()){
                                             </div>
                                         </div>
 
+                                        <div class="form-group row">
+											<label class="col-sm-2 control-label">Frase 2 al final del formulario <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este frase la podrán leer los usuarios antes de enviar el formulario de inscripción. Escribe algo que les quieras informar o advertir."><i class="fa fa-question"></i></button></label>
+											<div class="col-sm-10">
+                                                <textarea cols="80" id="editor4" name="fraseDos" rows="10" <?=$disabledPermiso;?>><?=$cfg['cfgi_frase_formulario_inscripcion_2'];?></textarea>
+											</div>
+										</div>
+
                                         <?php $botones = new botonesGuardar("",Modulos::validarPermisoEdicion()); ?>
                                     </form>
                                 </div>
@@ -253,6 +260,7 @@ if(!Modulos::validarPermisoEdicion()){
         CKEDITOR.replace( 'editor1' );
         CKEDITOR.replace( 'editor2' );
         CKEDITOR.replace( 'editor3' );
+        CKEDITOR.replace( 'editor4' );
     </script>
 </body>
 

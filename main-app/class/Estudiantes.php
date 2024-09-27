@@ -3,6 +3,7 @@ require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.ph
 require_once(ROOT_PATH."/main-app/class/servicios/MediaTecnicaServicios.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/BindSQL.php");
+require_once(ROOT_PATH."/main-app/class/Tables/BDT_aspirante.php");
 
 class Estudiantes {
 
@@ -847,65 +848,124 @@ class Estudiantes {
         global $config, $conexion;
         $codigoMAT = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_matriculas');
 
-        $tipoD = isset($POST["tipoD"]) ? $POST["tipoD"] : "";
-        $nDoc = isset($POST["nDoc"]) ? $POST["nDoc"] : "";
-        $religion = isset($POST["religion"]) ? $POST["religion"] : "";
-        $email = isset($POST["email"]) ? strtolower($POST["email"]) : "";
-        $direccion = isset($POST["direccion"]) ? $POST["direccion"] : "";
-        $barrio = isset($POST["barrio"]) ? $POST["barrio"] : "";
-        $telefono = isset($POST["telefono"]) ? $POST["telefono"] : "";
-        $celular = isset($POST["celular"]) ? $POST["celular"] : "";
-        $estrato = isset($POST["estrato"]) ? $POST["estrato"] : "";
-        $genero = isset($POST["genero"]) ? $POST["genero"] : "";
-        $apellido1 = isset($POST["apellido1"]) ? mysqli_real_escape_string($conexion,$POST["apellido1"]) : "";
-        $apellido2 = isset($POST["apellido2"]) ? mysqli_real_escape_string($conexion,$POST["apellido2"]) : "";
-        $nombres = isset($POST["nombres"]) ? mysqli_real_escape_string($conexion,$POST["nombres"]) : "";
-        $grado = isset($POST["grado"]) ? $POST["grado"] : "";
-        $grupo = isset($POST["grupo"]) ? $POST["grupo"] : "";
-        $tipoEst = isset($POST["tipoEst"]) ? $POST["tipoEst"] : "";
-        $lugarD = isset($POST["lugarD"]) ? $POST["lugarD"] : "";
-        $matestM = isset($POST["matestM"]) ? $POST["matestM"] : "";
-        $folio = isset($POST["folio"]) ? $POST["folio"] : "";
-        $codTesoreria = isset($POST["codTesoreria"]) ? $POST["codTesoreria"] : "";
-        $va_matricula = isset($POST["va_matricula"]) ? $POST["va_matricula"] : "";
-        $inclusion = isset($POST["inclusion"]) ? $POST["inclusion"] : "";
-        $extran = isset($POST["extran"]) ? $POST["extran"] : "";
-        $tipoSangre = isset($POST["tipoSangre"]) ? $POST["tipoSangre"] : "";
-        $eps = isset($POST["eps"]) ? $POST["eps"] : "";
-        $celular2 = isset($POST["celular2"]) ? $POST["celular2"] : "";
-        $ciudadR = isset($POST["ciudadR"]) ? $POST["ciudadR"] : "";
-        $nombre2 = isset($POST["nombre2"]) ? mysqli_real_escape_string($conexion,$POST["nombre2"]) : "";
-        $fNac = isset($POST["fNac"]) ? $POST["fNac"] : "";
+        $tipoD         = isset($POST["tipoD"]) ? $POST["tipoD"] : "";
+        $nDoc          = isset($POST["nDoc"]) ? $POST["nDoc"] : "";
+        $religion      = isset($POST["religion"]) ? $POST["religion"] : "";
+        $email         = isset($POST["email"]) ? strtolower($POST["email"]) : "";
+        $direccion     = isset($POST["direccion"]) ? $POST["direccion"] : "";
+        $barrio        = isset($POST["barrio"]) ? $POST["barrio"] : "";
+        $telefono      = isset($POST["telefono"]) ? $POST["telefono"] : "";
+        $celular       = isset($POST["celular"]) ? $POST["celular"] : "";
+        $estrato       = isset($POST["estrato"]) ? $POST["estrato"] : "";
+        $genero        = isset($POST["genero"]) ? $POST["genero"] : "";
+        $apellido1     = isset($POST["apellido1"]) ? mysqli_real_escape_string($conexion,$POST["apellido1"]) : "";
+        $apellido2     = isset($POST["apellido2"]) ? mysqli_real_escape_string($conexion,$POST["apellido2"]) : "";
+        $nombres       = isset($POST["nombres"]) ? mysqli_real_escape_string($conexion,$POST["nombres"]) : "";
+        $grado         = isset($POST["grado"]) ? $POST["grado"] : "";
+        $grupo         = isset($POST["grupo"]) ? $POST["grupo"] : "";
+        $tipoEst       = isset($POST["tipoEst"]) ? $POST["tipoEst"] : "";
+        $lugarD        = isset($POST["lugarD"]) ? $POST["lugarD"] : "";
+        $matestM       = isset($POST["matestM"]) ? $POST["matestM"] : "";
+        $folio         = isset($POST["folio"]) ? $POST["folio"] : "";
+        $codTesoreria  = isset($POST["codTesoreria"]) ? $POST["codTesoreria"] : "";
+        $va_matricula  = isset($POST["va_matricula"]) ? $POST["va_matricula"] : "";
+        $inclusion     = isset($POST["inclusion"]) ? $POST["inclusion"] : "";
+        $extran        = isset($POST["extran"]) ? $POST["extran"] : "";
+        $tipoSangre    = isset($POST["tipoSangre"]) ? $POST["tipoSangre"] : "";
+        $eps           = isset($POST["eps"]) ? $POST["eps"] : "";
+        $celular2      = isset($POST["celular2"]) ? $POST["celular2"] : "";
+        $ciudadR       = isset($POST["ciudadR"]) ? $POST["ciudadR"] : "";
+        $nombre2       = isset($POST["nombre2"]) ? mysqli_real_escape_string($conexion,$POST["nombre2"]) : "";
+        $fNac          = isset($POST["fNac"]) ? $POST["fNac"] : "";
         $tipoMatricula = isset($_POST["tipoMatricula"]) ? $POST["tipoMatricula"] : "";
+        $grupoEtnico   = isset($POST["grupoEtnico"]) ? $POST["grupoEtnico"] : 1;
+        $discapacidad  = isset($POST["discapacidad"]) ? $POST["discapacidad"] : 1;
 
         try{
 
             $consulta = "INSERT INTO ".BD_ACADEMICA.".academico_matriculas(
-                mat_id, mat_matricula, mat_fecha, mat_tipo_documento, 
-                mat_documento, mat_religion, mat_email, 
-                mat_direccion, mat_barrio, mat_telefono, 
-                mat_celular, mat_estrato, mat_genero, 
-                mat_fecha_nacimiento, mat_primer_apellido, mat_segundo_apellido, 
-                mat_nombres, mat_grado, mat_grupo, 
-                mat_tipo, mat_lugar_nacimiento, mat_lugar_expedicion, 
-                mat_acudiente, mat_estado_matricula, mat_id_usuario, 
-                mat_folio, mat_codigo_tesoreria, mat_valor_matricula, 
-                mat_inclusion, mat_extranjero, mat_tipo_sangre, 
-                mat_eps, mat_celular2, mat_ciudad_residencia, 
-                mat_nombre2, mat_estado_agno, mat_tipo_matricula, institucion, year)
-                VALUES(
-                :codigo, ".$result_numMat.", now(), :tipoD,
-                :nDoc, :religion, :email,
-                :direccion, :barrio, :telefono,
-                :celular, :estrato, :genero, 
-                :fNac, :apellido1, :apellido2, 
-                :nombres, :grado, :grupo,
-                :tipoEst, '".$procedencia."', :lugarD,
-                '".$idAcudiente."', :matestM, '".$idEstudianteU."', 
-                :folio, :codTesoreria, :va_matricula, 
-                :inclusion, :extran, :tipoSangre, 
-                :eps, :celular2, :ciudadR, 
-                :nombre2, 3, :tipoMatricula, :idInstitucion, :year
+                mat_id, 
+                mat_matricula, 
+                mat_fecha, mat_tipo_documento, 
+                mat_documento, 
+                mat_religion, 
+                mat_email, 
+                mat_direccion, 
+                mat_barrio, 
+                mat_telefono, 
+                mat_celular, 
+                mat_estrato, 
+                mat_genero, 
+                mat_fecha_nacimiento, 
+                mat_primer_apellido, 
+                mat_segundo_apellido, 
+                mat_nombres, 
+                mat_grado, 
+                mat_grupo, 
+                mat_tipo, 
+                mat_lugar_nacimiento, 
+                mat_lugar_expedicion, 
+                mat_acudiente, 
+                mat_estado_matricula, 
+                mat_id_usuario, 
+                mat_folio, 
+                mat_codigo_tesoreria, 
+                mat_valor_matricula, 
+                mat_inclusion, 
+                mat_extranjero, 
+                mat_tipo_sangre, 
+                mat_eps,
+                mat_celular2, 
+                mat_ciudad_residencia, 
+                mat_nombre2, 
+                mat_estado_agno, 
+                mat_tipo_matricula, 
+                institucion, 
+                year, 
+                mat_etnia, 
+                mat_tiene_discapacidad
+                )VALUES(
+                :codigo, 
+                ".$result_numMat.", 
+                now(), 
+                :tipoD,
+                :nDoc, 
+                :religion, 
+                :email,
+                :direccion, 
+                :barrio, 
+                :telefono,
+                :celular, 
+                :estrato, 
+                :genero, 
+                :fNac, 
+                :apellido1, 
+                :apellido2, 
+                :nombres, 
+                :grado, 
+                :grupo,
+                :tipoEst, 
+                '".$procedencia."', 
+                :lugarD,
+                '".$idAcudiente."', 
+                :matestM, 
+                '".$idEstudianteU."', 
+                :folio, 
+                :codTesoreria, 
+                :va_matricula, 
+                :inclusion, 
+                :extran, 
+                :tipoSangre, 
+                :eps, 
+                :celular2, 
+                :ciudadR, 
+                :nombre2, 
+                3, 
+                :tipoMatricula, 
+                :idInstitucion, 
+                :year, 
+                :grupoEtnico, 
+                :discapacidad
                 )";
 
             $stmt = $conexionPDO->prepare($consulta);
@@ -956,6 +1016,9 @@ class Estudiantes {
             $stmt->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
             $stmt->bindParam(':year', $_SESSION["bd"], PDO::PARAM_STR);
 
+            $stmt->bindParam(':grupoEtnico', $grupoEtnico, PDO::PARAM_INT);
+            $stmt->bindParam(':discapacidad', $discapacidad, PDO::PARAM_INT);
+
             if ($stmt) {
                 $stmt->execute();
                 return $codigoMAT;
@@ -983,41 +1046,43 @@ class Estudiantes {
     {
         global $config, $conexion;
 
-        $tipoD = isset($POST["tipoD"]) ? $POST["tipoD"] : "";
-        $nDoc = isset($POST["nDoc"]) ? $POST["nDoc"] : "";
-        $religion = isset($POST["religion"]) ? $POST["religion"] : "";
-        $email = isset($POST["email"]) ? strtolower($POST["email"]) : "";
-        $direccion = isset($POST["direccion"]) ? $POST["direccion"] : "";
-        $barrio = isset($POST["barrio"]) ? $POST["barrio"] : "";
-        $telefono = isset($POST["telefono"]) ? $POST["telefono"] : "";
-        $celular = isset($POST["celular"]) ? $POST["celular"] : "";
-        $estrato = isset($POST["estrato"]) ? $POST["estrato"] : "";
-        $genero = isset($POST["genero"]) ? $POST["genero"] : "";
-        $apellido1 = isset($POST["apellido1"]) ? mysqli_real_escape_string($conexion,$POST["apellido1"]) : "";
-        $apellido2 = isset($POST["apellido2"]) ? mysqli_real_escape_string($conexion,$POST["apellido2"]) : "";
-        $nombres = isset($POST["nombres"]) ? mysqli_real_escape_string($conexion,$POST["nombres"]) : "";
-        $grado = isset($POST["grado"]) ? $POST["grado"] : "";
-        $grupo = isset($POST["grupo"]) ? $POST["grupo"] : "";
-        $tipoEst = isset($POST["tipoEst"]) ? $POST["tipoEst"] : "";
-        $lugarD = isset($POST["lugarD"]) ? $POST["lugarD"] : "";
-        $matestM = isset($POST["matestM"]) ? $POST["matestM"] : "";
-        $matricula = isset($POST["matricula"]) ? $POST["matricula"] : "";
-        $folio = isset($POST["folio"]) ? $POST["folio"] : "";
-        $codTesoreria = isset($POST["codTesoreria"]) ? $POST["codTesoreria"] : "";
-        $va_matricula = isset($POST["va_matricula"]) ? $POST["va_matricula"] : "";
-        $inclusion = isset($POST["inclusion"]) ? $POST["inclusion"] : "";
-        $extran = isset($POST["extran"]) ? $POST["extran"] : "";
-        $NumMatricula = isset($POST["NumMatricula"]) ? $POST["NumMatricula"] : "";
-        $estadoAgno = isset($POST["estadoAgno"]) ? $POST["estadoAgno"] : "";
-        $tipoSangre = isset($POST["tipoSangre"]) ? $POST["tipoSangre"] : "";
-        $eps = isset($POST["eps"]) ? $POST["eps"] : "";
-        $celular2 = isset($POST["celular2"]) ? $POST["celular2"] : "";
-        $ciudadR = isset($POST["ciudadR"]) ? $POST["ciudadR"] : "";
-        $nombre2 = isset($POST["nombre2"]) ? mysqli_real_escape_string($conexion,$POST["nombre2"]) : "";
-        $id = isset($POST["id"]) ? $POST["id"] : "";
+        $tipoD         = isset($POST["tipoD"]) ? $POST["tipoD"] : "";
+        $nDoc          = isset($POST["nDoc"]) ? $POST["nDoc"] : "";
+        $religion      = isset($POST["religion"]) ? $POST["religion"] : "";
+        $email         = isset($POST["email"]) ? strtolower($POST["email"]) : "";
+        $direccion     = isset($POST["direccion"]) ? $POST["direccion"] : "";
+        $barrio        = isset($POST["barrio"]) ? $POST["barrio"] : "";
+        $telefono      = isset($POST["telefono"]) ? $POST["telefono"] : "";
+        $celular       = isset($POST["celular"]) ? $POST["celular"] : "";
+        $estrato       = isset($POST["estrato"]) ? $POST["estrato"] : "";
+        $genero        = isset($POST["genero"]) ? $POST["genero"] : "";
+        $apellido1     = isset($POST["apellido1"]) ? mysqli_real_escape_string($conexion,$POST["apellido1"]) : "";
+        $apellido2     = isset($POST["apellido2"]) ? mysqli_real_escape_string($conexion,$POST["apellido2"]) : "";
+        $nombres       = isset($POST["nombres"]) ? mysqli_real_escape_string($conexion,$POST["nombres"]) : "";
+        $grado         = isset($POST["grado"]) ? $POST["grado"] : "";
+        $grupo         = isset($POST["grupo"]) ? $POST["grupo"] : "";
+        $tipoEst       = isset($POST["tipoEst"]) ? $POST["tipoEst"] : "";
+        $lugarD        = isset($POST["lugarD"]) ? $POST["lugarD"] : "";
+        $matestM       = isset($POST["matestM"]) ? $POST["matestM"] : "";
+        $matricula     = isset($POST["matricula"]) ? $POST["matricula"] : "";
+        $folio         = isset($POST["folio"]) ? $POST["folio"] : "";
+        $codTesoreria  = isset($POST["codTesoreria"]) ? $POST["codTesoreria"] : "";
+        $va_matricula  = isset($POST["va_matricula"]) ? $POST["va_matricula"] : "";
+        $inclusion     = isset($POST["inclusion"]) ? $POST["inclusion"] : "";
+        $extran        = isset($POST["extran"]) ? $POST["extran"] : "";
+        $NumMatricula  = isset($POST["NumMatricula"]) ? $POST["NumMatricula"] : "";
+        $estadoAgno    = isset($POST["estadoAgno"]) ? $POST["estadoAgno"] : "";
+        $tipoSangre    = isset($POST["tipoSangre"]) ? $POST["tipoSangre"] : "";
+        $eps           = isset($POST["eps"]) ? $POST["eps"] : "";
+        $celular2      = isset($POST["celular2"]) ? $POST["celular2"] : "";
+        $ciudadR       = isset($POST["ciudadR"]) ? $POST["ciudadR"] : "";
+        $nombre2       = isset($POST["nombre2"]) ? mysqli_real_escape_string($conexion,$POST["nombre2"]) : "";
+        $id            = isset($POST["id"]) ? $POST["id"] : "";
         $tipoMatricula = isset($POST["tipoMatricula"]) ? $_POST["tipoMatricula"] : GRADO_GRUPAL;
+        $grupoEtnico   = isset($POST["grupoEtnico"]) ? $_POST["grupoEtnico"] : 1;
+        $discapacidad  = isset($POST["discapacidad"]) ? $_POST["discapacidad"] : 1;
 
-        try{
+        try {
             
             $consulta = "UPDATE ".BD_ACADEMICA.".academico_matriculas SET 
             mat_tipo_documento    = :tipoD, 
@@ -1054,8 +1119,10 @@ class Estudiantes {
             mat_lugar_nacimiento  = :procedencia,
             $pasosMatricula
             $fechaNacimiento
-            mat_nombre2           = :nombre2,
-            mat_tipo_matricula    = :tipoMatricula
+            mat_nombre2            = :nombre2,
+            mat_tipo_matricula     = :tipoMatricula,
+            mat_etnia              = :grupoEtnico,
+            mat_tiene_discapacidad = :discapacidad
 
             WHERE mat_id = :id AND institucion= :idInstitucion AND year= :year";
 
@@ -1098,6 +1165,8 @@ class Estudiantes {
             $stmt->bindParam(':tipoMatricula', $tipoMatricula, PDO::PARAM_STR);
             $stmt->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_INT);
             $stmt->bindParam(':year', $_SESSION["bd"], PDO::PARAM_STR);
+            $stmt->bindParam(':grupoEtnico', $grupoEtnico, PDO::PARAM_INT);
+            $stmt->bindParam(':discapacidad', $discapacidad, PDO::PARAM_INT);
 
             if ($stmt) {
                 $stmt->execute();
@@ -1255,10 +1324,19 @@ class Estudiantes {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
         $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
-        INNER JOIN ".BD_ADMISIONES.".aspirantes ON asp_id=mat.mat_solicitud_inscripcion
-        LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=asp_grado AND gra.institucion=mat.institucion AND gra.year=mat.year
-        WHERE mat.mat_estado_matricula=5 AND mat.institucion=? AND mat.year=? {$filtro}
-        ORDER BY mat.mat_primer_apellido  {$limite}";
+        INNER JOIN ".BD_ADMISIONES.".aspirantes 
+            ON asp_id=mat.mat_solicitud_inscripcion 
+            AND asp_oculto = '".BDT_Aspirante::ESTADO_OCULTO_FALSO."'
+        LEFT JOIN ".BD_ACADEMICA.".academico_grados gra 
+            ON gra_id=asp_grado 
+            AND gra.institucion=mat.institucion 
+            AND gra.year=mat.year
+        WHERE mat.mat_estado_matricula=".EN_INSCRIPCION." 
+        AND mat.institucion=? 
+        AND mat.year=? 
+        {$filtro}
+        ORDER BY mat.mat_primer_apellido  {$limite}
+        ";
 
         $parametros = [$config['conf_id_institucion'], $year];
         

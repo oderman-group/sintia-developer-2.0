@@ -5,7 +5,7 @@ if (!empty($data["dataTotal"])) {
 }
 $contReg = 1;
 foreach ($data["data"] as $resultado) {
-	$observacion = strip_tags($resultado['asp_observacion']);
+	$observacion = !empty($resultado['asp_observacion']) ? strip_tags($resultado['asp_observacion']) : "";
 	$infoTooltipEstudiante = "<b>Nombre acudiente:</b><br>
                           {$resultado['asp_nombre_acudiente']}<br>
                           <b>Celular:</b><br>
@@ -17,7 +17,7 @@ foreach ($data["data"] as $resultado) {
                           <b>Observación:</b><br>
 						  <span style='color:darkblue; font-size:11px; font-style:italic;'>{$observacion}</span>";
 ?>
-	<tr id="data1" class="odd gradeX">
+	<tr id="registro_<?= $resultado["asp_id"]; ?>" class="odd gradeX">
 		<td><?= $resultado["mat_id"]; ?></td>
 		<td><?= $resultado["asp_id"]; ?></td>
 		<td><?= $resultado["asp_fecha"]; ?></td>
@@ -51,6 +51,8 @@ foreach ($data["data"] as $resultado) {
 					<?php if ($resultado["asp_estado_solicitud"] == 1 or $resultado["asp_estado_solicitud"] == 2 or $resultado["asp_estado_solicitud"] == 7) { ?>
 						<li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Va a eliminar este aspirante. Esta acción es irreversible. Desea continuar?','question','inscripciones-eliminar-aspirante.php?matricula=<?= base64_encode($resultado["mat_id"]); ?>')">Eliminar aspirante</a></li>
 					<?php } ?>
+					
+					<li><a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!', 'Va a ocultar a este aspirante del listado. Desea continuar?', 'question','inscripciones-ocultar-aspirante.php?matricula=<?= base64_encode($resultado["mat_id"]); ?>&aspirante=<?= base64_encode($resultado["asp_id"]); ?>', true, <?=$resultado["asp_id"];?>)">Ocultar aspirante</a></li>
 				</ul>
 			</div>
 		</td>

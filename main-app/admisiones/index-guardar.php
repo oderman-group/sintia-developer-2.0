@@ -4,6 +4,7 @@ include("php-funciones.php");
 require_once("../class/EnviarEmail.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/Inscripciones.php");
+require_once(ROOT_PATH."/main-app/class/Tables/BDT_aspirante.php");
 
 $idInst="";
 if(!empty($_REQUEST["idInst"])){ $idInst=base64_decode($_REQUEST["idInst"]);}
@@ -21,7 +22,12 @@ $uss->execute();
 $datosUss = $uss->fetch();
 $nombreUss=strtoupper($datosUss['uss_nombre']." ".$datosUss['uss_apellido1']);
 
-$estQuery = "SELECT * FROM aspirantes WHERE asp_documento = :documento AND asp_institucion = :institucion AND asp_agno = :years";
+$estQuery = "SELECT * FROM aspirantes 
+WHERE asp_documento = :documento 
+AND asp_institucion = :institucion 
+AND asp_agno = :years
+AND asp_oculto = ".BDT_Aspirante::ESTADO_OCULTO_FALSO."
+";
 $est = $pdo->prepare($estQuery);
 $est->bindParam(':documento', $_POST['documento'], PDO::PARAM_INT);
 $est->bindParam(':institucion', $idInst, PDO::PARAM_INT);
@@ -40,7 +46,7 @@ if (md5($_POST['idInst']) != $_POST['iditoken']) {
 }
 
 $nombreCompleto=$_POST['nombreEstudiante'].' '.$_POST['apellido1'];
-$sql = "INSERT INTO aspirantes(asp_institucion, asp_tipo_documento, asp_documento, asp_nombre, asp_email_acudiente, asp_nombre_acudiente, asp_celular_acudiente, asp_agno, asp_estado_solicitud, asp_documento_acudiente, asp_grado)VALUES(:institucion, :tipoDocumento, :documento, :nombreEstudiante, :email, :nombreAcudiente, :celular, '".$year."', 8, :documentoAcudiente, :grado)";
+$sql = "INSERT INTO aspirantes(asp_institucion, asp_tipo_documento, asp_documento, asp_nombre, asp_email_acudiente, asp_nombre_acudiente, asp_celular_acudiente, asp_agno, asp_estado_solicitud, asp_documento_acudiente, asp_grado, asp_hizo_proceso_antes)VALUES(:institucion, :tipoDocumento, :documento, :nombreEstudiante, :email, :nombreAcudiente, :celular, '".$year."', 8, :documentoAcudiente, :grado, :hizoProceso)";
 $stmt = $pdo->prepare($sql);
 
 $stmt->bindParam(':institucion', $idInst, PDO::PARAM_INT);
@@ -52,6 +58,7 @@ $stmt->bindParam(':nombreAcudiente', $_POST['nombreAcudiente'], PDO::PARAM_STR);
 $stmt->bindParam(':celular', $_POST['celular'], PDO::PARAM_STR);
 $stmt->bindParam(':documentoAcudiente', $_POST['documentoAcudiente'], PDO::PARAM_STR);
 $stmt->bindParam(':grado', $_POST['grado'], PDO::PARAM_INT);
+$stmt->bindParam(':hizoProceso', $_POST['procesoAdmisionAntes'], PDO::PARAM_INT);
 
 $stmt->execute();
 

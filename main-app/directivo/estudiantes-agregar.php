@@ -345,6 +345,31 @@ if(!Modulos::validarPermisoEdicion()){
 													</select>
 												</div>
 											</div>
+
+											<div class="form-group row">
+												<label class="col-sm-2 control-label">Grupo étnico?</label>
+												<div class="col-sm-2">
+													<select class="form-control  select2" name="grupoEtnico" <?=$disabledPermiso;?>>
+														<option value="">Seleccione una opción</option>
+														<option value="1">Ninguno</option>
+                                                        <option value="2">Afrocolombianos</option>
+                                                        <option value="3">Raizales</option>
+                                                        <option value="4">Indigena</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="form-group row">
+												<label class="col-sm-2 control-label">Tiene alguna limitación o discapacidad?</label>
+												<div class="col-sm-2">
+													<select class="form-control  select2" name="discapacidad" <?=$disabledPermiso;?>>
+														<option value="">Seleccione una opción</option>
+														<option value="1">Ninguna</option>
+														<option value="2">Si</option>
+														<option value="3">No</option>
+													</select>
+												</div>
+											</div>
 											
 											<div class="form-group row">
 												<label class="col-sm-2 control-label">Direcci&oacute;n</label>

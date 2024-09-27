@@ -92,7 +92,7 @@ function deseaRegresar(dato){
  * @param tipos  [success,error,warning,info,question]
  * @return boolean 
  */
-function sweetConfirmacion(titulo, mensaje, tipo ='question', varHeref) {
+function sweetConfirmacion(titulo, mensaje, tipo ='question', varHeref, async = false, idRegistroTabla = null) {
     Swal.fire({
         title: titulo,
         text: mensaje,
@@ -105,7 +105,35 @@ function sweetConfirmacion(titulo, mensaje, tipo ='question', varHeref) {
             if(varHeref === null) {
                 return true;
             } else {
-                window.location.href=varHeref;
+                if(async == true) { 
+                    fetch(varHeref, {
+                        method: 'GET'
+                    })
+                    .then(response => response.text()) // Convertir la respuesta a texto
+                    .then(data => {
+                        if (idRegistroTabla != null) {
+                            document.getElementById('registro_'+idRegistroTabla).style.display = 'none';
+                        }
+
+                        $.toast({
+                            heading: 'Proceso completado', 
+                            text: 'Se ha completado el proceso correctamente.', 
+                            position: 'bottom-right',
+                            showHideTransition: 'slide',
+                            loaderBg:'#26c281', 
+                            icon: 'success', 
+                            hideAfter: 3000, 
+                            stack: 2
+                
+                        });
+                    })
+                    .catch(error => {
+                        // Manejar errores
+                        console.error('Error:', error);
+                    });
+                } else {
+                    window.location.href=varHeref;
+                }
             }
 
         } else {

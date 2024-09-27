@@ -1,4 +1,5 @@
 <?php
+require_once(ROOT_PATH."/main-app/class/Conexion.php");
 class BDT_Tablas {
 
     public static $tableName;
@@ -28,7 +29,7 @@ class BDT_Tablas {
      * @throws Exception Si ocurre un error al preparar la consulta.
      */
     public static function Select(Array $predicado = []) {
-        global $conexionPDO;
+        $conexionPDO = Conexion::newConnection('PDO');
         $where = '';
 
         if( !empty($predicado) ) {
