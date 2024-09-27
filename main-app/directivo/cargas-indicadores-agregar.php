@@ -2,11 +2,11 @@
 <?php $idPaginaInterna = 'DT0040';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
+<?php Utilidades::validarParametros($_GET,["carga","docente","periodo"]);?>
 <?php include("verificar-carga.php");?>
 <?php
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 
-Utilidades::validarParametros($_GET,["carga","docente","periodo"]);
 
 if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
