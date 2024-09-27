@@ -38,8 +38,8 @@
         <span class="fa fa-angle-down"></span>
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">	
-          <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?tipo=<?=GRADO_GRUPAL;?>">Grupal</a>
-          <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?tipo=<?=GRADO_INDIVIDUAL;?>">Individual</a>
+          <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?tipo=<?=base64_encode(GRADO_GRUPAL);?>">Grupal</a>
+          <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?tipo=<?=base64_encode(GRADO_INDIVIDUAL);?>">Individual</a>
           <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>">Todos</a>
           </div>
         </li>

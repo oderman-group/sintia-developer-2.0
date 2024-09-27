@@ -125,36 +125,41 @@ class SubRoles {
         WHERE subr_id='".$datos["id"]."'";  
         mysqli_query($conexion,$sqlUpdate);
 
-        if(!empty($datos["paginas"])){
-            try{
+        if (!empty($datos["paginas"])) {
+
+            try {
                 $consultaPaginaSubRoles = mysqli_query($conexion, "SELECT spp_id_pagina FROM ".$baseDatosServicios.".sub_roles_paginas 
                 INNER JOIN ".$baseDatosServicios.".paginas_publicidad ON pagp_id=spp_id_pagina AND (pagp_pagina_padre='' OR pagp_pagina_padre IS NULL)
                 WHERE spp_id_rol = '".$datos["id"]."'");
             } catch (Exception $e) {
                 include("../compartido/error-catch-to-report.php");
             }
-            $subRolesPaginas = mysqli_fetch_all($consultaPaginaSubRoles, MYSQLI_ASSOC);
-            $valoresPaginas = array_column($subRolesPaginas, 'spp_id_pagina');
 
-            $resultadoAgregar= array_diff($datos["paginas"],$valoresPaginas);
-            if(!empty($resultadoAgregar)){
-                try{
-                    self::crearRolesPaginas($datos["id"],$resultadoAgregar);
+            $subRolesPaginas = mysqli_fetch_all($consultaPaginaSubRoles, MYSQLI_ASSOC);
+            $valoresPaginas  = array_column($subRolesPaginas, 'spp_id_pagina');
+
+            $resultadoAgregar = array_diff($datos["paginas"], $valoresPaginas);
+
+            if (!empty($resultadoAgregar)) {
+                try {
+                    self::crearRolesPaginas($datos["id"], $resultadoAgregar);
                 } catch (Exception $e) {
                     include("../compartido/error-catch-to-report.php");
                 }
             }
 
-            $resultadoEliminar= array_diff($valoresPaginas,$datos["paginas"]);
-            if(!empty($resultadoEliminar)){
-                try{
+            $resultadoEliminar = array_diff($valoresPaginas,$datos["paginas"]);
+
+            if (!empty($resultadoEliminar)) {
+                try {
                     self::eliminarRolesPaginas($datos["id"],$resultadoEliminar);
                 } catch (Exception $e) {
                     include("../compartido/error-catch-to-report.php");
                 }
             }
-        }else{
-            $sqlDelete="DELETE FROM ".$baseDatosServicios.".sub_roles_paginas
+
+        } else {
+            $sqlDelete = "DELETE FROM ".$baseDatosServicios.".sub_roles_paginas
             WHERE spp_id_rol='".$datos["id"]."'";
             try{
                 mysqli_query($conexion,$sqlDelete);

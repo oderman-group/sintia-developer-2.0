@@ -14,6 +14,8 @@ define('JOBS_ESTADO_PENDIENTE', 'Pendiente');
 define('JOBS_ESTADO_PROCESO', 'Proceso');
 define('JOBS_ESTADO_FINALIZADO', 'Finalizado');
 define('JOBS_ESTADO_ERROR', 'Error');
+define('JOBS_ESTADO_PROCESADO', 'Procesado');
+define('JOBS_ESTADO_ENCOLADO', 'Encolado');
 
 define('JOBS_TIPO_IMPORTAR_ESTUDIANTES_EXCEL', 'importar_estudiantes');
 define('JOBS_TIPO_GENERAR_INFORMES', 'generar_informes');
@@ -196,6 +198,12 @@ define('PAQUETES', 'PAQUETES');
 define('GENERAR_CON_PORCENTAJE_COMPLETO', 1);
 define('OMITIR_ESTUDIANTES_CON_PORCENTAJE_INCOMPLETO', 2);
 define('GENERAR_CON_CUALQUIER_PORCENTAJE', 3);
+
+
+
+// define('COMPB_FILTRO_TEXTO', 'filtro_texto');
+
+
 
 switch($_SERVER['HTTP_HOST']){
 	case 'localhost':

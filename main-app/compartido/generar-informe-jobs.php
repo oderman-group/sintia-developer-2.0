@@ -3,8 +3,8 @@ $_SERVER['DOCUMENT_ROOT'] = dirname(dirname(dirname(dirname(__FILE__))));
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 require_once ROOT_PATH."/main-app/class/Conexion.php";
 
-$conexionPDO         = Conexion::newConnection('PDO');
-$conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion);
+$conexionPDO = Conexion::newConnection('PDO');
+$conexion    = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion);
 
 require_once(ROOT_PATH."/main-app/class/Sysjobs.php");
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
@@ -14,249 +14,287 @@ require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
-$parametrosBuscar = array(
-	"tipo" =>JOBS_TIPO_GENERAR_INFORMES,
-	"estado" =>JOBS_ESTADO_PENDIENTE
-);										
-$listadoCrobjobs=SysJobs::listar($parametrosBuscar);
+require_once(ROOT_PATH."/main-app/class/RedisInstance.php");
+require_once(ROOT_PATH."/main-app/class/BindSQL.php");
+require_once(ROOT_PATH."/main-app/class/Tables/BDT_temp_calculo_boletin_estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Tables/BDT_sys_jobs.php");
+;
 
+$cantidadActualizados = BDT_SysJobs::updateStautusToPendingWhenLongTimeInProcess();
 
-while($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)){
+if ($cantidadActualizados > 0) {
+    echo 'Se han actualizado '.$cantidadActualizados.' jobs que tenian demasiado tiempo en proceso.'."<br>";
+}
 
-$datos = array(
-	"id" 	  => $resultadoJobs['job_id'],
-	"estado"  => JOBS_ESTADO_PROCESO,
-);
-SysJobs::actualizar($datos);
-
-// fecha1 es la primera fecha
-$fechaInicio = new DateTime();
-$finalizado = false;
-$parametros = json_decode($resultadoJobs["job_parametros"], true);
-$institucionId = $resultadoJobs["job_id_institucion"];
-$anio = $resultadoJobs["job_year"];
-$intento = intval($resultadoJobs["job_intentos"]);
-
-$_SESSION["id"]=$resultadoJobs["job_responsable"];
-$_SESSION["bd"]=$resultadoJobs["job_year"];
-$_SESSION["idInstitucion"]=$resultadoJobs["job_id_institucion"];
-
-$grado =$parametros["grado"];
-$grupo =$parametros["grupo"];
-$carga = $parametros["carga"];
-$periodo = $parametros["periodo"];
-
-$informacionAdicional = [
-	'carga'   => $carga,
-	'periodo' => $periodo
+$parametrosBuscar = [
+    "tipo"   => JOBS_TIPO_GENERAR_INFORMES,
+    "estado" => JOBS_ESTADO_PENDIENTE
 ];
 
+BindSQL::iniciarTransacion();
 
-if(empty($config)){
-	$configConsulta = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".configuracion WHERE conf_id_institucion='".$institucionId."' AND conf_agno='".$anio."'");
-	$config = mysqli_fetch_array($configConsulta, MYSQLI_BOTH);
-}
+echo 'Comenzando el proceso de generación de informes...'."<br>";
 
-//Consultamos los estudiantes del grado y grupo
-$filtroAdicional= "AND mat_grado='".$grado."' AND mat_grupo='".$grupo."' AND (mat_estado_matricula=1 OR mat_estado_matricula=2)";
-$cursoActual=GradoServicios::consultarCurso($grado);
-$consultaListaEstudante =Estudiantes::listarEstudiantesEnGrados($filtroAdicional,"",$cursoActual,$grupo,$anio);
-$numEstudiantes=0;
-$finalizado = true;
-$erroresNumero=0;
-$listadoEstudiantesError="";
-$mensaje="";
-	if($config['conf_porcentaje_completo_generar_informe']==1){
-		$consultaListaEstudantesError =Estudiantes::listarEstudiantesNotasFaltantes($carga,$periodo,$cursoActual["gra_tipo"]);
-		//Verificamos que el estudiante tenga sus notas al 100%
-		if(mysqli_num_rows($consultaListaEstudantesError)>0){
-			$erroresNumero=mysqli_num_rows($consultaListaEstudantesError);
-			$contador=0;
-			while($estudianteResultadoError = mysqli_fetch_array($consultaListaEstudantesError, MYSQLI_BOTH)){
-			$contador++;
-			$porcentajeAcumulado = $estudianteResultadoError['acumulado'] > 0 ? $estudianteResultadoError['acumulado'] : 0;
-			$listadoEstudiantesError=$listadoEstudiantesError."<br><br>".$contador."): ".$estudianteResultadoError['mat_nombres']
-			." ".$estudianteResultadoError['mat_primer_apellido']." ".$estudianteResultadoError['mat_segundo_apellido']
-			." no tiene notas completas.<br>
-			ID: <b>".$estudianteResultadoError['mat_id']."</b><br>
-			Valor Actual: <b>".$porcentajeAcumulado."% </b>";
-			}
-			$finalizado = false;
-		}
-	}
+try {
+    $listadoCrobjobsActualizar = SysJobs::listar($parametrosBuscar);
 
-	if($finalizado){
-		$contBol=1;
-		while($estudianteResultado = mysqli_fetch_array($consultaListaEstudante, MYSQLI_BOTH)){
-			$estudiante = $estudianteResultado["mat_id"];
-			include(ROOT_PATH."/main-app/definitivas.php");
-			
-			$idNumericoEstudiante = preg_replace('/^MAT/', '', $estudiante); //Para ser usado en el codigo de los registros
+    echo 'Se encontraron '.mysqli_num_rows($listadoCrobjobsActualizar).' jobs para generar informes.'."<br>";
 
-			//Consultamos si tiene registros en el boletín
-			$boletinDatos = Boletin::traerNotaBoletinCargaPeriodo($config, $periodo, $estudiante, $carga, $anio);
+    // Actualizamos todos los jobs seleccionados a en PROCESO de una vez para evitar colisiones con otro job
+    if (mysqli_num_rows($listadoCrobjobsActualizar) > 0) {
+        while($resultadoJobsActualizar = mysqli_fetch_array($listadoCrobjobsActualizar, MYSQLI_ASSOC)) {
+            $datos = [
+                "id"     => $resultadoJobsActualizar['job_id'],
+                "estado" => JOBS_ESTADO_PROCESO,
+            ];
 
-			if($config['conf_porcentaje_completo_generar_informe']==2){
-				//Verificamos que el estudiante tenga sus notas al porcentaje minimo permitido
-				if($porcentajeActual < PORCENTAJE_MINIMO_GENERAR_INFORME and empty($boletinDatos['bol_nota'])){
-					$erroresNumero++;
-					$mensaje=$mensaje."<br><br>".$erroresNumero."): ".$estudianteResultado['mat_nombres']." ".$estudianteResultado['mat_primer_apellido']." ".$estudianteResultado['mat_segundo_apellido'] ." no tiene notas completas.<br>
-					ID: <b>".$estudianteResultado['mat_id']."</b><br>
-					Valor Actual: <b>".$porcentajeActual."% </b>";
-					$finalizado = false;
-					continue;
-				}
-			}
-			$caso = 1; //Inserta la definitiva que viene normal 
-			//Si ya existe un registro previo de definitiva TIPO 1
-			if(!empty($boletinDatos['bol_id']) and $boletinDatos['bol_tipo']==1){
-				
-				if($boletinDatos['bol_nota']!=$definitiva || $boletinDatos['bol_porcentaje']!=$porcentajeActual){
-					$caso = 2;//Se cambia la definitiva que tenía por la que viene. Sea menor o mayor, o igual solo si cambia el porcentaje.
-				}else{
-					$caso = 3;//No se hacen cambios. Todo sigue igual
-					continue;
-				}
-				
-			}
-			//Si ya existe un registro previo de recuperación de periodo TIPO 2
-			elseif(!empty($boletinDatos['bol_id']) and $boletinDatos['bol_tipo']==2){
-				
-				//Si la definitiva que viene está perdida 
-				if($definitiva<$config[5]){
-					$caso = 3;//No se hacen cambios. Todo sigue igual
-					continue;
-				}else{
-					$caso = 4;//Se reemplaza la nota de recuperación actual por la definitiva que viene. Igual está ganada y no requiere de recuperación.
-				}
-				
-			}
-			//Si ya existe un registro previo de recuperación por Indicadores TIPO 3
-			elseif(!empty($boletinDatos['bol_id']) and ($boletinDatos['bol_tipo']==3 or $boletinDatos['bol_tipo']==4)){
-				$caso = 5;//Se actualiza la definitiva que viene y se cambia la recuperación del Indicador a nota anterior. 
-			}
-			//Vamos a obtener las definitivas por cada indicador y la definitiva general de la asignatura
-			$notasPorIndicador = Calificaciones::traerNotasPorIndicador($config, $carga, $estudiante, $periodo, $anio);
-			$sumaNotaIndicador = 0; 
-			while($notInd = mysqli_fetch_array($notasPorIndicador, MYSQLI_BOTH)){
-				$consultaNum = Indicadores::consultaRecuperacionIndicadorPeriodo($config, $notInd[1], $estudiante, $carga, $periodo, $anio);
-				$num = mysqli_num_rows($consultaNum);
+            SysJobs::actualizar($datos);
 
-				
-				$sumaNotaIndicador  += $notInd[0];
-				
-				if($num==0){
-					Indicadores::eliminarRecuperacionIndicadorPeriodo($config, $notInd[1], $estudiante, $carga, $periodo, $anio);				
-					
-					Indicadores::guardarRecuperacionIndicador($conexionPDO, $config, $estudiante, $carga, $notInd[0], $notInd[1], $periodo, $notInd[2], $anio);
-				}else{
-					Indicadores::actualizarRecuperacionIndicador($config, $estudiante, $carga, $notInd[0], $notInd[1], $periodo, $notInd[2], $anio);
-				}
-			}
-			$sumaNotaIndicador = round($sumaNotaIndicador,1); 
-			if($caso == 2 or $caso == 4 or $caso == 5){
-		
-				if(!empty($boletinDatos['bol_historial_actualizacion']) && $boletinDatos['bol_historial_actualizacion']!=NULL){
-					$actualizacion = json_decode($boletinDatos['bol_historial_actualizacion'], true);
-				}else{
-					$actualizacion = array();
-				}
-		
-				$fecha=$boletinDatos['bol_fecha_registro'];
-				if(!empty($boletinDatos['bol_ultima_actualizacion']) && $boletinDatos['bol_ultima_actualizacion']!=NULL){
-					$fecha=$boletinDatos['bol_ultima_actualizacion'];
-				}
-		
-				$numActualizacion= $boletinDatos['bol_actualizaciones']+1;
-				$actualizacion[$numActualizacion] = [
-					"nota anterior" 			=> $boletinDatos['bol_nota'],
-					"fecha de actualización" 		=> $fecha,
-					"porcentaje" 	=> $boletinDatos['bol_porcentaje']
-				];
-		
-				$update = [
-					'bol_nota_anterior'           => 'bol_nota', 
-					'bol_nota'                    => $definitiva, 
-					'bol_nota_indicadores='       => $sumaNotaIndicador, 
-					'bol_tipo'                    => 1, 
-					'bol_observaciones'           => 'Reemplazada', 
-					'bol_porcentaje'              => $porcentajeActual, 
-					'bol_historial_actualizacion' => json_encode($actualizacion)
-				];
-				Boletin::actualizarNotaBoletin($config, $boletinDatos['bol_id'], $update, $anio);
-			}elseif($caso == 1){
-				//Eliminamos por si acaso hay algún registro
-				if(!empty($boletinDatos['bol_id'])){
-					Boletin::eliminarNotaBoletinID($config, $boletinDatos['bol_id'], $anio);
-				}			
-				//INSERTAR LOS DATOS EN LA TABLA BOLETIN
-				Boletin::guardarNotaBoletin($conexionPDO, "bol_carga, bol_estudiante, bol_periodo, bol_nota, bol_tipo, bol_fecha_registro, bol_actualizaciones, bol_nota_indicadores, bol_porcentaje, institucion, year, bol_id", [$carga, $estudiante, $periodo, $definitiva, 1, date("Y-m-d H:i:s"), 0, $sumaNotaIndicador, $porcentajeActual, $config['conf_id_institucion'], $anio]);
-				
-				$contBol++;
-			}
-			
-			$numEstudiantes++;
+            echo 'Actualizado a en PROCESO el job con ID: '.$resultadoJobsActualizar['job_id']."<br>";
+        }
+        mysqli_free_result($listadoCrobjobsActualizar);
+    } else {
+        //Evitamos que el job continue si no hay jobs pendientes
+        exit();
+    }
 
-		}
+    $parametrosBuscar = [
+        "tipo"   => JOBS_TIPO_GENERAR_INFORMES,
+        "estado" => JOBS_ESTADO_PROCESO
+    ];
+
+    $listadoCrobjobs = SysJobs::listar($parametrosBuscar);
+
+    while ($resultadoJobs = mysqli_fetch_array($listadoCrobjobs, MYSQLI_BOTH)) {
+
+        echo 'Procesando job ID: '.$resultadoJobs['job_id']."<br>";
+
+        // fecha1 es la primera fecha
+        $fechaInicio   = new DateTime();
+        $finalizado    = false;
+        $parametros    = json_decode($resultadoJobs["job_parametros"], true);
+        $institucionId = $resultadoJobs["job_id_institucion"];
+        $anio          = $resultadoJobs["job_year"];
+        $intento       = intval($resultadoJobs["job_intentos"]);
+
+        $_SESSION["id"]            = $resultadoJobs["job_responsable"];
+        $_SESSION["bd"]            = $resultadoJobs["job_year"];
+        $_SESSION["idInstitucion"] = $resultadoJobs["job_id_institucion"];
+
+        $grado   = $parametros["grado"];
+        $grupo   = $parametros["grupo"];
+        $carga   = $parametros["carga"];
+        $periodo = $parametros["periodo"];
+
+        $informacionAdicional = [
+            'carga'   => $carga,
+            'periodo' => $periodo
+        ];
+
+        $config = RedisInstance::getSystemConfiguration();
+
+        //Consultamos los estudiantes del grado y grupo
+        $filtroAdicional         = "AND mat_grado='".$grado."' 
+                                    AND mat_grupo='".$grupo."' 
+                                    AND (mat_estado_matricula=1 OR mat_estado_matricula=2)
+                                    ";
+        $cursoActual             = GradoServicios::consultarCurso($grado);
+        $numEstudiantes          = 0;
+        $finalizado              = true;
+        $erroresNumero           = 0;
+        $listadoEstudiantesError = "";
+        $mensaje                 = "";
+
+        if ($config['conf_porcentaje_completo_generar_informe'] == GENERAR_CON_PORCENTAJE_COMPLETO) {
+            echo 'Ingresamos a verificación de porcentaje completo para los estudiantes.'."<br>";
+
+            $consultaListaEstudantesError = Estudiantes::listarEstudiantesNotasFaltantes($carga, $periodo, $cursoActual["gra_tipo"]);
+
+            //Verificamos que el estudiante tenga sus notas al 100%
+            if (mysqli_num_rows($consultaListaEstudantesError) > 0) {
+                $erroresNumero = mysqli_num_rows($consultaListaEstudantesError);
+                $contador      = 0;
+
+                while ($estudianteResultadoError = mysqli_fetch_array($consultaListaEstudantesError, MYSQLI_BOTH)) {
+                    $contador ++;
+
+                    $porcentajeAcumulado     = $estudianteResultadoError['acumulado'] > 0 ? $estudianteResultadoError['acumulado'] : 0;
+                    $listadoEstudiantesError = $listadoEstudiantesError."<br><br>".$contador."): ".$estudianteResultadoError['mat_nombres']
+                    ." ".$estudianteResultadoError['mat_primer_apellido']." ".$estudianteResultadoError['mat_segundo_apellido']
+                    ." no tiene notas completas.<br>
+                    ID: <b>".$estudianteResultadoError['mat_id']."</b><br>
+                    Valor Actual: <b>".$porcentajeAcumulado."% </b>";
+                }
+
+                $finalizado = false;
+
+                echo 'Existen estudiantes con notas incompletas por lo tanto no se pudo generar el informe.'."<br>";
+            }
+        }
+
+        if ($finalizado) {
+
+            $consultaListaEstudante  = Estudiantes::listarEstudiantesEnGrados($filtroAdicional, "", $cursoActual, $grupo, $anio);
+
+            echo '<p>Se encontraron '.mysqli_num_rows($consultaListaEstudante).' estudiantes para generar informes.'."</p>";
+
+            if (mysqli_num_rows($consultaListaEstudante) > Estudiantes::MAXIMOS_ESTUDIANTES_CURSO) {
+                echo 'No se puede generar el informe porque la lista de estudiantes es muy grande (máximo '.Estudiantes::MAXIMOS_ESTUDIANTES_CURSO.' estudiantes).'."<br>";
+
+                $datos = [
+                    "id"     => $resultadoJobs['job_id'],
+                    "estado" => JOBS_ESTADO_ERROR,
+                    "mensaje" => 'No se puede generar el informe porque la lista de estudiantes es muy grande (máximo '.Estudiantes::MAXIMOS_ESTUDIANTES_CURSO.' estudiantes).'
+                ];
     
-		$update = ['car_periodo' => ($periodo + 1)];
-		CargaAcademica::actualizarCargaPorID($config, $carga, $update, $anio);
+                SysJobs::actualizar($datos);
+    
+                echo 'Actualizado a en PROCESO el job con ID: '.$resultadoJobsActualizar['job_id']."<br>";
 
-		$consulta_mat_area_est = CargaAcademica::traerCargaMateriaPorID($config, $carga, $anio);
+                continue;
+            }
 
-		$respuesta ="
-		<h4>Resumen del proceso:</h4>
-		- Total estudiantes calificados: {$numEstudiantes}<br><br>
-		Datos releacionados:<br>
-		- Cod. Carga : {$carga}<br>
-		- Asignatura :{$consulta_mat_area_est["mat_nombre"]}<br>
-		- Grado : {$grado}<br>
-		- Grupo : {$grupo}<br>
-		- Periodo : {$periodo}<br><br>
-		";
-		// fecha2 en este caso es la fecha actual
-		$fechaFinal = new DateTime();
-		$tiempoTrasncurrido=minutosTranscurridos($fechaInicio,$fechaFinal);
-		$mensaje="La generaci&oacute;n de informe concluy&oacute; exitosamente.<br>
-		".$tiempoTrasncurrido."<br>
-		".$respuesta;
-		$datos = array(
-			"id" 	  => $resultadoJobs['job_id'],
-			"mensaje" => $mensaje,
-			"estado"  => JOBS_ESTADO_FINALIZADO,
-		);
-		SysJobs::actualizar($datos);
-		SysJobs::enviarMensaje($resultadoJobs['job_responsable'],$mensaje,$resultadoJobs['job_id'],JOBS_TIPO_GENERAR_INFORMES,JOBS_ESTADO_FINALIZADO, $informacionAdicional);
-	}else{
-		
-		if($intento>=3){				
-		$mensaje="<a target=\"_blank\" href=\"../docente/calificaciones-faltantes.php?carga=".base64_encode($carga)."&periodo=".base64_encode($periodo)."&get=".base64_encode(100)."\">El informe no se pudo generar, coloque las notas a todos los estudiantes y vuelva a intentarlo.</a>";
-		SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$mensaje,JOBS_ESTADO_FINALIZADO);
-		SysJobs::enviarMensaje($resultadoJobs['job_responsable'],$mensaje.$listadoEstudiantesError,$resultadoJobs['job_id'],JOBS_TIPO_GENERAR_INFORMES,JOBS_ESTADO_ERROR, $informacionAdicional);
-		}else{
-			$texto="";
-			if($erroresNumero>1){
-				$texto= $erroresNumero."  estudiantes que les";
-			 }else{
-				$texto= $erroresNumero."  estudiante que le";
-			 }
-			 $mensaje="<a target=\"_blank\" href=\"../docente/calificaciones-faltantes.php?carga=".base64_encode($carga)."&periodo=".base64_encode($periodo)."&get=".base64_encode(100)."\"> El informe no se ha podido generar porque hay ".$texto." faltan notas.</a>";
-			 SysJobs::actualizarMensaje($resultadoJobs['job_id'],$intento,$mensaje,JOBS_ESTADO_PENDIENTE);
-		}
-	}
-	
+            while ($estudianteResultado = mysqli_fetch_array($consultaListaEstudante, MYSQLI_ASSOC)) {
+                $estudiante = $estudianteResultado["mat_id"];
+
+                echo 'Procesando estudiante ID: '.$estudiante." - ".$estudianteResultado['mat_nombres']."<br>";
+
+                $porcentajeActual = Calificaciones::obtenerPorcentajeActualEstudiante($estudiante, $carga, $periodo);
+
+                //Consultamos si tiene registros en el boletín
+                $boletinDatos = Boletin::traerNotaBoletinCargaPeriodo($config, $periodo, $estudiante, $carga, $anio);
+
+                if ($config['conf_porcentaje_completo_generar_informe'] == OMITIR_ESTUDIANTES_CON_PORCENTAJE_INCOMPLETO) {
+
+                    //Verificamos que el estudiante tenga sus notas al porcentaje minimo permitido
+                    if ($porcentajeActual < PORCENTAJE_MINIMO_GENERAR_INFORME && empty($boletinDatos['bol_nota'])) {
+                        $erroresNumero ++;
+
+                        $mensaje = $mensaje."<br><br>".$erroresNumero."): ".$estudianteResultado['mat_nombres']." ".$estudianteResultado['mat_primer_apellido']." ".$estudianteResultado['mat_segundo_apellido'] ." no tiene notas completas.<br>
+                        ID: <b>".$estudianteResultado['mat_id']."</b><br>
+                        Valor Actual: <b>".$porcentajeActual."% </b>";
+
+                        $finalizado = false;
+
+                        continue;
+                    }
+                }
+
+                //Insertamos en la tabla temporal
+                $datosParaInsertar = [
+                    'tcbe_id_estudiante'        => $estudiante,
+                    'tcbe_id_carga_academica'   => $carga,
+                    'tcbe_periodo'              => $periodo,
+                    'tcbe_id_job_referencia'    => $resultadoJobs['job_id'],
+                    'tcbe_estado'               => BDT_tempCalculoBoletinEstudiantes::ESTADO_ESTUDIANTE_PENDIENTE,
+                    'tcbe_datos_estudiante'     => json_encode($estudianteResultado),
+                    'tcbe_calcular_indicadores' => $_SESSION["idInstitucion"] == ICOLVEN || 
+                                                   $_SESSION["idInstitucion"] == DEVELOPER || 
+                                                   $_SESSION["idInstitucion"] == DEVELOPER_PROD ? 1 : 0
+                ];
+
+                try {
+                    BDT_tempCalculoBoletinEstudiantes::Insert($datosParaInsertar, BD_ADMIN);
+                    echo 'Estudiante insertado correctamente.'."<br><br>";
+                } catch (Exception $e) {
+                    echo $e->getMessage();
+                    $finalizado = false;
+                }
+
+                $numEstudiantes ++;
+
+            }
+
+            $datos = [
+                "id"      => $resultadoJobs['job_id'],
+                "estado"  => JOBS_ESTADO_PROCESADO,
+            ];
+
+            SysJobs::actualizar($datos);
+
+            echo 'Actualizamos el estado del job a procesado.'."<br>";
+
+        } else {
+            if ($intento >= 3) {
+                $mensaje = "<a target=\"_blank\" href=\"../docente/calificaciones-faltantes.php?
+                carga=".base64_encode($carga)."
+                &periodo=".base64_encode($periodo)."
+                &get=".base64_encode(100)."\">
+                    El informe no se pudo generar, coloque las notas a todos los estudiantes y vuelva a intentarlo.
+                </a>
+                ";
+
+                SysJobs::actualizarMensaje(
+                    $resultadoJobs['job_id'], 
+                    $intento, 
+                    $mensaje, 
+                    JOBS_ESTADO_FINALIZADO
+                );
+
+                echo 'Actualizamos el estado del job a finalizado porque ya se han hecho '.$intento.' intentos.'."<br>";
+
+                SysJobs::enviarMensaje(
+                    $resultadoJobs['job_responsable'],
+                    $mensaje.$listadoEstudiantesError,
+                    $resultadoJobs['job_id'],
+                    JOBS_TIPO_GENERAR_INFORMES,
+                    JOBS_ESTADO_ERROR, 
+                    $informacionAdicional
+                );
+
+                echo 'Enviamos un mensaje al responsable del job.'."<br>";
+            } else {
+                $texto = "";
+
+                if ($erroresNumero > 1) {
+                    $texto = $erroresNumero."  estudiantes que les";
+                } else {
+                    $texto = $erroresNumero."  estudiante que le";
+                }
+
+                $mensaje = "<a target=\"_blank\" href=\"../docente/calificaciones-faltantes.php?carga=".base64_encode($carga)."&periodo=".base64_encode($periodo)."&get=".base64_encode(100)."\"> El informe no se ha podido generar porque hay ".$texto." faltan notas.</a>";
+
+                SysJobs::actualizarMensaje(
+                    $resultadoJobs['job_id'],
+                    $intento,
+                    $mensaje,
+                    JOBS_ESTADO_PENDIENTE
+                );
+
+                echo 'Actualizamos el estado del job a pendiente y haremos otro intento más tarde.'."<br>";
+            }
+        }
+
+        echo "Job finalizado."."<br>";
+
+        echo "<hr>";
+
+    }
+
+    BindSQL::finalizarTransacion();
+} catch (Exception $e) {
+
+    BindSQL::revertirTransacion();
+
+    echo $e->getMessage();
+
+    Utilidades::logError($e);
+
+    $datos = [
+        "id"      => $resultadoJobs['job_id'],
+        "estado"  => JOBS_ESTADO_ERROR,
+        "mensaje" => $e->getMessage(),
+    ];
+
+    SysJobs::actualizar($datos);
 
 }
 
-
-
-function minutosTranscurridos($fecha_i,$fecha_f)
+function minutosTranscurridos($fecha_i, $fecha_f)
 {
-	$intervalo = $fecha_i->diff($fecha_f);
-	$minutos = $intervalo->i;
-	$segundos = $intervalo->s;
-	return " Finaliz&oacute; en: <i> {$minutos} min y {$segundos} seg.</i>";
-}
+    $intervalo = $fecha_i->diff($fecha_f);
+    $minutos   = $intervalo->i;
+    $segundos  = $intervalo->s;
 
-exit()
-?>
+    return " Finaliz&oacute; en: <i> {$minutos} min y {$segundos} seg.</i>";
+}

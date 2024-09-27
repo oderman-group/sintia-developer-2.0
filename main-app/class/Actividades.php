@@ -3,6 +3,7 @@ require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.ph
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 require_once(ROOT_PATH."/main-app/compartido/sintia-funciones.php");
+require_once(ROOT_PATH."/main-app/class/Tables/BDT_academico_asignaciones_estudiantes.php");
 
 class Actividades {
 
@@ -1063,5 +1064,69 @@ class Actividades {
         $resultado = BindSQL::prepararSQL($sql, $parametros);
 
         return $codigo;
+    }
+
+    /**
+     * Assigns a given activity to a list of students.
+     *
+     * @param string $codigoActividad The unique identifier of the activity to be assigned.
+     * @param array $estudiantes An array of student IDs to whom the activity will be assigned.
+     *
+     * @return void This function does not return any value.
+     */
+    public static function guardarAsignacionActividad (string $codigoActividad, array $estudiantes): void
+    {
+        $cont = count($estudiantes);
+
+        if ($cont == 0) {
+            return;
+        }
+
+        $datos = [
+            'asgest_id_asignacion' => $codigoActividad,
+            'asgest_tipo'          => BDT_AcademicoAsignacionesEstudiantes::TIPO_TAREA,
+        ];
+
+        $i = 0;
+
+        while ($i < $cont) {
+            $datos['asgest_id_estudiante'] = $estudiantes[$i];
+            BDT_AcademicoAsignacionesEstudiantes::Insert($datos);
+            $i++;
+        }
+    }
+
+
+    /**
+     * Updates the assignment of a given activity to a list of students.
+     *
+     * This function first deletes any existing assignments for the specified activity,
+     * and then reassigns the activity to the provided list of students.
+     *
+     * @param string $codigoActividad The unique identifier of the activity to be assigned.
+     * @param array $estudiantes An array of student IDs to whom the activity will be assigned.
+     *
+     * @return void This function does not return any value.
+     */
+    public static function actualizarAsignacionActividad (string $codigoActividad, array $estudiantes): void
+    {
+        $cont = count($estudiantes);
+
+        $datos = [
+            'asgest_id_asignacion' => $codigoActividad,
+            'asgest_tipo'          => BDT_AcademicoAsignacionesEstudiantes::TIPO_TAREA,
+        ];
+
+        $predicado = $datos;
+
+        BDT_AcademicoAsignacionesEstudiantes::Delete($predicado);
+
+        $i = 0;
+
+        while ($i < $cont) {
+            $datos['asgest_id_estudiante'] = $estudiantes[$i];
+            BDT_AcademicoAsignacionesEstudiantes::Insert($datos);
+            $i++;
+        }
     }
 }

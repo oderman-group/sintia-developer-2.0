@@ -16,6 +16,7 @@ require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once ROOT_PATH."/main-app/class/Conexion.php";
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
 require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
+require_once(ROOT_PATH."/main-app/class/Tables/BDT_academico_cargas.php");
 require_once(ROOT_PATH."/main-app/class/Calificaciones.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
@@ -72,26 +73,26 @@ while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 		continue;
 	}
 
-	//Vamos a obtener las definitivas por cada indicador y la definitiva general de la asignatura
-	$notasPorIndicador = Calificaciones::traerNotasPorIndicador($config, $carga, $resultado['mat_id'], $periodo);
-	$sumaNotaIndicador = 0; 
+	// //Vamos a obtener las definitivas por cada indicador y la definitiva general de la asignatura
+	// $notasPorIndicador = Calificaciones::traerNotasPorIndicador($config, $carga, $resultado['mat_id'], $periodo);
+	// $sumaNotaIndicador = 0; 
 
-	while ($notInd = mysqli_fetch_array($notasPorIndicador, MYSQLI_BOTH)) {
-		$consultaNum = Indicadores::consultaRecuperacionIndicadorPeriodo($config, $notInd[1], $resultado['mat_id'], $carga, $periodo);
-		$num         = mysqli_num_rows($consultaNum);
+	// while ($notInd = mysqli_fetch_array($notasPorIndicador, MYSQLI_BOTH)) {
+	// 	$consultaNum = Indicadores::consultaRecuperacionIndicadorPeriodo($config, $notInd[1], $resultado['mat_id'], $carga, $periodo);
+	// 	$num         = mysqli_num_rows($consultaNum);
 
-		$sumaNotaIndicador += $notInd[0];
+	// 	$sumaNotaIndicador += $notInd[0];
 
-		if ($num == 0) {
-			Indicadores::eliminarRecuperacionIndicadorPeriodo($config, $notInd[1], $resultado['mat_id'], $carga, $periodo);				
+	// 	if ($num == 0) {
+	// 		Indicadores::eliminarRecuperacionIndicadorPeriodo($config, $notInd[1], $resultado['mat_id'], $carga, $periodo);				
 
-			Indicadores::guardarRecuperacionIndicador($conexionPDO, $config, $resultado['mat_id'], $carga, $notInd[0], $notInd[1], $periodo, $notInd[2]);
-		} else {
-			Indicadores::actualizarRecuperacionIndicador($config, $resultado['mat_id'], $carga, $notInd[0], $notInd[1], $periodo, $notInd[2]);
-		}
-	} 
+	// 		Indicadores::guardarRecuperacionIndicador($conexionPDO, $config, $resultado['mat_id'], $carga, $notInd[0], $notInd[1], $periodo, $notInd[2]);
+	// 	} else {
+	// 		Indicadores::actualizarRecuperacionIndicador($config, $resultado['mat_id'], $carga, $notInd[0], $notInd[1], $periodo, $notInd[2]);
+	// 	}
+	// } 
 
-	$sumaNotaIndicador = round($sumaNotaIndicador, 1);
+	// $sumaNotaIndicador = round($sumaNotaIndicador, 1);
 
 	if (!empty($boletinDatos['bol_historial_actualizacion']) && $boletinDatos['bol_historial_actualizacion'] != NULL) {
 		$actualizacion = json_decode($boletinDatos['bol_historial_actualizacion'], true);
@@ -116,7 +117,6 @@ while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 	$actualizacion[$numActualizacion] = $nuevoArray;
 
 	$update = [
-		'bol_nota_indicadores'        => $sumaNotaIndicador,
 		'bol_tipo'                    => 1,
 		'bol_historial_actualizacion' => json_encode($actualizacion),
 		'bol_estado'				  => 'GENERADO',
@@ -127,9 +127,51 @@ while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 
 }
 
+$periodoSiguiente = $periodo + 1;
+$carHistoricoArray = [];
+
+try {
+    $predicado = [
+        'car_id'      => $carga,
+        'institucion' => $config['conf_id_institucion'],
+        'year'        => $_SESSION["bd"],
+    ];
+
+    $campos = "car_periodo, car_estado, car_historico";
+
+    $datosCargaActualConsulta = BDT_AcademicoCargas::select($predicado, $campos, BD_ACADEMICA);
+    $datosCargaActual         = $datosCargaActualConsulta->fetchAll();
+    $carHistoricoCampo        = $datosCargaActual[0]['car_historico'];
+
+    if (!empty($carHistoricoCampo)) {
+
+        $carHistoricoArray     = json_decode($carHistoricoCampo, true);
+        $keys                  = array_keys($carHistoricoArray);
+        $lastKey               = end($keys);
+        $lastCarHistoricoArray = $carHistoricoArray[$lastKey];
+
+        if (
+            $datosCargaActual[0]['car_estado'] == 'DIRECTIVO' && 
+            !empty($lastCarHistoricoArray['car_periodo_anterior']) && 
+            $lastCarHistoricoArray['car_periodo_anterior'] != $datosCargaActual[0]['car_periodo']
+        ) {
+            $periodoSiguiente = $lastCarHistoricoArray['car_periodo_anterior'];
+        }
+
+    }
+
+    $carHistoricoArray[$carga.':'.time()] = [
+        'car_periodo_anterior' => $datosCargaActual[0]['car_periodo'],
+        'car_estado_anterior'  => $datosCargaActual[0]['car_estado'],
+    ];
+} catch (PDOException $e) {
+    include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
+}
+
 $update = [
-	'car_periodo' => $periodo + 1,
-	'car_estado'  => 'SINTIA',
+    'car_estado'    => 'SINTIA',
+    'car_periodo'   => $periodoSiguiente,
+    'car_historico' => json_encode($carHistoricoArray),
 ];
 
 CargaAcademica::actualizarCargaPorID($config, $carga, $update);
