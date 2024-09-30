@@ -146,6 +146,27 @@ require_once(ROOT_PATH."/main-app/class/Actividades.php");?>
 													</label>
 												</div>
 											 </div>
+
+											<div class="form-group row">
+												<label class="col-sm-2 control-label">Estudiantes</label>
+												<div class="col-sm-10">
+													<select id="multiple" style="width: 100%" class="form-control select2-multiple" multiple name="estudiantes[]">
+														<option value="">Seleccione una opción</option>
+														<?php
+															try {
+																$opcionesConsulta = Estudiantes::escogerConsultaParaListarEstudiantesParaDocentes($datosCargaActual);
+															} catch (Exception $e) {
+																include("../compartido/error-catch-to-report.php");
+															}
+
+															while ($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)) {
+														?>
+															<option value="<?=$opcionesDatos['mat_id'];?>"><?=Estudiantes::NombreCompletoDelEstudiante($opcionesDatos);?></option>
+														<?php }?>
+													</select>
+												</div>
+											</div>
+
 										</div>
 										
 										<!-- div necesario para el Jscript-->
@@ -223,7 +244,7 @@ require_once(ROOT_PATH."/main-app/class/Actividades.php");?>
 													}
 													
 													function redirect(){
-														location.href='actividades.php?success=SC_DT_1&id='+respuesta;
+														location.href='actividades-editar.php?success=SC_DT_1&idR='+respuesta;
 													}
 
 												});

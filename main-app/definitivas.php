@@ -23,7 +23,7 @@ $numConsultaD = mysqli_num_rows($consultaD);
 
 		
 
-		if(isset($nota['cal_nota'])&&$nota['cal_nota']!=""){
+		if (isset($nota['cal_nota']) && $nota['cal_nota']!="") {
 
 			$porNuevo = ($resultadoD['act_valor'] / 100);
 

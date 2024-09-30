@@ -1,6 +1,8 @@
 <?php
 require_once(ROOT_PATH."/main-app/class/Conexion.php");
-class BDT_Tablas {
+require_once(ROOT_PATH."/main-app/class/Tables/BDT_interface.php");
+
+abstract class BDT_Tablas implements BDT_Interface{
 
     public static $tableName;
 
@@ -28,9 +30,11 @@ class BDT_Tablas {
      * @return PDOStatement|false Un objeto PDOStatement que contiene los resultados de la consulta o false en caso de error.
      * @throws Exception Si ocurre un error al preparar la consulta.
      */
-    public static function Select(Array $predicado = []) {
+    public static function Select(Array $predicado = [], $campos = '*', $bd = BD_ACADEMICA) {
         $conexionPDO = Conexion::newConnection('PDO');
         $where = '';
+
+        $campos ??= '*';
 
         if( !empty($predicado) ) {
             $where = "WHERE ";
@@ -41,7 +45,7 @@ class BDT_Tablas {
         }
         
         try {
-            $consulta = "SELECT * FROM ".static::$tableName." {$where}";
+            $consulta = "SELECT $campos FROM {$bd}.".static::$tableName." {$where}";
             $stmt = $conexionPDO->prepare($consulta);
 
             if ($stmt) {
@@ -60,6 +64,124 @@ class BDT_Tablas {
 
     }
 
+    public static function Insert(array $datos, $bd = BD_ACADEMICA): ?string
+    {
+        global $conexionPDO;
+
+        $campos   = implode(", ", array_keys($datos));
+        $valores  = implode("', '", array_values($datos));
+        $consulta = "INSERT INTO {$bd}.".static::$tableName." ({$campos}) VALUES ('{$valores}')";
+
+        try {
+            $stmt = $conexionPDO->prepare($consulta);
+            $stmt->execute();
+            return $conexionPDO->lastInsertId();
+        } catch (PDOException  $e) {
+            echo "Excepción capturada: ". $e->getMessage();
+            return null;
+        }
+    }
+
+    public static function Update(array $datos, array $predicado, $bd = BD_ACADEMICA): bool {
+        global $conexionPDO;
+        $sets = '';
+
+        foreach( $datos as $clave => $valor ) {
+            $sets.= $clave."='{$valor}', ";
+        }
+
+        $sets = substr($sets, 0, -2);
+        $where = '';
+
+        foreach( $predicado as $clave => $valor ) {
+            $where.= $clave."='{$valor}' AND ";
+        }
+
+        $where = substr($where, 0, -5);
+        $consulta = "UPDATE {$bd}.".static::$tableName." SET {$sets} WHERE {$where}";
+
+        try {
+            $stmt = $conexionPDO->prepare($consulta);
+            $stmt->execute();
+            return $stmt->rowCount() > 0;
+        } catch (PDOException  $e) {
+            echo "Excepción capturada: ". $e->getMessage();
+            return false;
+        }
+    }
+
+    public static function Delete(array $predicado, $bd = BD_ACADEMICA): bool {
+        global $conexionPDO;
+        $where = '';
+        
+        foreach( $predicado as $clave => $valor ) {
+            $where.= $clave."='{$valor}' AND ";
+        }
+        
+        $where = substr($where, 0, -5);
+        $consulta = "DELETE FROM {$bd}.".static::$tableName." WHERE {$where}";
+
+        try {
+            $stmt = $conexionPDO->prepare($consulta);
+            $stmt->execute();
+            return $stmt->rowCount() > 0;
+        } catch (PDOException  $e) {
+            echo "Excepción capturada: ". $e->getMessage();
+            return false;
+        }
+    }
+
+    public static function InsertOrUpdate(array $datos, array $predicado, $bd = BD_ACADEMICA): bool {
+        global $conexionPDO;
+        $campos   = implode(", ", array_keys($datos));
+        $valores  = implode("', '", array_values($datos));
+        $consulta = "INSERT INTO {$bd}.".static::$tableName." ({$campos}) VALUES ('{$valores}') ON DUPLICATE KEY UPDATE ";
+        
+        foreach( $datos as $clave => $valor ) {
+            $consulta.= $clave."='{$valor}', ";
+        }
+        
+        $consulta = substr($consulta, 0, -2);
+        $where = '';
+        
+        foreach( $predicado as $clave => $valor ) {
+            $where.= $clave."='{$valor}' AND ";
+        }
+        
+        $where = substr($where, 0, -5);
+        $consulta.= " WHERE {$where}";
+
+        try {
+            $stmt = $conexionPDO->prepare($consulta);
+            $stmt->execute();
+            return $stmt->rowCount() > 0;
+        } catch (PDOException  $e) {
+            echo "Excepción capturada: ". $e->getMessage();
+            return false;
+        }
+    }
+
+    public static function deleteBeforeInsert(array $datos, array $predicado, $bd = BD_ACADEMICA): bool {
+        global $conexionPDO;
+        $where = '';
+        
+        foreach( $predicado as $clave => $valor ) {
+            $where.= $clave."='{$valor}' AND ";
+        }
+
+        $where = substr($where, 0, -5);
+        $consulta = "DELETE FROM {$bd}.".static::$tableName." WHERE {$where}";
+
+        try {
+            $stmt = $conexionPDO->prepare($consulta);
+            $stmt->execute();
+            return self::Insert($datos, $bd);
+        } catch (PDOException  $e) {
+            echo "Excepción capturada: ". $e->getMessage();
+            return false;
+        }
+    }
+
     /**
      * Obtiene el número de filas resultantes de una consulta en la base de datos.
      *
@@ -67,7 +189,7 @@ class BDT_Tablas {
      *
      * @return int El número de filas resultantes de la consulta.
      */
-    public static function numRows(Array $predicado = []) {
+    public static function numRows(array $predicado = []) {
         $consulta   = self::Select($predicado);
         $numRecords = $consulta->rowCount();
 

@@ -175,8 +175,8 @@ if(typeof formulario !== 'undefined' && formulario !== null) {
 
 <!-- start footer -->
 <div class="page-footer">
-	<div class="page-footer-inner"> 2018 &copy; Plataforma SINTIA By
-		<a href="#" target="_top" class="makerCss">ODERMAN</a>
+	<div class="page-footer-inner"> <?=date("Y");?> &copy; Plataforma SINTIA By
+		<a href="#" target="_top" class="makerCss">ODERMAN</a> | Tiempo de carga de la pagina: <b><?=$tiempoMostrar;?></b> segundos
 	</div>
 
 	<div class="scroll-to-top">

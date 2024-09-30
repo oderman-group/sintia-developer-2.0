@@ -1657,4 +1657,35 @@ class CargaAcademica {
 
         return $resultado;
     }
+     /**
+     * Lista  los grupos relacionados  los a cursos selecionados tenienedo en cuenta las cargas.
+     * 
+     * @param array $cursos - un array que tiene los cursos selecionados
+     *
+     * @return array - Un conjunto de resultados (`array`)
+     *
+     */
+    public static function listarGruposCursos($cursos){
+        global $config;
+        // Preparar los placeholders para la consulta
+        $in_cursos = implode(', ', array_fill(0, count($cursos), '?'));
+        $sql = "SELECT DISTINCT car_grupo,gru_nombre FROM ".BD_ACADEMICA.".academico_cargas car
+        INNER JOIN mobiliar_academic.academico_grupos gru ON
+        (
+            gru.institucion=car.institucion
+            AND gru.year=car.year
+            AND gru.gru_id=car_grupo
+        )
+        WHERE car.institucion=? 
+        AND car.year=?
+        AND car_curso IN($in_cursos)
+        AND car_activa=1
+        ORDER BY gru_nombre";
+
+        $parametros = [$config['conf_id_institucion'], $_SESSION["bd"],$cursos];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        $resultado= BindSQL::resultadoArray($resultado);
+        return $resultado;
+    }
 }

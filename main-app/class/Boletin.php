@@ -2,6 +2,7 @@
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 require_once ROOT_PATH."/main-app/class/Conexion.php";
+require_once(ROOT_PATH."/main-app/class/Tables/BDT_academico_boletin.php");
 
 class Boletin {
 
@@ -9,6 +10,9 @@ class Boletin {
     public const BOLETIN_TIPO_NOTA_RECUPERACION_PERIODO   = 2; // La hace el docente o el directivo.
     public const BOLETIN_TIPO_NOTA_RECUPERACION_INDICADOR = 3; // La hace el docente por los indicadores.
     public const BOLETIN_TIPO_NOTA_DIRECTIVA              = 4; // La Colocar el directivo directamente.
+
+    public const ESTADO_ABIERTO  = 'ABIERTO';
+    public const ESTADO_GENERADO = 'GENERADO';
 
 
     /**
@@ -100,6 +104,22 @@ class Boletin {
         $resultado = mysqli_fetch_array($resultado, MYSQLI_BOTH);
 
         return $resultado;
+    }
+        /**
+     * Obtiene los datos asociados a un tipo de notas basados en la categoría y la nota proporcionadas dependeindo de una lista ya cargada.
+     * este metho es para evitar la multiples consultas a la base de datos sino buscar la informacion a una consulta ya cargada
+     * @param array  $listaDesemp La categoría de notas para la cual se desea obtener información.
+     * @param string $nota La nota para la cual se desea obtener información.
+     */
+    public static function obtenerDatosTipoDeNotasCargadas($listaDesemp, $nota) {
+        $encontrado = null;
+        foreach ($listaDesemp as $item) {
+            if ($nota >= $item['notip_desde'] && $nota <= $item['notip_hasta']) {
+                $encontrado = $item;
+                break;  // Detenemos la búsqueda una vez encontrado
+            }
+        }
+        return $encontrado;
     }
 
     /**

@@ -7,6 +7,8 @@ require_once(ROOT_PATH."/main-app/class/Tables/BDT_aspirante.php");
 
 class Estudiantes {
 
+    public const MAXIMOS_ESTUDIANTES_CURSO = 50;
+
     /**
      * Esta función lista estudiantes según varios parámetros.
      *
@@ -72,11 +74,13 @@ class Estudiantes {
                 
                 $resultado = BindSQL::prepararSQL($sql, $parametros);
             }else{
+                
                 $parametros = [
-                    'matcur_id_curso'=>$cursoActual["gra_id"],
-                    'matcur_id_institucion'=>$config['conf_id_institucion'],
-                    'limite'=>$filtroLimite,
-                    'arreglo'=>false
+                    'matcur_id_curso'       => $cursoActual["gra_id"],
+                    'matcur_id_institucion' => $config['conf_id_institucion'],
+                    'limite'                => $filtroLimite,
+                    'and'                   => $filtroAdicional,
+                    'arreglo'               => false
                 ];
                 $resultado = MediaTecnicaServicios::listarEstudiantes($parametros);
                 }

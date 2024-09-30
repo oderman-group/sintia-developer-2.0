@@ -1,7 +1,7 @@
 <?php
 include("session-compartida.php");
 $idPaginaInterna = 'DT0224';
-
+Utilidades::validarParametros($_GET);
 if($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="../directivo/page-info.php?idmsg=301";</script>';
 	exit();
@@ -11,7 +11,7 @@ require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH."/main-app/class/Boletin.php");
 require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
 require_once(ROOT_PATH."/main-app/class/Ausencias.php");
-    
+
 $year=$_SESSION["bd"];
 if(isset($_GET["year"])){
 $year=base64_decode($_GET["year"]);
