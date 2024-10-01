@@ -1,5 +1,5 @@
 <?php
-if (!empty($data["dataTotal"])) {
+if  (!empty($data["dataTotal"]))  {
 	require_once("../Estudiantes.php");
 	require_once("../Modulos.php");
 }
@@ -21,6 +21,11 @@ foreach ($data["data"] as $resultado) {
 	//Para calcular el porcentaje de actividades en las cargas
 	$cargaSP = $resultado['car_id'];
 	$periodoSP = $resultado['car_periodo'];
+	if(!empty($data["dataTotal"])){
+		include("../../suma-porcentajes.php");
+	}else{
+		include("../suma-porcentajes.php");
+	}
 
 	$marcaMediaTecnica = '';
 	$filtroDocentesParaListarEstudiantes = " AND mat_grado='" . $resultado['car_curso'] . "' AND mat_grupo='" . $resultado['car_grupo'] . "'";
@@ -106,6 +111,106 @@ foreach ($data["data"] as $resultado) {
 						<?php }
 						if ($permisoPlanillaNotas) { ?>
 							<li><a href="../compartido/planilla-docentes-notas.php?carga=<?= base64_encode($resultado['car_id']); ?>" target="_blank">Ver Planilla con notas</a></li>
+						<?php }
+						if (Modulos::validarSubRol(['DT0237'])) {
+							$permisoGenerarInforme = false;
+							$msnajetooltip = "";
+							$actividadesAsignadas = $spcd[0];
+							$actividadesRegistradas = $spcr[0];
+							$configGenerarJobs = $config['conf_porcentaje_completo_generar_informe'];
+							$numSinNotas=0;
+							if ($actividadesAsignadas < PORCENTAJE_MINIMO_GENERAR_INFORME) {
+								$permisoGenerarInforme = false;
+								$msnajetooltip = "Las calidifaciones asignadas no completan el 100% ";
+							} else if ($actividadesRegistradas < PORCENTAJE_MINIMO_GENERAR_INFORME) { 
+								$permisoGenerarInforme = false;
+								$msnajetooltip = "Las calidifaciones regsitradas no completan el 100% ";
+							} else {
+								$permisoGenerarInforme = true;
+							}
+							if ($permisoGenerarInforme) {
+								switch (intval($configGenerarJobs)) {
+									case 1:
+										$consultaListaEstudantesSinNotas = Estudiantes::listarEstudiantesNotasFaltantes($resultado["car_id"],$resultado["car_periodo"],$resultado["gra_tipo"]);
+                                        $numSinNotas = mysqli_num_rows($consultaListaEstudantesSinNotas);
+										if ($numSinNotas < PORCENTAJE_MINIMO_GENERAR_INFORME) {
+											$permisoGenerarInforme = false;
+											$msnajetooltip = "La institucion no permite generar informe  hasta que todos los estudiantes esten calificados un 100%";
+											break;
+										}
+										break;
+									case 2:
+										$permisoGenerarInforme = true;
+										$msnajetooltip = "la institucion omitirá los estudaintes que no tengan las calificaciones en un 100%";
+										break;
+									case 3:
+										$permisoGenerarInforme = true;
+										$msnajetooltip = "la institucion generar el informe con el porcentaje actual de cada estudainte";
+										break;
+								}
+							}
+							$parametros = [
+								"carga"   => $resultado["car_id"],
+								"periodo" => $resultado["car_periodo"],
+								"grado"   => $resultado["car_curso"],
+								"grupo"   => $resultado["car_grupo"]
+							];
+
+							$parametrosBuscar = [
+								"tipo"        => JOBS_TIPO_GENERAR_INFORMES,
+								"responsable" => $_SESSION['id'],
+								"parametros"  => json_encode($parametros),
+								"agno"        => $config['conf_agno']
+							];
+
+							$buscarJobs     = SysJobs::consultar($parametrosBuscar);
+							$jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
+
+							if (!empty($jobsEncontrado)) {
+								$permisoGenerarInforme=false;
+								switch ($jobsEncontrado["job_estado"]) {
+									case JOBS_ESTADO_ERROR:
+										$msnajetooltip =$jobsEncontrado["job_mensaje"];
+										$permisoGenerarInforme=true;
+										break;
+
+									case JOBS_ESTADO_PENDIENTE:
+										$msnajetooltip = $jobsEncontrado["job_mensaje"];
+										break;
+
+									case JOBS_ESTADO_PROCESO:
+										$msnajetooltip = "El informe está en proceso.";
+										break;
+									case JOBS_ESTADO_PROCESADO:
+										$msnajetooltip = "El informe ya fué procesado.";
+										break;
+
+									default:
+										$msnajetooltip = "El informe no se puede generar, coloque las notas a todos los estudiantes para generar el informe.";										
+										break;
+								}
+							}
+
+							$tooltip = '';
+							if (!empty($msnajetooltip)) {
+								$tooltip = ' title="' . $msnajetooltip . '"';
+							}
+						?>
+							<li class="dropdown-submenu-generar-informe" data-toggle="tooltip" <?= $tooltip ?>>
+								<a class="dropdown-item dropdown-toggle <?= !$permisoGenerarInforme ? 'disabled' : '' ?> " href="#">Generar Informe</a>
+								<?php if ($permisoGenerarInforme) {
+									 $parametros='?carga='.base64_encode($resultado["car_id"]).
+									              '&periodo='.base64_encode($resultado["car_periodo"]).
+												  '&grado='.base64_encode($resultado["car_curso"]).
+												  '&grupo='.base64_encode($resultado["car_grupo"]).
+												  '&tipoGrado='.base64_encode($resultado["gra_tipo"]);
+									?>
+									<ul class="dropdown-menu">
+										<li><a rel="<?=$configGenerarJobs.'-'.$numSinNotas.'-1';?> class="dropdown-item"  href="javascript:void(0);" onclick="mensajeGenerarInforme(this)" name="../compartido/generar-informe.php<?=$parametros?>">Manual</a></li>
+										<li><a rel="<?=$configGenerarJobs.'-'.$numSinNotas.'-2';?> class="dropdown-item" href="javascript:void(0);"  onclick="mensajeGenerarInforme(this)" name="../compartido/job-generar-informe.php?<?=$parametros?>">Automático</a></li>
+									</ul>
+								<?php } ?>
+							</li>
 						<?php } ?>
 				</ul>
 			</div>
@@ -113,3 +218,43 @@ foreach ($data["data"] as $resultado) {
 		</tr>
 	<?php $contReg++;
 } ?>
+<script>
+	// Habilita los submenús al hacer clic
+	document.querySelectorAll('.dropdown-submenu-generar-informe a.dropdown-toggle').forEach(function(element) {
+		element.addEventListener('click', function(e) {
+			if (!this.nextElementSibling.classList.contains('show')) {
+				// Cierra otros submenús abiertos
+				document.querySelectorAll('.dropdown-menu1 .show').forEach(function(menu) {
+					menu.classList.remove('show');
+				});
+			}
+			// Muestra el submenú seleccionado
+			this.nextElementSibling.classList.toggle('show');
+			e.stopPropagation(); // Evita el cierre al hacer clic dentro del submenú
+		});
+	});
+	$(document).ready(function() {
+		$('[data-toggle="tooltip"]').tooltip();
+	});
+</script>
+<style>
+	.dropdown-submenu-generar-informe .dropdown-menu {
+		top: 100%;
+		/* Mueve el submenú hacia abajo del elemento principal */
+		left: 0;
+		/* Alinea el submenú con el borde izquierdo del elemento padre */
+		margin-top: 0.5rem;
+		/* Agrega un pequeño margen superior */
+	}
+
+	.tooltip {
+		z-index: 9001 !important;
+	}
+
+	.dropdown-item.disabled,
+	.dropdown-item:disabled {
+		color: #a7b3bd;
+		pointer-events: none;
+		background-color: transparent;
+	}
+</style>
