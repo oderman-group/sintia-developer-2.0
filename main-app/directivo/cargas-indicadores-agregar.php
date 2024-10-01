@@ -2,7 +2,7 @@
 <?php $idPaginaInterna = 'DT0040';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
 <?php include("../compartido/head.php");?>
-<?php Utilidades::validarParametros($_GET,["carga","docente","periodo"]);?>
+<?php Utilidades::validarParametros($_GET ,[ "carga", "docente", "periodo"]);?>
 <?php include("verificar-carga.php");?>
 <?php
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");

@@ -1,7 +1,7 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0111';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php Utilidades::validarParametros($_GET,["carga"]);?>
+<?php Utilidades::validarParametros($_GET, ["carga"]); ?>
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");?>
 <?php

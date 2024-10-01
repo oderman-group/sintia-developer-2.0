@@ -1,7 +1,7 @@
 <?php include("session.php");?>
 <?php $idPaginaInterna = 'DT0034';?>
 <?php include("../compartido/historial-acciones-guardar.php");?>
-<?php Utilidades::validarParametros($_GET,["carga","docente"]); ?>
+<?php Utilidades::validarParametros($_GET, ["carga", "docente"]); ?>
 <?php include("verificar-carga.php");?>
 <?php include("../compartido/head.php");
 require_once(ROOT_PATH."/main-app/class/Indicadores.php");
