@@ -342,7 +342,7 @@ $procesoAnterior = [
                                                     <input type="text" class="form-control" name="ocupacionPadre" value="<?= $datosPadre['uss_ocupacion']; ?>">
                                                 </div>
                                                 <?php
-                                                $opcionesGenerales = BDT_OpcionesGenerales::Select(['ogen_grupo' => 8]);
+                                                $opcionesGenerales = BDT_OpcionesGenerales::Select(['ogen_grupo' => 8], '*', BD_ADMIN);
                                                 ?>
 
                                                 <div class="form-group col-md-4">
@@ -411,7 +411,7 @@ $procesoAnterior = [
                                                     <input type="text" class="form-control" name="ocupacionMadre" value="<?= $datosMadre['uss_ocupacion']; ?>">
                                                 </div>
                                                 <?php
-                                                $opcionesGenerales = BDT_OpcionesGenerales::Select(['ogen_grupo' => 8]);
+                                                $opcionesGenerales = BDT_OpcionesGenerales::Select(['ogen_grupo' => 8], '*', BD_ADMIN);
                                                 ?>
 
                                                 <div class="form-group col-md-4">
