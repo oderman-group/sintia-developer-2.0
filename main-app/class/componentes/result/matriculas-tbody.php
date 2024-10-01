@@ -25,95 +25,24 @@ $moduloAdministrativo  = Modulos::validarModulosActivos($conexion, modulo: 4);
 $moduloFinanciero      = Modulos::validarModulosActivos($conexion, modulo: 2);
 $moduloConvivencia     = Modulos::validarModulosActivos($conexion, modulo: 3);
 
-$permisoBloquearUsuario     = false;
-if (Modulos::validarSubRol(['DT0087'])) {
-	$permisoBloquearUsuario = true;
-}
-
-$permisoCambiarEstado     = false;
-if (Modulos::validarSubRol(['DT0217'])) {
-	$permisoCambiarEstado = true;
-}
-
-$permisoEditarUsuario     = false;
-if (Modulos::validarSubRol(['DT0124'])) {
-	$permisoEditarUsuario = true;
-}
-
-$permisoEditarEstudiante     = false;
-if (Modulos::validarSubRol(['DT0078'])) {
-	$permisoEditarEstudiante = true;
-}
-
-$permisoCrearSion     = false;
-if (Modulos::validarSubRol(['DT0218'])) {
-	$permisoCrearSion = true;
-}
-
-$permisoCambiarGrupo     = false;
-if (Modulos::validarSubRol(['DT0083'])) {
-	$permisoCambiarGrupo = true;
-}
-
-$permisoRetirar     = false;
-if (Modulos::validarSubRol(['DT0074'])) {
-	$permisoRetirar = true;
-}
-
-$permisoReservar     = false;
-if (Modulos::validarSubRol(['DT0219'])) {
-	$permisoReservar = true;
-}
-
-$permisoEliminar     = false;
-if (Modulos::validarSubRol(['DT0162'])) {
-	$permisoEliminar = true;
-}
-
-$permisoCrearUsuario     = false;
-if (Modulos::validarSubRol(['DT0220'])) {
-	$permisoCrearUsuario = true;
-}
-
-$permisoAutoLogin     = false;
-if (Modulos::validarSubRol(['DT0129'])) {
-	$permisoAutoLogin = true;
-}
-
-$permisoBoletines     = false;
-if (Modulos::validarSubRol(['DT0224'])) {
-	$permisoBoletines = true;
-}
-
-$permisoLibroMatricula     = false;
-if (Modulos::validarSubRol(['DT0247'])) {
-	$permisoLibroMatricula = true;
-}
-
-$permisoInformeParcial     = false;
-if (Modulos::validarSubRol(['DT0248'])) {
-	$permisoInformeParcial = true;
-}
-
-$permisoHojaMatricula     = false;
-if (Modulos::validarSubRol(['DT0249'])) {
-	$permisoHojaMatricula = true;
-}
-
-$permisoAspectos     = false;
-if (Modulos::validarSubRol(['DT0023'])) {
-	$permisoAspectos = true;
-}
-
-$permisoFinanzas     = false;
-if (Modulos::validarSubRol(['DT0093'])) {
-	$permisoFinanzas = true;
-}
-
-$permisoReportes     = false;
-if (Modulos::validarSubRol(['DT0117'])) {
-	$permisoReportes = true;
-}
+$permisoBloquearUsuario   = Modulos::validarSubRol(['DT0087']);
+$permisoCambiarEstado     = Modulos::validarSubRol(['DT0217']);
+$permisoEditarUsuario     = Modulos::validarSubRol(['DT0124']);
+$permisoEditarEstudiante  = Modulos::validarSubRol(['DT0078']);
+$permisoCrearSion         = Modulos::validarSubRol(['DT0218']);
+$permisoCambiarGrupo      = Modulos::validarSubRol(['DT0083']);
+$permisoRetirar           = Modulos::validarSubRol(['DT0074']);
+$permisoReservar          = Modulos::validarSubRol(['DT0219']);
+$permisoEliminar          = Modulos::validarSubRol(['DT0162']);
+$permisoCrearUsuario      = Modulos::validarSubRol(['DT0220']);
+$permisoAutoLogin         = Modulos::validarSubRol(['DT0129']);
+$permisoBoletines         = Modulos::validarSubRol(['DT0224']);
+$permisoLibroMatricula    = Modulos::validarSubRol(['DT0247']);
+$permisoInformeParcial    = Modulos::validarSubRol(['DT0248']);
+$permisoHojaMatricula     = Modulos::validarSubRol(['DT0249']);
+$permisoAspectos          = Modulos::validarSubRol(['DT0023']);
+$permisoFinanzas          = Modulos::validarSubRol(['DT0093']);
+$permisoReportes          = Modulos::validarSubRol(['DT0117']);
 
 foreach ($data["data"] as $resultado) {
 
