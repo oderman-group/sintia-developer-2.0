@@ -3,10 +3,6 @@ name: publicar sitio en el cpanel prueba
 on:
   push:
     branches: [ "prueba" ]
-  pull_request:
-    branches: [ "prueba" ]
-
-
 jobs:
   FTP-Deploy-Action:
     name: FTP-Deploy-Action
@@ -18,9 +14,9 @@ jobs:
     - name: FTP-Deploy-Action
       uses: SamKirkland/FTP-Deploy-Action@3.1.1
       with:
-        ftp-server: ${{ secrets.FTP_SERVER }}
-        ftp-username: ${{ secrets.FTP_USER }}
-        ftp-password: ${{ secrets.FTP_PASS }}
+        ftp-server: 'sintia.co'
+        ftp-username: 'ftp_user_git'
+        ftp-password: 'L47p(uftnuD-'
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
