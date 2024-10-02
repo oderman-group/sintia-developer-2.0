@@ -1,1 +1,3 @@
-nuevo archivo 2  este es uno nuevo
+nuevo prueba 1
+nuevo prueba 2
+nuevo prueba 3
