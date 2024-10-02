@@ -65,6 +65,7 @@ define('ICOLVEN', 1);
 define('DEVELOPER', 22);
 define('DEVELOPER_PROD', 30);
 define('ELLEN_KEY', 16);
+define('EOA_CIRUELOS', 17);
 
 define('PORCENTAJE_MINIMO_GENERAR_INFORME', 99);
 

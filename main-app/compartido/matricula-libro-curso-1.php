@@ -213,7 +213,7 @@ if($totalPromedio==1)	$totalPromedio="1.0";	if($totalPromedio==2)	$totalPromedio
             <td align="center" style="font-weight:bold; font-size:10px;"></td>
         <td align="center" style="font-weight:bold;"><?php 
 		
-		if($datosUsr["mat_grado"]>11){
+		if($datosUsr["mat_grado"]>11 && $config['conf_id_institucion'] != EOA_CIRUELOS){
 				$notaFA = ceil($totalPromedio);
 				switch($notaFA){
 					case 1: echo "D"; break;
@@ -275,7 +275,7 @@ while($fila2=mysqli_fetch_array($consultaAMat, MYSQLI_BOTH)){
        
         <td align="center" style="font-weight:bold; "><?php 
 		
-					if($datosUsr["mat_grado"]>11){
+					if($datosUsr["mat_grado"]>11 && $config['conf_id_institucion'] != EOA_CIRUELOS){
 				$notaFI = ceil($totalPromedio2);
 				switch($notaFI){
 					case 1: echo "D"; break;
@@ -292,7 +292,7 @@ while($fila2=mysqli_fetch_array($consultaAMat, MYSQLI_BOTH)){
         <td align="center" style="font-weight:bold;"><?php //DESEMPEÑO
 		while($rDesempeno=mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH)){
 			if($totalPromedio2>=$rDesempeno["notip_desde"] && $totalPromedio2<=$rDesempeno["notip_hasta"]){
-				if($datosUsr["mat_grado"]>11){
+				if($datosUsr["mat_grado"]>11 && $config['conf_id_institucion'] != EOA_CIRUELOS){
 					$notaFD = ceil($totalPromedio2);
 				switch($notaFD){
 					case 1: echo "BAJO"; break;
@@ -363,7 +363,7 @@ if($numfilasNotAreaMT>0){
 	<td align="center" style="font-weight:bold; font-size:10px;"></td>
 <td align="center" style="font-weight:bold;"><?php 
 
-if($datosUsr["mat_grado"]>11){
+if($datosUsr["mat_grado"]>11 && $config['conf_id_institucion'] != EOA_CIRUELOS){
 		$notaFA = ceil($totalPromedio);
 		switch($notaFA){
 			case 1: echo "D"; break;
@@ -421,7 +421,7 @@ if($totalPromedio2<$config[5]){
 
 <td align="center" style="font-weight:bold; "><?php 
 
-			if($datosUsr["mat_grado"]>11){
+			if($datosUsr["mat_grado"]>11 && $config['conf_id_institucion'] != EOA_CIRUELOS){
 		$notaFI = ceil($totalPromedio2);
 		switch($notaFI){
 			case 1: echo "D"; break;
@@ -438,7 +438,7 @@ if($totalPromedio2<$config[5]){
 <td align="center" style="font-weight:bold;"><?php //DESEMPEÑO
 while($rDesempeno=mysqli_fetch_array($consultaDesempeno, MYSQLI_BOTH)){
 	if($totalPromedio2>=$rDesempeno["notip_desde"] && $totalPromedio2<=$rDesempeno["notip_hasta"]){
-		if($datosUsr["mat_grado"]>11){
+		if($datosUsr["mat_grado"]>11 && $config['conf_id_institucion'] != EOA_CIRUELOS){
 			$notaFD = ceil($totalPromedio2);
 		switch($notaFD){
 			case 1: echo "BAJO"; break;

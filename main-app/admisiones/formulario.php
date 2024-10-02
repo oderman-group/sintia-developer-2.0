@@ -562,7 +562,7 @@ $datosMadre = $madre->fetch();
                 </div>
 
                 <?php
-                $opcionesGenerales = BDT_OpcionesGenerales::Select(['ogen_grupo' => 8]);
+                $opcionesGenerales = BDT_OpcionesGenerales::Select(['ogen_grupo' => 8], '*', BD_ADMIN);
                 ?>
 
                 <div class="form-group col-md-4">
@@ -722,7 +722,7 @@ $datosMadre = $madre->fetch();
                 </div>
 
                 <?php
-                $opcionesGenerales = BDT_OpcionesGenerales::Select(['ogen_grupo' => 8]);
+                $opcionesGenerales = BDT_OpcionesGenerales::Select(['ogen_grupo' => 8], '*', BD_ADMIN);
                 ?>
 
                 <div class="form-group col-md-4">
