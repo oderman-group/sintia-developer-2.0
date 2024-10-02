@@ -1,25 +1,20 @@
-name: publicar sitio en el cpanel prueba
-
+name: Publish Website to CPanel
 on:
   push:
-    branches: [ "prueba" ]
+    branches:
+      - prueba
 jobs:
-  FTP-Deploy-Action:
-    name: FTP-Deploy-Action
+  web-deploy:
+    name: nuevo debply
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-debth: 2
-    - name: FTP-Deploy-Action
-      uses: SamKirkland/FTP-Deploy-Action@3.1.1
-      with:
-        ftp-server: ${{ secrets.FTP_SERVER }}
-        ftp-username: ${{ secrets.FTP_USERNAME }}
-        ftp-password: ${{ secrets.FTP_PASSWORD }}
+    - name: get lattes code
+    - uses: action/checkout@v2
 
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-    # Docs: https://getcomposer.org/doc/articles/scripts.md
-
-    # - name: Run test suite
-    #   run: composer run-script test
+    - name: Sync Files
+    - uses: SamKirkland/FTP-Deploy-Action@4.3.0
+      with:
+        ftp-server: sintia.co
+        ftp-username: mobiliar
+        ftp-password: UBU9*7OJ4wVK
+    
