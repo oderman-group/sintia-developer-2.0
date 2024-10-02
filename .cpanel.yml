@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/mobiliar/repositories/app-sintia  # Ruta donde se despliega tu aplicación
+    - /usr/local/bin/git --git-dir=$DEPLOYPATH/.git --work-tree=$DEPLOYPATH pull origin prueba  # Realiza el pull en la rama main
