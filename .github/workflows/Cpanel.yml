@@ -14,7 +14,6 @@ jobs:
     - name: Sync Files
     - uses: SamKirkland/FTP-Deploy-Action@4.3.0
       with:
-        ftp-server: sintia.co
-        ftp-username: mobiliar
-        ftp-password: UBU9*7OJ4wVK
-    
+        server: sintia.co
+        username: mobiliar
+        password: UBU9*7OJ4wVK
