@@ -8,8 +8,8 @@ jobs:
     name: nuevo debply
     runs-on: ubuntu-latest
     steps:
-    - name: get lattes code
-    - uses: action/checkout@v2
+    - name: get lates code
+    - uses: action/checkout@v3
 
     - name: Sync Files
     - uses: SamKirkland/FTP-Deploy-Action@4.3.0
