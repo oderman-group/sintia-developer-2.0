@@ -3,17 +3,3 @@ on:
   push:
     branches:
       - prueba
-jobs:
-  web-deploy:
-    name: nuevo debply
-    runs-on: ubuntu-latest
-    steps:
-    - name: get lates code
-    - uses: action/checkout@v3
-
-    - name: Sync Files
-    - uses: SamKirkland/FTP-Deploy-Action@4.3.0
-      with:
-        server: sintia.co
-        username: mobiliar
-        password: UBU9*7OJ4wVK
