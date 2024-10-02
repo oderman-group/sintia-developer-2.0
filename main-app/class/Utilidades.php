@@ -103,7 +103,7 @@ class Utilidades {
      * $esValido = esAlfanumerico('nombre123');
      *  */
     public static function esAlfanumerico($valor) {
-        return preg_match('/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ,:.!\s]+$/', $valor);
+        return preg_match('/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ,-:.!\s]+$/', $valor);
     }
 
     /**
