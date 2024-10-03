@@ -82,7 +82,7 @@ foreach ($data["data"] as $resultado) {
 				<button type="button" class="btn btn-primary dropdown-toggle m-r-20" data-toggle="dropdown">
 					<i class="fa fa-angle-down"></i>
 				</button>
-				<ul class="dropdown-menu" role="menu" style="z-index: 9000;">
+				<ul class="dropdown-menu" role="menu" >
 					<?php if (Modulos::validarPermisoEdicion() && $permisoReportesNotas) { ?>
 						<?php if ($permisoEditar) { ?>
 							<li><a href="cargas-editar.php?idR=<?= base64_encode($resultado['car_id']); ?>"><?= $frases[165][$datosUsuarioActual['uss_idioma']]; ?></a></li>
@@ -197,7 +197,7 @@ foreach ($data["data"] as $resultado) {
 							}
 						?>
 							<li class="dropdown-submenu-generar-informe" data-toggle="tooltip" <?= $tooltip ?>>
-								<a class="dropdown-item dropdown-toggle <?= !$permisoGenerarInforme ? 'disabled' : '' ?> " href="#">Generar Informe</a>
+								<a style="color:<?= !$permisoGenerarInforme ? '#bcc6d0' : '#6f6f6f' ?>;" class="dropdown-item dropdown-toggle " href="javascript:void(0);" onclick="mostrarGenerarInforme(<?=$resultado["car_id"]?>)" >Generar Informe</a>
 								<?php if ($permisoGenerarInforme) {
 									 $parametros='?carga='.base64_encode($resultado["car_id"]).
 									              '&periodo='.base64_encode($resultado["car_periodo"]).
@@ -205,7 +205,7 @@ foreach ($data["data"] as $resultado) {
 												  '&grupo='.base64_encode($resultado["car_grupo"]).
 												  '&tipoGrado='.base64_encode($resultado["gra_tipo"]);
 									?>
-									<ul class="dropdown-menu">
+									<ul id="generarInforme-<?=$resultado["car_id"]?>" class="dropdown-menu">
 										<li><a rel="<?=$configGenerarJobs.'-'.$numSinNotas.'-1';?> class="dropdown-item"  href="javascript:void(0);" onclick="mensajeGenerarInforme(this)" name="../compartido/generar-informe.php<?=$parametros?>">Manual</a></li>
 										<li><a rel="<?=$configGenerarJobs.'-'.$numSinNotas.'-2';?> class="dropdown-item" href="javascript:void(0);"  onclick="mensajeGenerarInforme(this)" name="../compartido/job-generar-informe.php?<?=$parametros?>">Automático</a></li>
 									</ul>
@@ -222,20 +222,22 @@ foreach ($data["data"] as $resultado) {
 	// Habilita los submenús al hacer clic
 	document.querySelectorAll('.dropdown-submenu-generar-informe a.dropdown-toggle').forEach(function(element) {
 		element.addEventListener('click', function(e) {
-			if (!this.nextElementSibling.classList.contains('show')) {
-				// Cierra otros submenús abiertos
-				document.querySelectorAll('.dropdown-menu1 .show').forEach(function(menu) {
-					menu.classList.remove('show');
-				});
-			}
-			// Muestra el submenú seleccionado
-			this.nextElementSibling.classList.toggle('show');
 			e.stopPropagation(); // Evita el cierre al hacer clic dentro del submenú
 		});
 	});
 	$(document).ready(function() {
 		$('[data-toggle="tooltip"]').tooltip();
 	});
+	
+	function mostrarGenerarInforme(valor) {
+			submenu = document.getElementById('generarInforme-' + valor);
+			if (submenu.classList.contains('show')) {
+				submenu.classList.remove('show');					
+			}else{
+				submenu.classList.add('show');
+			};
+			
+		}
 </script>
 <style>
 	.dropdown-submenu-generar-informe .dropdown-menu {
@@ -245,16 +247,5 @@ foreach ($data["data"] as $resultado) {
 		/* Alinea el submenú con el borde izquierdo del elemento padre */
 		margin-top: 0.5rem;
 		/* Agrega un pequeño margen superior */
-	}
-
-	.tooltip {
-		z-index: 9001 !important;
-	}
-
-	.dropdown-item.disabled,
-	.dropdown-item:disabled {
-		color: #a7b3bd;
-		pointer-events: none;
-		background-color: transparent;
 	}
 </style>
