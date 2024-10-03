@@ -207,7 +207,7 @@ $cargas;
     <table width="100%" cellspacing="0" cellpadding="0" border="0" align="left" style="font-size:12px;">
         <tr>
             <td>C&oacute;digo: <b><?= $estudiante["mat_matricula"]; ?></b></td>
-            <td>Nombre: <b><?= $nombre ?></b></td>
+            <td>Nombre: <b><?=$estudiante["nombre"] ?></b></td>
         </tr>
         <tr>
             <td>Grado: <b><?= $estudiante["gra_nombre"] . " " . $estudiante["gru_nombre"]; ?></b></td>
