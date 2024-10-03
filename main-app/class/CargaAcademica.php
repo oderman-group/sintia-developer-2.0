@@ -382,6 +382,7 @@ class CargaAcademica {
      * @param string $order
      * @param string $limit
      * @param string $valueIlike - Valor String que se utilizara para biuscar por cualuqier parametro definido (puede ser nulo).
+     * @param array $selectConsulta - valores de los select que se van a nececitar para las consultas
      *
      */
     public static function listarCargas(
@@ -390,11 +391,20 @@ class CargaAcademica {
         string $filtroMT = "", 
         string $filtro = "", 
         string $order = "car_id", 
-        string $limit = "LIMIT 0, 2000",
+        string $limit = "",
         string $valueIlike = "",
-        array  $filtro2 = array()  
+        array  $filtro2 = array(),
+        array $selectConsulta=[]  
 
     ){
+        $stringSelect="car.*,
+                       am.*, 
+                       gra.*, 
+                       gru.*, 
+                       uss.*";
+        if (!empty($selectConsulta)) {
+            $stringSelect=implode(", ", $selectConsulta);
+        };
         if(!empty($valueIlike)){
             $busqueda=$valueIlike;
             $filtro .= " AND (
@@ -411,7 +421,7 @@ class CargaAcademica {
                 OR CONCAT(TRIM(uss_nombre), TRIM(uss_apellido1)) LIKE '%".$busqueda."%'
             )";
         }
-        if(!empty($filtro2)){
+        if(!empty($filtro2)){           
             if(!empty($filtro2['periodoSeleccionados'])){
                 $arrayPeriodos=$filtro2['periodoSeleccionados'];
                 $periodos = implode(", ", $arrayPeriodos);
@@ -419,14 +429,99 @@ class CargaAcademica {
             }
         }
         try {
-            $sql="SELECT car.*, am.*, gra.*, gru.*, uss.*, car.id_nuevo AS id_nuevo_carga FROM ".BD_ACADEMICA.".academico_cargas car
-            INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion=car.institucion AND gra.year=car.year {$filtroMT}
-            LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion=car.institucion AND gru.year=car.year
-            LEFT JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id=car_materia AND am.institucion=car.institucion AND am.year=car.year
-            LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion=car.institucion AND uss.year=car.year
-            WHERE car.institucion=? AND car.year=? {$filtro}
-            ORDER BY {$order}
-            {$limit};";
+            $sql = "SELECT 
+                    $stringSelect 
+                    ,car.id_nuevo AS id_nuevo_carga ,
+                    COUNT(matri.id_nuevo) as cantidad_estudaintes,
+                    COUNT(matcur_id) as cantidad_estudaintes_mt,
+                    activ.suma_actividades AS actividades,
+                    activ_reg.suma_actividades_registradas AS actividades_registradas                   
+                    
+                    FROM ".BD_ACADEMICA.".academico_cargas car
+        
+                    INNER JOIN ".BD_ACADEMICA.".academico_grados gra 
+                    ON  gra_id                        = car_curso 
+                    AND gra.institucion               = car.institucion 
+                    AND gra.year                      = car.year {$filtroMT}
+
+                    LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru 
+                    ON  gru.gru_id                    = car_grupo 
+                    AND gru.institucion               = car.institucion 
+                    AND gru.year                      = car.year
+                    
+                    LEFT JOIN ".BD_ACADEMICA.".academico_materias am 
+                    ON  am.mat_id                     = car_materia 
+                    AND am.institucion                = car.institucion 
+                    AND am.year                       = car.year
+
+                    LEFT JOIN ".BD_GENERAL.".usuarios uss 
+                    ON uss_id                         = car_docente 
+                    AND uss.institucion               = car.institucion 
+                    AND uss.year                      = car.year
+
+                    LEFT JOIN ".BD_ACADEMICA.".academico_matriculas matri 
+                    ON  matri.mat_grado               = car_curso 
+                    AND matri.mat_grupo               = car_grupo
+                    AND matri.institucion             = car.institucion 
+                    AND matri.year                    = car.year
+                    AND (
+                        matri.mat_estado_matricula    = ".MATRICULADO." 
+                        OR matri.mat_estado_matricula = ".ASISTENTE."
+                        )
+
+                    LEFT JOIN ".BD_ADMIN.".mediatecnica_matriculas_cursos med_matri 
+                    ON  matcur_id_curso               = car_curso 
+                    AND matcur_id_grupo               = car_grupo
+					AND matcur_estado                 = '".ACTIVO."' 
+                    AND matcur_id_institucion         = car.institucion 
+                    AND matcur_years                  = car.year
+
+
+
+                    LEFT JOIN (
+                                SELECT
+                                act_id_carga,
+                                act_periodo,
+                                SUM(act_valor) AS suma_actividades
+
+                                FROM ".BD_ACADEMICA.".academico_actividades 
+                                WHERE act_estado  = 1
+                                AND   institucion = ".$config['conf_id_institucion']."
+                                AND   year        = ".$_SESSION["bd"]."
+                                GROUP BY act_id_carga,act_periodo
+                            )
+                    AS  activ
+                    ON  activ.act_id_carga = car.car_id
+	                AND activ.act_periodo  = car.car_periodo
+
+                    LEFT JOIN (
+                                SELECT
+                                act_id_carga,
+                                act_periodo,
+                                SUM(act_valor) AS suma_actividades_registradas
+
+                                FROM ".BD_ACADEMICA.".academico_actividades 
+                                WHERE act_estado  = 1
+                                AND   act_registrada = 1
+                                AND   institucion = ".$config['conf_id_institucion']."
+                                AND   year        = ".$_SESSION["bd"]."
+                                GROUP BY act_id_carga,act_periodo
+                            )
+                    AS  activ_reg
+                    ON  activ_reg.act_id_carga = car.car_id
+	                AND activ_reg.act_periodo  = car.car_periodo
+
+
+                    
+                    WHERE car.institucion             = ? 
+                    AND car.year                      = ? 
+                    {$filtro}
+                    
+                    GROUP BY car_id
+
+                    ORDER BY {$order}
+                    
+                    {$limit};";
     
             $parametros = [$config['conf_id_institucion'], $_SESSION["bd"]];
             
