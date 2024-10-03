@@ -134,17 +134,17 @@ foreach ($data["data"] as $resultado) {
                                         $numSinNotas = mysqli_num_rows($consultaListaEstudantesSinNotas);
 										if ($numSinNotas < PORCENTAJE_MINIMO_GENERAR_INFORME) {
 											$permisoGenerarInforme = false;
-											$msnajetooltip = "La institucion no permite generar informe  hasta que todos los estudiantes esten calificados un 100%";
+											$msnajetooltip = "La institución no permite generar informe hasta que todos los estudiantes estén calificados un 100%";
 											break;
 										}
 										break;
 									case 2:
 										$permisoGenerarInforme = true;
-										$msnajetooltip = "la institucion omitirá los estudaintes que no tengan las calificaciones en un 100%";
+										$msnajetooltip = "La institución omitirá los estudiantes que no tengan las calificaciones en un 100%";
 										break;
 									case 3:
 										$permisoGenerarInforme = true;
-										$msnajetooltip = "la institucion generar el informe con el porcentaje actual de cada estudainte";
+										$msnajetooltip = "La institución generará el informe con el porcentaje actual de cada estudiante";
 										break;
 								}
 							}
