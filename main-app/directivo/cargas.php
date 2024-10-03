@@ -26,6 +26,10 @@ if($config['conf_doble_buscador'] == 1) {
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
+	<div id="overlayInforme">
+		<div id="loader"></div>
+		<div id="loading-text">Generando informe…</div>
+	</div>
     <div class="page-wrapper">
         <?php include("../compartido/encabezado.php");?>
 		
