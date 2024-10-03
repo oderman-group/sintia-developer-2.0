@@ -26,6 +26,10 @@ if($config['conf_doble_buscador'] == 1) {
 </head>
 <!-- END HEAD -->
 <?php include("../compartido/body.php");?>
+	<div id="overlayInforme">
+		<div id="loader"></div>
+		<div id="loading-text">Generando informe…</div>
+	</div>
     <div class="page-wrapper">
         <?php include("../compartido/encabezado.php");?>
 		
@@ -116,7 +120,7 @@ if($config['conf_doble_buscador'] == 1) {
 													<tbody id="cargas_result">
 													<?php
 													include("includes/consulta-paginacion-cargas.php");
-													$filtroLimite = '';
+													$filtroLimite = 'LIMIT 9';
 													$selectSql = ["car_id","car_periodo","car_curso","car_ih","car_permiso2",
 																	"car_indicador_automatico","car_maximos_indicadores",
 																	"car_docente","gra_tipo","am.mat_id",
