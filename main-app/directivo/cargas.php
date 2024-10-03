@@ -14,6 +14,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 
 require_once("../class/Estudiantes.php");
+require_once("../class/Sysjobs.php");
 $jQueryTable = '';
 if($config['conf_doble_buscador'] == 1) {
 	$jQueryTable = 'id="example1"';
