@@ -197,7 +197,7 @@ foreach ($data["data"] as $resultado) {
 							}
 						?>
 							<li class="dropdown-submenu-generar-informe" data-toggle="tooltip" <?= $tooltip ?>>
-								<a style="color:<?= !$permisoGenerarInforme ? '#bcc6d0' : '#6f6f6f' ?>;" class="dropdown-item dropdown-toggle " href="javascript:void(0);" onclick="mostrarGenerarInforme(<?=$resultado["car_id"]?>)" >Generar Informe</a>
+								<a style="color:<?= !$permisoGenerarInforme ? '#bcc6d0' : '#6f6f6f' ?>;" class="dropdown-item dropdown-toggle" href="javascript:void(0);" onclick="mostrarGenerarInforme(<?=$resultado["car_id"]?>)" >Generar Informe</a>
 								<?php if ($permisoGenerarInforme) {
 									 $parametros='?carga='.base64_encode($resultado["car_id"]).
 									              '&periodo='.base64_encode($resultado["car_periodo"]).
@@ -206,8 +206,8 @@ foreach ($data["data"] as $resultado) {
 												  '&tipoGrado='.base64_encode($resultado["gra_tipo"]);
 									?>
 									<ul id="generarInforme-<?=$resultado["car_id"]?>" class="dropdown-menu">
-										<li><a rel="<?=$configGenerarJobs.'-'.$numSinNotas.'-1';?> class="dropdown-item"  href="javascript:void(0);" onclick="mensajeGenerarInforme(this)" name="../compartido/generar-informe.php<?=$parametros?>">Manual</a></li>
-										<li><a rel="<?=$configGenerarJobs.'-'.$numSinNotas.'-2';?> class="dropdown-item" href="javascript:void(0);"  onclick="mensajeGenerarInforme(this)" name="../compartido/job-generar-informe.php?<?=$parametros?>">Automático</a></li>
+										<li><a rel="<?=$configGenerarJobs.'-'.$numSinNotas.'-1';?>" class="dropdown-item"  href="javascript:void(0);" onclick="mensajeGenerarInforme(this)" name="../compartido/generar-informe.php<?=$parametros?>">Manual</a></li>
+										<li><a rel="<?=$configGenerarJobs.'-'.$numSinNotas.'-2';?>" class="dropdown-item" href="javascript:void(0);"  onclick="mensajeGenerarInforme(this)" name="../compartido/job-generar-informe.php<?=$parametros?>">Automático</a></li>
 									</ul>
 								<?php } ?>
 							</li>
