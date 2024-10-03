@@ -29,7 +29,7 @@ if(!isset($_GET['nodb'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../config-general/assets-login-2023/img/logo.png" type="image/x-icon">
-    <title>Plataforma Educativa SINTIA | Login</title>
+    <title>Plataforma Educativa SINTIA | Login again</title>
     <!-- Google fonts-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap">
     <!-- Styles -->
