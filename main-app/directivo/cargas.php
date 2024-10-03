@@ -120,7 +120,7 @@ if($config['conf_doble_buscador'] == 1) {
 													<tbody id="cargas_result">
 													<?php
 													include("includes/consulta-paginacion-cargas.php");
-													$filtroLimite = 'LIMIT 9';
+													$filtroLimite = '';
 													$selectSql = ["car_id","car_periodo","car_curso","car_ih","car_permiso2",
 																	"car_indicador_automatico","car_maximos_indicadores",
 																	"car_docente","gra_tipo","am.mat_id",
