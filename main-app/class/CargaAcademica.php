@@ -1765,7 +1765,7 @@ class CargaAcademica {
         // Preparar los placeholders para la consulta
         $in_cursos = implode(', ', array_fill(0, count($cursos), '?'));
         $sql = "SELECT DISTINCT car_grupo,gru_nombre FROM ".BD_ACADEMICA.".academico_cargas car
-        INNER JOIN mobiliar_academic.academico_grupos gru ON
+        INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON
         (
             gru.institucion=car.institucion
             AND gru.year=car.year

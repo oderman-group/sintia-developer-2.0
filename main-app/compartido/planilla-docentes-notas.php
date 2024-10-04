@@ -57,7 +57,7 @@ require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
     $materiaSiglas=strtoupper($resultadoCargas['mat_siglas']);
     $periodoActual=($resultadoCargas['car_periodo']-1);
 
-    switch($periodoActual){
+    switch($periodoActual) {
         case 1:
             $acomulado=0.25;
             break;
@@ -68,7 +68,7 @@ require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
             $acomulado=0.75;
             break;
         case 4:
-            $acomulado=0.10;
+            $acomulado=1;
             break;
     }
 ?>
@@ -116,7 +116,7 @@ require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
       <?php
         }
       ?>
-        <td rowspan="2" class="vertical" style="background:<?=$Plataforma->colorTres;?>; height:20px;" width="2%">FINAL <?= $materiaSiglas; ?></td>
+        <td rowspan="2" class="vertical" style="background:<?=$Plataforma->colorTres;?>; height:20px;" width="2%" title="Representa la suma de definitivas de cada periodo dividido sobre el periodo actual global, en el que está la Institución.">FINAL <?= $materiaSiglas; ?></td>
       <?php
         for($i=1;$i<=17;$i++){
       ?>
@@ -171,8 +171,8 @@ require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
           // $acomuladoNota+=$notaEstudiante;
         }
         //ACOMULADO PARA LAS MATERIAS
-        $totalAcomuladoNota=$acomuladoNota*$acomulado;
-        $totalAcomuladoNota= round($totalAcomuladoNota, 1);
+        $totalAcomuladoNota=$acomuladoNota/$config['conf_periodo'];
+        $totalAcomuladoNota= round($totalAcomuladoNota, 2);
 
         $totalAcomuladoNotaFinal=$totalAcomuladoNota;
         $title='';
