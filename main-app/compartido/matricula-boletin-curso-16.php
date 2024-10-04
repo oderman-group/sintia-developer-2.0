@@ -138,7 +138,7 @@ if ($periodoSeleccionado == 4) $periodoActuales = "Final";
                 <table width="100%" cellspacing="5" cellpadding="5" border="1" rules="all">
                     <tr>
                         <td>C&oacute;digo:<br> <?= strpos($estudiante["mat_documento"], '.') !== true && is_numeric($estudiante["mat_documento"]) ? number_format($estudiante["mat_documento"], 0, ",", ".") : $estudiante["mat_documento"]; ?></td>
-                        <td>Nombre:<br> <?= $nombre ?></td>
+                        <td>Nombre:<br> <?= $estudiante["nombre"] ?></td>
                         <td>Grado:<br> <?= $estudiante["gra_nombre"] . " " . $estudiante["gru_nombre"]; ?></td>
                         <td>Puesto Curso:<br> <?= isset($puestosCurso[$estudiante["mat_id"]]) ? $puestosCurso[$estudiante["mat_id"]] : 'N/A'; ?><?= " de " . count($puestosCurso); ?></td>
                     </tr>
