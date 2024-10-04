@@ -101,7 +101,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                         </div>
                                         
                                         <div class="table">
-                                    		<table class="display" style="width:100%;">
+                                    		<table  id="example1" class="display" style="width:100%;">
                                             <div id="gifCarga" class="gif-carga">
 										        <img   alt="Cargando...">
 									        </div>
@@ -139,7 +139,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                             </table>
                                             </div>
                                         </div>
-                      				    <?php include("enlaces-paginacion.php");?>
+                      				    <!-- <?php include("enlaces-paginacion.php");?> -->
                                     </div>
                                 </div>
                             </div>
