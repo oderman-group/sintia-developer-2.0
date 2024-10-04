@@ -1356,7 +1356,7 @@ class Boletin {
         $andEstudiante="";
 
         if (!empty($idEstudiante)) {
-            $andEstudiante = "AND   mat.mat_id  = " . $idEstudiante;
+            $andEstudiante = "AND   mat.mat_id  = '" . $idEstudiante."'";
         }
          // Preparar los placeholders para la consulta
          $in_periodos = implode(', ', array_fill(0, count($periodos), '?'));
