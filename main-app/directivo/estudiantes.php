@@ -183,8 +183,14 @@ if($config['conf_doble_buscador'] == 1) {
 													<?php
 													
 													include("includes/consulta-paginacion-estudiantes.php");
-													$filtroLimite = 'LIMIT '.$inicio.','.$registros;												
-													$consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite, $cursoActual);
+													$filtroLimite = 'LIMIT '.$inicio.','.$registros;
+													
+													$selectSql = ["mat.*",
+																  "uss.uss_id","uss.uss_usuario","uss.uss_bloqueado",
+																  "gra_nombre","gru_nombre","gra_formato_boletin",
+																  "acud.uss_nombre","acud.uss_nombre2","acud.uss_nombre2"];
+
+													$consulta = Estudiantes::listarEstudiantes(0, $filtro, $filtroLimite, $cursoActual,null,$selectSql);
 													
 													$contReg = 1;
 
