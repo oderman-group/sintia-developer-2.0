@@ -1,5 +1,5 @@
 <?php
-
+require_once "sensitive.php";
 // Update the path below to your autoload.php,
 // see https://getcomposer.org/doc/01-basic-usage.md
 require_once "vendor/twilio/sdk/src/Twilio/autoload.php";
