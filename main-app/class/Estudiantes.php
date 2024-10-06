@@ -4,6 +4,7 @@ require_once(ROOT_PATH."/main-app/class/servicios/MediaTecnicaServicios.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 require_once(ROOT_PATH."/main-app/class/Tables/BDT_aspirante.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 class Estudiantes {
 
@@ -243,7 +244,7 @@ class Estudiantes {
                         
                         GROUP BY mat.mat_id
 
-                        HAVING acumulado < ".PORCENTAJE_MINIMO_GENERAR_INFORME."  OR acumulado IS NULL
+                        HAVING acumulado < ".Boletin::PORCENTAJE_MINIMO_GENERAR_INFORME."  OR acumulado IS NULL
                         ORDER BY mat.mat_primer_apellido, mat.mat_segundo_apellido, mat.mat_nombres";
         }else{
           $sqlString = "SELECT
@@ -282,7 +283,7 @@ class Estudiantes {
                         AND   matcur_estado          = '".ACTIVO."'
                         
                         GROUP BY mat.mat_id 
-                        HAVING acumulado < ".PORCENTAJE_MINIMO_GENERAR_INFORME."  OR acumulado IS NULL
+                        HAVING acumulado < ".Boletin::PORCENTAJE_MINIMO_GENERAR_INFORME."  OR acumulado IS NULL
                         ORDER BY mat.mat_primer_apellido, mat.mat_segundo_apellido, mat.mat_nombres";
         }
     
