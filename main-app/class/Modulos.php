@@ -5,6 +5,17 @@ require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 
 class Modulos {
 
+    public const MODULO_ACADEMICO      = 1;
+    public const MODULO_FINANCIERO     = 2;
+    public const MODULO_DISCIPLINARIO  = 3;
+    public const MODULO_ADMINISTRATIVO = 4;
+    public const MODULO_COMUNICATIVO   = 5;
+    public const MODULO_MERCADEO       = 6;
+    public const MODULO_GENERAL        = 7;
+    public const MODULO_ADMISIONES     = 8;
+    public const MODULO_RESERVA_CUPO   = 9;
+    public const MODULO_MEDIA_TECNICA  = 10;
+
     /**
      * Verifica los permisos de acceso a una página interna según el ID de la página.
      *
