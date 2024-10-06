@@ -1256,7 +1256,12 @@ class Estudiantes {
 
         global $conexion, $config;
 
-        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas WHERE mat_id=mat_id AND institucion=? AND year=? {$predicado}";
+        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas 
+        WHERE 
+            mat_id=mat_id
+        AND institucion=? 
+        AND year=? {$predicado}
+        ";
 
         $parametros = [$config['conf_id_institucion'], $_SESSION["bd"]];
         
