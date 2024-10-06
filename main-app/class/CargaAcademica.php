@@ -1371,7 +1371,7 @@ class CargaAcademica {
         $sql = "SELECT car_id, car_ih, car_materia, car_docente, car_director_grupo,
         mat_nombre, mat_area, mat_valor,
         ar_nombre, ar_posicion
-        bol_estudiante, bol_periodo, bol_nota,
+        bol_estudiante, bol_periodo, bol_nota, bol_id,
         bol_nota * (mat_valor/100) AS notaArea
         FROM ".BD_ACADEMICA.".academico_cargas car
         INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id = car_materia AND am.institucion=car.institucion AND am.year=car.year
@@ -1441,21 +1441,38 @@ class CargaAcademica {
         int     $periodo,
         string  $idEstudiante,
         string  $idArea,
-        string  $yearBd = ""
+        string  $yearBd = "",
+        string|null $grupo = null
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+
+        $whereGrupo = !empty($grupo) ? " AND car.car_grupo = '". $grupo. "'" : "";
 
         $sql = "SELECT mat_valor,
         bol_estudiante, bol_periodo, bol_nota,
         SUM(bol_nota * (mat_valor/100)) AS notaArea
         FROM ".BD_ACADEMICA.".academico_cargas car
-        INNER JOIN ".BD_ACADEMICA.".academico_materias am ON am.mat_id = car_materia AND mat_sumar_promedio='SI' AND am.institucion=car.institucion AND am.year=car.year
-        INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol_carga=car_id AND bol_periodo=? AND bol_estudiante = ? AND bol.institucion=car.institucion AND bol.year=car.year
-        WHERE am.mat_area = ? AND car.institucion=? AND car.year=?
-        GROUP BY am.mat_area";
+        INNER JOIN ".BD_ACADEMICA.".academico_materias am 
+            ON am.mat_id = car_materia 
+            AND mat_sumar_promedio='SI' 
+            AND am.institucion=car.institucion 
+            AND am.year=car.year
+        INNER JOIN ".BD_ACADEMICA.".academico_boletin bol 
+            ON bol_carga=car_id 
+            AND bol_periodo='".$periodo."' 
+            AND bol_estudiante = '".$idEstudiante."'
+            AND bol.institucion=car.institucion 
+            AND bol.year=car.year
+        WHERE 
+            am.mat_area = '".$idArea."' 
+            AND car.institucion=? 
+            AND car.year=?
+            {$whereGrupo}
+        GROUP BY am.mat_area
+        ";
 
-        $parametros = [$periodo, $idEstudiante, $idArea, $config['conf_id_institucion'], $year];
+        $parametros = [$config['conf_id_institucion'], $year];
 
         $resultado = BindSQL::prepararSQL($sql, $parametros);
 

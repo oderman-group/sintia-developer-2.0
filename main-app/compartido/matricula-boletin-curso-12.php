@@ -214,7 +214,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                             }
 
                             //NOTA PARA LAS MATERIAS
-                            $notaMateria = !empty($datosMaterias['bol_nota']) ? round($datosMaterias['bol_nota'], 1) : 0;
+                            $notaMateria = !empty($datosMaterias['bol_nota']) ? round($datosMaterias['bol_nota'], $config['conf_decimales_notas']) : 0;
                             $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $notaMateria,$year);
                             if($notaMateria<10){
                                 $estiloNota['notip_nombre']="Bajo";
@@ -247,7 +247,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                             if($i!=$periodoActual){
                                                 $datosPeriodos = Boletin::traerNotaBoletinCargaPeriodo($config, $i, $matriculadosDatos['mat_id'], $datosMaterias['car_id'], $year);
                                                 $notaMateriasPeriodos=$datosPeriodos['bol_nota'];
-                                                $notaMateriasPeriodos=round($notaMateriasPeriodos, 1);
+                                                $notaMateriasPeriodos=round($notaMateriasPeriodos, $config['conf_decimales_notas']);
                                                 $notaMateriasPeriodosTotal+=$notaMateriasPeriodos;
 
                                                 $notaMateriasPeriodosFinal=$notaMateriasPeriodos;
@@ -283,7 +283,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
                                         //ACOMULADO PARA LAS MATERIAS
                                         $notaAcomuladoMateria = ($notaMateria + $notaMateriasPeriodosTotal) / $ultimoPeriodo;
-                                        $notaAcomuladoMateria = round($notaAcomuladoMateria,1);
+                                        $notaAcomuladoMateria = round($notaAcomuladoMateria,$config['conf_decimales_notas']);
                                         if(strlen($notaAcomuladoMateria) === 1 || $notaAcomuladoMateria == 10){
                                             $notaAcomuladoMateria = $notaAcomuladoMateria.".0";
                                         }
@@ -306,7 +306,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                             }
 
                             //NOTA PARA LAS AREAS
-                            if(!empty($datosMaterias['notaArea'])) $notaArea+=round($datosMaterias['notaArea'], 1);
+                            if(!empty($datosMaterias['notaArea'])) $notaArea+=round($datosMaterias['notaArea'], $config['conf_decimales_notas']);
 
                         } //FIN WHILE DE LAS MATERIAS
                     ?>
@@ -322,9 +322,9 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                                 $ultimoPeriodoAreas = $config["conf_periodos_maximos"];
                                 for($i=1;$i<=$periodoActual;$i++){
                                     if($i!=$periodoActual){
-                                        $consultaAreasPeriodos = CargaAcademica::consultaAreasPeriodos($config, $i, $matriculadosDatos['mat_id'], $datosAreas['ar_id'], $year);
+                                        $consultaAreasPeriodos = CargaAcademica::consultaAreasPeriodos($config, $i, $matriculadosDatos['mat_id'], $datosAreas['ar_id'], $year, $matriculadosDatos['mat_grupo']);
                                         $datosAreasPeriodos=mysqli_fetch_array($consultaAreasPeriodos, MYSQLI_BOTH);
-                                        $notaAreasPeriodos = !empty($datosAreasPeriodos['notaArea']) ? round($datosAreasPeriodos['notaArea'], 1) : 0;
+                                        $notaAreasPeriodos = !empty($datosAreasPeriodos['notaArea']) ? round($datosAreasPeriodos['notaArea'], $config['conf_decimales_notas']) : 0;
                                         $notaAreasPeriodosTotal+=$notaAreasPeriodos;
                                         switch($i){
                                             case 1:
@@ -380,7 +380,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
                         
                                 //ACOMULADO PARA LAS AREAS
                                 $notaAcomuladoArea = ($notaArea + $notaAreasPeriodosTotal) / $ultimoPeriodoAreas;
-                                $notaAcomuladoArea = round($notaAcomuladoArea,1);
+                                $notaAcomuladoArea = round($notaAcomuladoArea,$config['conf_decimales_notas']);
                                 if(strlen($notaAcomuladoArea) === 1 || $notaAcomuladoArea == 10){
                                     $notaAcomuladoArea = $notaAcomuladoArea.".0";
                                 }
@@ -410,7 +410,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
                         //PROMEDIO DE LAS AREAS
                         $promedioGeneral += !empty($sumaPromedioGeneral) && !empty($numAreas) ? ($sumaPromedioGeneral/$numAreas) : 0;
-                        $promedioGeneral= round($promedioGeneral,1);
+                        $promedioGeneral= round($promedioGeneral,$config['conf_decimales_notas']);
                         $estiloNotaPromedioGeneral = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $promedioGeneral,$year);
                         if($promedioGeneral<10){
                             $estiloNotaPromedioGeneral['notip_nombre']="Bajo";
@@ -438,7 +438,7 @@ include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 
                             //PROMEDIO DE LAS AREAS PERIODOS ANTERIORES
                             $promedioGeneralPeriodos = !empty($sumaPromedioGeneralPeriodos) && !empty($numAreas) ? ($sumaPromedioGeneralPeriodos/$numAreas) : 0;
-                            $promedioGeneralPeriodos= round($promedioGeneralPeriodos,1);
+                            $promedioGeneralPeriodos= round($promedioGeneralPeriodos,$config['conf_decimales_notas']);
 
                             $promedioGeneralPeriodosFinal=$promedioGeneralPeriodos;
                             if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
