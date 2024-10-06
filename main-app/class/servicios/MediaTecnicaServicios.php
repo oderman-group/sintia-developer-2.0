@@ -101,20 +101,46 @@ class MediaTecnicaServicios extends Servicios
   ) {
     global  $config;
     $year = !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+    
+    $select = !empty($parametrosArray['select']) ? $parametrosArray['select'] : "*";
 
-    $sqlInicial = "SELECT * FROM " . BD_ADMIN . ".mediatecnica_matriculas_cursos 
-      LEFT JOIN " . BD_ACADEMICA . ".academico_matriculas mat ON matcur_id_matricula=mat.mat_id AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year}
-			LEFT JOIN " . BD_ACADEMICA . ".academico_grados gra ON gra_id=matcur_id_curso AND gra.institucion={$config['conf_id_institucion']} AND gra.year={$year}
-      LEFT JOIN " . BD_ACADEMICA . ".academico_grupos gru ON gru.gru_id=matcur_id_grupo AND gru.institucion={$config['conf_id_institucion']} AND gru.year={$year}
-			LEFT JOIN " . BD_GENERAL . ".usuarios uss ON uss_id=mat.mat_id_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$year}
-      LEFT JOIN " . BD_ADMIN . ".opciones_generales ON ogen_id=mat.mat_genero			
-      ";
+    $sqlInicial = "SELECT 
+                   $select
+                   FROM " . BD_ADMIN . ".mediatecnica_matriculas_cursos
+                   
+                   LEFT JOIN " . BD_ACADEMICA . ".academico_matriculas mat 
+                   ON  matcur_id_matricula = mat.mat_id 
+                   AND mat.institucion     = mat.institucion
+                   AND mat.year            = mat.year
+
+                   LEFT JOIN " . BD_ACADEMICA . ".academico_grados gra 
+                   ON gra_id           = matcur_id_curso 
+                   AND gra.institucion = mat.institucion 
+                   AND gra.year        = mat.year
+
+                   LEFT JOIN " . BD_ACADEMICA . ".academico_grupos gru 
+                   ON gru.gru_id       = matcur_id_grupo 
+                   AND gru.institucion = mat.institucion
+                   AND gru.year        = mat.year
+
+                   LEFT JOIN " . BD_GENERAL . ".usuarios uss 
+                   ON uss_id           = mat.mat_id_usuario 
+                   AND uss.institucion = mat.institucion
+                   AND uss.year        = mat.year
+
+                   LEFT JOIN ".BD_GENERAL.".usuarios  acud
+                   ON acud.institucion          = mat.institucion
+						       AND acud.year                = mat.year
+						       AND acud.uss_id              = mat.mat_acudiente
+
+                   LEFT JOIN " . BD_ADMIN . ".opciones_generales 
+                   ON ogen_id          = mat.mat_genero";
     if ($parametrosArray && count($parametrosArray) > 0) {
       $grupo = "";
       if (!empty($parametrosArray['matcur_id_grupo'])) {
         $grupo = 'matcur_id_grupo';
       }
-      $parametrosValidos = array('matcur_id_matricula', 'matcur_id_curso', 'matcur_id_institucion', 'matcur_years', $grupo);
+      $parametrosValidos = array('matcur_id_matricula', 'matcur_id_curso', 'matcur_id_institucion', 'matcur_years','mat_eliminado', $grupo);
       $sqlInicial = Servicios::concatenarWhereAnd($sqlInicial, $parametrosValidos, $parametrosArray);
     };
     $andPersonalizado = !empty($parametrosArray['and']) ? $parametrosArray['and'] : "";

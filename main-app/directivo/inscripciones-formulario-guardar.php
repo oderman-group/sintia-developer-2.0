@@ -43,7 +43,8 @@ mat_lugar_expedicion = :lugarExp,
 mat_motivo_retiro_anterior = :motivoRetiro,
 mat_foto = :foto,
 mat_etnia = :etnia,
-mat_tiene_discapacidad = :discapacidad
+mat_tiene_discapacidad = :discapacidad,
+mat_tipo_situacion = :situacion
 WHERE mat_id = :idMatricula AND institucion= :idInstitucion AND year= :year";
 $stmt = $conexionPDO->prepare($sql);
 
@@ -70,6 +71,7 @@ $stmt->bindParam(':idInstitucion', $config['conf_id_institucion'], PDO::PARAM_IN
 $stmt->bindParam(':year', $_SESSION["bd"], PDO::PARAM_STR);
 $stmt->bindParam(':etnia', $_POST['grupoEtnico'], PDO::PARAM_STR);
 $stmt->bindParam(':discapacidad', $_POST['discapacidad'], PDO::PARAM_STR);
+$stmt->bindParam(':situacion', $_POST['tipoSituacion'], PDO::PARAM_INT);
 
 $stmt->execute();
 $filasAfectadas = $stmt->rowCount();

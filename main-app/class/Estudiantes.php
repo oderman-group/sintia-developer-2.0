@@ -17,19 +17,27 @@ class Estudiantes {
      * @param string $filtroLimite - Límite de resultados para la consulta SQL.
      * @param mixed $cursoActual - Información sobre el curso actual (puede ser nulo).
      * @param string $valueIlike - Valor String que se utilizara para biuscar por cualuqier parametro definido (puede ser nulo).
-     *
+     * @param array $selectConsulta - valores de los select que se van a nececitar para las consultas
+     * 
      * @return mysqli_result - Un array con los resultados de la consulta.
      */
     public static function listarEstudiantes(
         int    $eliminados      = 0, 
         string $filtroAdicional = '', 
-        string $filtroLimite    = 'LIMIT 0, 2000',
+        string $filtroLimite    = 'LIMIT 0, 20',
         $cursoActual=null,
-        $valueIlike=null
+        $valueIlike=null,
+        array $selectConsulta=[]
     )
     {
         global $config, $arregloModulos;
         $tipoGrado = $cursoActual ? $cursoActual["gra_tipo"] : GRADO_GRUPAL;
+        
+        $stringSelect="*";
+        if (!empty($selectConsulta)) {
+            $stringSelect=implode(", ", $selectConsulta);
+        };
+
         $resultado = [];
         if(!empty($valueIlike)){
             $busqueda=$valueIlike;
@@ -55,20 +63,51 @@ class Estudiantes {
                 OR CONCAT(TRIM(mat_segundo_apellido), ' ', TRIM(mat_nombre2)) LIKE '%".$busqueda."%'
                 OR CONCAT(TRIM(mat_segundo_apellido), ' ', TRIM(mat_primer_apellido)) LIKE '%".$busqueda."%'
                 OR CONCAT(TRIM(mat_nombre2), ' ', TRIM(mat_segundo_apellido)) LIKE '%".$busqueda."%'
+                OR CONCAT(TRIM(gra_nombre), ' ', TRIM(mat_segundo_apellido)) LIKE '%".$busqueda."%'
             )";
         }
         try {
             if( $tipoGrado == GRADO_GRUPAL || !array_key_exists(10, $arregloModulos) ){
-                $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
-                LEFT JOIN ".BD_GENERAL.".usuarios uss ON uss_id=mat.mat_id_usuario AND uss.institucion=mat.institucion AND uss.year=mat.year
-                LEFT JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=mat.mat_grado AND gra.institucion=mat.institucion AND gra.year=mat.year
-                LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=mat.mat_grupo AND gru.institucion=mat.institucion AND gru.year=mat.year
-                LEFT JOIN ".BD_ADMIN.".opciones_generales ON ogen_id=mat.mat_genero
-                LEFT JOIN ".BD_ADMIN.".localidad_ciudades ON ciu_id=mat.mat_lugar_nacimiento
-                WHERE mat.mat_eliminado IN (0, '".$eliminados."') AND mat.institucion=? AND mat.year=?
-                {$filtroAdicional}
-                ORDER BY mat.mat_grado, mat.mat_grupo, mat.mat_primer_apellido, mat.mat_segundo_apellido, mat.mat_nombres
-                {$filtroLimite}";
+                $sql = "SELECT 
+                        $stringSelect 
+                        FROM ".BD_ACADEMICA.".academico_matriculas mat
+                        
+                        LEFT JOIN ".BD_GENERAL.".usuarios uss 
+                        ON uss_id               = mat.mat_id_usuario 
+                        AND uss.institucion     = mat.institucion 
+                        AND uss.year            = mat.year
+
+                        LEFT JOIN ".BD_ACADEMICA.".academico_grados gra 
+                        ON gra_id               = mat.mat_grado 
+                        AND gra.institucion     = mat.institucion 
+                        AND gra.year            = mat.year
+
+                        LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru 
+                        ON gru.gru_id           = mat.mat_grupo 
+                        AND gru.institucion     = mat.institucion 
+                        AND gru.year            = mat.year
+
+                        LEFT JOIN ".BD_ADMIN.".opciones_generales 
+                        ON ogen_id              = mat.mat_genero
+                        
+                        LEFT JOIN ".BD_ADMIN.".localidad_ciudades 
+                        ON ciu_id               = mat.mat_lugar_nacimiento
+
+                        LEFT JOIN ".BD_GENERAL.".usuarios  acud
+                        ON acud.institucion          = mat.institucion
+						AND acud.year                = mat.year
+						AND acud.uss_id              = mat.mat_acudiente
+                        
+                        WHERE mat.mat_eliminado IN (0, '".$eliminados."') 
+                        AND mat.institucion     = ? 
+                        AND mat.year            = ?
+                        
+                        {$filtroAdicional}
+                        
+                        ORDER BY 
+                        mat.mat_grado,mat.mat_grupo,mat.mat_primer_apellido,mat.mat_segundo_apellido,mat.mat_nombres
+
+                        {$filtroLimite}";
         
                 $parametros = [$config['conf_id_institucion'], $_SESSION["bd"]];
                 
@@ -77,9 +116,11 @@ class Estudiantes {
                 
                 $parametros = [
                     'matcur_id_curso'       => $cursoActual["gra_id"],
+                    'mat_eliminado'         => 0,
                     'matcur_id_institucion' => $config['conf_id_institucion'],
                     'limite'                => $filtroLimite,
                     'and'                   => $filtroAdicional,
+                    'select'                => $stringSelect,
                     'arreglo'               => false
                 ];
                 $resultado = MediaTecnicaServicios::listarEstudiantes($parametros);
@@ -1315,32 +1356,46 @@ class Estudiantes {
     * para la institución y año especificados en la configuración.
     *
     * @param array   $config      Configuración general del sistema.
-    * @param string  $yearBd      Año de la base de datos a utilizar (opcional). Si no se proporciona, se utiliza el año de la sesión.
+    * @param string  $yearBd      Año de la base de datos a utilizar (opcional). Si no se proporciona, se utiliza el año de la sesión.    
+    * @param array   $selectConsulta - valores de los select que se van a nececitar para las consultas
     * @return mixed  El resultado de la consulta, que contiene las matrículas de los aspirantes.
     */
     public static function listarMatriculasAspirantes(
         array   $config, 
-        string  $filtro = "", 
-        string  $limite = "", 
-        string  $yearBd = ""
+        string  $filtro       = "", 
+        string  $limite       = "", 
+        string  $yearBd       = "",
+        array $selectConsulta = [] 
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+        $stringSelect="*";
 
-        $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_matriculas mat
-        INNER JOIN ".BD_ADMISIONES.".aspirantes 
-            ON asp_id=mat.mat_solicitud_inscripcion 
-            AND asp_oculto = '".BDT_Aspirante::ESTADO_OCULTO_FALSO."'
-        LEFT JOIN ".BD_ACADEMICA.".academico_grados gra 
-            ON gra_id=asp_grado 
-            AND gra.institucion=mat.institucion 
-            AND gra.year=mat.year
-        WHERE mat.mat_estado_matricula=".EN_INSCRIPCION." 
-        AND mat.institucion=? 
-        AND mat.year=? 
-        {$filtro}
-        ORDER BY mat.mat_primer_apellido  {$limite}
-        ";
+        if (!empty($selectConsulta)) {
+            $stringSelect = implode(", ", $selectConsulta);
+        };
+
+        $sql = " SELECT 
+                 $stringSelect  
+                 FROM ".BD_ACADEMICA.".academico_matriculas mat
+
+                 INNER JOIN ".BD_ADMISIONES.".aspirantes 
+                 ON asp_id    = mat.mat_solicitud_inscripcion
+                 
+                 LEFT JOIN ".BD_ACADEMICA.".academico_grados gra 
+                 ON gra_id            = asp_grado 
+                 AND gra.institucion  = mat.institucion 
+                 AND gra.year         = mat.year
+
+                 WHERE mat.mat_estado_matricula = ".EN_INSCRIPCION." 
+                 AND mat.institucion            = ? 
+                 AND mat.year                   = ? 
+                
+                 {$filtro}
+                 
+                 ORDER BY mat.mat_primer_apellido  
+                 
+                 {$limite}";
 
         $parametros = [$config['conf_id_institucion'], $year];
         
