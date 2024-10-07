@@ -186,3 +186,14 @@ if(typeof formulario !== 'undefined' && formulario !== null) {
 <!-- end footer -->
 
 <?php Conexion::getConexion()->closeConnection(); ?>
+
+
+<script type="text/javascript">
+  window._mfq = window._mfq || [];
+  (function() {
+    var mf = document.createElement("script");
+    mf.type = "text/javascript"; mf.defer = true;
+    mf.src = "//cdn.mouseflow.com/projects/ae17c015-82d9-4150-91b6-d01309880044.js";
+    document.getElementsByTagName("head")[0].appendChild(mf);
+  })();
+</script>
