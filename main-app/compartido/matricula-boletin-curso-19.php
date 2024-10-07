@@ -48,9 +48,9 @@ if (!empty($_GET["year"])) {
 $idEstudiante = '';
 if (!empty($_GET["id"])) {
 
-    $filtro = " AND mat_id='" . base64_decode($_GET["id"]) . "'";
+    $filtro               = " AND mat_id='" . base64_decode($_GET["id"]) . "'";
     $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
-    $estudiante = $matriculadosPorCurso->fetch_assoc();
+    $estudiante           = $matriculadosPorCurso->fetch_assoc();
     if (!empty($estudiante)) {
         $idEstudiante = $estudiante["mat_id"];
         $grado        = $estudiante["mat_grado"];
@@ -105,8 +105,8 @@ for ($i = 1; $i <= $periodoSeleccionado; $i++) {
 </head>
 <?php
 // Cosnultas iniciales
-$listaDatos = [];
-$tiposNotas = [];
+$listaDatos         = [];
+$tiposNotas         = [];
 $cosnultaTiposNotas = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $year);
 while ($row = $cosnultaTiposNotas->fetch_assoc()) {
     $tiposNotas[] = $row;
@@ -142,7 +142,7 @@ while ($row = $conCargasDos->fetch_assoc()) {
         $listaIndicadores[] = $row2;
     }
     $row['indicadores'] = $listaIndicadores;
-    $listaCargas[] = $row;
+    $listaCargas[]      = $row;
 }
 
 $periodosCursados = $periodoSeleccionado - 1;
@@ -241,10 +241,16 @@ if ($grado >= 12 && $grado <= 15) {
                 </tr>
             </thead>
             <tbody>
-                <?php 
+                <?php
                 $cantidadMaterias = 0;
-                foreach ($areas[$estudiante["mat_id"]]  as  $area) {  ?>
-                    <?php                    
+                foreach ($areas[$estudiante["mat_id"]]  as  $area) {  
+                    $ihArea       =0;                    
+                    $notaAre      =[];
+                    $fallasArea   =0;
+                    $desenpenioAre;
+                    ?>
+                   
+                    <?php
                     foreach ($cargas[$estudiante["mat_id"]][$area["ar_id"]] as $carga) {
                         $cantidadMaterias++;
                     ?>
@@ -254,21 +260,30 @@ if ($grado >= 12 && $grado <= 15) {
                             <?php
                             $promedioMateria = 0;
                             $fallasAcumuladas = 0;
+                            $ihArea+= $carga['car_ih'];
                             for ($j = 1; $j <= $periodoSeleccionado; $j++) {
                                 $nota = isset($notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["bol_nota"])
                                     ? $notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["bol_nota"]
                                     : 0;
                                 $fallas = isset($notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["aus_ausencias"])
                                     ? $notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["aus_ausencias"]
-                                    : 0;
-                                $nota =      Boletin::agregarDecimales($nota);
-                                $desempeno = Boletin::determinarRango($nota, $tiposNotas);
-                                $promedioMateria  += $nota;
-                                $fallasAcumuladas += $fallas;
+                                    : 0;                                
+                                $nota                  = Boletin::agregarDecimales($nota);
+                                $desempeno             = Boletin::determinarRango($nota, $tiposNotas);
+                                $promedioMateria       += $nota;
+                                $fallasAcumuladas      += $fallas;
+                                $fallasArea            += $fallas;  
+
+                                if (isset($notaAre[$j])) {
+                                $notaAre[$j]           += $nota*($carga['mat_valor']/100);
+                                }else{
+                                $notaAre[$j]           =  $nota*($carga['mat_valor']/100); 
+                                }
+
                                 if (isset($totalNotasPeriodo[$j])) {
-                                    $totalNotasPeriodo[$j] += $nota;
+                                $totalNotasPeriodo[$j] += $nota;
                                 } else {
-                                    $totalNotasPeriodo[$j] = $nota;
+                                $totalNotasPeriodo[$j] =  $nota;
                                 }
                                 $background = $j != $periodoSeleccionado ? 'background: #9ed8ed;' : '';
                             ?>
@@ -277,18 +292,39 @@ if ($grado >= 12 && $grado <= 15) {
                             ?>
                             <td align="center"><?= $desempeno['notip_nombre'] ?></td>
                             <?php
-                            $notaAcumulada = $promedioMateria / $periodoSeleccionado;
+                            $notaAcumulada = $promedioMateria / $config['conf_periodos_maximos'];
                             $notaAcumulada = round($notaAcumulada, 2);
                             $desempenoAcumulado = Boletin::determinarRango($notaAcumulada, $tiposNotas); ?>
                             <td align="center"> <?= $fallasAcumuladas ?></td>
                             <td align="center" style=" font-size:12px;"><?= $notaAcumulada ?></td>
-                            <td align="center" style=" font-size:12px;"><?= $desempenoAcumulado["notip_nombre"] .'-'.$cantidadMaterias?></td>
+                            <td align="center" style=" font-size:12px;"><?= $desempenoAcumulado["notip_nombre"] ?></td>
                         </tr>
-                    <?php } ?>
-                <?php } ?>
+                    <?php }                     
+                    if($ihArea !=$carga['car_ih'] ){                        
+                    ?>
+                    <td  style="font-weight:bold;background: #EAEAEA;"><?= $area["ar_nombre"] ?></td>
+                    <td align="center" style="font-weight:bold;background: #EAEAEA;"><?= $ihArea ?></td> 
+                    <?php 
+                        $notaAreAcumulada=0;
+                        for ($j = 1; $j <= $periodoSeleccionado; $j++) {
+                        $notaAreAcumulada += $notaAre[$j];
+                        $desenpenioAre =Boletin::determinarRango($notaAre[$j], $tiposNotas);?>                  
+                    <td align="center" style="font-weight:bold;background: #EAEAEA;"><?= number_format($notaAre[$j],$config['conf_decimales_notas']); ?></td>
+                   
+                <?php }
+                $notaAreAcumulada       = number_format($notaAreAcumulada/$config['conf_periodos_maximos'] ,$config['conf_decimales_notas']);
+                $desenpenioAreAcumulado = Boletin::determinarRango($notaAreAcumulada , $tiposNotas);
+                ?>
+                <td align="center" style="font-weight:bold;background: #EAEAEA;"><?= $desenpenioAre['notip_nombre'] ?></td>
+                <td align="center" style="font-weight:bold;background: #EAEAEA;"><?= $fallasArea ?></td>
+                <td align="center" style="font-weight:bold;background: #EAEAEA;"><?= $notaAreAcumulada ?></td>
+                <td align="center" style="font-weight:bold;background: #EAEAEA;"><?= $desempenoAcumulado["notip_nombre"] ?></td>
+                
+               <?php }
+            } ?>
             </tbody>
             <tfoot style="font-weight:bold; font-size: 13px;">
-                <tr style="background: #EAEAEA">
+                <tr style="font-weight:bold;background: #EAEAEA">
                     <td colspan="2">PROMEDIO GENERAL</td>
                     <?php
                     $promedioFinal = 0;
@@ -356,8 +392,6 @@ if ($grado >= 12 && $grado <= 15) {
 
             <?php
             foreach ($listaCargas as $carga) {
-
-
             ?>
                 <tbody>
                     <tr style="color:#000;">
