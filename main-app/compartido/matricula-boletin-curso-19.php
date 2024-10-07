@@ -369,11 +369,23 @@ if ($grado >= 12 && $grado <= 15) {
                 </tr>
                 <?php
                 foreach ($observacionesConvivencia[$estudiante["mat_id"]] as $observacion) {
+                    $observacionString="";
                     if ($observacion["estudiante"] == $estudiante["mat_id"]) {
+                        if($config['conf_observaciones_multiples_comportamiento'] == '1'){
+                            $explode=explode(",",$observacion["observacion"] );
+                            $numDatos=count($explode);
+                            for($i=0;$i<$numDatos;$i++){
+                                $consultaObservaciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".observaciones WHERE obser_id=$explode[$i] AND obser_id_institucion=".$config['conf_id_institucion']." AND obser_years=".$config['conf_agno']."");
+                                $observaciones = mysqli_fetch_array($consultaObservaciones, MYSQLI_BOTH);
+                                $observacionString =  $observacionString."- ".$observaciones["obser_descripcion"]."<br>";
+                            }
+                        }else{
+                            $observacionString = $observacion["observacion"];
+                        }
                 ?>
-                        <tr align="center" style="font-weight:bold; font-size:12px; height:20px;">
-                            <td><?= $observacion["periodo"] ?></td>
-                            <td align="left"><?= $observacion["observacion"] ?></td>
+                        <tr align="center" style="font-size:12px; height:16px;">
+                            <td  style="font-weight:bold;"><?= $observacion["periodo"] ?></td>
+                            <td align="left"><?=$observacionString ?></td>
                         </tr>
 
                 <?php  }
