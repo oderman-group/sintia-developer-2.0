@@ -1,6 +1,6 @@
 <?php
-$logoIndex = "../config-general/assets-login-2023/img/logo.png";
-$logoWidth = 100;
+$logoIndex = "../sintia-gris.png";
+$logoWidth = 250;
 
 if(!isset($_GET['nodb'])) {
     require_once("index-logica.php");
@@ -103,14 +103,16 @@ if(!isset($_GET['nodb'])) {
                                 <div class="invalid-feedback">Por favor seleccione un año.</div>
                             </div>
 
-                            <div class="d-flex justify-content-end mt-5">
-                                <a class="forgot-password" id="forgot-password" href="recuperar-clave.php">¿Ha olvidado su contraseña?</a>
-                            </div>
-                            <button class="w-75 btn btn-lg btn-primary btn-rounded mt-3" type="submit">Empezar la aventura</button>
-                            <div class="d-flex justify-content-center mt-5">
-                                <p><a href="https://docs.google.com/forms/d/e/1FAIpQLSdiugXhzAj0Ysmt2gthO07tbvjxTA7CHcZqgzBpkefZC6T2qg/viewform" class="text-body" target="_blank">¿Requieres soporte?</a></p>
-                            </div>
+                            <button class="w-75 btn btn-lg btn-primary btn-rounded mt-3" type="submit">Iniciar sesión</button>
                         </form>
+
+                        <div class="d-flex justify-content-center mt-3">
+                            <a class="forgot-password" id="forgot-password" href="recuperar-clave.php">¿Has olvidado tu contraseña?</a>
+                        </div>
+
+                        <div class="d-flex justify-content-center mt-3">
+                            <p><a href="https://docs.google.com/forms/d/e/1FAIpQLSdiugXhzAj0Ysmt2gthO07tbvjxTA7CHcZqgzBpkefZC6T2qg/viewform" class="text-body btn-sm" target="_blank">¿Requieres soporte?</a></p>
+                        </div>
                     </div>
                 </div>
             </div>

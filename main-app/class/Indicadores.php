@@ -6,6 +6,9 @@ require_once ROOT_PATH."/main-app/class/Conexion.php";
 
 class Indicadores {
 
+    public const CONFIG_MANUAL_INDICADOR      = 1;
+    public const CONFIG_AUTOMATICO_INDICADOR  = 0;
+
     /**
      * Este metodo me consulta la suma de los indicadores de la carga actual
      * @param mysqli    $conexion

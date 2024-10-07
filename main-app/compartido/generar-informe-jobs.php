@@ -105,7 +105,7 @@ try {
         $listadoEstudiantesError = "";
         $mensaje                 = "";
 
-        if ($config['conf_porcentaje_completo_generar_informe'] == GENERAR_CON_PORCENTAJE_COMPLETO) {
+        if ($config['conf_porcentaje_completo_generar_informe'] == Boletin::GENERAR_CON_PORCENTAJE_COMPLETO) {
             echo 'Ingresamos a verificación de porcentaje completo para los estudiantes.'."<br>";
 
             $consultaListaEstudantesError = Estudiantes::listarEstudiantesNotasFaltantes($carga, $periodo, $cursoActual["gra_tipo"]);
@@ -164,10 +164,10 @@ try {
                 //Consultamos si tiene registros en el boletín
                 $boletinDatos = Boletin::traerNotaBoletinCargaPeriodo($config, $periodo, $estudiante, $carga, $anio);
 
-                if ($config['conf_porcentaje_completo_generar_informe'] == OMITIR_ESTUDIANTES_CON_PORCENTAJE_INCOMPLETO) {
+                if ($config['conf_porcentaje_completo_generar_informe'] == Boletin::OMITIR_ESTUDIANTES_CON_PORCENTAJE_INCOMPLETO) {
 
                     //Verificamos que el estudiante tenga sus notas al porcentaje minimo permitido
-                    if ($porcentajeActual < PORCENTAJE_MINIMO_GENERAR_INFORME && empty($boletinDatos['bol_nota'])) {
+                    if ($porcentajeActual < Boletin::PORCENTAJE_MINIMO_GENERAR_INFORME && empty($boletinDatos['bol_nota'])) {
                         $erroresNumero ++;
 
                         $mensaje = $mensaje."<br><br>".$erroresNumero."): ".$estudianteResultado['mat_nombres']." ".$estudianteResultado['mat_primer_apellido']." ".$estudianteResultado['mat_segundo_apellido'] ." no tiene notas completas.<br>

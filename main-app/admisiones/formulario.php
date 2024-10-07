@@ -286,18 +286,45 @@ $datosMadre = $madre->fetch();
                     <label>Grupo étnico <span style="color:red;">(*)</span></label>
                     <select class="form-control" name="grupoEtnico" required>
                         <option value="1" <?php if ($datos['mat_etnia'] == 1) echo "selected"; ?>>Ninguno</option>
-                        <option value="2" <?php if ($datos['mat_etnia'] == 2) echo "selected"; ?>>Afrocolombianos</option>
-                        <option value="3" <?php if ($datos['mat_etnia'] == 3) echo "selected"; ?>>Raizales</option>
-                        <option value="4" <?php if ($datos['mat_etnia'] == 4) echo "selected"; ?>>Indigena</option>
+                        <option value="2" <?php if ($datos['mat_etnia'] == 2) echo "selected"; ?>>Negro, mulato, afrocolombiano o afrodescendiente</option>
+                        <option value="3" <?php if ($datos['mat_etnia'] == 3) echo "selected"; ?>>Raizal del archipielago de San Andrés, providencia y Santa Catalina</option>
+                        <option value="4" <?php if ($datos['mat_etnia'] == 4) echo "selected"; ?>>Indigenas</option>
+                        <option value="5" <?php if ($datos['mat_etnia'] == 5) echo "selected"; ?>>Rom (Gitano)</option>
+                        <option value="6" <?php if ($datos['mat_etnia'] == 6) echo "selected"; ?>>Palenquero de San Basilio</option>
+                    </select>
+                </div>
+
+                <?php
+                $discapacidades = [
+                    1 => 'Ninguna',
+                    2 => 'Fisica',
+                    3 => 'Auditiva',
+                    4 => 'Visual',
+                    5 => 'Sordoceguera',
+                    6 => 'Intelectual/Cognitiva',
+                    7 => 'Psicosocial (mental)',
+                    8 => 'Multiple',
+                    9 => 'Autismo (transtorno del espectro autista - TEA) *',
+                    10 => 'Transtornos específicos de aprendizaje o del comportamiento',
+                    11 => 'Sordomudo *',
+                ];
+                ?>
+
+                <div class="form-group col-md-4">
+                    <label>Limitación o discapacidad <span style="color:red;">(*)</span></label>
+                    <select class="form-control" name="discapacidad" required>
+                        <?php foreach ($discapacidades as $id => $discapacidad) :?>
+                            <option value="<?php echo $id;?>" <?php if ($datos['mat_tiene_discapacidad'] == $id) echo "selected";?>><?php echo $discapacidad;?></option>
+                        <?php endforeach;?>
                     </select>
                 </div>
 
                 <div class="form-group col-md-4">
-                    <label>Tiene alguna limitación o discapacidad? <span style="color:red;">(*)</span></label>
-                    <select class="form-control" name="discapacidad" required>
-                        <option value="1" <?php if ($datos['mat_tiene_discapacidad'] == 1) echo "selected"; ?>>Ninguna</option>
-                        <option value="2" <?php if ($datos['mat_tiene_discapacidad'] == 2) echo "selected"; ?>>SI</option>
-                        <option value="3" <?php if ($datos['mat_tiene_discapacidad'] == 3) echo "selected"; ?>>NO</option>
+                    <label>Tipo de situación <span style="color:red;">(*)</span></label>
+                    <select class="form-control" name="tipoSituacion" required>
+                        <option value="1" <?php if ($datos['mat_tipo_situacion'] == 1) echo "selected"; ?>>Ninguna</option>
+                        <option value="2" <?php if ($datos['mat_tipo_situacion'] == 2) echo "selected"; ?>>Desplazado, victima del conflicto</option>
+                        <option value="3" <?php if ($datos['mat_tipo_situacion'] == 3) echo "selected"; ?>>Desmovilizado del conflicto armado</option>
                     </select>
                 </div>
 

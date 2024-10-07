@@ -1,6 +1,7 @@
 <?php 
 include("session.php");
 require_once '../class/Plataforma.php';
+require_once ROOT_PATH."/main-app/class/Modulos.php";
 
 $Plataforma = new Plataforma;
 
@@ -55,7 +56,7 @@ try{
 if($numModulos>0){
 	$contModulos = 0;
 	while ($contModulos < $numModulos) {
-		if($_POST["modulos"][$contModulos] == MODULO_ADMISIONES) {
+		if($_POST["modulos"][$contModulos] == Modulos::MODULO_ADMISIONES) {
 
 			try{
 				$colorBG = $Plataforma->colorUno;

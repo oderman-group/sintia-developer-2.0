@@ -14,6 +14,12 @@ class Boletin {
     public const ESTADO_ABIERTO  = 'ABIERTO';
     public const ESTADO_GENERADO = 'GENERADO';
 
+    public const PORCENTAJE_MINIMO_GENERAR_INFORME = 99;
+
+    public const GENERAR_CON_PORCENTAJE_COMPLETO = 1;
+    public const OMITIR_ESTUDIANTES_CON_PORCENTAJE_INCOMPLETO = 2;
+    public const GENERAR_CON_CUALQUIER_PORCENTAJE = 3;
+
 
     /**
     * Devuelve una lista de tipos de notas basados en la categoría proporcionada y el año académico seleccionado.
@@ -1356,7 +1362,7 @@ class Boletin {
         $andEstudiante="";
 
         if (!empty($idEstudiante)) {
-            $andEstudiante = "AND   mat.mat_id  = " . $idEstudiante;
+            $andEstudiante = "AND   mat.mat_id  = '" . $idEstudiante."'";
         }
          // Preparar los placeholders para la consulta
          $in_periodos = implode(', ', array_fill(0, count($periodos), '?'));
