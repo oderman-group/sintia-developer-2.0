@@ -360,36 +360,58 @@ if ($grado >= 12 && $grado <= 15) {
             });
         ?>
             <table width="100%" style="margin-top: 15px;" cellspacing="0" cellpadding="0" rules="all" border="1" align="center">
-                <tr style=" background:#00adefad; border-color:#036; font-size:12px; text-align:center">
-                    <td colspan="3">OBSERVACIONES DE CONVIVENCIA</td>
+            <thead>
+                <tr style="font-weight:bold; text-align:left; background-color: #00adefad;">
+                    <td><b>Observaciones:</b></td>
                 </tr>
-                <tr style=" background:#EAEAEA; color:#000; font-size:12px; text-align:center">
+            </thead>
+               
+                <?php
+                 if($config['conf_observaciones_multiples_comportamiento'] == '1'){ ?>
+                    <tr style="color:#000;">
+                    <td style="padding-left: 20px;">
+                        <?php 
+                            $cndisiplina = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='".$estudiante['mat_id']."' AND dn_periodo='".$periodoSeleccionado."' AND institucion={$config['conf_id_institucion']} AND year=".$config['conf_agno']."");
+                            while($rndisiplina=mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)){
+
+                                if(!empty($rndisiplina['dn_observacion'])){
+                                    if($config['conf_observaciones_multiples_comportamiento'] == '1'){
+                                        $explode=explode(",",$rndisiplina['dn_observacion']);
+                                        $numDatos=count($explode);
+                                        for($i=0;$i<$numDatos;$i++){
+                                            $consultaObservaciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".observaciones WHERE obser_id=$explode[$i] AND obser_id_institucion=".$config['conf_id_institucion']." AND obser_years=".$config['conf_agno']."");
+                                            $observaciones = mysqli_fetch_array($consultaObservaciones, MYSQLI_BOTH);
+                                            echo "- ".$observaciones['obser_descripcion']."<br>";
+                                        }
+                                    }else{
+                                        echo "- ".$rndisiplina["dn_observacion"]."<br>";
+                                    }
+                                }
+                            }
+                            if ($periodoSeleccionado == $config["conf_periodos_maximos"] && $ultimoPeriodoAreas < $config["conf_periodos_maximos"]) {
+                                Echo "ESTUDIANTE RETIRADO SIN FINALIZAR AÑO LECTIVO.";
+                            }
+                        ?>
+                        <p>&nbsp;</p>
+                    </td>
+                </tr>
+                <?php }else{?>
+                    <tr style=" background:#EAEAEA; color:#000; font-size:12px; text-align:center">
                     <td width="8%">Periodo</td>
                     <td>Observaciones</td>
-                </tr>
-                <?php
-                foreach ($observacionesConvivencia[$estudiante["mat_id"]] as $observacion) {
-                    $observacionString="";
-                    if ($observacion["estudiante"] == $estudiante["mat_id"]) {
-                        if($config['conf_observaciones_multiples_comportamiento'] == '1'){
-                            $explode=explode(",",$observacion["observacion"] );
-                            $numDatos=count($explode);
-                            for($i=0;$i<$numDatos;$i++){
-                                $consultaObservaciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".observaciones WHERE obser_id=$explode[$i] AND obser_id_institucion=".$config['conf_id_institucion']." AND obser_years=".$config['conf_agno']."");
-                                $observaciones = mysqli_fetch_array($consultaObservaciones, MYSQLI_BOTH);
-                                $observacionString =  $observacionString."- ".$observaciones["obser_descripcion"]."<br>";
-                            }
-                        }else{
-                            $observacionString = $observacion["observacion"];
-                        }
-                ?>
-                        <tr align="center" style="font-size:12px; height:16px;">
-                            <td  style="font-weight:bold;"><?= $observacion["periodo"] ?></td>
-                            <td align="left"><?=$observacionString ?></td>
-                        </tr>
-
-                <?php  }
-                } ?>
+                </tr> <?php
+                    foreach ($observacionesConvivencia[$estudiante["mat_id"]] as $observacion) {
+                        $observacionString="";
+                        if ($observacion["estudiante"] == $estudiante["mat_id"]) {?>
+                            <tr align="center" style="font-size:12px; height:16px;">
+                                <td  style="font-weight:bold;"><?= $observacion["periodo"] ?></td>
+                                <td align="left"><?=$observacionString ?></td>
+                            </tr>
+    
+                    <?php  }
+                    } 
+                 } ?>
+                
             </table>
         <?php } ?>
         <p>&nbsp;</p>
