@@ -28,10 +28,7 @@ define('MENU', 'menu');
 define('MENU_PADRE', 'menu-padre');
 define('SUB_MENU', 'sub-menu');
 
-define('ESTADO_EMAIL_ENVIADO', 'enviado');
-define('ESTADO_EMAIL_ERROR', 'error');
-
-
+// Solicitudes de cancelación de uso de la plataforma
 define('SOLICITUD_CANCELACION_PENDIENTE', 'Pendiente');
 define('SOLICITUD_CANCELACION_APROBADO', 'Aprobado');
 define('SOLICITUD_CANCELACION_CANCELADO', 'Cancelado');
@@ -67,11 +64,7 @@ define('DEVELOPER_PROD', 30);
 define('ELLEN_KEY', 16);
 define('EOA_CIRUELOS', 17);
 
-define('PORCENTAJE_MINIMO_GENERAR_INFORME', 99);
-
 /* CONSTANTES ACADEMICAS */
-define('CONFIG_MANUAL_INDICADOR', 1);
-define('CONFIG_AUTOMATICO_INDICADOR', 0);
 define('CONFIG_MANUAL_CALIFICACIONES', 1);
 define('CONFIG_AUTOMATICO_CALIFICACIONES', 0);
 define('PERMISO_EDICION_PERIODOS_DIFERENTES', true); //Diferentes al actual
@@ -81,18 +74,6 @@ define('CUALITATIVA', 'CUALITATIVA');
 define('CUANTITATIVA', 'CUANTITATIVA');
 
 define('CLAVE_SUGERIDA', 'sherman1298');
-
-/* SINTIA PLATFORM MODULES */
-define('MODULO_ACADEMICO', 1);
-define('MODULO_FINANCIERO', 2);
-define('MODULO_DISCIPLINARIO', 3);
-define('MODULO_ADMINISTRATIVO', 4);
-define('MODULO_COMUNICATIVO', 5);
-define('MODULO_MERCADEO', 6);
-define('MODULO_GENERAL', 7);
-define('MODULO_ADMISIONES', 8);
-define('MODULO_RESERVA_CUPO', 9);
-define('MODULO_MEDIA_TECNICA', 10);
 
 /* TIPO DE VALIDACION*/
 define('IDENTIFICAION', 'Identificacion');
@@ -194,11 +175,6 @@ define('ESPACIO', 'ESPACIO');
 define('USUARIOS', 'USUARIOS');
 define('MODULOS', 'MODULOS');
 define('PAQUETES', 'PAQUETES');
-
-/* CONFIGURACIÓN PARA GENERAR INFORMES */
-define('GENERAR_CON_PORCENTAJE_COMPLETO', 1);
-define('OMITIR_ESTUDIANTES_CON_PORCENTAJE_INCOMPLETO', 2);
-define('GENERAR_CON_CUALQUIER_PORCENTAJE', 3);
 
 
 

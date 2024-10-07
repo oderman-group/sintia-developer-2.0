@@ -801,12 +801,28 @@ class CargaAcademica {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
         $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
-        INNER JOIN ".BD_ACADEMICA.".academico_materias mate ON mate.mat_id=car_materia AND mate.institucion=car.institucion AND mate.year=car.year
-        INNER JOIN ".BD_ACADEMICA.".academico_grados gra ON gra_id=car_curso AND gra.institucion=car.institucion AND gra.year=car.year
-        INNER JOIN ".BD_ACADEMICA.".academico_grupos gru ON gru.gru_id=car_grupo AND gru.institucion=car.institucion AND gru.year=car.year
-        INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion=car.institucion AND uss.year=car.year
-        WHERE car.institucion=? AND car.year=? AND (car_curso=? AND car_grupo=? {$filtroOr})
-        ORDER BY mat_id";
+        INNER JOIN ".BD_ACADEMICA.".academico_materias mate 
+            ON mate.mat_id=car_materia 
+            AND mate.institucion=car.institucion 
+            AND mate.year=car.year
+        INNER JOIN ".BD_ACADEMICA.".academico_grados gra 
+            ON gra_id=car_curso 
+            AND gra.institucion=car.institucion 
+            AND gra.year=car.year
+        INNER JOIN ".BD_ACADEMICA.".academico_grupos gru 
+            ON gru.gru_id=car_grupo 
+            AND gru.institucion=car.institucion 
+            AND gru.year=car.year
+        INNER JOIN ".BD_GENERAL.".usuarios uss 
+            ON uss_id=car_docente 
+            AND uss.institucion=car.institucion 
+            AND uss.year=car.year
+        WHERE 
+            car.institucion=? 
+        AND car.year=? 
+        AND (car_curso=? AND car_grupo=? {$filtroOr})
+        ORDER BY mat_id
+        ";
 
         $parametros = [$config['conf_id_institucion'], $year, $idCurso, $idGrupo];
 
@@ -838,9 +854,21 @@ class CargaAcademica {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
         $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
-        INNER JOIN ".BD_ACADEMICA.".academico_materias mate ON mate.mat_id=car_materia AND mate.institucion=car.institucion AND mate.year=car.year
-        INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=car_docente AND uss.institucion=car.institucion AND uss.year=car.year
-        WHERE car.institucion=? AND car.year=? AND car_curso=? AND car_grupo=? AND car_materia=?";
+        INNER JOIN ".BD_ACADEMICA.".academico_materias mate 
+            ON mate.mat_id=car_materia 
+            AND mate.institucion=car.institucion 
+            AND mate.year=car.year
+        INNER JOIN ".BD_GENERAL.".usuarios uss 
+            ON uss_id=car_docente 
+            AND uss.institucion=car.institucion 
+            AND uss.year=car.year
+        WHERE 
+            car.institucion=? 
+        AND car.year=? 
+        AND car_curso=? 
+        AND car_grupo=? 
+        AND car_materia=?
+        ";
 
         $parametros = [$config['conf_id_institucion'], $year, $idCurso, $idGrupo, $idMateria];
 

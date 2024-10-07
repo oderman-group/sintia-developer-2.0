@@ -13,9 +13,9 @@ $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
 
 if(
 	(
-		( $datosCargaActual['car_valor_indicador'] == CONFIG_AUTOMATICO_INDICADOR && $sumaIndicadores[2] < $datosCargaActual['car_maximos_indicadores'] ) 
+		( $datosCargaActual['car_valor_indicador'] == Indicadores::CONFIG_AUTOMATICO_INDICADOR && $sumaIndicadores[2] < $datosCargaActual['car_maximos_indicadores'] ) 
 																
-		or ($datosCargaActual['car_valor_indicador'] == CONFIG_MANUAL_INDICADOR && $sumaIndicadores[2] < $datosCargaActual['car_maximos_indicadores'] && $periodoConsultaActual<=$datosCargaActual['gra_periodos'] && $porcentajeRestante > 0 )
+		or ($datosCargaActual['car_valor_indicador'] == Indicadores::CONFIG_MANUAL_INDICADOR && $sumaIndicadores[2] < $datosCargaActual['car_maximos_indicadores'] && $periodoConsultaActual<=$datosCargaActual['gra_periodos'] && $porcentajeRestante > 0 )
 	)
 	&& CargaAcademica::validarPermisoPeriodosDiferentes($datosCargaActual, $periodoConsultaActual)
 ){

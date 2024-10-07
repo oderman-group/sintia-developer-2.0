@@ -30,11 +30,11 @@ $porcentajeRestante = ($porcentajePermitido - $sumaIndicadores[1]);
                 <?php
                 if (
                     (
-                        ($datosCargaActual['car_valor_indicador'] == CONFIG_AUTOMATICO_INDICADOR
+                        ($datosCargaActual['car_valor_indicador'] == Indicadores::CONFIG_AUTOMATICO_INDICADOR
                             && $sumaIndicadores[2] < $datosCargaActual['car_maximos_indicadores']
                         )
                         ||
-                        ($datosCargaActual['car_valor_indicador'] == CONFIG_MANUAL_INDICADOR
+                        ($datosCargaActual['car_valor_indicador'] == Indicadores::CONFIG_MANUAL_INDICADOR
                             && $sumaIndicadores[2] < $datosCargaActual['car_maximos_indicadores']
                             && $porcentajeRestante > 0)
                     )

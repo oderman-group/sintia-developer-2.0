@@ -7,6 +7,7 @@ require_once("../class/UsuariosPadre.php");
 require_once("../class/Estudiantes.php");
 require_once("../class/Sysjobs.php");
 require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
+require_once(ROOT_PATH."/main-app/class/Boletin.php");
 
 $datosCargaActual = null;
 
@@ -106,7 +107,7 @@ if( !empty($_SESSION["infoCargaActual"]) ) {
                                             $mensajeI = "<span style='color:blue;'>Terminado</span>";
                                         } else {
 
-                                            if ($spcr[0] < PORCENTAJE_MINIMO_GENERAR_INFORME) {
+                                            if ($spcr[0] < Boletin::PORCENTAJE_MINIMO_GENERAR_INFORME) {
                                                     $mensajeI = $spcr[0];
                                             } elseif ($rCargas["car_permiso1"] == 0) {
                                                 $mensajeI = 'Sin permiso para generar';

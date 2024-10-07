@@ -30,7 +30,7 @@ $carga     = base64_decode($_GET["carga"]);
 $periodo   = base64_decode($_GET["periodo"]);
 $tipoGrado = base64_decode($_GET["tipoGrado"]);
 
-if ($config['conf_porcentaje_completo_generar_informe'] == GENERAR_CON_PORCENTAJE_COMPLETO) {
+if ($config['conf_porcentaje_completo_generar_informe'] == Boletin::GENERAR_CON_PORCENTAJE_COMPLETO) {
 	$consultaListaEstudantesError = Estudiantes::listarEstudiantesNotasFaltantes($carga, $periodo, $tipoGrado);
 
 	//Verificamos que el estudiante no tenga notas faltantes para generar el informe
@@ -67,8 +67,8 @@ while ($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)) {
 	//Validar la configuración que omite a los estudiantes que NO tienen el 100% de calificaciones
 	//Verificamos si el procentaje actual es menor al mínimo permitido y que el estudiante NO tenga nota registrada previamente
 	if (
-		$config['conf_porcentaje_completo_generar_informe'] == OMITIR_ESTUDIANTES_CON_PORCENTAJE_INCOMPLETO && 
-		$porcentajeActual < PORCENTAJE_MINIMO_GENERAR_INFORME && 
+		$config['conf_porcentaje_completo_generar_informe'] == Boletin::OMITIR_ESTUDIANTES_CON_PORCENTAJE_INCOMPLETO && 
+		$porcentajeActual < Boletin::PORCENTAJE_MINIMO_GENERAR_INFORME && 
 		empty($boletinDatos['bol_nota'])
 	) {
 		continue;

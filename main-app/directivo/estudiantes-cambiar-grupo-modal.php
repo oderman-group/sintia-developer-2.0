@@ -51,7 +51,7 @@ require_once(ROOT_PATH."/main-app/class/componentes/botones-guardar.php");
                     $gradoActual = Grados::obtenerGrado($e["mat_grado"]);
                     ?>
                     <div class="col-sm-1">
-                        <input type="text" name="cursoNuevo" class="form-control" autocomplete="off" value="<?= $gradoActual["gra_id"] ?>" readonly>
+                        <input type="text" name="cursoActual" class="form-control" autocomplete="off" value="<?= $gradoActual["gra_id"] ?>" readonly>
                     </div>
                     <div class="col-sm-9">
                         <input type="text" class="form-control" autocomplete="off" value="<?= $gradoActual["gra_nombre"] ?>" readonly>
