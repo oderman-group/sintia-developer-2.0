@@ -23,7 +23,7 @@ class EnviarEmail {
      * 
      * @return void
      */
-    public static function enviar($data, $asunto,$bodyTemplateRoute,$body, $archivos): void
+    public static function enviar($data, $asunto, $bodyTemplateRoute, $body, $archivos): void
     {
         global $mail;
 
@@ -59,70 +59,81 @@ class EnviarEmail {
 
             //Remitente
             $mail->setFrom(EMAIL_SENDER, NAME_SENDER);
-            $correrocopia='soporte@plataformasintia.com';
-            $destinatario=$data['usuario_email'];
-            $destinatario2=empty($data['usuario2_email'])?null:$data['usuario2_email'];
-            $destinatario3=empty($data['usuario3_email'])?null:$data['usuario3_email'];
-            $validarRemitente = self::validarEmail(EMAIL_SENDER);
-            $validarDestinatario = self::validarEmail($destinatario);
-            $validarDestinatario2 = is_null($destinatario2)?true:self::validarEmail($destinatario2);
-            $validarDestinatario3 = is_null($destinatario3)?true:self::validarEmail($destinatario3);
-            $validarcopia = self::validarEmail($correrocopia);
 
-            if($validarRemitente && $validarDestinatario &&  $validarDestinatario2 &&  $validarDestinatario3 && $validarcopia){
+            $correrocopia         = 'soporte@plataformasintia.com';
+            $destinatario         = $data['usuario_email'];
+            $destinatario2        = empty($data['usuario2_email'])?null:$data['usuario2_email'];
+            $destinatario3        = empty($data['usuario3_email'])?null:$data['usuario3_email'];
+            $validarRemitente     = self::validarEmail(EMAIL_SENDER);
+            $validarDestinatario  = self::validarEmail($destinatario);
+            $validarDestinatario2 = is_null($destinatario2) ? true : self::validarEmail($destinatario2);
+            $validarDestinatario3 = is_null($destinatario3) ? true : self::validarEmail($destinatario3);
+            $validarcopia         = self::validarEmail($correrocopia);
+
+            if ($validarRemitente && $validarDestinatario &&  $validarDestinatario2 &&  $validarDestinatario3 && $validarcopia) {
                     //Destinatarios
                     $mail->addAddress($correrocopia, 'Soporte Plataforma SINTIA');
                     $mail->addAddress($destinatario, $data['usuario_nombre']);
-                    if(!is_null($destinatario2)){
+
+                    if (!is_null($destinatario2)) {
                         $mail->addAddress($destinatario2, $data['usuario2_nombre']);
                     }
-                    if(!is_null($destinatario3)){
+
+                    if (!is_null($destinatario3)) {
                         $mail->addAddress($destinatario3, $data['usuario3_nombre']);
                     }
-                    
+
                     // Content
-                    $mail->isHTML(true);                                   // Set email format to HTML
+                    $mail->isHTML(true);            // Set email format to HTML
+
                     $mail->Subject = $asunto;
-                    $mail->Body = $body;
+                    $mail->Body    = $body;
                     $mail->CharSet = 'UTF-8';
-                    if($archivos && !empty($archivos)){
-                        $index =1;
+
+                    if ($archivos && !empty($archivos)) {
+                        $index = 1;
                         foreach ($archivos as &$valor) {
-                            $valor ;
+                            $valor;
                             $mail->AddAttachment($valor);
-                        }                         
+                        }
                     }
+
                     $mail->send();
-                    self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$data['usuario_id'],$asunto,$body,self::ESTADO_EMAIL_ENVIADO,'');  
-            }else{                 
-                    if(!$validarRemitente){
-                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$data['usuario_id'],$asunto,$body,self::ESTADO_EMAIL_ERROR,'Error remitente'.EMAIL_SENDER);  
-                        self::mensajeError(EMAIL_SENDER);        
-                    } 
-                    if(!$validarDestinatario){
-                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$data['usuario_id'],$asunto,$body,self::ESTADO_EMAIL_ERROR,'Error destinatario'.$destinatario); 
-                        self::mensajeError($destinatario);        
+                    self::enviarReporte($data['institucion_id'], $mail, EMAIL_SENDER, $data['usuario_id'], $asunto, $body, self::ESTADO_EMAIL_ENVIADO, '');
+            } else {
+                    if (!$validarRemitente) {
+                        self::enviarReporte($data['institucion_id'], $mail, EMAIL_SENDER, $data['usuario_id'], $asunto, $body, self::ESTADO_EMAIL_ERROR, 'Error remitente'.EMAIL_SENDER);
+                        self::mensajeError(EMAIL_SENDER);
                     }
-                    if(!$validarDestinatario2){
-                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$data['usuario_id'],$asunto,$body,self::ESTADO_EMAIL_ERROR,'Error destinatario 2'.$destinatario2); 
-                        self::mensajeError($destinatario2);        
-                    }    
-                    if(!$validarDestinatario3){
-                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$data['usuario_id'],$asunto,$body,self::ESTADO_EMAIL_ERROR,'Error destinatario 2'.$destinatario2); 
-                        self::mensajeError($destinatario2);        
-                    }  
-                    if(!$validarcopia){
-                        self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$data['usuario_id'],$asunto,$body,self::ESTADO_EMAIL_ERROR,'Error destinatario'.$correrocopia); 
-                        self::mensajeError($correrocopia);        
-                    } 
+
+                    if (!$validarDestinatario) {
+                        self::enviarReporte($data['institucion_id'], $mail, EMAIL_SENDER, $data['usuario_id'], $asunto, $body, self::ESTADO_EMAIL_ERROR, 'Error destinatario'.$destinatario); 
+                        self::mensajeError($destinatario);
+                    }
+
+                    if (!$validarDestinatario2) {
+                        self::enviarReporte($data['institucion_id'], $mail, EMAIL_SENDER, $data['usuario_id'], $asunto, $body, self::ESTADO_EMAIL_ERROR, 'Error destinatario 2'.$destinatario2); 
+                        self::mensajeError($destinatario2);
+                    }
+
+                    if (!$validarDestinatario3) {
+                        self::enviarReporte($data['institucion_id'], $mail, EMAIL_SENDER, $data['usuario_id'], $asunto, $body, self::ESTADO_EMAIL_ERROR, 'Error destinatario 2'.$destinatario2); 
+                        self::mensajeError($destinatario2);
+                    }
+
+                    if (!$validarcopia) {
+                        self::enviarReporte($data['institucion_id'], $mail, EMAIL_SENDER, $data['usuario_id'], $asunto, $body, self::ESTADO_EMAIL_ERROR, 'Error destinatario'.$correrocopia);
+                        self::mensajeError($correrocopia);
+                    }
             }
 
         } catch (Exception $e) {
-            self::enviarReporte($data['institucion_id'],$mail,EMAIL_SENDER,$destinatario,$asunto,$body,self::ESTADO_EMAIL_ERROR,$e->getMessage());
+            self::enviarReporte($data['institucion_id'], $mail, EMAIL_SENDER, $destinatario, $asunto, $body, self::ESTADO_EMAIL_ERROR, $e->getMessage());
             include(ROOT_PATH."/main-app/compartido/error-catch-to-report.php");
         }
 
     }
+
     /**
      * Este función valida un correo electrónico que tenga la estructura correcta emplo@dominio.com
      * 
@@ -135,7 +146,7 @@ class EnviarEmail {
         $matches = null;
         // Expresion regular
         $regex = "/^[A-z0-9\\._-]+@[A-z0-9][A-z0-9-]*(\\.[A-z0-9_-]+)*\\.([A-z]{2,6})$/";
-       return (1 === preg_match($regex, $email, $matches));      
+        return (1 === preg_match($regex, $email, $matches));
     }
 
     /**
@@ -147,16 +158,16 @@ class EnviarEmail {
      */
     private static function mensajeError($email) 
     {
-        $msj=' el Correo '.$email.' no cumple con la estructura de un correo valido';
-        $url=$_SERVER["HTTP_REFERER"];
-        $pos = strpos($url, "?");
-        $simbolConcatenar=$pos===false?"?":"&";
-        $url=$url.$simbolConcatenar.'error=ER_DT_15&msj='.base64_encode($msj);
+        $msj              = ' el Correo '.$email.' no cumple con la estructura de un correo valido';
+        $url              = $_SERVER["HTTP_REFERER"];
+        $pos              = strpos($url, "?");
+        $simbolConcatenar = $pos === false ? "?" : "&";
+        $url              = $url.$simbolConcatenar.'error=ER_DT_15&msj='.base64_encode($msj);
+
         echo '<script type="text/javascript">window.location.href="'.$url.'";</script>';
-        exit();      
+        exit();
     }
 
-    
     /**
      * Este función envia el mensaje a la tabla de historial de correos enviados 
      * 
@@ -171,20 +182,23 @@ class EnviarEmail {
      * 
      * @return void
      */
-    private static function enviarReporte($institucion,$mail,$remitente,$destinatario,$asunto,$body,$estado,$descripcion){
+    private static function enviarReporte($institucion, $mail, $remitente, $destinatario, $asunto, $body, $estado, $descripcion) {
         global $conexion;
         global $baseDatosServicios;
-        if(is_null($conexion)){
+
+        if (is_null($conexion)) {
             global $servidorConexion;
             global $usuarioConexion;
             global $claveConexion;
             $conexion = mysqli_connect($servidorConexion, $usuarioConexion, $claveConexion, $baseDatosServicios);
         }
-        
-        $adjunto=$mail->attachmentExists();
-        try{
+
+        $adjunto = $mail->attachmentExists();
+
+        try {
             $bodySanitizado = mysqli_real_escape_string($conexion, $body);
-            $sql="INSERT INTO ".$baseDatosServicios.".historial_correos_enviados(
+            $referencia = $_SERVER["HTTP_REFERER"] ?? '';
+            $sql = "INSERT INTO ".$baseDatosServicios.".historial_correos_enviados(
                 hisco_fecha,
                 hisco_remitente,
                 hisco_destinatario,
@@ -202,7 +216,7 @@ class EnviarEmail {
                 '".$asunto."',
                 '".$bodySanitizado."',
                 '".$adjunto."',
-                '".$_SERVER["HTTP_REFERER"]."',
+                '".$referencia."',
                 '".$estado."',
                 '".$descripcion."',
                 '".$institucion."')";

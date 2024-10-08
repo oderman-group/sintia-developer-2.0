@@ -3,10 +3,14 @@ require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 
 class Plataforma {
 
-    public $colorUno  = '#6017dc';
-    public $colorDos  = '#41c4c4';
-    public $colorTres = '#56ffe4';
-    public $logo      = 'https://main.plataformasintia.com/app-sintia/main-app/sintia-logo-2023.png';
+    public $colorUno   = '#6017dc';
+    public $colorDos   = '#41c4c4';
+    public $colorTres  = '#56ffe4';
+
+    public $logo       = 'https://main.plataformasintia.com/app-sintia/main-app/sintia-logo-2023.png'; // Es purpura
+    public $logoBlanco = 'https://main.plataformasintia.com/app-sintia/sinita-blanco.png'; //Se usa sobre fondo Purpura
+    public $logoCian   = 'https://main.plataformasintia.com/app-sintia/sinita-cian.png'; //Se usa sobre fondo cian
+    public $logoGris   = 'https://main.plataformasintia.com/app-sintia/sintia-gris.png'; //Es gris
 
     /**
      * Muestra el contenido de un modal de términos y políticas.
