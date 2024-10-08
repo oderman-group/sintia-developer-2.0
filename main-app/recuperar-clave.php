@@ -58,8 +58,12 @@ if (isset($_POST['usuariosEncontrados'])) {
                             <div class="form-floating mt-3">
                                 <input type="text" class="form-control input-login" id="emailInput" name="Usuario"
                                     placeholder="Usuario" value="<?php echo $usuario ?>" required>
-                                <label for="emailInput">Usuario, documento o Email</label>
-                                <div class="invalid-feedback">Por favor ingrese un correo electrónico válido.</div>
+                                <label for="emailInput">Usuario de acceso o Email registrado</label>
+                                <div class="invalid-feedback">Por favor ingrese su correo electrónico o usuario de acceso.</div>
+                            </div>
+
+                            <div class="text-center text-lg-center mt-4 pt-2">
+                                <button type="submit" class="w-75 btn btn-lg btn-primary btn-rounded mt-3">Recuperar contraseña</button>
                             </div>
 
                             <div class="d-flex justify-content-between align-items-center" style="margin-top: 50px;">
@@ -67,11 +71,6 @@ if (isset($_POST['usuariosEncontrados'])) {
                                 <a href="index.php" class="text-body">Regresar al login</a>
                                 <a href="https://docs.google.com/forms/d/e/1FAIpQLSdiugXhzAj0Ysmt2gthO07tbvjxTA7CHcZqgzBpkefZC6T2qg/viewform" class="text-body" target="_blank">¿Requieres soporte?</a>
                             </div>
-
-                            <div class="text-center text-lg-start mt-4 pt-2">
-                                <button type="submit" class="w-75 btn btn-lg btn-primary btn-rounded mt-3">Recuperar contraseña</button>
-                            </div>
-
                         </form>
                     </div>
                 </div>
