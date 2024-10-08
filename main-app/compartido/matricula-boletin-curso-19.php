@@ -242,25 +242,27 @@ if ($grado >= 12 && $grado <= 15) {
             </thead>
             <tbody>
                 <?php
-                $cantidadMaterias = 0;
-                foreach ($areas[$estudiante["mat_id"]]  as  $area) {  
+                $cantidadAreas = 0;
+                foreach ($areas[$estudiante["mat_id"]]  as  $area) {
+                    $cantidadAreas ++;  
                     $ihArea       =0;                    
                     $notaAre      =[];
                     $fallasArea   =0;
                     $desenpenioAre;
+                    
                     ?>
                    
                     <?php
                     foreach ($cargas[$estudiante["mat_id"]][$area["ar_id"]] as $carga) {
-                        $cantidadMaterias++;
+                        
+                        $promedioMateria  = 0;
+                        $fallasAcumuladas = 0;
+                        $ihArea           += $carga['car_ih'];
                     ?>
                         <tr>
                             <td><?= $carga["mat_nombre"] ?></td>
                             <td align="center"><?= $carga['car_ih'] ?></td>
-                            <?php
-                            $promedioMateria = 0;
-                            $fallasAcumuladas = 0;
-                            $ihArea+= $carga['car_ih'];
+                            <?php                            
                             for ($j = 1; $j <= $periodoSeleccionado; $j++) {
                                 $nota = isset($notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["bol_nota"])
                                     ? $notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["bol_nota"]
@@ -273,21 +275,21 @@ if ($grado >= 12 && $grado <= 15) {
                                 $promedioMateria       += $nota;
                                 $fallasAcumuladas      += $fallas;
                                 $fallasArea            += $fallas;  
-
+                                $porcentajeMateria=isset($carga['mat_valor'])?$carga['mat_valor']:100;
                                 if (isset($notaAre[$j])) {
-                                $notaAre[$j]           += $nota*($carga['mat_valor']/100);
+                                $notaAre[$j]           += $nota*($porcentajeMateria/100);
                                 }else{
-                                $notaAre[$j]           =  $nota*($carga['mat_valor']/100); 
+                                $notaAre[$j]           =  $nota*($porcentajeMateria/100); 
                                 }
 
                                 if (isset($totalNotasPeriodo[$j])) {
-                                $totalNotasPeriodo[$j] += $nota;
+                                $totalNotasPeriodo[$j] += $nota*($porcentajeMateria/100);
                                 } else {
-                                $totalNotasPeriodo[$j] =  $nota;
+                                $totalNotasPeriodo[$j] =  $nota*($porcentajeMateria/100);
                                 }
                                 $background = $j != $periodoSeleccionado ? 'background: #9ed8ed;' : '';
                             ?>
-                                <td align="center" align="center" style=" <?= $background ?> font-size:12px;"><?= $nota ?></td>
+                                <td align="center" align="center" style=" <?= $background ?> font-size:12px;"><?=number_format($nota,$config['conf_decimales_notas']);  ?></td>
                             <?php }
                             ?>
                             <td align="center"><?= $desempeno['notip_nombre'] ?></td>
@@ -323,19 +325,19 @@ if ($grado >= 12 && $grado <= 15) {
                <?php }
             } ?>
             </tbody>
-            <tfoot style="font-weight:bold; font-size: 13px;">
+            <tfoot style="font-weight:bold; font-size: 15px;">
                 <tr style="font-weight:bold;background: #EAEAEA">
-                    <td colspan="2">PROMEDIO GENERAL</td>
+                    <td colspan="2" >PROMEDIO GENERAL</td>
                     <?php
                     $promedioFinal = 0;
                     for ($j = 1; $j <= $periodoSeleccionado; $j++) {
-                        $acumuladoPj = ($totalNotasPeriodo[$j] / $cantidadMaterias);
+                        $acumuladoPj = ($totalNotasPeriodo[$j] / $cantidadAreas);
                         $acumuladoPj = round($acumuladoPj, 2);
                         $promedioFinal += $acumuladoPj;
                         $desempenoAcumuladoTotal = Boletin::determinarRango($acumuladoPj, $tiposNotas);
 
                     ?>
-                        <td align="center"><?= $acumuladoPj ?></td>
+                        <td align="center"><?= number_format($acumuladoPj,$config['conf_decimales_notas'])?> </td>
                     <?php } ?>
                     <td align="center"><?= $desempenoAcumuladoTotal["notip_nombre"] ?></td>
                     <td align="center"></td>
