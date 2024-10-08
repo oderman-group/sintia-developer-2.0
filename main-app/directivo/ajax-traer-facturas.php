@@ -22,7 +22,7 @@ if ($numFacturas > 0) {
         $disabled = $porCobrar < 1 ? "disabled" : "";
 ?>
     <tr id="reg<?=$resultado['fcu_id'];?>">
-        <td><?=$resultado['fcu_id'];?></td>
+        <td><?=$resultado['id_nuevo'];?></td>
         <td id="totalNeto<?=$resultado['fcu_id'];?>" data-total-neto="<?=$totalNeto?>">$<?=number_format($totalNeto, 0, ",", ".")?></td>
         <td style="color: green;" id="abonos<?=$resultado['fcu_id'];?>" data-abonos="<?=$abonos?>">$<?=number_format($abonos, 0, ",", ".")?></td>
         <td style="color: red;" id="porCobrar<?=$resultado['fcu_id'];?>" data-por-cobrar="<?=$porCobrar?>">$<?=number_format($porCobrar, 0, ",", ".")?></td>
