@@ -208,7 +208,7 @@ if ($periodoSeleccionado == 4) $periodoActuales = "Final";
                                 }
                             ?>
                                 <td align="center"><?= $fallas == 0 ? '' : intval($fallas); ?></td>
-                                <td align="center"><?= $nota ?></td>
+                                <td align="center"><?= $nota   == 0 ? '' : number_format($nota,$config['conf_decimales_notas']); ?></td>
                                 <td align="center"><?= $desempeno["notip_nombre"] ?></td>
                             <?php }
                             $promedioFinal = round(($promedioMateria / $periodoSeleccionado), 2);	// SI PERDIÓ LA MATERIA A FIN DE AÑO
@@ -223,7 +223,7 @@ if ($periodoSeleccionado == 4) $periodoActuales = "Final";
                             }
                             $desempenoFinal = Boletin::determinarRango($promedioFinal, $tiposNotas);
                             ?>
-                            <td align="center"><?= $promedioFinal == 0 ? '' : $promedioFinal; ?></td>
+                            <td align="center"><?= $promedioFinal   == 0 ? '' : number_format($promedioFinal,$config['conf_decimales_notas']); ?></td>
                             <td align="center"><?= $desempenoFinal["notip_nombre"]  ?></td>
                             <td align="center">&nbsp;</td>
                         </tr>
@@ -248,7 +248,7 @@ if ($periodoSeleccionado == 4) $periodoActuales = "Final";
                     <?php
                     $promedioTotal = round($promedioTotal / $periodoSeleccionado, 2);
                     $desempenoTotal = Boletin::determinarRango($promedioTotal, $tiposNotas); ?>
-                    <td><?= $promedioTotal ?></td>
+                    <td><?=$promedioTotal   == 0 ? '' : number_format($promedioTotal,$config['conf_decimales_notas']);  ?></td>
                     <td><?= $desempenoTotal["notip_nombre"] ?></td>
                     <td>-</td>
                 </tr>
