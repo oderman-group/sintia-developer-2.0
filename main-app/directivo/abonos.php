@@ -71,6 +71,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<th><?=$frases[51][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[383][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[424][$datosUsuarioActual['uss_idioma']];?></th>
+                                                        <th>Factura</th>
 														<th><?=$frases[413][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[414][$datosUsuarioActual['uss_idioma']];?></th>
 														<th><?=$frases[345][$datosUsuarioActual['uss_idioma']];?></th>
@@ -104,6 +105,7 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<td><?=$resultado['registration_date'];?></td>
 														<td><?=UsuariosPadre::nombreCompletoDelUsuario($resultado);?></td>
 														<td><?=$cliente;?></td>
+                                                        <td><?=$resultado['numeroFactura'];?></td>
 														<td>$<?=number_format($abonos,0,",",".")?></td>
 														<td><?=$resultado['payment_method'];?></td>
 														<td><?=$vaucher;?></td>

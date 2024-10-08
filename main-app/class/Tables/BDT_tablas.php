@@ -68,6 +68,10 @@ abstract class BDT_Tablas implements BDT_Interface{
     {
         global $conexionPDO;
 
+        if (is_null($conexionPDO)) {
+            $conexionPDO = Conexion::newConnection('PDO');
+        }
+
         $campos   = implode(", ", array_keys($datos));
         $valores  = implode("', '", array_values($datos));
         $consulta = "INSERT INTO {$bd}.".static::$tableName." ({$campos}) VALUES ('{$valores}')";
@@ -84,6 +88,11 @@ abstract class BDT_Tablas implements BDT_Interface{
 
     public static function Update(array $datos, array $predicado, $bd = BD_ACADEMICA): bool {
         global $conexionPDO;
+
+        if (is_null($conexionPDO)) {
+            $conexionPDO = Conexion::newConnection('PDO');
+        }
+
         $sets = '';
 
         foreach( $datos as $clave => $valor ) {
@@ -112,6 +121,11 @@ abstract class BDT_Tablas implements BDT_Interface{
 
     public static function Delete(array $predicado, $bd = BD_ACADEMICA): bool {
         global $conexionPDO;
+
+        if (is_null($conexionPDO)) {
+            $conexionPDO = Conexion::newConnection('PDO');
+        }
+
         $where = '';
         
         foreach( $predicado as $clave => $valor ) {
@@ -133,6 +147,11 @@ abstract class BDT_Tablas implements BDT_Interface{
 
     public static function InsertOrUpdate(array $datos, array $predicado, $bd = BD_ACADEMICA): bool {
         global $conexionPDO;
+
+        if (is_null($conexionPDO)) {
+            $conexionPDO = Conexion::newConnection('PDO');
+        }
+
         $campos   = implode(", ", array_keys($datos));
         $valores  = implode("', '", array_values($datos));
         $consulta = "INSERT INTO {$bd}.".static::$tableName." ({$campos}) VALUES ('{$valores}') ON DUPLICATE KEY UPDATE ";
@@ -163,6 +182,11 @@ abstract class BDT_Tablas implements BDT_Interface{
 
     public static function deleteBeforeInsert(array $datos, array $predicado, $bd = BD_ACADEMICA): bool {
         global $conexionPDO;
+
+        if (is_null($conexionPDO)) {
+            $conexionPDO = Conexion::newConnection('PDO');
+        }
+
         $where = '';
         
         foreach( $predicado as $clave => $valor ) {

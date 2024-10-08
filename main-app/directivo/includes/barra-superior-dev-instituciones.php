@@ -45,11 +45,11 @@ if (isset($_GET['busqueda'])) {
 
         </ul>
 
-        <form class="form-inline my-2 my-lg-0" action="<?= $_SERVER['PHP_SELF']; ?>" method="get">
+        <!-- <form class="form-inline my-2 my-lg-0" action="<?= $_SERVER['PHP_SELF']; ?>" method="get">
             <input type="hidden" name="plan" value="<?= base64_encode($plan); ?>"/>
             <input class="form-control mr-sm-2" type="search" placeholder="<?=$frases[386][$datosUsuarioActual['uss_idioma']];?>..." aria-label="Search" name="busqueda" value="<?= $busqueda; ?>">
             <button class="btn deepPink-bgcolor my-2 my-sm-0" type="submit"><?=$frases[8][$datosUsuarioActual['uss_idioma']];?></button>
-        </form>
+        </form> -->
 
     </div>
 </nav>
