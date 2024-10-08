@@ -1438,6 +1438,7 @@ class Boletin {
                 AND cls.year              = bol.year
                 AND cls.cls_id_carga      = car.car_id
                 AND cls.cls_periodo       = bol.bol_periodo
+                AND cls.cls_registrada    = 1
 
 
                 LEFT JOIN " . BD_ACADEMICA . ".academico_ausencias aus 
