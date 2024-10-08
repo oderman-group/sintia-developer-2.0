@@ -304,9 +304,21 @@ class Movimientos {
     )
     {
         try {
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".payments pay
-            INNER JOIN ".BD_GENERAL.".usuarios uss ON uss_id=responsible_user AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-            WHERE is_deleted=0 AND pay.institucion = {$config['conf_id_institucion']} AND pay.year = {$_SESSION["bd"]}");
+            $consulta = mysqli_query($conexion, "SELECT pay.id, pay.registration_date, pay.responsible_user, pay.invoiced, pay.cod_payment, pay.payment_method, pay.voucher,
+            uss.uss_nombre, uss.uss_nombre2, uss.uss_apellido1, uss.uss_apellido2,
+            pi.invoiced as numeroFactura
+            FROM ".BD_FINANCIERA.".payments pay
+            INNER JOIN ".BD_GENERAL.".usuarios uss 
+                ON uss_id=responsible_user 
+                AND uss.institucion={$config['conf_id_institucion']} 
+                AND uss.year={$_SESSION["bd"]}
+            INNER JOIN ".BD_FINANCIERA.".payments_invoiced pi 
+                ON pi.payments=pay.cod_payment
+            WHERE 
+                is_deleted=0 
+            AND pay.institucion = {$config['conf_id_institucion']} 
+            AND pay.year = {$_SESSION["bd"]}
+            ");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
@@ -849,7 +861,12 @@ class Movimientos {
     {
         try {
             $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".finanzas_cuentas
-            WHERE fcu_anulado=0 {$filtro} AND fcu_status='".POR_COBRAR."' AND institucion = {$config['conf_id_institucion']} AND year = {$_SESSION["bd"]}");
+            WHERE 
+                fcu_anulado=0 {$filtro} 
+            AND fcu_status='".POR_COBRAR."' 
+            AND institucion = {$config['conf_id_institucion']} 
+            AND year = {$_SESSION["bd"]}
+            ");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
