@@ -352,22 +352,50 @@ if(!Modulos::validarPermisoEdicion()){
 													<select class="form-control  select2" name="grupoEtnico" <?=$disabledPermiso;?>>
 														<option value="">Seleccione una opción</option>
 														<option value="1">Ninguno</option>
-                                                        <option value="2">Afrocolombianos</option>
-                                                        <option value="3">Raizales</option>
-                                                        <option value="4">Indigena</option>
+                                                        <option value="2">Negro, mulato, afrocolombiano o afrodescendiente</option>
+                                                        <option value="3">Raizal del archipielago de San Andrés, providencia y Santa Catalina</option>
+                                                        <option value="4">Indigenas</option>
+                                                        <option value="5">Rom (Gitano)</option>
+                                                        <option value="6">Palenquero de San Basilio</option>
+													</select>
+												</div>
+											</div>
+											
+											<?php
+											$discapacidades = [
+												1 => 'Ninguna',
+												2 => 'Fisica',
+												3 => 'Auditiva',
+												4 => 'Visual',
+												5 => 'Sordoceguera',
+												6 => 'Intelectual/Cognitiva',
+												7 => 'Psicosocial (mental)',
+												8 => 'Multiple',
+												9 => 'Autismo (transtorno del espectro autista - TEA) *',
+												10 => 'Transtornos específicos de aprendizaje o del comportamiento',
+												11 => 'Sordomudo *',
+											];
+											?>
+											<div class="form-group row">
+												<label class="col-sm-2 control-label">Limitación o discapacidad</label>
+												<div class="col-sm-2">
+													<select class="form-control  select2" name="discapacidad" <?=$disabledPermiso;?>>
+														<option value="">Seleccione una opción</option>
+														<?php foreach ($discapacidades as $id => $discapacidad) :?>
+                                                            <option value="<?php echo $id;?>"><?php echo $discapacidad;?></option>
+                                                        <?php endforeach;?>
 													</select>
 												</div>
 											</div>
 
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Tiene alguna limitación o discapacidad?</label>
+												<label class="col-sm-2 control-label">Tipo de situación</label>
 												<div class="col-sm-2">
-													<select class="form-control  select2" name="discapacidad" <?=$disabledPermiso;?>>
-														<option value="">Seleccione una opción</option>
-														<option value="1">Ninguna</option>
-														<option value="2">Si</option>
-														<option value="3">No</option>
-													</select>
+													<select class="form-control" name="tipoSituacion" required <?=$disabledPermiso;?>>
+                                                        <option value="1">Ninguna</option>
+                                                        <option value="2">Desplazado, victima del conflicto</option>
+                                                        <option value="3">Desmovilizado del conflicto armado</option>
+                                                    </select>
 												</div>
 											</div>
 											

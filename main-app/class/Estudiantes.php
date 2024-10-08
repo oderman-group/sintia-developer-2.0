@@ -926,6 +926,7 @@ class Estudiantes {
         $tipoMatricula = isset($_POST["tipoMatricula"]) ? $POST["tipoMatricula"] : "";
         $grupoEtnico   = isset($POST["grupoEtnico"]) ? $POST["grupoEtnico"] : 1;
         $discapacidad  = isset($POST["discapacidad"]) ? $POST["discapacidad"] : 1;
+        $tipoSituacion = isset($POST["tipoSituacion"]) ? $POST["tipoSituacion"] : 1;
 
         try{
 
@@ -969,7 +970,8 @@ class Estudiantes {
                 institucion, 
                 year, 
                 mat_etnia, 
-                mat_tiene_discapacidad
+                mat_tiene_discapacidad,
+                mat_tipo_situacion
                 )VALUES(
                 :codigo, 
                 ".$result_numMat.", 
@@ -1011,7 +1013,8 @@ class Estudiantes {
                 :idInstitucion, 
                 :year, 
                 :grupoEtnico, 
-                :discapacidad
+                :discapacidad,
+                :tipoSituacion
                 )";
 
             $stmt = $conexionPDO->prepare($consulta);
@@ -1064,6 +1067,7 @@ class Estudiantes {
 
             $stmt->bindParam(':grupoEtnico', $grupoEtnico, PDO::PARAM_INT);
             $stmt->bindParam(':discapacidad', $discapacidad, PDO::PARAM_INT);
+            $stmt->bindParam(':tipoSituacion', $tipoSituacion, PDO::PARAM_INT);
 
             if ($stmt) {
                 $stmt->execute();
@@ -1127,6 +1131,7 @@ class Estudiantes {
         $tipoMatricula = isset($POST["tipoMatricula"]) ? $_POST["tipoMatricula"] : GRADO_GRUPAL;
         $grupoEtnico   = isset($POST["grupoEtnico"]) ? $_POST["grupoEtnico"] : 1;
         $discapacidad  = isset($POST["discapacidad"]) ? $_POST["discapacidad"] : 1;
+        $tipoSituacion = isset($POST["tipoSituacion"])? $POST["tipoSituacion"] : 1;
 
         try {
             
@@ -1168,7 +1173,8 @@ class Estudiantes {
             mat_nombre2            = :nombre2,
             mat_tipo_matricula     = :tipoMatricula,
             mat_etnia              = :grupoEtnico,
-            mat_tiene_discapacidad = :discapacidad
+            mat_tiene_discapacidad = :discapacidad,
+            mat_tipo_situacion     = :tipoSituacion
 
             WHERE mat_id = :id AND institucion= :idInstitucion AND year= :year";
 
@@ -1213,6 +1219,7 @@ class Estudiantes {
             $stmt->bindParam(':year', $_SESSION["bd"], PDO::PARAM_STR);
             $stmt->bindParam(':grupoEtnico', $grupoEtnico, PDO::PARAM_INT);
             $stmt->bindParam(':discapacidad', $discapacidad, PDO::PARAM_INT);
+            $stmt->bindParam(':tipoSituacion', $tipoSituacion, PDO::PARAM_INT);
 
             if ($stmt) {
                 $stmt->execute();
