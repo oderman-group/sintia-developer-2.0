@@ -51,7 +51,7 @@ $Plataforma = new Plataforma;
 											<?php
 											
 											try{
-												$destacados = mysqli_query($conexion, "SELECT ROUND(AVG(bol_nota),".$config['conf_decimales_notas'].") AS promedio, bol_estudiante, mat_nombres, mat_primer_apellido, mat_segundo_apellido, mat_grado,
+												$destacados = mysqli_query($conexion, "SELECT AVG(bol_nota) AS promedio, bol_estudiante, mat_nombres, mat_primer_apellido, mat_segundo_apellido, mat_grado,
 												ROW_NUMBER() OVER(ORDER BY promedio desc) as puesto 
 												FROM ".BD_ACADEMICA.".academico_boletin bol
 												INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_id=bol_estudiante AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]} $filtro AND mat_eliminado=0
@@ -64,13 +64,14 @@ $Plataforma = new Plataforma;
 											}
 											$contP = 1;
 											while($dest = mysqli_fetch_array($destacados, MYSQLI_BOTH)){
-												$porcentaje = ($dest['promedio']/$config['conf_nota_hasta'])*100;
-												if($dest['promedio'] < $config['conf_nota_minima_aprobar']) $colorGrafico = 'danger'; else $colorGrafico = 'info';
+												$nota=number_format($dest['promedio'],$config['conf_decimales_notas']);
+												$porcentaje = ($nota/$config['conf_nota_hasta'])*100;
+												if($nota < $config['conf_nota_minima_aprobar']) $colorGrafico = 'danger'; else $colorGrafico = 'info';
 											?>
 														<div class="work-monitor work-progress">
 															<div class="states">
 																<div class="info">
-																	<div class="desc pull-left"><?="<b>".$contP.".</b> ".Estudiantes::NombreCompletoDelEstudianteParaInformes($dest, $config['conf_orden_nombre_estudiantes']);?>: <b><?=$dest['promedio'];?></b></div>
+																	<div class="desc pull-left"><?="<b>".$contP.".</b> ".Estudiantes::NombreCompletoDelEstudianteParaInformes($dest, $config['conf_orden_nombre_estudiantes']);?>: <b data-toggle="tooltip" title="<?=$dest['promedio']?>"><?=$nota?></b></div>
 																	<div class="percent pull-right"><?=$porcentaje;?>%</div>
 																</div>
 

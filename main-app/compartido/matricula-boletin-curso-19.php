@@ -48,9 +48,9 @@ if (!empty($_GET["year"])) {
 $idEstudiante = '';
 if (!empty($_GET["id"])) {
 
-    $filtro = " AND mat_id='" . base64_decode($_GET["id"]) . "'";
+    $filtro               = " AND mat_id='" . base64_decode($_GET["id"]) . "'";
     $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
-    $estudiante = $matriculadosPorCurso->fetch_assoc();
+    $estudiante           = $matriculadosPorCurso->fetch_assoc();
     if (!empty($estudiante)) {
         $idEstudiante = $estudiante["mat_id"];
         $grado        = $estudiante["mat_grado"];
@@ -105,8 +105,8 @@ for ($i = 1; $i <= $periodoSeleccionado; $i++) {
 </head>
 <?php
 // Cosnultas iniciales
-$listaDatos = [];
-$tiposNotas = [];
+$listaDatos         = [];
+$tiposNotas         = [];
 $cosnultaTiposNotas = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $year);
 while ($row = $cosnultaTiposNotas->fetch_assoc()) {
     $tiposNotas[] = $row;
@@ -142,7 +142,7 @@ while ($row = $conCargasDos->fetch_assoc()) {
         $listaIndicadores[] = $row2;
     }
     $row['indicadores'] = $listaIndicadores;
-    $listaCargas[] = $row;
+    $listaCargas[]      = $row;
 }
 
 $periodosCursados = $periodoSeleccionado - 1;
@@ -241,65 +241,103 @@ if ($grado >= 12 && $grado <= 15) {
                 </tr>
             </thead>
             <tbody>
-                <?php 
-                $cantidadMaterias = 0;
-                foreach ($areas[$estudiante["mat_id"]]  as  $area) {  ?>
-                    <?php                    
+                <?php
+                $cantidadAreas = 0;
+                foreach ($areas[$estudiante["mat_id"]]  as  $area) {
+                    $cantidadAreas ++;  
+                    $ihArea       =0;                    
+                    $notaAre      =[];
+                    $fallasArea   =0;
+                    $desenpenioAre;
+                    
+                    ?>
+                   
+                    <?php
                     foreach ($cargas[$estudiante["mat_id"]][$area["ar_id"]] as $carga) {
-                        $cantidadMaterias++;
+                        
+                        $promedioMateria  = 0;
+                        $fallasAcumuladas = 0;
+                        $ihArea           += $carga['car_ih'];
                     ?>
                         <tr>
                             <td><?= $carga["mat_nombre"] ?></td>
                             <td align="center"><?= $carga['car_ih'] ?></td>
-                            <?php
-                            $promedioMateria = 0;
-                            $fallasAcumuladas = 0;
+                            <?php                            
                             for ($j = 1; $j <= $periodoSeleccionado; $j++) {
                                 $nota = isset($notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["bol_nota"])
                                     ? $notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["bol_nota"]
                                     : 0;
                                 $fallas = isset($notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["aus_ausencias"])
                                     ? $notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["aus_ausencias"]
-                                    : 0;
-                                $nota =      Boletin::agregarDecimales($nota);
-                                $desempeno = Boletin::determinarRango($nota, $tiposNotas);
-                                $promedioMateria  += $nota;
-                                $fallasAcumuladas += $fallas;
+                                    : 0;                                
+                                $nota                  = Boletin::agregarDecimales($nota);
+                                $desempeno             = Boletin::determinarRango($nota, $tiposNotas);
+                                $promedioMateria       += $nota;
+                                $fallasAcumuladas      += $fallas;
+                                $fallasArea            += $fallas;  
+                                $porcentajeMateria=isset($carga['mat_valor'])?$carga['mat_valor']:100;
+                                if (isset($notaAre[$j])) {
+                                $notaAre[$j]           += $nota*($porcentajeMateria/100);
+                                }else{
+                                $notaAre[$j]           =  $nota*($porcentajeMateria/100); 
+                                }
+
                                 if (isset($totalNotasPeriodo[$j])) {
-                                    $totalNotasPeriodo[$j] += $nota;
+                                $totalNotasPeriodo[$j] += $nota*($porcentajeMateria/100);
                                 } else {
-                                    $totalNotasPeriodo[$j] = $nota;
+                                $totalNotasPeriodo[$j] =  $nota*($porcentajeMateria/100);
                                 }
                                 $background = $j != $periodoSeleccionado ? 'background: #9ed8ed;' : '';
                             ?>
-                                <td align="center" align="center" style=" <?= $background ?> font-size:12px;"><?= $nota ?></td>
+                                <td align="center" align="center" style=" <?= $background ?> font-size:12px;"><?=number_format($nota,$config['conf_decimales_notas']);  ?></td>
                             <?php }
                             ?>
                             <td align="center"><?= $desempeno['notip_nombre'] ?></td>
                             <?php
-                            $notaAcumulada = $promedioMateria / $periodoSeleccionado;
+                            $notaAcumulada = $promedioMateria / $config['conf_periodos_maximos'];
                             $notaAcumulada = round($notaAcumulada, 2);
                             $desempenoAcumulado = Boletin::determinarRango($notaAcumulada, $tiposNotas); ?>
                             <td align="center"> <?= $fallasAcumuladas ?></td>
                             <td align="center" style=" font-size:12px;"><?= $notaAcumulada ?></td>
-                            <td align="center" style=" font-size:12px;"><?= $desempenoAcumulado["notip_nombre"] .'-'.$cantidadMaterias?></td>
+                            <td align="center" style=" font-size:12px;"><?= $desempenoAcumulado["notip_nombre"] ?></td>
                         </tr>
-                    <?php } ?>
-                <?php } ?>
+                    <?php }                     
+                    if($ihArea !=$carga['car_ih'] ){                        
+                    ?>
+                    <td  style="font-weight:bold;background: #EAEAEA;"><?= $area["ar_nombre"] ?></td>
+                    <td align="center" style="font-weight:bold;background: #EAEAEA;"><?= $ihArea ?></td> 
+                    <?php 
+                        $notaAreAcumulada=0;
+                        for ($j = 1; $j <= $periodoSeleccionado; $j++) {
+                        $notaAreAcumulada += $notaAre[$j];
+                        $desenpenioAre =Boletin::determinarRango($notaAre[$j], $tiposNotas);?>                  
+                    <td align="center" style="font-weight:bold;background: #EAEAEA;"><?= number_format($notaAre[$j],$config['conf_decimales_notas']); ?></td>
+                   
+                <?php }
+                $notaAreAcumulada       = number_format($notaAreAcumulada/$config['conf_periodos_maximos'] ,$config['conf_decimales_notas']);
+                $desenpenioAreAcumulado = Boletin::determinarRango($notaAreAcumulada , $tiposNotas);
+                ?>
+                <td align="center" style="font-weight:bold;background: #EAEAEA;"><?= $desenpenioAre['notip_nombre'] ?></td>
+                <td align="center" style="font-weight:bold;background: #EAEAEA;"><?= $fallasArea ?></td>
+                <td align="center" style="font-weight:bold;background: #EAEAEA;"><?= $notaAreAcumulada ?></td>
+                <td align="center" style="font-weight:bold;background: #EAEAEA;"><?= $desempenoAcumulado["notip_nombre"] ?></td>
+                
+               <?php }
+            } ?>
             </tbody>
-            <tfoot style="font-weight:bold; font-size: 13px;">
-                <tr style="background: #EAEAEA">
-                    <td colspan="2">PROMEDIO GENERAL</td>
+            <tfoot style="font-weight:bold; font-size: 15px;">
+                <tr style="font-weight:bold;background: #EAEAEA">
+                    <td colspan="2" >PROMEDIO GENERAL</td>
                     <?php
                     $promedioFinal = 0;
                     for ($j = 1; $j <= $periodoSeleccionado; $j++) {
-                        $acumuladoPj = ($totalNotasPeriodo[$j] / $cantidadMaterias);
+                        $acumuladoPj = ($totalNotasPeriodo[$j] / $cantidadAreas);
                         $acumuladoPj = round($acumuladoPj, 2);
                         $promedioFinal += $acumuladoPj;
                         $desempenoAcumuladoTotal = Boletin::determinarRango($acumuladoPj, $tiposNotas);
 
                     ?>
-                        <td align="center"><?= $acumuladoPj ?></td>
+                        <td align="center"><?= number_format($acumuladoPj,$config['conf_decimales_notas'])?> </td>
                     <?php } ?>
                     <td align="center"><?= $desempenoAcumuladoTotal["notip_nombre"] ?></td>
                     <td align="center"></td>
@@ -324,24 +362,58 @@ if ($grado >= 12 && $grado <= 15) {
             });
         ?>
             <table width="100%" style="margin-top: 15px;" cellspacing="0" cellpadding="0" rules="all" border="1" align="center">
-                <tr style=" background:#00adefad; border-color:#036; font-size:12px; text-align:center">
-                    <td colspan="3">OBSERVACIONES DE CONVIVENCIA</td>
+            <thead>
+                <tr style="font-weight:bold; text-align:left; background-color: #00adefad;">
+                    <td><b>Observaciones:</b></td>
                 </tr>
-                <tr style=" background:#EAEAEA; color:#000; font-size:12px; text-align:center">
+            </thead>
+               
+                <?php
+                 if($config['conf_observaciones_multiples_comportamiento'] == '1'){ ?>
+                    <tr style="color:#000;">
+                    <td style="padding-left: 20px;">
+                        <?php 
+                            $cndisiplina = mysqli_query($conexion, "SELECT * FROM ".BD_DISCIPLINA.".disiplina_nota WHERE dn_cod_estudiante='".$estudiante['mat_id']."' AND dn_periodo='".$periodoSeleccionado."' AND institucion={$config['conf_id_institucion']} AND year=".$config['conf_agno']."");
+                            while($rndisiplina=mysqli_fetch_array($cndisiplina, MYSQLI_BOTH)){
+
+                                if(!empty($rndisiplina['dn_observacion'])){
+                                    if($config['conf_observaciones_multiples_comportamiento'] == '1'){
+                                        $explode=explode(",",$rndisiplina['dn_observacion']);
+                                        $numDatos=count($explode);
+                                        for($i=0;$i<$numDatos;$i++){
+                                            $consultaObservaciones = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".observaciones WHERE obser_id=$explode[$i] AND obser_id_institucion=".$config['conf_id_institucion']." AND obser_years=".$config['conf_agno']."");
+                                            $observaciones = mysqli_fetch_array($consultaObservaciones, MYSQLI_BOTH);
+                                            echo "- ".$observaciones['obser_descripcion']."<br>";
+                                        }
+                                    }else{
+                                        echo "- ".$rndisiplina["dn_observacion"]."<br>";
+                                    }
+                                }
+                            }
+                            if ($periodoSeleccionado == $config["conf_periodos_maximos"] && $ultimoPeriodoAreas < $config["conf_periodos_maximos"]) {
+                                Echo "ESTUDIANTE RETIRADO SIN FINALIZAR AÑO LECTIVO.";
+                            }
+                        ?>
+                        <p>&nbsp;</p>
+                    </td>
+                </tr>
+                <?php }else{?>
+                    <tr style=" background:#EAEAEA; color:#000; font-size:12px; text-align:center">
                     <td width="8%">Periodo</td>
                     <td>Observaciones</td>
-                </tr>
-                <?php
-                foreach ($observacionesConvivencia[$estudiante["mat_id"]] as $observacion) {
-                    if ($observacion["estudiante"] == $estudiante["mat_id"]) {
-                ?>
-                        <tr align="center" style="font-weight:bold; font-size:12px; height:20px;">
-                            <td><?= $observacion["periodo"] ?></td>
-                            <td align="left"><?= $observacion["observacion"] ?></td>
-                        </tr>
-
-                <?php  }
-                } ?>
+                </tr> <?php
+                    foreach ($observacionesConvivencia[$estudiante["mat_id"]] as $observacion) {
+                        $observacionString="";
+                        if ($observacion["estudiante"] == $estudiante["mat_id"]) {?>
+                            <tr align="center" style="font-size:12px; height:16px;">
+                                <td  style="font-weight:bold;"><?= $observacion["periodo"] ?></td>
+                                <td align="left"><?=$observacionString ?></td>
+                            </tr>
+    
+                    <?php  }
+                    } 
+                 } ?>
+                
             </table>
         <?php } ?>
         <p>&nbsp;</p>
@@ -356,8 +428,6 @@ if ($grado >= 12 && $grado <= 15) {
 
             <?php
             foreach ($listaCargas as $carga) {
-
-
             ?>
                 <tbody>
                     <tr style="color:#000;">
