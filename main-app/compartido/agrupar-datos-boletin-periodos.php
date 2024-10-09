@@ -73,6 +73,7 @@ foreach ($listaDatos  as $registro) {
             "car_id"                    => $registro['car_id'],
             "nro"                       => $contarCargas,
             "mat_nombre"                => $registro['mat_nombre'],
+            "mat_valor"                 => $registro['mat_valor'],
             "docente"                   => $registro,
             "bol_periodo"               => $registro["bol_periodo"],
             "bol_nota"                  => $registro['bol_nota'],
