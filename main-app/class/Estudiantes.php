@@ -1392,7 +1392,7 @@ class Estudiantes {
                  $stringSelect  
                  FROM ".BD_ACADEMICA.".academico_matriculas mat
 
-                 INNER JOIN ".BD_ADMISIONES.".aspirantes 
+                 INNER JOIN ".BD_ADMISIONES.".aspirantes asp
                  ON asp_id    = mat.mat_solicitud_inscripcion
                  
                  LEFT JOIN ".BD_ACADEMICA.".academico_grados gra 
@@ -1406,7 +1406,7 @@ class Estudiantes {
                 
                  {$filtro}
                  
-                 ORDER BY mat.mat_primer_apellido  
+                 ORDER BY asp.asp_id DESC
                  
                  {$limite}";
 

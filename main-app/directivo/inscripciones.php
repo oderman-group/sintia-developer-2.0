@@ -107,7 +107,8 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
 									        </div>
 												<thead>
 													<tr>
-                                                        <th>ID</th>
+                                                        <th>No.</th>
+                                                        <th>ID Matrícula</th>
                                                         <th>#Solicitud</th>
                                                         <th>Fecha</th>
                                                         <th>Documento</th>
@@ -125,7 +126,7 @@ $urlInscripcion=REDIRECT_ROUTE.'/admisiones/';
                                                     $selectSql = ["mat_id","mat_documento","gra_nombre",
 																  "asp_observacion","asp_nombre_acudiente","asp_celular_acudiente",
 																  "asp_documento_acudiente","asp_id","asp_fecha","asp_comprobante","mat_nombres",
-																  "asp_agno","asp_email_acudiente","asp_estado_solicitud"];
+																  "asp_agno","asp_email_acudiente","asp_estado_solicitud", "mat_nombre2", "mat_primer_apellido", "mat_segundo_apellido",];
 
                                                     $filtroLimite = '';
                                                     
