@@ -89,7 +89,6 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
 										</div>
 									</div>
 								</div>
-
 								<table class="display" style="width:100%;" id="tablaItems">
 									<div id="gifCarga" class="gif-carga">
 										<img  alt="Cargando...">
@@ -117,10 +116,17 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
 
 										try {
 											$consulta = mysqli_query($conexion, "SELECT fc.*, uss.*, fc.id_nuevo AS id_nuevo_movimientos FROM " . BD_FINANCIERA . ".finanzas_cuentas fc
-														INNER JOIN " . BD_GENERAL . ".usuarios uss ON uss_id=fcu_usuario AND uss.institucion={$config['conf_id_institucion']} AND uss.year={$_SESSION["bd"]}
-														WHERE fcu_id=fcu_id AND fc.institucion={$config['conf_id_institucion']} AND fc.year={$_SESSION["bd"]} $filtro
-														ORDER BY fcu_id
-														LIMIT $inicio,$registros");
+														INNER JOIN " . BD_GENERAL . ".usuarios uss 
+															ON uss_id=fcu_usuario 
+															AND uss.institucion={$config['conf_id_institucion']} 
+															AND uss.year={$_SESSION["bd"]}
+														WHERE 
+															fcu_id=fcu_id 
+														AND fc.institucion={$config['conf_id_institucion']} 
+														AND fc.year={$_SESSION["bd"]} 
+														$filtro
+														ORDER BY fc.id_nuevo DESC
+														");
 										} catch (Exception $e) {
 											include("../compartido/error-catch-to-report.php");
 										}
@@ -135,7 +141,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
 								</table>
 							</div>
 						</div>
-						<?php include("enlaces-paginacion.php"); ?>
+						<?php //include("enlaces-paginacion.php"); ?>
 					</div>
 
 					<div class="col-sm-3">

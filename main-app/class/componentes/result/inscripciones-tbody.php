@@ -18,6 +18,7 @@ foreach ($data["data"] as $resultado) {
 						  <span style='color:darkblue; font-size:11px; font-style:italic;'>{$observacion}</span>";
 ?>
 	<tr id="registro_<?= $resultado["asp_id"]; ?>" class="odd gradeX">
+		<td><?= $contReg; ?></td>
 		<td><?= $resultado["mat_id"]; ?></td>
 		<td><?= $resultado["asp_id"]; ?></td>
 		<td><?= $resultado["asp_fecha"]; ?></td>

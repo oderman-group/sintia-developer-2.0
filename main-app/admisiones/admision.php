@@ -2,7 +2,12 @@
 include("bd-conexion.php");
 
 $gradosConsulta = "SELECT * FROM ".BD_ACADEMICA.".academico_grados
-WHERE gra_estado = 1 AND gra_tipo='".GRADO_GRUPAL."' AND institucion={$config['conf_id_institucion']} AND year={$config["conf_agno"]}";
+WHERE 
+    gra_estado = 1 
+AND gra_tipo='".GRADO_GRUPAL."' 
+AND institucion={$config['conf_id_institucion']} 
+AND year={$config["conf_agno"]}
+";
 $grados = $pdoI->prepare($gradosConsulta);
 $grados->execute();
 $num = $grados->rowCount();
@@ -67,16 +72,14 @@ $num = $grados->rowCount();
                 <hr class="my-4">
                 <?php include("alertas.php"); ?>
                 <h3 style="text-align: center;">REGISTRO INICIAL</h3>
-                <form action="index-guardar.php" method="post" class="border border-secondary rounded-top p-2">
+                <form action="index-guardar.php" method="post" class="border border-secondary rounded-top p-2 bg-light">
                     <input type="hidden" name="iditoken" value="<?= md5($_REQUEST['idInst']); ?>">
                     <input type="hidden" name="idInst" value="<?= $_REQUEST['idInst']; ?>">
-                    <p class="lead text-danger">
-                        (*) Todos los campos de este formulario son obligatorios.
-                    </p>
+                    <p class="lead text-danger"> (*) Campos obligatorios.</p>
                     <h3>1. Datos del estudiante</h3>
                     <div class="form-row">
                         <div class="form-group col-md-3">
-                            <label for="tipoDocumento">Tipo de documento</label>
+                            <label for="tipoDocumento">Tipo de documento <span style="color:red;">(*)</span></label>
                             <select id="tipoDocumento" name="tipoDocumento" class="form-control" required>
                                 <option value="" selected>Escoja una opción...</option>
                                 <option value="105">Cédula de ciudadanía</option>
@@ -90,22 +93,32 @@ $num = $grados->rowCount();
                         </div>
 
                         <div class="form-group col-md-3">
-                            <label for="documento">Número de documento</label>
+                            <label for="documento">Número de documento <span style="color:red;">(*)</span></label>
                             <input type="text" class="form-control" id="documento" name="documento" required>
                         </div>
 
                         <div class="form-group col-md-3">
-                            <label for="apellido1">Primer apellido</label>
+                            <label for="apellido1">Primer apellido <span style="color:red;">(*)</span></label>
                             <input type="text" class="form-control" id="apellido1" name="apellido1" required>
                         </div>
 
                         <div class="form-group col-md-3">
-                            <label for="nombreEstudiante">Nombre</label>
+                            <label for="apellido1">Segundo apellido</label>
+                            <input type="text" class="form-control" id="apellido2" name="apellido2">
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <label for="nombreEstudiante">Primer nombre <span style="color:red;">(*)</span></label>
                             <input type="text" class="form-control" id="nombreEstudiante" name="nombreEstudiante" required>
                         </div>
 
                         <div class="form-group col-md-3">
-                            <label for="grado">Grado al que aspira</label>
+                            <label for="nombreEstudiante2">Segundo nombre</label>
+                            <input type="text" class="form-control" id="nombreEstudiante2" name="nombreEstudiante2">
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <label for="grado">Grado al que aspira <span style="color:red;">(*)</span></label>
                             <select id="grado" name="grado" class="form-control" required>
                                 <option value="" selected>Escoja una opción...</option>
                                 <?php
@@ -128,20 +141,46 @@ $num = $grados->rowCount();
                     </div>
                     <h3>2. Datos del acudiente</h3>
                     <div class="form-row">
-                        <div class="form-group col-md-2">
-                            <label for="documentoAcudiente">Número de documento</label>
+                        <div class="form-group col-md-3">
+                            <label for="tipoDocumentoAcudiente">Tipo de documento <span style="color:red;">(*)</span></label>
+                            <select id="tipoDocumentoAcudiente" name="tipoDocumentoAcudiente" class="form-control" required>
+                                <option value="" selected>Escoja una opción...</option>
+                                <option value="105">Cédula de ciudadanía</option>
+                                <option value="106">NUIP</option>
+                                <option value="107">Tarjeta de identidad</option>
+                                <option value="108">Registro civil</option>
+                                <option value="109">Cédula de extranjería</option>
+                                <option value="110">Pasaporte</option>
+                                <option value="139">PEP</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-3">
+                            <label for="documentoAcudiente">Número de documento <span style="color:red;">(*)</span></label>
                             <input type="text" class="form-control" id="documentoAcudiente" name="documentoAcudiente" required>
                         </div>
-                        <div class="form-group col-md-4">
-                            <label for="nombreAcudiente">Nombre completo</label>
-                            <input type="text" class="form-control" id="nombreAcudiente" name="nombreAcudiente" required>
+                        <div class="form-group col-md-3">
+                            <label for="apellido1Acudiente">Primer Apellido <span style="color:red;">(*)</span></label>
+                            <input type="text" class="form-control" id="apellido1Acudiente" name="apellido1Acudiente" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="apellido2Acudiente">Segundo Apellido</label>
+                            <input type="text" class="form-control" id="apellido2Acudiente" name="apellido2Acudiente">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="nombre1Acudiente">Primer nombre <span style="color:red;">(*)</span></label>
+                            <input type="text" class="form-control" id="nombre1Acudiente" name="nombre1Acudiente" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="nombre2Acudiente">Segundo nombre </label>
+                            <input type="text" class="form-control" id="nombre2Acudiente" name="nombre2Acudiente">
                         </div>
                         <div class="form-group col-md-4">
-                            <label for="email">Email</label>
+                            <label for="email">Email <span style="color:red;">(*)</span></label>
                             <input type="email" class="form-control" id="email" name="email" required>
                         </div>
-                        <div class="form-group col-md-2">
-                            <label for="celular">Celular</label>
+                        <div class="form-group col-md-4">
+                            <label for="celular">Celular <span style="color:red;">(*)</span></label>
                             <input type="text" class="form-control" id="celular" name="celular" required>
                         </div>
                     </div>
@@ -171,9 +210,9 @@ $num = $grados->rowCount();
                             </label>
                         </div>
                     </div>
-                    <p class="h6 text-info">
+                    <div class="alert alert-info" role="alert">
                         El formulario de inscripción tiene un costo de $<?= number_format($valorInscripcion, 0, ".", "."); ?>.
-                    </p>
+                    </div>
                     <div class="text-right">
                         <button type="submit" class="btn btn-lg" style="background-color:<?=$fondoBarra;?>; color:<?=$colorTexto;?>;"><i class="fa fa-credit-card" aria-hidden="true"></i> Enviar solicitud</button>
                     </div>

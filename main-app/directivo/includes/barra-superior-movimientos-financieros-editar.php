@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #41c4c4;">
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+	<!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
 	<div class="navbar-collapse" id="navbarSupportedContent">
@@ -14,5 +14,8 @@
 				</div>
 			</li>
 		</ul> 
-	</div>
+	</div> -->
+	<a href="movimientos-factura-venta.php?id=<?=base64_encode($resultado['fcu_id']);?>" class="btn btn-danger" target="_blank">
+		<i class="fa fa-print"></i> Imprimir factura
+	</a>
 </nav><br>

@@ -8,6 +8,8 @@
 $(document).ready(function() {
 	'use strict';
     $('#example1').DataTable();
+
+    $('#tablaItems').DataTable();
     
     var table = $('#example2').DataTable( {
         "scrollY": "200px",

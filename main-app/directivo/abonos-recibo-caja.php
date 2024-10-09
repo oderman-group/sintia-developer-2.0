@@ -22,9 +22,7 @@ $fechaBD = new DateTime($resultado['registration_date']);
 $fechaReplace = $fechaBD->format('d/m/Y');
 
 
-$filtro= "AND fcu_id='".$resultado['invoiced']."'";
-$consultaFactura = Movimientos::listarInvoicedSelect($conexion, $config, $filtro);
-$resultadoFactura = mysqli_fetch_array($consultaFactura, MYSQLI_BOTH);
+$resultadoFactura = UsuariosPadre::sesionUsuario($resultado['invoiced']);
 
 switch ($resultado['payment_method']) {
     case "EFECTIVO":

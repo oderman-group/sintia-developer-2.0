@@ -123,7 +123,7 @@ $Plataforma = new Plataforma;
                                                         LEFT JOIN ".$baseDatosServicios.".planes_sintia ON plns_id=ins_id_plan
                                                         WHERE ins_id=ins_id AND ins_enviroment='".ENVIROMENT."' $filtro
                                                         ORDER BY ins_id
-                                                        LIMIT $inicio,$registros;");
+                                                        ");
                                                     } catch (Exception $e) {
                                                         include("../compartido/error-catch-to-report.php");
                                                     }
@@ -185,7 +185,7 @@ $Plataforma = new Plataforma;
                                         </div>
                                     </div>
                                 </div>
-                                <?php include("enlaces-paginacion.php");?>
+                                <?php //include("enlaces-paginacion.php");?>
                             </div>
                         </div>
                     </div>

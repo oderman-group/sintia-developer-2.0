@@ -79,6 +79,13 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
 										<input type="hidden" value="<?=$resultado['fcu_id'];?>" name="idU" id="idTransaction">
 										<input type="hidden" value="<?=TIPO_FACTURA;?>" name="typeTransaction" id="typeTransaction">
 										
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label">Nro.</label>
+                                            <div class="col-sm-2">
+                                                <input type="text" name="idNuevo" class="form-control" autocomplete="off" required value="<?=$resultado['id_nuevo'];?>" disabled>
+                                            </div>
+                                        </div>
+
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Usuario</label>
                                             <div class="col-sm-4">
@@ -361,7 +368,7 @@ if(!Modulos::validarPermisoEdicion() || $resultado['fcu_anulado']==1 || $resulta
 										
                                         <div class="text-left" >                                            
                                             <?php                                             
-                            				$botones = new botonesGuardar("movimientos.php",Modulos::validarPermisoEdicion() && $resultado['fcu_anulado']==0 && $resultado['fcu_status']==POR_COBRAR && $abonos==0,"Importar saldos"); ?>
+                            				$botones = new botonesGuardar("movimientos.php",Modulos::validarPermisoEdicion() && $resultado['fcu_anulado']==0 && $resultado['fcu_status']==POR_COBRAR && $abonos==0,"Guardar cambios"); ?>
                                         </div>
                                     </form>
                                 </div>
