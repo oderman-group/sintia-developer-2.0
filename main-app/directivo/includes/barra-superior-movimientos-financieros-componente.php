@@ -128,6 +128,6 @@ $filtros[2] = [
 ];
 
 
-$barraSuperior = new ComponenteFiltro('movimientos', 'filter-movimientos.php','movimientos-tbody.php', $filtros, $opciones,'mostrarResultado');
+$barraSuperior = new ComponenteFiltro('movimientos', 'filter-movimientos.php','movimientos-tbody.php', $filtros, $opciones,'mostrarResultado', false);
 $barraSuperior->generarComponente();
 ?>
