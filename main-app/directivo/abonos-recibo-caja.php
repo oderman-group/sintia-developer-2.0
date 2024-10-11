@@ -162,7 +162,7 @@ switch ($resultado['payment_method']) {
                 <tbody>
                     <tr>
                         <td><div style="height: 200px;">Pago de factura de venta No. <?=$resultado['invoiced'];?></div></td>
-                        <td align="right" style="vertical-align: top;">$<?=number_format($resultado['payment'], 0, ",", ".")?></td>
+                        <td align="right" style="vertical-align: top;">$<?=number_format($resultado['valorAbono'], 0, ",", ".")?></td>
                     </tr>
                 </tbody>
                 <tfoot>
@@ -181,11 +181,11 @@ switch ($resultado['payment_method']) {
                             <table width="100%">
                                 <tr>
                                     <td align="center" width="30%" style="font-weight:bold;">Subtotal</td>
-                                    <td align="right" width="70%"><?="$".number_format($resultado['payment'], 0, ",", ".");?></td>
+                                    <td align="right" width="70%"><?="$".number_format($resultado['valorAbono'], 0, ",", ".");?></td>
                                 </tr>
                                 <tr style="background-color: #a8a8a8;">
                                     <td align="center" width="30%">Total</td>
-                                    <td align="right" width="70%"><?="$".number_format($resultado['payment'], 0, ",", ".");?></td>
+                                    <td align="right" width="70%"><?="$".number_format($resultado['valorAbono'], 0, ",", ".");?></td>
                                 </tr>
                             </table>
                         </td>

@@ -103,12 +103,12 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 														<?php }?>	
 														<td><?=$resultado['ar_nombre'];?></td>
 														<?php 
-															$cargas=$numeros[0];
-															if(Modulos::validarSubRol(['DT0032'])){
-																$cargas='<a href="cargas.php?asignatura='.base64_encode($resultado['mat_id']).'" style="text-decoration: underline;">'.$numeros[0].'</a>';
+															$cargas = $numeros[0];
+															if (Modulos::validarSubRol(['DT0032'])) {
+																$cargas='<a href="cargas.php?asignatura='.base64_encode($resultado['mat_id']).'" class="text-dark">'.$numeros[0].'</a>';
 															}
 														?>
-														<td><?=$cargas?></td>
+														<td><span class="badge badge-warning"><?=$cargas?></span></td>
 														
 														<?php if(Modulos::validarPermisoEdicion() && Modulos::validarSubRol(['DT0021','DT0151'])){?>
 															<td>

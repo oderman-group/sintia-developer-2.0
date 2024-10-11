@@ -406,17 +406,19 @@ class Movimientos {
     {
         $resultado = [];
         try {
-            $consulta = mysqli_query($conexion, "SELECT * FROM ".BD_FINANCIERA.".payments pay
+            $consulta = mysqli_query($conexion, "SELECT pay.id, pay.registration_date, pay.responsible_user, pay.invoiced, pay.cod_payment, pay.payment_method, pay.voucher,
+            uss.uss_nombre, uss.uss_nombre2, uss.uss_apellido1, uss.uss_apellido2,
+            pi.invoiced as numeroFactura, pi.payment as valorAbono
+            FROM ".BD_FINANCIERA.".payments pay
             INNER JOIN ".BD_GENERAL.".usuarios uss 
                 ON uss_id=responsible_user 
                 AND uss.institucion={$config['conf_id_institucion']} 
                 AND uss.year={$_SESSION["bd"]}
-            LEFT JOIN ".BD_ADMIN.".localidad_ciudades 
-                ON ciu_id=uss_lugar_nacimiento
-            LEFT JOIN ".BD_ADMIN.".localidad_departamentos 
-                ON dep_id=ciu_departamento
+            INNER JOIN ".BD_FINANCIERA.".payments_invoiced pi 
+                ON pi.payments=pay.cod_payment
             WHERE 
-                id='{$idAbono}' 
+                is_deleted=0 
+            AND pay.id='{$idAbono}'
             AND pay.institucion = {$config['conf_id_institucion']} 
             AND pay.year = {$_SESSION["bd"]}
             ");
