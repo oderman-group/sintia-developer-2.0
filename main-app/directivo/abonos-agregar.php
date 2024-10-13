@@ -219,7 +219,7 @@ $codigoUnico=Utilidades::generateCode("ABO");
                                             </div>
                                             
                                             <label class="col-sm-2 control-label"><?=$frases[416][$datosUsuarioActual['uss_idioma']];?>
-                                                <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Estas notas no se verán reflejadas en el comprobante."><i class="fa fa-question"></i></button>
+                                                <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Estas notas no se verán reflejadas en el comprobante."><i class="fa fa-info"></i></button>
                                             </label>
                                             <div class="col-sm-4">
                                                 <textarea cols="80" id="editor2" name="notas" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?=$disabledPermiso;?>></textarea>

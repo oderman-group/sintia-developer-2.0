@@ -456,7 +456,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                     </div>
                                                     <div class="form-group row">
                                                         <label class="col-sm-2 control-label">
-                                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Los cursos que estén marcado con esta opción permitirán que cualquiera pueda participar del curso"><i class="fa fa-question"></i></button>
+                                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Los cursos que estén marcado con esta opción permitirán que cualquiera pueda participar del curso"><i class="fa fa-info"></i></button>
                                                             Auto Matricular
                                                         </label>
                                                         <div class="col-sm-10">
@@ -470,7 +470,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                     </div>
                                                     <div class="form-group row">
                                                         <label class="col-sm-2 control-label">
-                                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Los cursos que estén marcados como no activos no podrán ser manipulados"><i class="fa fa-question"></i></button>
+                                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Los cursos que estén marcados como no activos no podrán ser manipulados"><i class="fa fa-info"></i></button>
 
                                                             Activo
 

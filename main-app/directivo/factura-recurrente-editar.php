@@ -98,24 +98,24 @@ if(!Modulos::validarPermisoEdicion()){
                                         </div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Fecha de inicio <span style="color: red;">(*)</span> <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Fecha en la que se crea la primer factura."><i class="fa fa-question"></i></button></label>
+                                            <label class="col-sm-2 control-label">Fecha de inicio <span style="color: red;">(*)</span> <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Fecha en la que se crea la primer factura."><i class="fa fa-info"></i></button></label>
                                             <div class="col-sm-4">
                                                 <input type="date" name="fechaInicio" class="form-control" autocomplete="off" required value="<?=$resultado['date_start'];?>" disabled>
                                             </div>
 
-                                            <label class="col-sm-2 control-label">Fecha de finalización <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Indica el último día de la creación automática de la factura."><i class="fa fa-question"></i></button></label>
+                                            <label class="col-sm-2 control-label">Fecha de finalización <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Indica el último día de la creación automática de la factura."><i class="fa fa-info"></i></button></label>
                                             <div class="col-sm-4">
                                                 <input type="date" name="fechaFinal" class="form-control" autocomplete="off" value="<?=$resultado['date_finish'];?>" disabled>
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Frecuencia <span style="color: red;">(*)</span> <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Indica cada cuántos meses se generará la factura, por ejemplo si eliges 2 se creará cada 2 meses."><i class="fa fa-question"></i></button></label>
+                                            <label class="col-sm-2 control-label">Frecuencia <span style="color: red;">(*)</span> <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Indica cada cuántos meses se generará la factura, por ejemplo si eliges 2 se creará cada 2 meses."><i class="fa fa-info"></i></button></label>
                                             <div class="col-sm-4">
                                                 <input type="number" min="1" name="frecuencia" class="form-control" autocomplete="off" value="1" required disabled>
                                             </div>
                                             
-                                            <label class="col-sm-2 control-label">Días de facturación <span style="color: red;">(*)</span> <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Indica que dias del mes deseas que se genere la factura."><i class="fa fa-question"></i></button></label>
+                                            <label class="col-sm-2 control-label">Días de facturación <span style="color: red;">(*)</span> <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Indica que dias del mes deseas que se genere la factura."><i class="fa fa-info"></i></button></label>
                                             <div class="col-sm-4">
                                                 <select class="form-control select2-multiple" multiple name="dias[]" required <?=$disabledPermiso;?>>
                                                     <option value="" >Seleccione una opción</option>
@@ -349,7 +349,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         </div>
                                         <hr>
                                         <div class="form-group row">
-                                            <label class="col-sm-12 control-label">Observaciones <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Observaciones adicionales que quieres que vea tu cliente en la factura."><i class="fa fa-question"></i></button></label>
+                                            <label class="col-sm-12 control-label">Observaciones <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Observaciones adicionales que quieres que vea tu cliente en la factura."><i class="fa fa-info"></i></button></label>
                                             <div class="col-sm-12">
                                                 <textarea cols="80" id="editor1" name="obs" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?=$disabledPermiso;?>><?=$resultado['observation'];?></textarea>
                                             </div>

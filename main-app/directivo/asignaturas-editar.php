@@ -116,7 +116,7 @@ if(!Modulos::validarPermisoEdicion()){
 
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label">Sumar en promedio general?
-                                                <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Deseas que esta asignatura cuente en la suma del promedio general en los informes?."><i class="fa fa-question"></i></button> 
+                                                <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Deseas que esta asignatura cuente en la suma del promedio general en los informes?."><i class="fa fa-info"></i></button> 
                                             </label>
                                             <div class="col-sm-8">
                                                 <select class="form-control  select2" name="sumarPromedio" <?= $disabledPermiso; ?>>

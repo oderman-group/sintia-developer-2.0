@@ -85,7 +85,7 @@ if (!Modulos::validarPermisoEdicion() || $iniciadas > 0) {
                                     <input type="hidden" value="<?= $resultado['gal_limite_evaluadores']; ?>" name="limiteEvaluadoresAnterior">
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Tipo de Encuesta
-                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="A que o quien se va a enfocar esta asignación."><i class="fa fa-question"></i></button>
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="A que o quien se va a enfocar esta asignación."><i class="fa fa-info"></i></button>
                                         </label>
                                         <div class="col-sm-4">
                                             <select class="form-control  select2" id="tipoEncuesta" name="tipoEncuesta" data-id-evaluado="<?= $resultado['gal_id_evaluado']; ?>" onchange="selectEvaluado(this)" <?= $disabledPermiso; ?>>
@@ -99,7 +99,7 @@ if (!Modulos::validarPermisoEdicion() || $iniciadas > 0) {
                                         </div>
 
                                         <label class="col-sm-2 control-label">Evaluado
-                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Escoja los usuarios, curso, materia o areas que seran evaluadas."><i class="fa fa-question"></i></button>
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Escoja los usuarios, curso, materia o areas que seran evaluadas."><i class="fa fa-info"></i></button>
                                         </label>
                                         <div class="col-sm-4">
                                             <select class="form-control  select2" id="evaluado" name="evaluado" <?= $disabledPermiso; ?>>
@@ -110,7 +110,7 @@ if (!Modulos::validarPermisoEdicion() || $iniciadas > 0) {
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Evaluador
-                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Escoja el tipo de usuarios o cursos que realizaran esta encuesta."><i class="fa fa-question"></i></button>
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Escoja el tipo de usuarios o cursos que realizaran esta encuesta."><i class="fa fa-info"></i></button>
                                         </label>
                                         <div class="col-sm-4">
                                             <select class="form-control  select2" name="evaluador" id="evaluador" onchange="mostrarSelectCurso(this)" <?= $disabledPermiso; ?>>
@@ -125,7 +125,7 @@ if (!Modulos::validarPermisoEdicion() || $iniciadas > 0) {
 
                                         <div id="elementSelectCurso" style="display: none;">
                                             <label class="col-sm-2 control-label">Escoje los cursos
-                                                <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Si el evaluador sera curso, especifique que cursos realizaran la encuesta."><i class="fa fa-question"></i></button>
+                                                <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Si el evaluador sera curso, especifique que cursos realizaran la encuesta."><i class="fa fa-info"></i></button>
                                             </label>
                                             <div class="col-sm-4">
                                                 <select class="form-control  select2-multiple" style="width: 100%;" multiple name="evaluadorCursos[]" <?= $disabledPermiso; ?>>
@@ -143,7 +143,7 @@ if (!Modulos::validarPermisoEdicion() || $iniciadas > 0) {
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label">Limite
-                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Con este campo determinas cuantos usuarios pueden realizar la encuesta."><i class="fa fa-question"></i></button>
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Con este campo determinas cuantos usuarios pueden realizar la encuesta."><i class="fa fa-info"></i></button>
                                         </label>
                                         <div class="col-sm-4">
                                             <input type="number" min="0" name="limiteEvaluadores" class="form-control" autocomplete="off" <?=$iniciadas > 0 ? "disabled" : "";?> value="<?=$resultado['gal_limite_evaluadores'];?>" <?=$disabledPermiso;?>>
