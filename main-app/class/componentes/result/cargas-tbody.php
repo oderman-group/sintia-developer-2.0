@@ -108,12 +108,12 @@ foreach ($data["data"] as $resultado) {
 							$actividadesRegistradas = $resultado['actividades_registradas'];
 							$configGenerarJobs = $config['conf_porcentaje_completo_generar_informe'];
 							$numSinNotas=0;
-							if ($actividadesDeclaradas < PORCENTAJE_MINIMO_GENERAR_INFORME) {
+							if ($actividadesDeclaradas < Boletin::PORCENTAJE_MINIMO_GENERAR_INFORME) {
 								$generarInforme = false;
 								$msnajetooltip = "Las calidifaciones declaradas no completan el 100% ";
-							} else if ($actividadesRegistradas < PORCENTAJE_MINIMO_GENERAR_INFORME) { 
+							} else if ($actividadesRegistradas < Boletin::PORCENTAJE_MINIMO_GENERAR_INFORME) { 
 								$generarInforme = false;
-								$msnajetooltip = "Las calidifaciones regsitradas no completan el 100% ";
+								$msnajetooltip = "Las calidifaciones registradas no completan el 100% ";
 							} else {
 								$generarInforme = true;
 							}
@@ -122,7 +122,7 @@ foreach ($data["data"] as $resultado) {
 									case 1:
 										$consultaListaEstudantesSinNotas = Estudiantes::listarEstudiantesNotasFaltantes($resultado["car_id"],$resultado["car_periodo"],$resultado["gra_tipo"]);
                                         $numSinNotas = mysqli_num_rows($consultaListaEstudantesSinNotas);
-										if ($numSinNotas < PORCENTAJE_MINIMO_GENERAR_INFORME) {
+										if ($numSinNotas < Boletin::PORCENTAJE_MINIMO_GENERAR_INFORME) {
 											$generarInforme = false;
 											$msnajetooltip = "La institución no permite generar informe hasta que todos los estudiantes estén calificados un 100%";
 											break;
