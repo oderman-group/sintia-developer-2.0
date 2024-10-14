@@ -3,6 +3,7 @@ if (!empty($data["dataTotal"])) {
 	require_once("../Estudiantes.php");
 	require_once("../Modulos.php");
 	require_once("../Sysjobs.php");
+	require_once("../Boletin.php");
 }
 
 $permisoReportesNotas = Modulos::validarSubRol(['DT0238']);
