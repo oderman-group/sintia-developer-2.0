@@ -5,13 +5,13 @@ class SocialNoticias extends Servicios
 {
 
     /**
-     * Obtiene los datos de un usuario por ID de usuario o nombre de usuario.
+     * Obtiene los datos de una noticia por ID .
      *
-     * @param int|string $idNoticia ID de usuario o nombre de usuario a consultar.
+     * @param string $idNoticia ID de la noticia  a consultar.
      *
-     * @return array|string Devuelve un conjunto de resultados de la consulta de usuarios o una cadena vacía si no se encuentra ningún usuario.
+     * @return array|string Devuelve un conjunto de resultados de la consulta de noticias o una cadena vacía si no se encuentra ningún resultado.
      */
-    public static function consultarNoticia($id_noticia = 0)
+    public static function consultarNoticia(string $id_noticia = 0): array|null
     {
         global $config;
         $resultado = [];
