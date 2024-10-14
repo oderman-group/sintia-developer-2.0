@@ -77,7 +77,7 @@ if(!Modulos::validarPermisoEdicion()){
 										</div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Año Para Inscripciones <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este será el año lectivo en el que quedaran inscritos los nuevos estudiantes."><i class="fa fa-question"></i></button></label>
+                                            <label class="col-sm-2 control-label">Año Para Inscripciones <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este será el año lectivo en el que quedaran inscritos los nuevos estudiantes."><i class="fa fa-info"></i></button></label>
                                             <div class="col-sm-8">
                                                 <input type="number" name="yearInscripcion" class="form-control col-sm-2" value="<?=$cfg['cfgi_year_inscripcion'];?>" <?=$disabledPermiso;?>>
                                             </div>
@@ -93,14 +93,14 @@ if(!Modulos::validarPermisoEdicion()){
                                         <p class="h3">Estilos y apariencia</p>
 
 										<div class="form-group row">
-											<label class="col-sm-2 control-label">Color del fondo<span style="color: red;">(*)</span> <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este será el color principal que verán los usuarios el modulo de inscripciones. (En la barra superior, botones, etc.)"><i class="fa fa-question"></i></button></label>
+											<label class="col-sm-2 control-label">Color del fondo<span style="color: red;">(*)</span> <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este será el color principal que verán los usuarios el modulo de inscripciones. (En la barra superior, botones, etc.)"><i class="fa fa-info"></i></button></label>
 											<div class="col-sm-10">
 												<input type="color" style="margin-top: 20px;" name="colorFondo" class="col-sm-1" value="<?=$cfg['cfgi_color_barra_superior'];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 
                                         <div class="form-group row">
-											<label class="col-sm-2 control-label">Color del texto<span style="color: red;">(*)</span> <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este será el color de los textos sobre el color principal. Asegurese de escoger un color que combine y que no se pueda distinguir del color principal."><i class="fa fa-question"></i></button></label>
+											<label class="col-sm-2 control-label">Color del texto<span style="color: red;">(*)</span> <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este será el color de los textos sobre el color principal. Asegurese de escoger un color que combine y que no se pueda distinguir del color principal."><i class="fa fa-info"></i></button></label>
 											<div class="col-sm-10">
 												<input type="color" style="margin-top: 20px;" name="colorTexto" class="col-sm-1" value="<?=$cfg['cfgi_color_texto'];?>" <?=$disabledPermiso;?>>
 											</div>
@@ -119,7 +119,7 @@ if(!Modulos::validarPermisoEdicion()){
 										</div>
 
                                         <div class="form-group row">
-											<label class="col-sm-2 control-label">Habilitar botón de pagar prematricula <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Cuando el estudiante esté en estado aprobado le aparecerá el botón de pago de prematricula, si usted desea."><i class="fa fa-question"></i></button></label>
+											<label class="col-sm-2 control-label">Habilitar botón de pagar prematricula <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Cuando el estudiante esté en estado aprobado le aparecerá el botón de pago de prematricula, si usted desea."><i class="fa fa-info"></i></button></label>
 											<div class="col-sm-2">
                                                 <select class="form-control  select2" name="habilitarPagoPrematricula" <?=$disabledPermiso;?>>
                                                     <option value="1" <?php if($cfg['cfgi_activar_boton_pagar_prematricula']==1){ echo "selected";} ?>>SI</option>
@@ -129,14 +129,14 @@ if(!Modulos::validarPermisoEdicion()){
 										</div>
 
                                         <div class="form-group row">
-											<label class="col-sm-2 control-label">Link del botón de pagar prematricula <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Es link de alguna entidad externa o pasarela de pagos donde harán el pago de la prematricula."><i class="fa fa-question"></i></button></label>
+											<label class="col-sm-2 control-label">Link del botón de pagar prematricula <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Es link de alguna entidad externa o pasarela de pagos donde harán el pago de la prematricula."><i class="fa fa-info"></i></button></label>
 											<div class="col-sm-8">
 												<input type="url" name="linkPagoPrematricula" class="form-control col-sm-8" value="<?=$cfg['cfgi_link_boton_pagar_prematricula'];?>" <?=$disabledPermiso;?>>
 											</div>
 										</div>
 										
                                         <div class="form-group row">
-											<label class="col-sm-2 control-label">Banner inicial <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Si usted desea, puede subir un banner resaltando o mostrando alguna aviso que quiere que vean los usuarios cuando vayan a hacer el proceso de inscripción."><i class="fa fa-question"></i></button></label>
+											<label class="col-sm-2 control-label">Banner inicial <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Si usted desea, puede subir un banner resaltando o mostrando alguna aviso que quiere que vean los usuarios cuando vayan a hacer el proceso de inscripción."><i class="fa fa-info"></i></button></label>
 											<div class="col-sm-8">
 												<input type="file" name="bannerInicio" class="form-control col-sm-6" <?=$disabledPermiso;?>>
                                                 <?php
@@ -160,21 +160,21 @@ if(!Modulos::validarPermisoEdicion()){
 										</div>
 
 										<div class="form-group row">
-											<label class="col-sm-2 control-label">Texto informativo inicial <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Es un texto informativo que verán los usuarios al momento de hacer la inscripción."><i class="fa fa-question"></i></button></label>
+											<label class="col-sm-2 control-label">Texto informativo inicial <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Es un texto informativo que verán los usuarios al momento de hacer la inscripción."><i class="fa fa-info"></i></button></label>
 											<div class="col-sm-10">
                                                 <textarea cols="80" id="editor1" name="textoInicial" rows="10" <?=$disabledPermiso;?>><?=$cfg['cfgi_texto_inicial'];?></textarea>
 											</div>
 										</div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Texto para datos de cuenta <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title='Un texto con nombre del banco y numero de cuenta, este texto lo vera el usuario al consultar el estado y estar el proceso en "VERIFICACIÓN DE PAGO".'><i class="fa fa-question"></i></button></label>
+                                            <label class="col-sm-2 control-label">Texto para datos de cuenta <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title='Un texto con nombre del banco y numero de cuenta, este texto lo vera el usuario al consultar el estado y estar el proceso en "VERIFICACIÓN DE PAGO".'><i class="fa fa-info"></i></button></label>
                                             <div class="col-sm-10">
                                                 <textarea cols="80" id="editor3" name="datosCuenta" rows="10" <?=$disabledPermiso;?>><?=$cfg['cfgi_texto_info_cuenta'];?></textarea>
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
-											<label class="col-sm-2 control-label">Archivo sobre las políticas <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este archivo lo podrán descargar los usuarios antes de enviar el formulario de inscripción."><i class="fa fa-question"></i></button></label>
+											<label class="col-sm-2 control-label">Archivo sobre las políticas <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este archivo lo podrán descargar los usuarios antes de enviar el formulario de inscripción."><i class="fa fa-info"></i></button></label>
 											<div class="col-sm-8">
 												<input type="file" name="politicasArchivo" class="form-control col-sm-6" <?=$disabledPermiso;?>>
                                                 <?php if(!empty($cfg['cfgi_politicas_adjunto']) && file_exists('../files/imagenes-generales/'.$cfg['cfgi_politicas_adjunto'])){?>
@@ -187,14 +187,14 @@ if(!Modulos::validarPermisoEdicion()){
 										</div>
 
                                         <div class="form-group row">
-											<label class="col-sm-2 control-label">Texto sobre las Políticas <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este texto lo podrán leer los usuarios antes de enviar el formulario de inscripción."><i class="fa fa-question"></i></button></label>
+											<label class="col-sm-2 control-label">Texto sobre las Políticas <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este texto lo podrán leer los usuarios antes de enviar el formulario de inscripción."><i class="fa fa-info"></i></button></label>
 											<div class="col-sm-10">
                                                 <textarea cols="80" id="editor2" name="politicas" rows="10" <?=$disabledPermiso;?>><?=$cfg['cfgi_politicas_texto'];?></textarea>
 											</div>
 										</div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label">Que mostrar en politicas?<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Escoge si deseas mostrar el documento adjunto o el texto."><i class="fa fa-question"></i></button></label>
+                                            <label class="col-sm-2 control-label">Que mostrar en politicas?<button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Escoge si deseas mostrar el documento adjunto o el texto."><i class="fa fa-info"></i></button></label>
                                             <div class="col-sm-2">
                                                 <select class="form-control  select2" name="mostrarPoliticas" <?=$disabledPermiso;?>>
                                                     <option value="1" <?php if($cfg['cfgi_mostrar_politicas']==1){ echo "selected";} ?>>Archivo sobre politicas</option>
@@ -204,7 +204,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         </div>
 
                                         <div class="form-group row">
-											<label class="col-sm-2 control-label">Frase 2 al final del formulario <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este frase la podrán leer los usuarios antes de enviar el formulario de inscripción. Escribe algo que les quieras informar o advertir."><i class="fa fa-question"></i></button></label>
+											<label class="col-sm-2 control-label">Frase 2 al final del formulario <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este frase la podrán leer los usuarios antes de enviar el formulario de inscripción. Escribe algo que les quieras informar o advertir."><i class="fa fa-info"></i></button></label>
 											<div class="col-sm-10">
                                                 <textarea cols="80" id="editor4" name="fraseDos" rows="10" <?=$disabledPermiso;?>><?=$cfg['cfgi_frase_formulario_inscripcion_2'];?></textarea>
 											</div>

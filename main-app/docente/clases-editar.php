@@ -145,7 +145,7 @@ $datosConsulta = Clases::traerDatosClases($conexion, $config, $idR);
 											</div>
 										
 										<div class="form-group row">
-												<label class="col-sm-2 control-label">Disponible para estudiantes <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Puede o no ser vista por los estudiantes."><i class="fa fa-question"></i></button></label>
+												<label class="col-sm-2 control-label">Disponible para estudiantes <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Puede o no ser vista por los estudiantes."><i class="fa fa-info"></i></button></label>
 												<div class="input-group spinner col-sm-4">
 													<label class="switchToggle">
 														<?php
@@ -160,14 +160,14 @@ $datosConsulta = Clases::traerDatosClases($conexion, $config, $idR);
 										
 										<p class="text-warning">Opcional.</p>
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Hipervinculo <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Un link que quiere que los estudiantes tengan de referencia para esta clase en particular."><i class="fa fa-question"></i></button></label>
+												<label class="col-sm-2 control-label">Hipervinculo <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Un link que quiere que los estudiantes tengan de referencia para esta clase en particular."><i class="fa fa-info"></i></button></label>
 												<div class="col-sm-10">
 													<input type="url" name="vinculo" class="form-control" autocomplete="off" placeholder="https://www.ejemplo.com" value="<?=$datosConsulta['cls_hipervinculo'];?>">
 												</div>
 											</div>
 											
 											<div class="form-group row">
-												<label class="col-sm-2 control-label">Video de youtube <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Pegue la URL del video"><i class="fa fa-question"></i></button></label>
+												<label class="col-sm-2 control-label">Video de youtube <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Pegue la URL del video"><i class="fa fa-info"></i></button></label>
 												<div class="col-sm-10">
 													<input type="text" name="video" class="form-control" autocomplete="off" value="<?=$datosConsulta['cls_video_url'];?>">
 												</div>

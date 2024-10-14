@@ -38,7 +38,7 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
 										
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label">Descripción Final 
-                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este texto se verá reflejado al final de la publicación, después de la imagen o video (si has incluido uno de estos elementos en la publicación)."><i class="fa fa-question"></i></button>
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este texto se verá reflejado al final de la publicación, después de la imagen o video (si has incluido uno de estos elementos en la publicación)."><i class="fa fa-info"></i></button>
                                             </label>
                                             <div class="col-sm-10">
                                                 <textarea name="contenidoPie" id="editor2" class="form-control" rows="3" style="margin-top: 0px; margin-bottom: 0px; height: 70px; resize: none;"><?=$datosConsulta['not_descripcion_pie'];?></textarea>

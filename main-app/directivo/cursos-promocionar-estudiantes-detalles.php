@@ -133,7 +133,7 @@ if(!empty($_POST['relacionCargas']) && $_POST['relacionCargas'] == 1){
                                         </div>
                                         
                                         <label class="col-sm-1">Relacionar Cargas: 
-                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Podrás relacionar las cargas del curso actual con las cargas del curso al que deseas promocionar al estudiante, no podrás cambiar el grupo de los estudiantes de forma individual."><i class="fa fa-question"></i></button>
+                                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Podrás relacionar las cargas del curso actual con las cargas del curso al que deseas promocionar al estudiante, no podrás cambiar el grupo de los estudiantes de forma individual."><i class="fa fa-info"></i></button>
                                         </label>
                                         <div class="col-sm-1">
                                             <div class="input-group spinner">

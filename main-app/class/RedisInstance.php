@@ -2,6 +2,7 @@
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 require_once(ROOT_PATH."/main-app/class/Plataforma.php");
 require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
+require_once(ROOT_PATH."/main-app/class/Autenticate.php");
 
 class RedisInstance {
     const KEY_SYSTEM_CONFIGURATION = 'configuracionDelSistema';
@@ -66,7 +67,12 @@ class RedisInstance {
         }
 
         $config = Plataforma::sesionConfiguracion();
-		$redis->set(self::KEY_SYSTEM_CONFIGURATION, json_encode($config));
+        
+        if (empty($config)) {
+            Autenticate::getInstance()->cerrarSesion();
+        }
+
+        $redis->set(self::KEY_SYSTEM_CONFIGURATION, json_encode($config));
         return $config;
 
     }
