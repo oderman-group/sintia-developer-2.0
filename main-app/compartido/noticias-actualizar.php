@@ -78,10 +78,10 @@ if(!empty($_POST["cursos"])){
 $url= $usuariosClase->verificarTipoUsuario($datosUsuarioActual['uss_tipo'],'noticias.php');
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
-if($notificar == 1){
+if ($notificar == 1) {
     echo '<script type="text/javascript">
-           socket.emit("notificar_noticia", {id_noticia: "'.$_POST["idR"] .'",institucion: "'. $config['conf_id_institucion'].'",year: "'. $_SESSION["bd"] .'"});
-           </script>';
+    socket.emit("notificar_noticia", {global: "' . $global . '",id_noticia: "' . $_POST["idR"] . '",institucion: "' . $config['conf_id_institucion'] . '",year: "' . $_SESSION["bd"] . '"});
+    </script>';
 }
 echo '<script type="text/javascript">window.location.href="' . $url . '";</script>';
 exit();

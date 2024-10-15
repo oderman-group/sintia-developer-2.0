@@ -11,7 +11,7 @@ class SocialNoticias extends Servicios
      *
      * @return array|string Devuelve un conjunto de resultados de la consulta de noticias o una cadena vacía si no se encuentra ningún resultado.
      */
-    public static function consultarNoticia(string $id_noticia = 0): array|null
+    public static function consultarNoticia(string $id_noticia): array|null
     {
         global $config;
         $resultado = [];
@@ -19,16 +19,15 @@ class SocialNoticias extends Servicios
         $sql = "
         SELECT * FROM " . BD_ADMIN . ".social_noticias noti 
 
-        LEFT JOIN " . BD_GENERAL . ".usuarios uss 
+        INNER JOIN " . BD_GENERAL . ".usuarios uss 
         ON  uss_id          = not_usuario 
         AND uss.institucion = noti.not_institucion
         AND uss.year        = noti.not_year
 
-        WHERE  not_id       = ?
-        AND not_institucion = ?
-        AND not_year        = ?";
+        WHERE  not_id       = ?        
+        LIMIT 1";
 
-        $parametros = [$id_noticia,$config['conf_id_institucion'], $_SESSION["bd"]];
+        $parametros = [$id_noticia];
         $consulta = BindSQL::prepararSQL($sql, $parametros);
         
         $resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH);

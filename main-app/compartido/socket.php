@@ -9,4 +9,8 @@
 		console.log(body);
 		abrirModal("Nueva Noticia", "../compartido/noticia-modal.php", body);
 	});
+	socket.on("ver_noticia", async (body) => {
+		console.log(body);
+		abrirModal("Nueva Noticia", "../compartido/noticia-modal.php", body);
+	});
 </script>
