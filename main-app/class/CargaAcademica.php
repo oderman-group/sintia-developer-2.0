@@ -971,11 +971,23 @@ class CargaAcademica {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
         $sql = "SELECT * FROM ".BD_ACADEMICA.".academico_cargas car 
-        INNER JOIN ".BD_ACADEMICA.".academico_materias mate ON mate.mat_id=car_materia AND mate.mat_area=? AND mate.institucion=car.institucion AND mate.year=car.year
-        INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id= am.mat_area AND ar.institucion=car.institucion AND ar.year=car.year
-        WHERE car_curso=? AND car_grupo=? AND car.institucion=? AND car.year=?
+        INNER JOIN ".BD_ACADEMICA.".academico_materias mate 
+            ON mate.mat_id = car_materia 
+            AND mate.mat_area = ? 
+            AND mate.institucion = car.institucion 
+            AND mate.year = car.year
+        INNER JOIN ".BD_ACADEMICA.".academico_areas ar 
+            ON ar.ar_id = mate.mat_area 
+            AND ar.institucion = car.institucion 
+            AND ar.year = car.year
+        WHERE 
+            car_curso=? 
+        AND car_grupo=? 
+        AND car.institucion=? 
+        AND car.year=?
         GROUP BY ar.ar_id 
-        ORDER BY ar.ar_posicion ASC";
+        ORDER BY ar.ar_posicion ASC
+        ";
 
         $parametros = [$idArea, $idCurso, $idGrupo, $config['conf_id_institucion'], $year];
 
