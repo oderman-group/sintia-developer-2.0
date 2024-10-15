@@ -71,6 +71,7 @@ foreach ($listaDatos  as $registro) {
         }
         $cargas[$registro["mat_id"]][$registro["ar_id"]][$registro['car_id']] = [
             "car_id"                    => $registro['car_id'],
+            "ar_id"                     => $registro['ar_id'],
             "nro"                       => $contarCargas,
             "mat_nombre"                => $registro['mat_nombre'],
             "mat_valor"                 => $registro['mat_valor'],
