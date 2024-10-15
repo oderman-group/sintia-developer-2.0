@@ -93,7 +93,7 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
 												WHERE gcat_activa=1
 												");
 												?>
-                                                <select class="form-control  select2" name="categoriaGeneral" required>
+                                                <select class="form-control  select2" style="width: 100%" name="categoriaGeneral" required>
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													while($datosBD = mysqli_fetch_array($datosConsultaBD, MYSQLI_BOTH)){
@@ -166,7 +166,7 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
 										<div class="form-group row">
                                             <label class="col-sm-2 control-label"><?=$frases[75][$datosUsuarioActual['uss_idioma']];?></label>
                                             <div class="col-sm-10">
-                                                <select id="multiple" class="form-control select2-multiple" multiple name="destinatarios[]">
+                                                <select  class="form-control select2-multiple" style="width: 100%" multiple name="destinatarios[]">
                                                     <?php
                                                         $destinatarios=(!empty($datosConsulta['not_para']) && $datosConsulta['not_para']!="1,2,3,4,5") ? explode(',',$datosConsulta['not_para']) : "";
                                                         try{
@@ -187,7 +187,7 @@ $datosConsulta = mysqli_fetch_array($consultaNoticias, MYSQLI_BOTH);
 										<div class="form-group row">
 												<label class="col-sm-2 control-label"><?=$frases[5][$datosUsuarioActual['uss_idioma']];?></label>
 												<div class="col-sm-10">
-													<select id="multiple" class="form-control select2-multiple" multiple name="cursos[]">
+													<select  class="form-control select2-multiple" style="width: 100%" multiple name="cursos[]">
 													<?php
                                                     $infoConsulta = Grados::traerGradosInstitucion($config);
 													while($infoDatos = mysqli_fetch_array($infoConsulta, MYSQLI_BOTH)){
