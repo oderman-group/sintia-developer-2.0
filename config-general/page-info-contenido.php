@@ -351,7 +351,7 @@ switch($_GET["idmsg"]){
 		$texto = 'Este estudiante o curso, no tiene información para mostrar.';
 		$url1 = 'index.php';
 		$boton1 = 'IR AL INICIO';
-		$lottie = 'https://lottie.host/7a874211-5ebc-4d51-9d95-0e8f045d6a34/eDJ7X3tubH.json';
+		$lottie = 'https://lottie.host/ed001264-1fb6-4bde-ab66-a51dfd8f34dd/cOj1erXtHg.json';
 	break;
 		
 	case 307:
