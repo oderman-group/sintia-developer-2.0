@@ -88,7 +88,6 @@ if ($notificar == 1) {
     });
     setTimeout(function() {
         window.location.href = "' . $url . '";
-        exit();
     }, 500);
     </script>';
 }else{

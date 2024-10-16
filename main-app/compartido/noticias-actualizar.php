@@ -78,7 +78,6 @@ if(!empty($_POST["cursos"])){
 $url= $usuariosClase->verificarTipoUsuario($datosUsuarioActual['uss_tipo'],'noticias.php');
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
-echo '<script type="text/javascript">window.location.href="' . $url . '";</script>';
 if ($notificar == 1) {
     echo '<script type="text/javascript">
     socket.emit("notificar_noticia", {
@@ -89,7 +88,6 @@ if ($notificar == 1) {
     });
     setTimeout(function() {
         window.location.href = "' . $url . '";
-        exit();
     }, 500);
     </script>';
 }else{
