@@ -202,7 +202,7 @@ $institucionNombre = $institucion['ins_siglas'];
                         ?>
  						<li class="dropdown dropdown-extended dropdown-inbox" data-step="5" data-intro="<b>Encuestas:</b> Aquí se te redireccionara a las encuestas pendientes." data-position='bottom'>
                             <a href="encuestas-pendientes.php" class="dropdown-toggle">
-                                <i class="fa fa-question"></i>
+                                <i class="fa fa-info"></i>
                                 <span class="badge headerBadgeColor2" style="right: -12px; top: 5px;"><?=$numAsignacionesEncuesta?></span>
                             </a>
                         </li>

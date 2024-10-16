@@ -99,7 +99,10 @@ class Plataforma {
         $config = [];
 
         try {
-            $configConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion WHERE conf_id_institucion='".$_SESSION["idInstitucion"]."' AND conf_agno='".$_SESSION["bd"]."'");
+            $configConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".configuracion 
+            WHERE 
+                conf_id_institucion='".$_SESSION["idInstitucion"]."' 
+            AND conf_agno='".$_SESSION["bd"]."'");
             $config = mysqli_fetch_array($configConsulta, MYSQLI_BOTH);
         } catch (Exception $e) {
             echo "Excepción catpurada: ".$e->getMessage();

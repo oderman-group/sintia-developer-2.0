@@ -203,7 +203,7 @@ try{
                                                 </div>
                                                 
                                                 <label class="col-sm-2 control-label">Siglas de la compañía <span style="color: red;">(*)</span>
-                                                    <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Nombre corto de la compañía."><i class="fa fa-question"></i></button> 
+                                                    <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Nombre corto de la compañía."><i class="fa fa-info"></i></button> 
                                                 </label>
                                                 <div class="col-sm-4">
                                                     <input type="text" name="siglasInst" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['siglasInst'];?>">
@@ -212,7 +212,7 @@ try{
 
                                             <div class="form-group row">
                                                 <label class="col-sm-2 control-label">Nombre de la Base de datos <b>(SiglasBD)</b> <span style="color: red;">(*)</span>
-                                                    <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Aquí colocamos las siglas que van al intermedio del nombre de la BD ejemplo: dominio_{{SiglasBD}}_year"><i class="fa fa-question"></i></button> 
+                                                    <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Aquí colocamos las siglas que van al intermedio del nombre de la BD ejemplo: dominio_{{SiglasBD}}_year"><i class="fa fa-info"></i></button> 
                                                 </label>
                                                 <div class="col-sm-4">
                                                     <input type="text" name="siglasBD" class="form-control" autocomplete="off" value="<?=$datosNuevaBD['siglasBD'];?>">

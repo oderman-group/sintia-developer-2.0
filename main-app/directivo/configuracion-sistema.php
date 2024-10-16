@@ -8,6 +8,43 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
 }
+
+require_once(ROOT_PATH."/main-app/class/categoriasNotas.php");
+require_once(ROOT_PATH."/main-app/class/Tables/BDT_configuracion.php");
+
+$year = $_SESSION["bd"];
+if (!empty($_GET['year'])) {
+    $year = base64_decode($_GET['year']);
+}
+
+$id = $_SESSION["idInstitucion"];
+if (!empty($_GET['id'])) {
+    $id = base64_decode($_GET['id']);
+}
+
+try {
+    $consultaConfiguracion = mysqli_query($conexion, "SELECT configuracion.*, ins_siglas, ins_years FROM " . $baseDatosServicios . ".configuracion 
+    INNER JOIN " . $baseDatosServicios . ".instituciones ON ins_id=conf_id_institucion
+    WHERE conf_id_institucion='" . $id . "' AND conf_agno='" . $year . "'");
+} catch (Exception $e) {
+    include("../compartido/error-catch-to-report.php");
+}
+
+$datosConfiguracion = mysqli_fetch_array($consultaConfiguracion, MYSQLI_BOTH);
+
+$disabledPermiso = "";
+
+if (!Modulos::validarPermisoEdicion() && $datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO) {
+	$disabledPermiso = "disabled";
+}
+
+$configDEV   = 0;
+$institucion = '';
+
+if ($idPaginaInterna == 'DV0032')
+{ 
+    $configDEV =1; $institucion = "de <b>".$datosConfiguracion['ins_siglas']."</b> (". $year .")"; 
+}
 ?>
 
 	<!--bootstrap -->
@@ -35,7 +72,87 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 			<!-- start page content -->
             <div class="page-content-wrapper">
                 <div class="page-content">
-                    <?php include_once("includes/formulario-configuracion-contenido.php"); ?>
+                    <div class="page-bar">
+                        <div class="page-title-breadcrumb">
+                            <div class=" pull-left">
+                                <div class="page-title"><?= $frases[17][$datosUsuarioActual['uss_idioma']]; ?> del Sistema </div>
+                                <?php include("../compartido/texto-manual-ayuda.php"); ?>
+                            </div>
+                            <ol class="breadcrumb page-breadcrumb pull-right">
+                                <?php
+                                    if($idPaginaInterna == 'DV0032'){
+                                        echo '<li><a class="parent-item" href="javascript:void(0);" name="dev-instituciones.php" onClick="deseaRegresar(this)">Insituciones</a>&nbsp;<i class="fa fa-angle-right"></i></li>';
+                                    }
+                                ?>
+                                <li class="active"><?= $frases[17][$datosUsuarioActual['uss_idioma']]; ?> del Sistema </li>
+                            </ol>
+                        </div>
+                    </div>
+                    <?php //include_once("includes/formulario-configuracion-contenido.php"); ?>
+
+                    <?php 
+                    $tabs = [
+                        'general' => [
+                            'name' => 'General',
+                            'aria-selected' => 'true',
+                            'active' => 'active',
+                            'show' => 'show',
+                            'page-content' => 'includes/formulario-configuracion-contenido.php',
+                        ], 
+                        'comportamiento-sistema' => [
+                            'name' => 'Comportamiento del sistema',
+                            'aria-selected' => 'false',
+                            'active' => '',
+                            'show' => '',
+                            'page-content' => 'includes/config-sistema-comportamiento.php',
+                        ],
+                        'preferencias' => [
+                            'name' => 'Preferencias',
+                            'aria-selected' => 'false',
+                            'active' => '',
+                            'show' => '',
+                            'page-content' => 'includes/config-sistema-preferencias.php',
+                        ],
+                        'informes' => [
+                            'name' => 'Informes y reportes',
+                            'aria-selected' => 'false',
+                            'active' => '',
+                            'show' => '',
+                            'page-content' => 'includes/config-sistema-informes.php',
+                        ],
+                        'permisos' => [
+                            'name' => 'Permisos',
+                            'aria-selected' => 'false',
+                            'active' => '',
+                            'show' => '',
+                            'page-content' => 'includes/config-sistema-permisos.php',
+                        ],
+                        'estilos-apariencia' => [
+                            'name' => 'Estilos y apariencia',
+                            'aria-selected' => 'false',
+                            'active' => '',
+                            'show' => '',
+                            'page-content' => 'includes/config-sistema-estilos.php',
+                        ]
+                    ];
+                    ?>
+
+                    <nav>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <?php foreach ($tabs as $tab => $datos): ?>
+                                <a class="nav-item nav-link <?=$datos['active'];?>" data-toggle="tab" href="#<?=$tab;?>" role="tab" aria-selected="<?=$datos['aria-selected'];?>"><?=$datos['name'];?></a>
+                            <?php endforeach;?>
+                        </div>
+                    </nav>
+
+                    <div class="tab-content" id="nav-tabContent">
+                        <?php foreach ($tabs as $tab => $datos): ?>
+                            <div class="tab-pane fade <?=$datos['show'];?> <?=$datos['active'];?>" id="<?=$tab;?>" role="tabpanel">
+                                <?php include_once($datos['page-content']);?>
+                            </div>
+                        <?php endforeach;?>
+                    </div>
+
                 </div>
                 <!-- end page content -->
              <?php // include("../compartido/panel-configuracion.php");?>
