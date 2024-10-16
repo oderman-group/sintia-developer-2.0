@@ -81,7 +81,23 @@ include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 if ($notificar == 1) {
     echo '<script type="text/javascript">
     socket.emit("notificar_noticia", {global: "' . $global . '",id_noticia: "' . $_POST["idR"] . '",institucion: "' . $config['conf_id_institucion'] . '",year: "' . $_SESSION["bd"] . '"});
+    alert("254");
     </script>';
 }
 echo '<script type="text/javascript">window.location.href="' . $url . '";</script>';
-exit();
+if ($notificar == 1) {
+    echo '<script type="text/javascript">
+    socket.emit("notificar_noticia", {
+                    global      : "' . $global . '",
+                    id_noticia  : "' . $_POST["idR"] . '",
+                    institucion : "' . $config['conf_id_institucion'] . '",
+                    year        : "' . $_SESSION["bd"] . '"
+    });
+    setTimeout(function() {
+        window.location.href = "' . $url . '";
+        exit();
+    }, 500);
+    </script>';
+}else{
+    echo '<script type="text/javascript">window.location.href="' . $url . '";</script>'; 
+}
