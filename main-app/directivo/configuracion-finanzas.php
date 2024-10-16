@@ -68,7 +68,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         <p class="h3">General</p>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-3 control-label">Consecutivo Inicial <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este será el numero inicial para el consecutivo de los documetos a imprimir."><i class="fa fa-question"></i></button></label>
+                                            <label class="col-sm-3 control-label">Consecutivo Inicial <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Este será el numero inicial para el consecutivo de los documetos a imprimir."><i class="fa fa-info"></i></button></label>
                                             <div class="col-sm-8">
                                                 <input type="number" name="consecutivo" class="form-control col-sm-2" value="<?=$cfg['consecutive_start'];?>" <?=$disabledPermiso;?>>
                                             </div>
@@ -77,7 +77,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         <p class="h3">Otras</p>
 										
                                         <div class="form-group row">
-                                            <label class="col-sm-3 control-label">Firma <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta firma se mostrara en los documentos a imprimir."><i class="fa fa-question"></i></button></label>
+                                            <label class="col-sm-3 control-label">Firma <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta firma se mostrara en los documentos a imprimir."><i class="fa fa-info"></i></button></label>
                                             <div class="col-sm-4">
                                                 <?php
                                                     if(!empty($cfg['signature']) && file_exists('../files/firmas/'.$cfg['signature'])){
@@ -89,7 +89,7 @@ if(!Modulos::validarPermisoEdicion()){
                                         </div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-3 control-label">T&C  <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Estos T&C se veran reflejados en el pie de la factura."><i class="fa fa-question"></i></button></label>
+                                            <label class="col-sm-3 control-label">T&C  <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Estos T&C se veran reflejados en el pie de la factura."><i class="fa fa-info"></i></button></label>
                                             <div class="col-sm-9">
                                                 <textarea cols="80" id="editor1" name="pieFactura" class="form-control" rows="8" placeholder="Escribe tu mensaje" style="margin-top: 0px; margin-bottom: 0px; height: 100px; resize: none;" <?=$disabledPermiso;?>><?=$cfg['invoice_footer'];?></textarea>
                                             </div>
