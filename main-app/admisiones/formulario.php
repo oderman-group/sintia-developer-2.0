@@ -116,7 +116,7 @@ $datosMadre = $madre->fetch();
             </div>
         </div>
 
-        <form action="formulario-guardar.php" method="POST" enctype="multipart/form-data">
+        <form action="formulario-guardar.php" method="POST" enctype="multipart/form-data" id="formularioDatosAdmision">
             <input type="hidden" name="idMatricula" value="<?= $datos['mat_id']; ?>">
             <input type="hidden" name="solicitud" value="<?= $id; ?>">
             <input type="hidden" name="idAcudiente" value="<?= $datos['mat_acudiente']; ?>">
@@ -889,7 +889,7 @@ $datosMadre = $madre->fetch();
 
                     <label>1. Foto <span class="text-primary">(En formato .jpg, .png, .jpeg)</span> </label>
 
-                    <input type="file" class="form-control" name="foto">
+                    <input type="file" class="form-control" name="foto" onChange="validarPesoArchivo(this)">
 
                     <?php if (!empty($datos['mat_foto']) and file_exists('files/fotos/' . $datos['mat_foto'])) { ?>
                         <p><a href="files/fotos/<?= $datos['mat_foto']; ?>" target="_blank" class="link"><?= $datos['mat_foto']; ?></a></p>
@@ -1030,7 +1030,7 @@ $datosMadre = $madre->fetch();
 
             </div>
 
-            <h3 class="mb-4" style="text-align: center;">3. DOCUMENTACIÓN DEL ACUDIENTE</h3>
+            <h3 class="mb-4" style="text-align: center;">4. DOCUMENTACIÓN DEL ACUDIENTE</h3>
 
             <div class="p-3 mb-2 bg-secondary text-white">Debe cargar solo un archivo por cada campo. Si necesita cargar más de un archivo en un solo campo por favor comprimalos(.ZIP, .RAR) y los carga.</div>
 
@@ -1085,12 +1085,15 @@ $datosMadre = $madre->fetch();
 
                 </div>
 
-
-            <button type="submit" class="btn btn-success btn-lg btn-block">Guardar y enviar formulario</button>
+            <div id="result"></div>
+            <button type="submit" id="submitBtn" class="btn btn-success btn-lg btn-block">Guardar y enviar formulario</button>
 
         </form>
 
     </div>
+
+    
+
 
 
 
@@ -1099,6 +1102,73 @@ $datosMadre = $madre->fetch();
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+    <script>
+        function validarPesoArchivo(archivoInput) {
+            const maxPeso = 5 * 1024 * 1024; // Peso máximo permitido (en bytes), por ejemplo, 5 MB
+
+            const archivo = archivoInput.files[0]; // Obtiene el archivo seleccionado
+            const pesoArchivoMB = ((archivo.size / 1024) / 1024).toFixed(2);
+
+            if (archivo) {
+                if (archivo.size > maxPeso) {
+                    alert(`Este archivo pesa ${pesoArchivoMB} MB Lo ideal es que pese menos de 5 MB. Intente comprimirlo o busque reducir su peso.`);
+                    archivoInput.value = ""; // Borra la selección del archivo
+                    return false;
+                }
+            }
+        }
+
+
+document.getElementById('formularioDatosAdmision').addEventListener('submit', function(event) {
+  event.preventDefault(); // Evitar el envío predeterminado del formulario
+
+  const form = document.getElementById('formularioDatosAdmision');
+  const submitBtn = document.getElementById('submitBtn');
+  const resultShow = document.getElementById('result');
+
+  // Deshabilitar el botón de envío para evitar múltiples clics
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Enviando...';
+  resultShow.innerHTML = ''; // Limpiar el contenido anterior de resultados
+
+  // Crear un objeto FormData con los datos del formulario
+  const formData = new FormData(form);
+
+  // Enviar el formulario con fetch (AJAX)
+  fetch('formulario-guardar.php', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.text()) // Asumimos que la respuesta es texto
+  .then(result => {
+    // Manejar la respuesta del servidor
+    resultShow.innerHTML = result;
+
+    // Habilitar el botón después de la respuesta (opcional, si deseas que el usuario pueda reenviar el formulario)
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Enviar';
+
+    //refrescar la página en caso de que se haya completado el envío correctamente
+    if (result.includes('Los datos fueron guardados correctamente.')) {
+      setTimeout(() => {
+        location.reload();
+      }, 2000);
+    }
+  })
+  .catch(error => {
+    console.error('Error al enviar el formulario:', error);
+    alert('Hubo un problema al enviar el formulario. Inténtalo de nuevo.');
+
+    // Rehabilitar el botón en caso de error
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Enviar';
+  });
+});
+
+
+</script>
+
 
 </body>
 
