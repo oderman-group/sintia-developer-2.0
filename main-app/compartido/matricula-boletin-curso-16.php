@@ -179,7 +179,7 @@ if ($periodoSeleccionado == 4) $periodoActuales = "Final";
                 <?php foreach ($areas[$estudiante["mat_id"]]  as  $area) {  ?>
                     <?php foreach ($cargas[$estudiante["mat_id"]][$area["ar_id"]]  as  $carga) {
                         $fondoFila = ($carga["nro"] % 2 == 1) ? '#EAEAEA' : '#FFF';
-                        $totalIh += $registro['car_ih'];
+                        $totalIh += $carga['car_ih'];
                         $contarCargas++;
                     ?>
                         <tr style="background:<?= $fondoFila; ?>">
@@ -232,7 +232,7 @@ if ($periodoSeleccionado == 4) $periodoActuales = "Final";
             </tbody>
             <tfoot>
                 <tr style="font-weight:bold; text-align:center;">
-                    <td style="text-align:left;">PROMEDIO/TOTAL</td>
+                    <td style="text-align:left;">PROMEDIO / TOTAL</td>
                     <td><?= $totalIh; ?></td>
                     <?php
                     $promedioTotal = 0;
@@ -241,7 +241,7 @@ if ($periodoSeleccionado == 4) $periodoActuales = "Final";
                         $promedioTotal += $promedioGeneral;
                         $desempenoGeneral = Boletin::determinarRango($promedioGeneral, $tiposNotas);
                     ?>
-                        <td><?= $fallasPeriodo[$j] == 0 ? '' : $fallasPeriodo[$j]; ?></td>
+                        <td><?= $fallasPeriodo[$j] == 0 ? '' : '-' ?></td>
                         <td><?= $promedioGeneral ?></td>
                         <td><?= $desempenoGeneral["notip_nombre"] ?></td>
                     <?php } ?>
