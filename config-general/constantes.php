@@ -1,5 +1,6 @@
 <?php
-define('ROOT_PATH', $_SERVER['DOCUMENT_ROOT'].'/app-sintia');
+$rutaConSlash = str_replace('\\', '/', dirname(__DIR__));
+define('ROOT_PATH', $rutaConSlash);
 include(ROOT_PATH."/sensitive.php");
 
 define('EMAIL_SENDER', 'info@plataformasintia.com');
@@ -181,46 +182,55 @@ define('PAQUETES', 'PAQUETES');
 // define('COMPB_FILTRO_TEXTO', 'filtro_texto');
 
 
+if (php_sapi_name() === 'cli') {
 
-switch($_SERVER['HTTP_HOST']){
-	case 'localhost':
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
-        define('REDIRECT_ROUTE', 'http://localhost/app-sintia/main-app');
-        define('ENVIROMENT', 'TEST');
-        error_reporting (E_ALL);
-        break;
-
-	case 'developer.plataformasintia.com':
-        ini_set('display_errors', 0);
-        ini_set('display_startup_errors', 0);
-        define('REDIRECT_ROUTE', 'https://developer.plataformasintia.com/app-sintia/main-app');
-        define('ENVIROMENT', 'TEST');
-        break;
-
-	case 'main.plataformasintia.com':
         ini_set('display_errors', 0);
         ini_set('display_startup_errors', 0);
         define('REDIRECT_ROUTE', 'https://main.plataformasintia.com/app-sintia/main-app');
         define('ENVIROMENT', 'PROD');
         error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
-        break;
 
-        case 'copyprod.plataformasintia.com':
-        ini_set('display_errors', 0);
-        ini_set('display_startup_errors', 0);
-        define('REDIRECT_ROUTE', 'https://copyprod.plataformasintia.com/app-sintia/main-app');
-        define('ENVIROMENT', 'PROD');
-        error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
-        break;
+} else {
+        switch ($_SERVER['HTTP_HOST']) {
+                case 'localhost':
+                ini_set('display_errors', 1);
+                ini_set('display_startup_errors', 1);
+                define('REDIRECT_ROUTE', 'http://localhost/app-sintia/main-app');
+                define('ENVIROMENT', 'TEST');
+                error_reporting (E_ALL);
+                break;
 
-        default:
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
-        define('REDIRECT_ROUTE', 'https://'.$_SERVER['HTTP_HOST'].'/app-sintia/main-app');
-        define('ENVIROMENT', 'TEST');
-        error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
-        break;
+                case 'developer.plataformasintia.com':
+                ini_set('display_errors', 0);
+                ini_set('display_startup_errors', 0);
+                define('REDIRECT_ROUTE', 'https://developer.plataformasintia.com/app-sintia/main-app');
+                define('ENVIROMENT', 'TEST');
+                break;
+
+                case 'main.plataformasintia.com':
+                ini_set('display_errors', 0);
+                ini_set('display_startup_errors', 0);
+                define('REDIRECT_ROUTE', 'https://main.plataformasintia.com/app-sintia/main-app');
+                define('ENVIROMENT', 'PROD');
+                error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
+                break;
+
+                case 'copyprod.plataformasintia.com':
+                ini_set('display_errors', 0);
+                ini_set('display_startup_errors', 0);
+                define('REDIRECT_ROUTE', 'https://copyprod.plataformasintia.com/app-sintia/main-app');
+                define('ENVIROMENT', 'PROD');
+                error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
+                break;
+
+                default:
+                ini_set('display_errors', 1);
+                ini_set('display_startup_errors', 1);
+                define('REDIRECT_ROUTE', 'https://'.$_SERVER['HTTP_HOST'].'/app-sintia/main-app');
+                define('ENVIROMENT', 'TEST');
+                error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
+                break;
+        }
 }
 
 switch (ENVIROMENT) {
