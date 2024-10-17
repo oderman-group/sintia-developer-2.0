@@ -1,5 +1,5 @@
 <script type="application/javascript">
-	async function abrirModal(titulo, url, data) {
+	async function abrirModal(titulo, url, data, timeout,width = '1350px') {
 		const contenido = document.getElementById('contenidoCentralizado');
 		var gifCarga = document.getElementById("gifCarga");
 
@@ -19,14 +19,21 @@
 		if (gifCarga) {
 			document.getElementById("gifCarga").style.display = "none";
 		}
+		$('#ModalCentralizado .modal-dialog').css('width', width);
 		$('#ModalCentralizado').modal('show');
+		if (timeout) {
+			setTimeout(function() {
+				$('#ModalCentralizado').modal('hide'); // Cierra el modal
+			}, timeout);
+		}
+
 
 	}
 
-   //ejecutar los scripts del string
+	//ejecutar los scripts del string
 	function ejecutarScriptsCargados(elemento) {
 		var scripts = elemento.getElementsByTagName('script');
-		
+
 		for (var i = 0; i < scripts.length; i++) {
 			var script = document.createElement('script');
 			// Si el script tiene un atributo src, cargamos el script externo
@@ -42,7 +49,7 @@
 		}
 	}
 </script>
-<div class="modal fade" id="ModalCentralizado" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+<div class="modal fade" id="ModalCentralizado" tabindex="-1" role="dialog" aria-labelledby="basicModal" style="z-index: 10060 !important;" aria-hidden="true">
 	<div class="modal-dialog" style="max-width: 1350px!important;">
 		<div class="modal-content" style="border-radius: 20px;max-width: 1350px!important; ">
 
