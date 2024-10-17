@@ -1811,11 +1811,8 @@ class CargaAcademica {
     }
      /**
      * Lista  los grupos relacionados  los a cursos selecionados tenienedo en cuenta las cargas.
-     * 
      * @param array $cursos - un array que tiene los cursos selecionados
-     *
      * @return array - Un conjunto de resultados (`array`)
-     *
      */
     public static function listarGruposCursos($cursos){
         global $config;
@@ -1838,6 +1835,62 @@ class CargaAcademica {
         
         $resultado = BindSQL::prepararSQL($sql, $parametros);
         $resultado= BindSQL::resultadoArray($resultado);
+        return $resultado;
+    }
+    /**
+     * Lista las materias con las calificaiones de un estudiatne por todos los periodods
+     * @param string $curso        - cruso del estudiante
+     * @param string $idEstudiante - id del estudiante (mat_id)
+     * @param string $grupo        - grupo del estudiante
+     * @return array               - Un conjunto de resultados (`array`)
+     */
+    public static function consultarEstudianteMateriasNotasPeridos(String $curso,string $idEstudiante,string $grupo){
+        global $config;
+        $sql = "SELECT 
+                car_id, car_ih,
+                car_materia,
+                car_docente,
+                car_director_grupo,
+                mat_nombre,
+                mat_area,
+                mat_valor,
+                ar_nombre,
+                ar_posicion,
+                bol_estudiante,
+                bol_periodo,
+                bol_nota,
+                bol_id,
+                bol_nota * (mat_valor/100) AS notaArea
+                FROM ".BD_ACADEMICA.".academico_cargas car
+
+                INNER JOIN ".BD_ACADEMICA.".academico_materias am 
+                ON am.mat_id        = car_materia 
+                AND am.institucion  = car.institucion 
+                AND am.year         = car.year
+
+                INNER JOIN ".BD_ACADEMICA.".academico_areas a 
+                ON  a.ar_id         = am.mat_area 
+                AND a.institucion   = car.institucion 
+                AND a.year          = car.year
+
+                LEFT JOIN ".BD_ACADEMICA.".academico_boletin bol 
+                ON  bol_carga       = car_id  
+                AND bol.institucion = car.institucion 
+                AND bol.year        = car.year
+
+                WHERE car.institucion   = ? 
+                AND   car.year          = ?
+                AND   bol_estudiante    = ?
+                AND   car_curso         = ?
+                AND   car_grupo         = ?
+
+                ORDER BY ar_posicion,car_id,bol_periodo";
+
+        $parametros = [$config['conf_id_institucion'], $_SESSION["bd"],$idEstudiante,$curso,$grupo];
+        
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        $resultado = BindSQL::resultadoArray($resultado);      
+
         return $resultado;
     }
 }
