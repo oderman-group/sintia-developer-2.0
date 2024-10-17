@@ -13,6 +13,12 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 }
 
 require_once("../class/SubRoles.php");
+
+//TEMP: Debido a un error javascript, decidimos crear un nuevo registro y redireccionar a la edición del mismo
+$idRegistro = SubRoles::crear("NOMBRE DE TU NUEVO ROL", []);
+echo '<script type="text/javascript">window.location.href="sub-roles-editar.php?id='.base64_encode($idRegistro).'";</script>';
+exit();
+
 $listaRoles=SubRoles::listar();
 $listaPaginas = SubRoles::listarPaginas();
 
