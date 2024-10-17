@@ -889,7 +889,7 @@ $datosMadre = $madre->fetch();
 
                     <label>1. Foto <span class="text-primary">(En formato .jpg, .png, .jpeg)</span> </label>
 
-                    <input type="file" class="form-control" name="foto" onChange="validarPesoArchivo(this)">
+                    <input type="file" class="form-control" name="foto" accept=".png, .jpg, .jpeg" onChange="validarPesoArchivo(this)">
 
                     <?php if (!empty($datos['mat_foto']) and file_exists('files/fotos/' . $datos['mat_foto'])) { ?>
                         <p><a href="files/fotos/<?= $datos['mat_foto']; ?>" target="_blank" class="link"><?= $datos['mat_foto']; ?></a></p>
@@ -903,7 +903,7 @@ $datosMadre = $madre->fetch();
 
                     <label>2. Paz y salvo a la fecha del colegio de procedencia</label>
 
-                    <input type="file" class="form-control" name="pazysalvo">
+                    <input type="file" class="form-control" name="pazysalvo" onChange="validarPesoArchivo(this)">
                     <input type="hidden" name="pazysalvoA" value="<?= $datosDocumentos['matd_pazysalvo']; ?>">
 
                     <?php if (!empty($datosDocumentos['matd_pazysalvo']) and file_exists('files/otros/' . $datosDocumentos['matd_pazysalvo'])) { ?>
@@ -922,7 +922,7 @@ $datosMadre = $madre->fetch();
 
                     <label>3. Ficha acumulativa u observador del alumno </label>
 
-                    <input type="file" class="form-control" name="observador">
+                    <input type="file" class="form-control" name="observador" onChange="validarPesoArchivo(this)">
                     <input type="hidden" name="observadorA" value="<?= $datosDocumentos['matd_observador']; ?>">
 
                     <?php if (!empty($datosDocumentos['matd_observador']) and file_exists('files/otros/' . $datosDocumentos['matd_observador'])) { ?>
@@ -936,7 +936,7 @@ $datosMadre = $madre->fetch();
 
                     <label>4. Fotocopia de la EPS</label>
 
-                    <input type="file" class="form-control" name="eps">
+                    <input type="file" class="form-control" name="eps" onChange="validarPesoArchivo(this)">
                     <input type="hidden" name="epsA" value="<?= $datosDocumentos['matd_eps']; ?>">
 
                     <?php if (!empty($datosDocumentos['matd_eps']) and file_exists('files/otros/' . $datosDocumentos['matd_eps'])) { ?>
@@ -955,7 +955,7 @@ $datosMadre = $madre->fetch();
 
                     <label>5. Hoja de recomendación </label>
 
-                    <input type="file" class="form-control" name="recomendacion">
+                    <input type="file" class="form-control" name="recomendacion" onChange="validarPesoArchivo(this)">
                     <input type="hidden" name="recomendacionA" value="<?= $datosDocumentos['matd_recomendacion']; ?>">
 
                     <?php if (!empty($datosDocumentos['matd_recomendacion']) and file_exists('files/otros/' . $datosDocumentos['matd_recomendacion'])) { ?>
@@ -974,7 +974,7 @@ $datosMadre = $madre->fetch();
 
                     <label>6. Vacunas </label>
 
-                    <input type="file" class="form-control" name="vacunas">
+                    <input type="file" class="form-control" name="vacunas" onChange="validarPesoArchivo(this)">
                     <input type="hidden" name="vacunasA" value="<?= $datosDocumentos['matd_vacunas']; ?>">
 
                     <?php if (!empty($datosDocumentos['matd_vacunas']) and file_exists('files/otros/' . $datosDocumentos['matd_vacunas'])) { ?>
@@ -987,7 +987,7 @@ $datosMadre = $madre->fetch();
 
                     <label>7. Boletines actuales </label>
 
-                    <input type="file" class="form-control" name="boletines">
+                    <input type="file" class="form-control" name="boletines" onChange="validarPesoArchivo(this)">
                     <input type="hidden" name="boletinesA" value="<?= $datosDocumentos['matd_boletines_actuales']; ?>">
 
                     <?php if (!empty($datosDocumentos['matd_boletines_actuales']) and file_exists('files/otros/' . $datosDocumentos['matd_boletines_actuales'])) { ?>
@@ -1005,7 +1005,7 @@ $datosMadre = $madre->fetch();
 
                     <label>8. Documento de identidad (Ambas caras) </label>
 
-                    <input type="file" class="form-control" name="documentoIde">
+                    <input type="file" class="form-control" name="documentoIde" onChange="validarPesoArchivo(this)">
                     <input type="hidden" name="documentoIdeA" value="<?= $datosDocumentos['matd_documento_identidad']; ?>">
 
                     <?php if (!empty($datosDocumentos['matd_documento_identidad']) and file_exists('files/otros/' . $datosDocumentos['matd_documento_identidad'])) { ?>
@@ -1018,7 +1018,7 @@ $datosMadre = $madre->fetch();
 
                     <label>9. Certificado </label>
 
-                    <input type="file" class="form-control" name="certificado">
+                    <input type="file" class="form-control" name="certificado" onChange="validarPesoArchivo(this)">
                     <input type="hidden" name="certificadoA" value="<?= $datosDocumentos['matd_certificados']; ?>">
 
                     <?php if (!empty($datosDocumentos['matd_certificados']) and file_exists('files/otros/' . $datosDocumentos['matd_certificados'])) { ?>
@@ -1032,13 +1032,16 @@ $datosMadre = $madre->fetch();
 
             <h3 class="mb-4" style="text-align: center;">4. DOCUMENTACIÓN DEL ACUDIENTE</h3>
 
-            <div class="p-3 mb-2 bg-secondary text-white">Debe cargar solo un archivo por cada campo. Si necesita cargar más de un archivo en un solo campo por favor comprimalos(.ZIP, .RAR) y los carga.</div>
+            <div class="p-3 mb-2 bg-secondary text-white">
+                Debe cargar solo un archivo por cada campo. Si necesita cargar más de un archivo en un solo campo por favor comprimalos(.ZIP, .RAR) y los carga.<br>
+                Recuerde el peso máximo permitido para cada archivo es de 5MB.
+            </div>
 
             <div class="form-row">
 
                 <div class="form-group col-md-6">
                     <label>1. Certificado laboral <span class="text-primary">(En formato .jpg, .png, .jpeg)</span> </label>
-                    <input type="file" class="form-control" name="cartaLaboral">
+                    <input type="file" class="form-control" name="cartaLaboral" onChange="validarPesoArchivo(this)">
                     <?php if (!empty($datosDocumentos['matd_carta_laboral']) and file_exists('files/otros/' . $datosDocumentos['matd_carta_laboral'])) { ?>
                         <p><a href="files/otros/<?= $datosDocumentos['matd_carta_laboral']; ?>" target="_blank" class="link"><?= $datosDocumentos['matd_carta_laboral']; ?></a></p>
                     <?php } ?>
