@@ -881,7 +881,10 @@ $datosMadre = $madre->fetch();
 
             <h3 class="mb-4" style="text-align: center;">3. DOCUMENTACIÓN DEL ASPIRANTE</h3>
 
-            <div class="p-3 mb-2 bg-secondary text-white">Debe cargar solo un archivo por cada campo. Si necesita cargar más de un archivo en un solo campo por favor comprimalos(.ZIP, .RAR) y los carga.</div>
+            <div class="p-3 mb-2 bg-secondary text-white">
+                Debe cargar solo un archivo por cada campo. Si necesita cargar más de un archivo en un solo campo por favor comprimalos(.ZIP, .RAR) y los carga.<br>
+                Recuerde el peso máximo permitido para cada archivo es de 5MB.
+            </div>
 
             <div class="form-row">
 
