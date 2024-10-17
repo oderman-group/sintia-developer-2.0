@@ -1,6 +1,6 @@
 <?php $idPaginaInterna = 'DT0100';
-require_once(ROOT_PATH."/main-app/class/Grupos.php");
-require_once(ROOT_PATH."/main-app/class/Grados.php");
+require_once(ROOT_PATH . "/main-app/class/Grupos.php");
+require_once(ROOT_PATH . "/main-app/class/Grados.php");
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
     echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
     exit();
@@ -12,7 +12,7 @@ require_once("../class/Estudiantes.php");
 <link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
 <link href="../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
 <style>
-	.select2 {
+    .select2 {
         width: 100% !important;
     }
 </style>
@@ -23,7 +23,7 @@ require_once("../class/Estudiantes.php");
     <div class="panel">
         <header class="panel-heading panel-heading-purple">POR CURSO </header>
         <div class="panel-body">
-            <form name="formularioGuardar" action="informes-formato-boletin.php" method="post" target="_blank">
+            <form name="formularioGuardar" id="formularioGuardar1" action="informes-formato-boletin.php" method="post" onsubmit="return ejecutarAntesDeEnviar1();" target="_blank">
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Escoja un Formato de Boletín</label>
                     <div class="col-sm-2">
@@ -37,7 +37,9 @@ require_once("../class/Estudiantes.php");
                             }
                             while ($datosBoletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH)) {
                             ?>
-                                <option <?php if($config['conf_formato_boletin'] == $datosBoletin['ogen_id']){ echo "selected";} ?> value="<?= $datosBoletin['ogen_id']; ?>" ><?= $datosBoletin['ogen_nombre']; ?></option>
+                                <option <?php if ($config['conf_formato_boletin'] == $datosBoletin['ogen_id']) {
+                                            echo "selected";
+                                        } ?> value="<?= $datosBoletin['ogen_id']; ?>"><?= $datosBoletin['ogen_nombre']; ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -48,17 +50,17 @@ require_once("../class/Estudiantes.php");
                                 html: true, // Habilitar contenido HTML
                                 content: function() {
                                     valor = document.getElementById("tipoBoletin");
-                                    vacio= valor.value === null ||  valor.value === undefined ||  valor.value.trim() === '';
-                                    if(!vacio){
+                                    vacio = valor.value === null || valor.value === undefined || valor.value.trim() === '';
+                                    if (!vacio) {
                                         return '<div id="myPopover" class="popover-content"><label id="lbl_tipo">Formato tipo ' + valor.value + '</label>' +
-                                        '<img id="img-boletin" src="../files/images/boletines/tipo' + valor.value + '.png" class="w-100" />' +
-                                        '</div>';
-                                    }else{
+                                            '<img id="img-boletin" src="../files/images/boletines/tipo' + valor.value + '.png" class="w-100" />' +
+                                            '</div>';
+                                    } else {
                                         return '<div id="myPopover" class="popover-content"><label id="lbl_tipo">Seleccione un tipo de formato.</label>' +
-                                           
+
                                             '</div>';
                                     }
-                                    
+
                                 }
                             });
                         });
@@ -78,7 +80,7 @@ require_once("../class/Estudiantes.php");
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Curso</label>
                     <div class="col-sm-8">
-                        <select class="form-control  select2"  name="curso" required>
+                        <select class="form-control  select2" id="curso" name="curso" required>
                             <option value="">Seleccione una opción</option>
                             <?php
                             $opcionesConsulta = Grados::traerGradosInstitucion($config, GRADO_GRUPAL);
@@ -94,7 +96,7 @@ require_once("../class/Estudiantes.php");
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Grupo</label>
                     <div class="col-sm-4">
-                        <select class="form-control  select2" name="grupo">
+                        <select class="form-control  select2" id="grupo" name="grupo" required>
                             <option value="">Seleccione una opción</option>
                             <?php
                             $opcionesConsulta = Grupos::traerGrupos($conexion, $config);
@@ -110,16 +112,16 @@ require_once("../class/Estudiantes.php");
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Periodo</label>
                     <div class="col-sm-4">
-                        <select class="form-control  select2" name="periodo" required>
+                        <select class="form-control  select2" id="periodo" name="periodo" required>
                             <option value="">Seleccione una opción</option>
                             <?php
                             $p = 1;
                             while ($p <= $config[19]) {
                                 $selected = '';
-                                if($p == $config['conf_periodo']) {
-                                    $selected ='selected';
+                                if ($p == $config['conf_periodo']) {
+                                    $selected = 'selected';
                                 }
-                                echo '<option value="' . $p . '" '.$selected.'>Periodo ' . $p . '</option>';
+                                echo '<option value="' . $p . '" ' . $selected . '>Periodo ' . $p . '</option>';
                                 $p++;
                             }
                             ?>
@@ -130,7 +132,7 @@ require_once("../class/Estudiantes.php");
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Año</label>
                     <div class="col-sm-4">
-                        <select class="form-control  select2" name="year" required>
+                        <select class="form-control  select2" name="year" id="year" required>
                             <option value="">Seleccione una opción</option>
                             <?php
                             $yearStartC = $yearStart;
@@ -155,11 +157,11 @@ require_once("../class/Estudiantes.php");
     <div class="panel">
         <header class="panel-heading panel-heading-red">POR ESTUDIANTE </header>
         <div class="panel-body">
-            <form name="formularioGuardar" action="informes-formato-boletin.php" method="post" target="_blank">
+            <form name="formularioGuardar" id="formularioGuardar2" action="informes-formato-boletin.php" method="post" onsubmit="return ejecutarAntesDeEnviar2();" target="_blank">
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Escoja un Formato de Boletín</label>
                     <div class="col-sm-2">
-                        <select id="tipoBoletinEst" class="form-control  select2" name="formatoB" onchange="cambiarTipoEst()">
+                        <select id="tipoBoletinEst" class="form-control  select2"  name="formatoB" onchange="cambiarTipoEst()">
                             <option value="">Seleccione una opción</option>
                             <?php
                             try {
@@ -169,7 +171,9 @@ require_once("../class/Estudiantes.php");
                             }
                             while ($datosBoletin = mysqli_fetch_array($consultaBoletin, MYSQLI_BOTH)) {
                             ?>
-                                <option <?php if($config['conf_formato_boletin'] == $datosBoletin['ogen_id']){ echo "selected";} ?> value="<?= $datosBoletin['ogen_id']; ?>" ><?= $datosBoletin['ogen_nombre']; ?></option>
+                                <option <?php if ($config['conf_formato_boletin'] == $datosBoletin['ogen_id']) {
+                                            echo "selected";
+                                        } ?> value="<?= $datosBoletin['ogen_id']; ?>"><?= $datosBoletin['ogen_nombre']; ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -180,14 +184,14 @@ require_once("../class/Estudiantes.php");
                                 html: true, // Habilitar contenido HTML
                                 content: function() {
                                     valor = document.getElementById("tipoBoletinEst");
-                                    vacio= valor.value === null ||  valor.value === undefined ||  valor.value.trim() === '';
-                                    if(!vacio){
+                                    vacio = valor.value === null || valor.value === undefined || valor.value.trim() === '';
+                                    if (!vacio) {
                                         return '<div id="myPopover" class="popover-content"><label id="lbl_tipoEst">Formato tipo ' + valor.value + '</label>' +
                                             '<img id="img-boletinEst" src="../files/images/boletines/tipo' + valor.value + '.png" class="w-100" />' +
                                             '</div>';
-                                    }else{
+                                    } else {
                                         return '<div id="myPopover" class="popover-content"><label id="lbl_tipoEst">Seleccione un tipo de formato.</label>' +
-                                           
+
                                             '</div>';
                                     }
                                 }
@@ -219,7 +223,7 @@ require_once("../class/Estudiantes.php");
 
                                 <optgroup label="<?= $grado['gra_nombre']; ?>">
                                     <?php
-                                    $filtro = ' AND mat_grado="' . $grado['gra_id'].'"';
+                                    $filtro = ' AND mat_grado="' . $grado['gra_id'] . '"';
                                     $opcionesConsulta = Estudiantes::listarEstudiantesEnGrados($filtro, '');
                                     while ($opcionesDatos = mysqli_fetch_array($opcionesConsulta, MYSQLI_BOTH)) {
                                     ?>
@@ -243,17 +247,17 @@ require_once("../class/Estudiantes.php");
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Periodo</label>
                     <div class="col-sm-4">
-                        <select class="form-control  select2" name="periodo" required>
+                        <select class="form-control  select2" name="periodo" id="periodo2" required>
                             <option value="">Seleccione una opción</option>
                             <?php
                             $p = 1;
                             while ($p <= $config[19]) {
                                 $selected = '';
-                                if($p == $config['conf_periodo']) {
-                                    $selected ='selected';
+                                if ($p == $config['conf_periodo']) {
+                                    $selected = 'selected';
                                 }
 
-                                echo '<option value="' . $p . '" '.$selected.'>Periodo ' . $p . '</option>';
+                                echo '<option value="' . $p . '" ' . $selected . '>Periodo ' . $p . '</option>';
                                 $p++;
                             }
                             ?>
@@ -264,7 +268,7 @@ require_once("../class/Estudiantes.php");
                 <div class="form-group row">
                     <label class="col-sm-2 control-label">Año</label>
                     <div class="col-sm-4">
-                        <select class="form-control  select2" name="year" required>
+                        <select class="form-control  select2" name="year" id="year2" required>
                             <option value="">Seleccione una opción</option>
                             <?php
                             $yearStartE = $yearStart;
@@ -286,14 +290,95 @@ require_once("../class/Estudiantes.php");
         </div>
     </div>
 </div>
-
+<!-- notifications -->
+<script src="../../config-general/assets/plugins/jquery-toast/dist/jquery.toast.min.js"></script>
+<script src="../../config-general/assets/plugins/jquery-toast/dist/toast.js"></script>
 <script>
-// Agregar el evento onchange al select
-var miSelect = document.getElementById('selectEstudiantes');
-miSelect.onchange = function() {
-    limitarSeleccion(this);
-};
+    // Agregar el evento onchange al select
+    var miSelect = document.getElementById('selectEstudiantes');
+    miSelect.onchange = function() {
+        limitarSeleccion(this);
+    };
 </script>
+<script>
+    // Función que se ejecuta antes de enviar el formulario
+    function ejecutarAntesDeEnviar1() {
+        var curso   = document.getElementById("curso").value;
+        var grupo   = document.getElementById("grupo").value;
+        var periodo = document.getElementById("periodo").value;
+        var year    = document.getElementById("year").value;
+        $.toast({
+            heading            : 'Consultando Notas',
+            position           : 'bottom-right',
+            showHideTransition : 'slide',
+            icon               : 'success',
+            hideAfter          : 3500,
+            stack              : 6
+        });
+        var data = {
+            "curso": curso,
+            "grupo": grupo,
+            "periodo": periodo,
+            "idEstudiante": '',
+            "year": year
+        };
+        metodoFetch('../compartido/ajax_contar_notas_curso.php', data, 'json', false, 'enviarFormulario1');
+        return false;
+    }
+    function enviarFormulario1(response) {
+        if (response["ok"]) {
+            resultData = response["result"];
+            console.log(resultData);
+            if (resultData["notas_registradas"] > 0) {
+                document.getElementById('formularioGuardar1').submit();
+            } else {
+                var data = {
+                    "idmsg": 306,
+                    "msj": 'No se encontraron notas finales '
+                };
+                abrirModal('<?= $frases[115][$datosUsuarioActual['uss_idioma']]; ?>', '../compartido/page-info-modal.php', data, 5000, '800px');
+            }
+        }
+    }
+    // Función que se ejecuta antes de enviar el formulario
+    function ejecutarAntesDeEnviar2() {
+        
+        var idEstudiante = document.getElementById("selectEstudiantes").value;
+        var periodo      = document.getElementById("periodo2").value;
+        var year         = document.getElementById("year2").value;
+        $.toast({
+            heading            : 'Consultando Notas',
+            position           : 'bottom-right',
+            showHideTransition : 'slide',
+            icon               : 'success',
+            hideAfter          : 3500,
+            stack              : 6
+        });
+        var data = {
+            "curso": '',
+            "grupo": '',
+            "periodo": periodo,
+            "idEstudiante": idEstudiante,
+            "year": year
+        };
+        metodoFetch('../compartido/ajax_contar_notas_curso.php', data, 'json', false, 'enviarFormulario2');
+        return false;
+    }
+    
+    function enviarFormulario2(response) {
+        if (response["ok"]) {
+            resultData = response["result"];
+            console.log(resultData);
+            if (resultData["notas_registradas"] > 0) {
+                document.getElementById('formularioGuardar2').submit();
+            } else {
+                var data = {
+                    "idmsg": 306,
+                    "msj": 'No se encontraron notas finales '
+                };
+                abrirModal('<?= $frases[115][$datosUsuarioActual['uss_idioma']]; ?>', '../compartido/page-info-modal.php', data, 5000, '800px');
+            }
+        }
+    }
 
-
-
+</script>

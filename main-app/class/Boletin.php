@@ -1196,6 +1196,52 @@ class Boletin {
         return $resultado;
     }
 
+      /**
+     * Este metodo me consulta la cantidad de notas finales que tiene un curso
+    **/
+    public static function contarNotasCursoGrupo (
+        string  $idCurso,
+        string  $idGrupo,
+        string  $periodo,
+        string  $idEstudiante,
+        string  $yearBd = ""
+    )
+    {
+        global  $config;
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+        $andString='';
+        if(!empty($idEstudiante)){
+            $andString.="AND bol_estudiante = '$idEstudiante' ";
+        }
+        if(!empty($idCurso)){
+            $andString.="AND car_curso = '$idCurso' ";
+        }
+        if(!empty($idGrupo)){
+            $andString.="AND car_grupo = '$idGrupo' ";
+        }
+        $sql = "SELECT 
+                COUNT(car_id) as notas_registradas
+                FROM " . BD_ACADEMICA . ".academico_boletin bol 
+
+                INNER JOIN " . BD_ACADEMICA . ".academico_cargas car 
+                ON  car_id           = bol_carga 
+                AND car.institucion  = bol.institucion
+                AND car.year         = bol.year
+
+                WHERE bol.institucion = ?
+                AND bol.year          = ?
+                AND bol_periodo       = ?  
+                
+                $andString
+                ";
+
+        $parametros = [ $config['conf_id_institucion'], $year,$periodo];
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        $resultado = BindSQL::resultadoArray($resultado);
+        return $resultado[0];
+    }
+
     public static function datosBoletinIndicadores(
         string  $grado,
         string  $grupo,
