@@ -281,7 +281,7 @@ $institucionNombre = $institucion['ins_siglas'];
                         <!-- end manage user dropdown --
                         <li class="dropdown dropdown-quick-sidebar-toggler">
                              <a id="headerSettingButton" class="mdl-button mdl-js-button mdl-button--icon pull-right" data-upgraded=",MaterialButton">
-	                           <i class="fa fa-weixin" id="<?=$objetoEnviarE;?>" onclick="conectarme(this)"></i>
+	                           <i class="fa fa-weixin" id="" onclick="conectarme(this)"></i>
 	                        </a>
                         </li>-->
                     </ul>
