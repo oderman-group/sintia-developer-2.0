@@ -88,7 +88,10 @@ require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");?>
 													$filtroOr='';
 													if ($listaCursosMediaTecnica != null) { 
 														foreach ($listaCursosMediaTecnica as $dato) {
-															$filtroOr=$filtroOr.'OR (car_curso='.$dato["matcur_id_curso"].' AND car_grupo='.$dato["matcur_id_grupo"].')';
+															$curso = !empty($dato["matcur_id_curso"]) ? $dato["matcur_id_curso"] : 0;
+															$grupo = !empty($dato["matcur_id_grupo"]) ? $dato["matcur_id_grupo"] : 0;
+
+															$filtroOr=$filtroOr.'OR (car_curso='.$curso.' AND car_grupo='.$grupo.')';
 														}
 													}
 													$cCargas = CargaAcademica::traerCargasMateriasPorCursoGrupo($config, $datosEstudianteActual['mat_grado'], $datosEstudianteActual['mat_grupo'], "", $filtroOr);
