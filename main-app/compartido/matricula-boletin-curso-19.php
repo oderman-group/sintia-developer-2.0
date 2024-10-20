@@ -285,7 +285,7 @@ if ($grado >= 12 && $grado <= 15) {
                                 $promedioMateria       += $nota;
                                 $fallasAcumuladas      += $fallas;
                                 $fallasArea            += $fallas;
-                                $porcentajeMateria = isset($carga['mat_valor']) ? $carga['mat_valor'] : 100;
+                                $porcentajeMateria = !empty($carga['mat_valor']) ? $carga['mat_valor'] : 100;
                                 if (isset($notaAre[$j])) {
                                     $notaAre[$j]           += $nota * ($porcentajeMateria / 100);
                                 } else {
