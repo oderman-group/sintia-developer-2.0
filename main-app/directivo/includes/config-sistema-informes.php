@@ -105,6 +105,8 @@
                             <select class="form-control" id="tipoLibroFinal" name="libroFinal" onchange="cambiarTipoLibro()" <?=$disabledPermiso;?>>
                                 <option value="1" <?php if($datosConfiguracion['conf_libro_final']==1){ echo "selected";} ?>>Formato libro final 1</option>
                                 <option value="2" <?php if($datosConfiguracion['conf_libro_final']==2){ echo "selected";} ?>>Formato libro final 2</option>
+                                <option value="3" <?php if($datosConfiguracion['conf_libro_final']==3){ echo "selected";} ?>>Formato libro final 3 (1 Fast)</option>
+                                <option value="4" <?php if($datosConfiguracion['conf_libro_final']==4){ echo "selected";} ?>>Formato libro final 4 (2 Fast)</option>
                             </select>
                         </div>
                         <button type="button" titlee="Ver formato libro final" class="btn btn-sm" data-toggle="popover_2" ><i class="fa fa-eye"></i></button>
