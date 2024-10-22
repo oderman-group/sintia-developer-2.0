@@ -346,12 +346,12 @@ switch($_GET["idmsg"]){
 	break;
 
 	case 306:
-		$color = 'red';
+		$color  = 'red';
 		$titulo = 'SIN INFORMACIÓN';
-		$texto = 'Este estudiante o curso, no tiene información para mostrar.';
-		$url1 = 'index.php';
+		$texto  = empty($_GET["msj"])?'Este estudiante o curso, no tiene información para mostrar.':$_GET["msj"];;
+		$url1   = 'index.php';
 		$boton1 = 'IR AL INICIO';
-		$lottie = 'https://lottie.host/7a874211-5ebc-4d51-9d95-0e8f045d6a34/eDJ7X3tubH.json';
+		$lottie = 'https://lottie.host/ed001264-1fb6-4bde-ab66-a51dfd8f34dd/cOj1erXtHg.json';
 	break;
 		
 	case 307:

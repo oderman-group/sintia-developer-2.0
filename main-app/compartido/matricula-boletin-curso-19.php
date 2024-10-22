@@ -50,6 +50,7 @@ if (!empty($_GET["id"])) {
 
     $filtro               = " AND mat_id='" . base64_decode($_GET["id"]) . "'";
     $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
+    Utilidades::validarInfoBoletin($matriculadosPorCurso);
     $estudiante           = $matriculadosPorCurso->fetch_assoc();
     if (!empty($estudiante)) {
         $idEstudiante = $estudiante["mat_id"];
@@ -114,6 +115,7 @@ while ($row = $cosnultaTiposNotas->fetch_assoc()) {
 
 if (!empty($grado) && !empty($grupo) && !empty($periodo) && !empty($year)) {
     $datos = Boletin::datosBoletinPeriodos($grado, $grupo, $periodos, $year, $idEstudiante);
+    Utilidades::validarInfoBoletin($datos);
     while ($row = $datos->fetch_assoc()) {
         $listaDatos[] = $row;
     }
@@ -285,7 +287,7 @@ if ($grado >= 12 && $grado <= 15) {
                                 $promedioMateria       += $nota;
                                 $fallasAcumuladas      += $fallas;
                                 $fallasArea            += $fallas;
-                                $porcentajeMateria = isset($carga['mat_valor']) ? $carga['mat_valor'] : 100;
+                                $porcentajeMateria = !empty($carga['mat_valor']) ? $carga['mat_valor'] : 100;
                                 if (isset($notaAre[$j])) {
                                     $notaAre[$j]           += $nota * ($porcentajeMateria / 100);
                                 } else {

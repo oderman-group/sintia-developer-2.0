@@ -820,9 +820,24 @@ class Boletin {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
         try {
-            $resultado = mysqli_query($conexion, "SELECT mat_id, bol_estudiante, bol_carga, mat_nombres, mat_grado, bol_periodo, avg(bol_nota) as prom, ROW_NUMBER() OVER(ORDER BY prom desc) as puesto FROM ".BD_ACADEMICA.".academico_matriculas mat
-            INNER JOIN ".BD_ACADEMICA.".academico_boletin bol ON bol_estudiante=mat.mat_id AND bol_periodo='".$periodo."' AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$year}
-            WHERE  mat.mat_eliminado=0 AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$year} AND mat.mat_estado_matricula IN (".MATRICULADO.", ".ASISTENTE.", ".CANCELADO.")
+            $resultado = mysqli_query($conexion, "
+            SELECT mat_id,
+            bol_estudiante,
+            bol_carga, mat_nombres,
+            mat_grado, bol_periodo,
+            avg(bol_nota) as prom,
+            ROW_NUMBER() OVER(ORDER BY prom desc) as puesto
+            FROM ".BD_ACADEMICA.".academico_matriculas mat
+
+            INNER JOIN ".BD_ACADEMICA.".academico_boletin bol 
+            ON bol_estudiante=mat.mat_id AND bol_periodo='".$periodo."' 
+            AND bol.institucion={$config['conf_id_institucion']} 
+            AND bol.year={$year}
+
+            WHERE  mat.mat_eliminado=0 
+            AND mat.institucion={$config['conf_id_institucion']} 
+            AND mat.year={$year} 
+            AND mat.mat_estado_matricula IN (".MATRICULADO.", ".ASISTENTE.")
             GROUP BY mat.mat_id 
             ORDER BY prom DESC");
         } catch (Exception $e) {
@@ -1196,6 +1211,52 @@ class Boletin {
         return $resultado;
     }
 
+      /**
+     * Este metodo me consulta la cantidad de notas finales que tiene un curso
+    **/
+    public static function contarNotasCursoGrupo (
+        string  $idCurso,
+        string  $idGrupo,
+        string  $periodo,
+        string  $idEstudiante,
+        string  $yearBd = ""
+    )
+    {
+        global  $config;
+        $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
+        $andString='';
+        if(!empty($idEstudiante)){
+            $andString.="AND bol_estudiante = '$idEstudiante' ";
+        }
+        if(!empty($idCurso)){
+            $andString.="AND car_curso = '$idCurso' ";
+        }
+        if(!empty($idGrupo)){
+            $andString.="AND car_grupo = '$idGrupo' ";
+        }
+        $sql = "SELECT 
+                COUNT(car_id) as notas_registradas
+                FROM " . BD_ACADEMICA . ".academico_boletin bol 
+
+                INNER JOIN " . BD_ACADEMICA . ".academico_cargas car 
+                ON  car_id           = bol_carga 
+                AND car.institucion  = bol.institucion
+                AND car.year         = bol.year
+
+                WHERE bol.institucion = ?
+                AND bol.year          = ?
+                AND bol_periodo       = ?  
+                
+                $andString
+                ";
+
+        $parametros = [ $config['conf_id_institucion'], $year,$periodo];
+
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+        $resultado = BindSQL::resultadoArray($resultado);
+        return $resultado[0];
+    }
+
     public static function datosBoletinIndicadores(
         string  $grado,
         string  $grupo,
@@ -1365,8 +1426,17 @@ class Boletin {
             $andEstudiante = "AND   mat.mat_id  = '" . $idEstudiante."'";
         }
          // Preparar los placeholders para la consulta
-         $in_periodos = implode(', ', array_fill(0, count($periodos), '?'));
+         $in_periodos  = implode(', ', array_fill(0, count($periodos), '?'));
          $in_periodos2 = implode(', ', $periodos);
+         $odenNombres    ='';
+         switch ($config['conf_orden_nombre_estudiantes']) {
+            case '1':
+                $odenNombres = "mat_nombres,mat_nombre2,mat_primer_apellido,mat_segundo_apellido,";
+                break;
+            case '2':
+                $odenNombres = "mat_primer_apellido,mat_segundo_apellido,mat_nombres,mat_nombre2,";
+                break;
+         }
         $sql = "
                  SELECT                   
 					are.ar_id,
@@ -1465,7 +1535,7 @@ class Boletin {
                 AND   mat.mat_eliminado        = 0
                 AND ( mat.mat_estado_matricula = " . MATRICULADO . " OR mat.mat_estado_matricula=" . ASISTENTE . ") 
                
-                ORDER BY mat.mat_id,are.ar_posicion,car.car_id,bol.bol_periodo
+                ORDER BY  $odenNombres mat.mat_id,are.ar_posicion,car.car_id,bol.bol_periodo
                 ";
         $parametros = [$grado, $grupo, $config['conf_id_institucion'], $year];
 
@@ -1481,6 +1551,33 @@ class Boletin {
         }
         return $array=["notip_nombre" => "N/A"]; //
     }
+
+    public static function colorNota(float $valorNota): string {
+        global  $config;
+        $color='';
+        if ($valorNota < $config['conf_nota_minima_aprobar']) {
+            $color = $config['conf_color_perdida'];
+        } elseif ($valorNota >= $config['conf_nota_minima_aprobar']) {
+            $color = $config['conf_color_ganada'];
+        }
+        return $color; //
+    }
+
+    public static function formatoNota(float $valorNota,array $tiposNotas): float|string {
+        global  $config;
+        $notaResultado=0;
+        $nota = round($valorNota, $config['conf_decimales_notas']);
+        $nota = number_format($nota, $config['conf_decimales_notas']);
+        if ($config['conf_forma_mostrar_notas'] == CUALITATIVA) {
+            $desempeno = self::determinarRango($nota, $tiposNotas);
+            $notaResultado=$desempeno['notip_nombre'];
+        }else{
+            $notaResultado=$nota;
+        }
+        return $notaResultado; //
+    }
+
+    
     
 }
 
