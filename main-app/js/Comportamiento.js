@@ -2,15 +2,22 @@
  * Esta función me actualiza un sub rol
  */
 function comportamientoPeriodo(datosPeriodo) {
-    var periodo  = datosPeriodo.value;
-    var id  = datosPeriodo.id;
+    var idInput         = datosPeriodo.id;
+    var periodo         = datosPeriodo.value;
+    var idRegistro      = datosPeriodo.getAttribute("data-id-registro");
+    var periodoActual   = datosPeriodo.getAttribute("data-periodo-actual");
+
+    var inputElement = document.getElementById(idInput);
     
     if(periodo <= 4){
-        fetch('../directivo/comportamiento-actualizar-periodo.php?periodo='+periodo+'&id='+id, {
+        fetch('../directivo/comportamiento-actualizar-periodo.php?periodo='+periodo+'&id='+idRegistro, {
             method: 'GET'
         })
         .then(response => response.text()) // Convertir la respuesta a texto
         .then(data => {
+
+            inputElement.dataset.periodoActual = periodo;
+
             $.toast({
     
                 heading: 'Proceso completado', 
@@ -29,6 +36,9 @@ function comportamientoPeriodo(datosPeriodo) {
             console.error('Error:', error);
         });
     }else{
+
+        inputElement.value = periodoActual;
+
         $.toast({
 
             heading: 'Periodo Invalido', 

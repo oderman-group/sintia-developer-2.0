@@ -19,10 +19,10 @@ if (!empty($data["dataTotal"])) {
 	$usuariosClase = new UsuariosFunciones;
 }
 
-$contReg               = 1;
+$contReg               				= 1;
 
-$permisoActualizarPeriodo   = Modulos::validarSubRol(['DT0344']);
-$permisoEliminarComportamiento     = Modulos::validarSubRol(['DT0345']);
+$permisoActualizarPeriodo   		= Modulos::validarSubRol(['DT0344']);
+$permisoEliminarComportamiento     	= Modulos::validarSubRol(['DT0345']);
 
 
 foreach ($data["data"] as $resultado) {
@@ -59,9 +59,10 @@ foreach ($data["data"] as $resultado) {
 			<?php if (Modulos::validarPermisoEdicion() && $permisoActualizarPeriodo) { ?>
 				<input 
 					type="number" 
-					value="<?=!empty($resultado['dn_periodo']) ? $resultado['dn_periodo'] : "";?>" 
-					name="O<?=$contReg;?>" 
-					id="<?=$resultado['id_nuevo'];?>"
+					value="<?=!empty($resultado['dn_periodo']) ? $resultado['dn_periodo'] : "";?>"
+					id="P<?=$resultado['id_nuevo'];?>"
+					data-id-registro="<?=$resultado['id_nuevo'];?>"
+					data-periodo-actual="<?=$resultado['dn_periodo'];?>"
 					onChange="comportamientoPeriodo(this)" 
 					tabindex="10<?=$contReg;?>"
 				>
