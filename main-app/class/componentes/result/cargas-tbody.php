@@ -17,7 +17,7 @@ $permisoIndicadores   = Modulos::validarSubRol(['DT0034']);
 $permisoPlanilla      = Modulos::validarSubRol(['DT0239']);
 $permisoPlanillaNotas = Modulos::validarSubRol(['DT0237']);
 $permisoGenerarInforme = Modulos::validarSubRol(['DT0237']);
-$permisoComportamiento = Modulos::validarSubRol(['DT0237']);
+$permisoComportamiento = Modulos::validarSubRol(['DT0343']);
 
 $contReg = 1;
 foreach ($data["data"] as $resultado) {
