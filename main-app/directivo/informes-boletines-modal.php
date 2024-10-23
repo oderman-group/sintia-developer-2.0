@@ -2,6 +2,8 @@
 require_once("session.php");
 require_once(ROOT_PATH."/main-app/class/Grupos.php");
 require_once(ROOT_PATH."/main-app/class/Grados.php");
+include_once(ROOT_PATH."/main-app/compartido/ComponenteModal.php");
+$modaInfo = new ComponenteModal('informacion', $frases[115][$datosUsuarioActual['uss_idioma']], '../compartido/page-info-modal.php',null, 5000, '600px',false);
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
     echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
     exit();
@@ -348,7 +350,11 @@ require_once("../class/Estudiantes.php");
                     "idmsg": 306,
                     "msj": 'No se encontraron notas finales '
                 };
-                abrirModal('<?= $frases[115][$datosUsuarioActual['uss_idioma']]; ?>', '../compartido/page-info-modal.php', data, 5000, '800px');
+                <?php $data=json_encode([ 
+                       'idmsg' => '306',
+                       'msj'   => 'No se encontraron notas finales '                      
+                    ]);
+                    echo $modaInfo->getMetodoAbrirModal($data) ?>
             }
         }
     }
@@ -384,11 +390,11 @@ require_once("../class/Estudiantes.php");
             if (resultData["notas_registradas"] > 0) {
                 document.getElementById('formularioGuardar2').submit();
             } else {
-                var data = {
-                    "idmsg": 306,
-                    "msj": 'No se encontraron notas finales '
-                };
-                abrirModal('<?= $frases[115][$datosUsuarioActual['uss_idioma']]; ?>', '../compartido/page-info-modal.php', data, 5000, '800px');
+                <?php $data=json_encode([ 
+                       'idmsg' => '306',
+                       'msj'   => 'No se encontraron notas finales para este estudiante'                      
+                    ]);
+                echo $modaInfo->getMetodoAbrirModal($data) ?>
             }
         }
     }
