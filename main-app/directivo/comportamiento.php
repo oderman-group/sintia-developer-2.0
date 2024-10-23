@@ -145,7 +145,7 @@ if ($config['conf_doble_buscador'] == 1) {
 	</div>
 	<!-- end page container -->
 	<?php include("../compartido/footer.php"); ?>
-	<script src="../js/Comportamiento.js" ></script>
+	<script src="../js/Comportamiento.js"></script>
 </div>
 <!-- start js include path -->
 <script src="../../config-general/assets/plugins/jquery/jquery.min.js"></script>

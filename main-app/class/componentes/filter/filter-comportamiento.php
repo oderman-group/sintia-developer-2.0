@@ -18,7 +18,7 @@ if (!empty($filtrosDecode['asignatura'])) {
     $filtro .= " AND car_materia='" . $filtrosDecode['asignatura'] . "'";
 }
 
-$filtroLimite = 'LIMIT 0'.','.$config['conf_num_registros'];
+$filtroLimite = 'LIMIT 0' . ',' . $config['conf_num_registros'];
 
 $result = Disciplina::listarComportamiento($filtro, $filtroLimite, $valor);
 
