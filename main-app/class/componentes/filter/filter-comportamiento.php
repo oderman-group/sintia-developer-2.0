@@ -1,5 +1,5 @@
 <?php
-require_once("../../class/Disciplina.php");
+require_once(ROOT_PATH . "/main-app/class/Disciplina.php");
 
 if (!empty($filtrosDecode['carga'])) {
     $filtro .= " AND dn_id_carga='" . $filtrosDecode['carga'] . "'";
