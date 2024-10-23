@@ -15,11 +15,6 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
 	echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
 	exit();
 }
-
-$jQueryTable = '';
-if ($config['conf_doble_buscador'] == 1) {
-	$jQueryTable = 'id="example1"';
-}
 ?>
 <!-- data tables -->
 <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
@@ -57,8 +52,8 @@ if ($config['conf_doble_buscador'] == 1) {
 								<?php include("../../config-general/mensajes-informativos.php"); ?>
 								<span id="respuestaCambiarEstado"></span>
 								<?php
-									$filtro = "";
-									include("includes/barra-superior-comportamiento.php");
+								$filtro = "";
+								include("includes/barra-superior-comportamiento.php");
 								?>
 								<div class="card card-topline-purple" name="elementoGlobalBloquear">
 									<div class="card-head">
@@ -72,7 +67,7 @@ if ($config['conf_doble_buscador'] == 1) {
 									<div class="card-body">
 
 										<div class="row" style="margin-bottom: 10px;">
-											<table <?= $jQueryTable; ?> class="display" style="width:100%;">
+											<table id="example1" class="display" style="width:100%;">
 												<div id="gifCarga" class="gif-carga">
 													<img alt="Cargando...">
 												</div>
@@ -89,50 +84,47 @@ if ($config['conf_doble_buscador'] == 1) {
 												</thead>
 												<tbody id="comportamiento_result">
 													<?php
-														include("includes/consulta-paginacion-comportamiento.php");
-														$filtroLimite = 'LIMIT ' . $inicio . ',' . $registros;
-														$selectSql = [
-															"disc.id_nuevo",
-															"disc.dn_id",
-															"disc.dn_observacion",
-															"disc.dn_nota",
-															"disc.dn_fecha",
-															"disc.dn_periodo",
-															"mat.mat_foto",
-															"mat.mat_nombres",
-															"mat.mat_nombre2",
-															"mat.mat_primer_apellido",
-															"mat.mat_segundo_apellido",
-															"gra_nombre",
-															"gru_nombre",
-															"mate.mat_nombre",
-															"uss.uss_id",
-															"uss.uss_nombre",
-															"uss.uss_nombre2",
-															"uss.uss_apellido1",
-															"uss.uss_apellido2"
-														];
-														$consulta = Disciplina::listarComportamiento($filtro, $filtroLimite, null, $selectSql);
-														$contReg = 1;
-														$index = 0;
-														$arraysDatos = array();
-														if (!empty($consulta)) {
-															while ($fila = $consulta->fetch_assoc()) {
-																$arraysDatos[$index] = $fila;
-																$index++;
-															}
-															$consulta->free();
+													$selectSql = [
+														"dn.id_nuevo",
+														"dn.dn_id",
+														"dn.dn_observacion",
+														"dn.dn_nota",
+														"dn.dn_fecha",
+														"dn.dn_periodo",
+														"mat.mat_foto",
+														"mat.mat_nombres",
+														"mat.mat_nombre2",
+														"mat.mat_primer_apellido",
+														"mat.mat_segundo_apellido",
+														"gra_nombre",
+														"gru_nombre",
+														"mate.mat_nombre",
+														"uss.uss_id",
+														"uss.uss_nombre",
+														"uss.uss_nombre2",
+														"uss.uss_apellido1",
+														"uss.uss_apellido2"
+													];
+													$consulta = Disciplina::listarComportamiento($filtro, "", null, $selectSql);
+													$contReg = 1;
+													$index = 0;
+													$arraysDatos = array();
+													if (!empty($consulta instanceof PDOStatement)) {
+														while ($fila = $consulta->fetch(PDO::FETCH_ASSOC)) {
+															$arraysDatos[$index] = $fila;
+															$index++;
 														}
-														$lista = $arraysDatos;
-														$data["data"] = $lista;
-														include(ROOT_PATH . "/main-app/class/componentes/result/comportamiento-tbody.php");
+														$consulta->closeCursor();
+													}
+													$lista = $arraysDatos;
+													$data["data"] = $lista;
+													include(ROOT_PATH . "/main-app/class/componentes/result/comportamiento-tbody.php");
 													?>
 												</tbody>
 											</table>
 										</div>
 									</div>
 								</div>
-								<?php include("enlaces-paginacion.php"); ?>
 							</div>
 						</div>
 					</div>
