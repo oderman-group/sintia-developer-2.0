@@ -46,9 +46,9 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
 										<header class="panel-heading panel-heading-blue">MATRICULAS</header>
 										<div class="panel-body">
 											<?php if(Modulos::validarSubRol(['DT0100'])){
-                                                $modaloletin = new ComponenteModal('boletine','Boletines','../directivo/informes-boletines-modal.php');
+                                                $modalBoletin = new ComponenteModal('boletines','Boletines','../directivo/informes-boletines-modal.php');
                                                 ?>
-												<p><a href="javascript:void(0);"  onclick="<?=$modaloletin->getMetodoAbrirModal()?>"  >1. Boletines</a></p>											
+												<p><a href="javascript:void(0);"  onclick="<?=$modalBoletin->getMetodoAbrirModal()?>"  >1. Boletines</a></p>											
 											<?php 
 												} 
 												if(Modulos::validarSubRol(['DT0082'])){

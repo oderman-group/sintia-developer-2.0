@@ -2,6 +2,8 @@
 require_once("session.php");
 require_once(ROOT_PATH."/main-app/class/Grupos.php");
 require_once(ROOT_PATH."/main-app/class/Grados.php");
+include_once(ROOT_PATH."/main-app/compartido/ComponenteModal.php");
+$modaInfo = new ComponenteModal('informacion', $frases[115][$datosUsuarioActual['uss_idioma']], '../compartido/page-info-modal.php',null, 5000, '600px',false);
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
     echo '<script type="text/javascript">window.location.href="page-info.php?idmsg=301";</script>';
     exit();
@@ -305,6 +307,89 @@ miSelect.onchange = function() {
     limitarSeleccion(this);
 };
 </script>
+<script>
+    // Función que se ejecuta antes de enviar el formulario
+    function ejecutarAntesDeEnviar1() {
+        var curso   = document.getElementById("curso").value;
+        var grupo   = document.getElementById("grupo").value;
+        var periodo = document.getElementById("periodo").value;
+        var year    = document.getElementById("year").value;
+        $.toast({
+            heading            : 'Consultando Notas',
+            position           : 'bottom-right',
+            showHideTransition : 'slide',
+            icon               : 'success',
+            hideAfter          : 3500,
+            stack              : 6
+        });
+        var data = {
+            "curso": curso,
+            "grupo": grupo,
+            "periodo": periodo,
+            "idEstudiante": '',
+            "year": year
+        };
+        metodoFetch('../compartido/ajax_contar_notas_curso.php', data, 'json', false, 'enviarFormulario1');
+        return false;
+    }
+    function enviarFormulario1(response) {
+        if (response["ok"]) {
+            resultData = response["result"];
+            console.log(resultData);
+            if (resultData["notas_registradas"] > 0) {
+                document.getElementById('formularioGuardar1').submit();
+            } else {
+                var data = {
+                    "idmsg": 306,
+                    "msj": 'No se encontraron notas finales '
+                };
+                <?php $data=json_encode([ 
+                       'idmsg' => '306',
+                       'msj'   => 'No se encontraron notas finales '                      
+                    ]);
+                    echo $modaInfo->getMetodoAbrirModal($data) ?>
+            }
+        }
+    }
+    // Función que se ejecuta antes de enviar el formulario
+    function ejecutarAntesDeEnviar2() {
+        
+        var idEstudiante = document.getElementById("selectEstudiantes").value;
+        var periodo      = document.getElementById("periodo2").value;
+        var year         = document.getElementById("year2").value;
+        $.toast({
+            heading            : 'Consultando Notas',
+            position           : 'bottom-right',
+            showHideTransition : 'slide',
+            icon               : 'success',
+            hideAfter          : 3500,
+            stack              : 6
+        });
+        var data = {
+            "curso": '',
+            "grupo": '',
+            "periodo": periodo,
+            "idEstudiante": idEstudiante,
+            "year": year
+        };
+        metodoFetch('../compartido/ajax_contar_notas_curso.php', data, 'json', false, 'enviarFormulario2');
+        return false;
+    }
+    
+    function enviarFormulario2(response) {
+        if (response["ok"]) {
+            resultData = response["result"];
+            console.log(resultData);
+            if (resultData["notas_registradas"] > 0) {
+                document.getElementById('formularioGuardar2').submit();
+            } else {
+                <?php $data=json_encode([ 
+                       'idmsg' => '306',
+                       'msj'   => 'No se encontraron notas finales para este estudiante'                      
+                    ]);
+                echo $modaInfo->getMetodoAbrirModal($data) ?>
+            }
+        }
+    }
 
-
-
+</script>
