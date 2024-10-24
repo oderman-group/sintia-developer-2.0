@@ -83,32 +83,32 @@ class Disciplina
                     $stringSelect 
                     FROM " . BD_DISCIPLINA . "." . BDT_disciplina::$tableName . " dn
 
-                    LEFT JOIN " . BD_ACADEMICA . "." . BDT_disciplina::$tableMatricula . " mat 
+                    LEFT JOIN " . BD_ACADEMICA . ".academico_matriculas mat 
                     ON mat.mat_id           = dn.dn_cod_estudiante 
                     AND mat.institucion     = dn.institucion 
                     AND mat.year            = dn.year
 
-                    LEFT JOIN " . BD_ACADEMICA . "." . BDT_disciplina::$tableCargas . " car 
+                    LEFT JOIN " . BD_ACADEMICA . ".academico_cargas car 
                     ON car_id               = dn.dn_id_carga 
                     AND car.institucion     = dn.institucion 
                     AND car.year            = dn.year
                     
-                    LEFT JOIN " . BD_GENERAL . "." . BDT_disciplina::$tableUsuarios . " uss 
+                    LEFT JOIN " . BD_GENERAL . ".usuarios uss 
                     ON uss_id               = car.car_docente 
                     AND uss.institucion     = dn.institucion 
                     AND uss.year            = dn.year
 
-                    LEFT JOIN " . BD_ACADEMICA . "." . BDT_disciplina::$tableGrados . " gra 
+                    LEFT JOIN " . BD_ACADEMICA . ".academico_grados gra 
                     ON gra_id               = car.car_curso 
                     AND gra.institucion     = dn.institucion 
                     AND gra.year            = dn.year
 
-                    LEFT JOIN " . BD_ACADEMICA . "." . BDT_disciplina::$tableGrupos . " gru 
+                    LEFT JOIN " . BD_ACADEMICA . ".academico_grupos gru 
                     ON gru.gru_id           = car.car_grupo 
                     AND gru.institucion     = dn.institucion 
                     AND gru.year            = dn.year
 
-                    LEFT JOIN " . BD_ACADEMICA . "." . BDT_disciplina::$tableMaterias . " mate 
+                    LEFT JOIN " . BD_ACADEMICA . ".academico_materias mate 
                     ON mate.mat_id          = car.car_materia 
                     AND mate.institucion    = dn.institucion 
                     AND mate.year           = dn.year
