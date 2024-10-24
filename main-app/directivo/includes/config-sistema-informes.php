@@ -137,8 +137,8 @@
                     <div class="form-group row">
                         <label class="col-sm-3 control-label">Medidas del Logo en los informes (Ancho -  Alto) <span style="color: red;">(*)</span></label>
                         <div class="col-sm-9">
-                            <input type="text"style="margin-top: 20px;" name="logoAncho" class="col-sm-1" value="<?=$datosConfiguracion['conf_ancho_imagen'];?>" <?=$disabledPermiso;?>>
-                            <input type="text"style="margin-top: 20px;" name="logoAlto" class="col-sm-1" value="<?=$datosConfiguracion['conf_alto_imagen'];?>" <?=$disabledPermiso;?>>
+                            <input type="number"style="margin-top: 20px;" name="logoAncho" class="col-sm-1" value="<?=$datosConfiguracion['conf_ancho_imagen'];?>" <?=$disabledPermiso;?>> PX
+                            <input type="number"style="margin-top: 20px;" name="logoAlto" class="col-sm-1" value="<?=$datosConfiguracion['conf_alto_imagen'];?>" <?=$disabledPermiso;?>> PX
                         </div>
                     </div>
 

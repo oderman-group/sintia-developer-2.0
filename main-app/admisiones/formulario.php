@@ -379,12 +379,12 @@ $datosMadre = $madre->fetch();
 
                     <select class="form-control" name="curso">
 
-                        <option value="">Escoger</option>
+                        <option value="" disabled>Escoger</option>
 
                         <?php
                                 while($datosGrado = $grados->fetch()){
                                 ?>
-                                    <option value="<?php echo $datosGrado['gra_id'];?>" <?php if ($datos['mat_grado'] == $datosGrado['gra_id']) echo "selected"; ?>><?php echo $datosGrado['gra_nombre'];?></option>
+                                    <option value="<?php echo $datosGrado['gra_id'];?>" <?php if ($datos['mat_grado'] == $datosGrado['gra_id']) echo "selected"; else echo "disabled" ?>><?php echo $datosGrado['gra_nombre'];?></option>
                                 <?php }?>
 
                     </select>
