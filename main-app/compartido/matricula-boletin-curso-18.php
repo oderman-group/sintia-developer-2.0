@@ -50,15 +50,13 @@ if (!empty($_GET["id"])) {
 
     $filtro = " AND mat_id='" . base64_decode($_GET["id"]) . "'";
     $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
+    Utilidades::validarInfoBoletin($datos);
     $estudiante = $matriculadosPorCurso->fetch_assoc();
     if (!empty($estudiante)) {
         $idEstudiante = $estudiante["mat_id"];
         $grado        = $estudiante["mat_grado"];
         $grupo        = $estudiante["mat_grupo"];
-    } else {
-        echo "Excepción catpurada: Estudiante no encontrado ";
-        exit();
-    }
+    } 
 }
 
 $tamañoLogo = $_SESSION['idInstitucion'] == ICOLVEN ? 100 : 50;
@@ -111,6 +109,7 @@ while ($row = $cosnultaTiposNotas->fetch_assoc()) {
 
 if (!empty($grado) && !empty($grupo) && !empty($periodo) && !empty($year)) {
     $datos = Boletin::datosBoletinPeriodos($grado, $grupo, $periodos, $year, $idEstudiante);
+    Utilidades::validarInfoBoletin($datos);
     while ($row = $datos->fetch_assoc()) {
         $listaDatos[] = $row;
     }

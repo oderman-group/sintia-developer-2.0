@@ -3,7 +3,32 @@ require_once(dirname(__DIR__, 2) . '/config-general/constantes.php');
 require_once ROOT_PATH."/main-app/class/Conexion.php";
 class Utilidades {
 
-    private static $codigoTemporal;
+/**
+ * Valida si el resultado de una consulta SQL o un array está vacío.
+ *
+ * @param mixed $data Puede ser un resultado de consulta SQL o un array.
+ * @return void manda mensjae informativo si no cumple las condiciones
+ */
+    public static  function validarInfoBoletin($data)
+    {   
+        global $datosUsuarioActual;
+        $url= UsuariosPadre::verificarTipoUsuario($datosUsuarioActual['uss_tipo'],'page-info.php?idmsg=306');
+        // Si es un array, validar si está vacío
+        if (is_array($data)) {
+            if(empty($data)){
+                echo '<script type="text/javascript">window.location.href="'.$url.'";</script>';                    
+                exit();  
+            }
+        }
+           
+        if ($data instanceof mysqli_result) {
+            // Si el número de filas es 0, significa que la consulta está vacía
+           if($data->num_rows === 0){
+           echo '<script type="text/javascript">window.location.href="'.$url.'";</script>';                   
+            exit();  
+           }
+        }
+    }
 /**
  * Validar los parámetros GET recibidos y redirigir si no son válidos.
  *
