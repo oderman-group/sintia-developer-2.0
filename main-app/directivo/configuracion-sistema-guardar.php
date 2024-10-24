@@ -72,6 +72,7 @@ if ($_POST["configTab"] == BDT_Configuracion::CONFIG_SISTEMA_INFORMES) {
     $datos["conf_fecha_parcial"]                       = $_POST["fechapa"];
     $datos["conf_descripcion_parcial"]                 = $_POST["descrip"];
     $datos["conf_reporte_sabanas_nota_indocador"]      = $_POST["notasReporteSabanas"];
+    $datos["conf_promedio_libro_final"]      = $_POST["promedioLibroFinal"];
 
     $tabActual = "#informes";
 }
