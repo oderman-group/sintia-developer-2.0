@@ -21,6 +21,7 @@
 		}
 		$('#ModalCentralizado .modal-dialog').css('width', width);
 		$('#ModalCentralizado').modal('show');
+		setModalZIndex('ModalCentralizado');
 		if (timeout) {
 			setTimeout(function() {
 				$('#ModalCentralizado').modal('hide'); // Cierra el modal
@@ -48,9 +49,31 @@
 			document.head.appendChild(script);
 		}
 	}
+    // Función para calcular el z-index más alto 
+	function getMaxZIndex() {
+		let maxZIndex = 0;
+		const allElements = document.getElementsByTagName('*');
+
+		for (let i = 0; i < allElements.length; i++) {
+			const zIndex = window.getComputedStyle(allElements[i]).zIndex;
+
+			if (!isNaN(zIndex)) {
+				maxZIndex = Math.max(maxZIndex, parseInt(zIndex, 10));
+			}
+		}
+		return maxZIndex;
+	}
+	// Función para asignar el z-index más alto al modal
+	function setModalZIndex(modalId) {
+		// Obtener el z-index más alto de la página
+		const highestZIndex = getMaxZIndex();
+		// Asignar un z-index más alto al modal (por ejemplo, sumamos 10 al mayor valor encontrado)
+		const modal = document.getElementById(modalId);
+		modal.style.setProperty('z-index', highestZIndex + 10, 'important'); 
+	}
 </script>
-<div class="modal fade" id="ModalCentralizado" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="basicModal" aria-hidden="true">
-	<div class="modal-dialog" style="max-width: 1350px!important;">
+<div class="modal fade" id="ModalCentralizado" tabindex="-1"   role="dialog" data-backdrop="static" aria-labelledby="basicModal" aria-hidden="true">
+	<div class="modal-dialog" style="max-width: 1350px!important; z-index: 10051 !important">
 		<div class="modal-content" style="border-radius: 20px;max-width: 1350px!important; ">
 
 			<div class="modal-header panel-heading-purple">
