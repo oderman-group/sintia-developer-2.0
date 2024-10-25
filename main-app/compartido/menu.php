@@ -19,7 +19,7 @@
 							</div>
 						<?php }?>
 						
-	                    <ul class="sidemenu  page-header-fixed <?=$datosUsuarioActual['uss_tipo_menu'];?>" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="padding-top: 20px" data-step="1" data-intro="<b>Menú principal:</b> Aquí encontrarás todas las opciones para el uso de la plataforma." data-position='left'>
+	                    <ul class="sidemenu  page-header-fixed <?=$datosUsuarioActual['uss_tipo_menu'];?>" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="padding-top: 20px" data-step="1" data-intro="<b>Menú principal:</b> Aquí encontrarás las opciones principales para el uso de la plataforma. Algunas estarán activas y otras inactivas, dependiendo los módulos que haya contratado su institución." data-position='left'>
 	                        <li class="sidebar-toggler-wrapper hide">
 	                            <div class="sidebar-toggler">
 	                                <span></span>
@@ -70,7 +70,7 @@
 	                            </a>
 	                        </li>
 							
-							<li class="nav-item" data-step="8" data-intro="<b><?=$frases[69][$datosUsuarioActual['uss_idioma']];?>:</b> Aquí podrás ver y publicar noticias. También verás cumpleaños y otra información de interés." data-position='left'>
+							<li class="nav-item">
 	                            <a href="noticias.php" class="nav-link nav-toggle">
 	                                <i class="material-icons">view_comfy</i>
 	                                <span class="title"><?=$frases[69][$datosUsuarioActual['uss_idioma']];?></span>

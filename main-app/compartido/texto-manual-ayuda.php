@@ -12,7 +12,7 @@ $infoIdPagina = mysqli_fetch_array(mysqli_query($conexion, "SELECT * FROM ".$bas
 
 <span style="display: none;"><b># <?=$frases[237][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$idPaginaInterna;?></span>
 <?php if(!empty($infoIdPagina['pagp_url_youtube'])){ ?>
-<p style="color: royalblue;" data-step="7" data-intro="<b>IMPORTANTE - Tutorial de ayuda:</b> En cada pantalla de la plataforma podrás encontrar este anuncio para que veas un corto video tutorial de ayuda sobre las opciones de la pantalla en la cual te encuentras. O también puedes usar la vista guiada inteligente de la plataforma." data-position='bottom'>
+<p style="color: royalblue;">
 	
 	<i class="fa fa-info-circle"></i> <b><?=$frases[238][$datosUsuarioActual['uss_idioma']];?>:</b> <?=$frases[239][$datosUsuarioActual['uss_idioma']];?> <a href="<?=$infoIdPagina['pagp_url_youtube'];?>" style="text-decoration: underline; font-weight: bold;" target="_blank"><?=$frases[240][$datosUsuarioActual['uss_idioma']];?></a>.<br>
 	
