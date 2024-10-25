@@ -877,6 +877,7 @@ class Movimientos {
             AND fcu_status='".POR_COBRAR."' 
             AND institucion = {$config['conf_id_institucion']} 
             AND year = {$_SESSION["bd"]}
+            ORDER BY id_nuevo ASC
             ");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
