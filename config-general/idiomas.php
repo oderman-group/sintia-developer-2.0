@@ -536,7 +536,7 @@ $frases[258][$l] = 'Mis páginas recientes';
 
 $frases[259][$l] = 'Mis páginas más visitadas';
 
-$frases[260][$l] = 'Buscar Información';
+$frases[260][$l] = 'Busca usuarios, paginas, informes, etc.';
 
 $frases[261][$l] = 'Inglés';
 
@@ -1351,7 +1351,7 @@ $frases[258][$l] = 'My recent pages';
 
 $frases[259][$l] = 'My most visited pages';
 
-$frases[260][$l] = 'search information';
+$frases[260][$l] = 'search users, pages, reports, etc.';
 
 $frases[261][$l] = 'English';
 
