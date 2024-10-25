@@ -153,7 +153,8 @@ $codigoUnico=Utilidades::generateCode("ABO");
                                                         <table class="display" style="width:100%;" id="tablaItems">
                                                             <thead>
                                                                 <tr>
-                                                                    <th>Cod</th>
+                                                                    <th>Cod. Factura</th>
+                                                                    <th>Fecha</th>
                                                                     <th><?=$frases[107][$datosUsuarioActual['uss_idioma']];?></th>
                                                                     <th><?=$frases[417][$datosUsuarioActual['uss_idioma']];?></th>
                                                                     <th><?=$frases[418][$datosUsuarioActual['uss_idioma']];?></th>
