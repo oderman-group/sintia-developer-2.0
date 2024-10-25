@@ -936,16 +936,16 @@ function totalizarAbonos(){
     for (let i = 1; i < tabla.rows.length; i++) {
         var fila = tabla.rows[i];
 
-        var total = parseFloat(fila.cells[1].getAttribute('data-total-neto'));
+        var total = parseFloat(fila.cells[2].getAttribute('data-total-neto'));
         totalNeto = totalNeto + total;
 
-        var abonos = parseFloat(fila.cells[2].getAttribute('data-abonos'));
+        var abonos = parseFloat(fila.cells[3].getAttribute('data-abonos'));
         if (isNaN(abonos)) {
             var abonos = 0;
         }
         totalAbonos = totalAbonos + abonos;
 
-        var porCobrar = parseFloat(fila.cells[3].getAttribute('data-por-cobrar'));
+        var porCobrar = parseFloat(fila.cells[4].getAttribute('data-por-cobrar'));
         totalPorCobrar = totalPorCobrar + porCobrar;
     }
 
