@@ -95,7 +95,7 @@ $institucionNombre = $institucion['ins_siglas'];
 
                             <li class="dropdown dropdown-user">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                <i class="fa fa-calendar-o"></i>    
+                                <i class="fa fa-calendar-o"></i>
                                 <span class="username username-hide-on-mobile"> AÑO ACTUAL: <b><?=$_SESSION["bd"];?></b> </span>
                                     <?php if(Modulos::validarSubRol(['DT0030'])) { echo '<i class="fa fa-angle-down"></i>'; } ?>
                                 </a>
@@ -162,7 +162,7 @@ $institucionNombre = $institucion['ins_siglas'];
                         <?php }?>
 						
                     	<!-- start language menu -->
-                        <li class="dropdown language-switch" data-step="3" data-intro="<b>Idiomas:</b> Aquí puedes cambiar el idioma de la plataforma." data-position='bottom' data-scrollTo='tooltip'>
+                        <li class="dropdown language-switch" data-scrollTo='tooltip'>
 							<?php
 							switch($datosUsuarioActual['uss_idioma']){
 								case 1:
@@ -191,7 +191,7 @@ $institucionNombre = $institucion['ins_siglas'];
                         <!-- end language menu -->
                         
 						<!-- start notification dropdown -->
-                        <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar" data-step="4" data-intro="<b>Notificaciones:</b> Aquí recibirás notificaciones importantes relacionadas contigo." data-position='bottom' data-scrollTo='tooltip'>
+                        <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
                             <!--<span id="notificaciones"></span>-->
                         </li>
                         <!-- end notification dropdown -->
@@ -200,14 +200,14 @@ $institucionNombre = $institucion['ins_siglas'];
                         <?php
                             if($numAsignacionesEncuesta > 0  && ($idPaginaInterna != 'DC0146' && $idPaginaInterna != 'AC0038' && $idPaginaInterna != 'ES0062' && $idPaginaInterna != 'DT0324' && $idPaginaInterna != 'CM0060')){
                         ?>
- 						<li class="dropdown dropdown-extended dropdown-inbox" data-step="5" data-intro="<b>Encuestas:</b> Aquí se te redireccionara a las encuestas pendientes." data-position='bottom'>
+                        <li class="dropdown dropdown-extended dropdown-inbox">
                             <a href="encuestas-pendientes.php" class="dropdown-toggle">
                                 <i class="fa fa-info"></i>
                                 <span class="badge headerBadgeColor2" style="right: -12px; top: 5px;"><?=$numAsignacionesEncuesta?></span>
                             </a>
                         </li>
                         <?php } ?>
- 						<li class="dropdown dropdown-extended dropdown-inbox" id="header_inbox_bar" data-step="5" data-intro="<b>Mensajes:</b> Aquí verás los mensajes directos que te envíen otros usuarios de la plataforma." data-position='bottom' data-scrollTo='tooltip'>
+                        <li class="dropdown dropdown-extended dropdown-inbox" id="header_inbox_bar">
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                 <i class="fa fa-envelope-o"></i>
                                 <span id="mensajes_numero"></span>
@@ -245,7 +245,7 @@ $institucionNombre = $institucion['ins_siglas'];
                         </li>
                         <!-- end message dropdown -->
  						<!-- start manage user dropdown -->
- 						<li class="dropdown dropdown-user" data-step="6" data-intro="<b>Cuenta personal:</b> Aquí puedes acceder a tu perfil a cambiar tus datos personales, y en la opción salir podrás cerrar tu sesión con seguirdad cuando hayas terminado de trabajar con la plataforma." data-position='bottom' data-scrollTo='tooltip'>
+ 						<li class="dropdown dropdown-user" data-step="500" data-intro="<b>Cuenta personal:</b> Aquí puedes acceder a tu perfil a cambiar tus datos personales, y en la opción salir podrás cerrar tu sesión con seguirdad cuando hayas terminado de trabajar con la plataforma." data-position='bottom' data-scrollTo='tooltip'>
                             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                 <img alt="" class="img-circle " src="../files/fotos/<?=$datosUsuarioActual['uss_foto'];?>"/>
                                 <span class="username username-hide-on-mobile"> <?=UsuariosPadre::nombreCompletoDelUsuario($datosUsuarioActual);?> </span>
