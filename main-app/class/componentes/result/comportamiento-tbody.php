@@ -53,7 +53,13 @@ foreach ($data["data"] as $resultado) {
 		<td><?= $resultado["id_nuevo"]; ?></td>
 		<?php $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado); ?>
 		<td><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="<?= $nombre; ?>" data-content="<?= $infoTooltipEstudiante; ?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?= $nombre; ?></a></td>
-		<td><?= $resultado["dn_observacion"]; ?></td>
+		<td 
+			title="<?= !empty($resultado["dn_observacion"]) ? htmlspecialchars($resultado["dn_observacion"]) : ""; ?>" 
+			onclick="toggleFullText(this)"
+			style="cursor: pointer;"
+		>
+			<?= !empty($resultado["dn_observacion"]) ? ((strlen($resultado["dn_observacion"]) > 20) ? htmlspecialchars(substr($resultado["dn_observacion"], 0, 20)) . '...' : htmlspecialchars($resultado["dn_observacion"])) : ""; ?>
+		</td>
 		<td><?= $resultado["dn_nota"]; ?></td>
 		<td>
 			<?php if (Modulos::validarPermisoEdicion() && $permisoActualizarPeriodo) { ?>
