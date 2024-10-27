@@ -1,4 +1,6 @@
-<?php $idPaginaInterna = 'DT0249';
+<?php 
+include("session.php");
+$idPaginaInterna = 'DT0249';
 require_once(ROOT_PATH."/main-app/class/Grupos.php");
 require_once(ROOT_PATH."/main-app/class/Grados.php");
 if (!Modulos::validarSubRol([$idPaginaInterna])) {
@@ -11,6 +13,9 @@ require_once("../class/Estudiantes.php");
 <!--select2-->
 <link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
 <link href="../../config-general/assets/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
+<!--select2-->
+<script src="../../config-general/assets/plugins/select2/js/select2.js"></script>
+<script src="../../config-general/assets/js/pages/select2/select2-init.js"></script>
 <style>
 	.select2 {
         width: 100% !important;
