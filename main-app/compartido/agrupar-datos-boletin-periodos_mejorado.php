@@ -20,25 +20,14 @@ $estudiantes                  = [];
 $porcPeriodo = array(0.25, 0.25, 0.25, 0.25);
 foreach ($listaDatos  as $registro) {
 
+    Utilidades::valordefecto($registro["ind_id"]);
+    Utilidades::valordefecto($registro["ind_nombre"]);
+    Utilidades::valordefecto($registro["rind_nota"]);
+    Utilidades::valordefecto($registro["indicador_porcentual"],0);
+    Utilidades::valordefecto($registro["valor_indicador"],0);
+    Utilidades::valordefecto($registro["valor_porcentaje_indicador"],0);
 
-    // Observacion por estudainte
-    if (!empty($registro["dn_id"]) && !empty($registro["dn_observacion"])) {
-        $observacionesConvivencia[$registro["mat_id"]][$registro["dn_periodo"]] = [
-            "id"          => $registro["dn_id"],
-            "estudiante"  => $registro["dn_cod_estudiante"],
-            "observacion" => $registro["dn_observacion"],
-            "periodo"     => $registro["dn_periodo"]
-        ];
-    }
 
-    if (!empty($registro["niv_id"]) && !empty($registro["niv_definitiva"])) {
-        $nivelaciones[$registro["mat_id"]][$registro["niv_id_asg"]] = [
-            "id"          => $registro["niv_id"],
-            "estudiante"  => $registro["niv_cod_estudiante"],
-            "definitiva"  => $registro["niv_definitiva"],
-            "fecha"       => $registro["niv_fecha_nivelacion"]
-        ];
-    }
 
     // Datos del estudiante
     if ($mat_id != $registro["mat_id"]) {
@@ -66,6 +55,7 @@ foreach ($listaDatos  as $registro) {
             "mat_numero_matricula" => $registro["mat_numero_matricula"],
             "mat_folio"            => $registro["mat_folio"],
             "periodo_selecionado"  => $periodos,
+            "observaciones"        => [],
             "areas"                => []
 
         ];
@@ -203,4 +193,35 @@ foreach ($listaDatos  as $registro) {
         ];
         $mat_ar_car_periodo_indicador = $mat_ar_car_periodo.'-'.$registro["ind_id"];
     }
+
+        // Observacion por estudainte
+        if (!empty($registro["dn_id"]) && !empty($registro["dn_observacion"])) {
+            $observacionesConvivencia[$registro["mat_id"]][$registro["dn_periodo"]] = [
+                "id"          => $registro["dn_id"],
+                "estudiante"  => $registro["dn_cod_estudiante"],
+                "observacion" => $registro["dn_observacion"],
+                "periodo"     => $registro["dn_periodo"]
+            ];
+            $estudiantes[$registro["mat_id"]]["observaciones"][$registro["dn_periodo"]]= [
+                "id"          => $registro["dn_id"],
+                "estudiante"  => $registro["dn_cod_estudiante"],
+                "observacion" => $registro["dn_observacion"],
+                "periodo"     => $registro["dn_periodo"]
+            ];
+        }
+    
+        if (!empty($registro["niv_id"]) && !empty($registro["niv_definitiva"])) {
+            $nivelaciones[$registro["mat_id"]][$registro["niv_id_asg"]] = [
+                "id"          => $registro["niv_id"],
+                "estudiante"  => $registro["niv_cod_estudiante"],
+                "definitiva"  => $registro["niv_definitiva"],
+                "fecha"       => $registro["niv_fecha_nivelacion"]
+            ];
+            $estudiantes[$registro["mat_id"]]["nivelaciones"][$registro["niv_id_asg"]]= [
+                "id"          => $registro["niv_id"],
+                "estudiante"  => $registro["niv_cod_estudiante"],
+                "definitiva"  => $registro["niv_definitiva"],
+                "fecha"       => $registro["niv_fecha_nivelacion"]
+            ];
+        }
 }
