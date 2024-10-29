@@ -56,7 +56,7 @@ foreach ($data["data"] as $resultado) {
 		<td><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Información adicional" data-content="<?= $infoTooltipCargas; ?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?= $resultado['id_nuevo_carga']; ?></a></td>
 		<td><?= $marcaDG . "" . strtoupper($resultado['uss_nombre'] . " " . $resultado['uss_nombre2'] . " " . $resultado['uss_apellido1'] . " " . $resultado['uss_apellido2']); ?></td>
 		<td><?= $marcaMediaTecnica . "[" . $resultado['gra_id'] . "] " . strtoupper($resultado['gra_nombre'] . " " . $resultado['gru_nombre']); ?></td>
-		<td><?= "[" . $resultado['mat_id'] . "] " . strtoupper($resultado['mat_nombre']) . " (" . $resultado['mat_valor'] . "%)"; ?></td>
+		<td><?= "[" . $resultado['mat_id'] . "] " . strtoupper(empty($resultado['mat_nombre'])?'':$resultado['mat_nombre']) . " (" . $resultado['mat_valor'] . "%)"; ?></td>
 		<td><?= $resultado['car_ih']; ?></td>
 		<td><?= $resultado['car_periodo']; ?></td>
 		<?php
