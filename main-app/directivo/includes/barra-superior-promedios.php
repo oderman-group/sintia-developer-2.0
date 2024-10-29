@@ -70,11 +70,11 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
         <?php
         $grupos = Grupos::listarGrupos();
-        while($grupo = mysqli_fetch_array($grupos, MYSQLI_BOTH)){
+        while($grupoJson = mysqli_fetch_array($grupos, MYSQLI_BOTH)){
             $estiloResaltado = '';
-            if($grupo['gru_id'] == $grupo) $estiloResaltado = 'style="color: '.$Plataforma->colorUno.';"';
+            if($grupoJson['gru_id'] == $grupo) $estiloResaltado = 'style="color: '.$Plataforma->colorUno.';"';
         ?>	
-            <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?grupo=<?=base64_encode($grupo['gru_id']);?>&curso=<?=base64_encode($curso);?>&periodo=<?=base64_encode($periodo);?>&cantidad=<?=base64_encode($cantidad);?>&orden=<?=base64_encode($filtroOrden);?>" <?=$estiloResaltado;?>><?=$grupo['gru_nombre'];?></a>
+            <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?grupo=<?=base64_encode($grupoJson['gru_id']);?>&curso=<?=base64_encode($curso);?>&periodo=<?=base64_encode($periodo);?>&cantidad=<?=base64_encode($cantidad);?>&orden=<?=base64_encode($filtroOrden);?>" <?=$estiloResaltado;?>><?=$grupoJson['gru_nombre'];?></a>
         <?php }?>
           <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>" style="font-weight: bold; text-align: center;">VER TODO</a>
         </div>
