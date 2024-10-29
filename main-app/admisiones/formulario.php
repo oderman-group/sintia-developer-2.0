@@ -379,12 +379,12 @@ $datosMadre = $madre->fetch();
 
                     <select class="form-control" name="curso">
 
-                        <option value="">Escoger</option>
+                        <option value="" disabled>Escoger</option>
 
                         <?php
                                 while($datosGrado = $grados->fetch()){
                                 ?>
-                                    <option value="<?php echo $datosGrado['gra_id'];?>" <?php if ($datos['mat_grado'] == $datosGrado['gra_id']) echo "selected"; ?>><?php echo $datosGrado['gra_nombre'];?></option>
+                                    <option value="<?php echo $datosGrado['gra_id'];?>" <?php if ($datos['mat_grado'] == $datosGrado['gra_id']) echo "selected"; else echo "disabled" ?>><?php echo $datosGrado['gra_nombre'];?></option>
                                 <?php }?>
 
                     </select>
@@ -1043,7 +1043,7 @@ $datosMadre = $madre->fetch();
             <div class="form-row">
 
                 <div class="form-group col-md-6">
-                    <label>1. Certificado laboral <span class="text-primary">(En formato .jpg, .png, .jpeg)</span> </label>
+                    <label>1. Certificado laboral que incluya el salario actual </label>
                     <input type="file" class="form-control" name="cartaLaboral" onChange="validarPesoArchivo(this)">
                     <?php if (!empty($datosDocumentos['matd_carta_laboral']) and file_exists('files/otros/' . $datosDocumentos['matd_carta_laboral'])) { ?>
                         <p><a href="files/otros/<?= $datosDocumentos['matd_carta_laboral']; ?>" target="_blank" class="link"><?= $datosDocumentos['matd_carta_laboral']; ?></a></p>

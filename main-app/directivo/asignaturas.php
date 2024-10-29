@@ -87,13 +87,18 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                                                 </thead>
                                                 <tbody>
 													<?php
-													 $filtro = '';
-													 if(isset($_GET["area"]) and is_numeric(base64_decode($_GET["area"]))){$filtro .= " AND am.mat_area='".base64_decode($_GET["area"])."'";}
-													$consulta = Asignaturas::consultarTodasAsignaturas($conexion, $config);
-													 $contReg = 1;
-													 while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
+													$filtro = '';
+
+													if (isset($_GET["area"]) && is_numeric(base64_decode($_GET["area"]))) {
+														$filtro .= " AND am.mat_area='".base64_decode($_GET["area"])."'";
+													}
+
+													$consulta = Asignaturas::consultarTodasAsignaturas($conexion, $config, $filtro);
+													$contReg = 1;
+
+													while($resultado = mysqli_fetch_array($consulta, MYSQLI_BOTH)){
 														$numeros = CargaAcademica::contarCargasMaterias($config, $resultado['mat_id']);
-													 ?>
+													?>
 													<tr>
                                                         <td><?=$contReg;?></td>
 														<td><?=$resultado['mat_id'];?></td>

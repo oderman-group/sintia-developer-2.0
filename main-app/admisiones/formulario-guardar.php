@@ -9,9 +9,11 @@ $aspirante = $pdoI->prepare($aspiranteConsulta);
 $aspirante->bindParam(':id', $_POST['solicitud'], PDO::PARAM_INT);
 $aspirante->execute();
 $datosAspirante = $aspirante->fetch();
+
 $datosFecha = explode("-", $datosAspirante['asp_fecha']);
 $yearAspirante = $datosFecha[0];
 $yearConsultar = $config['conf_agno'];
+
 if ($yearAspirante < date("Y")){
     $yearConsultar = $yearAspirante;
 }
@@ -90,7 +92,11 @@ $asp->bindParam(':nombre', $nombreCompleto, PDO::PARAM_STR);
 $asp->execute();
 
 //Documentos
-Inscripciones::actualizarDocumentos($pdoI, $config, $_FILES, $_POST, $yearConsultar);
+try {
+    Inscripciones::actualizarDocumentos($pdoI, $config, $_FILES, $_POST, $yearConsultar);
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
 
 //Acudiente
 $acudienteQuery = "UPDATE ".BD_GENERAL.".usuarios SET

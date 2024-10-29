@@ -216,13 +216,20 @@ class UsuariosPadre {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
         $sql = "SELECT uss_id, uss_apellido1, uss_apellido2, uss_nombre, uss_nombre2, pes_nombre FROM ".BD_GENERAL.".usuarios uss 
-        INNER JOIN ".BD_ADMIN.".general_perfiles ON pes_id=uss_tipo
-        WHERE CONCAT(uss_apellido1,' ',uss_apellido2,' ',uss_nombre,' ',uss_nombre2) LIKE '%".$nombre."%' AND uss.institucion=? AND uss.year=? 
-        ORDER BY uss_apellido1, uss_apellido2, uss_nombre LIMIT 10";
+        INNER JOIN ".BD_ADMIN.".general_perfiles 
+            ON pes_id=uss_tipo
+        WHERE 
+            CONCAT(uss_apellido1,' ',uss_apellido2,' ',uss_nombre,' ',uss_nombre2) LIKE '%".$nombre."%' 
+        AND uss.institucion=? 
+        AND uss.year=? 
+        ORDER BY uss_apellido1, uss_apellido2, uss_nombre 
+        LIMIT 10
+        ";
+
         $parametros = [$config['conf_id_institucion'], $year];
         $consulta = BindSQL::prepararSQL($sql, $parametros);
 
-        return $consulta;         
+        return $consulta;
     }
 
     /**

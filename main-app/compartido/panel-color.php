@@ -1,5 +1,5 @@
 <!-- start color quick setting -->
-        <div class="quick-setting-main" data-step="2" data-intro="<b>Configuración de color:</b> Aquí podrás personalizar los colores de la plataforma." data-position='left' data-scrollTo='tooltip'>
+        <div class="quick-setting-main" data-scrollTo='tooltip'>
 			<button class="control-sidebar-btn btn" data-toggle="control-sidebar"><i class="fa fa-cog fa-spin"></i></button>
 			<div class="quick-setting display-none">
 				<ul id="themecolors">
