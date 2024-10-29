@@ -260,12 +260,8 @@ foreach ($estudiantes as $estudiante) {
 								</table>
 							</td>
 							<td align="center" style="font-size: 12px; font-weight: bold;">
-								<?php if ($recupero) {
-								// $notaAcumulado = $carga["periodos"][$periodoActual]['bol_nota'];
-							}
-							$notaAcumulado = $carga["carga_acumulada"];
-							?>
-								<?= Boletin::formatoNota($notaAcumulado, $tiposNotas); ?>
+								
+								<?= Boletin::formatoNota($carga["carga_acumulada"], $tiposNotas); ?>
 								<?php
 								if ($config['conf_forma_mostrar_notas'] == CUANTITATIVA) {
 									$desempeno = Boletin::determinarRango($notaAcumulado, $tiposNotas);

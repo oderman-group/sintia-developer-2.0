@@ -1384,11 +1384,26 @@ class Boletin {
                 AND cls.cls_periodo       = bol.bol_periodo
                 AND cls.cls_registrada    = 1
 
+                LEFT JOIN " . BD_ACADEMICA . ".academico_nivelaciones niv 
+                ON  niv.institucion        = mat.institucion
+                AND niv.year               = mat.year
+                AND niv.niv_cod_estudiante = mat.mat_id
+                AND niv.niv_id_asg         = car.car_id
+
                 LEFT JOIN " . BD_ACADEMICA . ".academico_ausencias aus 
                 ON  aus.institucion       = bol.institucion
                 AND aus.year              = bol.year
                 AND aus.aus_id_clase      = cls.cls_id
                 AND aus.aus_id_estudiante = mat.mat_id
+
+
+                LEFT JOIN " . BD_DISCIPLINA . ".disiplina_nota disi 
+                ON  disi.institucion       = bol.institucion
+                AND disi.year              = bol.year
+                AND disi.dn_cod_estudiante = bol_estudiante
+                AND disi.dn_periodo        = bol.bol_periodo
+                AND disi.dn_id_carga       = car.car_id
+
                 ";
                 if($traerIndicadores){
                 $sql .="
@@ -1401,13 +1416,7 @@ class Boletin {
                 INNER JOIN " . BD_ACADEMICA . ".academico_indicadores ind 
                 ON ind.institucion    = mat.institucion
                 AND ind.year          = mat.year
-                AND ind.ind_id        = indc.ipc_indicador 
-
-                LEFT JOIN " . BD_ACADEMICA . ".academico_nivelaciones niv 
-                ON  niv.institucion        = mat.institucion
-                AND niv.year               = mat.year
-                AND niv.niv_cod_estudiante = mat.mat_id
-                AND niv.niv_id_asg         = car.car_id
+                AND ind.ind_id        = indc.ipc_indicador                 
 
 				LEFT JOIN " . BD_ACADEMICA . ".academico_indicadores_recuperacion indr 
                 ON  indr.institucion        = mat.institucion
@@ -1415,37 +1424,7 @@ class Boletin {
                 AND indr.rind_estudiante     = mat.mat_id
                 AND indr.rind_carga          = car.car_id
 				AND indr.rind_nota          > indr.rind_nota_original
-				AND indr.rind_periodo        = bol.bol_periodo
-                    ";
-                   }                
-
-                $sql .="
-                LEFT JOIN (
-				   SELECT 
-                    bol2.bol_estudiante as est,
-                    bol2.bol_carga as carga_calculada, 
-                    avg(bol2.bol_nota) AS promedio_acumulado, 
-                    MAX(bol2.bol_periodo) AS periodo_calculado
-
-					FROM " . BD_ACADEMICA . ".academico_boletin bol2
-
-                    INNER JOIN " . BD_ACADEMICA . ".academico_matriculas mat1
-					ON   mat1.mat_id      = bol2.bol_estudiante
-					AND  mat1.institucion = bol2.institucion 
-                    AND  mat1.year        = bol2.year
-					
-                    
-                    WHERE bol2.institucion = ".$config['conf_id_institucion']."
-				    AND bol2.year          =  $year 
-				    AND   bol2.bol_periodo IN ($in_periodos2)
-                    AND   mat1.mat_grado   = $grado
-                    AND   mat1.mat_grupo   = $grupo
-
-					GROUP BY bol2.bol_estudiante,bol2.bol_carga
-					
-                    ) AS acum
-				ON   acum.est              = bol.bol_estudiante
-                AND  acum.carga_calculada  = car.car_id
+				AND indr.rind_periodo        IN ($in_periodos2)
 
                 LEFT JOIN (
                 SELECT
@@ -1476,16 +1455,38 @@ class Boletin {
                 GROUP BY cal.cal_id_estudiante,act.act_periodo,act.act_id_carga,act.act_id_tipo,cal.institucion,cal.year
                 ) AS indv
                 ON   indv.cal_id_estudiante = bol.bol_estudiante
-                    AND  indv.act_id_tipo   = indc.ipc_indicador
-                    AND  indv.act_id_carga  = car.car_id
+                AND  indv.act_id_tipo       = indc.ipc_indicador
+                AND  indv.act_id_carga      = car.car_id";
+                   }                
 
-                LEFT JOIN " . BD_DISCIPLINA . ".disiplina_nota disi 
-                ON  disi.institucion       = bol.institucion
-                AND disi.year              = bol.year
-                AND disi.dn_cod_estudiante = bol_estudiante
-                AND disi.dn_periodo        = bol.bol_periodo
-                AND disi.dn_id_carga       = car.car_id
+                $sql .="
+
+                LEFT JOIN (
+				   SELECT 
+                    bol2.bol_estudiante as est,
+                    bol2.bol_carga as carga_calculada, 
+                    avg(bol2.bol_nota) AS promedio_acumulado, 
+                    MAX(bol2.bol_periodo) AS periodo_calculado
+
+					FROM " . BD_ACADEMICA . ".academico_boletin bol2
+
+                    INNER JOIN " . BD_ACADEMICA . ".academico_matriculas mat1
+					ON   mat1.mat_id      = bol2.bol_estudiante
+					AND  mat1.institucion = bol2.institucion 
+                    AND  mat1.year        = bol2.year
+					
                     
+                    WHERE bol2.institucion = ".$config['conf_id_institucion']."
+				    AND bol2.year          =  $year 
+				    AND   bol2.bol_periodo IN ($in_periodos2)
+                    AND   mat1.mat_grado   = $grado
+                    AND   mat1.mat_grupo   = $grupo
+
+					GROUP BY bol2.bol_estudiante,bol2.bol_carga
+					
+                    ) AS acum
+				ON   acum.est              = bol.bol_estudiante
+                AND  acum.carga_calculada  = car.car_id                    
 
 
                 WHERE mat.mat_grado            = ?
@@ -1498,9 +1499,10 @@ class Boletin {
                 AND ( mat.mat_estado_matricula = " . MATRICULADO . " OR mat.mat_estado_matricula=" . ASISTENTE . ") 
 
 
-                ORDER BY mat.mat_id,are.ar_posicion,car.car_id,ind.ind_id;
-        
-        ";
+                ORDER BY mat.mat_id,are.ar_posicion,car.car_id";
+                if($traerIndicadores){
+                $sql .=",ind.ind_id";
+                }
         $parametros = [$grado, $grupo, $config['conf_id_institucion'], $year];
 
         $resultado = BindSQL::prepararSQL($sql, $parametros);
