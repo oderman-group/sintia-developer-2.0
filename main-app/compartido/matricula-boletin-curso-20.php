@@ -264,7 +264,7 @@ foreach ($estudiantes as $estudiante) {
 								<?= Boletin::formatoNota($carga["carga_acumulada"], $tiposNotas); ?>
 								<?php
 								if ($config['conf_forma_mostrar_notas'] == CUANTITATIVA) {
-									$desempeno = Boletin::determinarRango($notaAcumulado, $tiposNotas);
+									$desempeno = Boletin::determinarRango($carga["carga_acumulada"], $tiposNotas);
 									echo $desempeno['notip_nombre'];
 								}
 								?>
