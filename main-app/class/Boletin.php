@@ -1497,5 +1497,37 @@ class Boletin {
         return $array=["notip_nombre" => "N/A"]; //
     }
     
+
+    public static function colorNota(float $valorNota): string {
+        global  $config;
+        $color='';
+        if ($valorNota < $config['conf_nota_minima_aprobar']) {
+            $color = $config['conf_color_perdida'];
+        } elseif ($valorNota >= $config['conf_nota_minima_aprobar']) {
+            $color = $config['conf_color_ganada'];
+        }
+        return $color; //
+    }
+
+    public static function formatoNota(float $valorNota,array $tiposNotas=[]): float|string {
+        global  $config;
+        $notaResultado=0;
+        $nota = round($valorNota, $config['conf_decimales_notas']);
+        $nota = number_format($nota, $config['conf_decimales_notas']);
+        if(!empty($tiposNotas)){
+            if ($config['conf_forma_mostrar_notas'] == CUALITATIVA) {
+                $desempeno = self::determinarRango($nota, $tiposNotas);
+                $notaResultado=$desempeno['notip_nombre'];
+            }else{
+                $notaResultado=$nota;
+            }
+        }else{
+            $notaResultado=$nota;
+        }
+        
+        return $notaResultado; //
+    }
+    
+    
 }
 
