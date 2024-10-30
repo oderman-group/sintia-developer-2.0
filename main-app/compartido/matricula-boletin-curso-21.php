@@ -279,11 +279,11 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
                     <td>OBSERVACIONES</td>
                 </tr>
 
-                <?php foreach ($estudiante["observaciones"] as $observacion) {?>
+                <?php foreach ($estudiante["observaciones_generales"] as $observacion) {?>
 
                     <tr>
-                        <td style="text-align: center;"><?=$observacion["dn_periodo"];?></td>
-                        <td><?=$observacion["dn_observacion"];?></td>
+                        <td style="text-align: center;"><?=$observacion["periodo"];?></td>
+                        <td><?=$observacion["observacion"];?></td>
                     </tr>
 
                 <?php }?>

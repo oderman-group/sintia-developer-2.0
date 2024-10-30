@@ -1420,9 +1420,10 @@ class Boletin {
                 AND ( mat.mat_estado_matricula = " . MATRICULADO . " OR mat.mat_estado_matricula=" . ASISTENTE . ") 
 
 
-                ORDER BY mat.mat_id,are.ar_posicion,car.car_id,ind.ind_id;
-        
-        ";
+                ORDER BY mat.mat_id,are.ar_posicion,car.car_id,bol_periodo";
+                if($traerIndicadores){
+                $sql .=",ind.ind_id";
+                }
         $parametros = [$grado, $grupo, $config['conf_id_institucion'], $year];
 
         $resultado = BindSQL::prepararSQL($sql, $parametros);
