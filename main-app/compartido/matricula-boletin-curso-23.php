@@ -186,22 +186,22 @@ if ($periodoActual == 4)
 							</td>
 							<?php for ($k = 1; $k <= $periodoActual; $k++) {
 
-								$recupero = $carga["periodos"][$k]['bol_tipo'] == '2';
-								$nota     = $carga["periodos"][$k]["bol_nota"];
+							$recupero = $carga["periodos"][$k]['bol_tipo'] == '2';
+							$nota     = $carga["periodos"][$k]["bol_nota"];
 
+							?>
+							<td class="" align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;<?= $recupero ? 'color: #2b34f4;" title="Nota del periodo Recuperada ' . $carga['periodos'][$k]['bol_nota_anterior'] . '"' : '' ?>">
+								<?= Boletin::formatoNota($nota, $tiposNotas); ?></br>
+								<?php
+								if ($nota < $config['conf_nota_minima_aprobar']) {
+									$materiasPerdidas++;
+								}
+								if ($config['conf_forma_mostrar_notas'] == CUANTITATIVA) {
+									$desempeno = Boletin::determinarRango($carga["periodos"][$periodoActual]['bol_nota'], $tiposNotas);
+									echo $desempeno['notip_nombre'];
+								}
 								?>
-								<td class="" align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;<?= $recupero ? 'color: #2b34f4;" title="Nota del periodo Recuperada ' . $carga['periodos'][$k]['bol_nota_anterior'] . '"' : '' ?>">
-									<?= Boletin::formatoNota($nota, $tiposNotas); ?></br>
-									<?php
-									if ($nota < $config['conf_nota_minima_aprobar']) {
-										$materiasPerdidas++;
-									}
-									if ($config['conf_forma_mostrar_notas'] == CUANTITATIVA) {
-										$desempeno = Boletin::determinarRango($carga["periodos"][$periodoActual]['bol_nota'], $tiposNotas);
-										echo $desempeno['notip_nombre'];
-									}
-									?>
-								</td>
+							</td>
 							<?php } ?>
 							<td align="center" style="font-weight:bold; background:#EAEAEA;">
 								<?= Boletin::formatoNota($carga["carga_acumulada"], $tiposNotas) ?>
