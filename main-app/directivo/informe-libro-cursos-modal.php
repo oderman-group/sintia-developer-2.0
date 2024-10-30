@@ -82,7 +82,7 @@ if (!Modulos::validarSubRol([$idPaginaInterna])) {
                 <label class="col-sm-2 control-label">Estudiante</label>
                 <div class="col-sm-8">
 
-                    <select id="selectEstudiantes" class="form-control  select2" name="id" multiple required>
+                    <select id="selectEstudiantes" class="form-control  select2" style="width: 100%;" name="id" multiple required>
                         <option value="">Seleccione una opción</option>
                         <?php
                         $grados = Grados::traerGradosInstitucion($config, GRADO_GRUPAL);
