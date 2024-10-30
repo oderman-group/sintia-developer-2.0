@@ -231,7 +231,7 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
                     <?php } ?>
                     <td>-</td>
                 </tr>
-                < <tr style="font-weight:bold; text-align:center;">
+                <tr style="font-weight:bold; text-align:center;">
                     <td style="text-align:left;">AUSENCIAS</td>
                     <td>&nbsp;</td>
                     <td>&nbsp;</td>
