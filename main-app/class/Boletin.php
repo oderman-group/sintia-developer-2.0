@@ -1663,8 +1663,9 @@ class Boletin {
         return $color; //
     }
 
-    public static function formatoNota(float $valorNota,array $tiposNotas=[]): float|string {
+    public static function formatoNota(float|null $valorNota,array $tiposNotas=[]): float|string {
         global  $config;
+        Utilidades::valordefecto($valorNota,0);
         $notaResultado=0;
         $nota = round($valorNota, $config['conf_decimales_notas']);
         $nota = number_format($nota, $config['conf_decimales_notas']);
