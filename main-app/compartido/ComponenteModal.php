@@ -68,9 +68,9 @@ class ComponenteModal
 		$script = "<script type='text/javascript'> 
 		async function abrirModal_$id(data) {
 		const contenido = document.getElementById('ComponeteModalContenido-$id');
-		var gifCarga = document.getElementById('gifCarga');
-		if (gifCarga) {
-			document.getElementById('gifCarga').style.display = 'block';
+		var overlay = document.getElementById('overlay');
+		if (overlay) {
+			document.getElementById('overlay').style.display = 'flex';
 		}
 		contenido.innerHTML = '';
 		resultado = await metodoFetchAsync('$urlHtml',";
@@ -87,8 +87,8 @@ class ComponenteModal
 		
 		$('#ComponeteModal-$id .modal-dialog').css('width','$width');
 
-		if (gifCarga) {
-			document.getElementById('gifCarga').style.display = 'none';
+		if (overlay) {
+			document.getElementById('overlay').style.display = 'none';
 		}
 
 		$('#ComponeteModal-$id').modal('show');

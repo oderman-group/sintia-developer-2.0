@@ -36,7 +36,6 @@ if(!Modulos::validarSubRol([$idPaginaInterna])){
                     <div class="row">
                     
                         <div class="col-md-12">
-                         <div id="gifCarga" class="gif-carga"><img alt="Cargando..."></div>
 							<h4>INFORMES ACADEMICOS</h4>
                             <div class="row">
 								
