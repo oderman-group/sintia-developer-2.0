@@ -154,31 +154,7 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
         </table>
 
         <table width="100%" rules="all" border="1">
-            <thead>
-
-                <tr style="font-weight:bold; text-align:center;">
-                    <td width="20%" rowspan="2">ASIGNATURAS</td>
-                    <td width="2%" rowspan="2">I.H.</td>
-
-                    <?php for ($j = 1; $j <= $periodoActual; $j++) { ?>
-                        <td width="3%" colspan="2"><a
-                                href="<?= $_SERVER['PHP_SELF']; ?>?id=<?= $estudiante['mat_id']; ?>&periodo=<?= $j ?>"
-                                style="color:#000; text-decoration:none;">Periodo <?= $j ?></a></td>
-                    <?php } ?>
-                    <td width="3%" colspan="3">Final</td>
-                </tr>
-
-                <tr style="font-weight:bold; text-align:center;">
-                    <?php for ($j = 1; $j <= $periodoActual; $j++) { ?>
-                        <td width="3%">Nota</td>
-                        <td width="3%">Nivel</td>
-                    <?php } ?>
-                    <td width="3%">Nota</td>
-                    <td width="3%">Nivel</td>
-                    <td width="3%">Hab</td>
-                </tr>
-
-            </thead>
+         
             <tbody>
                 <?php
                 $contador = 1;
