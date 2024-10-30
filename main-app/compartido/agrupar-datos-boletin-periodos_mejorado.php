@@ -42,21 +42,22 @@ foreach ($listaDatos  as $registro) {
 
         $nombre = Estudiantes::NombreCompletoDelEstudiante($registro);
         $estudiantes[$registro["mat_id"]] = [
-            "mat_id"               => $registro["mat_id"],
-            "nombre"               => $nombre,
-            "mat_documento"        => $registro["mat_documento"],
-            "nro"                  => $conteoEstudiante,
-            "mat_matricula"        => $registro["mat_matricula"],
-            "gra_id"               => $registro["mat_grado"],
-            "gra_nombre"           => $registro["gra_nombre"],
-            "gru_id"               => $registro["mat_grupo"],
-            "gru_nombre"           => $registro["gru_nombre"],
-            "mat_estado_matricula" => $registro["mat_estado_matricula"],
-            "mat_numero_matricula" => $registro["mat_numero_matricula"],
-            "mat_folio"            => $registro["mat_folio"],
-            "periodo_selecionado"  => $periodos,
-            "observaciones"        => [],
-            "areas"                => []
+            "mat_id"                  => $registro["mat_id"],
+            "nombre"                  => $nombre,
+            "mat_documento"           => $registro["mat_documento"],
+            "nro"                     => $conteoEstudiante,
+            "mat_matricula"           => $registro["mat_matricula"],
+            "gra_id"                  => $registro["mat_grado"],
+            "gra_nombre"              => $registro["gra_nombre"],
+            "gru_id"                  => $registro["mat_grupo"],
+            "gru_nombre"              => $registro["gru_nombre"],
+            "mat_estado_matricula"    => $registro["mat_estado_matricula"],
+            "mat_numero_matricula"    => $registro["mat_numero_matricula"],
+            "mat_folio"               => $registro["mat_folio"],
+            "periodo_selecionado"     => $periodos,
+            "observaciones_generales" => [],
+            "promedios_materias"      => [],
+            "areas"                   => []
 
         ];
         $mat_id = $registro["mat_id"];
@@ -64,20 +65,18 @@ foreach ($listaDatos  as $registro) {
     // Datos de las areas
     if ($mat_ar != $mat_id . '-' . $registro["ar_id"]) {
         $notaAre           = 0;
-        $notaAreaAcumulada = 0; // lleva la nota acumulada de las Areas por los periodos  
         $contarNotasAreas  = 1;
         $contarFallasArea  = 0;
         $contarAreas++;
 
         $estudiantes[$registro["mat_id"]]["areas"][$registro['ar_id']] = [
-            "ar_id"                  => $registro['ar_id'],
-            "nro"                    => $contarAreas,
-            "ar_nombre"              => $registro['ar_nombre'],
-            "nota_area_acumulada"    => 0,
-            "cantidad_notas"         => 0,
-            "fallas"                 => 0,
-            "maneja_porcetaje"       => false,           
-            "cargas"                 => []
+            "ar_id"                    => $registro['ar_id'],
+            "nro"                      => $contarAreas,
+            "ar_nombre"                => $registro['ar_nombre'],
+            "suma_nota_area"           => 0,
+            "fallas"                   => 0,
+            "maneja_porcetaje"         => false,           
+            "cargas"                   => []
         ];
         $mat_ar = $mat_id . '-' . $registro["ar_id"];
     }
@@ -114,8 +113,7 @@ foreach ($listaDatos  as $registro) {
     if ($mat_ar_car_periodo != $mat_ar_car . '-' . $registro["bol_periodo"]) {        
         $notaIndicadorAcumulado = 0; // lleva el conteo de las notas de los indicadores 
         $porcentaje             = $estudiantes[$registro["mat_id"]]["areas"][$registro['ar_id']]["cargas"][$registro['car_id']]["mat_valor"];
-        $porcentaje             = empty($porcentaje) ? 100 : $porcentaje;
-
+        Utilidades::valordefecto($porcentaje,100);
         if ($porcentaje != 100) {
             $estudiantes[$registro["mat_id"]]["areas"][$registro['ar_id']]["maneja_porcetaje"] = true;  
         }        
@@ -123,13 +121,11 @@ foreach ($listaDatos  as $registro) {
         $registro['aus_ausencias'] = empty($registro['aus_ausencias'])?0:$registro['aus_ausencias'];
         
         $notaAre            += ($registro['bol_nota'] * $porcentaje)/100;
-        $notaAreaAcumulada  +=  $registro['bol_nota'] ;
         $contarFallasArea   +=  $registro['aus_ausencias'];
 
         
-        $estudiantes[$registro["mat_id"]]["areas"][$registro['ar_id']]["nota_area_acumulada"] = $notaAreaAcumulada;
-        $estudiantes[$registro["mat_id"]]["areas"][$registro['ar_id']]["cantidad_notas"]      = $contarNotasAreas++;
-        $estudiantes[$registro["mat_id"]]["areas"][$registro['ar_id']]["fallas"]              = $contarFallasArea;
+        $estudiantes[$registro["mat_id"]]["areas"][$registro['ar_id']]["suma_nota_area"] = $notaAre;
+        $estudiantes[$registro["mat_id"]]["areas"][$registro['ar_id']]["fallas"]         = $contarFallasArea;
        
 
        
@@ -137,15 +133,21 @@ foreach ($listaDatos  as $registro) {
         $contarFallasCarga  =  $contarFallasCarga + $registro['aus_ausencias'];
         $estudiantes[$registro["mat_id"]]["areas"][$registro['ar_id']]["cargas"][$registro['car_id']]["nota_carga_acumulada"] = $notaCargaAcumulada;
         $estudiantes[$registro["mat_id"]]["areas"][$registro['ar_id']]["cargas"][$registro['car_id']]["cantidad_notas"]       = $contarNotasCarga++;
-        $estudiantes[$registro["mat_id"]]["areas"][$registro['ar_id']]["cargas"][$registro['car_id']]["carga_acumulada"]     = $registro['promedio_acumulado'];
+        $estudiantes[$registro["mat_id"]]["areas"][$registro['ar_id']]["cargas"][$registro['car_id']]["carga_acumulada"]      = $registro['promedio_acumulado'];
 
-        // nota para el area
-        if (empty($estudiantes[$registro["mat_id"]]["areas"][$registro['ar_id']]["periodos"][$registro["bol_periodo"]]["nota_area"])){
-            $estudiantes[$registro["mat_id"]]["areas"][$registro['ar_id']]["periodos"][$registro["bol_periodo"]]["nota_area"]=0;
-        }
-        if (empty($estudiantes[$registro["mat_id"]]["areas"][$registro['ar_id']]["periodos"][$registro["bol_periodo"]]["nota_area"])){
-            $estudiantes[$registro["mat_id"]]["areas"][$registro['ar_id']]["periodos"][$registro["bol_periodo"]]["ausencia_area"]=0;
-        }
+        Utilidades::valordefecto($estudiantes[$registro["mat_id"]]["promedios_materias"][$registro["bol_periodo"]]["promedio_acumulado"],0);
+        Utilidades::valordefecto($estudiantes[$registro["mat_id"]]["promedios_materias"][$registro["bol_periodo"]]["cantidad_materias"],0);
+        $estudiantes[$registro["mat_id"]]["promedios_materias"][$registro["bol_periodo"]]=[
+            "periodo"               =>  $registro["bol_periodo"],
+            "promedio_acumulado"    =>  $estudiantes[$registro["mat_id"]]["promedios_materias"][$registro["bol_periodo"]]["promedio_acumulado"]+$registro['bol_nota'],
+            "cantidad_materias"     =>  $estudiantes[$registro["mat_id"]]["promedios_materias"][$registro["bol_periodo"]]["cantidad_materias"]+1,
+        ];
+        
+
+        // nota para el area       
+        Utilidades::valordefecto($estudiantes[$registro["mat_id"]]["areas"][$registro['ar_id']]["periodos"][$registro["bol_periodo"]]["nota_area"],0);
+        Utilidades::valordefecto($estudiantes[$registro["mat_id"]]["areas"][$registro['ar_id']]["periodos"][$registro["bol_periodo"]]["ausencia_area"],0);
+        
         $estudiantes[$registro["mat_id"]]["areas"][$registro['ar_id']]["periodos"][$registro["bol_periodo"]] = [
             "periodo"               =>  $registro["bol_periodo"],
             "nota_area"             =>  $estudiantes[$registro["mat_id"]]["areas"][$registro['ar_id']]["periodos"][$registro["bol_periodo"]]["nota_area"]+($registro['bol_nota'] * $porcentaje)/100,  
@@ -202,7 +204,7 @@ foreach ($listaDatos  as $registro) {
                 "observacion" => $registro["dn_observacion"],
                 "periodo"     => $registro["dn_periodo"]
             ];
-            $estudiantes[$registro["mat_id"]]["observaciones"][$registro["dn_periodo"]]= [
+            $estudiantes[$registro["mat_id"]]["observaciones_generales"][$registro["dn_periodo"]]= [
                 "id"          => $registro["dn_id"],
                 "estudiante"  => $registro["dn_cod_estudiante"],
                 "observacion" => $registro["dn_observacion"],
