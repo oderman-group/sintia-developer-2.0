@@ -147,7 +147,7 @@ if ($grado >= 12 && $grado <= 15) {
                     <td>Nombre:<br> <b style="color: #00adefad;"><?= $estudiante["nombre"] ?></b></td>
                 </tr>
                 <tr>
-                    <td>Curso:<br> <b style="color: #00adefad;"><?= strtoupper($estudiante["gra_nombre"]) ?></b></td>
+                    <td>Curso:<br> <b style="color: #00adefad;"><?= strtoupper($estudiante["gra_nombre"]) ?> <?= strtoupper($estudiante["gru_nombre"]) ?></b></td>
                     <td>Sede:<br> <b style="color: #00adefad;"><?= strtoupper($informacion_inst["info_nombre"]) ?></b></td>
                 </tr>
                 <tr>
