@@ -10,7 +10,6 @@ define('HEADER_EMAIL_BACKGROUND', '#6017dc');
 define('GRADO_INDIVIDUAL', 'individual');
 define('GRADO_GRUPAL', 'grupal');
 
-
 define('JOBS_ESTADO_PENDIENTE', 'Pendiente');
 define('JOBS_ESTADO_PROCESO', 'Proceso');
 define('JOBS_ESTADO_FINALIZADO', 'Finalizado');
@@ -178,86 +177,105 @@ define('MODULOS', 'MODULOS');
 define('PAQUETES', 'PAQUETES');
 
 
-
-// define('COMPB_FILTRO_TEXTO', 'filtro_texto');
-
-
+//CUANDO SE EJECUTA POR CONSOLA (CLI)
 if (php_sapi_name() === 'cli') {
 
-        ini_set('display_errors', 0);
-        ini_set('display_startup_errors', 0);
-        define('REDIRECT_ROUTE', 'https://main.plataformasintia.com/app-sintia/main-app');
-        define('ENVIROMENT', 'PROD');
-        error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
+    $_ENV = $argv[1] ?? 'PROD';
 
-} else {
-        switch ($_SERVER['HTTP_HOST']) {
-                case 'localhost':
-                ini_set('display_errors', 1);
-                ini_set('display_startup_errors', 1);
-                define('REDIRECT_ROUTE', 'http://localhost/app-sintia/main-app');
-                define('ENVIROMENT', 'TEST');
-                error_reporting (E_ALL);
-                break;
-
-                case 'developer.plataformasintia.com':
-                ini_set('display_errors', 0);
-                ini_set('display_startup_errors', 0);
-                define('REDIRECT_ROUTE', 'https://developer.plataformasintia.com/app-sintia/main-app');
-                define('ENVIROMENT', 'TEST');
-                break;
-
-                case 'main.plataformasintia.com':
-                ini_set('display_errors', 0);
-                ini_set('display_startup_errors', 0);
-                define('REDIRECT_ROUTE', 'https://main.plataformasintia.com/app-sintia/main-app');
-                define('ENVIROMENT', 'PROD');
-                error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
-                break;
-
-                case 'copyprod.plataformasintia.com':
-                ini_set('display_errors', 0);
-                ini_set('display_startup_errors', 0);
-                define('REDIRECT_ROUTE', 'https://copyprod.plataformasintia.com/app-sintia/main-app');
-                define('ENVIROMENT', 'PROD');
-                error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
-                break;
-
-                default:
-                ini_set('display_errors', 1);
-                ini_set('display_startup_errors', 1);
-                define('REDIRECT_ROUTE', 'https://'.$_SERVER['HTTP_HOST'].'/app-sintia/main-app');
-                define('ENVIROMENT', 'TEST');
-                error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
-                break;
-        }
-}
-
-switch (ENVIROMENT) {
-        case 'LOCAL':
-        include(ROOT_PATH."/conexion-datos-localhost.php");
-        define('BD_PREFIX', 'mobiliar_');
-        define('EPAYCO_TEST', 'true');
-        define('EMAIL_METHOD', 'MAILPIT');
+    switch ($_ENV) {
+        case 'TEST':
+            ini_set('display_errors', 1);
+            ini_set('display_startup_errors', 1);
+            define('REDIRECT_ROUTE', 'https://developer.plataformasintia.com/app-sintia/main-app');
+            define('ENVIROMENT', 'TEST');
+            error_reporting (E_ALL);
         break;
 
-        case 'TEST':
-        include(ROOT_PATH."/conexion-datos-developer.php");
-        define('BD_PREFIX', 'mobiliar_');
-        define('EPAYCO_TEST', 'true');
-        define('EMAIL_METHOD', 'NORMAL');
-	break;
-
         case 'PROD':
-        include(ROOT_PATH."/conexion-datos-production.php");
-        define('BD_PREFIX', 'mobiliar_');
-        define('EPAYCO_TEST', 'false');
-        define('EMAIL_METHOD', 'NORMAL');
+            ini_set('display_errors', 0);
+            ini_set('display_startup_errors', 0);
+            define('REDIRECT_ROUTE', 'https://main.plataformasintia.com/app-sintia/main-app');
+            define('ENVIROMENT', 'PROD');
+            error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
         break;
 
         default:
-        include(ROOT_PATH."/conexion-datos.php");
-        define('BD_PREFIX', 'odermangroup_');
-        define('EMAIL_METHOD', 'MAILPIT');
+            ini_set('display_errors', 0);
+            ini_set('display_startup_errors', 0);
+            define('REDIRECT_ROUTE', 'https://main.plataformasintia.com/app-sintia/main-app');
+            define('ENVIROMENT', 'PROD');
+            error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
         break;
+    }
+
+} else {
+    switch ($_SERVER['HTTP_HOST']) {
+        case 'localhost':
+            ini_set('display_errors', 1);
+            ini_set('display_startup_errors', 1);
+            define('REDIRECT_ROUTE', 'http://localhost/app-sintia/main-app');
+            define('ENVIROMENT', 'TEST');
+            error_reporting (E_ALL);
+        break;
+
+        case 'developer.plataformasintia.com':
+            ini_set('display_errors', 0);
+            ini_set('display_startup_errors', 0);
+            define('REDIRECT_ROUTE', 'https://developer.plataformasintia.com/app-sintia/main-app');
+            define('ENVIROMENT', 'TEST');
+        break;
+
+        case 'main.plataformasintia.com':
+            ini_set('display_errors', 0);
+            ini_set('display_startup_errors', 0);
+            define('REDIRECT_ROUTE', 'https://main.plataformasintia.com/app-sintia/main-app');
+            define('ENVIROMENT', 'PROD');
+            error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
+        break;
+
+        case 'copyprod.plataformasintia.com':
+            ini_set('display_errors', 0);
+            ini_set('display_startup_errors', 0);
+            define('REDIRECT_ROUTE', 'https://copyprod.plataformasintia.com/app-sintia/main-app');
+            define('ENVIROMENT', 'PROD');
+            error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
+        break;
+
+        default:
+            ini_set('display_errors', 1);
+            ini_set('display_startup_errors', 1);
+            define('REDIRECT_ROUTE', 'https://'.$_SERVER['HTTP_HOST'].'/app-sintia/main-app');
+            define('ENVIROMENT', 'TEST');
+            error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
+        break;
+    }
+}
+
+switch (ENVIROMENT) {
+    case 'LOCAL':
+    include(ROOT_PATH."/conexion-datos-localhost.php");
+    define('BD_PREFIX', 'mobiliar_');
+    define('EPAYCO_TEST', 'true');
+    define('EMAIL_METHOD', 'MAILPIT');
+    break;
+
+    case 'TEST':
+    include(ROOT_PATH."/conexion-datos-developer.php");
+    define('BD_PREFIX', 'mobiliar_');
+    define('EPAYCO_TEST', 'true');
+    define('EMAIL_METHOD', 'NORMAL');
+    break;
+
+    case 'PROD':
+    include(ROOT_PATH."/conexion-datos-production.php");
+    define('BD_PREFIX', 'mobiliar_');
+    define('EPAYCO_TEST', 'false');
+    define('EMAIL_METHOD', 'NORMAL');
+    break;
+
+    default:
+    include(ROOT_PATH."/conexion-datos.php");
+    define('BD_PREFIX', 'odermangroup_');
+    define('EMAIL_METHOD', 'MAILPIT');
+    break;
 }
