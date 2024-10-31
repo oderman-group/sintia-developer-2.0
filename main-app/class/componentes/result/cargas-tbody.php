@@ -205,7 +205,7 @@ foreach ($data["data"] as $resultado) {
 							</li>
 						<?php } ?>
 						<?php if($permisoComportamiento){?>
-						<li><a href="comportamiento.php?carga=<?=base64_encode($resultado['car_id']);?>" title="Observaciones de comportamiento registradas">Comportamiento</a></li>
+						<li><a href="comportamiento.php?curso=<?=base64_encode($resultado['car_curso']);?>&grupo=<?=base64_encode($resultado['car_grupo']);?>&asignatura=<?=base64_encode($resultado['mat_id']);?>" title="Observaciones de comportamiento registradas">Comportamiento</a></li>
 						<?php }?>
 				</ul>
 			</div>
