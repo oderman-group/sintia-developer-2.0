@@ -1,6 +1,5 @@
 <?php
-session_start();
-require_once("../conexion.php");
+require_once("index-logica.php");
 ?>
 
 <!DOCTYPE html>
@@ -21,35 +20,55 @@ require_once("../conexion.php");
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
     <!-- Or for RTL support -->
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
     <link href="../config-general/assets-login-2023/css/styles.css" rel="stylesheet" />
+    <!-- steps -->
+    <link rel="stylesheet" href="../config-general/assets/plugins/steps/steps.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <style>
+        /* Estilos básicos para el wizard */
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+    </style>
 
 </head>
 
 <body>
-    <div class="login-container">
+    <a href="https://api.whatsapp.com/send?phone=573006075800&text=Hola, me gustaria recibir mas información de la plataforma." class="float" target="_blank"><i class="fa fa-whatsapp my-float"></i></a>
+
+    <div class="login-container register-container">
         <div class=" vertical-center text-center">
             <div class="container">
                 <div class="row">
                     <div class="col-md-8 offset-md-2" id="login">
-                        <?php if (empty($_POST['siguiente'])) { ?>
-                            <form method="post" action="registro.php" class="needs-validation" novalidate>
-                                <?php include("../config-general/mensajes-informativos.php"); ?>
+                        <form method="post" name="example_advanced_form" id="example-advanced-form" action="registro.php" class="needs-validation" novalidate>
+                            <?php include("../config-general/mensajes-informativos.php"); ?>
+
+                            <h3>Datos Básicos</h3>
+                            <fieldset>
                                 <input type="hidden" name="urlDefault" value="<?= !empty($_REQUEST["urlDefault"]) ? $_REQUEST["urlDefault"] : ""; ?>" />
                                 <input type="hidden" name="plan" value="<?= !empty($_REQUEST["plan"]) ? $_REQUEST["plan"] : ""; ?>" />
                                 <input type="hidden" name="modAdicional[]" value="<?= !empty($_REQUEST["modAdicional"]) ? $_REQUEST["modAdicional"] : ""; ?>" />
                                 <input type="hidden" name="paquetes[]" value="<?= !empty($_REQUEST["paquetes"]) ? $_REQUEST["paquetes"] : ""; ?>" />
                                 <input type="hidden" name="cuotas" value="<?= !empty($_REQUEST["cuotas"]) ? $_REQUEST["cuotas"] : ""; ?>" />
-                                <img class="mb-4" src="../config-general/assets-login-2023/img/logo.png" width="100">
 
                                 <div class="form-floating mt-3">
-                                    <select class="form-select select2" id="institucion" name="institucion" aria-label="Default select example" required>
+                                    <select class="form-select select2" id="institucion" name="institucion" aria-label="Default select example" style="width: 100%;" required>
                                         <option value="">Tipo de Institución</option>
-                                        <option value="<?=SCHOOL?>" <?= !empty($_REQUEST["institucion"]) && $_REQUEST["institucion"] == SCHOOL ? "selected" : ""; ?>>Colegio</option>
-                                        <option value="<?=UNIVERSITY?>" <?= !empty($_REQUEST["institucion"]) && $_REQUEST["institucion"] == UNIVERSITY ? "selected" : ""; ?>>Universidad</option>
-                                        <option value="<?=INSTITUTE?>" <?= !empty($_REQUEST["institucion"]) && $_REQUEST["institucion"] == INSTITUTE ? "selected" : ""; ?>>Instituto</option>
-                                        <option value="<?=KINDERGARTEN?>" <?= !empty($_REQUEST["institucion"]) && $_REQUEST["institucion"] == KINDERGARTEN ? "selected" : ""; ?>>Jardin infantil</option>
+                                        <option value="<?= SCHOOL ?>" <?= !empty($_REQUEST["institucion"]) && $_REQUEST["institucion"] == SCHOOL ? "selected" : ""; ?>>Colegio</option>
+                                        <option value="<?= UNIVERSITY ?>" <?= !empty($_REQUEST["institucion"]) && $_REQUEST["institucion"] == UNIVERSITY ? "selected" : ""; ?>>Universidad</option>
+                                        <option value="<?= INSTITUTE ?>" <?= !empty($_REQUEST["institucion"]) && $_REQUEST["institucion"] == INSTITUTE ? "selected" : ""; ?>>Instituto</option>
+                                        <option value="<?= KINDERGARTEN ?>" <?= !empty($_REQUEST["institucion"]) && $_REQUEST["institucion"] == KINDERGARTEN ? "selected" : ""; ?>>Jardin infantil</option>
                                     </select>
                                     <label for="institucion">Institucion</label>
                                     <div class="invalid-feedback">Por favor seleccione una institución.</div>
@@ -72,20 +91,20 @@ require_once("../conexion.php");
                                         for (var i = 0; i < palabras.length; i++) {
                                             // Asegúrate de que la palabra no esté vacía antes de obtener la primera letra
                                             if (palabras[i].length > 0) {
-                                                primerasLetras += palabras[i][0]+palabras[i][1]; // Añade la primera letra de la palabra
+                                                primerasLetras += palabras[i][0] + palabras[i][1]; // Añade la primera letra de la palabra
                                             }
                                         }
 
                                         return primerasLetras;
                                     }
 
-                                    function generarSiglas(datos){
+                                    function generarSiglas(datos) {
                                         var institucion = datos.value;
                                         var siglas = obtenerPrimerasLetras(institucion);
                                         document.getElementById("siglasInst").value = siglas.toUpperCase();
                                     }
-                                </script> 
-                                
+                                </script>
+
                                 <div class="form-floating mt-3">
                                     <input type="text" class="form-control input-login" id="emailInput" name="usuario" value="<?= !empty($_REQUEST["usuario"]) ? $_REQUEST["usuario"] : ""; ?>" placeholder="documento" required>
                                     <label for="emailInput">Documento</label>
@@ -121,57 +140,90 @@ require_once("../conexion.php");
                                 </div>
 
                                 <div class="form-floating mt-3">
-                                    <input type="text" data-mask="(999) 999-9999" data-mask-reverse="true" class="form-control input-login" name="celular" value="<?= !empty($_REQUEST["celular"]) ? $_REQUEST["celular"] : ""; ?>" placeholder="Celular" required>
+                                    <input type="text" class="form-control input-login" name="celular" value="<?= !empty($_REQUEST["celular"]) ? $_REQUEST["celular"] : ""; ?>" placeholder="Celular" required>
                                     <label for="emailInput">Celular</label>
                                     <div class="invalid-feedback">Por favor ingrese un numero celular válido.</div>
                                 </div>
-                                
-                                <?php
-                                    if(!empty($_REQUEST['error']) && $_REQUEST['error']==1){
-                                        echo '<p class="text-center text-danger fs-12px mb-30">La validación ha sido incorrecta.</p>';
-                                    }
-                                ?>
-                                <input class="w-75 btn btn-lg btn-primary btn-rounded mt-3" type="submit" name="siguiente" value="Siguiente"></input>
-                                <div class="d-flex justify-content-center mt-5">
-                                    <p><a href="index.php" class="text-body">Login</a></p>
-                                </div>
-                            </form>
-                        <?php } if (!empty($_POST['siguiente'])) { ?>
-                            <form method="post" id="miFormulario" class="needs-validation" novalidate>
-                                <input type="hidden" name="urlDefault" value="<?= !empty($_REQUEST["urlDefault"]) ? $_REQUEST["urlDefault"] : ""; ?>" />
-                                <input type="hidden" name="institucion" value="<?= !empty($_REQUEST["institucion"]) ? $_REQUEST["institucion"] : ""; ?>" />
-                                <input type="hidden" name="nombreIns" value="<?= !empty($_REQUEST["nombreIns"]) ? $_REQUEST["nombreIns"] : ""; ?>" />
-                                <input type="hidden" name="siglasInst" value="<?= !empty($_REQUEST["siglasInst"]) ? $_REQUEST["siglasInst"] : ""; ?>" />
-                                <input type="hidden" name="usuario" value="<?= !empty($_REQUEST["usuario"]) ? $_REQUEST["usuario"] : ""; ?>" />
-                                <input type="hidden" name="clave" value="<?= !empty($_REQUEST["clave"]) ? $_REQUEST["clave"] : ""; ?>" />
-                                <input type="hidden" name="nombre" value="<?= !empty($_REQUEST["nombre"]) ? $_REQUEST["nombre"] : ""; ?>" />
-                                <input type="hidden" name="apellidos" value="<?= !empty($_REQUEST["apellidos"]) ? $_REQUEST["apellidos"] : ""; ?>" />
-                                <input type="hidden" name="email" value="<?= !empty($_REQUEST["email"]) ? $_REQUEST["email"] : ""; ?>" />
-                                <input type="hidden" name="celular" value="<?= !empty($_REQUEST["celular"]) ? $_REQUEST["celular"] : ""; ?>" />
-                                <img class="mb-4" src="../config-general/assets-login-2023/img/logo.png" width="100"> 
 
-                                <div class="form-floating mt-3">
-                                    <select class="form-select select2" id="plan" name="plan" aria-label="Default select example" required>
-                                        <option value="">Escoge un plan</option>
-                                        <?php
-                                            $consultaPlanes = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".planes_sintia WHERE plns_tipo='".PLANES."'");
-                                            while ($planes = mysqli_fetch_array($consultaPlanes, MYSQLI_BOTH)) {
-                                        ?>
-                                        <option value="<?=$planes['plns_id']?>" <?= !empty($_REQUEST["plan"]) && $_REQUEST["plan"] == $planes['plns_id'] ? "selected" : ""; ?>><?=$planes['plns_nombre']?></option>
-                                        <?php } ?>
-                                    </select>
-                                    <label for="plan">Escoja un plan</label>
-                                    <div class="invalid-feedback">Por favor seleccione un plan.</div>
+                                <?php
+                                if (!empty($_REQUEST['error']) && $_REQUEST['error'] == 1) {
+                                    echo '<p class="text-center text-danger fs-12px mb-30">La validación ha sido incorrecta.</p>';
+                                }
+                                ?>
+
+                            </fieldset>
+
+                            <h3>Seleción de Plan</h3>
+                            <fieldset>
+
+                                <div class="d-flex justify-content-center align-items-stretch gap-4">
+                                    <!-- Plan Silver -->
+                                    <div class="card text-center" style="width: 18rem; padding: 20px; background-color: #f8f9fa; border: 1px solid #ddd; border-radius: 10px;">
+                                        <input type="radio" name="plan" id="planSilver" value="Silver" required class="form-check-input">
+                                        <label for="planSilver" class="form-check-label d-flex flex-column align-items-center">
+                                            <img src="ruta_a_tu_icono_silver.png" alt="Silver Plan Icon" width="50" height="50">
+                                            <h4>Silver</h4>
+                                            <p>$599/mo</p>
+                                            <button type="button" class="btn btn-outline-dark btn-sm mt-2">EMPEZAR GRATIS</button>
+                                            <ul class="list-unstyled mt-3">
+                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
+                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
+                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
+                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
+                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
+                                            </ul>
+                                        </label>
+                                    </div>
+
+                                    <!-- Plan Gold -->
+                                    <div class="card text-center" style="width: 18rem; padding: 20px; background-color: #ffffff; border: 2px solid #000; border-radius: 10px;">
+                                        <input type="radio" name="plan" id="planGold" value="Gold" required class="form-check-input">
+                                        <label for="planGold" class="form-check-label d-flex flex-column align-items-center">
+                                            <img src="ruta_a_tu_icono_gold.png" alt="Gold Plan Icon" width="50" height="50">
+                                            <h4>Gold</h4>
+                                            <p style="font-size: 1.5rem;">$1,499/mo</p>
+                                            <button type="button" class="btn btn-dark btn-sm mt-2">EMPEZAR GRATIS</button>
+                                            <ul class="list-unstyled mt-3">
+                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
+                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
+                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
+                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
+                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
+                                            </ul>
+                                        </label>
+                                    </div>
+
+                                    <!-- Plan Diamond -->
+                                    <div class="card text-center" style="width: 18rem; padding: 20px; background-color: #f8f9fa; border: 1px solid #ddd; border-radius: 10px;">
+                                        <input type="radio" name="plan" id="planDiamond" value="Diamond" required class="form-check-input">
+                                        <label for="planDiamond" class="form-check-label d-flex flex-column align-items-center">
+                                            <img src="ruta_a_tu_icono_diamond.png" alt="Diamond Plan Icon" width="50" height="50">
+                                            <h4>Diamond</h4>
+                                            <p>$2,499/mo</p>
+                                            <button type="button" class="btn btn-outline-dark btn-sm mt-2">EMPEZAR GRATIS</button>
+                                            <ul class="list-unstyled mt-3">
+                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
+                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
+                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
+                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
+                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
+                                            </ul>
+                                        </label>
+                                    </div>
                                 </div>
+                            </fieldset>
+
+                            <h3>Activar Cuenta</h3>
+                            <fieldset>
 
                                 <div class="form-floating mt-3">
                                     <select class="form-select select2" id="modAdicional" name="modAdicional[]" multiple aria-label="Default select example">
                                         <option value="">Escoge los modulos adicionales</option>
                                         <?php
-                                            $consultaModulos = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".modulos WHERE mod_estado=1");
-                                            while ($modulos = mysqli_fetch_array($consultaModulos, MYSQLI_BOTH)) {
+                                        $consultaModulos = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM " . BD_ADMIN . ".modulos WHERE mod_estado=1");
+                                        while ($modulos = mysqli_fetch_array($consultaModulos, MYSQLI_BOTH)) {
                                         ?>
-                                        <option value="<?=$modulos['mod_id']?>"><?=$modulos['mod_nombre']?></option>
+                                            <option value="<?= $modulos['mod_id'] ?>"><?= $modulos['mod_nombre'] ?></option>
                                         <?php } ?>
                                     </select>
                                     <label for="modAdicional">Escoge los modulos adicionales</label>
@@ -182,9 +234,9 @@ require_once("../conexion.php");
                                 <div class="form-floating mt-3">
                                     <select class="form-select select2" id="paquetes" name="paquetes[]" multiple aria-label="Default select example">
                                         <option value="">Escoge los paquetes adicionales</option>
-                                        <option value="1"<?= !empty($_REQUEST["paquetes"]) && $_REQUEST["paquetes"] == 1 ? "selected" : ""; ?>>Paquete #1</option>
-                                        <option value="2"<?= !empty($_REQUEST["paquetes"]) && $_REQUEST["paquetes"] == 2 ? "selected" : ""; ?>>Paquete #2</option>
-                                        <option value="3"<?= !empty($_REQUEST["paquetes"]) && $_REQUEST["paquetes"] == 3 ? "selected" : ""; ?>>Paquete #3</option>
+                                        <option value="1" <?= !empty($_REQUEST["paquetes"]) && $_REQUEST["paquetes"] == 1 ? "selected" : ""; ?>>Paquete #1</option>
+                                        <option value="2" <?= !empty($_REQUEST["paquetes"]) && $_REQUEST["paquetes"] == 2 ? "selected" : ""; ?>>Paquete #2</option>
+                                        <option value="3" <?= !empty($_REQUEST["paquetes"]) && $_REQUEST["paquetes"] == 3 ? "selected" : ""; ?>>Paquete #3</option>
                                     </select>
                                     <label for="paquetes">Escoge los paquetes adicionales</label>
                                     <div class="invalid-feedback">Por favor seleccione un paquete.</div>
@@ -193,9 +245,9 @@ require_once("../conexion.php");
                                 <div class="form-floating mt-3">
                                     <select class="form-select select2" id="cuotas" name="cuotas" aria-label="Default select example">
                                         <?php
-                                            for($i=1; $i<=64; $i++) {
+                                        for ($i = 1; $i <= 64; $i++) {
                                         ?>
-                                        <option value="<?=$i?>" <?= !empty($_REQUEST["cuotas"]) && $_REQUEST["cuotas"] == $i ? "selected" : ""; ?>><?=$i?></option>
+                                            <option value="<?= $i ?>" <?= !empty($_REQUEST["cuotas"]) && $_REQUEST["cuotas"] == $i ? "selected" : ""; ?>><?= $i ?></option>
                                         <?php } ?>
                                     </select>
                                     <label for="cuotas">A cuantas cuotas?</label>
@@ -203,32 +255,18 @@ require_once("../conexion.php");
 
                                 <div class="form-floating mt-3">
                                     <?php
-                                        $numA1 = rand(1, 10);
-                                        $numA2 = rand(1, 10);
-                                        $resultadoA = $numA1 + $numA2;
+                                    $numA1 = rand(1, 10);
+                                    $numA2 = rand(1, 10);
+                                    $resultadoA = $numA1 + $numA2;
                                     ?>
                                     <input type="hidden" name="sumaReal" value="<?= md5($resultadoA); ?>" />
                                     <input type="text" class="form-control input-login" name="suma" value="<?= !empty($_REQUEST["suma"]) ? $_REQUEST["suma"] : ""; ?>" placeholder="Valida que no eres un Robot. ¿Cuánto es <?= $numA1 . "+" . $numA2; ?>?" required>
                                     <label for="emailInput">Valida que no eres un Robot. ¿Cuánto es <?= $numA1 . "+" . $numA2; ?>?</label>
                                     <div class="invalid-feedback">Por favor ingrese el resultado de la suma.</div>
                                 </div>
-                                
-                                <!-- <button class="w-75 btn btn-lg btn-primary btn-rounded mt-3" type="submit" >Iniciar Prueba Gratis</button> -->
-                                <button class="w-75 btn btn-lg btn-primary btn-rounded mt-3" type="button" onclick="enviarFormulario('registro-guardar.php')">Iniciar prueba gratis</button>
-                                <button class="w-75 btn btn-lg btn-success btn-rounded mt-3" type="button" onclick="enviarFormulario('pagos-online/index.php')">Realizar pago</button>
-                                <div class="d-flex justify-content-center mt-5">
-                                    <p><a href="index.php" class="text-body">Login</a></p>
-                                </div>
-                            </form>
-
-                            <script>
-                                function enviarFormulario(accion) {
-                                    var formulario = document.getElementById('miFormulario');
-                                    formulario.action = accion; // Cambia la acción del formulario
-                                    formulario.submit(); // Envía el formulario
-                                }
-                            </script>
-                        <?php }  ?>
+                            </fieldset>
+                        </form>
+                        <div id="wizard" style="display: none;"></div>
                     </div>
                 </div>
             </div>
@@ -246,11 +284,17 @@ require_once("../conexion.php");
                     <a class="btn btn-primary btn-lg btn-rounded" target="_blank" href="mailto:info@plataformasintia.com">info@plataformasintia.com</a>
                 </div>
             </div>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
-    <script src="../config-general/assets-login-2023/js/pages/login.js"></script>
-    <script src="../config-general/assets/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js" ></script>
+    <script src="../config-general/assets/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
+    <script src="../config-general/assets/plugins/jquery-validation/js/jquery.validate.min.js"></script>
+    <!-- steps -->
+    <script src="../config-general/assets/plugins/steps/jquery.steps.js"></script>
+    <script src="../config-general/assets/js/pages/steps/steps-data.js"></script>
+    <script src="../config-general/assets-login-2023/js/pages/login_1.js"></script>
     <script>
         $(document).ready(function () {
             $('.form-select').select2({
@@ -269,7 +313,6 @@ require_once("../conexion.php");
                 } else {
                     $('#institution').removeClass('is-invalid');
                 }
-                
             });
         });
     </script>
