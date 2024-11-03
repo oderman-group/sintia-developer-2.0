@@ -233,10 +233,19 @@ require_once("../conexion.php");
                 </div>
             </div>
         </div>
-        <div class="logo-container vertical-center">
-            <img src="registerM.png" alt="Mariana" style="width: 100%;">
-        </div>
-    </div>
+        <div class="logo-container position-relative vertical-center" style="width: 100%; height: 100vh; overflow: hidden;">
+            <!-- Lottie como fondo -->
+            <lottie-player src="<?= !empty($datosContactoSintia['dtc_animacion_register']) ? $datosContactoSintia['dtc_animacion_register'] : ""; ?>" background="transparent" speed="1" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" loop autoplay></lottie-player>
+
+            <!-- Contenido centrado encima de la animación -->
+            <div class="content-overlay text-center" style="position: relative; z-index: 1; color: #000;">
+                <h3 class="mt-5">¿Necesitas ayuda?</h3>
+
+                <div class="button-container d-flex justify-content-center mt-3" style="gap: 15px;">
+                    <a class="btn deepPink-bgcolor btn-lg btn-rounded" target="_blank" href="https://api.whatsapp.com/send?phone=573006075800&text=Hola, me gustaria recibir mas información de la plataforma.">3006075800 </a>
+                    <a class="btn btn-primary btn-lg btn-rounded" target="_blank" href="mailto:info@plataformasintia.com">info@plataformasintia.com</a>
+                </div>
+            </div>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
