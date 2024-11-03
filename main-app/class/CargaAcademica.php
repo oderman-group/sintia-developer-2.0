@@ -929,7 +929,8 @@ class CargaAcademica {
         array   $config,
         string  $idCurso,
         string  $idGrupo,
-        string  $yearBd = ""
+        string  $yearBd     = "",
+        string  $groupBy    = "GROUP BY ar.ar_id"
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
@@ -938,7 +939,7 @@ class CargaAcademica {
         INNER JOIN ".BD_ACADEMICA.".academico_materias mate ON mate.mat_id=car_materia AND mate.institucion=car.institucion AND mate.year=car.year
         INNER JOIN ".BD_ACADEMICA.".academico_areas ar ON ar.ar_id= mate.mat_area AND ar.institucion=car.institucion AND ar.year=car.year
         WHERE car_curso=? AND car_grupo=? AND car.institucion=? AND car.year=?
-        GROUP BY ar.ar_id 
+        {$groupBy}
         ORDER BY ar.ar_posicion ASC";
 
         $parametros = [$idCurso, $idGrupo, $config['conf_id_institucion'], $year];
