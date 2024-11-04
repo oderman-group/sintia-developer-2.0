@@ -82,7 +82,9 @@ function agregarPagina(page, idRol) {
     nuevaOpcion.selected = true;
     select.appendChild(nuevaOpcion);
     contarPaginasSeleccionadas(idRol);
-    actualizarSubRol(idRol);
+    if (idRol !== null && idRol !== '') {
+        actualizarSubRol(idRol);
+    }
 }
 
 /**
@@ -96,7 +98,9 @@ function eliminarPagina(page, idRol) {
         select.removeChild(opcionAEliminar);
     }
     contarPaginasSeleccionadas(idRol);
-    actualizarSubRol(idRol);
+    if (idRol !== null && idRol !== '') {
+        actualizarSubRol(idRol);
+    }
 }
 
 /**
