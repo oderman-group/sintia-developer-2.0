@@ -99,7 +99,7 @@ $listaPaginas = SubRoles::listarPaginas();
                                         </div>
                                         <div class="card-body">
 
-                                            <div>  
+                                            <div id="tablePaginas">  
                                                 <table id="example3" class="display" name="tabla1" style="width:100%;">
                                                     <thead>
                                                         <tr>
@@ -155,11 +155,6 @@ $listaPaginas = SubRoles::listarPaginas();
                             <button type="submit" class="btn btn-success"><?=$frases[41][$datosUsuarioActual['uss_idioma']];?></button>
                         </div>
                     </div>
-                    <script>
-                        $(document).ready(function() {
-                            inicializarCheckAll("");
-                        });
-                    </script>
                     <select  id="paginasSeleccionadas"  style="width: 100% !important" name="paginas[]" multiple hidden></select>
                     </form>
                 </div>
@@ -170,6 +165,59 @@ $listaPaginas = SubRoles::listarPaginas();
 <!-- end page container -->
 <?php include("../compartido/footer.php"); ?>
 <script src="../js/Subroles.js" ></script>
+<script>
+    // Variable global para almacenar los elementos seleccionados
+    let paginasSeleccionadas = new Set();
+
+    $(document).ready(function() {
+        // Inicializar DataTable
+        var table = $('#example3').DataTable();
+
+        // Al cargar la tabla, inicializar el checkbox de seleccionar todos
+        if (document.getElementById('all')) {
+            document.getElementById('all').addEventListener('change', function() {
+                var isChecked = this.checked;
+
+                // Iterar sobre todas las filas (incluye todas las páginas)
+                table.rows().every(function(rowIdx, tableLoop, rowLoop) {
+                    var rowNode = this.node();
+                    var checkbox = $(rowNode).find('.check');
+                    
+                    // Obtener el idRol y el valor de la página
+                    var idRol = checkbox.data("id-rol");
+                    var page = checkbox.val();
+
+                    if (isChecked) {
+                        checkbox.prop('checked', true);
+                        agregarPagina(page, idRol);
+                        paginasSeleccionadas.add(page); // Guardar la selección globalmente
+                    } else {
+                        checkbox.prop('checked', false);
+                        eliminarPagina(page, idRol);
+                        paginasSeleccionadas.delete(page); // Eliminar de la selección global
+                    }
+                });
+            });
+        }
+
+        // Evento para aplicar selección cuando se cambia de página
+        table.on('draw', function() {
+            // Cada vez que cambia la página, aplicar selección de acuerdo a `paginasSeleccionadas`
+            table.rows({ page: 'current' }).every(function(rowIdx, tableLoop, rowLoop) {
+                var rowNode = this.node();
+                var checkbox = $(rowNode).find('.check');
+                var page = checkbox.val();
+
+                // Verificar si la página está en `paginasSeleccionadas`
+                if (paginasSeleccionadas.has(page)) {
+                    checkbox.prop('checked', true);
+                } else {
+                    checkbox.prop('checked', false);
+                }
+            });
+        });
+    });
+</script>
 <!-- start js include path -->
 <script src="../../config-general/assets/plugins/jquery/jquery.min.js"></script>
 <script src="../../config-general/assets/plugins/popper/popper.js"></script>
