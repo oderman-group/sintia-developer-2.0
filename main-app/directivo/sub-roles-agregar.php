@@ -129,7 +129,7 @@ $listaPaginas = SubRoles::listarPaginas();
                                                                 <td>
                                                                     <div class="input-group spinner col-sm-10">
                                                                         <label class="switchToggle">
-                                                                            <input type="checkbox" class="check" id="<?= $pagina['pagp_paginas_dependencia']; ?>" onchange="validarPaginasDependencia(this)" value="<?= $pagina['pagp_id']; ?>">
+                                                                            <input type="checkbox" class="check" data-id-rol="" id="<?= $pagina['pagp_paginas_dependencia']; ?>" onchange="validarPaginasDependencia(this)" value="<?= $pagina['pagp_id']; ?>">
                                                                             <span class="slider green round"></span>
                                                                         </label>
                                                                     </div>
