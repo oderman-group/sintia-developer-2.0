@@ -135,115 +135,44 @@ require_once("index-logica.php");
                             <fieldset>
 
                                 <div class="d-flex justify-content-center align-items-stretch gap-4">
-                                    <!-- Plan Silver -->
-                                    <div class="card text-center" style="width: 18rem; padding: 20px; background-color: #f8f9fa; border: 1px solid #ddd; border-radius: 10px;">
-                                        <input type="radio" name="plan" id="planSilver" value="Silver" required class="form-check-input">
-                                        <label for="planSilver" class="form-check-label d-flex flex-column align-items-center">
-                                            <img src="ruta_a_tu_icono_silver.png" alt="Silver Plan Icon" width="50" height="50">
-                                            <h4>Silver</h4>
-                                            <p>$599/mo</p>
-                                            <button type="button" class="btn btn-outline-dark btn-sm mt-2">EMPEZAR GRATIS</button>
-                                            <ul class="list-unstyled mt-3">
-                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
-                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
-                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
-                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
-                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
-                                            </ul>
-                                        </label>
-                                    </div>
+                                    <?php
+                                        $consultaPlanes = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM ".BD_ADMIN.".planes_sintia WHERE plns_tipo='".PLANES."'");
+                                        while ($planes = mysqli_fetch_array($consultaPlanes, MYSQLI_BOTH)) {
+                                            $background = $planes['plns_id'] == 2 ? "background-color: #ffffff; border: 2px solid #000;": "background-color: #f8f9fa; border: 1px solid #ddd;";
 
-                                    <!-- Plan Gold -->
-                                    <div class="card text-center" style="width: 18rem; padding: 20px; background-color: #ffffff; border: 2px solid #000; border-radius: 10px;">
-                                        <input type="radio" name="plan" id="planGold" value="Gold" required class="form-check-input">
-                                        <label for="planGold" class="form-check-label d-flex flex-column align-items-center">
-                                            <img src="ruta_a_tu_icono_gold.png" alt="Gold Plan Icon" width="50" height="50">
-                                            <h4>Gold</h4>
-                                            <p style="font-size: 1.5rem;">$1,499/mo</p>
-                                            <button type="button" class="btn btn-dark btn-sm mt-2">EMPEZAR GRATIS</button>
-                                            <ul class="list-unstyled mt-3">
-                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
-                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
-                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
-                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
-                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
-                                            </ul>
-                                        </label>
-                                    </div>
-
-                                    <!-- Plan Diamond -->
-                                    <div class="card text-center" style="width: 18rem; padding: 20px; background-color: #f8f9fa; border: 1px solid #ddd; border-radius: 10px;">
-                                        <input type="radio" name="plan" id="planDiamond" value="Diamond" required class="form-check-input">
-                                        <label for="planDiamond" class="form-check-label d-flex flex-column align-items-center">
-                                            <img src="ruta_a_tu_icono_diamond.png" alt="Diamond Plan Icon" width="50" height="50">
-                                            <h4>Diamond</h4>
-                                            <p>$2,499/mo</p>
-                                            <button type="button" class="btn btn-outline-dark btn-sm mt-2">EMPEZAR GRATIS</button>
-                                            <ul class="list-unstyled mt-3">
-                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
-                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
-                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
-                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
-                                                <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
-                                            </ul>
-                                        </label>
-                                    </div>
+                                            $iconoPlan = !empty($planes['plns_imagen']) ? $planes['plns_imagen']: "default.png";
+                                    ?>
+                                        <div class="card text-center" style="width: 18rem; padding: 20px; border-radius: 10px; <?=$background?>">
+                                            <input type="radio" name="plan" id="plan<?=$planes['plns_id']?>" value="<?=$planes['plns_id']?>" required class="form-check-input">
+                                            <label for="plan<?=$planes['plns_id']?>" class="form-check-label d-flex flex-column align-items-center">
+                                                <img src="files/planes/<?=$iconoPlan?>" alt="<?=$planes['plns_nombre']?> Plan Icon" width="50" height="50">
+                                                <h4><?=$planes['plns_nombre']?></h4>
+                                                <p>$<?=number_format($planes['plns_valor'],0,",",".")?>/Mensual</p>
+                                                <button type="button" onclick="enviarFormulario('registro-guardar.php')" class="btn btn-outline-dark btn-sm mt-2">EMPEZAR GRATIS</button>
+                                                <ul class="list-unstyled mt-3">
+                                                    <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
+                                                    <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
+                                                    <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
+                                                    <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
+                                                    <li><i class="bi bi-check-circle"></i> Etiam sodales ac f</li>
+                                                </ul>
+                                            </label>
+                                        </div>
+                                    <?php } ?>
                                 </div>
                             </fieldset>
 
                             <h3>Activar Cuenta</h3>
-                            <fieldset>
-
-                                <div class="form-floating mt-3">
-                                    <select class="form-select select2" id="modAdicional" name="modAdicional[]" multiple aria-label="Default select example">
-                                        <option value="">Escoge los modulos adicionales</option>
-                                        <?php
-                                        $consultaModulos = mysqli_query($conexionBaseDatosServicios, "SELECT * FROM " . BD_ADMIN . ".modulos WHERE mod_estado=1");
-                                        while ($modulos = mysqli_fetch_array($consultaModulos, MYSQLI_BOTH)) {
-                                        ?>
-                                            <option value="<?= $modulos['mod_id'] ?>"><?= $modulos['mod_nombre'] ?></option>
-                                        <?php } ?>
-                                    </select>
-                                    <label for="modAdicional">Escoge los modulos adicionales</label>
-                                    <div class="invalid-feedback">Por favor seleccione un modulo.</div>
-                                </div>
-
-                                <!-- Cambiar por consulta a paquetes -->
-                                <div class="form-floating mt-3">
-                                    <select class="form-select select2" id="paquetes" name="paquetes[]" multiple aria-label="Default select example">
-                                        <option value="">Escoge los paquetes adicionales</option>
-                                        <option value="1" <?= !empty($_REQUEST["paquetes"]) && $_REQUEST["paquetes"] == 1 ? "selected" : ""; ?>>Paquete #1</option>
-                                        <option value="2" <?= !empty($_REQUEST["paquetes"]) && $_REQUEST["paquetes"] == 2 ? "selected" : ""; ?>>Paquete #2</option>
-                                        <option value="3" <?= !empty($_REQUEST["paquetes"]) && $_REQUEST["paquetes"] == 3 ? "selected" : ""; ?>>Paquete #3</option>
-                                    </select>
-                                    <label for="paquetes">Escoge los paquetes adicionales</label>
-                                    <div class="invalid-feedback">Por favor seleccione un paquete.</div>
-                                </div>
-
-                                <div class="form-floating mt-3">
-                                    <select class="form-select select2" id="cuotas" name="cuotas" aria-label="Default select example">
-                                        <?php
-                                        for ($i = 1; $i <= 64; $i++) {
-                                        ?>
-                                            <option value="<?= $i ?>" <?= !empty($_REQUEST["cuotas"]) && $_REQUEST["cuotas"] == $i ? "selected" : ""; ?>><?= $i ?></option>
-                                        <?php } ?>
-                                    </select>
-                                    <label for="cuotas">A cuantas cuotas?</label>
-                                </div>
-
-                                <div class="form-floating mt-3">
-                                    <?php
-                                    $numA1 = rand(1, 10);
-                                    $numA2 = rand(1, 10);
-                                    $resultadoA = $numA1 + $numA2;
-                                    ?>
-                                    <input type="hidden" name="sumaReal" value="<?= md5($resultadoA); ?>" />
-                                    <input type="text" class="form-control input-login" name="suma" value="<?= !empty($_REQUEST["suma"]) ? $_REQUEST["suma"] : ""; ?>" placeholder="Valida que no eres un Robot. ¿Cuánto es <?= $numA1 . "+" . $numA2; ?>?" required>
-                                    <label for="emailInput">Valida que no eres un Robot. ¿Cuánto es <?= $numA1 . "+" . $numA2; ?>?</label>
-                                    <div class="invalid-feedback">Por favor ingrese el resultado de la suma.</div>
-                                </div>
-                            </fieldset>
+                            <fieldset></fieldset>
                         </form>
+
+                        <script>
+                            function enviarFormulario(accion) {
+                                var formulario = document.getElementById('miFormulario');
+                                formulario.action = accion; // Cambia la acción del formulario
+                                formulario.submit(); // Envía el formulario
+                            }
+                        </script>
                         <div id="wizard" style="display: none;"></div>
                     </div>
                 </div>
