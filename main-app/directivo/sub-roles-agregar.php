@@ -155,7 +155,12 @@ $listaPaginas = SubRoles::listarPaginas();
                             <button type="submit" class="btn btn-success"><?=$frases[41][$datosUsuarioActual['uss_idioma']];?></button>
                         </div>
                     </div>
-                    <select  id="paginasSeleccionadas"  style="width: 100% !important" name="paginas[]" multiple hidden/>
+                    <script>
+                        $(document).ready(function() {
+                            inicializarCheckAll("");
+                        });
+                    </script>
+                    <select  id="paginasSeleccionadas"  style="width: 100% !important" name="paginas[]" multiple hidden></select>
                     </form>
                 </div>
             </div>
