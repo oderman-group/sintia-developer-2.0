@@ -51,7 +51,7 @@ require_once("index-logica.php");
             <div class="container">
                 <div class="row">
                     <div class="col-md-8 offset-md-2" id="login">
-                        <form method="post" name="example_advanced_form" id="example-advanced-form" action="registro.php" class="needs-validation" novalidate>
+                        <form method="post" name="example_advanced_form" id="example-advanced-form" action="registro-guardar.php" class="needs-validation" novalidate>
                             <?php include("../config-general/mensajes-informativos.php"); ?>
 
                             <h3>Datos Básicos</h3>
@@ -63,21 +63,33 @@ require_once("index-logica.php");
                                 <input type="hidden" name="cuotas" value="<?= !empty($_REQUEST["cuotas"]) ? $_REQUEST["cuotas"] : ""; ?>" />
 
                                 <div class="form-floating mt-3">
-                                    <select class="form-select select2" id="institucion" name="institucion" aria-label="Default select example" style="width: 100%;" required>
-                                        <option value="">Tipo de Institución</option>
-                                        <option value="<?= SCHOOL ?>" <?= !empty($_REQUEST["institucion"]) && $_REQUEST["institucion"] == SCHOOL ? "selected" : ""; ?>>Colegio</option>
-                                        <option value="<?= UNIVERSITY ?>" <?= !empty($_REQUEST["institucion"]) && $_REQUEST["institucion"] == UNIVERSITY ? "selected" : ""; ?>>Universidad</option>
-                                        <option value="<?= INSTITUTE ?>" <?= !empty($_REQUEST["institucion"]) && $_REQUEST["institucion"] == INSTITUTE ? "selected" : ""; ?>>Instituto</option>
-                                        <option value="<?= KINDERGARTEN ?>" <?= !empty($_REQUEST["institucion"]) && $_REQUEST["institucion"] == KINDERGARTEN ? "selected" : ""; ?>>Jardin infantil</option>
-                                    </select>
-                                    <label for="institucion">Institucion</label>
-                                    <div class="invalid-feedback">Por favor seleccione una institución.</div>
+                                    <input type="text" class="form-control input-login" name="nombre" value="<?= !empty($_REQUEST["nombre"]) ? $_REQUEST["nombre"] : ""; ?>" placeholder="Nombres" required>
+                                    <label for="emailInput">Nombres</label>
+                                    <div class="invalid-feedback">Por favor ingrese su nombre.</div>
                                 </div>
 
                                 <div class="form-floating mt-3">
-                                    <input type="text" class="form-control input-login" name="nombreIns" placeholder="Institución" onchange="generarSiglas(this)" value="<?= !empty($_REQUEST["nombreIns"]) ? $_REQUEST["nombreIns"] : ""; ?>" required>
+                                    <input type="text" class="form-control input-login" name="apellidos" value="<?= !empty($_REQUEST["apellidos"]) ? $_REQUEST["apellidos"] : ""; ?>" placeholder="Apellidos" required>
+                                    <label for="emailInput">Apellidos</label>
+                                    <div class="invalid-feedback">Por favor ingrese sus apellidos.</div>
+                                </div>
+
+                                <div class="form-floating mt-3">
+                                    <input type="email" class="form-control input-login" name="Correo electrónico" value="<?= !empty($_REQUEST["email"]) ? $_REQUEST["email"] : ""; ?>" placeholder="email" required>
+                                    <label for="emailInput">Correo electrónico</label>
+                                    <div class="invalid-feedback">Por favor ingrese un correo electrónico válido.</div>
+                                </div>
+
+                                <div class="form-floating mt-3">
+                                    <input type="text" class="form-control input-login" name="Número de celular" value="<?= !empty($_REQUEST["celular"]) ? $_REQUEST["celular"] : ""; ?>" placeholder="Celular" required>
+                                    <label for="emailInput">Número de celular</label>
+                                    <div class="invalid-feedback">Por favor ingrese un número celular válido.</div>
+                                </div>
+
+                                <div class="form-floating mt-5">
+                                    <input type="text" class="form-control input-login" name="nombreIns" placeholder="Nombre de la institución" onchange="generarSiglas(this)" value="<?= !empty($_REQUEST["nombreIns"]) ? $_REQUEST["nombreIns"] : ""; ?>" required>
                                     <input type="hidden" name="siglasInst" id="siglasInst">
-                                    <label for="emailInput">Institución</label>
+                                    <label for="emailInput">Nombre de la institución</label>
                                     <div class="invalid-feedback">Por favor ingrese el nombre de su institución.</div>
                                 </div>
 
@@ -106,50 +118,16 @@ require_once("index-logica.php");
                                 </script>
 
                                 <div class="form-floating mt-3">
-                                    <input type="text" class="form-control input-login" id="emailInput" name="usuario" value="<?= !empty($_REQUEST["usuario"]) ? $_REQUEST["usuario"] : ""; ?>" placeholder="documento" required>
-                                    <label for="emailInput">Documento</label>
-                                    <div class="invalid-feedback">Por favor ingrese su numero de documento sin puntos.</div>
-                                </div>
-
-                                <div class="form-floating input-group mt-3">
-                                    <input type="password" class="form-control input-login" id="password" name="clave" value="<?= !empty($_REQUEST["clave"]) ? $_REQUEST["clave"] : ""; ?>" placeholder="Password" required>
-                                    <button class="btn btn-outline-secondary input-group-text toggle-password" type="button">
-                                        <i class="bi bi-eye-slash"></i>
-                                    </button>
-                                    <label for="password">Contraseña</label>
-                                    <div class="invalid-feedback">usuario y/o contraseña invalido</div>
-                                    <div class="form-text" id="caps-lock-message" style="display: none;">Mayúsculas activadas</div>
+                                    <input type="text" class="form-control input-login" name="ciudad" placeholder="Municipio/Ciudad" value="<?= !empty($_REQUEST["ciudad"]) ? $_REQUEST["ciudad"] : ""; ?>" required>
+                                    <label for="emailInput">Municipio/Ciudad</label>
+                                    <div class="invalid-feedback">Por favor ingrese la ciudad de su institución.</div>
                                 </div>
 
                                 <div class="form-floating mt-3">
-                                    <input type="text" class="form-control input-login" name="nombre" value="<?= !empty($_REQUEST["nombre"]) ? $_REQUEST["nombre"] : ""; ?>" placeholder="Nombres" required>
-                                    <label for="emailInput">Nombres</label>
-                                    <div class="invalid-feedback">Por favor ingrese su nombre.</div>
+                                    <input type="text" class="form-control input-login" name="cargo" placeholder="Cargo que ocupa" value="<?= !empty($_REQUEST["cargo"]) ? $_REQUEST["cargo"] : ""; ?>" required>
+                                    <label for="emailInput">Cargo que ocupa</label>
+                                    <div class="invalid-feedback">Por favor ingrese su cargo en la institución.</div>
                                 </div>
-
-                                <div class="form-floating mt-3">
-                                    <input type="text" class="form-control input-login" name="apellidos" value="<?= !empty($_REQUEST["apellidos"]) ? $_REQUEST["apellidos"] : ""; ?>" placeholder="Apellidos" required>
-                                    <label for="emailInput">Apellidos</label>
-                                    <div class="invalid-feedback">Por favor ingrese sus apellidos.</div>
-                                </div>
-
-                                <div class="form-floating mt-3">
-                                    <input type="email" class="form-control input-login" name="email" value="<?= !empty($_REQUEST["email"]) ? $_REQUEST["email"] : ""; ?>" placeholder="email" required>
-                                    <label for="emailInput">Email</label>
-                                    <div class="invalid-feedback">Por favor ingrese un correo electrónico válido.</div>
-                                </div>
-
-                                <div class="form-floating mt-3">
-                                    <input type="text" class="form-control input-login" name="celular" value="<?= !empty($_REQUEST["celular"]) ? $_REQUEST["celular"] : ""; ?>" placeholder="Celular" required>
-                                    <label for="emailInput">Celular</label>
-                                    <div class="invalid-feedback">Por favor ingrese un numero celular válido.</div>
-                                </div>
-
-                                <?php
-                                if (!empty($_REQUEST['error']) && $_REQUEST['error'] == 1) {
-                                    echo '<p class="text-center text-danger fs-12px mb-30">La validación ha sido incorrecta.</p>';
-                                }
-                                ?>
 
                             </fieldset>
 
