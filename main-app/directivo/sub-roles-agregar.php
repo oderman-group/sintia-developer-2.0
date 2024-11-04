@@ -95,7 +95,7 @@ $listaPaginas = SubRoles::listarPaginas();
                                 <div class="col-sm-12">
                                     <div class="card card-topline-purple">
                                         <div class="card-head">
-                                            <header><?=$frases[370][$datosUsuarioActual['uss_idioma']];?> ( <label  style="font-weight: bold;" id="cantSeleccionadas" ></label>/<?= mysqli_num_rows($listaPaginas)?> )</header>
+                                            <header><?=$frases[370][$datosUsuarioActual['uss_idioma']];?> ( <label  style="font-weight: bold;" id="cantSeleccionadas" >0</label>/<?= mysqli_num_rows($listaPaginas)?> )</header>
                                         </div>
                                         <div class="card-body">
 
