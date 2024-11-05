@@ -25,10 +25,10 @@ foreach ($data["data"] as $resultado) {
 	$periodoSP = $resultado['car_periodo'];
 	$marcaMediaTecnica = '';
 	if ($resultado['gra_tipo'] == GRADO_INDIVIDUAL) {
-		$cantidadEstudiantes = $resultado['cantidad_estudaintes_mt'];
+		$cantidadEstudiantes = $resultado['cantidad_estudiantes_mt'];
 		$marcaMediaTecnica = '<i class="fa fa-bookmark" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Media técnica"></i> ';
 	} else {
-		$cantidadEstudiantes = $resultado['cantidad_estudaintes'];
+		$cantidadEstudiantes = $resultado['cantidad_estudiantes'];
 	}
 	$infoTooltipCargas = "<b>COD:</b> 
 	{$resultado['car_id']}<br>
@@ -122,8 +122,7 @@ foreach ($data["data"] as $resultado) {
 							if ($generarInforme) {
 								switch (intval($configGenerarJobs)) {
 									case 1:
-										$consultaListaEstudantesSinNotas = Estudiantes::listarEstudiantesNotasFaltantes($resultado["car_id"],$resultado["car_periodo"],$resultado["gra_tipo"]);
-                                        $numSinNotas = mysqli_num_rows($consultaListaEstudantesSinNotas);
+										$numSinNotas            = $resultado["cantidad_estudiantes_sin_nota"];
 										if ($numSinNotas < Boletin::PORCENTAJE_MINIMO_GENERAR_INFORME) {
 											$generarInforme = false;
 											$msnajetooltip = "La institución no permite generar informe hasta que todos los estudiantes estén calificados un 100%";
@@ -139,34 +138,20 @@ foreach ($data["data"] as $resultado) {
 										$msnajetooltip = "La institución generará el informe con el porcentaje actual de cada estudiante";
 										break;
 								}
-							}
-							$parametros = [
-								"carga"   => $resultado["car_id"],
-								"periodo" => $resultado["car_periodo"],
-								"grado"   => $resultado["car_curso"],
-								"grupo"   => $resultado["car_grupo"]
-							];
+							}				
 
-							$parametrosBuscar = [
-								"tipo"        => JOBS_TIPO_GENERAR_INFORMES,
-								"responsable" => $_SESSION['id'],
-								"parametros"  => json_encode($parametros),
-								"agno"        => $config['conf_agno']
-							];
+							$jobsEncontrado = empty($resultado["job_id"]) ? false : true;
 
-							$buscarJobs     = SysJobs::consultar($parametrosBuscar);
-							$jobsEncontrado = mysqli_fetch_array($buscarJobs, MYSQLI_BOTH);
-
-							if (!empty($jobsEncontrado)) {
+							if ($jobsEncontrado) {
 								$generarInforme=false;
-								switch ($jobsEncontrado["job_estado"]) {
+								switch ($resultado["job_estado"]) {
 									case JOBS_ESTADO_ERROR:
-										$msnajetooltip =$jobsEncontrado["job_mensaje"];
+										$msnajetooltip =$resultado["job_mensaje"];
 										$generarInforme=true;
 										break;
 
 									case JOBS_ESTADO_PENDIENTE:
-										$msnajetooltip = $jobsEncontrado["job_mensaje"];
+										$msnajetooltip = $resultado["job_mensaje"];
 										break;
 
 									case JOBS_ESTADO_PROCESO:
