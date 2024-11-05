@@ -130,11 +130,13 @@ define('ICUI', 'ICUI');
 define('OTRO', 'OTRO');
 
 /* ESTADOS DE MATRICULA */
+define('ELIMINADO', 0);
 define('MATRICULADO', 1);
 define('ASISTENTE', 2);
 define('CANCELADO', 3);
 define('NO_MATRICULADO', 4);
 define('EN_INSCRIPCION', 5);
+
 
 /* NIVELES EDUCATIVOS */
 define('PREESCOLAR', 1);
