@@ -113,10 +113,10 @@ foreach ($data["data"] as $resultado) {
 							$numSinNotas=0;
 							if ($actividadesDeclaradas < Boletin::PORCENTAJE_MINIMO_GENERAR_INFORME) {
 								$generarInforme = false;
-								$msnajetooltip = "Las calidifaciones declaradas no completan el 100% ";
+								$msnajetooltip = "Las califaciones declaradas no completan el 100% ";
 							} else if ($actividadesRegistradas < Boletin::PORCENTAJE_MINIMO_GENERAR_INFORME) { 
 								$generarInforme = false;
-								$msnajetooltip = "Las calidifaciones registradas no completan el 100% ";
+								$msnajetooltip = "Las califaciones registradas no completan el 100% ";
 							} else {
 								$generarInforme = true;
 							}
