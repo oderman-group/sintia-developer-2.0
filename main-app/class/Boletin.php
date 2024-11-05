@@ -1284,8 +1284,37 @@ class Boletin {
                 AND   bol.year        = mat.year
                 AND   bol_estudiante  = mat.mat_id
                 AND   bol_carga       = car.car_id
-                AND   bol_periodo     = ?
 
+                LEFT JOIN " . BD_ACADEMICA . ".academico_clases cls 
+                ON  cls.institucion       = bol.institucion
+                AND cls.year              = bol.year
+                AND cls.cls_id_carga      = car.car_id
+                AND cls.cls_periodo       = bol.bol_periodo
+                AND cls.cls_registrada    = 1
+
+                LEFT JOIN " . BD_ACADEMICA . ".academico_nivelaciones niv 
+                ON  niv.institucion        = mat.institucion
+                AND niv.year               = mat.year
+                AND niv.niv_cod_estudiante = mat.mat_id
+                AND niv.niv_id_asg         = car.car_id
+
+                LEFT JOIN " . BD_ACADEMICA . ".academico_ausencias aus 
+                ON  aus.institucion       = bol.institucion
+                AND aus.year              = bol.year
+                AND aus.aus_id_clase      = cls.cls_id
+                AND aus.aus_id_estudiante = mat.mat_id
+
+
+                LEFT JOIN " . BD_DISCIPLINA . ".disiplina_nota disi 
+                ON  disi.institucion       = bol.institucion
+                AND disi.year              = bol.year
+                AND disi.dn_cod_estudiante = bol_estudiante
+                AND disi.dn_periodo        = bol.bol_periodo
+                AND disi.dn_id_carga       = car.car_id
+
+                ";
+                if($traerIndicadores){
+                $sql .="
                 INNER JOIN " . BD_ACADEMICA . ".academico_indicadores_carga indc 
                 ON  indc.institucion  = mat.institucion
                 AND indc.year         = mat.year
@@ -1295,13 +1324,51 @@ class Boletin {
                 INNER JOIN " . BD_ACADEMICA . ".academico_indicadores ind 
                 ON ind.institucion    = mat.institucion
                 AND ind.year          = mat.year
-                AND ind.ind_id        = indc.ipc_indicador
+                AND ind.ind_id        = indc.ipc_indicador 
 
                 LEFT JOIN " . BD_ACADEMICA . ".academico_nivelaciones niv 
                 ON  niv.institucion        = mat.institucion
                 AND niv.year               = mat.year
                 AND niv.niv_cod_estudiante = mat.mat_id
                 AND niv.niv_id_asg         = car.car_id
+
+				LEFT JOIN " . BD_ACADEMICA . ".academico_indicadores_recuperacion indr 
+                ON  indr.institucion        = mat.institucion
+                AND indr.year               = mat.year
+                AND indr.rind_estudiante     = mat.mat_id
+                AND indr.rind_carga          = car.car_id
+				AND indr.rind_nota          > indr.rind_nota_original
+				AND indr.rind_periodo        = bol.bol_periodo
+                    ";
+                   }                
+
+                $sql .="
+                LEFT JOIN (
+				   SELECT 
+                    bol2.bol_estudiante as est,
+                    bol2.bol_carga as carga_calculada, 
+                    avg(bol2.bol_nota) AS promedio_acumulado, 
+                    MAX(bol2.bol_periodo) AS periodo_calculado
+
+					FROM " . BD_ACADEMICA . ".academico_boletin bol2
+
+                    INNER JOIN " . BD_ACADEMICA . ".academico_matriculas mat1
+					ON   mat1.mat_id      = bol2.bol_estudiante
+					AND  mat1.institucion = bol2.institucion 
+                    AND  mat1.year        = bol2.year
+					
+                    
+                    WHERE bol2.institucion = ".$config['conf_id_institucion']."
+				    AND bol2.year          =  $year 
+				    AND   bol2.bol_periodo IN ($in_periodos2)
+                    AND   mat1.mat_grado   = $grado
+                    AND   mat1.mat_grupo   = $grupo
+
+					GROUP BY bol2.bol_estudiante,bol2.bol_carga
+					
+                    ) AS acum
+				ON   acum.est              = bol.bol_estudiante
+                AND  acum.carga_calculada  = car.car_id
 
                 LEFT JOIN (
                 SELECT
@@ -1339,8 +1406,8 @@ class Boletin {
                 ON  disi.institucion       = bol.institucion
                 AND disi.year              = bol.year
                 AND disi.dn_cod_estudiante = bol_estudiante
-                AND disi.dn_periodo        <= bol.bol_periodo
-                AND disi.dn_id_carga        =car.car_id
+                AND disi.dn_periodo        = bol.bol_periodo
+                AND disi.dn_id_carga       = car.car_id
                     
 
 
@@ -1353,10 +1420,11 @@ class Boletin {
                 AND ( mat.mat_estado_matricula = " . MATRICULADO . " OR mat.mat_estado_matricula=" . ASISTENTE . ") 
 
 
-                ORDER BY mat.mat_id,are.ar_posicion,car.car_id,ind.ind_id;
-        
-        ";
-        $parametros = [$periodo, $periodo, $config['conf_id_institucion'], $year, $grado, $grupo, $config['conf_id_institucion'], $year];
+                ORDER BY mat.mat_id,are.ar_posicion,car.car_id,bol_periodo";
+                if($traerIndicadores){
+                $sql .=",ind.ind_id";
+                }
+        $parametros = [$grado, $grupo, $config['conf_id_institucion'], $year];
 
         $resultado = BindSQL::prepararSQL($sql, $parametros);
 
@@ -1496,6 +1564,39 @@ class Boletin {
         }
         return $array=["notip_nombre" => "N/A"]; //
     }
+    
+
+    public static function colorNota(float $valorNota): string {
+        global  $config;
+        $color='';
+        if ($valorNota < $config['conf_nota_minima_aprobar']) {
+            $color = $config['conf_color_perdida'];
+        } elseif ($valorNota >= $config['conf_nota_minima_aprobar']) {
+            $color = $config['conf_color_ganada'];
+        }
+        return $color; //
+    }
+
+    public static function formatoNota(float|null $valorNota,array $tiposNotas=[]): float|string {
+        global  $config;
+        Utilidades::valordefecto($valorNota,0);
+        $notaResultado=0;
+        $nota = round($valorNota, $config['conf_decimales_notas']);
+        $nota = number_format($nota, $config['conf_decimales_notas']);
+        if(!empty($tiposNotas)){
+            if ($config['conf_forma_mostrar_notas'] == CUALITATIVA) {
+                $desempeno = self::determinarRango($nota, $tiposNotas);
+                $notaResultado=$desempeno['notip_nombre'];
+            }else{
+                $notaResultado=$nota;
+            }
+        }else{
+            $notaResultado=$nota;
+        }
+        
+        return $notaResultado; //
+    }
+    
     
 }
 

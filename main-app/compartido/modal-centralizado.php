@@ -1,10 +1,10 @@
 <script type="application/javascript">
 	async function abrirModal(titulo, url, data) {
 		const contenido = document.getElementById('contenidoCentralizado');
-		var gifCarga = document.getElementById("gifCarga");
+		var overlay = document.getElementById("overlay");
 
-		if (gifCarga) {
-			document.getElementById("gifCarga").style.display = "block";
+		if (overlay) {
+			document.getElementById("overlay").style.display = "flex";
 		}
 
 		contenido.innerHTML = "";
@@ -16,10 +16,17 @@
 
 		document.getElementById('tituloModal').textContent = titulo;
 
-		if (gifCarga) {
-			document.getElementById("gifCarga").style.display = "none";
+		if (overlay) {
+			document.getElementById("overlay").style.display = "none";
 		}
 		$('#ModalCentralizado').modal('show');
+
+		if (timeout) {
+			setTimeout(function() {
+				$('#ModalCentralizado').modal('hide'); // Cierra el modal
+			}, timeout);
+		}
+
 
 	}
 
@@ -42,8 +49,8 @@
 		}
 	}
 </script>
-<div class="modal fade" id="ModalCentralizado" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-	<div class="modal-dialog" style="max-width: 1350px!important;">
+<div class="modal fade" id="ModalCentralizado" tabindex="-1"   role="dialog" data-backdrop="static" aria-labelledby="basicModal" aria-hidden="true">
+	<div class="modal-dialog" style="max-width: 1350px!important; z-index: 10051 !important">
 		<div class="modal-content" style="border-radius: 20px;max-width: 1350px!important; ">
 
 			<div class="modal-header panel-heading-purple">

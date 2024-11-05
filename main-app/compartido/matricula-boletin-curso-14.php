@@ -113,7 +113,12 @@ if ($periodoActual == 4) $periodoActuales = "Final";
         $tiposNotas[] = $row;
     }
     if (!empty($grado) && !empty($grupo) && !empty($periodo) && !empty($year)) {
-        $datos = Boletin::datosBoletinIndicadores($grado, $grupo, $periodo, $year, $idEstudiante);
+        $periodos = [];
+        for ($i = $periodoActual; $i <= $periodoActual; $i++) {
+            $periodos[$i] = $i;
+        }
+        $datos = Boletin::datosBoletin($grado, $grupo, $periodos, $year, $idEstudiante,true);
+        Utilidades::validarInfoBoletin($datos);
         while ($row = $datos->fetch_assoc()) {
             $listaDatos[] = $row;
         }
