@@ -16,6 +16,7 @@ require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/servicios/GradoServicios.php");
 require_once(ROOT_PATH."/main-app/class/Asignaturas.php");
 require_once(ROOT_PATH."/main-app/class/CargaAcademica.php");
+require_once(ROOT_PATH."/main-app/class/Tables/BDT_configuracion.php");
 $Plataforma = new Plataforma;
 
 $year=$_SESSION["bd"];
@@ -297,7 +298,8 @@ $contadorEstudiantes = 0;
                                         }//FIN FOR
 
                                         //ACOMULADO PARA LAS MATERIAS
-                                        $notaAcomuladoMateria = $notaMateriasPeriodosTotal / $config["conf_periodos_maximos"];
+                                        $periodoCalcular = $config["conf_promedio_libro_final"] == BDT_Configuracion::PERIODOS_CURSADOS ? $ultimoPeriodo : $config["conf_periodos_maximos"];
+                                        $notaAcomuladoMateria = $notaMateriasPeriodosTotal / $periodoCalcular;
                                         $notaAcomuladoMateria = round($notaAcomuladoMateria,1);
 
                                         if (strlen($notaAcomuladoMateria) === 1 || $notaAcomuladoMateria == 10){
@@ -381,7 +383,8 @@ $contadorEstudiantes = 0;
                                 }
                         
                                 //ACOMULADO PARA LAS AREAS
-                                $notaAcomuladoArea = $notaAreasPeriodosTotal / $config["conf_periodos_maximos"];
+                                $periodoCalcular = $config["conf_promedio_libro_final"] == BDT_Configuracion::PERIODOS_CURSADOS ? $ultimoPeriodoAreas : $config["conf_periodos_maximos"];
+                                $notaAcomuladoArea = $notaAreasPeriodosTotal / $periodoCalcular;
                                 $notaAcomuladoArea = round($notaAcomuladoArea,1);
                                 if (strlen($notaAcomuladoArea) === 1 || $notaAcomuladoArea == 10) {
                                     $notaAcomuladoArea = $notaAcomuladoArea.".0";
@@ -474,7 +477,8 @@ $contadorEstudiantes = 0;
 						}// FIN FOR
                         
 						//ACOMULADO GENERAL
-						$notaAcomuladoTotal = $promedioGeneralPeriodosTotal / $config["conf_periodos_maximos"];
+                        $periodoCalcular = $config["conf_promedio_libro_final"] == BDT_Configuracion::PERIODOS_CURSADOS ? $ultimoPeriodoAreas : $config["conf_periodos_maximos"];
+						$notaAcomuladoTotal = $promedioGeneralPeriodosTotal / $periodoCalcular ;
 						$notaAcomuladoTotal = round($notaAcomuladoTotal,1);
 						if(strlen($notaAcomuladoTotal) === 1 || $notaAcomuladoTotal == 10){
 							$notaAcomuladoTotal = $notaAcomuladoTotal.".0";
