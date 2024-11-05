@@ -432,9 +432,11 @@ class CargaAcademica {
             $sql = "SELECT 
                     $stringSelect 
                     ,car.id_nuevo AS id_nuevo_carga ,
-                    COUNT(matri.id_nuevo) as cantidad_estudaintes,
-                    COUNT(matcur_id) as cantidad_estudaintes_mt,
+                    jobs.*,
+                    COUNT(est_sin_nota.estudiante) as cantidad_estudiantes_sin_nota,
+                    matri.estudiantes as cantidad_estudiantes,
                     activ.suma_actividades AS actividades,
+                    COUNT(med_matri.matcur_id) as cantidad_estudiantes_mt,
                     activ_reg.suma_actividades_registradas AS actividades_registradas                   
                     
                     FROM ".BD_ACADEMICA.".academico_cargas car
@@ -442,7 +444,8 @@ class CargaAcademica {
                     INNER JOIN ".BD_ACADEMICA.".academico_grados gra 
                     ON  gra_id                        = car_curso 
                     AND gra.institucion               = car.institucion 
-                    AND gra.year                      = car.year {$filtroMT}
+                    AND gra.year                      = car.year                    
+                    {$filtroMT}
 
                     LEFT JOIN ".BD_ACADEMICA.".academico_grupos gru 
                     ON  gru.gru_id                    = car_grupo 
@@ -459,16 +462,6 @@ class CargaAcademica {
                     AND uss.institucion               = car.institucion 
                     AND uss.year                      = car.year
 
-                    LEFT JOIN ".BD_ACADEMICA.".academico_matriculas matri 
-                    ON  matri.mat_grado               = car_curso 
-                    AND matri.mat_grupo               = car_grupo
-                    AND matri.institucion             = car.institucion 
-                    AND matri.year                    = car.year
-                    AND (
-                        matri.mat_estado_matricula    = ".MATRICULADO." 
-                        OR matri.mat_estado_matricula = ".ASISTENTE."
-                        )
-
                     LEFT JOIN ".BD_ADMIN.".mediatecnica_matriculas_cursos med_matri 
                     ON  matcur_id_curso               = car_curso 
                     AND matcur_id_grupo               = car_grupo
@@ -476,6 +469,72 @@ class CargaAcademica {
                     AND matcur_id_institucion         = car.institucion 
                     AND matcur_years                  = car.year
 
+                    LEFT JOIN ".BD_ADMIN.".sys_jobs jobs
+                    ON  job_tipo                                  ='".JOBS_TIPO_GENERAR_INFORMES."'
+                    AND job_id_institucion                        = car.institucion 
+                    AND job_year                                  = car.year
+                    AND job_ambiente                              = '".ENVIROMENT."'
+                    AND JSON_EXTRACT(job_parametros, '$.carga')   = car.car_id
+                    AND JSON_EXTRACT(job_parametros, '$.periodo') = car.car_periodo 
+
+
+                   LEFT JOIN (
+                              SELECT
+							 mat1.mat_grado as grado,
+							 mat1.mat_grupo as grupo,
+							 COUNT(mat1.mat_id) as estudiantes
+							 
+							FROM 
+								".BD_ACADEMICA.".academico_matriculas mat1
+						    	WHERE mat1.institucion    = ".$config['conf_id_institucion']."
+								AND   mat1.year           = ".$_SESSION["bd"]."
+								AND   mat1.mat_eliminado  = ".ELIMINADO." 
+								AND  (mat1.mat_estado_matricula= ".MATRICULADO." OR mat1.mat_estado_matricula= ".ASISTENTE." ) 
+							 
+								GROUP BY mat1.mat_grado,mat1.mat_grupo
+                            )
+                    AS  matri
+                    ON  matri.grado  = car.car_curso
+	                AND matri.grupo  = car.car_grupo
+										
+					LEFT JOIN(
+							  SELECT 
+					          mat1.mat_id       as estudiante,
+                              act1.act_periodo  as periodo,
+							  act1.act_id_carga as carga,
+							  SUM(aac1.cal_nota_equivalente_cien)/(SUM(act1.act_valor)/100)  as definitiva
+												
+                    FROM 
+                    ".BD_ACADEMICA.".academico_matriculas mat1
+
+                    INNER JOIN ".BD_ACADEMICA.".academico_cargas car1 
+                    ON  car1.institucion = mat1.institucion 
+                    AND car1.year        = mat1.year
+                    AND car1.car_curso       = mat1.mat_grado
+                    AND car1.car_grupo       = mat1.mat_grupo
+                    AND car1.car_activa      = 1
+
+                    INNER JOIN ".BD_ACADEMICA.".academico_actividades act1 
+                    ON  act1.institucion     = mat1.institucion
+                    AND act1.year            = mat1.year
+                    AND act1.act_estado      = 1
+                    AND act1.act_id_carga    = car_id
+
+                    LEFT JOIN ".BD_ACADEMICA.".academico_calificaciones aac1 
+                    ON  aac1.institucion       = mat1.institucion 
+                    AND aac1.year              = mat1.year
+                    AND aac1.cal_id_estudiante = mat1.mat_id
+                    AND aac1.cal_id_actividad  = act_id
+
+                    WHERE mat1.institucion    = ".$config['conf_id_institucion']."
+                    AND   mat1.year           = ".$_SESSION["bd"]."
+                    AND   mat1.mat_eliminado  = ".ELIMINADO." 
+                    AND   (mat1.mat_estado_matricula= ".MATRICULADO." OR mat1.mat_estado_matricula= ".ASISTENTE."  ) 
+                       
+                    GROUP BY mat1.mat_id,act_id_carga
+					HAVING definitiva IS NULL																				
+					) est_sin_nota
+                    ON est_sin_nota.carga = car.car_id
 
 
                     LEFT JOIN (
@@ -501,10 +560,10 @@ class CargaAcademica {
                                 SUM(act_valor) AS suma_actividades_registradas
 
                                 FROM ".BD_ACADEMICA.".academico_actividades 
-                                WHERE act_estado  = 1
+                                WHERE act_estado     = 1
                                 AND   act_registrada = 1
-                                AND   institucion = ".$config['conf_id_institucion']."
-                                AND   year        = ".$_SESSION["bd"]."
+                                AND   institucion    = ".$config['conf_id_institucion']."
+                                AND   year           = ".$_SESSION["bd"]."
                                 GROUP BY act_id_carga,act_periodo
                             )
                     AS  activ_reg
@@ -517,7 +576,7 @@ class CargaAcademica {
                     AND car.year                      = ? 
                     {$filtro}
                     
-                    GROUP BY car_id
+                    GROUP BY car_id,est_sin_nota.carga
 
                     ORDER BY {$order}
                     
