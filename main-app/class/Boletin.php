@@ -1566,7 +1566,8 @@ class Boletin {
                 return $array; // Devuelve el array que contiene el valor en su rango
             }
         }
-        return $array=["notip_nombre" => "N/A"]; //
+        return $array=["notip_nombre"  => "N/A",
+                        "notip_imagen" => "bajo.png"]; //
     }
     
 
