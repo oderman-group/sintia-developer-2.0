@@ -9,6 +9,11 @@ require_once(ROOT_PATH."/main-app/class/Boletin.php");
 class Estudiantes {
 
     public const MAXIMOS_ESTUDIANTES_CURSO = 50;
+    
+    public const CREAR_MATRICULA   = 'CREAR_MATRICULA';
+    public const IMPORTAR_EXCEL    = 'IMPORTAR_EXCEL';
+    public const AUTO_INSCRIPCION  = 'AUTO_INSCRIPCION';
+    public const MOVIDO            = 'MOVIDO';
 
     /**
      * Esta función lista estudiantes según varios parámetros.
@@ -908,8 +913,17 @@ class Estudiantes {
      * @param $fechaNacimiento String
      * @param $procedencia String
      * @param $pasosMatricula String
+     * @param $formaCreacion string Se refiere a la forma o lugar desde donde fue creada la matrícula
      */
-    public static function insertarEstudiantes($conexionPDO, $POST, $idEstudianteU, $result_numMat = '', $procedencia = '', $idAcudiente = '')
+    public static function insertarEstudiantes(
+        $conexionPDO, 
+        $POST, 
+        $idEstudianteU, 
+        $result_numMat = '', 
+        $procedencia = '', 
+        $idAcudiente = '',
+        string $formaCreacion = self::CREAR_MATRICULA
+    )
     {
         global $config, $conexion;
         $codigoMAT = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_matriculas');
@@ -991,7 +1005,8 @@ class Estudiantes {
                 year, 
                 mat_etnia, 
                 mat_tiene_discapacidad,
-                mat_tipo_situacion
+                mat_tipo_situacion,
+                mat_forma_creacion
                 )VALUES(
                 :codigo, 
                 ".$result_numMat.", 
@@ -1034,7 +1049,8 @@ class Estudiantes {
                 :year, 
                 :grupoEtnico, 
                 :discapacidad,
-                :tipoSituacion
+                :tipoSituacion,
+                :formaCreacion
                 )";
 
             $stmt = $conexionPDO->prepare($consulta);
@@ -1088,6 +1104,8 @@ class Estudiantes {
             $stmt->bindParam(':grupoEtnico', $grupoEtnico, PDO::PARAM_INT);
             $stmt->bindParam(':discapacidad', $discapacidad, PDO::PARAM_INT);
             $stmt->bindParam(':tipoSituacion', $tipoSituacion, PDO::PARAM_INT);
+
+            $stmt->bindParam(':formaCreacion', $formaCreacion, PDO::PARAM_STR);
 
             if ($stmt) {
                 $stmt->execute();
