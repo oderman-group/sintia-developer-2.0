@@ -426,8 +426,8 @@ class Utilidades {
     /**
  * Asigna un valor por defecto a un campo que sea unullo o vacio.
  *
- * @param string|double|float|bool $valorDefecto Puede ser un resultado de consulta SQL o un array.
- * @return string|double|float|bool manda mensjae informativo si no cumple las condiciones
+ * @param  string|double|float|bool|array $valorDefecto Puede ser un resultado de consulta SQL o un array.
+ * @return string|double|float|bool|array manda mensjae informativo si no cumple las condiciones
  */
 public static  function valordefecto(&$valor,$valorDefecto="")
 {   
