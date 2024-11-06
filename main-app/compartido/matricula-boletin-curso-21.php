@@ -175,9 +175,12 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
                             <td><?= $carga['mat_nombre']; ?></td>
                             <td align="center"><?= $carga['car_ih']; ?></td>
                             <?php for ($j = 1; $j <= $periodoActual; $j++) {
-                                $recupero = $carga["periodos"][$j]['bol_tipo'] == '2';
+                                Utilidades::valordefecto($carga["periodos"][$j]["bol_tipo"],'1');
                                 Utilidades::valordefecto($promedios[$j], 0);
                                 Utilidades::valordefecto($ausencias[$j], 0);
+                                Utilidades::valordefecto($carga["periodos"][$j]["bol_nota"], 0);
+                                $recupero = $carga["periodos"][$j]['bol_tipo'] == '2';
+                                
                                 if($carga["director_grupo"]==1){
                                     $directorGrupo=$carga["docente"];
                                 }
@@ -301,18 +304,6 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
 
         <p>&nbsp;</p>
 
-        <table width="100%" cellspacing="3" cellpadding="3" rules="all" border="1">
-            <thead>
-                <tr>
-                    <td style="text-align: center; font-weight: bold; font-size: medium;">
-                        <?= !empty($informacion_inst["info_direccion"]) ? strtoupper($informacion_inst["info_direccion"]) : ""; ?>
-                        <?= !empty($informacion_inst["info_telefono"]) ? "TELEFONO " . $informacion_inst["info_telefono"] : ""; ?>
-                    </td>
-                </tr>
-            </thead>
-        </table>
-
-        <p>&nbsp;</p>
         <table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1">
             <thead>
                 <tr style="font-weight:bold; text-align:center; background-color: #00adefad;">
@@ -343,6 +334,19 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
             <?php
             }
             ?>
+        </table>
+
+        <p>&nbsp;</p>
+
+        <table width="100%" cellspacing="3" cellpadding="3" rules="all" border="1">
+            <thead>
+                <tr>
+                    <td style="text-align: center; font-weight: bold; font-size: medium;">
+                        <?= !empty($informacion_inst["info_direccion"]) ? strtoupper($informacion_inst["info_direccion"]) : ""; ?>
+                        <?= !empty($informacion_inst["info_telefono"]) ? "TELEFONO " . $informacion_inst["info_telefono"] : ""; ?>
+                    </td>
+                </tr>
+            </thead>
         </table>
         <div id="saltoPagina"></div>
         <?php
