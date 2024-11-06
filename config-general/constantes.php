@@ -211,8 +211,9 @@ if (php_sapi_name() === 'cli') {
 } else {
     switch ($_SERVER['HTTP_HOST']) {
         case 'localhost':
-            ini_set('display_errors', 1);
-            ini_set('display_startup_errors', 1);
+            ini_set('display_errors', 0);
+            ini_set('display_startup_errors', 0);
+            ini_set('error_log', __DIR__ . '/errores_local.log');
             define('REDIRECT_ROUTE', 'http://localhost/app-sintia/main-app');
             define('ENVIROMENT', 'TEST');
             error_reporting (E_ALL);
@@ -221,13 +222,16 @@ if (php_sapi_name() === 'cli') {
         case 'developer.plataformasintia.com':
             ini_set('display_errors', 0);
             ini_set('display_startup_errors', 0);
+            ini_set('error_log', __DIR__ . '/errores_dev.log');
             define('REDIRECT_ROUTE', 'https://developer.plataformasintia.com/app-sintia/main-app');
             define('ENVIROMENT', 'TEST');
+            error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
         break;
 
         case 'main.plataformasintia.com':
             ini_set('display_errors', 0);
             ini_set('display_startup_errors', 0);
+            ini_set('error_log', __DIR__ . '/errores_prod.log');
             define('REDIRECT_ROUTE', 'https://main.plataformasintia.com/app-sintia/main-app');
             define('ENVIROMENT', 'PROD');
             error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
@@ -236,6 +240,7 @@ if (php_sapi_name() === 'cli') {
         case 'copyprod.plataformasintia.com':
             ini_set('display_errors', 0);
             ini_set('display_startup_errors', 0);
+            ini_set('error_log', __DIR__ . '/errores_copy_prod.log');
             define('REDIRECT_ROUTE', 'https://copyprod.plataformasintia.com/app-sintia/main-app');
             define('ENVIROMENT', 'PROD');
             error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
@@ -244,6 +249,7 @@ if (php_sapi_name() === 'cli') {
         default:
             ini_set('display_errors', 1);
             ini_set('display_startup_errors', 1);
+            ini_set('error_log', __DIR__ . '/errores_default_env.log');
             define('REDIRECT_ROUTE', 'https://'.$_SERVER['HTTP_HOST'].'/app-sintia/main-app');
             define('ENVIROMENT', 'TEST');
             error_reporting (E_ALL ^ E_NOTICE ^ E_WARNING);
