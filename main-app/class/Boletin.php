@@ -1225,7 +1225,7 @@ class Boletin {
         $andEstudiante="";
 
         if (!empty($idEstudiante)) {
-            $andEstudiante = "AND   bol_estudiante  = " . $idEstudiante;
+            $andEstudiante = "AND   mat.mat_id  = '" . $idEstudiante."'";
         }
         $sql = "
                  SELECT
