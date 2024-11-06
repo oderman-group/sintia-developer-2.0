@@ -1668,32 +1668,6 @@ class Estudiantes {
     }
 
     /**
-    * Esta función ejecuta una consulta preparada para insertar un nuevo registro de matricula en la tabla 'academico_matriculas'.
-    *
-    * @param PDO    $conexionPDO  Conexión PDO a la base de datos.
-    * @param string $insert       Lista de campos separados por coma para la inserción.
-    * @param array  $parametros   Array de parámetros para la consulta preparada.
-    **/
-    public static function guardarMatricula (
-        PDO     $conexionPDO,
-        string  $insert,
-        array   $parametros
-    )
-    {
-        $campos = explode(',', $insert);
-        $numCampos = count($campos);
-        $signosPreguntas = str_repeat('?,', $numCampos);
-        $signosPreguntas = rtrim($signosPreguntas, ',');
-
-        $codigo = Utilidades::getNextIdSequence($conexionPDO, BD_ACADEMICA, 'academico_matriculas');
-        $parametros[] = $codigo;
-
-        $sql = "INSERT INTO ".BD_ACADEMICA.".academico_matriculas ({$insert}) VALUES ({$signosPreguntas})";
-        
-        $resultado = BindSQL::prepararSQL($sql, $parametros);
-    }
-
-    /**
     * Esta función ejecuta una consulta preparada para actualizar un registro de matriculas en la tabla 'academico_matriculas' por el id unico.
     *
     * @param array  $config         Configuración del sistema.
