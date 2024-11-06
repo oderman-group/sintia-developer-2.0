@@ -163,8 +163,10 @@ foreach ($estudiantes as $estudiante) {
 								<tr>
 									<td><strong># Estudiantes:</strong> <?= count($puestosCurso); ?></td>
 									<td>
-										<?php if ($estudiante['gra_id'] < 27) { ?>
-											<strong>Puesto Curso: </strong><?= $puestosCurso[$estudiante["mat_id"]]; ?>
+										<?php if ($estudiante['gra_id'] < 27) { 
+											Utilidades::valordefecto($puestosCurso[$estudiante["mat_id"]],0);
+											?>
+											<strong>Puesto Curso: </strong><?= $puestosCurso[$estudiante["mat_id"]] ?>
 										<?php } ?>
 									</td>
 								</tr>
@@ -192,7 +194,9 @@ foreach ($estudiantes as $estudiante) {
 
 			</thead>
 			<tbody>
-				<?php foreach ($estudiante["areas"] as $area) { ?>
+				<?php foreach ($estudiante["areas"] as $area) {
+					Utilidades::valordefecto($area["periodos"][$periodoActual]["nota_area"],0);					
+					?>
 					<tr style="font-weight:bold;">
 						<td width="12%">&nbsp;</td>
 						<td width="2%">&nbsp;</td>
@@ -204,7 +208,11 @@ foreach ($estudiantes as $estudiante) {
 						<td width="2%">&nbsp;</td>
 					</tr>
 					<?php foreach ($area["cargas"] as $carga) {
-						$notaAcumulado = 0;
+						$notaAcumulado = 0;						
+						Utilidades::valordefecto($carga["periodos"][$periodoActual]["bol_tipo"],'1');
+						Utilidades::valordefecto($carga["periodos"][$periodoActual]["bol_nota"],0);
+						Utilidades::valordefecto($carga["periodos"][$periodoActual]["bol_nota_anterior"],valorDefecto: 0);
+						Utilidades::valordefecto($carga["periodos"][$periodoActual]["indicadores"],[]);
 						$recupero = $carga["periodos"][$periodoActual]['bol_tipo'] == '2';
 						?>
 						<tr>
@@ -227,6 +235,7 @@ foreach ($estudiantes as $estudiante) {
 							<td>
 								<table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1">
 									<?php for ($i = 1; $i <= $periodoActual - 1; $i++) {
+										Utilidades::valordefecto($carga["periodos"][$i]["indicadores"],[]);										
 										foreach ($carga["periodos"][$i]['indicadores'] as $indicador) {
 											$recuperoIndicador = $indicador["recuperado"];
 											if ($recuperoIndicador) { ?>
@@ -236,7 +245,8 @@ foreach ($estudiantes as $estudiante) {
 											<?php }
 										}
 									} ?>
-									<?php foreach ($carga["periodos"][$periodoActual]['indicadores'] as $indicador) {
+									<?php 
+									foreach ($carga["periodos"][$periodoActual]['indicadores'] as $indicador) {
 										$recuperoIndicador = $indicador["recuperado"];
 										?>
 										<tr>
