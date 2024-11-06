@@ -114,7 +114,7 @@ if ($periodoActual == 4) $periodoActuales = "Final";
     }
     if (!empty($grado) && !empty($grupo) && !empty($periodo) && !empty($year)) {
         $periodos = [];
-        for ($i = $periodoActual; $i <= $periodoActual; $i++) {
+        for ($i = 1; $i <= $periodoActual; $i++) {
             $periodos[$i] = $i;
         }
         $datos = Boletin::datosBoletin($grado, $grupo, $periodos, $year, $idEstudiante,true);
