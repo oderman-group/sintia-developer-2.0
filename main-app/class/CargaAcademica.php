@@ -450,12 +450,12 @@ class CargaAcademica {
                     AND gru.year                      = car.year
                     
                     LEFT JOIN ".BD_ACADEMICA.".academico_materias am 
-                    ON  am.mat_id                     = car_materia 
+                    ON  am.mat_id                     = car.car_materia 
                     AND am.institucion                = car.institucion 
                     AND am.year                       = car.year
 
                     LEFT JOIN ".BD_GENERAL.".usuarios uss 
-                    ON uss_id                         = car_docente 
+                    ON uss_id                         = car.car_docente 
                     AND uss.institucion               = car.institucion 
                     AND uss.year                      = car.year
 
