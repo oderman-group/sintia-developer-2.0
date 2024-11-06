@@ -1391,6 +1391,10 @@ class Boletin {
                 $odenNombres = "mat_primer_apellido,mat_segundo_apellido,mat_nombres,mat_nombre2,";
                 break;
          }
+         $cancelados = "";
+         if ($config['conf_mostrar_estudiantes_cancelados'] == SI) {
+            $cancelados = "OR mat.mat_estado_matricula =  ".CANCELADO ." " ;
+         }
         $sql = "
                  SELECT                   
 					are.ar_id,
@@ -1487,7 +1491,8 @@ class Boletin {
                 $andEstudiante
                 AND   mat.year                 = ?
                 AND   mat.mat_eliminado        = 0
-                AND ( mat.mat_estado_matricula = " . MATRICULADO . " OR mat.mat_estado_matricula=" . ASISTENTE . ") 
+                AND ( mat.mat_estado_matricula = " . MATRICULADO . " OR mat.mat_estado_matricula=" . ASISTENTE . " $cancelados )
+                
                
                 ORDER BY  $odenNombres mat.mat_id,are.ar_posicion,car.car_id,bol.bol_periodo
                 ";
