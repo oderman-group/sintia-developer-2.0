@@ -5,6 +5,7 @@ require_once("../class/EnviarEmail.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/Inscripciones.php");
 require_once(ROOT_PATH."/main-app/class/Tables/BDT_aspirante.php");
+require_once(ROOT_PATH."/main-app/class/Estudiantes.php");
 
 $idInst = "";
 
@@ -138,7 +139,9 @@ if ($newId > 0) {
     $madre->execute();
 
     //Matriculas
-    $matriculasQuery = "INSERT INTO ".BD_ACADEMICA.".academico_matriculas(mat_id, mat_tipo_documento, mat_documento, mat_solicitud_inscripcion, mat_estado_matricula, mat_id_usuario, mat_primer_apellido, mat_nombres, mat_acudiente, mat_padre, mat_madre, mat_grado, mat_grupo, institucion, year, mat_nombre2, mat_segundo_apellido)VALUES(:codigo, :tipoDocumento, :documento, :solicitud, 5, :idUss, :apellido1, :nombres, :acudiente, :padre, :madre, :grado, 1, :idInstitucion, :year, :nombre2, :apellido2)";
+    $matriculasQuery = "INSERT INTO ".BD_ACADEMICA.".academico_matriculas(mat_id, mat_tipo_documento, mat_documento, mat_solicitud_inscripcion, mat_estado_matricula, mat_id_usuario, mat_primer_apellido, mat_nombres, mat_acudiente, mat_padre, mat_madre, mat_grado, mat_grupo, institucion, year, mat_nombre2, mat_segundo_apellido, mat_forma_creacion)VALUES(:codigo, :tipoDocumento, :documento, :solicitud, 5, :idUss, :apellido1, :nombres, :acudiente, :padre, :madre, :grado, 1, :idInstitucion, :year, :nombre2, :apellido2, :formaCreacion)";
+
+    $formaCreacion = Estudiantes::AUTO_INSCRIPCION;
 
     $codigoMAT  = Utilidades::getNextIdSequence($pdoI, BD_ACADEMICA, 'academico_matriculas');
     $matriculas = $pdoI->prepare($matriculasQuery);
@@ -158,6 +161,7 @@ if ($newId > 0) {
     $matriculas->bindParam(':year', $config['conf_agno'], PDO::PARAM_STR);
     $matriculas->bindParam(':nombre2', $_POST['nombreEstudiante2'], PDO::PARAM_STR);
     $matriculas->bindParam(':apellido2', $_POST['apellido2'], PDO::PARAM_STR);
+    $matriculas->bindParam(':formaCreacion', $formaCreacion, PDO::PARAM_STR);
     $matriculas->execute();
 
     //Documentos
