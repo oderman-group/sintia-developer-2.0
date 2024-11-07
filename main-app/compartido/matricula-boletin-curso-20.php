@@ -15,7 +15,7 @@ require_once(ROOT_PATH . "/main-app/class/Indicadores.php");
 require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php");
 require_once(ROOT_PATH . "/main-app/class/Calificaciones.php");
 
-$porcentajes = true;
+$porcentajes = false;
 
 $year = $_SESSION["bd"];
 if (isset($_GET["year"])) {
