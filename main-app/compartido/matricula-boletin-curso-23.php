@@ -125,7 +125,8 @@ if ($periodoActual == 4)
 
 			<?php
 			$nombreInforme = "BOLETÍN DE CALIFICACIONES";
-			include("../compartido/head-informes.php") ?>
+			include("../compartido/head-informes.php");
+			Utilidades::valordefecto($puestosCurso[$estudiante["mat_id"]],0); ?>
 
 			<table width="100%" cellspacing="0" cellpadding="0" border="0" align="left" style="font-size:12px;">
 				<tr>
@@ -136,7 +137,7 @@ if ($periodoActual == 4)
 				<tr>
 					<td>Grado: <b><?= $estudiante["gra_nombre"] . " " . $estudiante["gru_nombre"]; ?></b></td>
 					<td>Periodo: <b><?= strtoupper($periodoActuales); ?></b></td>
-					<td>Puesto Curso:<br> <?= $puestosCurso[$estudiante["mat_id"]]; ?></td>
+					<td>Puesto Curso:<br> <?=$puestosCurso[$estudiante["mat_id"]] ?></td>
 				</tr>
 			</table>
 			<br>
@@ -185,23 +186,25 @@ if ($periodoActual == 4)
 								<?php echo $carga["car_ih"]; ?>
 							</td>
 							<?php for ($k = 1; $k <= $periodoActual; $k++) {
+                                
+								Utilidades::valordefecto($carga["periodos"][$k]['bol_tipo'],'1');
+								Utilidades::valordefecto($carga["periodos"][$k]['bol_nota'],0);
+								$recupero = $carga["periodos"][$k]['bol_tipo'] == '2';
+								$nota     = $carga["periodos"][$k]["bol_nota"];
 
-							$recupero = $carga["periodos"][$k]['bol_tipo'] == '2';
-							$nota     = $carga["periodos"][$k]["bol_nota"];
-
-							?>
-							<td class="" align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;<?= $recupero ? 'color: #2b34f4;" title="Nota del periodo Recuperada ' . $carga['periodos'][$k]['bol_nota_anterior'] . '"' : '' ?>">
-								<?= Boletin::formatoNota($nota, $tiposNotas); ?></br>
-								<?php
-								if ($nota < $config['conf_nota_minima_aprobar']) {
-									$materiasPerdidas++;
-								}
-								if ($config['conf_forma_mostrar_notas'] == CUANTITATIVA) {
-									$desempeno = Boletin::determinarRango($carga["periodos"][$periodoActual]['bol_nota'], $tiposNotas);
-									echo $desempeno['notip_nombre'];
-								}
 								?>
-							</td>
+								<td class="" align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;<?= $recupero ? 'color: #2b34f4;" title="Nota del periodo Recuperada ' . $carga['periodos'][$k]['bol_nota_anterior'] . '"' : '' ?>">
+									<?= Boletin::formatoNota($nota, $tiposNotas); ?></br>
+									<?php
+									if ($nota < $config['conf_nota_minima_aprobar']) {
+										$materiasPerdidas++;
+									}
+									if ($config['conf_forma_mostrar_notas'] == CUANTITATIVA) {
+										$desempeno = Boletin::determinarRango($carga["periodos"][$periodoActual]['bol_nota'], $tiposNotas);
+										echo $desempeno['notip_nombre'];
+									}
+									?>
+								</td>
 							<?php } ?>
 							<td align="center" style="font-weight:bold; background:#EAEAEA;">
 								<?= Boletin::formatoNota($carga["carga_acumulada"], $tiposNotas) ?>
@@ -212,7 +215,9 @@ if ($periodoActual == 4)
 							<td align="center" style="font-weight:bold; background:#EAEAEA;"><?= $carga["fallas"] ?></td>
 						</tr>
 						<!-- listamos los indicadores -->
-						<?php foreach ($carga["periodos"][$periodoActual]["indicadores"] as $indicador) {
+						<?php 
+						    Utilidades::valordefecto($carga["periodos"][$periodoActual]["indicadores"],[]);
+						    foreach ($carga["periodos"][$periodoActual]["indicadores"] as $indicador) {
 							$recuperoIndicador = $indicador["recuperado"];
 							?>
 							<tr bgcolor="#FFF" style="font-size:12px;">
@@ -301,11 +306,11 @@ if ($periodoActual == 4)
 			Utilidades::valordefecto($msj);
 			if ($periodoActual == $config["conf_periodos_maximos"]) {
 				if ($materiasPerdidas >= $config["conf_num_materias_perder_agno"])
-					$msj = "<center>EL (LA) ESTUDIANTE " . UsuariosPadre::nombreCompletoDelUsuario($datosUsr) . " NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+					$msj = "<center>EL (LA) ESTUDIANTE " . $estudiante["nombre"] . " NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
 				elseif ($materiasPerdidas < $config["conf_num_materias_perder_agno"] and $materiasPerdidas > 0)
-					$msj = "<center>EL (LA) ESTUDIANTE " . UsuariosPadre::nombreCompletoDelUsuario($datosUsr) . " DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";
+					$msj = "<center>EL (LA) ESTUDIANTE " . $estudiante["nombre"] . " DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";
 				else
-					$msj = "<center>EL (LA) ESTUDIANTE " . UsuariosPadre::nombreCompletoDelUsuario($datosUsr) . " FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
+					$msj = "<center>EL (LA) ESTUDIANTE " . $estudiante["nombre"] . " FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
 			}
 			?>
 
