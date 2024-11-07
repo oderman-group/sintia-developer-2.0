@@ -200,7 +200,7 @@ if ($periodoActual == 4)
 										$materiasPerdidas++;
 									}
 									if ($config['conf_forma_mostrar_notas'] == CUANTITATIVA) {
-										$desempeno = Boletin::determinarRango($carga["periodos"][$periodoActual]['bol_nota'], $tiposNotas);
+										$desempeno = Boletin::determinarRango($carga["periodos"][$k]['bol_nota'], $tiposNotas);
 										echo $desempeno['notip_nombre'];
 									}
 									?>
@@ -252,8 +252,8 @@ if ($periodoActual == 4)
 				<tr align="center" style="font-size:12px; font-weight:bold;">
 					<td colspan="2" align="right">PROMEDIO</td>
 
-					<?php foreach ($estudiante["promedios_materias"] as $promedio) {
-						$promedio = round(($promedio["promedio_acumulado"] / ($promedio["cantidad_materias"])), $config['conf_decimales_notas']);
+					<?php foreach ($estudiante["promedios_generales"] as $promedio) {
+						$promedio = round(($promedio["suma_notas_materias"] / ($promedio["cantidad_materias"])), $config['conf_decimales_notas']);
 						$promedio = number_format($promedio, $config['conf_decimales_notas']);
 						?>
 						<td align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;"><?= Boletin::formatoNota($promedio, $tiposNotas); ?></td>
