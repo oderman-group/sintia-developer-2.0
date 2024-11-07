@@ -185,7 +185,7 @@ require_once("index-logica.php");
 
                         <script>
                             function enviarFormulario(accion) {
-                                var formulario = document.getElementById('miFormulario');
+                                var formulario = document.getElementById('example-advanced-form');
                                 formulario.action = accion; // Cambia la acción del formulario
                                 formulario.submit(); // Envía el formulario
                             }
