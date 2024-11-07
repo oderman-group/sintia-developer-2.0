@@ -217,8 +217,7 @@ foreach ($estudiantes as $estudiante) {
 						?>
 						<tr>
 							<td><?= $carga['mat_nombre']; ?>
-								<?php if ($porcentajes) { ?>(<?= $carga['mat_valor'];
-								} ?>%)
+							<?php if ($porcentajes) { ?>(<?= $carga['mat_valor'];?>%)<?php } ?>
 							</td>
 							<td align="center"><?= $carga['car_ih']; ?></td>
 							<td align="center"><?= $carga['fallas']; ?></td>
@@ -251,7 +250,7 @@ foreach ($estudiantes as $estudiante) {
 										?>
 										<tr>
 											<?php if ($porcentajes) { ?>
-												<td align="center">%<?= $indicador['valor_porcentaje_indicador']; ?></td>
+												<td align="center"><?= $indicador['valor_porcentaje_indicador']; ?>%</td>
 											<?php } ?>
 											<td width="90%"><?= $indicador['ind_nombre']; ?></td>
 											<td width="10%"
