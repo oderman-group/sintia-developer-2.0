@@ -214,6 +214,7 @@ if ($periodoActual == 4)
                 <?php } ?>
             <?php } ?>
         </table>
+        <p>&nbsp;</p>
         <?php if(!empty($carga["periodos"][$periodoActual]['bol_observaciones_boletin'])) { ?>  
         <table width="100%" cellspacing="0" cellpadding="0" rules="all" border="1" align="center">
             <tr style="font-weight:bold; background:#2e537dab; border-color:#036; height:40px; font-size:12px; text-align:center">
@@ -225,7 +226,7 @@ if ($periodoActual == 4)
             </tr>
             <?php foreach ($estudiante["observaciones_generales"] as $observacion) { ?>
                 <tr align="center" style="font-weight:bold; font-size:12px; height:20px;">
-                    <td><?= $observacion["dn_periodo"] ?></td>
+                    <td><?= $observacion["periodo"] ?></td>
                     <td align="left"><?= $observacion["observacion"] ?></td>
                 </tr>
             <?php } ?>            
