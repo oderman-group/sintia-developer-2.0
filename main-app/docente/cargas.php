@@ -161,26 +161,6 @@ if( !empty($_SESSION["infoCargaActual"]) ) {
                                                                                 Manualmente
                                                                             </a>
                                                                         </li>
-                                                                        <li>
-                                                                            <a 
-                                                                                rel="'.$configGenerarJobs.'-'.$numSinNotas.'-2" 
-                                                                                data-toggle="tooltip" 
-                                                                                data-placement="right"
-                                                                                title="Se programara la generación de informe y se te notificará cuando esté listo" 
-                                                                                id="'.$rCargas["car_id"].'" 
-                                                                                href="javascript:void(0);" 
-                                                                                name="../compartido/job-generar-informe.php?
-                                                                                    carga='.base64_encode($rCargas["car_id"]).'
-                                                                                    &periodo='.base64_encode($rCargas["car_periodo"]).'
-                                                                                    &grado='.base64_encode($rCargas["car_curso"]).'
-                                                                                    &grupo='.base64_encode($rCargas["car_grupo"]).'
-                                                                                    &tipoGrado='.base64_encode($rCargas["gra_tipo"]).'
-                                                                                " 
-                                                                                onclick="mensajeGenerarInforme(this)"
-                                                                            >
-                                                                                Automático
-                                                                            </a>
-                                                                        </li>
                                                                     </ul>
                                                                 </div>
                                                             ';
