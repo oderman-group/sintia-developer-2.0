@@ -201,7 +201,7 @@ if ($periodoActual == 4)
 										$materiasPerdidas++;
 									}
 									if ($config['conf_forma_mostrar_notas'] == CUANTITATIVA) {
-										$desempeno = Boletin::determinarRango($carga["periodos"][$periodoActual]['bol_nota'], $tiposNotas);
+										$desempeno = Boletin::determinarRango($carga["periodos"][$k]['bol_nota'], $tiposNotas);
 										echo $desempeno['notip_nombre'];
 									}
 									?>
@@ -222,11 +222,8 @@ if ($periodoActual == 4)
 							$recuperoIndicador = $indicador["recuperado"];
 							?>
 							<tr bgcolor="#FFF" style="font-size:12px;">
-								<td style="font-size:12px; height:15px;"><?php echo $indicador["ind_nombre"]; ?></td>
-								<td align="center" style="font-weight:bold; font-size:12px;"></td>
-								<?php for ($k = 1; $k <= $periodoActual - 1; $k++) { ?>
-									<td align="center" style="font-weight:bold; font-size:12px;"></td>
-								<?php } ?>
+								<td style="font-size:12px; height:15px;" colspan="<?=$periodoActual +1?>" ><?php echo $indicador["ind_nombre"]; ?></td>								
+								
 								<td align="center"
 									style="font-size:12px; height:15px;<?= $recuperoIndicador ? 'color: #2b34f4;" title="Nota indicador recuperada ' . $indicador['valor_indicador'] . '"' : '' ?>"" <?= $indicador['ind_nombre']; ?>">
 									<?php echo Boletin::formatoNota($indicador["nota_final"], $tiposNotas);; ?>
@@ -253,8 +250,8 @@ if ($periodoActual == 4)
 				<tr align="center" style="font-size:12px; font-weight:bold;">
 					<td colspan="2" align="right">PROMEDIO</td>
 
-					<?php foreach ($estudiante["promedios_materias"] as $promedio) {
-						$promedio = round(($promedio["promedio_acumulado"] / ($promedio["cantidad_materias"])), $config['conf_decimales_notas']);
+					<?php foreach ($estudiante["promedios_generales"] as $promedio) {
+						$promedio = round(($promedio["suma_notas_materias"] / ($promedio["cantidad_materias"])), $config['conf_decimales_notas']);
 						$promedio = number_format($promedio, $config['conf_decimales_notas']);
 						?>
 						<td align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;"><?= Boletin::formatoNota($promedio, $tiposNotas); ?></td>

@@ -1411,8 +1411,8 @@ class Boletin {
                     WHERE bol2.institucion = ".$config['conf_id_institucion']."
 				    AND bol2.year          =  $year 
 				    AND   bol2.bol_periodo IN ($in_periodos2)
-                    AND   mat1.mat_grado   = $grado
-                    AND   mat1.mat_grupo   = $grupo
+                    AND   mat1.mat_grado   = '$grado'
+                    AND   mat1.mat_grupo   = '$grupo'
 
 					GROUP BY bol2.bol_estudiante,bol2.bol_carga
 					

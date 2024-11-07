@@ -128,7 +128,7 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
 
 					<?php
 					for ($j = 1; $j <= $periodoActual; $j++) {
-						$valorPeriodo = $estudiante["promedios_materias"][$j]["porcentaje_periodo"];
+						$valorPeriodo = $estudiante["promedios_generales"][$j]["porcentaje_periodo"];
 						?>
 						<td width="3%" colspan="2">Periodo <?= $j . "<br>($valorPeriodo%)" ?></>
 						</td>
@@ -177,8 +177,8 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
 								<td align="center" style="background-color: <?= $colorNota ?>;"> <?= $nota ?> </td>
 								<td align="center"><?= Boletin::determinarRango($nota, $tiposNotas)['notip_nombre'] ?></td>
 							<?php }
-							Utilidades::valordefecto($carga["carga_acumulada2"], 0);
-							$notaCargaAcumulada = $carga["carga_acumulada2"];
+							Utilidades::valordefecto($carga["nota_carga_acumulada"], 0);
+							$notaCargaAcumulada = $carga["nota_carga_acumulada"];
 							$notaCargaAcumulada = round($notaCargaAcumulada, $config['conf_decimales_notas']);
 							$notaCargaAcumulada = number_format($notaCargaAcumulada, $config['conf_decimales_notas']);
 							$colorNota = '';
@@ -221,7 +221,7 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
 					<?php
 					$promedioAcumulado = 0;
 					for ($k = 1; $k <= $periodoActual; $k++) {
-						$promedio = round(($estudiante["promedios_materias"][$k]["promedio_acumulado"] / ($estudiante["promedios_materias"][$k]["cantidad_materias"])), $config['conf_decimales_notas']);
+						$promedio = round(($estudiante["promedios_generales"][$k]["suma_notas_materias"] / ($estudiante["promedios_generales"][$k]["cantidad_materias"])), $config['conf_decimales_notas']);
 						$promedioAcumulado += $promedio;
 						$promedio = number_format($promedio, $config['conf_decimales_notas']);
 						?>
