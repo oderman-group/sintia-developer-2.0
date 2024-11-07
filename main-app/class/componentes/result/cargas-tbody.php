@@ -86,6 +86,7 @@ foreach ($data["data"] as $resultado) {
 						if ($permisoAutologin && !empty($resultado['uss_id'])) { ?>
 							<li>
 								<a href="javascript:void(0);" onClick="sweetConfirmacion('Alerta!','Esta acción te permitirá entrar como docente y ver todos los detalles de esta carga. Deseas continuar?','question','auto-login.php?user=<?= base64_encode($resultado['car_docente']); ?>&tipe=<?= base64_encode(2) ?>&carga=<?= base64_encode($resultado['car_id']); ?>&periodo=<?= base64_encode($resultado['car_periodo']); ?>')">Ver como docente</a>
+							</li>
 							<?php }
 					}
 					if ($permisoAutologin) { ?>
