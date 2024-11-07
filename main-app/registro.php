@@ -39,11 +39,6 @@ require_once("index-logica.php");
         .buttons {
             margin-top: 20px;
         }
-        
-        .wizard .steps ul li {
-            width: 33.33%; /* Ajusta este valor dependiendo de la cantidad de tabs */
-            text-align: center;
-        }
     </style>
 
 </head>
@@ -196,6 +191,7 @@ require_once("index-logica.php");
                             }
                         </script>
                         <div id="wizard" style="display: none;"></div>
+                        <div id="extraButtonTrigger" style="display: none;" data-url="index.php" data-text="Cancelar Registro" data-btn="btn-extraButton"></div>
                     </div>
                 </div>
             </div>
