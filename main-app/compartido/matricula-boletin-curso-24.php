@@ -25,6 +25,15 @@ if (empty($_GET["periodo"])) {
 	$periodoActual = base64_decode($_GET["periodo"]);
 }
 
+if (!empty($_GET["curso"])) {
+	$curso = base64_decode($_GET["curso"]);
+}
+
+$grupo = 1;
+if (!empty($_GET["grupo"])) {
+	$grupo = base64_decode($_GET["grupo"]);
+}
+
 if ($periodoActual == 1)
 	$periodoActuales = "Primero";
 if ($periodoActual == 2)
