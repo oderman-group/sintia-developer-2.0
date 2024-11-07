@@ -264,13 +264,13 @@ if( !empty($_SESSION["infoCargaActual"]) ) {
                                             $marcaDG = '<i class="fa fa-star text-info" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Director de grupo"></i> ';
                                         }
                                     ?>
-                        <div class="col-lg-3 col-md-6 col-12 col-sm-6 sortable-item elemento-draggable" draggable="true" id="carga-<?=$rCargas['car_id'];?>"> 
+                        <div class="col-lg-2 col-md-6 col-12 col-sm-6 sortable-item elemento-draggable" draggable="true" id="carga-<?=$rCargas['car_id'];?>"> 
                             <div class="blogThumb" style="background-color:<?=$fondoCargaActual;?>;">
-                                <div class="thumb-center">
+                                <!-- <div class="thumb-center">
                                     <a href="cargas-seleccionar.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($rCargas['car_periodo']);?>" title="Entrar">
                                         <img class="img-responsive" alt="user" src="../../config-general/assets/img/course/course1.jpg">
                                     </a>	
-                                </div>
+                                </div> -->
                                 <div class="course-box">
                                 <h5 <?=$induccionEntrar;?>><a href="cargas-seleccionar.php?carga=<?=base64_encode($rCargas['car_id']);?>&periodo=<?=base64_encode($rCargas['car_periodo']);?>" title="Entrar" style="text-decoration: underline;"><?=strtoupper($rCargas['mat_nombre']);?></a></h5>
                                     
