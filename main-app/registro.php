@@ -197,7 +197,7 @@ require_once("index-logica.php");
         </div>
         <div class="logo-container position-relative vertical-center" style="width: 100%; height: 100vh; overflow: hidden;">
             <!-- Lottie como fondo -->
-            <lottie-player src="<?= !empty($datosContactoSintia['dtc_animacion_register']) ? $datosContactoSintia['dtc_animacion_register'] : ""; ?>" background="transparent" speed="1" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" loop autoplay></lottie-player>
+            <lottie-player src="<?= !empty($datosContactoSintia['dtc_animacion_register']) ? $datosContactoSintia['dtc_animacion_register'] : ""; ?>" background="transparent" speed="0.2" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" loop autoplay></lottie-player>
 
             <!-- Contenido centrado encima de la animación -->
             <div class="content-overlay text-center" style="position: relative; z-index: 1; color: #000;">
