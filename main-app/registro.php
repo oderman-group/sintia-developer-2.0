@@ -39,6 +39,11 @@ require_once("index-logica.php");
         .buttons {
             margin-top: 20px;
         }
+        
+        .wizard .steps ul li {
+            width: 33.33%; /* Ajusta este valor dependiendo de la cantidad de tabs */
+            text-align: center;
+        }
     </style>
 
 </head>
