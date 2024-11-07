@@ -154,6 +154,29 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
         </table>
 
         <table width="100%" rules="all" border="1">
+            <thead>
+
+                <tr style="font-weight:bold; text-align:center;">
+                    <td width="20%" rowspan="2">ASIGNATURAS</td>
+                    <td width="2%" rowspan="2">I.H.</td>
+
+                    <?php for ($j = 1; $j <= $periodoActual; $j++) { ?>
+                        <td width="3%" colspan="2"><a href="<?= $_SERVER['PHP_SELF']; ?>?id=<?= $datosUsr['mat_id']; ?>&periodo=<?= $j ?>" style="color:#000; text-decoration:none;">Periodo <?= $j ?></a></td>
+                    <?php } ?>
+                    <td width="3%" colspan="3">Final</td>
+                </tr>
+
+                <tr style="font-weight:bold; text-align:center;">
+                    <?php for ($j = 1; $j <= $periodoActual; $j++) { ?>
+                        <td width="3%">Nota</td>
+                        <td width="3%">Nivel</td>
+                    <?php } ?>
+                    <td width="3%">Nota</td>
+                    <td width="3%">Nivel</td>
+                    <td width="3%">Hab</td>
+                </tr>
+
+            </thead>
          
             <tbody>
                 <?php
@@ -222,16 +245,15 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
                 <tr style="font-weight:bold; text-align:center;">
                     <td style="text-align:left;">PROMEDIO GENERAL</td>
                     <td>&nbsp;</td>
-                    <?php foreach ($promedios as $promedio) {
-                        $promedio = round(($promedio / ($contador-1)), $config['conf_decimales_notas']);
-                        $promedio = number_format($promedio, $config['conf_decimales_notas']);
-
-                        ?>
-                        <td align="center"><?= Boletin::formatoNota($promedio, $tiposNotas); ?></td>
+                    <?php foreach ($estudiante["promedios_generales"] as $promedio) {
+						$promedio = round(($promedio["suma_notas_materias"] / ($promedio["cantidad_materias"])), $config['conf_decimales_notas']);
+						$promedio = number_format($promedio, $config['conf_decimales_notas']);
+						?>
+                        <td align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;" ><?= Boletin::formatoNota($promedio, $tiposNotas); ?></td>
                         <td align="center"><img
                                 src="../files/iconos/<?= Boletin::determinarRango($promedio, $tiposNotas)['notip_imagen']; ?>"
                                 width="15" height="15"></td>
-                    <?php } ?>
+					<?php } ?>
                     <td>-</td>
                 </tr>
                 <tr style="font-weight:bold; text-align:center;">
