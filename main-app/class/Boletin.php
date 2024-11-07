@@ -1237,15 +1237,16 @@ class Boletin {
                     car.car_id,                    
                     gra.gra_nombre,
                     gru.gru_nombre,
-					ar_nombre,
+                  	ar_nombre,
                     mate.mat_id as id_materia,
                     mate.mat_nombre,                    
                     car.car_ih, 
 					car.car_director_grupo,
                     mate.mat_valor,
+                    per.gvp_valor as periodo_valor,
                     acum.*,
                     bol.*,
-                    disi.*,
+                    disi.*, 
                     docen.*,
                     mat.*,";
                     if($traerIndicadores){
@@ -1301,6 +1302,12 @@ class Boletin {
                 AND   bol.year        = mat.year
                 AND   bol_estudiante  = mat.mat_id
                 AND   bol_carga       = car.car_id
+
+                LEFT JOIN " . BD_ACADEMICA . ".academico_grados_periodos per
+                ON    per.institucion = mat.institucion 
+                AND   per.year        = mat.year
+                AND   per.gvp_grado   = mat.mat_grado
+                AND   per.gvp_periodo = bol.bol_periodo
 
                 LEFT JOIN " . BD_ACADEMICA . ".academico_clases cls 
                 ON  cls.institucion       = bol.institucion
