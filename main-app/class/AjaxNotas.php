@@ -16,7 +16,7 @@ class AjaxNotas extends Calificaciones {
     **/
     public static function ajaxNivelacionesRegistrar($data)
     {
-        global $conexion, $config;        
+        global $conexion, $config;
 
         try {
             $consulta = mysqli_query($conexion, "
