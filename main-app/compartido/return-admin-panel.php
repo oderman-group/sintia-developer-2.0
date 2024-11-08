@@ -7,6 +7,11 @@ if (!empty($_SESSION["admin"])) {
     unset($_SESSION["admin"]);
 }
 
+if (!empty($_SESSION["infoCargaActual"])) {
+    $_SESSION["infoCargaActual"] = '';
+    unset($_SESSION["infoCargaActual"]);
+}
+
 if (empty($_SESSION["id"])) {
     header("Location:../controlador/salir.php");
     exit();

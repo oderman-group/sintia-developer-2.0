@@ -25,6 +25,8 @@ switch (base64_decode($_GET['tipe'])) {
 			$url = '../docente/cargas-seleccionar.php?carga='.$_GET["carga"].'&periodo='.$_GET["periodo"];
 		} else {
 			$auth->limpiarCookiesDocentes();
+			$_SESSION["infoCargaActual"] = '';
+			unset($_SESSION["infoCargaActual"]);
 		}
 
 	break;
