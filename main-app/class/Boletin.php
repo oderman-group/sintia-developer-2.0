@@ -1229,7 +1229,15 @@ class Boletin {
             $andEstudiante = "AND   mat.mat_id  = '" . $idEstudiante."'";
         }
         $in_periodos2 = implode(', ', $periodos);
-
+        $odenNombres    ='';
+        switch ($config['conf_orden_nombre_estudiantes']) {
+            case '1':
+                $odenNombres = "mat_nombres,mat_nombre2,mat_primer_apellido,mat_segundo_apellido,";
+                break;
+            case '2':
+                $odenNombres = "mat_primer_apellido,mat_segundo_apellido,mat_nombres,mat_nombre2,";
+                break;
+         }
         $sql = "
                  SELECT
                     mat.mat_id,
@@ -1431,7 +1439,7 @@ class Boletin {
                 AND ( mat.mat_estado_matricula = " . MATRICULADO . " OR mat.mat_estado_matricula=" . ASISTENTE . ") 
 
 
-                ORDER BY mat.mat_id,are.ar_posicion,car.car_id,bol_periodo";
+                ORDER BY $odenNombres mat.mat_id,are.ar_posicion,car.car_id,bol_periodo";
                 if($traerIndicadores){
                 $sql .=",ind.ind_id";
                 }
@@ -1459,8 +1467,17 @@ class Boletin {
             $andEstudiante = "AND   mat.mat_id  = '" . $idEstudiante."'";
         }
          // Preparar los placeholders para la consulta
-         $in_periodos = implode(', ', array_fill(0, count($periodos), '?'));
+         $in_periodos  = implode(', ', array_fill(0, count($periodos), '?'));
          $in_periodos2 = implode(', ', $periodos);
+         $odenNombres    ='';
+         switch ($config['conf_orden_nombre_estudiantes']) {
+            case '1':
+                $odenNombres = "mat_nombres,mat_nombre2,mat_primer_apellido,mat_segundo_apellido,";
+                break;
+            case '2':
+                $odenNombres = "mat_primer_apellido,mat_segundo_apellido,mat_nombres,mat_nombre2,";
+                break;
+         }
         $sql = "
                  SELECT                   
 					are.ar_id,
@@ -1559,7 +1576,7 @@ class Boletin {
                 AND   mat.mat_eliminado        = 0
                 AND ( mat.mat_estado_matricula = " . MATRICULADO . " OR mat.mat_estado_matricula=" . ASISTENTE . ") 
                
-                ORDER BY mat.mat_id,are.ar_posicion,car.car_id,bol.bol_periodo
+                ORDER BY  $odenNombres mat.mat_id,are.ar_posicion,car.car_id,bol.bol_periodo
                 ";
         $parametros = [$grado, $grupo, $config['conf_id_institucion'], $year];
 
@@ -1576,7 +1593,6 @@ class Boletin {
         return $array=["notip_nombre"  => "N/A",
                         "notip_imagen" => "bajo.png"]; //
     }
-    
 
     public static function colorNota(float $valorNota): string {
         global  $config;

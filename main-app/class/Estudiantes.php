@@ -379,17 +379,37 @@ class Estudiantes {
      * @return string $nombre
      */
     public static function NombreCompletoDelEstudiante(array $estudiante){
-        
-        $nombre=$estudiante['mat_nombres'];
-        if(!empty($estudiante['mat_nombre2'])){
-            $nombre.=" ".$estudiante['mat_nombre2'];
+        global $config;
+        switch ($config['conf_orden_nombre_estudiantes']) {
+            case '2':
+                $nombre = trim($estudiante['mat_nombres']);
+                if (!empty($estudiante['mat_nombre2'])) {
+                    $nombre .= " " . trim($estudiante['mat_nombre2']);
+                }
+                if (!empty($estudiante['mat_segundo_apellido'])) {
+                    $nombre = trim($estudiante['mat_segundo_apellido']) . " " . $nombre;
+                }
+                if (!empty($estudiante['mat_primer_apellido'])) {
+                    $nombre = trim($estudiante['mat_primer_apellido']). " " . $nombre;
+                }
+                break;
+            case '1':
+                $nombre = trim($estudiante['mat_nombres']);
+                
+                if (!empty($estudiante['mat_nombre2'])) {
+                    $nombre .= " " . trim($estudiante['mat_nombre2']);
+                }
+                if (!empty($estudiante['mat_primer_apellido'])) {
+                    $nombre .= " " .trim($estudiante['mat_primer_apellido']);
+                }
+                if (!empty($estudiante['mat_segundo_apellido'])) {
+                    $nombre .= " " .trim($estudiante['mat_segundo_apellido']);
+                }
+                
+               
+                break;
         }
-        if(!empty($estudiante['mat_segundo_apellido'])){
-            $nombre=$estudiante['mat_segundo_apellido']." ".$nombre;
-        }
-        if(!empty($estudiante['mat_primer_apellido'])){
-            $nombre=$estudiante['mat_primer_apellido']." ".$nombre;
-        }
+
         return strtoupper($nombre);
     }
 

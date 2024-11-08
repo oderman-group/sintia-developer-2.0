@@ -37,6 +37,7 @@ class Informes
             mat_primer_apellido,
             mat_segundo_apellido,
             mat_nombres,
+            mat_nombre2,
             mat_grado,
             gra_nombre,
             mat_grupo,
