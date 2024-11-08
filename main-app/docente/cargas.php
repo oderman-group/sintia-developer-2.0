@@ -26,6 +26,11 @@ if (!empty($_SESSION["infoCargaActual"])) {
     .elemento-draggable {
         cursor: grab;
     }
+
+    .elemento-draggable .blogThumb {
+        height: 200px; /* Establece la altura que desees */
+        overflow: hidden; /* Oculta el contenido que sobrepase la altura */
+    }
 </style>
 <!-- END HEAD -->
 <?php include("../compartido/body.php"); ?>
@@ -102,15 +107,12 @@ if (!empty($_SESSION["infoCargaActual"])) {
                                 $fondoCargaActual = '#FFF';
                                 $seleccionado     = false;
 
-                                
-                                
-
                                 if (!empty($carga['car_ultimo_acceso_docente'])) {
                                     $ultimoAcceso = $carga['car_ultimo_acceso_docente'];
                                 }
 
                                 if (!empty($_COOKIE["carga"]) && $carga['car_id'] == $_COOKIE["carga"]) {
-                                    $fondoCargaActual = 'cornsilk';
+                                    $fondoCargaActual = '#6017dc1f';
                                     $seleccionado     = true;
                                 }
 
@@ -139,16 +141,16 @@ if (!empty($_SESSION["infoCargaActual"])) {
                                 $cantEstudiantes = 0;
                                 $verMsj = false;
                                 ?>
-                                <div class="col-lg-3 col-md-6 col-12 col-sm-6 sortable-item elemento-draggable"
+                                <div class="col-lg-2 col-md-6 col-12 col-sm-6 sortable-item elemento-draggable"
                                     draggable="true" id="carga-<?= $carga['car_id']; ?>">
-                                    <div class="blogThumb" style="background-color:<?= $fondoCargaActual; ?>;">
-                                        <div class="thumb-center">
+                                    <div class="blogThumb border border-info" style="background-color:<?= $fondoCargaActual; ?>;">
+                                        <!-- <div class="thumb-center">
                                             <a href="cargas-seleccionar.php?carga=<?= base64_encode($carga['car_id']); ?>&periodo=<?= base64_encode($carga['car_periodo']); ?>"
                                                 title="Entrar">
                                                 <img class="img-responsive" alt="user"
                                                     src="../../config-general/assets/img/course/course1.jpg">
                                             </a>
-                                        </div>
+                                        </div> -->
                                         <div class="course-box">
                                             <h5 <?= $induccionEntrar; ?>><a
                                                     href="cargas-seleccionar.php?carga=<?= base64_encode($carga['car_id']); ?>&periodo=<?= base64_encode($carga['car_periodo']); ?>"
@@ -243,7 +245,7 @@ if (!empty($_SESSION["infoCargaActual"])) {
                                                             break;
                     
                                                         default:
-                                                            $generarInforme=true;									
+                                                            $generarInforme=true;
                                                             break;
                                                     }
                                                 }
@@ -287,7 +289,7 @@ if (!empty($_SESSION["infoCargaActual"])) {
                                                             Manualmente
                                                             </a>
                                                         </li>
-                                                        <li>
+                                                        <!-- <li>
                                                             <a 
                                                             rel="<?=$configGenerarJobs.'-'.$numSinNotas.'-2';?>" 
                                                             data-toggle="tooltip" 
@@ -299,7 +301,7 @@ if (!empty($_SESSION["infoCargaActual"])) {
                                                             onclick="mensajeGenerarInforme(this)">
                                                             Automático
                                                             </a>
-                                                        </li>
+                                                        </li> -->
                                                     </ul>
                                                 </div>
                                                 <?php } ?>
@@ -308,7 +310,7 @@ if (!empty($_SESSION["infoCargaActual"])) {
                                                         
                                                         <?php if($calificarFaltantes){ ?>
                                                         <a target="_blank" href="calificaciones-faltantes.php?carga=<?=base64_encode($carga["car_id"])?>&periodo=<?=base64_encode($carga["car_periodo"])?>&get=<?=base64_encode(100)?>">
-                                                            <?=$msj?>                                                           
+                                                            <?=$msj?>
                                                         </a>
                                                         <?php }else{?>
                                                             <?=$msj?>
