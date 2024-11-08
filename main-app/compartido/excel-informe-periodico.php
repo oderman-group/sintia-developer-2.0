@@ -207,7 +207,7 @@ try {
                 }
 
                 if (!empty($registro["mat_primer_apellido"])) {
-                    $excelUtil->agregarTexto('D' . $num, $registro["mat_primer_apellido"] . ' ' . $registro["mat_segundo_apellido"] . ' ' . $registro["mat_nombres"]);
+                    $excelUtil->agregarTexto('D' . $num, Estudiantes::NombreCompletoDelEstudiante($registro));
                 }
 
                 if (!empty($registro["gra_nombre"])) {
