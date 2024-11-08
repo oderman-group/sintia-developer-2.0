@@ -113,6 +113,11 @@ if(!isset($_GET['nodb'])) {
                         <div class="d-flex justify-content-center mt-3">
                             <p><a href="https://docs.google.com/forms/d/e/1FAIpQLSdiugXhzAj0Ysmt2gthO07tbvjxTA7CHcZqgzBpkefZC6T2qg/viewform" class="text-body btn-sm" target="_blank">¿Requieres soporte?</a></p>
                         </div>
+
+                        <div class="d-block justify-content-center mt-4">
+                            <p>¿Quieres registrar tu Institución?</p>
+                            <a href="registro.php" class="btn btn-lg btn-primary btn-rounded">Crear cuenta ahora</a>
+                        </div>
                     </div>
                 </div>
             </div>
