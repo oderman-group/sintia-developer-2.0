@@ -22,7 +22,7 @@ class AjaxNotas extends Calificaciones {
             $consulta = mysqli_query($conexion, "
             SELECT * FROM ".BD_ACADEMICA.".academico_nivelaciones 
             WHERE 
-                niv_cod_estudiante=".$data['codEst']." 
+                niv_cod_estudiante='".$data['codEst']."'
             AND niv_id_asg='".$data['carga']."' 
             AND institucion={$config['conf_id_institucion']} 
             AND year={$_SESSION["bd"]}");

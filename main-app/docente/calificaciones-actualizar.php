@@ -15,8 +15,11 @@ $indicadoresDatosC = Indicadores::consultaIndicadorPeriodo($conexion, $config, $
 
 $valores = Actividades::consultarPorcentajeActividadesIndicador($config, $cargaConsultaActual, $_POST["indicador"], $periodoConsultaActual);
 
+$valorCalificacion = is_numeric($_POST["valorCalificacion"]) ? $_POST["valorCalificacion"] : 
+    (isset($_POST["valor"]) && is_numeric($_POST["valor"]) ? $_POST["valor"] : 0);
+
 $porcentajeRestante = $indicadoresDatosC['ipc_valor'] - $valores[0];
-$porcentajeRestante = ($porcentajeRestante + $_POST["valorCalificacion"]);
+$porcentajeRestante = ($porcentajeRestante + $valorCalificacion);
 
 $fecha = date('Y-m-d', strtotime(str_replace('-', '/', $_POST["fecha"])));
 

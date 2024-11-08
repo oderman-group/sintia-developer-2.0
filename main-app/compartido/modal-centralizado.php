@@ -1,10 +1,10 @@
 <script type="application/javascript">
 	async function abrirModal(titulo, url, data, timeout,width = '1350px') {
 		const contenido = document.getElementById('contenidoCentralizado');
-		var gifCarga = document.getElementById("gifCarga");
+		var overlay = document.getElementById("overlay");
 
-		if (gifCarga) {
-			document.getElementById("gifCarga").style.display = "block";
+		if (overlay) {
+			document.getElementById("overlay").style.display = "flex";
 		}
 
 		contenido.innerHTML = "";
@@ -16,8 +16,8 @@
 
 		document.getElementById('tituloModal').textContent = titulo;
 
-		if (gifCarga) {
-			document.getElementById("gifCarga").style.display = "none";
+		if (overlay) {
+			document.getElementById("overlay").style.display = "none";
 		}
 		$('#ModalCentralizado .modal-dialog').css('width', width);
 		$('#ModalCentralizado').modal('show');

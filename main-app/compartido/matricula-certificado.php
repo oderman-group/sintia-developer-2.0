@@ -178,7 +178,7 @@ $Plataforma = new Plataforma();
                 <?php
 
                 //SELECCION LAS CARGAS DEL ESTUDIANTE, MATERIAS, AREAS
-			    $cargasAcademicas = CargaAcademica::traerCargasMateriasAreaPorCursoGrupo($config, $matricula["mat_grado"], $matricula["mat_grupo"], $inicio);
+			    $cargasAcademicas = CargaAcademica::traerCargasMateriasAreaPorCursoGrupo($config, $matricula["mat_grado"], $matricula["mat_grupo"], $inicio, "");
                 $materiasPerdidas = 0;
 
 				$horasT = 0;
@@ -211,7 +211,7 @@ $Plataforma = new Plataforma();
 
                     <tr>
 
-                        <td><?= $cargas["car_id"] .") -". strtoupper($cargas["mat_nombre"]); ?></td>
+                        <td><?= strtoupper($cargas["mat_nombre"]); ?></td>
 
                         <td><?= $notaFinal; ?></td>
 
@@ -230,7 +230,7 @@ $Plataforma = new Plataforma();
                     while($datosEstudianteActualMT = mysqli_fetch_array($consultaEstudianteActualMT, MYSQLI_BOTH)){
                         if(!empty($datosEstudianteActualMT)){
                 //SELECCION LAS CARGAS DEL ESTUDIANTE, MATERIAS, AREAS DE MT
-			    $cargasAcademicas = CargaAcademica::traerCargasMateriasAreaPorCursoGrupo($config, $datosEstudianteActualMT["matcur_id_curso"], $datosEstudianteActualMT["matcur_id_grupo"], $inicio);
+			    $cargasAcademicas = CargaAcademica::traerCargasMateriasAreaPorCursoGrupo($config, $datosEstudianteActualMT["matcur_id_curso"], $datosEstudianteActualMT["matcur_id_grupo"], $inicio, "");
                 while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
 
                     //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES
@@ -345,7 +345,7 @@ $Plataforma = new Plataforma();
                 <?php
 
                 //SELECCION LAS CARGAS DEL ESTUDIANTE, MATERIAS, AREAS
-			    $cargasAcademicas = CargaAcademica::traerCargasMateriasAreaPorCursoGrupo($config, $matricula["mat_grado"], $matricula["mat_grupo"], $inicio);
+			    $cargasAcademicas = CargaAcademica::traerCargasMateriasAreaPorCursoGrupo($config, $matricula["mat_grado"], $matricula["mat_grupo"], $inicio, "");
                 $materiasPerdidas = 0;
                 $horasT = 0;
 				$periodoFinal = $config['conf_periodos_maximos'];
@@ -420,7 +420,7 @@ $Plataforma = new Plataforma();
                         if(!empty($datosEstudianteActualMT)){
 
                 //SELECCION LAS CARGAS DEL ESTUDIANTE, MATERIAS, AREAS
-			    $cargasAcademicas = CargaAcademica::traerCargasMateriasAreaPorCursoGrupo($config, $datosEstudianteActualMT["matcur_id_curso"], $datosEstudianteActualMT["matcur_id_grupo"], $inicio);
+			    $cargasAcademicas = CargaAcademica::traerCargasMateriasAreaPorCursoGrupo($config, $datosEstudianteActualMT["matcur_id_curso"], $datosEstudianteActualMT["matcur_id_grupo"], $inicio, "");
                 while ($cargas = mysqli_fetch_array($cargasAcademicas, MYSQLI_BOTH)) {
 
                     //OBTENEMOS EL PROMEDIO DE LAS CALIFICACIONES

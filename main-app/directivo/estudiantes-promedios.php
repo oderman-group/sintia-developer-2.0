@@ -51,20 +51,28 @@ $Plataforma = new Plataforma;
 											<?php
 											
 											try{
+												switch ($config['conf_orden_nombre_estudiantes']) {
+													case '1':
+														$odenNombres = "mat_nombres,mat_nombre2,mat_primer_apellido,mat_segundo_apellido";
+														break;
+													case '2':
+														$odenNombres = "mat_primer_apellido,mat_segundo_apellido,mat_nombres,mat_nombre2";
+														break;
+												 };
 												$destacados = mysqli_query($conexion, "SELECT AVG(bol_nota) AS promedio, bol_estudiante, mat_nombres, mat_primer_apellido, mat_segundo_apellido, mat_grado,
-												ROW_NUMBER() OVER(ORDER BY promedio desc) as puesto 
+												ROW_NUMBER() OVER(ORDER BY promedio desc,$odenNombres) as puesto 
 												FROM ".BD_ACADEMICA.".academico_boletin bol
 												INNER JOIN ".BD_ACADEMICA.".academico_matriculas mat ON mat_id=bol_estudiante AND mat.institucion={$config['conf_id_institucion']} AND mat.year={$_SESSION["bd"]} $filtro AND mat_eliminado=0
 												AND (mat_estado_matricula=1 OR mat_estado_matricula=2)
 												WHERE bol_id=bol_id AND bol.institucion={$config['conf_id_institucion']} AND bol.year={$_SESSION["bd"]} $filtroBoletin
-												GROUP BY bol_estudiante ORDER BY promedio $filtroOrden
+												GROUP BY bol_estudiante ORDER BY promedio $filtroOrden, $odenNombres 
 												$filtroLimite");
 											} catch (Exception $e) {
 												include("../compartido/error-catch-to-report.php");
 											}
 											$contP = 1;
 											while($dest = mysqli_fetch_array($destacados, MYSQLI_BOTH)){
-												$nota=number_format($dest['promedio'],$config['conf_decimales_notas']);
+												$nota=number_format(empty($dest['promedio'])?0:$dest['promedio'],$config['conf_decimales_notas']);
 												$porcentaje = ($nota/$config['conf_nota_hasta'])*100;
 												if($nota < $config['conf_nota_minima_aprobar']) $colorGrafico = 'danger'; else $colorGrafico = 'info';
 											?>
