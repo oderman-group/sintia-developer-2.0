@@ -86,10 +86,9 @@ class Autenticate {
             $urlRedirect = REDIRECT_ROUTE."?inst=".base64_encode($_SESSION["idInstitucion"])."&year=".base64_encode($_SESSION["bd"]);
         }
 
-        setcookie("carga","",time()-3600);
-        setcookie("periodo","",time()-3600);
-        setcookie("cargaE","",time()-3600);
-        setcookie("periodoE","",time()-3600);
+        $this->limpiarCookiesDocentes();
+        $this->limpiarCookiesEstudiantes();
+
         session_destroy();
 
         Conexion::getConexion()->closeConnection();
@@ -100,6 +99,34 @@ class Autenticate {
 
         header("Location:".$urlRedirect);
     }
+
+    /**
+     * Clears the cookies related to teacher sessions.
+     *
+     * This function sets the expiration time of the "carga" and "periodo" cookies to a time in the past, effectively
+     * clearing them from the user's browser. This is typically done when a teacher logs out or when switching institutions.
+     *
+     * @return void
+     */
+    public function limpiarCookiesDocentes() {
+        setcookie("carga", "", time()-3600, "/");
+        setcookie("periodo", "", time()-3600, "/");
+    }
+
+
+    /**
+     * Clears the cookies related to student sessions.
+     *
+     * This function sets the expiration time of the "cargaE" and "periodoE" cookies to a time in the past, effectively
+     * clearing them from the user's browser. This is typically done when a student logs out or when switching institutions.
+     *
+     * @return void
+     */
+    public function limpiarCookiesEstudiantes() {
+        setcookie("cargaE","",time()-3600);
+        setcookie("periodoE","",time()-3600);
+    }
+
 
     /**
      * Switches the current institution for the user session.
