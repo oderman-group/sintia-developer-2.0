@@ -15,6 +15,7 @@ require_once(ROOT_PATH . "/main-app/class/Boletin.php");
 require_once(ROOT_PATH . "/main-app/class/Indicadores.php");
 require_once(ROOT_PATH . "/main-app/class/Utilidades.php");
 require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php");
+require_once(ROOT_PATH . "/main-app/class/Tables/BDT_configuracion.php");
 
 $year = $_SESSION["bd"];
 
@@ -61,12 +62,6 @@ if (!empty($idEstudiante)) {
         $grupo        = $estudiante["mat_grupo"];
     }
 }
-
-
-$ultimoPeriodoAreas = $config["conf_periodos_maximos"];
-
-
-
 ?>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <!doctype html>
@@ -263,10 +258,9 @@ if ($grado >= 12 && $grado <= 15) {
                             ?>
                                 <td align="center" align="center" style=" <?= $background ?>;<?= $cargaStyle ?> font-size:12px;"><?= $nota   == 0 ? '' : number_format($nota, $config['conf_decimales_notas']); ?></td>
                             <?php }
-                            ?>
-
-                            <?php
-                            $notaAcumulada = $promedioMateria / $periodoFinal;
+                            
+                            $periodoCalcular = $estudiante['mat_estado_matricula'] == CANCELADO && $config["conf_promedio_libro_final"] == BDT_Configuracion::PERIODOS_CURSADOS ? COUNT($carga["periodos"]) : $config["conf_periodos_maximos"];
+                            $notaAcumulada = $promedioMateria / $periodoCalcular;
                             $notaAcumulada = round($notaAcumulada, $config['conf_decimales_notas']);
                             $desempenoAcumulado = Boletin::determinarRango($notaAcumulada, $tiposNotas);
                             if ($notaAcumulada < $config['conf_nota_minima_aprobar']) {
@@ -283,12 +277,17 @@ if ($grado >= 12 && $grado <= 15) {
                             <td align="center" <?= $style ?>><?= $ihArea ?></td>
                             <?php
                             $notaAreAcumulada = 0;
+                            $periodoAreaCalcular = $config["conf_periodos_maximos"];
                             for ($j = 1; $j <= $periodoFinal; $j++) {
                                 $notaAreAcumulada += $notaAre[$j]; ?>
                                 <td align="center" <?= $style ?>><?= $notaAre[$j] <= 0 ? '' : number_format($notaAre[$j], $config['conf_decimales_notas']); ?></td>
 
-                            <?php }
-                            $notaAreAcumulada       = number_format($notaAreAcumulada / $config['conf_periodos_maximos'], $config['conf_decimales_notas']);
+                            <?php
+                                if ( $notaAre[$j] <= 0 ) { $periodoAreaCalcular -= 1; } 
+                            }
+                            
+                            $periodoAreaCalcular = $estudiante['mat_estado_matricula'] == CANCELADO && $config["conf_promedio_libro_final"] == BDT_Configuracion::PERIODOS_CURSADOS ? $periodoAreaCalcular : $config["conf_periodos_maximos"];
+                            $notaAreAcumulada       = number_format($notaAreAcumulada / $periodoAreaCalcular, $config['conf_decimales_notas']);
                             $desenpenioAreAcumulado = Boletin::determinarRango($notaAreAcumulada, $tiposNotas);
 
                             ?>
@@ -304,14 +303,19 @@ if ($grado >= 12 && $grado <= 15) {
                     <td colspan="2">PROMEDIO GENERAL</td>
                     <?php
                     $promedioFinal = 0;
+                    $periodoCalcular = $config["conf_periodos_maximos"];
                     for ($j = 1; $j <= $periodoFinal; $j++) {
                         $acumuladoPj = ($totalNotasPeriodo[$j] / $cantidadAreas);
                         $acumuladoPj = round($acumuladoPj, $config['conf_decimales_notas']);
                         $promedioFinal += $acumuladoPj;
+
+                        if ( $acumuladoPj <= 0 ) { $periodoCalcular -= 1; }
                     ?>
                         <td align="center"><?= $acumuladoPj <= 0  ? '' : $acumuladoPj ?> </td>
                     <?php }
-                    $promedioFinal = round($promedioFinal / $periodoFinal, $config['conf_decimales_notas']);
+
+                    $periodoCalcularFinal = $estudiante['mat_estado_matricula'] == CANCELADO && $config["conf_promedio_libro_final"] == BDT_Configuracion::PERIODOS_CURSADOS ? $periodoCalcular : $config["conf_periodos_maximos"];
+                    $promedioFinal = round($promedioFinal / $periodoCalcularFinal, $config['conf_decimales_notas']);
 
                     $desempenoAcumuladoTotal = Boletin::determinarRango($promedioFinal, $tiposNotas);
                     ?>
@@ -332,7 +336,7 @@ if ($grado >= 12 && $grado <= 15) {
                                 $msj = "EL(LA) ESTUDIANTE FUE PROMOVIDO(A) AL GRADO SIGUIENTE.";
                             }
 
-                            if ($estudiante['mat_estado_matricula'] == CANCELADO && $ultimoPeriodoAreas < $config["conf_periodos_maximos"]) {
+                            if ($estudiante['mat_estado_matricula'] == CANCELADO && $periodoCalcularFinal < $config["conf_periodos_maximos"]) {
                                 $msj = "EL(LA) ESTUDIANTE FUE RETIRADO SIN FINALIZAR AÑO LECTIVO.";
                             }
                         }
