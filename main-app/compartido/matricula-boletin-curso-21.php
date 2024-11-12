@@ -210,8 +210,10 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
                                 
                                 $nota = $carga["periodos"][$j]["bol_nota"];
                                 ?>
-                                <td align="center">
-                                    <?= $recupero ? $carga['periodos'][$j]['bol_nota_anterior'] . " / " . Boletin::formatoNota($nota, $tiposNotas) . " Recuperada" : Boletin::formatoNota($nota, $tiposNotas) ?>
+                                <td align="center">                                    
+                                    <p>
+                                    <?= $recupero ? $carga['periodos'][$j]['bol_nota_anterior'] . " /  <span style='font-weight: bold;'> " . Boletin::formatoNota($nota, $tiposNotas) . " Recu. </span>" :  Boletin::formatoNota($nota, $tiposNotas)?>
+                                    </p>
                                 </td>
                                 <td align="center"><img
                                         src="../files/iconos/<?= Boletin::determinarRango($nota, $tiposNotas)['notip_imagen']; ?>"
@@ -224,6 +226,8 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
                             }
 
                             $notaFinal = $carga["carga_acumulada"];
+                            $notaFinal = round($notaFinal, $config['conf_decimales_notas']);
+						    $notaFinal = number_format($notaFinal, $config['conf_decimales_notas']);
                             Utilidades::valordefecto($promedios[$j], 0);
                             Utilidades::valordefecto($ausencias[$j], 0);
                             $promedios[$j] += $notaFinal;
@@ -245,16 +249,34 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
                 <tr style="font-weight:bold; text-align:center;">
                     <td style="text-align:left;">PROMEDIO GENERAL</td>
                     <td>&nbsp;</td>
-                    <?php foreach ($estudiante["promedios_generales"] as $promedio) {
-						$promedio = round(($promedio["suma_notas_materias"] / ($promedio["cantidad_materias"])), $config['conf_decimales_notas']);
+                    <?php
+                        $promedioFinal     = 0; 
+                        $porcentajePeriodo = 0;
+                        for ($k = 1; $k <= $periodoActual; $k++) {
+                            if ( !empty($estudiante["promedios_generales"][$k]["suma_notas_materias"]) ) {
+                                $notaPromedio      = $estudiante["promedios_generales"][$k]["suma_notas_materias"] ;
+                                $cantidadMaterias  = $estudiante["promedios_generales"][$k]["cantidad_materias"] ;
+                                $porcentajePeriodo = $estudiante["promedios_generales"][$k]["porcentaje_periodo"] ;
+                                $promedio = round(( $notaPromedio/ ( $cantidadMaterias)), $config['conf_decimales_notas']);
+                            }else{
+                                $notaPromedio      = 0;
+                                $porcentajePeriodo = 0;
+                                $promedio          = 0;
+                            }
+
+						
 						$promedio = number_format($promedio, $config['conf_decimales_notas']);
+                        $promedioFinal +=  $promedio * ($porcentajePeriodo/100);
 						?>
-                        <td align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;" ><?= Boletin::formatoNota($promedio, $tiposNotas); ?></td>
+                        <td align="center" style="font-weight:bold;  font-size:14px;" ><?= Boletin::formatoNota($promedio, $tiposNotas); ?></td>
                         <td align="center"><img
                                 src="../files/iconos/<?= Boletin::determinarRango($promedio, $tiposNotas)['notip_imagen']; ?>"
                                 width="15" height="15"></td>
 					<?php } ?>
-                    <td>-</td>
+                    <td align="center" style="font-weight:bold;  font-size:14px;" ><?= Boletin::formatoNota($promedioFinal, $tiposNotas); ?></td>
+                        <td align="center"><img
+                                src="../files/iconos/<?= Boletin::determinarRango($promedioFinal, $tiposNotas)['notip_imagen']; ?>"
+                                width="15" height="15"></td>
                 </tr>
                 <tr style="font-weight:bold; text-align:center;">
                     <td style="text-align:left;">AUSENCIAS</td>
