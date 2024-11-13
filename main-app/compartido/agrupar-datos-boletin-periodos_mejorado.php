@@ -172,7 +172,7 @@ foreach ($listaDatos  as $registro) {
         $mat_ar_car_periodo = $mat_ar_car . '-' . $registro["bol_periodo"];
     }
     // Datos de los Indicadores por periodo
-    if ($mat_ar_car_periodo_indicador != $mat_ar_car_periodo.'-'.$registro["ind_id"]) {
+    if (!empty($registro["ind_id"]) && $mat_ar_car_periodo_indicador != $mat_ar_car_periodo.'-'.$registro["ind_id"]) {
         $indicadorRecuperado=false;
         $contarIndicadores++;
         $notaIndicador = empty($registro['valor_indicador']) ? 0 : $registro['valor_indicador'];
