@@ -211,7 +211,7 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
 							<!-- INDICADORES -->
 							<tr>
 								<td colspan="<?= (2 * $periodoActual) - 1 ?>">
-									<?= $indicador['ind_id'] . ") " . $indicador['ind_nombre']; ?>
+									<?= $indicador['ind_id'] . " " . $indicador['ind_nombre']; ?>
 								</td>
 								<td align="center"> <?= $indicador['valor_porcentaje_indicador'] . "%"; ?></td>
 								<td align="center"

@@ -42,22 +42,24 @@ foreach ($listaDatos  as $registro) {
 
         $nombre = Estudiantes::NombreCompletoDelEstudiante($registro);
         $estudiantes[$registro["mat_id"]] = [
-            "mat_id"                  => $registro["mat_id"],
-            "nombre"                  => $nombre,
-            "mat_documento"           => $registro["mat_documento"],
-            "nro"                     => $conteoEstudiante,
-            "mat_matricula"           => $registro["mat_matricula"],
-            "gra_id"                  => $registro["mat_grado"],
-            "gra_nombre"              => $registro["gra_nombre"],
-            "gru_id"                  => $registro["mat_grupo"],
-            "gru_nombre"              => $registro["gru_nombre"],
-            "mat_estado_matricula"    => $registro["mat_estado_matricula"],
-            "mat_numero_matricula"    => $registro["mat_numero_matricula"],
-            "mat_folio"               => $registro["mat_folio"],
-            "periodo_selecionado"     => $periodos,
-            "observaciones_generales" => [],
-            "promedios_generales"     => [],
-            "areas"                   => []
+            "mat_id"                            => $registro["mat_id"],
+            "nombre"                            => $nombre,
+            "mat_documento"                     => $registro["mat_documento"],
+            "nro"                               => $conteoEstudiante,
+            "mat_matricula"                     => $registro["mat_matricula"],
+            "gra_id"                            => $registro["mat_grado"],
+            "gra_nombre"                        => $registro["gra_nombre"],
+            "gru_id"                            => $registro["mat_grupo"],
+            "gru_nombre"                        => $registro["gru_nombre"],
+            "mat_estado_matricula"              => $registro["mat_estado_matricula"],
+            "mat_numero_matricula"              => $registro["mat_numero_matricula"],
+            "mat_folio"                         => $registro["mat_folio"],
+            "periodo_selecionado"               => $periodos,
+            "observaciones_generales"           => [],
+            "suma_promedios_generales_materias" => 0,
+            "suma_promedios_generales_areas"    => 0,
+            "promedios_generales"               => [],
+            "areas"                             => []
 
         ];
         $mat_id = $registro["mat_id"];
@@ -228,9 +230,11 @@ foreach ($listaDatos  as $registro) {
         }
 }
 foreach ($estudiantes as $estudiante) {
-    $cantidad_materias           = 0;
-    $suma_notas_materias_periodo = [];
-    $suma_notas_areas_periodo    = [];
+    $cantidad_materias                  = 0;
+    $suma_notas_materias_periodo        = [];
+    $suma_notas_areas_periodo           = [];
+    $suma_promedios_generales_materias  = 0;
+    $suma_promedios_generales_areas     = 0;
     foreach ($estudiante["areas"] as $area) {
         $nota_area      = [];
         $suma_nota_area = 0;
@@ -266,9 +270,20 @@ foreach ($estudiantes as $estudiante) {
         $estudiantes[$estudiante["mat_id"]]["areas"][$area["ar_id"]]["nota_area_acumulada"] += $nota_area_acumulada ;
     }
     foreach ($estudiante["promedios_generales"] as $promedio) {
-        $estudiantes[$estudiante["mat_id"]]["promedios_generales"][$promedio["periodo"]]["cantidad_materias"]   = $cantidad_materias;
-        $estudiantes[$estudiante["mat_id"]]["promedios_generales"][$promedio["periodo"]]["cantidad_areas"]      = count($estudiante["areas"]);
-        $estudiantes[$estudiante["mat_id"]]["promedios_generales"][$promedio["periodo"]]["suma_notas_materias"] = $suma_notas_materias_periodo[$promedio["periodo"]];
-        $estudiantes[$estudiante["mat_id"]]["promedios_generales"][$promedio["periodo"]]["suma_notas_areas"]    = $suma_notas_areas_periodo[$promedio["periodo"]];
+        $estudiantes[$estudiante["mat_id"]]["promedios_generales"][$promedio["periodo"]]["cantidad_materias"]        = $cantidad_materias;        
+        $estudiantes[$estudiante["mat_id"]]["promedios_generales"][$promedio["periodo"]]["suma_notas_materias"]      = $suma_notas_materias_periodo[$promedio["periodo"]];
+        $estudiantes[$estudiante["mat_id"]]["promedios_generales"][$promedio["periodo"]]["nota_materia_promedio"]    = $suma_notas_materias_periodo[$promedio["periodo"]]/$cantidad_materias;
+        $estudiantes[$estudiante["mat_id"]]["promedios_generales"][$promedio["periodo"]]["nota_materia_porcentaje"]  = ($suma_notas_materias_periodo[$promedio["periodo"]]/$cantidad_materias)*($promedio["porcentaje_periodo"]/100) ;
+        $suma_promedios_generales_materias                                                                           += $suma_notas_materias_periodo[$promedio["periodo"]]/$cantidad_materias;
+
+
+        $estudiantes[$estudiante["mat_id"]]["promedios_generales"][$promedio["periodo"]]["cantidad_areas"]           = count($estudiante["areas"]);
+        $estudiantes[$estudiante["mat_id"]]["promedios_generales"][$promedio["periodo"]]["suma_notas_areas"]         = $suma_notas_areas_periodo[$promedio["periodo"]];
+        $estudiantes[$estudiante["mat_id"]]["promedios_generales"][$promedio["periodo"]]["nota_area_promedio"]       = $suma_notas_areas_periodo[$promedio["periodo"]]/count($estudiante["areas"]);        
+        $estudiantes[$estudiante["mat_id"]]["promedios_generales"][$promedio["periodo"]]["nota_area_porcentaje"]     = ($suma_notas_areas_periodo[$promedio["periodo"]]/count($estudiante["areas"]))*($promedio["porcentaje_periodo"]/100);        
+        $suma_promedios_generales_areas                                                                              += $suma_notas_areas_periodo[$promedio["periodo"]]/count($estudiante["areas"]);
     }
+    $estudiantes[$estudiante["mat_id"]]["suma_promedios_generales_materias"]   = $suma_promedios_generales_materias;
+    $estudiantes[$estudiante["mat_id"]]["suma_promedios_generales_areas"]      = $suma_promedios_generales_areas;
+    
 }
