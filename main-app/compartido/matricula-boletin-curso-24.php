@@ -75,7 +75,7 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
 	for ($i = 1; $i <= $periodoActual; $i++) {
 		$periodos[$i] = $i;
 	}
-	$datos = Boletin::datosBoletin($curso, $grupo, $periodos, $year, $idEstudiante, true);
+	$datos = Boletin::datosBoletin($curso, $grupo, $periodos, $year, $idEstudiante);
 	while ($row = $datos->fetch_assoc()) {
 		$listaDatos[] = $row;
 	}
