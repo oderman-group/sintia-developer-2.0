@@ -236,7 +236,7 @@ if (!Modulos::validarPermisoEdicion()) {
 																	data-placement="top"
 																	style="border-bottom: 1px dotted #000;"><?= UsuariosPadre::nombreCompletoDelUsuario($usuario); ?></a>
 															</td>
-															<td <?= $backGroundMatricula; ?>>
+															<td>
 																<?= $usuario['pes_nombre'] . "" . $mostrarNumCargas . "" . $mostrarNumAcudidos; ?>
 															</td>
 															<td><span
