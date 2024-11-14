@@ -81,15 +81,7 @@ if (!Modulos::validarPermisoEdicion()) {
 						<div class="row">
 
 							<div class="col-md-12">
-								<?php include("../../config-general/mensajes-informativos.php");
-								// require "../../config-general/google-translate-php-master/vendor/autoload.php";
-								// use Stichoza\GoogleTranslate\GoogleTranslate;
-								// $tr = new GoogleTranslate();
-								// $tr->setSource('es'); // Traducir del inglés
-								// $tr->setTarget('en'); // Al español
-								// echo $tr->translate('Más Acciones'); // Hola Mundo
-								
-								?>
+								<?php include("../../config-general/mensajes-informativos.php");?>
 
 								<?php include("includes/barra-superior-usuarios.php");
 
