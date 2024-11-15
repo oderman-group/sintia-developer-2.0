@@ -314,7 +314,7 @@ require_once("index-logica.php");
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    startCountdown(2 * 60); // Inicia la cuenta regresiva con 10 minutos
+                    startCountdown(10 * 60); // Inicia la cuenta regresiva con 10 minutos
                     console.log(data.message);
                 } else {
                     alert(data.message);
