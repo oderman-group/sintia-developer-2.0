@@ -39,6 +39,12 @@ require_once("index-logica.php");
         .buttons {
             margin-top: 20px;
         }
+
+        .code-input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            outline: none;
+        }
     </style>
 
 </head>
@@ -63,25 +69,25 @@ require_once("index-logica.php");
                                 <input type="hidden" name="cuotas" value="<?= !empty($_REQUEST["cuotas"]) ? $_REQUEST["cuotas"] : ""; ?>" />
 
                                 <div class="form-floating mt-3">
-                                    <input type="text" class="form-control input-login" name="nombre" value="<?= !empty($_REQUEST["nombre"]) ? $_REQUEST["nombre"] : ""; ?>" placeholder="Nombres" required>
+                                    <input type="text" class="form-control input-login" id="nombre" name="nombre" value="<?= !empty($_REQUEST["nombre"]) ? $_REQUEST["nombre"] : ""; ?>" placeholder="Nombres" required>
                                     <label for="emailInput">Nombres</label>
                                     <div class="invalid-feedback">Por favor ingrese su nombre.</div>
                                 </div>
 
                                 <div class="form-floating mt-3">
-                                    <input type="text" class="form-control input-login" name="apellidos" value="<?= !empty($_REQUEST["apellidos"]) ? $_REQUEST["apellidos"] : ""; ?>" placeholder="Apellidos" required>
+                                    <input type="text" class="form-control input-login" id="apellidos" name="apellidos" value="<?= !empty($_REQUEST["apellidos"]) ? $_REQUEST["apellidos"] : ""; ?>" placeholder="Apellidos" required>
                                     <label for="emailInput">Apellidos</label>
                                     <div class="invalid-feedback">Por favor ingrese sus apellidos.</div>
                                 </div>
 
                                 <div class="form-floating mt-3">
-                                    <input type="email" class="form-control input-login" name="Correo electrónico" value="<?= !empty($_REQUEST["email"]) ? $_REQUEST["email"] : ""; ?>" placeholder="email" required>
+                                    <input type="email" class="form-control input-login" id="email" name="email" value="<?= !empty($_REQUEST["email"]) ? $_REQUEST["email"] : ""; ?>" placeholder="email" required>
                                     <label for="emailInput">Correo electrónico</label>
                                     <div class="invalid-feedback">Por favor ingrese un correo electrónico válido.</div>
                                 </div>
 
                                 <div class="form-floating mt-3">
-                                    <input type="text" class="form-control input-login" name="Número de celular" value="<?= !empty($_REQUEST["celular"]) ? $_REQUEST["celular"] : ""; ?>" placeholder="Celular" required>
+                                    <input type="text" class="form-control input-login" id="celular" name="celular" value="<?= !empty($_REQUEST["celular"]) ? $_REQUEST["celular"] : ""; ?>" placeholder="Celular" required>
                                     <label for="emailInput">Número de celular</label>
                                     <div class="invalid-feedback">Por favor ingrese un número celular válido.</div>
                                 </div>
@@ -180,16 +186,29 @@ require_once("index-logica.php");
                             </fieldset>
 
                             <h3>Activar Cuenta</h3>
-                            <fieldset></fieldset>
-                        </form>
+                            <fieldset>
+                                <div class="text-center">
+                                    <img class="mt-4 mb-4" src="<?=$Plataforma->logoCian;?>" width="100">
+                                    <h1 class="mt-4">Revisa tu bandeja de entrada</h1>
+                                    <p class="mt-4">Hemos enviado un código de 6 caracteres a <strong id="emailCode">tu_correo@ejemplo.com</strong>. Este código será válido durante <strong><span id="contMin">10</span> <span id="textMin">minutos</span></strong>.</p>
+                                    
+                                    <!-- Contenedor para los inputs del código -->
+                                    <div class="d-flex justify-content-center align-items-center mt-4">
+                                        <input type="text" maxlength="1" class="form-control mx-1 text-center code-input" style="width: 50px; height: 50px; font-size: 24px;"/>
+                                        <input type="text" maxlength="1" class="form-control mx-1 text-center code-input" style="width: 50px; height: 50px; font-size: 24px;"/>
+                                        <input type="text" maxlength="1" class="form-control mx-1 text-center code-input" style="width: 50px; height: 50px; font-size: 24px;"/>
+                                        <span class="mx-2" style="font-size: 24px;"> - </span>
+                                        <input type="text" maxlength="1" class="form-control mx-1 text-center code-input" style="width: 50px; height: 50px; font-size: 24px;"/>
+                                        <input type="text" maxlength="1" class="form-control mx-1 text-center code-input" style="width: 50px; height: 50px; font-size: 24px;"/>
+                                        <input type="text" maxlength="1" class="form-control mx-1 text-center code-input" style="width: 50px; height: 50px; font-size: 24px;"/>
+                                    </div>
 
-                        <script>
-                            function enviarFormulario(accion) {
-                                var formulario = document.getElementById('example-advanced-form');
-                                formulario.action = accion; // Cambia la acción del formulario
-                                formulario.submit(); // Envía el formulario
-                            }
-                        </script>
+                                    <p class="mt-4 text-danger" id="errorMessage" style="visibility: hidden;">Código inválido. Por favor verifica e inténtalo de nuevo.</p>
+                                    <button type="button" class="btn btn-primary mt-4" onclick="verificarCodigo()">Validar Código</button>
+                                    <p class="mt-4">¿Tienes problemas? Revisa tu carpeta de spam o <a href="javascript:void(0);" id="intNuevo" class="text-decoration-none" style="color: #000;">inténtalo de nuevo</a></p>
+                                </div>
+                            </fieldset>
+                        </form>
                         <div id="wizard" style="display: none;"></div>
                         <div id="extraButtonTrigger" style="display: none;" data-url="index.php" data-text="Cancelar Registro" data-btn="btn-extraButton"></div>
                     </div>
@@ -221,6 +240,88 @@ require_once("index-logica.php");
     <script src="../config-general/assets/js/pages/steps/steps-data.js"></script>
     <script src="../config-general/assets-login-2023/js/pages/login_1.js"></script>
     <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    email       =   document.getElementById('email').value;
+                    document.getElementById('emailCode').innerHTML = email;
+                    enviarCodigo();
+                }
+            });
+        });
+
+        const activarCuenta = document.getElementById('emailCode');
+        observer.observe(activarCuenta);
+
+        document.querySelectorAll('.code-input').forEach((input, index, inputs) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus(); // Saltar al siguiente campo automáticamente
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && index > 0 && !e.target.value) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+
+        // Función para iniciar la cuenta regresiva
+        function startCountdown(durationInSeconds) {
+            const contMinElement = document.getElementById('contMin');
+            const textMinElement = document.getElementById('textMin');
+            const intNuevoElement = document.getElementById('intNuevo');
+            let remainingTime = durationInSeconds;
+
+            // Actualiza cada segundo
+            const interval = setInterval(() => {
+                const minutes = Math.floor(remainingTime / 60); // Calcula los minutos
+                const seconds = remainingTime % 60; // Calcula los segundos
+
+                // Muestra el tiempo en formato MM:SS
+                contMinElement.innerHTML = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+
+                if (minutes === 1) {
+                    textMinElement.innerHTML = `minuto`;
+                }else if (minutes === 0) {
+                    textMinElement.innerHTML = `segundos`;
+                }
+
+                if (remainingTime === 0) {
+                    clearInterval(interval); // Detén la cuenta regresiva al llegar a 0
+
+                    // Cambiar el color del texto
+                    intNuevoElement.style.color = '<?=$Plataforma->colorUno;?>';
+                    intNuevoElement.onclick = enviarCodigo;
+                }
+
+                remainingTime -= 1; // Reduce el tiempo restante en 1 segundo
+            }, 1000);
+        }
+
+        function enviarCodigo() {
+            // Capturar el correo electrónico ingresado
+            nombre      =   document.getElementById('nombre').value;
+            apellidos   =   document.getElementById('apellidos').value;
+            email       =   document.getElementById('email').value;
+            celular     =   document.getElementById('celular').value;
+
+            // Enviar el código al correo electrónico
+            fetch('enviar-codigo.php?nombre=' + nombre + '&apellidos=' + apellidos + '&email=' + email + '&celular=' + celular, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    startCountdown(2 * 60); // Inicia la cuenta regresiva con 10 minutos
+                    console.log(data.message);
+                } else {
+                    alert(data.message);
+                }
+            });
+        }
+
         $(document).ready(function () {
             $('.form-select').select2({
                 theme: 'bootstrap-5'
