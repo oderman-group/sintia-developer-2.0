@@ -133,6 +133,18 @@
                         </script>
                     </div>
 
+                    <div class="form-group row">
+                        <label class="col-sm-3 control-label">Promediar difinitiva a estudiantes retirados en libro final <span style="color: red;">(*)</span>
+                            <button type="button" class="btn btn-sm" data-toggle="tooltip" data-placement="right" title="Esta acción permite escoger como promediar la definitiva de los estudiantes retirados en el libro final ."><i class="fa fa-info"></i></button> 
+                        </label>
+                        <div class="col-sm-2">
+                            <select class="form-control" name="promedioLibroFinal" <?=$disabledPermiso;?>>
+                                <option value="<?=BDT_Configuracion::TODOS_PERIODOS;?>" <?php if($datosConfiguracion['conf_promedio_libro_final'] == BDT_Configuracion::TODOS_PERIODOS){ echo "selected";} ?>>POR TODOS LOS PERIODOS</option>
+                                <option value="<?=BDT_Configuracion::PERIODOS_CURSADOS;?>" <?php if($datosConfiguracion['conf_promedio_libro_final'] == BDT_Configuracion::PERIODOS_CURSADOS){ echo "selected";} ?>>POR PERIODOS CURSADOS</option>
+                            </select>
+                        </div>
+                    </div>
+
 
                     <div class="form-group row">
                         <label class="col-sm-3 control-label">Medidas del Logo en los informes (Ancho -  Alto) <span style="color: red;">(*)</span></label>
