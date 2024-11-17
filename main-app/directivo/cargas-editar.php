@@ -172,7 +172,9 @@ require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
                                                     <option value="">Seleccione una opción</option>
 													<?php
 													$p = 1;
-													while ($p <= $datosEditar['car_periodo']) {
+													$peridoLimite = $datosEditar['gra_permiso_adelantar_periodo'] ? $config[19] : $datosEditar['car_periodo'];
+
+													while ($p <= $peridoLimite) {
 														if ($p == $datosEditar['car_periodo'])
 															echo '<option value="'.$p.'" selected>Periodo '.$p.'</option>';
 														else
