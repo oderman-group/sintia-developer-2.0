@@ -117,12 +117,14 @@ foreach ($data["data"] as $resultado) {
 			if ($permisoCambiarEstado) {
 				$cambiarEstado = "onclick='cambiarEstadoMatricula(" . $dataParaJavascript . ")'";
 			}
+			if(!empty($resultado['mat_estado_matricula'])){
 			?>
 			<a style="cursor: pointer;" id="estadoMatricula<?= $resultado['mat_id']; ?>" <?= $cambiarEstado; ?>>
-				<span class="<?= $estadosEtiquetasMatriculas[$resultado['mat_estado_matricula']]; ?>">
+				<span class="<?= $estadosMatriculasEstudiantes[$resultado['mat_estado_matricula']]; ?>">
 					<?= $estadosMatriculasEstudiantes[$resultado['mat_estado_matricula']]; ?>
 				</span>
 			</a>
+			<?php } ?>
 		</td>
 		<td><?= $resultado['mat_documento']; ?></td>
 		<?php $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado); ?>
