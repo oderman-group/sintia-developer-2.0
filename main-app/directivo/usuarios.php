@@ -157,6 +157,8 @@ if (!Modulos::validarPermisoEdicion()) {
 													$tipos = empty($tipo) ? [] : [$tipo];
 													$lista = Usuarios::listar($selectSql, $tipos, "uss_id");
 													$contReg = 1;
+													
+													echo '<script type="text/javascript">document.getElementById("overlay").style.display = "flex";</script>';
 													foreach ($lista as $usuario) {
 														$bgColor = '';
 														if ($usuario['uss_bloqueado'] == 1)
@@ -293,7 +295,9 @@ if (!Modulos::validarPermisoEdicion()) {
 
 														</tr>
 														<?php $contReg++;
-													} ?>
+													}
+													echo '<script type="text/javascript">document.getElementById("overlay").style.display = "none";</script>';
+													?>
 
 												</tbody>
 
