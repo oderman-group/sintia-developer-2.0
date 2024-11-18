@@ -272,7 +272,7 @@ class Usuarios {
             AND us.year          = ?
             AND us.uss_id       != '".$_SESSION["id"]."'
             $andTipos
-            AND us.uss_tipo     != '4'
+            AND us.uss_tipo     != '". TIPO_ESTUDIANTE ."'
             
             ORDER BY $order
             
