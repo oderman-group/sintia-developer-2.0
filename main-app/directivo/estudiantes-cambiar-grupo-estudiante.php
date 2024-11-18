@@ -52,7 +52,7 @@ if($pasarNotas == 1 ){
     foreach ($notasNuevas as $carga => $nuevaCarga){
         $cargaNueva = explode("|", $nuevaCarga);
         $update = ['bol_carga' => $cargaNueva[0]];
-        Boletin::actualizarBoletinCargaEstudiante($config, $carga, $_POST["estudiante"], $update,$_SESSION["bd"],false);
+        Boletin::actualizarBoletinCargaEstudiante($config, $carga, $_POST["estudiante"], $update,$_SESSION["bd"]);
         $contadorCargasActualizadas ++;
     }
     BindSQL::finalizarTransacion();
