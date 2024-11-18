@@ -4,7 +4,7 @@
 			<div class="form-group row">
 				<label class="col-sm-3 control-label">Curso <span style="color: red;">(*)</span></label>
 				<div class="col-sm-9">
-					<select class="form-control" name="grado" <?= $disabledPermiso; ?>>
+					<select class="form-control" name="grado" id="gradoMatricula"  <?= $disabledPermiso; ?> onchange="listarGrupos(this.value)">
 						<option value="">Seleccione una opción</option>
 						<?php 
 						$cv = Grados::traerGradosInstitucion($config, GRADO_GRUPAL);
@@ -20,8 +20,9 @@
 
 			<div class="form-group row">
 				<label class="col-sm-3 control-label">Grupo</label>
-				<div class="col-sm-3">
-					<select class="form-control" name="grupo" <?= $disabledPermiso; ?>>
+				<div class="col-sm-4">
+					<span id="mensajeGrupos" style="color: #6017dc; display:none;">Espere un momento mientras se cargan los grupos.</span>
+					<select class="form-control" id="gruposMatricula" name="grupo"  <?= $disabledPermiso; ?>>
 						<?php 
                         $cv = Grupos::traerGrupos($conexion, $config);
 						while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
@@ -32,6 +33,18 @@
 						} ?>
 					</select>
 				</div>
+				<?php 
+				$permisoCambiarGrupo      = Modulos::validarSubRol(['DT0083']);
+				$moduloMediaTecnica       = Modulos::validarModulosActivos($conexion, 10);
+				$marcaMediaTecnica        = '';
+				if ($datosEstudianteActual['mat_tipo_matricula'] == GRADO_INDIVIDUAL && array_key_exists(10, $arregloModulos) && $moduloMediaTecnica) {
+					$marcaMediaTecnica = 'Si';
+				}
+				if (!empty($datosEstudianteActual['mat_grado']) && $permisoCambiarGrupo  &&  empty($marcaMediaTecnica)) { ?>
+				<div class="col-sm-4">
+				<button type="button" class="btn btn-info" onclick="cambiarNotas('<?=  base64_encode($datosEstudianteActual['mat_id'])?>',true)" style="background-color:<?=$fondoBarra;?>; color:<?=$colorTexto;?>;">Cambiar notas a otro grupo</button>
+				</div>
+				<?php } ?>
 			</div>
 
 			<div class="form-group row">
@@ -233,6 +246,38 @@
 		function agregarCurso(dato) {
 			crearFila(dato);
 		};
+
+		var selectcurso = $('#gradoMatricula');
+       var selectgrupos = $('#gruposMatricula');
+
+		async function listarGrupos(curso) {
+        var url = "../compartido/ajax_grupos_curso.php";
+        var data = {
+            "cursos": curso
+        };
+        $('#mensajeGrupos').show();
+        selectgrupos.empty();
+        // selectmaterias.empty();
+        resultado = await metodoFetchAsync(url, data, 'json', false);
+        resultData = resultado["data"];
+        if (resultData["ok"]) {
+            resultData["result"];
+            // Itera sobre el JSON y añade cada opción
+            resultData["result"].forEach(function(opcion) {
+                var nuevaOpcion = new Option(opcion.gru_nombre, opcion.car_grupo, false, false);
+                selectgrupos.append(nuevaOpcion);
+            });
+            $('#mensajeGrupos').hide();
+		};
+    }
+
+	async function cambiarNotas(mat_id,cambiar) {
+		var data = {
+			"id"   : mat_id,
+			"cambiar": cambiar
+		};
+		abrirModal("Cambiar de grupo", "estudiantes-cambiar-grupo-modal.php", data);
+	}
 
 		function editarCurso(id) {
 			var grupoSelect = document.getElementById("grupo-" + id);

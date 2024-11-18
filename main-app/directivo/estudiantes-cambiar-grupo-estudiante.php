@@ -12,18 +12,11 @@ $estudiante         = mysqli_fetch_array($consultaEstudiante, MYSQLI_BOTH);
 $cargasConsulta = CargaAcademica::traerCargasMateriasPorCursoGrupo($config, $estudiante["mat_grado"], $estudiante["mat_grupo"]);
 
 $contadorCargasActualizadas = 0;
-
-while ($cargasDatos = mysqli_fetch_array($cargasConsulta, MYSQLI_BOTH)) {
-    $cargasConsultaNuevo = CargaAcademica::traerCargasMateriasPorCursoGrupoMateria($config, $_POST["cursoActual"], $_POST["grupoNuevo"], $cargasDatos["car_materia"]);
-
-    if (!is_null($cargasConsultaNuevo)) {
-        $update = [
-            'bol_carga' => $cargasConsultaNuevo["car_id"]
-        ];
-
-        // Actualizar las referencias en la tabla boletín para el estudiante con la nueva carga del nuevo grupo al que fue movido
-        Boletin::actualizarBoletinCargaEstudiante($config, $cargasDatos['car_id'], $_POST["estudiante"], $update);
-
+if($pasarNotas == 1 ){
+    foreach ($notasNuevas as $carga => $nuevaCarga){
+        $cargaNueva = explode("|", $nuevaCarga);
+        $update = ['bol_carga' => $cargaNueva[0]];
+        Boletin::actualizarBoletinCargaEstudiante($config, $carga, $_POST["estudiante"], $update,$_SESSION["bd"]);
         $contadorCargasActualizadas ++;
     }
 }
