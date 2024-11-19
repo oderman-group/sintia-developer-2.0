@@ -42,10 +42,11 @@ document.querySelectorAll('.code-input').forEach((input, index, inputs) => {
 
 // Función para iniciar la cuenta regresiva
 function startCountdown(durationInSeconds) {
-  const contMinElement = document.getElementById('contMin');
-  const textMinElement = document.getElementById('textMin');
+  const contMinElement  = document.getElementById('contMin');
+  const textMinElement  = document.getElementById('textMin');
   const intNuevoElement = document.getElementById('intNuevo');
-  let remainingTime = durationInSeconds;
+  var colorCambio       = intNuevoElement.getAttribute('data-colo-cambio')
+  let remainingTime     = durationInSeconds;
 
   // Actualiza cada segundo
   const interval = setInterval(() => {
@@ -65,7 +66,7 @@ function startCountdown(durationInSeconds) {
           clearInterval(interval); // Detén la cuenta regresiva al llegar a 0
 
           // Cambiar el color del texto
-          intNuevoElement.style.color = '<?=$Plataforma->colorUno;?>';
+          intNuevoElement.style.color = colorCambio;
           intNuevoElement.onclick = enviarCodigo;
       }
 

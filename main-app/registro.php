@@ -205,7 +205,7 @@ require_once("index-logica.php");
 
                                     <p class="mt-4 text-danger" id="errorMessage" style="visibility: hidden;">Código inválido. Por favor verifica e inténtalo de nuevo.</p>
                                     <button type="button" class="btn btn-primary mt-4" onclick="verificarCodigo()">Validar Código</button>
-                                    <p class="mt-4">¿Tienes problemas? Revisa tu carpeta de spam o <a href="javascript:void(0);" id="intNuevo" class="text-decoration-none" style="color: #000;">inténtalo de nuevo</a></p>
+                                    <p class="mt-4">¿Tienes problemas? Revisa tu carpeta de spam o <a href="javascript:void(0);" id="intNuevo" class="text-decoration-none" data-colo-cambio="<?=$Plataforma->colorUno;?>" style="color: #000;">inténtalo de nuevo</a></p>
                                 </div>
                             </fieldset>
                         </form>
