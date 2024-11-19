@@ -77,6 +77,16 @@ function startCountdown(durationInSeconds) {
   }, 1000);
 }
 
+async function miFuncionConDelay(element, alert = '') {
+  await new Promise(resolve => setTimeout(resolve, 10000));
+  element.style.visibility = 'hidden';
+  element.innerHTML = '-';
+  if (alert !== '') {
+    element.classList.remove(alert);
+  }
+  element.classList.remove('animate__animated', 'animate__flash', 'animate__repeat-2');
+}
+
 function enviarCodigo() {
   // Capturar el correo electrónico ingresado
   nombre      =   document.getElementById('nombre').value;
@@ -91,6 +101,17 @@ function enviarCodigo() {
     .then(response => response.json())
     .then(data => {
       if (data.success) {
+
+        // Mostrar mensaje si es un nuevo intento
+        if (intento > 1) {
+          const errorMessage = document.getElementById('message');
+
+          errorMessage.innerHTML = 'Hemos enviado un nuevo código a tu correo electrónico,<br> si no ves el correo revisa tu carpeta de spam o<br> verifica que hayas ingresado bien tu correo electrónico.';
+          errorMessage.style.visibility = 'visible';
+          errorMessage.classList.add('alert-success', 'animate__animated', 'animate__flash', 'animate__repeat-2');
+          miFuncionConDelay(errorMessage, 'alert-success');
+        }
+
         startCountdown(10 * 60); // Inicia la cuenta regresiva con 10 minutos
         console.log(data.message);
       } else {

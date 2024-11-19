@@ -27,6 +27,8 @@ $Plataforma = new Plataforma;
     <link rel="stylesheet" href="../config-general/assets/plugins/steps/steps.css">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+	<!-- libreria de animate.style -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
         /* Estilos básicos para el wizard */
         .step {
@@ -204,7 +206,7 @@ $Plataforma = new Plataforma;
                                         <input type="text" maxlength="1" class="form-control mx-1 text-center code-input" style="width: 50px; height: 50px; font-size: 24px;"/>
                                     </div>
 
-                                    <p class="mt-4 text-danger" id="errorMessage" style="visibility: hidden;">Código inválido. Por favor verifica e inténtalo de nuevo.</p>
+                                    <p class="mt-4 alert alert-block" id="message" style="visibility: hidden;">-</p>
                                     <button type="button" class="btn btn-primary mt-4" onclick="verificarCodigo()">Validar Código</button>
                                     <p class="mt-4">¿Tienes problemas? Revisa tu carpeta de spam o <a href="javascript:void(0);" id="intNuevo" class="text-decoration-none" data-colo-cambio="<?=$Plataforma->colorUno;?>" style="color: #000;">inténtalo de nuevo</a></p>
                                 </div>
