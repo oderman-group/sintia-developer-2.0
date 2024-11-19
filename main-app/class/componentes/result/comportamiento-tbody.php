@@ -58,7 +58,7 @@ foreach ($data["data"] as $resultado) {
 			$observacion = "";
 			for ($i = 0; $i < $numDatos; $i++) {
 				$observaciones = Disciplina::traerDatosObservacion($config, $explode[$i], "obser_descripcion");
-				$observacion .= $observaciones['obser_descripcion'] . "<br> ";
+				$observacion .= "- " . $observaciones['obser_descripcion'] . "<br> ";
 			}
 		}
 	}
