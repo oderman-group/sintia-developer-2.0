@@ -2,6 +2,7 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . "/app-sintia/config-general/constantes.php");
 require_once(ROOT_PATH . "/main-app/class/Utilidades.php");
 require_once(ROOT_PATH . "/main-app/class/Tables/BDT_disciplina.php");
+require_once(ROOT_PATH . "/main-app/class/Tables/BDT_observaciones.php");
 
 class Disciplina
 {
@@ -194,5 +195,30 @@ class Disciplina
         ];
 
         BDT_disciplina::update($datos, $predicado, BD_DISCIPLINA);
+    }
+
+    /**
+     * Este metodo me trae la informacion de una observacion multiple
+     * 
+     * @param array     $config 
+     * @param int       $id
+     * @param string    $campos
+     **/
+    public static function traerDatosObservacion(
+        array   $config,
+        int     $id,
+        string  $campos =   "*"
+    ) {
+        $predicado = [
+            "obser_id"              =>  $id,
+            "obser_id_institucion"  =>  $config['conf_id_institucion'],
+            "obser_years"           =>  $_SESSION["bd"]
+        ];
+
+        $consulta = BDT_observaciones::Select($predicado, $campos, BD_ADMIN);
+        $datos = $consulta->fetch(PDO::FETCH_ASSOC);
+
+        return $datos;
+
     }
 }
