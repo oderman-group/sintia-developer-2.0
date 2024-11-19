@@ -35,19 +35,19 @@ require_once(ROOT_PATH."/main-app/class/Calificaciones.php");?>
 						<div class="row">
 
 							<div class="col-md-4 col-lg-3">
-
+							<?php if (!$config['conf_ocultar_panel_lateral_notas_estudiantes']) {?>
 								<div class="panel">
 									<header class="panel-heading panel-heading-purple"><?= $frases[106][$datosUsuarioActual['uss_idioma']]; ?> </header>
 									<div class="panel-body">
 										<?php
 										$porcentaje = 0;
 										for ($i = 1; $i <= $datosEstudianteActual['gra_periodos']; $i++) {
-                                            $periodosCursos = Grados::traerPorcentajePorPeriodosGrados($conexion, $config, $datosEstudianteActual['mat_grado'], $i);
-                                            
-                                            $porcentajeGrado=25;
-                                            if(!empty($periodosCursos['gvp_valor'])){
-                                                $porcentajeGrado=$periodosCursos['gvp_valor'];
-                                            }
+											$periodosCursos = Grados::traerPorcentajePorPeriodosGrados($conexion, $config, $datosEstudianteActual['mat_grado'], $i);
+											
+											$porcentajeGrado=25;
+											if(!empty($periodosCursos['gvp_valor'])){
+												$porcentajeGrado=$periodosCursos['gvp_valor'];
+											}
 
 											$notapp = Boletin::traerNotaBoletinCargaPeriodo($config, $i, $datosEstudianteActual['mat_id'], $cargaConsultaActual);
 											$porcentaje =0;
@@ -96,6 +96,7 @@ require_once(ROOT_PATH."/main-app/class/Calificaciones.php");?>
 
 									</div>
 								</div>
+							<?php }?>
 
 								<?php include("filtro-cargas.php"); ?>
 
