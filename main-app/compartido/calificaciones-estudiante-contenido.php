@@ -135,7 +135,6 @@
 
 									<?php }?>
 
-									<?php if (!$config['conf_ocultar_panel_lateral_notas_estudiantes']) {?>
 
 									<div class="panel">
 
@@ -174,7 +173,11 @@
 													
 
 													<?php
-														if(!empty($notapp['bol_nota']) and $config['conf_sin_nota_numerica']!=1){
+														if(
+															!empty($notapp['bol_nota']) && 
+															$config['conf_sin_nota_numerica']!=1 && 
+															!$config['conf_ocultar_panel_lateral_notas_estudiantes']
+														) {
 
 														$notaPorPeriodo=$notapp['bol_nota'];
 														if($config['conf_forma_mostrar_notas'] == CUALITATIVA){
@@ -225,7 +228,6 @@
 
 									</div>
 
-									<?php }?>
 
 
 
