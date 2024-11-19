@@ -2,6 +2,7 @@
 require_once($_SERVER['DOCUMENT_ROOT'] . "/app-sintia/config-general/constantes.php");
 require_once(ROOT_PATH . "/main-app/class/Utilidades.php");
 require_once(ROOT_PATH . "/main-app/class/Tables/BDT_disciplina.php");
+require_once(ROOT_PATH . "/main-app/class/Tables/BDT_observaciones.php");
 
 class Disciplina
 {
