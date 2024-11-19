@@ -9,4 +9,6 @@ function togglePasswordVisibility() {
 }
 
 // Agregar un controlador de eventos para el clic en el botón del "ojo"
-togglePassword.addEventListener('click', togglePasswordVisibility);
+if(togglePassword){
+  togglePassword.addEventListener('click', togglePasswordVisibility);
+}
