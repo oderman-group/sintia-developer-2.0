@@ -29,7 +29,8 @@ if(!empty($consulta)){
             "id_docente"  => $nota["car_docente"],
             "periodo"     => $nota["bol_periodo"],
             "nota"        => $nota["bol_nota"],
-            "grupo"       => $estudiante["mat_grupo"]
+            "grupo"       => $estudiante["mat_grupo"],
+            "bol_id"      => $nota["bol_id"]
         ];
         $cont++; 
     }; 
@@ -51,11 +52,18 @@ $contadorCargasActualizadas = 0;
 if($pasarNotas == 1 ){
     foreach ($notasNuevas as $carga => $nuevaCarga){
         $cargaNueva = explode("|", $nuevaCarga);
-        $update = ['bol_carga' => $cargaNueva[0]];
-        Boletin::actualizarBoletinCargaEstudiante($config, $carga, $_POST["estudiante"], $update,$_SESSION["bd"]);
-        $contadorCargasActualizadas ++;
-    }
-    BindSQL::finalizarTransacion();
+
+        for ($i = 0; $i < count($respaldo); $i++ ) {
+            if( $respaldo[$i]["car_id"] == $carga ) {
+                $filter = " AND bol_id = '".$respaldo[$i]["bol_id"]."'";
+                $update = ['bol_carga' => $cargaNueva[0]];
+                if( $cargaNueva[0] != $carga ) {
+                    Boletin::actualizarBoletinCargaEstudiante($config, $carga, $_POST["estudiante"], $update,$_SESSION["bd"],$filter);
+                    $contadorCargasActualizadas ++;
+                };
+            }
+        }
+    };
 }
 
 
@@ -67,7 +75,7 @@ Estudiantes::actualizarMatriculasPorId($config, $_POST["estudiante"], $update);
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 
-$msj = "Se actualizaron (".$contadorCargasActualizadas.") cargas  con notas para el estudiante ".Estudiantes::NombreCompletoDelEstudiante($estudiante);
+$msj = "Se actualizaron (".$contadorCargasActualizadas.") notas para el estudiante ".Estudiantes::NombreCompletoDelEstudiante($estudiante);
 $referer = $_SERVER["HTTP_REFERER"];
 if (strpos($referer, needle: '?') !== false) {
     // La URL ya tiene parámetros, usa '&'

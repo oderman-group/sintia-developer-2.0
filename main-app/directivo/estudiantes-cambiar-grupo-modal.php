@@ -130,7 +130,7 @@ require_once(ROOT_PATH . "/main-app/class/componentes/botones-guardar.php");
 
                         <tr>
                             <th width="5%" rowspan="2">#</th>
-                            <th width="50%" rowspan="2">Materia</th>
+                            <th width="30%" rowspan="2">Materia</th>
                             <th colspan="<?= $config["conf_periodos_maximos"] ?>">Notas Periodos</th>
                             <th width="30%" rowspan="2">Materias Relacionada</th>
                         </tr>
@@ -159,7 +159,9 @@ require_once(ROOT_PATH . "/main-app/class/componentes/botones-guardar.php");
                         }
                         // agrupamos los datos por periodos
                         $materiasPeriodos = [];
-                        $carga_id        = "";
+                        $carga_id        = "";                   
+
+
                         foreach ($consulta  as $registro) {
                             $periodo = 1;
                             if ($carga_id != $registro["car_id"]) {
@@ -183,7 +185,7 @@ require_once(ROOT_PATH . "/main-app/class/componentes/botones-guardar.php");
                                 ];
                                 $carga_id = $registro["car_id"];
                             }
-                            $materiasPeriodos[$registro["car_id"]]["periodos"][] = [
+                            $materiasPeriodos[$registro["car_id"]]["periodos"][$registro["bol_periodo"]] = [
                                 "bol_periodo"      => $registro["bol_periodo"],
                                 "bol_nota"         => $registro["bol_nota"]
                             ];
@@ -202,7 +204,7 @@ require_once(ROOT_PATH . "/main-app/class/componentes/botones-guardar.php");
                                 <input type='hidden' name='selectCargasOrigen[]' value='<?=$resultado['car_id']?>'>
                                 </td>
                                 <?php for ($i = 1; $i <= $config["conf_periodos_maximos"]; $i++) { ?>
-                                    <th width="5%"><?= !empty($resultado['periodos'][$i - 1]['bol_nota']) ? $resultado['periodos'][$i - 1]['bol_nota'] : '-' ?></th>
+                                    <th width="5%"><?= !empty($resultado['periodos'][$i]['bol_nota']) ? $resultado['periodos'][$i]['bol_nota'] : '-' ?></th>
                                 <?php } ?>
                                 <td id="<?= $resultado['car_id'] ?>_relacion">
                                     <div class="form-group row">
