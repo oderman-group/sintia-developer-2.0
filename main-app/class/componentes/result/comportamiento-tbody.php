@@ -48,6 +48,20 @@ foreach ($data["data"] as $resultado) {
 	$arrayEnviar = array("tipo" => 1, "descripcionTipo" => "Para ocultar fila del registro.");
 	$arrayDatos = json_encode($arrayEnviar);
 	$objetoEnviar = htmlentities($arrayDatos);
+
+	$observacion = "";
+	if (!empty($resultado["dn_observacion"])) {
+		$observacion = $resultado["dn_observacion"];
+		if ($config["conf_observaciones_multiples_comportamiento"] == '1') {
+			$explode = explode(",", $resultado["dn_observacion"]);
+			$numDatos = count($explode);
+			$observacion = "";
+			for ($i = 0; $i < $numDatos; $i++) {
+				$observaciones = Disciplina::traerDatosObservacion($config, $explode[$i], "obser_descripcion");
+				$observacion .= $observaciones['obser_descripcion'] . "<br> ";
+			}
+		}
+	}
 ?>
 	<tr id="reg<?= $resultado['id_nuevo']; ?>">
 		<td><?= $resultado["id_nuevo"]; ?></td>
