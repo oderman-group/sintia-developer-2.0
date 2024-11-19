@@ -13,6 +13,8 @@ if (togglePassword) {
   togglePassword.addEventListener('click', togglePasswordVisibility);
 }
 
+let intento = 1;
+
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -27,6 +29,30 @@ const activarCuenta = document.getElementById('emailCode');
 observer.observe(activarCuenta);
 
 document.querySelectorAll('.code-input').forEach((input, index, inputs) => {
+  // Manejar el evento de pegar (paste)
+  input.addEventListener('paste', (e) => {
+      e.preventDefault(); // Prevenir el comportamiento por defecto
+
+      // Obtener el texto pegado
+      const pasteData = e.clipboardData.getData('text');
+
+      // Validar que los datos sean números y de longitud correcta
+      if (/^\d{6}$/.test(pasteData)) {
+          // Dividir los caracteres y asignarlos a los inputs
+          pasteData.split('').forEach((char, i) => {
+              if (inputs[i]) {
+                  inputs[i].value = char;
+              }
+          });
+
+          // Enfocar el siguiente input después de pegar
+          const lastFilledInput = inputs[Math.min(pasteData.length - 1, inputs.length - 1)];
+          if (lastFilledInput) lastFilledInput.focus();
+      } else {
+          alert('Por favor, pega un código válido de 6 dígitos.');
+      }
+  });
+  
   input.addEventListener('input', (e) => {
     if (e.target.value.length === 1 && index < inputs.length - 1) {
       inputs[index + 1].focus(); // Saltar al siguiente campo automáticamente
