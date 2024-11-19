@@ -1,5 +1,6 @@
 <?php
 require_once("index-logica.php");
+$Plataforma = new Plataforma;
 ?>
 
 <!DOCTYPE html>
