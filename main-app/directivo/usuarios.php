@@ -79,14 +79,18 @@ if (!Modulos::validarPermisoEdicion()) {
 				<div class="row">
 					<div class="col-md-12">
 						<div class="row">
-
+						    <div class="col-md-12">
+								<div class="alert alert-block alert-info animate__animated animate__flash">
+										<p>Para consultar por estudiante o acudiente utilice el filtro</p>
+								</div>
+							</div>
 							<div class="col-md-12">
 								<?php include("../../config-general/mensajes-informativos.php");?>
 
 								<?php include("includes/barra-superior-usuarios.php");
 
 								?>
-
+							    
 								<div class="card card-topline-purple">
 									<div class="card-head">
 										<header><?= $frases[75][$datosUsuarioActual['uss_idioma']]; ?></header>
@@ -154,7 +158,7 @@ if (!Modulos::validarPermisoEdicion()) {
 														"uss_bloqueado",
 														"uss_ultimo_ingreso"
 													];
-													$tipos = empty($tipo) ? [] : [$tipo];
+													$tipos = empty($tipo) ? [TIPO_DEV,TIPO_DOCENTE,TIPO_DIRECTIVO,TIPO_CLIENTE,TIPO_PROVEEDOR] : [$tipo];
 													$lista = Usuarios::listar($selectSql, $tipos, "uss_id");
 													$contReg = 1;
 													
