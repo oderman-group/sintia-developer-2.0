@@ -65,7 +65,7 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
 	for ($i = 1; $i <= $periodoActual; $i++) {
 		$periodos[$i] = $i;
 	}
-	$datos = Boletin::datosBoletin($curso, $grupo, $periodos, $year);
+	$datos = Boletin::datosBoletin($curso, $grupo, $periodos, $year, $idEstudiante);
 	while ($row = $datos->fetch_assoc()) {
 		$listaDatos[] = $row;
 	}
@@ -168,54 +168,7 @@ while ($row = $materias1->fetch_assoc()) {
 			<td align="center">Promedio</td>
 			<td align="center">Puesto</td>
 		</tr>
-		<?php
-		$j = 1;
-		$cambios = 0;
-		$valor = 0;
-		if (!empty($notas1)) {
-			arsort($notas1);
-			foreach ($notas1 as $key => $val) {
-				if ($val != $valor) {
-					$valor = $val;
-					$cambios++;
-				}
-				if ($cambios == 1) {
-					$color = '#CCFFCC';
-					$puesto = 'Primero';
-				}
-				if ($cambios == 2) {
-					$color = '#CCFFFF';
-					$puesto = 'Segundo';
-				}
-				if ($cambios == 3) {
-					$color = '#FFFFCC';
-					$puesto = 'Tercero';
-				}
-				if ($cambios == 4) {
-					break;
-				}
-
-				$valTotal = $val;
-				$title = '';
-				if ($config['conf_forma_mostrar_notas'] == CUALITATIVA) {
-					$title = 'title="Nota Cuantitativa: ' . $val . '"';
-					// $estiloNota = Boletin::obtenerDatosTipoDeNotas($config['conf_notas_categoria'], $val, $year);
-					$estiloNota = Boletin::determinarRango($val, $tiposNotas);
-					$valTotal = !empty($estiloNota['notip_nombre']) ? $estiloNota['notip_nombre'] : "";
-				}
-		?>
-				<tr style="border-color:#41c4c4; background-color:<?= $color; ?>">
-					<td align="center"><?= $j; ?></td>
-					<td><?= $grupo1[$key]; ?></td>
-					<td align="center" <?= $title; ?>><?=  Boletin::formatoNota($valTotal, $tiposNotas); ?></td>
-					<td align="center"><?= $puesto; ?></td>
-				</tr>
-		<?php
-				$j++;
-			}
-		}
-		?>
-
+	
 
 	</table>
 
