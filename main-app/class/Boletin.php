@@ -1170,14 +1170,15 @@ class Boletin {
         string  $idCarga,
         string  $idEstudiante,
         array   $update,
-        string  $yearBd = ""
+        string  $yearBd = "",
+        string  $filter = ""
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
         [$updateSql, $updateValues] = BindSQL::prepararUpdateConArray($update);
 
-        $sql = "UPDATE ".BD_ACADEMICA.".academico_boletin SET {$updateSql} WHERE bol_estudiante=? AND bol_carga=? AND institucion=? AND year=?";
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_boletin SET {$updateSql} WHERE bol_estudiante=? AND bol_carga=? AND institucion=? AND year=? $filter";
 
         $parametros = array_merge($updateValues, [$idEstudiante, $idCarga, $config['conf_id_institucion'], $year]);
 
