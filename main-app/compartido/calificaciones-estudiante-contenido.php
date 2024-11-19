@@ -135,7 +135,7 @@
 
 									<?php }?>
 
-									
+									<?php if (!$config['conf_ocultar_panel_lateral_notas_estudiantes']) {?>
 
 									<div class="panel">
 
@@ -224,6 +224,8 @@
 										</div>
 
 									</div>
+
+									<?php }?>
 
 
 
