@@ -54,7 +54,8 @@ foreach ($data["data"] as $resultado) {
 		<?php $nombre = Estudiantes::NombreCompletoDelEstudiante($resultado); ?>
 		<td><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="<?= $nombre; ?>" data-content="<?= $infoTooltipEstudiante; ?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?= $nombre; ?></a></td>
 		<td 
-			title="<?= !empty($resultado["dn_observacion"]) ? htmlspecialchars($resultado["dn_observacion"]) : ""; ?>" 
+			title="<?= !empty($observacion) ? htmlspecialchars(strip_tags($observacion)) : ""; ?>"
+			data-observacion="<?= !empty($observacion) ? htmlspecialchars($observacion) : ""; ?>"
 			onclick="toggleFullText(this)"
 			style="cursor: pointer;"
 		>
