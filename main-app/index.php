@@ -116,7 +116,7 @@ if(!isset($_GET['nodb'])) {
 
                         <div class="d-block justify-content-center mt-4">
                             <p>¿Quieres registrar tu Institución?</p>
-                            <a href="registro.php" class="btn btn-lg btn-primary btn-rounded">Crear cuenta ahora</a>
+                            <a href="registro.php" class="btn btn-xs btn-secondary btn-rounded">Crear cuenta ahora</a>
                         </div>
                     </div>
                 </div>

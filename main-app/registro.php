@@ -1,5 +1,6 @@
 <?php
 require_once("index-logica.php");
+$Plataforma = new Plataforma;
 ?>
 
 <!DOCTYPE html>
@@ -26,6 +27,8 @@ require_once("index-logica.php");
     <link rel="stylesheet" href="../config-general/assets/plugins/steps/steps.css">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+	<!-- libreria de animate.style -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
         /* Estilos básicos para el wizard */
         .step {
@@ -154,7 +157,6 @@ require_once("index-logica.php");
                                                 <img src="files/planes/<?=$iconoPlan?>" alt="<?=$planes['plns_nombre']?> Plan Icon" width="50" height="50">
                                                 <h4><?=$planes['plns_nombre']?></h4>
                                                 <p>$<?=number_format($planes['plns_valor'],0,",",".")?>/Anual</p>
-                                                <button type="button" onclick="enviarFormulario('registro-guardar.php')" class="btn btn-outline-dark btn-sm mt-2">EMPEZAR GRATIS</button>
                                                 <ul class="list-unstyled mt-3" style="text-align: left;">
                                                     <?php if ( $planes['plns_id'] == 1 ) { ?>
                                                         <li><i class="bi bi-check-circle mt-2"></i> 1. Escritorio </li>
@@ -203,9 +205,9 @@ require_once("index-logica.php");
                                         <input type="text" maxlength="1" class="form-control mx-1 text-center code-input" style="width: 50px; height: 50px; font-size: 24px;"/>
                                     </div>
 
-                                    <p class="mt-4 text-danger" id="errorMessage" style="visibility: hidden;">Código inválido. Por favor verifica e inténtalo de nuevo.</p>
+                                    <p class="mt-4 alert alert-block" id="message" style="visibility: hidden;">-</p>
                                     <button type="button" class="btn btn-primary mt-4" onclick="verificarCodigo()">Validar Código</button>
-                                    <p class="mt-4">¿Tienes problemas? Revisa tu carpeta de spam o <a href="javascript:void(0);" id="intNuevo" class="text-decoration-none" style="color: #000;">inténtalo de nuevo</a></p>
+                                    <p class="mt-4">¿Tienes problemas? Revisa tu carpeta de spam o <a href="javascript:void(0);" id="intNuevo" class="text-decoration-none" data-colo-cambio="<?=$Plataforma->colorUno;?>" style="color: #000;">inténtalo de nuevo</a></p>
                                 </div>
                             </fieldset>
                         </form>
@@ -238,110 +240,7 @@ require_once("index-logica.php");
     <!-- steps -->
     <script src="../config-general/assets/plugins/steps/jquery.steps.js"></script>
     <script src="../config-general/assets/js/pages/steps/steps-data.js"></script>
-    <script src="../config-general/assets-login-2023/js/pages/login_1.js"></script>
-    <script>
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    email       =   document.getElementById('email').value;
-                    document.getElementById('emailCode').innerHTML = email;
-                    enviarCodigo();
-                }
-            });
-        });
-
-        const activarCuenta = document.getElementById('emailCode');
-        observer.observe(activarCuenta);
-
-        document.querySelectorAll('.code-input').forEach((input, index, inputs) => {
-            input.addEventListener('input', (e) => {
-                if (e.target.value.length === 1 && index < inputs.length - 1) {
-                    inputs[index + 1].focus(); // Saltar al siguiente campo automáticamente
-                }
-            });
-
-            input.addEventListener('keydown', (e) => {
-                if (e.key === 'Backspace' && index > 0 && !e.target.value) {
-                    inputs[index - 1].focus();
-                }
-            });
-        });
-
-        // Función para iniciar la cuenta regresiva
-        function startCountdown(durationInSeconds) {
-            const contMinElement = document.getElementById('contMin');
-            const textMinElement = document.getElementById('textMin');
-            const intNuevoElement = document.getElementById('intNuevo');
-            let remainingTime = durationInSeconds;
-
-            // Actualiza cada segundo
-            const interval = setInterval(() => {
-                const minutes = Math.floor(remainingTime / 60); // Calcula los minutos
-                const seconds = remainingTime % 60; // Calcula los segundos
-
-                // Muestra el tiempo en formato MM:SS
-                contMinElement.innerHTML = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-
-                if (minutes === 1) {
-                    textMinElement.innerHTML = `minuto`;
-                }else if (minutes === 0) {
-                    textMinElement.innerHTML = `segundos`;
-                }
-
-                if (remainingTime === 0) {
-                    clearInterval(interval); // Detén la cuenta regresiva al llegar a 0
-
-                    // Cambiar el color del texto
-                    intNuevoElement.style.color = '<?=$Plataforma->colorUno;?>';
-                    intNuevoElement.onclick = enviarCodigo;
-                }
-
-                remainingTime -= 1; // Reduce el tiempo restante en 1 segundo
-            }, 1000);
-        }
-
-        function enviarCodigo() {
-            // Capturar el correo electrónico ingresado
-            nombre      =   document.getElementById('nombre').value;
-            apellidos   =   document.getElementById('apellidos').value;
-            email       =   document.getElementById('email').value;
-            celular     =   document.getElementById('celular').value;
-
-            // Enviar el código al correo electrónico
-            fetch('enviar-codigo.php?nombre=' + nombre + '&apellidos=' + apellidos + '&email=' + email + '&celular=' + celular, {
-                method: 'GET'
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    startCountdown(10 * 60); // Inicia la cuenta regresiva con 10 minutos
-                    console.log(data.message);
-                } else {
-                    alert(data.message);
-                }
-            });
-        }
-
-        $(document).ready(function () {
-            $('.form-select').select2({
-                theme: 'bootstrap-5'
-            });
-
-            $('.select2').on('select2:open', function () {
-                $(this).parent().find('.select2-selection--single').addClass('form-control');
-            });
-
-            $('form').on('submit', function (e) {
-                if (!this.checkValidity()) {
-                    $('#institution').addClass('is-invalid');
-                    this.classList.add('was-validated');
-                    e.preventDefault();
-                } else {
-                    $('#institution').removeClass('is-invalid');
-                }
-            });
-        });
-    </script>
+    <script src="../config-general/assets-login-2023/js/pages/registro.js"></script>
     <!-- Core theme JS-->
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
