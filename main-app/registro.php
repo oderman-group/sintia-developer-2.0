@@ -157,7 +157,6 @@ $Plataforma = new Plataforma;
                                                 <img src="files/planes/<?=$iconoPlan?>" alt="<?=$planes['plns_nombre']?> Plan Icon" width="50" height="50">
                                                 <h4><?=$planes['plns_nombre']?></h4>
                                                 <p>$<?=number_format($planes['plns_valor'],0,",",".")?>/Anual</p>
-                                                <button type="button" onclick="enviarFormulario('registro-guardar.php')" class="btn btn-outline-dark btn-sm mt-2">EMPEZAR GRATIS</button>
                                                 <ul class="list-unstyled mt-3" style="text-align: left;">
                                                     <?php if ( $planes['plns_id'] == 1 ) { ?>
                                                         <li><i class="bi bi-check-circle mt-2"></i> 1. Escritorio </li>
