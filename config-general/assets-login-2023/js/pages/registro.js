@@ -155,6 +155,54 @@ function enviarCodigo() {
     });
 }
 
+function verificarCodigo() {
+  // Seleccionar todos los inputs
+  const inputs = document.querySelectorAll('.code-input');
+  const message = document.getElementById('message');
+
+  // Verificar si todos los inputs están llenos
+  let allFilled = true;
+  let codigoIngresado = '';
+
+  inputs.forEach(input => {
+      if (input.value.trim() === '') {
+          allFilled = false;
+      }
+      codigoIngresado += input.value.trim(); // Construir el código ingresado
+  });
+
+  if (allFilled) {
+      fetch('validar-codigo.php?code=' + codigoIngresado + '&idCode=' + idCode, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            message.innerHTML = data.message;
+            message.style.visibility = 'visible';
+            message.classList.add('alert-success', 'animate__animated', 'animate__flash', 'animate__repeat-2');
+            miFuncionConDelay(message, 'alert-success');
+          } else {
+            message.innerHTML = data.message;
+            message.style.visibility = 'visible';
+            message.classList.add('alert-danger', 'animate__animated', 'animate__flash', 'animate__repeat-2');
+            miFuncionConDelay(message, 'alert-danger');
+          }
+        })
+        .catch(error => {
+          message.innerHTML = 'Error al validar el código: comunicate con un asesor.';
+          message.style.visibility = 'visible';
+          message.classList.add('alert-danger', 'animate__animated', 'animate__flash', 'animate__repeat-2');
+          miFuncionConDelay(message, 'alert-danger');
+        });
+  } else {
+    message.innerHTML = 'Faltan llenar algunos campos.';
+    message.style.visibility = 'visible';
+    message.classList.add('alert-danger', 'animate__animated', 'animate__flash', 'animate__repeat-2');
+    miFuncionConDelay(message, 'alert-danger');
+  }
+}
+
 function disableButton() {
     finishButton.classList.add('disabled');
     finishButton.style.pointerEvents = 'none';
