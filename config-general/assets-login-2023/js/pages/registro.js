@@ -149,6 +149,18 @@ function enviarCodigo() {
     });
 }
 
+function disableButton() {
+    finishButton.classList.add('disabled');
+    finishButton.style.pointerEvents = 'none';
+    finishButton.style.opacity = '0.5';
+}
+
+function enableButton() {
+    finishButton.classList.remove('disabled');
+    finishButton.style.pointerEvents = 'auto';
+    finishButton.style.opacity = '1';
+}
+
 $(document).ready(function () {
   $('.form-select').select2({
     theme: 'bootstrap-5'
