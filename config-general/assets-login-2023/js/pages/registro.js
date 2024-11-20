@@ -22,6 +22,12 @@ const observer = new IntersectionObserver((entries) => {
     if (entry.isIntersecting) {
       email = document.getElementById('email').value;
       document.getElementById('emailCode').innerHTML = email;
+
+      finishButton = Array.from(document.querySelectorAll('a[role="menuitem"]')).find(button => button.textContent.trim() === 'Finalizar');
+      if (finishButton) {
+        disableButton();
+      }
+      
       enviarCodigo();
     }
   });
