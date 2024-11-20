@@ -190,6 +190,7 @@ function verificarCodigo() {
             message.style.visibility = 'visible';
             message.classList.add('alert-success', 'animate__animated', 'animate__flash', 'animate__repeat-2');
             miFuncionConDelay(message, 'alert-success');
+            enableButton()
           } else {
             message.innerHTML = data.message;
             message.style.visibility = 'visible';
