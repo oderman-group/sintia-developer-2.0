@@ -48,7 +48,7 @@ class Notificacion {
                 break;
 
             case self::CANAL_EMAIL:
-                $asunto            = $data['asunto'];
+                $asunto            = $data['asunto'] . $codigo;
                 $bodyTemplateRoute = $data['body_template_route'];
                 $data['codigo']    = $codigo; // Añadir el código al array de datos para el template de email.
 
