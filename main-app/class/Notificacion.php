@@ -58,7 +58,7 @@ class Notificacion {
             'codv_activo'              => 1,
         ];
 
-        $this->guardarCodigoValido($datos);
+        $idCodigo = $this->guardarCodigoValido($datos);
 
         switch ($canal) {
             case self::CANAL_SMS:
@@ -75,6 +75,13 @@ class Notificacion {
                 EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute, null, null);
                 break;
         }
+
+        $datosCodigo = [
+            'codigo_id'     => $idCodigo,
+            'codigo'        => $codigo,
+        ];
+
+        return $datosCodigo;
 
     }
 
@@ -115,7 +122,7 @@ class Notificacion {
      * @return int Retorna el ID del ultimo registro insertado.
      */
     public function guardarCodigoValido(array $datos) {
-        BDT_CodigoVerificacion::Insert($datos, BD_ADMIN);
+        return BDT_CodigoVerificacion::Insert($datos, BD_ADMIN);
     }
 
 }
