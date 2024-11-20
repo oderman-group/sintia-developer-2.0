@@ -56,6 +56,8 @@ document.querySelectorAll('.code-input').forEach((input, index, inputs) => {
           // Enfocar el siguiente input después de pegar
           const lastFilledInput = inputs[Math.min(pasteData.length - 1, inputs.length - 1)];
           if (lastFilledInput) lastFilledInput.focus();
+
+          verificarCodigo();
       } else {
           alert('Por favor, pega un código válido de 6 dígitos.');
       }
@@ -64,6 +66,12 @@ document.querySelectorAll('.code-input').forEach((input, index, inputs) => {
   input.addEventListener('input', (e) => {
     if (e.target.value.length === 1 && index < inputs.length - 1) {
       inputs[index + 1].focus(); // Saltar al siguiente campo automáticamente
+    }
+
+    // Verificar si todos los campos están completos
+    const enteredCode = Array.from(inputs).map(input => input.value).join('');
+    if (enteredCode.length === 6) {
+      verificarCodigo();
     }
   });
 
