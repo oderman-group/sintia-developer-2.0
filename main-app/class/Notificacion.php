@@ -15,6 +15,26 @@ class Notificacion {
 
     public const PROCESOS_VALIDOS = [self::PROCESO_RECUPERAR_CLAVE, self::PROCESO_ACTIVAR_CUENTA];
 
+    /**
+     * Envia un código de verificación a un usuario a través del canal especificado.
+     *
+     * @param array  $data     Datos necesarios para el envío de la notificación, que incluyen:
+     *                         - 'usuario_nombre': Nombre del usuario.
+     *                         - 'usuario_id': ID del usuario.
+     *                         - 'institucion_id': ID de la institución.
+     *                         - 'year': Año relacionado con el proceso.
+     *                         - 'asunto' (opcional): Asunto para el email (requerido si el canal es email).
+     *                         - 'body_template_route' (opcional): Ruta del template para el email (requerido si el canal es email).
+     * @param string $canal    Canal a través del cual se enviará la notificación. 
+     *                         Debe ser uno de los valores definidos en `self::CANALES_VALIDOS`.
+     *                         Ejemplo: `self::CANAL_SMS`, `self::CANAL_EMAIL`.
+     * @param string $proceso  Tipo de proceso de la notificación.
+     *                         Debe ser uno de los valores definidos en `self::PROCESOS_VALIDOS`.
+     *
+     * @throws Exception Si el canal no es válido o el proceso no es válido.
+     *
+     * @return array $datosCodigo retorna un array con el ID y el código registrado
+     */
     public function enviarCodigoNotificacion(array $data, $canal, $proceso) {
 
         if (!in_array($canal, self::CANALES_VALIDOS)) {
@@ -58,6 +78,17 @@ class Notificacion {
 
     }
 
+    /**
+     * Genera un código de verificación válido basado en el tipo especificado.
+     *
+     * @param string $typeCode Tipo de código a generar. Valores permitidos:
+     *                         - 'numeric': Genera un código numérico de 6 dígitos.
+     *                         - 'alphanumeric': Genera un código alfanumérico de 6 caracteres.
+     *
+     * @throws Exception Si se especifica un tipo de código no válido.
+     *
+     * @return string El código de verificación generado.
+     */
     public function generarCodigoValido($typeCode = 'numeric'): string {
         switch ($typeCode) {
             case 'numeric':
@@ -69,6 +100,20 @@ class Notificacion {
         }
     }
 
+    /**
+     * Guarda un código de verificación en la base de datos.
+     *
+     * @param array $datos Datos necesarios para registrar el código de verificación, que incluyen:
+     *                     - 'codv_usuario_asociado': ID del usuario asociado.
+     *                     - 'institucion': ID de la institución relacionada.
+     *                     - 'year': Año del proceso.
+     *                     - 'codv_canal': Canal utilizado para la notificación.
+     *                     - 'codv_tipo_proceso': Tipo de proceso de verificación.
+     *                     - 'codv_codigo_verificacion': Código de verificación generado.
+     *                     - 'codv_activo': Estado del código (activo/inactivo).
+     *
+     * @return int Retorna el ID del ultimo registro insertado.
+     */
     public function guardarCodigoValido(array $datos) {
         BDT_CodigoVerificacion::Insert($datos, BD_ADMIN);
     }
