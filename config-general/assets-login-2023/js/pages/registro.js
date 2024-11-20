@@ -1,4 +1,4 @@
-const idCode = null;
+let idCode = null;
 const togglePassword = document.querySelector('.toggle-password');
 
 // Función para alternar la visibilidad de la contraseña
