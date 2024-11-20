@@ -138,12 +138,12 @@ function enviarCodigo() {
 
         // Mostrar mensaje si es un nuevo intento
         if (intento > 1) {
-          const errorMessage = document.getElementById('message');
+          const message = document.getElementById('message');
 
-          errorMessage.innerHTML = 'Hemos enviado un nuevo código a tu correo electrónico,<br> si no ves el correo revisa tu carpeta de spam o<br> verifica que hayas ingresado bien tu correo electrónico.';
-          errorMessage.style.visibility = 'visible';
-          errorMessage.classList.add('alert-success', 'animate__animated', 'animate__flash', 'animate__repeat-2');
-          miFuncionConDelay(errorMessage, 'alert-success');
+          message.innerHTML = 'Hemos enviado un nuevo código a tu correo electrónico,<br> si no ves el correo revisa tu carpeta de spam o<br> verifica que hayas ingresado bien tu correo electrónico.';
+          message.style.visibility = 'visible';
+          message.classList.add('alert-success', 'animate__animated', 'animate__flash', 'animate__repeat-2');
+          miFuncionConDelay(message, 'alert-success');
         }
 
         idCode = data.code.codigo_id;
