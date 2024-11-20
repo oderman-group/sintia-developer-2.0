@@ -1,3 +1,4 @@
+const idCode = null;
 const togglePassword = document.querySelector('.toggle-password');
 
 // Función para alternar la visibilidad de la contraseña
@@ -52,7 +53,7 @@ document.querySelectorAll('.code-input').forEach((input, index, inputs) => {
           alert('Por favor, pega un código válido de 6 dígitos.');
       }
   });
-  
+
   input.addEventListener('input', (e) => {
     if (e.target.value.length === 1 && index < inputs.length - 1) {
       inputs[index + 1].focus(); // Saltar al siguiente campo automáticamente
@@ -138,8 +139,9 @@ function enviarCodigo() {
           miFuncionConDelay(errorMessage, 'alert-success');
         }
 
+        idCode = data.code.codigo_id;
+
         startCountdown(10 * 60); // Inicia la cuenta regresiva con 10 minutos
-        console.log(data.message);
       } else {
         alert(data.message);
       }
