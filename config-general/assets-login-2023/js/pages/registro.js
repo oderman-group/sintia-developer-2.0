@@ -131,6 +131,7 @@ async function miFuncionConDelay(element, alert = '') {
 }
 
 function enviarCodigo() {
+  var intputIdRegistro = document.getElementById('idRegistro');
   // Capturar el correo electrónico ingresado
   nombre      =   document.getElementById('nombre').value;
   apellidos   =   document.getElementById('apellidos').value;
@@ -156,6 +157,7 @@ function enviarCodigo() {
         }
 
         idRegistro = data.code.idRegistro;
+        intputIdRegistro.value = idRegistro;
 
         startCountdown(10 * 60); // Inicia la cuenta regresiva con 10 minutos
       } else {

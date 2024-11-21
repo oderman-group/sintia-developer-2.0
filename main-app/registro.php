@@ -66,10 +66,7 @@ $Plataforma = new Plataforma;
                             <h3>Datos Básicos</h3>
                             <fieldset>
                                 <input type="hidden" name="urlDefault" value="<?= !empty($_REQUEST["urlDefault"]) ? $_REQUEST["urlDefault"] : ""; ?>" />
-                                <input type="hidden" name="plan" value="<?= !empty($_REQUEST["plan"]) ? $_REQUEST["plan"] : ""; ?>" />
-                                <input type="hidden" name="modAdicional[]" value="<?= !empty($_REQUEST["modAdicional"]) ? $_REQUEST["modAdicional"] : ""; ?>" />
-                                <input type="hidden" name="paquetes[]" value="<?= !empty($_REQUEST["paquetes"]) ? $_REQUEST["paquetes"] : ""; ?>" />
-                                <input type="hidden" name="cuotas" value="<?= !empty($_REQUEST["cuotas"]) ? $_REQUEST["cuotas"] : ""; ?>" />
+                                <input type="hidden" id="idRegistro" name="idRegistro" value="<?= !empty($_REQUEST["idRegistro"]) ? $_REQUEST["idRegistro"] : ""; ?>" />
 
                                 <div class="form-floating mt-3">
                                     <input type="text" class="form-control input-login" id="nombre" name="nombre" value="<?= !empty($_REQUEST["nombre"]) ? $_REQUEST["nombre"] : ""; ?>" placeholder="Nombres" required>
