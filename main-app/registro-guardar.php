@@ -257,6 +257,18 @@ $bodyTemplateRoute = ROOT_PATH.'/config-general/plantilla-email-prueba.php';
 
 EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute,null,null);
 
+$datos = [
+	'codv_usuario_asociado'    	=> '2',
+	'institucion'       		=> $idInsti,
+	'year'       				=> $year
+];
+
+$predicado = [
+	'codv_id' => $_REQUEST["idRegistro"]
+];
+
+$notificacion->actualizarCodigo($datos, $predicado);
+
 //FIN ENVÍO DE MENSAJE
 echo '<script type="text/javascript">window.location.href="https://plataformasintia.com/es/gracias.php";</script>';
 exit();
