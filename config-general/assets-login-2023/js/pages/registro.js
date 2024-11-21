@@ -197,6 +197,15 @@ function verificarCodigo() {
             message.style.visibility = 'visible';
             message.classList.add('alert-danger', 'animate__animated', 'animate__flash', 'animate__repeat-2');
             miFuncionConDelay(message, 'alert-danger');
+            
+            clearInterval(interval);
+            const intNuevoElement = document.getElementById('intNuevo');
+            var colorCambio = intNuevoElement.getAttribute('data-colo-cambio')
+            intNuevoElement.style.color = colorCambio;
+            intNuevoElement.onclick = function () {
+              intento++;
+              enviarCodigo();
+            };
           }
         })
         .catch(error => {
