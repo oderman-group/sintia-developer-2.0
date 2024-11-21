@@ -9,7 +9,7 @@ $data = [
     'institucion_id'      => 22,
     'usuario_id'          => 1,
     'year'                => date("Y"),
-    'asunto'              => 'Código de Confirmación',
+    'asunto'              => 'Código de Confirmación: ',
     'body_template_route' => ROOT_PATH .'/config-general/template-email-activar-cuenta-codigo.php',
     'usuario_email'       => $_REQUEST['email'],
     'telefono'            => $_REQUEST['celular'],
@@ -18,8 +18,12 @@ $data = [
 $canal = Notificacion::CANAL_EMAIL;
 
 try {
-    $notificacion->enviarCodigoNotificacion($data, $canal, Notificacion::PROCESO_ACTIVAR_CUENTA);
-    $arrayIdInsercion=["success"=>true, "message"=>"Código enviado exitosamente"];
+    $datosCodigo = $notificacion->enviarCodigoNotificacion($data, $canal, Notificacion::PROCESO_ACTIVAR_CUENTA);
+    $arrayIdInsercion=[
+        "success"=>true,
+        "message"=>"Código enviado exitosamente",
+        "code"=>$datosCodigo
+    ];
 } catch (Exception $e) {
     $arrayIdInsercion=["success"=>false, "message"=>"Error al enviar el código: ".$e->getMessage()];
 }

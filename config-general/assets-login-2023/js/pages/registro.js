@@ -1,3 +1,6 @@
+let interval  = null;
+let idRegistro = null;
+let finishButton  = null;
 const togglePassword = document.querySelector('.toggle-password');
 
 // Función para alternar la visibilidad de la contraseña
@@ -20,6 +23,12 @@ const observer = new IntersectionObserver((entries) => {
     if (entry.isIntersecting) {
       email = document.getElementById('email').value;
       document.getElementById('emailCode').innerHTML = email;
+
+      finishButton = Array.from(document.querySelectorAll('a[role="menuitem"]')).find(button => button.textContent.trim() === 'Finalizar');
+      if (finishButton) {
+        disableButton();
+      }
+      
       enviarCodigo();
     }
   });
@@ -48,14 +57,22 @@ document.querySelectorAll('.code-input').forEach((input, index, inputs) => {
           // Enfocar el siguiente input después de pegar
           const lastFilledInput = inputs[Math.min(pasteData.length - 1, inputs.length - 1)];
           if (lastFilledInput) lastFilledInput.focus();
+
+          verificarCodigo();
       } else {
           alert('Por favor, pega un código válido de 6 dígitos.');
       }
   });
-  
+
   input.addEventListener('input', (e) => {
     if (e.target.value.length === 1 && index < inputs.length - 1) {
       inputs[index + 1].focus(); // Saltar al siguiente campo automáticamente
+    }
+
+    // Verificar si todos los campos están completos
+    const enteredCode = Array.from(inputs).map(input => input.value).join('');
+    if (enteredCode.length === 6) {
+      verificarCodigo();
     }
   });
 
@@ -74,8 +91,8 @@ function startCountdown(durationInSeconds) {
   var colorCambio = intNuevoElement.getAttribute('data-colo-cambio')
   let remainingTime = durationInSeconds;
 
-  // Actualiza cada segundo
-  const interval = setInterval(() => {
+    // Actualiza cada segundo
+    interval = setInterval(() => {
     const minutes = Math.floor(remainingTime / 60); // Calcula los minutos
     const seconds = remainingTime % 60; // Calcula los segundos
 
@@ -114,6 +131,7 @@ async function miFuncionConDelay(element, alert = '') {
 }
 
 function enviarCodigo() {
+  var intputIdRegistro = document.getElementById('idRegistro');
   // Capturar el correo electrónico ingresado
   nombre      =   document.getElementById('nombre').value;
   apellidos   =   document.getElementById('apellidos').value;
@@ -130,20 +148,92 @@ function enviarCodigo() {
 
         // Mostrar mensaje si es un nuevo intento
         if (intento > 1) {
-          const errorMessage = document.getElementById('message');
+          const message = document.getElementById('message');
 
-          errorMessage.innerHTML = 'Hemos enviado un nuevo código a tu correo electrónico,<br> si no ves el correo revisa tu carpeta de spam o<br> verifica que hayas ingresado bien tu correo electrónico.';
-          errorMessage.style.visibility = 'visible';
-          errorMessage.classList.add('alert-success', 'animate__animated', 'animate__flash', 'animate__repeat-2');
-          miFuncionConDelay(errorMessage, 'alert-success');
+          message.innerHTML = 'Hemos enviado un nuevo código a tu correo electrónico,<br> si no ves el correo revisa tu carpeta de spam o<br> verifica que hayas ingresado bien tu correo electrónico.';
+          message.style.visibility = 'visible';
+          message.classList.add('alert-success', 'animate__animated', 'animate__flash', 'animate__repeat-2');
+          miFuncionConDelay(message, 'alert-success');
         }
 
+        idRegistro = data.code.idRegistro;
+        intputIdRegistro.value = idRegistro;
+
         startCountdown(10 * 60); // Inicia la cuenta regresiva con 10 minutos
-        console.log(data.message);
       } else {
         alert(data.message);
       }
     });
+}
+
+function verificarCodigo() {
+  // Seleccionar todos los inputs
+  const inputs = document.querySelectorAll('.code-input');
+  const message = document.getElementById('message');
+
+  // Verificar si todos los inputs están llenos
+  let allFilled = true;
+  let codigoIngresado = '';
+
+  inputs.forEach(input => {
+      if (input.value.trim() === '') {
+          allFilled = false;
+      }
+      codigoIngresado += input.value.trim(); // Construir el código ingresado
+  });
+
+  if (allFilled) {
+      fetch('validar-codigo.php?code=' + codigoIngresado + '&idRegistro=' + idRegistro, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            message.innerHTML = data.message;
+            message.style.visibility = 'visible';
+            message.classList.add('alert-success', 'animate__animated', 'animate__flash', 'animate__repeat-2');
+            miFuncionConDelay(message, 'alert-success');
+            enableButton()
+          } else {
+            message.innerHTML = data.message;
+            message.style.visibility = 'visible';
+            message.classList.add('alert-danger', 'animate__animated', 'animate__flash', 'animate__repeat-2');
+            miFuncionConDelay(message, 'alert-danger');
+            
+            clearInterval(interval);
+            const intNuevoElement = document.getElementById('intNuevo');
+            var colorCambio = intNuevoElement.getAttribute('data-colo-cambio')
+            intNuevoElement.style.color = colorCambio;
+            intNuevoElement.onclick = function () {
+              intento++;
+              enviarCodigo();
+            };
+          }
+        })
+        .catch(error => {
+          message.innerHTML = 'Error al validar el código: comunicate con un asesor.';
+          message.style.visibility = 'visible';
+          message.classList.add('alert-danger', 'animate__animated', 'animate__flash', 'animate__repeat-2');
+          miFuncionConDelay(message, 'alert-danger');
+        });
+  } else {
+    message.innerHTML = 'Faltan llenar algunos campos.';
+    message.style.visibility = 'visible';
+    message.classList.add('alert-danger', 'animate__animated', 'animate__flash', 'animate__repeat-2');
+    miFuncionConDelay(message, 'alert-danger');
+  }
+}
+
+function disableButton() {
+    finishButton.classList.add('disabled');
+    finishButton.style.pointerEvents = 'none';
+    finishButton.style.opacity = '0.5';
+}
+
+function enableButton() {
+    finishButton.classList.remove('disabled');
+    finishButton.style.pointerEvents = 'auto';
+    finishButton.style.opacity = '1';
 }
 
 $(document).ready(function () {
