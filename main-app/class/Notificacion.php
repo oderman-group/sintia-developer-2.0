@@ -58,7 +58,7 @@ class Notificacion {
             'codv_activo'              => 1,
         ];
 
-        $idCodigo = $this->guardarCodigoValido($datos);
+        $idRegistro = $this->guardarCodigoValido($datos);
 
         switch ($canal) {
             case self::CANAL_SMS:
@@ -77,7 +77,7 @@ class Notificacion {
         }
 
         $datosCodigo = [
-            'codigo_id'     => $idCodigo,
+            'idRegistro'     => $idRegistro,
             'codigo'        => $codigo,
         ];
 

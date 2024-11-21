@@ -1,4 +1,4 @@
-let idCode = null;
+let idRegistro = null;
 let finishButton  = null;
 const togglePassword = document.querySelector('.toggle-password');
 
@@ -154,7 +154,7 @@ function enviarCodigo() {
           miFuncionConDelay(message, 'alert-success');
         }
 
-        idCode = data.code.codigo_id;
+        idRegistro = data.code.idRegistro;
 
         startCountdown(10 * 60); // Inicia la cuenta regresiva con 10 minutos
       } else {
@@ -180,7 +180,7 @@ function verificarCodigo() {
   });
 
   if (allFilled) {
-      fetch('validar-codigo.php?code=' + codigoIngresado + '&idCode=' + idCode, {
+      fetch('validar-codigo.php?code=' + codigoIngresado + '&idRegistro=' + idRegistro, {
         method: 'GET'
       })
         .then(response => response.json())
