@@ -144,4 +144,23 @@ class Notificacion {
         return BDT_CodigoVerificacion::Select($predicado, $campos, BD_ADMIN);
     }
 
+    /**
+     * Actualiza un registro de código de verificación en la base de datos.
+     *
+     * @param array $datos     Datos a actualizar, donde cada clave es el nombre del campo
+     *                         y cada valor es el nuevo valor para ese campo.
+     *                         Ejemplo: ['codv_activo' => 0, 'codv_fecha_uso' => '2024-11-20 18:00:00'].
+     * @param array $predicado Condiciones para identificar el registro a actualizar,
+     *                         donde cada clave es el nombre del campo y cada valor es el criterio de búsqueda.
+     *                         Ejemplo: ['codv_id' => 123].
+     *
+     * @return void
+     */
+    public function actualizarCodigo(
+        array  $datos,
+        array  $predicado
+    ) {
+        BDT_CodigoVerificacion::Update($datos, $predicado, BD_ADMIN);
+    }
+
 }
