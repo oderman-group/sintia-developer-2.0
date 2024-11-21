@@ -125,4 +125,23 @@ class Notificacion {
         return BDT_CodigoVerificacion::Insert($datos, BD_ADMIN);
     }
 
+    /**
+     * Recupera un código de verificación desde la base de datos basado en el predicado especificado.
+     *
+     * @param array  $predicado     Filtros para la consulta, donde cada clave representa
+     *                              un campo de la base de datos y cada valor el criterio de búsqueda.
+     *                              Ejemplo: ['codv_usuario_asociado' => 123, 'codv_activo' => 1].
+     * @param string $campos        Especifica los campos que se desean recuperar.
+     *                              Por defecto, se recuperan todos los campos utilizando "*".
+     *                              Ejemplo: 'codv_codigo_verificacion, codv_fecha_creacion'.
+     *
+     * @return PDOStatement|false   Un objeto PDOStatement que contiene los resultados de la consulta o false en caso de error..
+     */
+    public function traerCodigoValido(
+        array   $predicado,
+        string  $campos = "*"
+    ) {
+        return BDT_CodigoVerificacion::Select($predicado, $campos, BD_ADMIN);
+    }
+
 }
