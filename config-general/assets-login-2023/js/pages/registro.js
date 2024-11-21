@@ -1,3 +1,4 @@
+let interval  = null;
 let idRegistro = null;
 let finishButton  = null;
 const togglePassword = document.querySelector('.toggle-password');
@@ -90,8 +91,8 @@ function startCountdown(durationInSeconds) {
   var colorCambio = intNuevoElement.getAttribute('data-colo-cambio')
   let remainingTime = durationInSeconds;
 
-  // Actualiza cada segundo
-  const interval = setInterval(() => {
+    // Actualiza cada segundo
+    interval = setInterval(() => {
     const minutes = Math.floor(remainingTime / 60); // Calcula los minutos
     const seconds = remainingTime % 60; // Calcula los segundos
 
