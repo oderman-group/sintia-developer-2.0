@@ -48,6 +48,7 @@ class Notificacion {
         $codigo  = $this->generarCodigoValido();
         $mensaje = 'Hola '.$data['usuario_nombre'].', tu código de verificación SINTIA es: '. $codigo;
 
+        $fechaActual = new DateTime();
         $datos = [
             'codv_usuario_asociado'    => $data['usuario_id'],
             'institucion'              => $data['institucion_id'],
@@ -55,6 +56,7 @@ class Notificacion {
             'codv_canal'               => $canal,
             'codv_tipo_proceso'        => $proceso,
             'codv_codigo_verificacion' => $codigo,
+            'codv_fecha_registro'      => $fechaActual->format('Y-m-d H:i:s'),
             'codv_activo'              => 1,
         ];
 
