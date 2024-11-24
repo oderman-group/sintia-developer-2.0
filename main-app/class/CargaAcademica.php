@@ -574,6 +574,7 @@ class CargaAcademica {
                     
                     WHERE car.institucion             = ? 
                     AND car.year                      = ? 
+                    AND car_activa                    = 1
                     {$filtro}
                     
                     GROUP BY car_id,est_sin_nota.carga
