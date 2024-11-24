@@ -125,7 +125,7 @@ if($config['conf_doble_buscador'] == 1) {
 																	"car_docente","gra_tipo","am.mat_id",
 																	"car_maximas_calificaciones","car_director_grupo","uss_nombre",
 																	"uss_id","uss_nombre2","uss_apellido1","uss_apellido2","gra_id","gra_nombre",
-																	"gru_nombre","mat_nombre","mat_valor","car_grupo","car_director_grupo"];
+																	"gru_nombre","mat_nombre","mat_valor","car_grupo","car_director_grupo", "car_activa"];
 													$busqueda = CargaAcademica::listarCargas($conexion, $config, "", $filtro, "car_id", $filtroLimite,"",array(),$selectSql);
     												$contReg = 1;
 													$index = 0;

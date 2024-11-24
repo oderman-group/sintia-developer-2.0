@@ -51,8 +51,14 @@ foreach ($data["data"] as $resultado) {
 	if ($resultado['car_director_grupo'] == 1) {
 		$marcaDG = '<i class="fa fa-star text-info" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Director de grupo"></i> ';
 	}
+
+	$claseInactiva = '';
+
+	if (isset($resultado['car_activa']) && $resultado['car_activa'] != 1) {
+		$claseInactiva = 'class = "bg-secondary"';
+	}
 ?>
-	<tr>
+	<tr <?=$claseInactiva;?>>
 	   <td><?= $contReg; ?></td>
 		<td><a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="Información adicional" data-content="<?= $infoTooltipCargas; ?>" data-html="true" data-placement="top" style="border-bottom: 1px dotted #000;"><?= $resultado['id_nuevo_carga']; ?></a></td>
 		<td><?= $marcaDG . "" . strtoupper($resultado['uss_nombre'] . " " . $resultado['uss_nombre2'] . " " . $resultado['uss_apellido1'] . " " . $resultado['uss_apellido2']); ?></td>
