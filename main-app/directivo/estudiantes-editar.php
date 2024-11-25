@@ -38,6 +38,8 @@ if(!Modulos::validarPermisoEdicion()){
 
 	<!-- steps -->
 	<link rel="stylesheet" href="../../config-general/assets/plugins/steps/steps.css"> 
+	<!-- Theme Styles -->
+    <link href="../../config-general/assets/css/pages/formlayout.css" rel="stylesheet" type="text/css" />
 
 	<!--select2-->
     <link href="../../config-general/assets/plugins/select2/css/select2.css" rel="stylesheet" type="text/css" />
