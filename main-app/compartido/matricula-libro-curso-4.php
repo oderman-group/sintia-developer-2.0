@@ -99,7 +99,7 @@ if (!empty($grado) && !empty($grupo) && !empty($periodoFinal) && !empty($year)) 
     for ($i = 1; $i <= $periodoFinal; $i++) {
         $periodos[$i] = $i;
     }
-    $datos = Boletin::datosBoletinPeriodos($grado, $grupo, $periodos, $year, $idEstudiante);
+    $datos = Boletin::datosBoletin($grado, $grupo, $periodos, $year, $idEstudiante);
     while ($row = $datos->fetch_assoc()) {
         $listaDatos[] = $row;
     }
@@ -226,7 +226,7 @@ if ($grado >= 12 && $grado <= 15) {
                     ?>
                         <?php if (count($area["cargas"]) > 1) {
                             $nombre = $carga["mat_nombre"];
-                            $styleborder = 'border-bottom: hidden;';
+                            $styleborder = '';
                         } else {
                             $nombre = $area["ar_nombre"];
                             $cargaStyle = '';
@@ -293,7 +293,7 @@ if ($grado >= 12 && $grado <= 15) {
                             ?>
 
                             <td align="center" <?= $style ?>><?= $notaAreAcumulada <= 0  ? '' : $notaAreAcumulada ?></td>
-                            <td align="center" <?= $style ?>><?= $notaAreAcumulada <= 0  ? '' : $desempenoAcumulado["notip_nombre"] ?></td>
+                            <td align="center" <?= $style ?>><?= $notaAreAcumulada <= 0  ? '' : $desenpenioAreAcumulado["notip_nombre"] ?></td>
                         </tr>
                 <?php }
                 } ?>
@@ -324,6 +324,7 @@ if ($grado >= 12 && $grado <= 15) {
                 </tr>
                 <tr style="color:#000;">
                     <td style="padding-left: 10px;" colspan="8">
+                       <p>&nbsp;</p>
                         <h4 style="font-weight:bold; color: #00adefad;"><b>Observación definitiva:</b></h4>
                         <?php
                         if ($periodoFinal == $config["conf_periodos_maximos"]) {
