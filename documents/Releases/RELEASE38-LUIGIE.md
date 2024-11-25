@@ -2,3 +2,4 @@
 PES-1140 - Optimizar consulta cargas docente
 PES-1312 - Doble generacion de informe automatico
 PES-1289 - Doble Optimizar usuarios
+PES-1044 - cambiar de grupo
