@@ -99,7 +99,7 @@ if (!empty($grado) && !empty($grupo) && !empty($periodoFinal) && !empty($year)) 
     for ($i = 1; $i <= $periodoFinal; $i++) {
         $periodos[$i] = $i;
     }
-    $datos = Boletin::datosBoletinPeriodos($grado, $grupo, $periodos, $year, $idEstudiante);
+    $datos = Boletin::datosBoletin($grado, $grupo, $periodos, $year, $idEstudiante);
     while ($row = $datos->fetch_assoc()) {
         $listaDatos[] = $row;
     }
