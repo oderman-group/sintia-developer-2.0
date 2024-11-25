@@ -847,14 +847,16 @@ class CargaAcademica {
      * @param string  $idCurso        ID del curso.
      * @param string  $idGrupo        ID del grupo.
      * @param string  $yearBd         Año para la base de datos (opcional).
+     * @param string  $yearBd         Año para la base de datos (opcional).
      * @return mysqli_result
      */
     public static function traerCargasMateriasPorCursoGrupo (
         array   $config,
         string  $idCurso,
         string  $idGrupo,
-        string  $yearBd = "",
-        string  $filtroOr = ""
+        string  $yearBd   = "",
+        string  $filtroOr = "",
+        string  $order    = "mat_id"
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
@@ -864,6 +866,12 @@ class CargaAcademica {
             ON mate.mat_id=car_materia 
             AND mate.institucion=car.institucion 
             AND mate.year=car.year
+
+        INNER JOIN " . BD_ACADEMICA . ".academico_areas are 
+                ON  are.institucion = mate.institucion
+                AND are.year        = mate.year
+                AND are.ar_id       = mate.mat_area
+
         INNER JOIN ".BD_ACADEMICA.".academico_grados gra 
             ON gra_id=car_curso 
             AND gra.institucion=car.institucion 
@@ -880,7 +888,7 @@ class CargaAcademica {
             car.institucion=? 
         AND car.year=? 
         AND (car_curso=? AND car_grupo=? {$filtroOr})
-        ORDER BY mat_id
+        ORDER BY $order
         ";
 
         $parametros = [$config['conf_id_institucion'], $year, $idCurso, $idGrupo];

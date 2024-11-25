@@ -1377,6 +1377,7 @@ class Boletin {
                 AND   bol.year        = mat.year
                 AND   bol_estudiante  = mat.mat_id
                 AND   bol_carga       = car.car_id
+                AND   bol_periodo             IN ($in_periodos2)
 
                 LEFT JOIN " . BD_ACADEMICA . ".academico_clases cls 
                 ON  cls.institucion       = bol.institucion
@@ -1493,7 +1494,7 @@ class Boletin {
                 WHERE mat.mat_grado            = ?
                 AND   mat.mat_grupo            = ?
                 AND   mat.institucion          = ?
-                AND   bol_periodo             IN ($in_periodos2)
+                
                 $andEstudiante
                 AND   mat.year                 = ?
                 AND   mat.mat_eliminado        = 0
