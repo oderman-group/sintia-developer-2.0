@@ -113,7 +113,7 @@ if ($num>0)
 			break;
 			
 			case 2:
-				$url = '../docente/noticias.php';
+				$url = '../docente/cargas.php';
 			break;
 			
 			case 3:
@@ -125,7 +125,7 @@ if ($num>0)
 			break;
 			
 			case 5:
-				$url = '../directivo/noticias.php';
+				$url = '../directivo/estudiantes.php';
 			break;
 			
 			default:
