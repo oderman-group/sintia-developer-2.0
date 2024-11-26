@@ -1170,14 +1170,15 @@ class Boletin {
         string  $idCarga,
         string  $idEstudiante,
         array   $update,
-        string  $yearBd = ""
+        string  $yearBd = "",
+        string  $filter = ""
     )
     {
         $year= !empty($yearBd) ? $yearBd : $_SESSION["bd"];
 
         [$updateSql, $updateValues] = BindSQL::prepararUpdateConArray($update);
 
-        $sql = "UPDATE ".BD_ACADEMICA.".academico_boletin SET {$updateSql} WHERE bol_estudiante=? AND bol_carga=? AND institucion=? AND year=?";
+        $sql = "UPDATE ".BD_ACADEMICA.".academico_boletin SET {$updateSql} WHERE bol_estudiante=? AND bol_carga=? AND institucion=? AND year=? $filter";
 
         $parametros = array_merge($updateValues, [$idEstudiante, $idCarga, $config['conf_id_institucion'], $year]);
 
@@ -1310,6 +1311,7 @@ class Boletin {
                 AND   bol.year        = mat.year
                 AND   bol_estudiante  = mat.mat_id
                 AND   bol_carga       = car.car_id
+                AND   bol_periodo             IN ($in_periodos2)
 
                 LEFT JOIN " . BD_ACADEMICA . ".academico_grados_periodos per
                 ON    per.institucion = mat.institucion 
@@ -1432,7 +1434,7 @@ class Boletin {
                 WHERE mat.mat_grado            = ?
                 AND   mat.mat_grupo            = ?
                 AND   mat.institucion          = ?
-                AND   bol_periodo             IN ($in_periodos2)
+                
                 $andEstudiante
                 AND   mat.year                 = ?
                 AND   mat.mat_eliminado        = 0
