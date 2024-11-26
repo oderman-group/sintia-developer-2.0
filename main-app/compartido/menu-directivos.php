@@ -287,13 +287,13 @@
 	                        </li>
 							<?php }?>
 							
-							<li <?php agregarClass(MENU_PADRE,["DT0335","DT0336"]) ?> class="nav-item bg-warning">
-								<a href="#" class="nav-link nav-toggle bg-warning text-dark"><i class="fa fa-shopping-cart text-dark"></i>
+							<li <?php agregarClass(MENU_PADRE,["DT0335","DT0336"]) ?> class="nav-item">
+								<a href="#" class="nav-link nav-toggle"><i class="fa fa-shopping-cart"></i>
 									<span class="title">Servicios SINTIA</span> <span class="arrow"></span>
 								</a>
-								<ul class="sub-menu bg-warning text-dark" <?php agregarClass(SUB_MENU,["DT0335","DT0336"])?>>
-									<li <?php agregarClass(MENU,["DT0335"]) ?>><a href="servicios-modulos.php" class="nav-link text-dark"> <span class="title">Modulos</span></a></li>
-									<li <?php agregarClass(MENU,["DT0336"]) ?>><a href="servicios-paquetes.php" class="nav-link text-dark"> <span class="title">Paquetes</span></a></li>
+								<ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0335","DT0336"])?>>
+									<li <?php agregarClass(MENU,["DT0335"]) ?>><a href="servicios-modulos.php" class="nav-link"> <span class="title">Modulos</span></a></li>
+									<li <?php agregarClass(MENU,["DT0336"]) ?>><a href="servicios-paquetes.php" class="nav-link"> <span class="title">Paquetes</span></a></li>
 								</ul>
 							</li>
 

@@ -206,8 +206,13 @@ class Modulos {
         global $conexion, $baseDatosServicios, $datosUsuarioActual, $config, $arregloModulos;
 
         //Si la institución no tiene este módulo (Subroles) asignado entonces devolvemos true siempre
-        if( ( $datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && (empty($arregloModulos) || !array_key_exists(16, $arregloModulos)) ) 
-        || $datosUsuarioActual['uss_tipo'] == TIPO_DEV ) {
+        if( 
+            ( 
+                $datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && 
+                (empty($arregloModulos) || !array_key_exists(16, $arregloModulos)) 
+            ) || 
+            $datosUsuarioActual['uss_tipo'] == TIPO_DEV 
+        ) {
             return true;
         }
 
