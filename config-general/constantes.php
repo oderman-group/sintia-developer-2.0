@@ -40,6 +40,9 @@ define('CHAT_TIPO_IMAGEN', 2);
 define('CHAT_TIPO_DOCUMENTO', 3);
 define('CHAT_TIPO_AUDIO', 4);
 
+define('GENERO_MASCULINO', 126);
+define('GENERO_FEMENINO', 127);
+
 
 /* Nombres de carpetas  */
 define('FILE_CURSOS', "cursos/");
