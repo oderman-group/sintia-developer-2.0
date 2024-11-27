@@ -5,6 +5,9 @@ require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 
 class UsuariosPadre {
 
+    public const GENERO_MASCULINO = 126;
+    public const GENERO_FEMENINO  = 127;
+
     /**
      * Obtiene el nombre completo de un usuario a partir de su arreglo de datos.
      *

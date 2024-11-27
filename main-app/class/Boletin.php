@@ -2,6 +2,7 @@
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 require_once ROOT_PATH."/main-app/class/Conexion.php";
+require_once ROOT_PATH."/main-app/class/UsuariosPadre.php";
 require_once(ROOT_PATH."/main-app/class/Tables/BDT_academico_boletin.php");
 
 class Boletin {
@@ -1252,6 +1253,7 @@ class Boletin {
 					car.car_director_grupo,
                     mate.mat_valor,
                     per.gvp_valor as periodo_valor,
+                    aus.aus_ausencias,
                     acum.*,
                     bol.*,
                     disi.*, 
@@ -1310,6 +1312,7 @@ class Boletin {
                 AND   bol.year        = mat.year
                 AND   bol_estudiante  = mat.mat_id
                 AND   bol_carga       = car.car_id
+                AND   bol_periodo             IN ($in_periodos2)
 
                 LEFT JOIN " . BD_ACADEMICA . ".academico_grados_periodos per
                 ON    per.institucion = mat.institucion 
@@ -1432,7 +1435,7 @@ class Boletin {
                 WHERE mat.mat_grado            = ?
                 AND   mat.mat_grupo            = ?
                 AND   mat.institucion          = ?
-                AND   bol_periodo             IN ($in_periodos2)
+                
                 $andEstudiante
                 AND   mat.year                 = ?
                 AND   mat.mat_eliminado        = 0
@@ -1594,6 +1597,15 @@ class Boletin {
                         "notip_imagen" => "bajo.png"]; //
     }
 
+/**
+ * Determina el color asociado a una nota según si está aprobada o no, basado en la configuración global.
+ *
+ * @param float $valorNota Valor de la nota que se evaluará.
+ *
+ * @return string Devuelve un string que representa el color asociado:
+ *                - Si la nota es menor a la mínima aprobatoria, devuelve el color de pérdida.
+ *                - Si la nota es igual o mayor a la mínima aprobatoria, devuelve el color de ganancia.
+ */
     public static function colorNota(float $valorNota): string {
         global  $config;
         $color='';
@@ -1605,12 +1617,35 @@ class Boletin {
         return $color; //
     }
 
-    public static function formatoNota(float|null $valorNota,array $tiposNotas=[]): float|string {
+/**
+ * Ajusta el valor de una nota al número de decimales configurado globalmente.
+ *
+ * @param float|null $valorNota Valor de la nota a ajustar. Si es null, se asigna un valor por defecto de 0.
+ *
+ * @return string Devuelve la nota ajustada y formateada como cadena, con el número de decimales definido en la configuración global.
+ */
+    public static function notaDecimales(float|null $valorNota){
         global  $config;
         Utilidades::valordefecto($valorNota,0);
-        $notaResultado=0;
         $nota = round($valorNota, $config['conf_decimales_notas']);
         $nota = number_format($nota, $config['conf_decimales_notas']);
+        return $nota;
+    }
+
+/**
+ * Formatea una nota numérica en función de los tipos de notas definidos y la configuración global.
+ *
+ * @param float|null $valorNota  Valor de la nota a formatear. Puede ser null.
+ * @param array      $tiposNotas Array con los tipos de notas (rangos y descripciones) utilizados para determinar el desempeño.
+ *
+ * @return float|string Devuelve la nota formateada. 
+ *                      - Si la configuración es cualitativa, retorna una descripción (`string`).
+ *                      - Si la configuración es cuantitativa, retorna el valor de la nota (`float`).
+ */
+    public static function formatoNota(float|null $valorNota,array $tiposNotas=[]): float|string {
+        global  $config;       
+        $notaResultado=0;
+        $nota = self::notaDecimales($valorNota);
         if(!empty($tiposNotas)){
             if ($config['conf_forma_mostrar_notas'] == CUALITATIVA) {
                 $desempeno = self::determinarRango($nota, $tiposNotas);
@@ -1623,6 +1658,44 @@ class Boletin {
         }
         
         return $notaResultado; //
+    }
+
+     /**
+     * Genera un mensaje sobre el estado académico del estudiante basado en el periodo, 
+     * el número de materias perdidas, el nombre del estudiante y su género.
+     *
+     * @param int    $periodo         Número del periodo escolar actual.
+     * @param int    $materiasPerdidas Número de materias perdidas por el estudiante (por defecto 0).
+     * @param string $estudainte      Nombre del estudiante.
+     * @param string $genero          Género del estudiante (por defecto '126' para femenino, masculino usa UsuariosPadre::GENERO_MASCULINO).
+     *
+     * @return string Mensaje en formato HTML que indica si el estudiante fue promovido, debe nivelar materias, o no fue promovido.
+     */
+    public static function mensajeFinalEstudainte($periodo,$materiasPerdidas,$estudainte,$genero):string {
+        global  $config;
+        Utilidades::valordefecto($materiasPerdidas,0);
+        Utilidades::valordefecto($genero,'126');
+        
+        $prefijo = ['EL', 'O'];
+        if ($genero != UsuariosPadre::GENERO_MASCULINO) {
+            $prefijo = ['LA', 'A'];
+        }
+        
+        if ($materiasPerdidas > 1) {
+            $plural = "S";
+        }
+
+        $msj = "";
+        if ($periodo >= $config["conf_periodos_maximos"]) {
+            if ($materiasPerdidas >= $config["conf_num_materias_perder_agno"])
+                $msj = "<center> $prefijo[0] ESTUDIANTE " . $estudainte . " NO FUE PROMOVID$prefijo[1] AL GRADO SIGUIENTE ($materiasPerdidas) MATERIA$plural PERDIDA$plural</center>";
+            elseif ($materiasPerdidas < $config["conf_num_materias_perder_agno"] and $materiasPerdidas > 0)
+                $msj = "<center> $prefijo[0] ESTUDIANTE " . $estudainte . " DEBE NIVELAR LA$plural ($materiasPerdidas) MATERIA$plural PERDIDA$plural</center>";
+            else
+                $msj = "<center> $prefijo[0] ESTUDIANTE " . $estudainte . " FUE PROMOVID$prefijo[1] AL GRADO SIGUIENTE</center>";
+        }
+        
+        return $msj; //
     }
     
     

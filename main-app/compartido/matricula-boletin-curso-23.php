@@ -85,7 +85,7 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
 	while ($row = $datos->fetch_assoc()) {
 		$listaDatos[] = $row;
 	}
-	include("../compartido/agrupar-datos-boletin-periodos_mejorado.php");
+	include("../compartido/agrupar-datos-boletin-periodos-mejorado.php");
 }
 
 if ($periodoActual == 1)
@@ -121,6 +121,7 @@ if ($periodoActual == 4)
 
 
 		foreach ($estudiantes as $estudiante) {
+			    $materiasPerdidas=0;
 			?>
 
 			<?php
@@ -196,16 +197,20 @@ if ($periodoActual == 4)
 								<td class="" align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;<?= $recupero ? 'color: #2b34f4;" title="Nota del periodo Recuperada ' . $carga['periodos'][$k]['bol_nota_anterior'] . '"' : '' ?>">
 									<?= Boletin::formatoNota($nota, $tiposNotas); ?></br>
 									<?php
-									if ($nota < $config['conf_nota_minima_aprobar']) {
-										$materiasPerdidas++;
-									}
+									
 									if ($config['conf_forma_mostrar_notas'] == CUANTITATIVA) {
 										$desempeno = Boletin::determinarRango($carga["periodos"][$k]['bol_nota'], $tiposNotas);
 										echo $desempeno['notip_nombre'];
 									}
 									?>
 								</td>
-							<?php } ?>
+							<?php } 
+							
+							
+							if ($carga["carga_acumulada"]  < $config['conf_nota_minima_aprobar']) {
+								$materiasPerdidas++;
+							}
+							?>
 							<td align="center" style="font-weight:bold; background:#EAEAEA;">
 								<?= Boletin::formatoNota($carga["carga_acumulada"], $tiposNotas) ?>
 							</td>
@@ -254,7 +259,7 @@ if ($periodoActual == 4)
 
 					<?php foreach ($estudiante["promedios_generales"] as $promedio) {
 						$promedio = round(($promedio["suma_notas_materias"] / ($promedio["cantidad_materias"])), $config['conf_decimales_notas']);
-						$promedio = number_format($promedio, $config['conf_decimales_notas']);
+						
 						?>
 						<td align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;"><?= Boletin::formatoNota($promedio, $tiposNotas); ?></td>
 					<?php } ?>
@@ -303,15 +308,8 @@ if ($periodoActual == 4)
 
 			</div>
 			<?php
-			Utilidades::valordefecto($msj);
-			if ($periodoActual == $config["conf_periodos_maximos"]) {
-				if ($materiasPerdidas >= $config["conf_num_materias_perder_agno"])
-					$msj = "<center>EL (LA) ESTUDIANTE " . $estudiante["nombre"] . " NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
-				elseif ($materiasPerdidas < $config["conf_num_materias_perder_agno"] and $materiasPerdidas > 0)
-					$msj = "<center>EL (LA) ESTUDIANTE " . $estudiante["nombre"] . " DEBE NIVELAR LAS MATERIAS PERDIDAS</center>";
-				else
-					$msj = "<center>EL (LA) ESTUDIANTE " . $estudiante["nombre"] . " FUE PROMOVIDO(A) AL GRADO SIGUIENTE</center>";
-			}
+			Utilidades::valordefecto(valor: $msj);
+			echo Boletin::mensajeFinalEstudainte($periodoActual,$materiasPerdidas,$estudiante["nombre"],$estudiante["genero"]);
 			?>
 
 			<p align="center">
@@ -319,13 +317,8 @@ if ($periodoActual == 4)
 				align="center"><?= $msj; ?></div>
 			</p>
 			<?php include("../compartido/footer-informes.php") ?>
+			<p>&nbsp;</p>
 
-			<!-- 
-<div align="center" style="font-size:10px; margin-top:10px;">
-										<img src="../files/images/sintia.png" height="50" width="100"><br>
-										SINTIA -  SISTEMA INTEGRAL DE GESTI&Oacute;N INSTITUCIONAL - <?= date("l, d-M-Y"); ?>
-									</div>
-									-->
 			<div id="saltoPagina"></div>
 
 			<?php
