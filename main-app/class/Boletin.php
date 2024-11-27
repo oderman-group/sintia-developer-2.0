@@ -1624,6 +1624,31 @@ class Boletin {
         
         return $notaResultado; //
     }
+
+    
+    public static function mensajeFinalEstudainte($periodo,$materiasPerdidas,$estudainte,$genero):string {
+        global  $config;
+        Utilidades::valordefecto($materiasPerdidas,0);
+        Utilidades::valordefecto($genero,'126');
+        $prefijo=['EL','O'];
+        if($genero != '126'){
+            $prefijo =['LA','A'];
+        }
+        if($materiasPerdidas > 1 ){
+            $plurar ="S";
+        }
+        $msj="";
+        if( $periodo >= $config["conf_periodos_maximos"] ) {
+            if( $materiasPerdidas >= $config["conf_num_materias_perder_agno"] )
+                $msj = "<center> $prefijo[0] ESTUDIANTE ".$estudainte." NO FUE PROMOVID$prefijo[1] AL GRADO SIGUIENTE ($materiasPerdidas) MATERIA$plurar PERDIDA$plurar</center>";
+            elseif($materiasPerdidas < $config["conf_num_materias_perder_agno"] and $materiasPerdidas > 0 )
+                $msj = "<center> $prefijo[0] ESTUDIANTE ".$estudainte." DEBE NIVELAR LA$plurar ($materiasPerdidas) MATERIA$plurar PERDIDA$plurar</center>";
+            else
+                $msj = "<center> $prefijo[0] ESTUDIANTE ".$estudainte." FUE PROMOVID$prefijo[1] AL GRADO SIGUIENTE</center>";	
+        }
+        
+        return $msj; //
+    }
     
     
 }

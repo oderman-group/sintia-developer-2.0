@@ -39,8 +39,9 @@ foreach ($listaDatos  as $registro) {
         $materiasPerdidas    = 0;
         $indicadoresPerdidos = 0;
         $conteoEstudiante++;
-
+        
         $nombre = Estudiantes::NombreCompletoDelEstudiante($registro);
+        Utilidades::valordefecto($registro["mat_genero"],'126');
         $estudiantes[$registro["mat_id"]] = [
             "mat_id"                            => $registro["mat_id"],
             "nombre"                            => $nombre,
@@ -49,6 +50,7 @@ foreach ($listaDatos  as $registro) {
             "mat_matricula"                     => $registro["mat_matricula"],
             "gra_id"                            => $registro["mat_grado"],
             "gra_nombre"                        => $registro["gra_nombre"],
+            "genero"                        => $registro["mat_genero"],
             "gru_id"                            => $registro["mat_grupo"],
             "gru_nombre"                        => $registro["gru_nombre"],
             "mat_estado_matricula"              => $registro["mat_estado_matricula"],
