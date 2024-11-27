@@ -136,7 +136,7 @@ while ($row = $conCargasDos->fetch_assoc()) {
 $colspan = 5 + $celdas;
 ?>
 
-<?php include("../compartido/agrupar-datos-boletin-periodos_mejorado.php") ?>
+<?php include("../compartido/agrupar-datos-boletin-periodos-mejorado.php") ?>
 
 <body style="font-family:Arial;">
     <?php foreach ($estudiantes  as  $estudiante) {

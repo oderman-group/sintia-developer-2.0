@@ -85,7 +85,7 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
 	while ($row = $datos->fetch_assoc()) {
 		$listaDatos[] = $row;
 	}
-	include("../compartido/agrupar-datos-boletin-periodos_mejorado.php");
+	include("../compartido/agrupar-datos-boletin-periodos-mejorado.php");
 }
 
 if ($periodoActual == 1)

@@ -103,7 +103,7 @@ if (!empty($grado) && !empty($grupo) && !empty($periodoFinal) && !empty($year)) 
     while ($row = $datos->fetch_assoc()) {
         $listaDatos[] = $row;
     }
-    include("../compartido/agrupar-datos-boletin-periodos_mejorado.php");
+    include("../compartido/agrupar-datos-boletin-periodos-mejorado.php");
 }
 $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
 
