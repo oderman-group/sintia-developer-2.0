@@ -7,6 +7,9 @@ require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 
 class Inscripciones extends BindSQL{
 
+    public const MAXIMO_PESO_ARCHIVO_MB = 5 * 1024 * 1024;
+    public const ARCHIVOS_PERMITIDOS    = ['pdf', 'jpg', 'png', 'docx', 'txt', 'xls', 'xlsx', 'jpeg', 'zip', 'rar', 'gz'];
+
 
         /**
      * Lista todas  las Inscripciones con información adicional.
@@ -135,7 +138,13 @@ class Inscripciones extends BindSQL{
      * 
      * @return array $documentos
     **/
-    public static function actualizarDocumentos( PDO $conexionPDO, array $config, array $FILES, array $POST, string $year= ""){
+    public static function actualizarDocumentos(
+        PDO $conexionPDO, 
+        array $config, 
+        array $FILES, 
+        array $POST, 
+        string $year= ""
+    ) {
 
         try {
 
@@ -146,7 +155,22 @@ class Inscripciones extends BindSQL{
                 $extension = end($explode);
                 $pazysalvo = uniqid('pyz_') . "." . $extension;
                 @unlink($destino . "/" . $pazysalvo);
-                move_uploaded_file($FILES['pazysalvo']['tmp_name'], $destino . "/" . $pazysalvo);
+
+                if ($FILES['pazysalvo']['size'] > self::MAXIMO_PESO_ARCHIVO_MB) {
+                    echo "El tamaño del paz y salvo excede el límite permitido. " . $FILES['pazysalvo']['size'];
+                    exit();
+                } 
+        
+                if (!file_exists($destino)) {
+                    mkdir($destino, 0777, true);
+                }
+        
+                if (move_uploaded_file($FILES['pazysalvo']['tmp_name'], $destino . "/" . $pazysalvo)) {
+                    echo "El paz y salvo se movió correctamente a: " . $destino . "<br>";
+                } else {
+                    echo "Hubo un error al mover el paz y salvo.<br>";
+                }
+
             } else {
                 $pazysalvo = $POST['pazysalvoA'];
             }
@@ -157,7 +181,22 @@ class Inscripciones extends BindSQL{
                 $extension = end($explode);
                 $observador = uniqid('obs_') . "." . $extension;
                 @unlink($destino . "/" . $observador);
-                move_uploaded_file($FILES['observador']['tmp_name'], $destino . "/" . $observador);
+
+                if ($FILES['pazysalvo']['size'] > self::MAXIMO_PESO_ARCHIVO_MB) {
+                    echo "El tamaño del observador excede el límite permitido. " . $FILES['observador']['size'];
+                    exit();
+                } 
+        
+                if (!file_exists($destino)) {
+                    mkdir($destino, 0777, true);
+                }
+        
+                if (move_uploaded_file($FILES['observador']['tmp_name'], $destino . "/" . $observador)) {
+                    echo "El observador se movió correctamente a: " . $destino. "<br>";
+                } else {
+                    echo "Hubo un error al mover el paz y salvo.<br>";
+                }
+
             } else {
                 $observador = $POST['observadorA'];
             }
@@ -168,7 +207,22 @@ class Inscripciones extends BindSQL{
                 $extension = end($explode);
                 $eps = uniqid('eps_') . "." . $extension;
                 @unlink($destino . "/" . $eps);
-                move_uploaded_file($FILES['eps']['tmp_name'], $destino . "/" . $eps);
+
+                if ($FILES['eps']['size'] > self::MAXIMO_PESO_ARCHIVO_MB) {
+                    echo "El tamaño de la eps excede el límite permitido. " . $FILES['eps']['size'];
+                    exit();
+                } 
+        
+                if (!file_exists($destino)) {
+                    mkdir($destino, 0777, true);
+                }
+        
+                if (move_uploaded_file($FILES['eps']['tmp_name'], $destino . "/" . $eps)) {
+                    echo "La eps se movió correctamente a: " . $destino. "<br>";
+                } else {
+                    echo "Hubo un error al mover la eps.<br>";
+                }
+
             } else {
                 $eps = $POST['epsA'];
             }
@@ -179,7 +233,22 @@ class Inscripciones extends BindSQL{
                 $extension = end($explode);
                 $recomendacion = uniqid('rec_') . "." . $extension;
                 @unlink($destino . "/" . $recomendacion);
-                move_uploaded_file($FILES['recomendacion']['tmp_name'], $destino . "/" . $recomendacion);
+
+                if ($FILES['recomendacion']['size'] > self::MAXIMO_PESO_ARCHIVO_MB) {
+                    echo "La recomendacion del eps excede el límite permitido. " . $FILES['recomendacion']['size'];
+                    exit();
+                } 
+        
+                if (!file_exists($destino)) {
+                    mkdir($destino, 0777, true);
+                }
+        
+                if (move_uploaded_file($FILES['recomendacion']['tmp_name'], $destino . "/" . $recomendacion)) {
+                    echo "La recomendacion se movió correctamente a: " . $destino. "<br>";
+                } else {
+                    echo "Hubo un error al mover la recomendacion.<br>";
+                }
+
             } else {
                 $recomendacion = $POST['recomendacionA'];
             }
@@ -190,7 +259,22 @@ class Inscripciones extends BindSQL{
                 $extension = end($explode);
                 $vacunas = uniqid('vac_') . "." . $extension;
                 @unlink($destino . "/" . $vacunas);
-                move_uploaded_file($FILES['vacunas']['tmp_name'], $destino . "/" . $vacunas);
+
+                if ($FILES['vacunas']['size'] > self::MAXIMO_PESO_ARCHIVO_MB) {
+                    echo "La vacunas excede el límite permitido. " . $FILES['vacunas']['size'];
+                    exit();
+                } 
+        
+                if (!file_exists($destino)) {
+                    mkdir($destino, 0777, true);
+                }
+
+                if (move_uploaded_file($FILES['vacunas']['tmp_name'], $destino . "/" . $vacunas)) {
+                    echo "La vacuna se movió correctamente a: " . $destino. "<br>";
+                } else {
+                    echo "Hubo un error al mover la vacunas.<br>";
+                }
+
             } else {
                 $vacunas = $POST['vacunasA'];
             }
@@ -201,7 +285,22 @@ class Inscripciones extends BindSQL{
                 $extension = end($explode);
                 $boletines = uniqid('bol_') . "." . $extension;
                 @unlink($destino . "/" . $boletines);
-                move_uploaded_file($FILES['boletines']['tmp_name'], $destino . "/" . $boletines);
+
+                if ($FILES['boletines']['size'] > self::MAXIMO_PESO_ARCHIVO_MB) {
+                    echo "El boletin excede el límite permitido. " . $FILES['boletines']['size'];
+                    exit();
+                } 
+        
+                if (!file_exists($destino)) {
+                    mkdir($destino, 0777, true);
+                }
+
+                if (move_uploaded_file($FILES['boletines']['tmp_name'], $destino . "/" . $boletines)) {
+                    echo "El boletin se movió correctamente a: " . $destino. "<br>";
+                } else {
+                    echo "Hubo un error al mover el boletin.<br>";
+                }
+
             } else {
                 $boletines = $POST['boletinesA'];
             }
@@ -212,7 +311,21 @@ class Inscripciones extends BindSQL{
                 $extension = end($explode);
                 $documentoIde = uniqid('doc_') . "." . $extension;
                 @unlink($destino . "/" . $documentoIde);
-                move_uploaded_file($FILES['documentoIde']['tmp_name'], $destino . "/" . $documentoIde);
+
+                if ($FILES['documentoIde']['size'] > self::MAXIMO_PESO_ARCHIVO_MB) {
+                    echo "El DNI excede el límite permitido. " . $FILES['documentoIde']['size'];
+                    exit();
+                } 
+        
+                if (!file_exists($destino)) {
+                    mkdir($destino, 0777, true);
+                }
+
+                if (move_uploaded_file($FILES['documentoIde']['tmp_name'], $destino . "/" . $documentoIde)) {
+                    echo "El DNI se movió correctamente a: " . $destino. "<br>";
+                } else {
+                    echo "Hubo un error al mover el DNI.<br>";
+                }
             } else {
                 $documentoIde = $POST['documentoIdeA'];
             }
@@ -223,7 +336,22 @@ class Inscripciones extends BindSQL{
                 $extension = end($explode);
                 $certificado = uniqid('cert_') . "." . $extension;
                 @unlink($destino . "/" . $certificado);
-                move_uploaded_file($FILES['certificado']['tmp_name'], $destino . "/" . $certificado);
+
+                if ($FILES['certificado']['size'] > self::MAXIMO_PESO_ARCHIVO_MB) {
+                    echo "El certificado excede el límite permitido. " . $FILES['certificado']['size'];
+                    exit();
+                } 
+        
+                if (!file_exists($destino)) {
+                    mkdir($destino, 0777, true);
+                }
+
+                if (move_uploaded_file($FILES['certificado']['tmp_name'], $destino . "/" . $certificado)) {
+                    echo "El certificado se movió correctamente a: " . $destino. "<br>";
+                } else {
+                    echo "Hubo un error al mover El certificado.<br>";
+                }
+
             } else {
                 $certificado = $POST['certificadoA'];
             }
@@ -234,7 +362,22 @@ class Inscripciones extends BindSQL{
                 $extension = end($explode);
                 $cartaLaboral = uniqid('cert_') . "." . $extension;
                 @unlink($destino . "/" . $cartaLaboral);
-                move_uploaded_file($FILES['cartaLaboral']['tmp_name'], $destino . "/" . $cartaLaboral);
+
+                if ($FILES['cartaLaboral']['size'] > self::MAXIMO_PESO_ARCHIVO_MB) {
+                    echo "La carta laboral excede el límite permitido. " . $FILES['cartaLaboral']['size'];
+                    exit();
+                } 
+        
+                if (!file_exists($destino)) {
+                    mkdir($destino, 0777, true);
+                }
+
+                if (move_uploaded_file($FILES['cartaLaboral']['tmp_name'], $destino . "/" . $cartaLaboral)) {
+                    echo "La carta laboral se movió correctamente a: " . $destino. "<br>";
+                } else {
+                    echo "Hubo un error al mover La carta laboral.<br>";
+                }
+
             } else {
                 $cartaLaboral = !empty($POST['cartaLaboral']) ? $POST['cartaLaboral'] : null;
             }
@@ -271,6 +414,7 @@ class Inscripciones extends BindSQL{
             } else {
                 throw new Exception("Error al preparar la consulta.");
             }
+
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
