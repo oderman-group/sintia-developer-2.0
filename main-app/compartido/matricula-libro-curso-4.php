@@ -53,13 +53,13 @@ if (isset($_GET["id"])) {
     $idEstudiante = base64_decode($_GET["id"]);
 }
 if (!empty($idEstudiante)) {
-    $filtro               = " AND mat_id='" . $idEstudiante . "'";
+    $filtro = " AND mat_id='" . $idEstudiante . "'";
     $matriculadosPorCurso = Estudiantes::estudiantesMatriculados($filtro, $year);
-    $estudiante           = $matriculadosPorCurso->fetch_assoc();
+    $estudiante = $matriculadosPorCurso->fetch_assoc();
     if (!empty($estudiante)) {
         $idEstudiante = $estudiante["mat_id"];
-        $grado        = $estudiante["mat_grado"];
-        $grupo        = $estudiante["mat_grupo"];
+        $grado = $estudiante["mat_grado"];
+        $grupo = $estudiante["mat_grupo"];
     }
 }
 ?>
@@ -70,11 +70,17 @@ if (!empty($idEstudiante)) {
 <head>
     <title>Libro Final</title>
     <meta name="tipo_contenido" content="text/html;" http-equiv="content-type" charset="utf-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <!-- favicon -->
     <link rel="shortcut icon" href="<?= $Plataforma->logo; ?>" />
     <style>
-        #saltoPagina {
-            PAGE-BREAK-AFTER: always;
+        .page {
+            page-break-after: always;
+            /* Crea un salto de página después de este div */
+        }
+
+        #guardarPDF {
+            cursor: pointer;
         }
 
         .divBordeado {
@@ -82,13 +88,45 @@ if (!empty($idEstudiante)) {
             border: 3px solid #9ed8ed;
             background-color: #00ACFB;
         }
+
+        .btn-flotante {
+            font-size: 16px;            /* Cambiar el tamaño de la tipografia */
+            text-transform: uppercase;            /* Texto en mayusculas */
+            font-weight: bold;            /* Fuente en negrita o bold */
+            color: #ffffff;            /* Color del texto */
+            border-radius: 5px;            /* Borde del boton */
+            letter-spacing: 2px;            /* Espacio entre letras */
+            background-color: #E91E63;            /* Color de fondo */
+            padding: 18px 30px;            /* Relleno del boton */
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            transition: all 300ms ease 0ms;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+            z-index: 99;
+        }
+
+        .btn-flotante:hover {
+            background-color: #2c2fa5;            /* Color de fondo al pasar el cursor */
+            box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(-7px);
+        }
+
+        @media only screen and (max-width: 600px) {
+            .btn-flotante {
+                font-size: 14px;
+                padding: 12px 20px;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
     </style>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 </head>
 <?php
 // Cosnultas iniciales
-$listaDatos         = [];
-$tiposNotas         = [];
+$listaDatos = [];
+$tiposNotas = [];
 $cosnultaTiposNotas = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $year);
 while ($row = $cosnultaTiposNotas->fetch_assoc()) {
     $tiposNotas[] = $row;
@@ -126,262 +164,299 @@ if ($grado >= 12 && $grado <= 15) {
 ?>
 
 <body style="font-family:Arial; font-size:9px;">
-    <?php foreach ($estudiantes  as  $estudiante) {
-        $totalNotasPeriodo = [];
-    ?>
-        <div style="margin: 15px 0;">
-            <table width="100%" cellspacing="5" cellpadding="5" border="1" rules="all" style="font-size: 13px;">
-                <tr>
-                    <td rowspan="3" width="20%"><img src="../files/images/logo/<?= $informacion_inst["info_logo"] ?>" width="100%"></td>
-                    <td align="center" rowspan="3" width="25%">
-                        <h3 style="font-weight:bold; color: #00adefad; margin: 0"><?= strtoupper($informacion_inst["info_nombre"]) ?></h3><br>
-                        <?= $informacion_inst["info_direccion"] ?><br>
-                        Informes: <?= $informacion_inst["info_telefono"] ?>
-                    </td>
-                    <td>Código:<br> <b style="color: #00adefad;"><?= $estudiante["mat_id"]; ?></b></td>
-                    <td>Nombre:<br> <b style="color: #00adefad;"><?= $estudiante["nombre"] ?></b></td>
-                </tr>
-                <tr>
-                    <td>Curso:<br> <b style="color: #00adefad;"><?= strtoupper($estudiante["gra_nombre"]) ?> <?= strtoupper($estudiante["gru_nombre"]) ?></b></td>
-                    <td>Sede:<br> <b style="color: #00adefad;"><?= strtoupper($informacion_inst["info_nombre"]) ?></b></td>
-                </tr>
-                <tr>
-                    <td>Jornada:<br> <b style="color: #00adefad;"><?= strtoupper($informacion_inst["info_jornada"]) ?></b></td>
-                    <td>Documento:<br> <b style="color: #00adefad;">BOLETÍN DEFINITIVO DE NOTAS - EDUCACIÓN BÁSICA <?= strtoupper($educacion) ?></b></td>
-                </tr>
-            </table>
-            <p>&nbsp;</p>
-        </div>
-        <table width="100%">
-            <tr>
-                <td>
-                    <div class="divBordeado">&nbsp;</div>
-                </td>
-            </tr>
-            <tr style="text-align:center; font-size: 13px;">
-                <td style="color: #b2adad;">
-                    <?php
-                    $consultaEstiloNota = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $year);
-                    $numEstiloNota = mysqli_num_rows($consultaEstiloNota);
-                    $i = 1;
-                    while ($estiloNota = mysqli_fetch_array($consultaEstiloNota, MYSQLI_BOTH)) {
-                        $diagonal = " / ";
-                        if ($i == $numEstiloNota) {
-                            $diagonal = "";
-                        }
-                        echo $estiloNota['notip_nombre'] . ": " . $estiloNota['notip_desde'] . " - " . $estiloNota['notip_hasta'] . $diagonal;
-                        $i++;
-                    }
-                    ?>
-                </td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-            </tr>
-            <tr style="text-align:center; font-size: 20px; font-weight:bold;">
-                <td>AÑO LECTIVO: <?= $year ?></td>
-            </tr>
-        </table>
-        <table width="100%" rules="all" border="1" style="font-size: 15px;">
-            <thead>
-                <tr style="font-weight:bold; text-align:center;">
-                    <td width="20%" rowspan="2">ASIGNATURAS</td>
-                    <td width="3%" rowspan="2">I.H</td>
-                    <td width="3%" colspan="4" style="background-color: #00adefad;"><a href="#" style="color:#000; text-decoration:none;">Periodo Cursados</a></td>
-                    <td width="3%" colspan="2"><a href="#" style="color:#000; text-decoration:none;">DEFINITIVA</a></td>
-                </tr>
-                <tr style="font-weight:bold; text-align:center;">
-                    <?php
-                    for ($i = 1; $i <= $periodoFinal; $i++) {
-                    ?>
-                        <td width="3%" style="background-color: #00adefad;"><?= $i ?></td>
-                    <?php
-                    }
-                    ?>
-                    <td width="3%">DEF</td>
-                    <td width="3%">Desempeño</td>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $cantidadAreas = 0;
-                $materiasPerdidas = 0;
-                foreach ($estudiante["areas"]  as  $area) {
-                    $cantidadAreas++;
-                    $ihArea       = 0;
-                    $notaAre      = [];
-                    $desenpenioAre;
 
-
-                ?>
-
-                    <?php
-                    foreach ($area["cargas"] as $carga) {
-                        $promedioMateria  = 0;
-                        $fallasAcumuladas = 0;
-                        $ihArea           += $carga['car_ih'];
-                        $style = "style='font-weight:bold;background: #EAEAEA;'";
-                        $cargaStyle = '';
-                        $styleborder = '';
-                    ?>
-                        <?php if (count($area["cargas"]) > 1) {
-                            $nombre = $carga["mat_nombre"];
-                            $styleborder = '';
-                        } else {
-                            $nombre = $area["ar_nombre"];
-                            $cargaStyle = '';
-                        } ?>
-                        <tr style="<?= $styleborder ?>">
-                            <td style="<?= $cargaStyle ?>"> <?= $nombre ?></td>
-                            <td style="<?= $cargaStyle ?>" align="center"><?= $carga['car_ih'] ?></td>
-                            <?php
-                            for ($j = 1; $j <= $periodoFinal; $j++) {
-                                $nota = isset($carga["periodos"][$j]["bol_nota"])
-                                    ? $carga["periodos"][$j]["bol_nota"]
-                                    : 0;
-                                $nota                  = Boletin::agregarDecimales($nota);
-                                $desempeno             = Boletin::determinarRango($nota, $tiposNotas);
-                                $promedioMateria       += $nota;
-                                $porcentajeMateria = !empty($carga['mat_valor']) ? $carga['mat_valor'] : 100;
-                                if (isset($notaAre[$j])) {
-                                    $notaAre[$j]           += $nota * ($porcentajeMateria / 100);
-                                } else {
-                                    $notaAre[$j]           =  $nota * ($porcentajeMateria / 100);
-                                }
-
-                                if (isset($totalNotasPeriodo[$j])) {
-                                    $totalNotasPeriodo[$j] += $nota * ($porcentajeMateria / 100);
-                                } else {
-                                    $totalNotasPeriodo[$j] =  $nota * ($porcentajeMateria / 100);
-                                }
-                                $background =  'background: #9ed8ed;';
-                            ?>
-                                <td align="center" align="center" style=" <?= $background ?>;<?= $cargaStyle ?> font-size:12px;"><?= $nota   == 0 ? '' : number_format($nota, $config['conf_decimales_notas']); ?></td>
-                            <?php }
-                            
-                            $periodoCalcular = $estudiante['mat_estado_matricula'] == CANCELADO && $config["conf_promedio_libro_final"] == BDT_Configuracion::PERIODOS_CURSADOS ? COUNT($carga["periodos"]) : $config["conf_periodos_maximos"];
-                            $notaAcumulada = $promedioMateria / $periodoCalcular;
-                            $notaAcumulada = round($notaAcumulada, $config['conf_decimales_notas']);
-                            $desempenoAcumulado = Boletin::determinarRango($notaAcumulada, $tiposNotas);
-                            if ($notaAcumulada < $config['conf_nota_minima_aprobar']) {
-                                $materiasPerdidas++;
-                            }
-                            ?>
-                            <td align="center" style=" font-size:12px;"><?= $notaAcumulada <= 0 ? '' : $notaAcumulada ?></td>
-                            <td align="center" style=" font-size:12px;"><?= $notaAcumulada <= 0 ? '' : $desempenoAcumulado["notip_nombre"] ?></td>
-                        </tr>
-                    <?php }
-                    if ($ihArea != $carga['car_ih']) { ?>
+    <div id="contenido">
+        <?php foreach ($estudiantes as $estudiante) {
+            $totalNotasPeriodo = [];
+            ?>
+            <div class="page">
+                <div style="margin: 15px 0;">
+                    <table width="100%" cellspacing="5" cellpadding="5" border="1" rules="all" style="font-size: 13px;">
                         <tr>
-                            <td <?= $style ?>><?= $area["ar_nombre"] ?></td>
-                            <td align="center" <?= $style ?>><?= $ihArea ?></td>
+                            <td rowspan="3" width="20%"><img
+                                    src="../files/images/logo/<?= $informacion_inst["info_logo"] ?>" width="100%"></td>
+                            <td align="center" rowspan="3" width="25%">
+                                <h3 style="font-weight:bold; color: #00adefad; margin: 0">
+                                    <?= strtoupper($informacion_inst["info_nombre"]) ?></h3><br>
+                                <?= $informacion_inst["info_direccion"] ?><br>
+                                Informes: <?= $informacion_inst["info_telefono"] ?>
+                            </td>
+                            <td>Código:<br> <b style="color: #00adefad;"><?= $estudiante["mat_id"]; ?></b></td>
+                            <td>Nombre:<br> <b style="color: #00adefad;"><?= $estudiante["nombre"] ?></b></td>
+                        </tr>
+                        <tr>
+                            <td>Curso:<br> <b style="color: #00adefad;"><?= strtoupper($estudiante["gra_nombre"]) ?></b>
+                            </td>
+                            <td>Sede:<br> <b
+                                    style="color: #00adefad;"><?= strtoupper($informacion_inst["info_nombre"]) ?></b></td>
+                        </tr>
+                        <tr>
+                            <td>Jornada:<br> <b
+                                    style="color: #00adefad;"><?= strtoupper($informacion_inst["info_jornada"]) ?></b></td>
+                            <td>Documento:<br> <b style="color: #00adefad;">BOLETÍN DEFINITIVO DE NOTAS - EDUCACIÓN BÁSICA
+                                    <?= strtoupper($educacion) ?></b></td>
+                        </tr>
+                    </table>
+                    <p>&nbsp;</p>
+                </div>
+                <table width="100%">
+                    <tr>
+                        <td>
+                            <div class="divBordeado">&nbsp;</div>
+                        </td>
+                    </tr>
+                    <tr style="text-align:center; font-size: 13px;">
+                        <td style="color: #b2adad;">
                             <?php
-                            $notaAreAcumulada = 0;
-                            $periodoAreaCalcular = $config["conf_periodos_maximos"];
-                            for ($j = 1; $j <= $periodoFinal; $j++) {
-                                $notaAreAcumulada += $notaAre[$j]; ?>
-                                <td align="center" <?= $style ?>><?= $notaAre[$j] <= 0 ? '' : number_format($notaAre[$j], $config['conf_decimales_notas']); ?></td>
-
-                            <?php
-                                if ( $notaAre[$j] <= 0 ) { $periodoAreaCalcular -= 1; } 
+                            $consultaEstiloNota = Boletin::listarTipoDeNotas($config["conf_notas_categoria"], $year);
+                            $numEstiloNota = mysqli_num_rows($consultaEstiloNota);
+                            $i = 1;
+                            while ($estiloNota = mysqli_fetch_array($consultaEstiloNota, MYSQLI_BOTH)) {
+                                $diagonal = " / ";
+                                if ($i == $numEstiloNota) {
+                                    $diagonal = "";
+                                }
+                                echo $estiloNota['notip_nombre'] . ": " . $estiloNota['notip_desde'] . " - " . $estiloNota['notip_hasta'] . $diagonal;
+                                $i++;
                             }
-                            
-                            $periodoAreaCalcular = $estudiante['mat_estado_matricula'] == CANCELADO && $config["conf_promedio_libro_final"] == BDT_Configuracion::PERIODOS_CURSADOS ? $periodoAreaCalcular : $config["conf_periodos_maximos"];
-                            $notaAreAcumulada       = number_format($notaAreAcumulada / $periodoAreaCalcular, $config['conf_decimales_notas']);
-                            $desenpenioAreAcumulado = Boletin::determinarRango($notaAreAcumulada, $tiposNotas);
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr style="text-align:center; font-size: 20px; font-weight:bold;">
+                        <td>AÑO LECTIVO: <?= $year ?></td>
+                    </tr>
+                </table>
+                <table width="100%" rules="all" border="1" style="font-size: 15px;">
+                    <thead>
+                        <tr style="font-weight:bold; text-align:center;">
+                            <td width="20%" rowspan="2">ASIGNATURAS</td>
+                            <td width="3%" rowspan="2">I.H</td>
+                            <td width="3%" colspan="4" style="background-color: #00adefad;"><a href="#"
+                                    style="color:#000; text-decoration:none;">Periodo Cursados</a></td>
+                            <td width="3%" colspan="2"><a href="#" style="color:#000; text-decoration:none;">DEFINITIVA</a>
+                            </td>
+                        </tr>
+                        <tr style="font-weight:bold; text-align:center;">
+                            <?php
+                            for ($i = 1; $i <= $periodoFinal; $i++) {
+                                ?>
+                                <td width="3%" style="background-color: #00adefad;"><?= $i ?></td>
+                                <?php
+                            }
+                            ?>
+                            <td width="3%">DEF</td>
+                            <td width="3%">Desempeño</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $cantidadAreas = 0;
+                        $materiasPerdidas = 0;
+                        foreach ($estudiante["areas"] as $area) {
+                            $cantidadAreas++;
+                            $ihArea = 0;
+                            $notaAre = [];
+                            $desenpenioAre;
+
 
                             ?>
 
-                            <td align="center" <?= $style ?>><?= $notaAreAcumulada <= 0  ? '' : $notaAreAcumulada ?></td>
-                            <td align="center" <?= $style ?>><?= $notaAreAcumulada <= 0  ? '' : $desenpenioAreAcumulado["notip_nombre"] ?></td>
+                            <?php
+                            foreach ($area["cargas"] as $carga) {
+                                $promedioMateria = 0;
+                                $fallasAcumuladas = 0;
+                                $ihArea += $carga['car_ih'];
+                                $style = "style='font-weight:bold;background: #EAEAEA;'";
+                                $cargaStyle = '';
+                                $styleborder = '';
+                                ?>
+                                <?php if (count($area["cargas"]) > 1) {
+                                    $nombre = $carga["mat_nombre"];
+                                    $styleborder = '';
+                                } else {
+                                    $nombre = $area["ar_nombre"];
+                                    $cargaStyle = '';
+                                } ?>
+                                <tr style="<?= $styleborder ?>">
+                                    <td style="<?= $cargaStyle ?>"> <?= $nombre ?></td>
+                                    <td style="<?= $cargaStyle ?>" align="center"><?= $carga['car_ih'] ?></td>
+                                    <?php
+                                    for ($j = 1; $j <= $periodoFinal; $j++) {
+                                        $nota = isset($carga["periodos"][$j]["bol_nota"])
+                                            ? $carga["periodos"][$j]["bol_nota"]
+                                            : 0;
+                                        $nota = Boletin::agregarDecimales($nota);
+                                        $desempeno = Boletin::determinarRango($nota, $tiposNotas);
+                                        $promedioMateria += $nota;
+                                        $porcentajeMateria = !empty($carga['mat_valor']) ? $carga['mat_valor'] : 100;
+                                        if (isset($notaAre[$j])) {
+                                            $notaAre[$j] += $nota * ($porcentajeMateria / 100);
+                                        } else {
+                                            $notaAre[$j] = $nota * ($porcentajeMateria / 100);
+                                        }
+
+                                        if (isset($totalNotasPeriodo[$j])) {
+                                            $totalNotasPeriodo[$j] += $nota * ($porcentajeMateria / 100);
+                                        } else {
+                                            $totalNotasPeriodo[$j] = $nota * ($porcentajeMateria / 100);
+                                        }
+                                        $background = 'background: #9ed8ed;';
+                                        ?>
+                                        <td align="center" align="center"
+                                            style=" <?= $background ?>;<?= $cargaStyle ?> font-size:12px;">
+                                            <?= $nota == 0 ? '' : number_format($nota, $config['conf_decimales_notas']); ?></td>
+                                    <?php }
+
+                                    $periodoCalcular = $estudiante['mat_estado_matricula'] == CANCELADO && $config["conf_promedio_libro_final"] == BDT_Configuracion::PERIODOS_CURSADOS ? COUNT($carga["periodos"]) : $config["conf_periodos_maximos"];
+                                    $notaAcumulada = $promedioMateria / $periodoCalcular;
+                                    $notaAcumulada = round($notaAcumulada, $config['conf_decimales_notas']);
+                                    $desempenoAcumulado = Boletin::determinarRango($notaAcumulada, $tiposNotas);
+                                    if ($notaAcumulada < $config['conf_nota_minima_aprobar']) {
+                                        $materiasPerdidas++;
+                                    }
+                                    ?>
+                                    <td align="center" style=" font-size:12px;"><?= $notaAcumulada <= 0 ? '' : $notaAcumulada ?>
+                                    </td>
+                                    <td align="center" style=" font-size:12px;">
+                                        <?= $notaAcumulada <= 0 ? '' : $desempenoAcumulado["notip_nombre"] ?></td>
+                                </tr>
+                            <?php }
+                            if ($ihArea != $carga['car_ih']) { ?>
+                                <tr>
+                                    <td <?= $style ?>><?= $area["ar_nombre"] ?></td>
+                                    <td align="center" <?= $style ?>><?= $ihArea ?></td>
+                                    <?php
+                                    $notaAreAcumulada = 0;
+                                    $periodoAreaCalcular = $config["conf_periodos_maximos"];
+                                    for ($j = 1; $j <= $periodoFinal; $j++) {
+                                        $notaAreAcumulada += $notaAre[$j]; ?>
+                                        <td align="center" <?= $style ?>>
+                                            <?= $notaAre[$j] <= 0 ? '' : number_format($notaAre[$j], $config['conf_decimales_notas']); ?>
+                                        </td>
+
+                                        <?php
+                                        if ($notaAre[$j] <= 0) {
+                                            $periodoAreaCalcular -= 1;
+                                        }
+                                    }
+
+                                    $periodoAreaCalcular = $estudiante['mat_estado_matricula'] == CANCELADO && $config["conf_promedio_libro_final"] == BDT_Configuracion::PERIODOS_CURSADOS ? $periodoAreaCalcular : $config["conf_periodos_maximos"];
+                                    $notaAreAcumulada = number_format($notaAreAcumulada / $periodoAreaCalcular, $config['conf_decimales_notas']);
+                                    $desenpenioAreAcumulado = Boletin::determinarRango($notaAreAcumulada, $tiposNotas);
+
+                                    ?>
+
+                                    <td align="center" <?= $style ?>><?= $notaAreAcumulada <= 0 ? '' : $notaAreAcumulada ?></td>
+                                    <td align="center" <?= $style ?>>
+                                        <?= $notaAreAcumulada <= 0 ? '' : $desenpenioAreAcumulado["notip_nombre"] ?></td>
+                                </tr>
+                            <?php }
+                        } ?>
+                    </tbody>
+                    <tfoot style="font-size: 13px;">
+                        <tr style="font-weight:bold;background: #EAEAEA;font-size: 15px">
+                            <td colspan="2">PROMEDIO GENERAL</td>
+                            <?php
+                            $promedioFinal = 0;
+                            $periodoCalcular = $config["conf_periodos_maximos"];
+                            for ($j = 1; $j <= $periodoFinal; $j++) {
+                                $acumuladoPj = ($totalNotasPeriodo[$j] / $cantidadAreas);
+                                $acumuladoPj = round($acumuladoPj, $config['conf_decimales_notas']);
+                                $promedioFinal += $acumuladoPj;
+
+                                if ($acumuladoPj <= 0) {
+                                    $periodoCalcular -= 1;
+                                }
+                                ?>
+                                <td align="center"><?= $acumuladoPj <= 0 ? '' : $acumuladoPj ?> </td>
+                            <?php }
+
+                            $periodoCalcularFinal = $estudiante['mat_estado_matricula'] == CANCELADO && $config["conf_promedio_libro_final"] == BDT_Configuracion::PERIODOS_CURSADOS ? $periodoCalcular : $config["conf_periodos_maximos"];
+                            $promedioFinal = round($promedioFinal / $periodoCalcularFinal, $config['conf_decimales_notas']);
+
+                            $desempenoAcumuladoTotal = Boletin::determinarRango($promedioFinal, $tiposNotas);
+                            ?>
+                            <td align="center"><?= $promedioFinal <= 0 ? '' : $promedioFinal ?></td>
+                            <td align="center"><?= $desempenoAcumuladoTotal["notip_nombre"] ?></td>
                         </tr>
-                <?php }
-                } ?>
-            </tbody>
-            <tfoot style="font-size: 13px;">
-                <tr style="font-weight:bold;background: #EAEAEA;font-size: 15px">
-                    <td colspan="2">PROMEDIO GENERAL</td>
-                    <?php
-                    $promedioFinal = 0;
-                    $periodoCalcular = $config["conf_periodos_maximos"];
-                    for ($j = 1; $j <= $periodoFinal; $j++) {
-                        $acumuladoPj = ($totalNotasPeriodo[$j] / $cantidadAreas);
-                        $acumuladoPj = round($acumuladoPj, $config['conf_decimales_notas']);
-                        $promedioFinal += $acumuladoPj;
+                        <tr style="color:#000;">
+                            <td style="padding-left: 10px;" colspan="8">
+                                <p>&nbsp;</p>
+                                <h4 style="font-weight:bold; color: #00adefad;"><b>Observación definitiva:</b></h4>
+                                <?php
+                                if ($periodoFinal == $config["conf_periodos_maximos"]) {
 
-                        if ( $acumuladoPj <= 0 ) { $periodoCalcular -= 1; }
-                    ?>
-                        <td align="center"><?= $acumuladoPj <= 0  ? '' : $acumuladoPj ?> </td>
-                    <?php }
+                                    if ($materiasPerdidas >= $config["conf_num_materias_perder_agno"]) {
+                                        $msj = "EL(LA) ESTUDIANTE NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE.";
+                                    } elseif ($materiasPerdidas < $config["conf_num_materias_perder_agno"] && $materiasPerdidas > 0) {
+                                        $msj = "EL(LA) ESTUDIANTE DEBE NIVELAR LAS MATERIAS PERDIDAS.";
+                                    } else {
+                                        $msj = "EL(LA) ESTUDIANTE FUE PROMOVIDO(A) AL GRADO SIGUIENTE.";
+                                    }
 
-                    $periodoCalcularFinal = $estudiante['mat_estado_matricula'] == CANCELADO && $config["conf_promedio_libro_final"] == BDT_Configuracion::PERIODOS_CURSADOS ? $periodoCalcular : $config["conf_periodos_maximos"];
-                    $promedioFinal = round($promedioFinal / $periodoCalcularFinal, $config['conf_decimales_notas']);
+                                    if ($estudiante['mat_estado_matricula'] == CANCELADO && $periodoCalcularFinal < $config["conf_periodos_maximos"]) {
+                                        $msj = "EL(LA) ESTUDIANTE FUE RETIRADO SIN FINALIZAR AÑO LECTIVO.";
+                                    }
+                                }
+                                echo "<span style='padding-left: 10px;'>" . $msj . "</span>";
+                                ?>
+                                <p>&nbsp;</p>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
 
-                    $desempenoAcumuladoTotal = Boletin::determinarRango($promedioFinal, $tiposNotas);
-                    ?>
-                    <td align="center"><?= $promedioFinal <= 0  ? '' : $promedioFinal ?></td>
-                    <td align="center"><?= $desempenoAcumuladoTotal["notip_nombre"] ?></td>
-                </tr>
-                <tr style="color:#000;">
-                    <td style="padding-left: 10px;" colspan="8">
-                       <p>&nbsp;</p>
-                        <h4 style="font-weight:bold; color: #00adefad;"><b>Observación definitiva:</b></h4>
-                        <?php
-                        if ($periodoFinal == $config["conf_periodos_maximos"]) {
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <!--******FIRMAS******-->
 
-                            if ($materiasPerdidas >= $config["conf_num_materias_perder_agno"]) {
-                                $msj = "EL(LA) ESTUDIANTE NO FUE PROMOVIDO(A) AL GRADO SIGUIENTE.";
-                            } elseif ($materiasPerdidas < $config["conf_num_materias_perder_agno"] && $materiasPerdidas > 0) {
-                                $msj = "EL(LA) ESTUDIANTE DEBE NIVELAR LAS MATERIAS PERDIDAS.";
+                <table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0"
+                    style="text-align:center; font-size:10px;">
+                    <tr>
+                        <td align="left">
+                            <?php
+                            $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
+                            $nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
+                            if (!empty($rector["uss_firma"]) && file_exists(ROOT_PATH . '/main-app/files/fotos/' . $rector['uss_firma'])) {
+                                echo '<img src="../files/fotos/' . $rector["uss_firma"] . '" width="100"><br>';
                             } else {
-                                $msj = "EL(LA) ESTUDIANTE FUE PROMOVIDO(A) AL GRADO SIGUIENTE.";
-                            }
-
-                            if ($estudiante['mat_estado_matricula'] == CANCELADO && $periodoCalcularFinal < $config["conf_periodos_maximos"]) {
-                                $msj = "EL(LA) ESTUDIANTE FUE RETIRADO SIN FINALIZAR AÑO LECTIVO.";
-                            }
-                        }
-                        echo "<span style='padding-left: 10px;'>" . $msj . "</span>";
-                        ?>
-                        <p>&nbsp;</p>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-
-        <p>&nbsp;</p>
-        <p>&nbsp;</p>
-        <p>&nbsp;</p>
-        <!--******FIRMAS******-->
-
-        <table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0" style="text-align:center; font-size:10px;">
-            <tr>
-                <td align="left">
-                    <?php
-                    $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
-                    $nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
-                    if (!empty($rector["uss_firma"]) && file_exists(ROOT_PATH . '/main-app/files/fotos/' . $rector['uss_firma'])) {
-                        echo '<img src="../files/fotos/' . $rector["uss_firma"] . '" width="100"><br>';
-                    } else {
-                        echo '<p>&nbsp;</p>
+                                echo '<p>&nbsp;</p>
                                 <p>&nbsp;</p>
                                 <p>&nbsp;</p>';
-                    }
-                    ?>
-                    <p style="height:0px;"></p>_________________________________<br>
-                    <p>&nbsp;</p>
-                    <?= $nombreRector ?><br>
-                    Rector(a)
-                </td>
-            </tr>
-        </table>
+                            }
+                            ?>
+                            <p style="height:0px;"></p>_________________________________<br>
+                            <p>&nbsp;</p>
+                            <?= $nombreRector ?><br>
+                            Rector(a)
+                        </td>
+                    </tr>
+                </table>
+            </div>
 
-        <div id="saltoPagina"></div>
-    <?php  }  ?>
+        <?php } ?>
+    </div>
+    <input type="button" class="btn btn-primary btn-flotante" id="guardarPDF"
+            onclick="generatePDF()" value="Descargar PDF"></input>
 </body>
 
 <script type="application/javascript">
-    print();
+    function generatePDF() {
+        const element = document.getElementById('contenido');
+        const options = {
+            margin: 10,
+            filename: 'LIBROFINAL<?= $informacion_inst["info_id"] ?>_<?= $year ?>_<?= $grado ?>_<?= $grupo ?>_<?= $idEstudiante ?>.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().set(options).from(element).save();
+    }
 </script>
 
 </html>
