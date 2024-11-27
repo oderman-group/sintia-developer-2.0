@@ -1252,6 +1252,7 @@ class Boletin {
 					car.car_director_grupo,
                     mate.mat_valor,
                     per.gvp_valor as periodo_valor,
+                    aus.aus_ausencias,
                     acum.*,
                     bol.*,
                     disi.*, 
@@ -1606,12 +1607,18 @@ class Boletin {
         return $color; //
     }
 
-    public static function formatoNota(float|null $valorNota,array $tiposNotas=[]): float|string {
+    public static function notaDecimales(float|null $valorNota){
         global  $config;
         Utilidades::valordefecto($valorNota,0);
-        $notaResultado=0;
         $nota = round($valorNota, $config['conf_decimales_notas']);
         $nota = number_format($nota, $config['conf_decimales_notas']);
+        return $nota;
+    }
+
+    public static function formatoNota(float|null $valorNota,array $tiposNotas=[]): float|string {
+        global  $config;       
+        $notaResultado=0;
+        $nota = self::notaDecimales($valorNota);
         if(!empty($tiposNotas)){
             if ($config['conf_forma_mostrar_notas'] == CUALITATIVA) {
                 $desempeno = self::determinarRango($nota, $tiposNotas);
@@ -1632,7 +1639,7 @@ class Boletin {
         Utilidades::valordefecto($materiasPerdidas,0);
         Utilidades::valordefecto($genero,'126');
         $prefijo=['EL','O'];
-        if($genero != '126'){
+        if($genero != GENERO_MASCULINO){
             $prefijo =['LA','A'];
         }
         if($materiasPerdidas > 1 ){

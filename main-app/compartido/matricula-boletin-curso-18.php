@@ -59,6 +59,7 @@ if (!empty($_GET["id"])) {
 }
 
 $tamañoLogo = $_SESSION['idInstitucion'] == ICOLVEN ? 100 : 50;
+$periodoFinal= ($periodoSeleccionado == $config['conf_periodos_maximos']);
 
 switch ($periodoSeleccionado) {
     case 1:
@@ -107,7 +108,7 @@ while ($row = $cosnultaTiposNotas->fetch_assoc()) {
 }
 
 if (!empty($grado) && !empty($grupo) && !empty($periodoSeleccionado) && !empty($year)) {
-    $datos = Boletin::datosBoletin($grado, $grupo, $periodos, $year, $idEstudiante);
+    $datos = Boletin::datosBoletin($grado, $grupo, $periodos, $year, $idEstudiante,false);
     while ($row = $datos->fetch_assoc()) {
         $listaDatos[] = $row;
     }
@@ -182,12 +183,12 @@ $colspan = 5 + $celdas;
             </tr>
             <?php
             $cantidadMaterias = 0;
-            foreach ($areas[$estudiante["mat_id"]]  as  $area) {  ?>
+            foreach ($estudiante["areas"]  as  $area) {  ?>
                 <tr style="background-color: #EAEAEA" style="font-size:12px;">
                     <td colspan="<?= $colspan ?>" style="font-size:12px; font-weight:bold;"><?= $area["ar_nombre"]; ?></td>
                 </tr>
                 <?php
-                foreach ($cargas[$estudiante["mat_id"]][$area["ar_id"]]  as  $carga) {
+                foreach ($area["cargas"]  as  $carga) {
                     $cantidadMaterias++; ?>
                     <tr>
                         <td align="center"><?= $carga["nro"]; ?></td>
@@ -196,39 +197,26 @@ $colspan = 5 + $celdas;
                         <?php
                         $promedioMateria = 0;
                         for ($j = 1; $j <= $periodoSeleccionado; $j++) {
-                            $nota = isset($notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["bol_nota"])
-                                ? $notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["bol_nota"]
-                                : 0;
-                            $fallas = isset($notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["aus_ausencias"])
-                                ? $notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$j]["aus_ausencias"]
-                                : 0;
-                            $desempeno = Boletin::determinarRango($nota, $tiposNotas);
-                            $promedioMateria += $nota;
-
-                            if (isset($totalNotasPeriodo[$j])) {
-                                $totalNotasPeriodo[$j] += $nota;
-                            } else {
-                                $totalNotasPeriodo[$j] = $nota;
-                            }
-                            if (isset($fallasPeriodo[$j])) {
-                                $fallasPeriodo[$j] += $fallas;
-                            } else {
-                                $fallasPeriodo[$j] = $fallas;
-                            }
+                            Utilidades::valordefecto($carga["periodos"][$j]['bol_tipo'],'1');
+                            Utilidades::valordefecto($carga["periodos"][$j]['bol_nota'],0);
+                            $recupero = $carga["periodos"][$j]['bol_tipo'] == '2';
+                            $nota     = $carga["periodos"][$j]["bol_nota"];
+                            $desempeno = Boletin::determinarRango($nota , $tiposNotas);
 
                         ?>
-                            <td align="center" style=" font-size:12px;"><?= Boletin::agregarDecimales($nota);  ?></td>
+                            <td align="center" style="font-size:12px;<?= $recupero ? 'color: #2b34f4;" title="Nota del periodo Recuperada ' . $carga['periodos'][$j]['bol_nota_anterior'] . '"' : '' ?>">
+                            <?= Boletin::notaDecimales($nota);  ?>
+                            </td>
                             <td align="center" style=" font-size:12px;"><?= $desempeno["notip_nombre"] ?></td>
                         <?php }
-                        $notaAcumulada = $promedioMateria / $periodoSeleccionado;
-                        $notaAcumulada = round($notaAcumulada, 2);
+                        $notaAcumulada = $carga["nota_carga_acumulada"];
                         $desempenoAcumulado = Boletin::determinarRango($notaAcumulada, $tiposNotas);
                         if ($notaAcumulada  < $config['conf_nota_minima_aprobar']) {
                             $materiasPerdidas++;
                         }
                         ?>
-                        <td align="center" style=" font-size:12px;"><?= $notaAcumulada ?></td>
-                        <td align="center" style=" font-size:12px;"><?= $desempenoAcumulado["notip_nombre"] ?></td>
+                        <td align="center" style=" font-size:12px;font-weight:bold; "><?=  Boletin::notaDecimales($notaAcumulada); ?></td>
+                        <td align="center" style=" font-size:12px;font-weight:bold; "><?= $desempenoAcumulado["notip_nombre"] ?></td>
                     </tr>
                     <?php if (!empty($notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$periodoSeleccionado]["bol_observaciones_boletin"])) { ?>
                         <tr>
@@ -244,44 +232,42 @@ $colspan = 5 + $celdas;
 
                 <?php } ?>
             <?php } ?>
-            <tr bgcolor="#EAEAEA" style="font-size:12px; text-align:center;">
-                <td colspan="3" style="text-align:left;  font-size:12px;">PROMEDIO GENERAL</td>
+            <tr bgcolor="#EAEAEA" style="font-size:12px;font-weight:bold; text-align:center;">
+                <td colspan="3" style="text-align:left; font-weight:bold; font-size:12px;">PROMEDIO GENERAL</td>
 
+                
+                <?php 
+                $promedioFinal     = 0; 
+                $porcentajePeriodo = 0;                
+                foreach ($estudiante["promedios_generales"] as $periodo) {
+                        Utilidades::valordefecto($periodo["nota_materia_promedio"],0);
+						$promedio          =  $periodo["nota_materia_promedio"] ;
+                        $porcentajePeriodo =  $periodo["porcentaje_periodo"] ;
+						$promedioFinal     += $periodoFinal? $promedio * ($porcentajePeriodo/100): $promedio/$periodoSeleccionado;
+						?>
+                        <td style=" font-size:12px;font-weight:bold;"><?= Boletin::notaDecimales($promedio, $tiposNotas); ?></td>
+                        <td style=" font-size:12px;font-weight:bold;"><?= Boletin::determinarRango($promedio, $tiposNotas)["notip_nombre"]; ?></td>
+					<?php } ?>
                 <?php
-                $promedioFinal = 0;
-                for ($j = 1; $j <= $periodoSeleccionado; $j++) {
-                    $avumuladoPj = ($totalNotasPeriodo[$j] / $cantidadMaterias);
-                    $avumuladoPj = round($avumuladoPj, 2);
-                    $promedioFinal += $avumuladoPj;
-                    $desempenoAcumuladoTotal = Boletin::determinarRango($avumuladoPj, $tiposNotas);
+               
                 ?>
-
-                    <td style=" font-size:12px;"><?= $avumuladoPj ?></td>
-                    <td style=" font-size:12px;"><?= $desempenoAcumuladoTotal["notip_nombre"] ?></td>
-                <?php
-                }
-                $promedioFinal = ($promedioFinal / $periodoSeleccionado);
-                $promedioFinal = round($promedioFinal, 2);
-                $desempenoTotal = Boletin::determinarRango($promedioFinal, $tiposNotas);
-                ?>
-                <td style=" font-size:12px;"><?= $promedioFinal ?></td>
-                <td style=" font-size:12px;"><?= $desempenoTotal["notip_nombre"] ?></td>
+                <td style=" font-size:12px;"><?= Boletin::notaDecimales($promedioFinal, $tiposNotas); ?></td>
+                <td style=" font-size:12px;"><?= Boletin::determinarRango($promedioFinal, $tiposNotas)["notip_nombre"]; ?></td>
             </tr>
             <tr bgcolor="#EAEAEA" style="font-size:12px; text-align:center;">
                 <td colspan="3" style="text-align:left;  font-size:12px;">AUSENCIAS</td>
 
-                <?php
-                $fallasFinal = 0;
-                for ($j = 1; $j <= $periodoSeleccionado; $j++) {
-                    $fallasAcumuladas = $fallasPeriodo[$j] ;
-                    $fallasFinal+=$fallasAcumuladas;
+                <?php $fallasFinal=0;
+                  foreach ($estudiante["promedios_generales"] as $promedios_generales) {
+                    $suma_ausencias =  $promedios_generales["suma_ausencias"] ;
+                    $fallasFinal    += $suma_ausencias;
                 ?>
 
-                    <td colspan="2" style=" font-size:12px;"><?= $fallasAcumuladas ?> Aús.</td>
+                    <td colspan="2" style=" font-size:12px;"><?= $suma_ausencias ?> Aús.</td>
                 <?php
                 }
                 ?>
-                <td colspan="2" style=" font-size:12px;"><?= $fallasAcumuladas ?> Aús.</td>
+                <td colspan="2" style=" font-size:12px;"><?= $fallasFinal ?> Aús.</td>
             </tr>
         </table>
         <td>&nbsp;</td>
@@ -315,18 +301,20 @@ $colspan = 5 + $celdas;
                 foreach ($observacionesConvivencia[$estudiante["mat_id"]] as $observacion) {
                     if ($observacion["estudiante"] == $estudiante["mat_id"]) {
                 ?>
-                        <tr align="center" style="font-weight:bold; font-size:12px; height:20px;">
-                            <td><?= $observacion["periodo"] ?></td>
-                            <td align="left"><?= $observacion["observacion"] ?></td>
+                        <tr align="center" style="font-size:12px; height:20px;">
+                            <td style="font-weight:bold;"><?= $observacion["periodo"] ?></td>
+                            <td align="left"  style="padding-left:5px;"><?= $observacion["observacion"] ?></td>
                         </tr>
 
                 <?php  }
                 } ?>
             </table>
         <?php } ?>
-        <?php 
-        echo Boletin::mensajeFinalEstudainte($periodoActual,$materiasPerdidas,$estudiante["nombre"],$estudiante["genero"]);
-        include("../compartido/firmas-informes.php");?>
+        <p >&nbsp;</p>
+        <div style="font-weight:bold;">
+        <?= Boletin::mensajeFinalEstudainte($periodoSeleccionado,$materiasPerdidas,$estudiante["nombre"],$estudiante["genero"])?>
+        </div>
+        <?php include("../compartido/firmas-informes.php");?>
         <p>&nbsp;</p>
         <table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1" align="center" style="font-size:10px;">
             <thead>
