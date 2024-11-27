@@ -101,11 +101,11 @@ if (!empty($curso) && !empty($grupo) && !empty($periodoFinal) && !empty($year)) 
 	for ($i = 1; $i <= $periodoFinal; $i++) {
 		$periodos[$i] = $i;
 	}
-	$datos = Boletin::datosBoletinPeriodos($curso, $grupo, $periodos, $year, $id);
+	$datos = Boletin::datosBoletin($curso, $grupo, $periodos, $year, $id,false);
 	while ($row = $datos->fetch_assoc()) {
 		$listaDatos[] = $row;
 	}
-	include("../compartido/agrupar-datos-boletin-periodos_mejorado.php");
+	include("../compartido/agrupar-datos-boletin-periodos-mejorado.php");
 }
 
 
@@ -116,24 +116,63 @@ if (!empty($curso) && !empty($grupo) && !empty($periodoFinal) && !empty($year)) 
 	<meta name="tipo_contenido" content="text/html;" http-equiv="content-type" charset="utf-8">
 	<link rel="shortcut icon" href="<?= $Plataforma->logo; ?>">
 	<link href="../../config-general/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 	<style type="text/css">
-		#saltoPagina {
-			PAGE-BREAK-AFTER: always;
-		}
+	        .page {
+            page-break-after: always;
+            /* Crea un salto de página después de este div */
+        }
 
-		@media print {
-			@page {
-				size: landscape;
-			}
-		}
+        #guardarPDF {
+            cursor: pointer;
+        }
+
+        .divBordeado {
+            height: 3px;
+            border: 3px solid #9ed8ed;
+            background-color: #00ACFB;
+        }
+
+        .btn-flotante {
+            font-size: 16px;            /* Cambiar el tamaño de la tipografia */
+            text-transform: uppercase;            /* Texto en mayusculas */
+            font-weight: bold;            /* Fuente en negrita o bold */
+            color: #ffffff;            /* Color del texto */
+            border-radius: 5px;            /* Borde del boton */
+            letter-spacing: 2px;            /* Espacio entre letras */
+            background-color: #E91E63;            /* Color de fondo */
+            padding: 18px 30px;            /* Relleno del boton */
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            transition: all 300ms ease 0ms;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+            z-index: 99;
+        }
+
+        .btn-flotante:hover {
+            background-color: #2c2fa5;            /* Color de fondo al pasar el cursor */
+            box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(-7px);
+        }
+
+        @media only screen and (max-width: 600px) {
+            .btn-flotante {
+                font-size: 14px;
+                padding: 12px 20px;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
 	</style>
 </head>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 
 <body style="font-family:Arial;">
+<div id="contenido">
 	<?php foreach ($estudiantes  as  $estudiante) {
 		$materiasPerdidas = 0;
-	?>
+	?><div class="page">
 		<?php
 		$nombreInforme = "REGISTRO DE VALORACIÓN";
 		if ($config['conf_mostrar_encabezado_informes'] == 1) {
@@ -178,7 +217,7 @@ if (!empty($curso) && !empty($grupo) && !empty($periodoFinal) && !empty($year)) 
 					<td align="center"></td>
 					<td align="center">
 						<?php
-						$notaArea = round($area["nota_area_acumulada"] / $area["cantidad_notas"], $config['conf_decimales_notas']);
+						$notaArea = $area["nota_area_acumulada"] ;
 						if ($estudiante["gra_id"] > 11 && $config['conf_id_institucion'] != EOA_CIRUELOS) {
 							$notaFA = ceil($notaArea);
 							switch ($notaFA) {
@@ -199,7 +238,7 @@ if (!empty($curso) && !empty($grupo) && !empty($periodoFinal) && !empty($year)) 
 									break;
 							}
 						} else {
-							echo $notaArea;
+							echo Boletin::formatoNota($notaArea);
 						}
 
 						?></td>
@@ -211,13 +250,14 @@ if (!empty($curso) && !empty($grupo) && !empty($periodoFinal) && !empty($year)) 
 				<?php foreach ($area["cargas"]  as  $carga) {
 					$cantidadAreas = count($area["cargas"]);
 
-					$notaCarga = round($carga["nota_carga_acumulada"] / $carga["cantidad_notas"], $config['conf_decimales_notas']);
+					$notaCarga = $carga["nota_carga_acumulada"] ;
 
 					if ($notaCarga < $config['conf_nota_minima_aprobar']) {
 						$materiasPerdidas++;
 					}
 					$notaCargaDeseno = Boletin::determinarRango($notaCarga, $tiposNotas);
-
+					Utilidades::valordefecto($notaCargaDeseno["notip_desde"],0);
+					Utilidades::valordefecto($notaCargaDeseno["notip_hasta"],1);
 					if ($notaCarga >= $notaCargaDeseno["notip_desde"] && $notaCarga <= $notaCargaDeseno["notip_hasta"]) {
 						if ($estudiante["gra_id"] > 11 && $config['conf_id_institucion'] != EOA_CIRUELOS) {
 							$notaFD = ceil($notaCarga);
@@ -249,7 +289,7 @@ if (!empty($curso) && !empty($grupo) && !empty($periodoFinal) && !empty($year)) 
 					<tr style="font-size:10px; font-weight:normal;">
 						<td style="font-size:10px;"><?php echo $carga["mat_nombre"]; ?></td>
 						<td align="center" style="font-size:10px;"><?= $carga["car_ih"] ?></td>
-						<td align="center" style="font-size:10px;"><?= $notaCarga ?></td>
+						<td align="center" style="font-size:10px;"><?= Boletin::formatoNota($notaCarga);  ?></td>
 						<td align="center" style="font-size:10px;"><?= $notaCargaDeseno["notip_nombre"] ?></td>
 						<td align="center" style="font-size:10px;"><?= $carga["fallas"] ?></td>
 						<td align="center"></td>
@@ -319,13 +359,26 @@ if (!empty($curso) && !empty($grupo) && !empty($periodoFinal) && !empty($year)) 
 				</td>
 			</tr>
 		</table>
-
+	</div>
 	<?php }  ?>
-	<div id="saltoPagina"></div>
+</div>
+<input type="button" class="btn btn-flotante" id="guardarPDF"
+onclick="generatePDF()" value="Descargar PDF"></input>
 
 	<?php include(ROOT_PATH . "/main-app/compartido/guardar-historial-acciones.php"); ?>
 	<script type="application/javascript">
-		print();
+	function generatePDF() {
+        const element = document.getElementById('contenido');
+        const options = {
+            margin: 10,
+            filename: 'LIBROFINAL<?= $informacion_inst["info_id"] ?>_<?= $year ?>_<?= $grado ?>_<?= $grupo ?>_<?= $idEstudiante ?>.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().set(options).from(element).save();
+    }
 	</script>
 </body>
 
