@@ -38,9 +38,6 @@ if (!empty($_GET["grupo"])) {
     $grupo = base64_decode($_GET["grupo"]);
 }
 
-if (!empty($_GET["periodo"])) {
-    $periodo = base64_decode($_GET["periodo"]);
-}
 
 if (!empty($_GET["year"])) {
     $year = base64_decode($_GET["year"]);
@@ -109,15 +106,15 @@ while ($row = $cosnultaTiposNotas->fetch_assoc()) {
     $tiposNotas[] = $row;
 }
 
-if (!empty($grado) && !empty($grupo) && !empty($periodo) && !empty($year)) {
-    $datos = Boletin::datosBoletinPeriodos($grado, $grupo, $periodos, $year, $idEstudiante);
+if (!empty($grado) && !empty($grupo) && !empty($periodoSeleccionado) && !empty($year)) {
+    $datos = Boletin::datosBoletin($grado, $grupo, $periodos, $year, $idEstudiante);
     while ($row = $datos->fetch_assoc()) {
         $listaDatos[] = $row;
     }
 }
 $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
 
-$puestos = Boletin::obtenerPuestoYpromedioEstudiante($periodo, $grado, $grupo, $year);
+$puestos = Boletin::obtenerPuestoYpromedioEstudiante($periodoSeleccionado, $grado, $grupo, $year);
 $puestoCurso = [];
 while ($puesto = mysqli_fetch_array($puestos, MYSQLI_BOTH)) {
     $puestoCurso[$puesto['bol_estudiante']] = $puesto['puesto'];
@@ -138,12 +135,13 @@ while ($row = $conCargasDos->fetch_assoc()) {
 $colspan = 5 + $celdas;
 ?>
 
-<?php include("../compartido/agrupar-datos-boletin-periodos.php") ?>
+<?php include("../compartido/agrupar-datos-boletin-periodos_mejorado.php") ?>
 
 <body style="font-family:Arial;">
     <?php foreach ($estudiantes  as  $estudiante) {
         $totalNotasPeriodo = [];
         $fallasPeriodo     = [];
+        $materiasPerdidas  =0;
     ?>
         <div align="center" style="margin-bottom:20px;">
             <img src="../files/images/logo/<?= $informacion_inst["info_logo"] ?>" height="50"><br>
@@ -225,6 +223,9 @@ $colspan = 5 + $celdas;
                         $notaAcumulada = $promedioMateria / $periodoSeleccionado;
                         $notaAcumulada = round($notaAcumulada, 2);
                         $desempenoAcumulado = Boletin::determinarRango($notaAcumulada, $tiposNotas);
+                        if ($notaAcumulada  < $config['conf_nota_minima_aprobar']) {
+                            $materiasPerdidas++;
+                        }
                         ?>
                         <td align="center" style=" font-size:12px;"><?= $notaAcumulada ?></td>
                         <td align="center" style=" font-size:12px;"><?= $desempenoAcumulado["notip_nombre"] ?></td>
@@ -323,7 +324,9 @@ $colspan = 5 + $celdas;
                 } ?>
             </table>
         <?php } ?>
-        <?php include("../compartido/firmas-informes.php") ?>
+        <?php 
+        echo Boletin::mensajeFinalEstudainte($periodoActual,$materiasPerdidas,$estudiante["nombre"],$estudiante["genero"]);
+        include("../compartido/firmas-informes.php");?>
         <p>&nbsp;</p>
         <table width="100%" cellspacing="5" cellpadding="5" rules="all" border="1" align="center" style="font-size:10px;">
             <thead>
@@ -353,7 +356,10 @@ $colspan = 5 + $celdas;
             }
             ?>
         </table>
-        <?php include("../compartido/footer-informes.php") ?>
+        <?php 
+        
+        include("../compartido/footer-informes.php");      
+        ?>
         <div id="saltoPagina"></div>
     <?php  }  ?>
 </body>
