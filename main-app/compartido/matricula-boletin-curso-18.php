@@ -245,10 +245,11 @@ $colspan = 5 + $celdas;
                     $periodo=$estudiante["promedios_generales"][$i] ;
                     Utilidades::valordefecto($periodo["nota_materia_promedio"],0);
                     $promedio          =  $periodo["nota_materia_promedio"] ;
+                    $promedio          =  Boletin::notaDecimales($promedio, $tiposNotas);
                     $porcentajePeriodo =  $periodo["porcentaje_periodo"] ;
                     $promedioFinal     += $periodoFinal? $promedio * ($porcentajePeriodo/100): $promedio/$periodoSeleccionado;
                     ?>
-                        <td style=" font-size:12px;font-weight:bold;"><?= Boletin::notaDecimales($promedio, $tiposNotas); ?></td>
+                        <td style=" font-size:12px;font-weight:bold;"><?= $promedio ?></td>
                         <td style=" font-size:12px;font-weight:bold;"><?= Boletin::determinarRango($promedio, $tiposNotas)["notip_nombre"]; ?></td>
                       
                       
