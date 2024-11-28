@@ -8,6 +8,7 @@ if ($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol
 }
 include(ROOT_PATH . "/main-app/compartido/historial-acciones-guardar.php");
 require_once(ROOT_PATH . "/main-app/class/Boletin.php");
+require_once(ROOT_PATH . "/main-app/compartido/overlay.php");
 require_once(ROOT_PATH . "/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH . "/main-app/class/Usuarios.php");
 require_once(ROOT_PATH . "/main-app/class/UsuariosPadre.php");
@@ -79,6 +80,9 @@ if (!empty($idEstudiante)) {
             /* Crea un salto de página después de este div */
         }
 
+        #saltoPagina {
+            PAGE-BREAK-AFTER: always;
+        }
         #guardarPDF {
             cursor: pointer;
         }
@@ -90,14 +94,22 @@ if (!empty($idEstudiante)) {
         }
 
         .btn-flotante {
-            font-size: 16px;            /* Cambiar el tamaño de la tipografia */
-            text-transform: uppercase;            /* Texto en mayusculas */
-            font-weight: bold;            /* Fuente en negrita o bold */
-            color: #ffffff;            /* Color del texto */
-            border-radius: 5px;            /* Borde del boton */
-            letter-spacing: 2px;            /* Espacio entre letras */
-            background-color: #E91E63;            /* Color de fondo */
-            padding: 18px 30px;            /* Relleno del boton */
+            font-size: 16px;
+            /* Cambiar el tamaño de la tipografia */
+            text-transform: uppercase;
+            /* Texto en mayusculas */
+            font-weight: bold;
+            /* Fuente en negrita o bold */
+            color: #ffffff;
+            /* Color del texto */
+            border-radius: 5px;
+            /* Borde del boton */
+            letter-spacing: 2px;
+            /* Espacio entre letras */
+            background-color: #E91E63;
+            /* Color de fondo */
+            padding: 18px 30px;
+            /* Relleno del boton */
             position: fixed;
             bottom: 40px;
             right: 40px;
@@ -107,7 +119,8 @@ if (!empty($idEstudiante)) {
         }
 
         .btn-flotante:hover {
-            background-color: #2c2fa5;            /* Color de fondo al pasar el cursor */
+            background-color: #2c2fa5;
+            /* Color de fondo al pasar el cursor */
             box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.3);
             transform: translateY(-7px);
         }
@@ -165,11 +178,13 @@ if ($grado >= 12 && $grado <= 15) {
 
 <body style="font-family:Arial; font-size:9px;">
 
-    <div id="contenido">
+    <div id="contenido" >
+    <p>&nbsp;</p>
         <?php foreach ($estudiantes as $estudiante) {
             $totalNotasPeriodo = [];
             ?>
-            <div class="page">
+            <div class="page" style="margin-left: 50px;margin-right: 50px;">
+                 <!-- <h1>Página <?= $estudiante["nro"]?></h1> -->
                 <div style="margin: 15px 0;">
                     <table width="100%" cellspacing="5" cellpadding="5" border="1" rules="all" style="font-size: 13px;">
                         <tr>
@@ -177,7 +192,8 @@ if ($grado >= 12 && $grado <= 15) {
                                     src="../files/images/logo/<?= $informacion_inst["info_logo"] ?>" width="100%"></td>
                             <td align="center" rowspan="3" width="25%">
                                 <h3 style="font-weight:bold; color: #00adefad; margin: 0">
-                                    <?= strtoupper($informacion_inst["info_nombre"]) ?></h3><br>
+                                    <?= strtoupper($informacion_inst["info_nombre"]) ?>
+                                </h3><br>
                                 <?= $informacion_inst["info_direccion"] ?><br>
                                 Informes: <?= $informacion_inst["info_telefono"] ?>
                             </td>
@@ -260,8 +276,6 @@ if ($grado >= 12 && $grado <= 15) {
                             $ihArea = 0;
                             $notaAre = [];
                             $desenpenioAre;
-
-
                             ?>
 
                             <?php
@@ -269,7 +283,7 @@ if ($grado >= 12 && $grado <= 15) {
                                 $promedioMateria = 0;
                                 $fallasAcumuladas = 0;
                                 $ihArea += $carga['car_ih'];
-                                $style = "style='font-weight:bold;background: #EAEAEA;'";
+                                $style = "style='font-weight:bold;background: #EAEAEA;padding-left: 10px;'";
                                 $cargaStyle = '';
                                 $styleborder = '';
                                 ?>
@@ -281,7 +295,7 @@ if ($grado >= 12 && $grado <= 15) {
                                     $cargaStyle = '';
                                 } ?>
                                 <tr style="<?= $styleborder ?>">
-                                    <td style="<?= $cargaStyle ?>"> <?= $nombre ?></td>
+                                    <td style="<?= $cargaStyle ?>  padding-left: 10px;"> <?= $nombre ?></td>
                                     <td style="<?= $cargaStyle ?>" align="center"><?= $carga['car_ih'] ?></td>
                                     <?php
                                     for ($j = 1; $j <= $periodoFinal; $j++) {
@@ -307,7 +321,8 @@ if ($grado >= 12 && $grado <= 15) {
                                         ?>
                                         <td align="center" align="center"
                                             style=" <?= $background ?>;<?= $cargaStyle ?> font-size:12px;">
-                                            <?= $nota == 0 ? '' : number_format($nota, $config['conf_decimales_notas']); ?></td>
+                                            <?= $nota == 0 ? '' : number_format($nota, $config['conf_decimales_notas']); ?>
+                                        </td>
                                     <?php }
 
                                     $periodoCalcular = $estudiante['mat_estado_matricula'] == CANCELADO && $config["conf_promedio_libro_final"] == BDT_Configuracion::PERIODOS_CURSADOS ? COUNT($carga["periodos"]) : $config["conf_periodos_maximos"];
@@ -321,7 +336,8 @@ if ($grado >= 12 && $grado <= 15) {
                                     <td align="center" style=" font-size:12px;"><?= $notaAcumulada <= 0 ? '' : $notaAcumulada ?>
                                     </td>
                                     <td align="center" style=" font-size:12px;">
-                                        <?= $notaAcumulada <= 0 ? '' : $desempenoAcumulado["notip_nombre"] ?></td>
+                                        <?= $notaAcumulada <= 0 ? '' : $desempenoAcumulado["notip_nombre"] ?>
+                                    </td>
                                 </tr>
                             <?php }
                             if ($ihArea != $carga['car_ih']) { ?>
@@ -351,7 +367,8 @@ if ($grado >= 12 && $grado <= 15) {
 
                                     <td align="center" <?= $style ?>><?= $notaAreAcumulada <= 0 ? '' : $notaAreAcumulada ?></td>
                                     <td align="center" <?= $style ?>>
-                                        <?= $notaAreAcumulada <= 0 ? '' : $desenpenioAreAcumulado["notip_nombre"] ?></td>
+                                        <?= $notaAreAcumulada <= 0 ? '' : $desenpenioAreAcumulado["notip_nombre"] ?>
+                                    </td>
                                 </tr>
                             <?php }
                         } ?>
@@ -408,48 +425,91 @@ if ($grado >= 12 && $grado <= 15) {
                         </tr>
                     </tfoot>
                 </table>
-
-                <p>&nbsp;</p>
-                <p>&nbsp;</p>
                 <p>&nbsp;</p>
                 <!--******FIRMAS******-->
-
-                <table width="100%" cellspacing="0" cellpadding="0" rules="none" border="0"
-                    style="text-align:center; font-size:10px;">
+                <table style="text-align:center; font-size:10px;">
                     <tr>
                         <td align="left">
                             <?php
                             $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
                             $nombreRector = UsuariosPadre::nombreCompletoDelUsuario($rector);
                             if (!empty($rector["uss_firma"]) && file_exists(ROOT_PATH . '/main-app/files/fotos/' . $rector['uss_firma'])) {
-                                echo '<img src="../files/fotos/' . $rector["uss_firma"] . '" width="100"><br>';
+                                echo '<div align="center"> <img src="../files/fotos/' . $rector["uss_firma"] . '" width="100"> </div> ';
                             } else {
                                 echo '<p>&nbsp;</p>
                                 <p>&nbsp;</p>
                                 <p>&nbsp;</p>';
                             }
                             ?>
-                            <p style="height:0px;"></p>_________________________________<br>
-                            <p>&nbsp;</p>
+                            </p>_________________________________<br>                           
                             <?= $nombreRector ?><br>
                             Rector(a)
                         </td>
                     </tr>
                 </table>
+                <p>&nbsp;</p>
             </div>
-
+             <div id="saltoPagina"></div>
         <?php } ?>
     </div>
-    <input type="button" class="btn btn-primary btn-flotante" id="guardarPDF"
-            onclick="generatePDF()" value="Descargar PDF"></input>
+    <input type="button" class="btn btn-primary btn-flotante" id="guardarPDF" onclick="generatePDF()"
+        value="Descargar PDF"></input>
 </body>
 
 <script type="application/javascript">
-    function generatePDF() {
+    async function generatePDFPart(start, end) {
+        const element = document.getElementById('contenido');
+        const estudiantes = [...document.querySelectorAll('.page')];
+        const visibleEstudiantes = estudiantes.slice(start, end);
+
+        // Crear un contenedor temporal con los elementos visibles
+        const tempContainer = document.createElement('div');
+        visibleEstudiantes.forEach(estudiante => tempContainer.appendChild(estudiante.cloneNode(true)));
+
+        const options = {
+            margin: 5,
+            filename: '.pdf',
+            filename: `LIBROFINAL<?= $informacion_inst["info_id"] ?>_<?= $year ?>_<?= $grado ?>_<?= $grupo ?>_paginas_${start}-${end}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'mm', format: 'b4', orientation: 'portrait' }
+        };
+
+       return await html2pdf().set(options).from(tempContainer).save();
+
+    }
+    async function generatePDF() {
+        const estudiantes = [...document.querySelectorAll('.page')];
+        document.getElementById('overlay').style.display = 'flex';
+        let cantidad = estudiantes.length;
+        console.log(cantidad);       
+        let start = 0;
+        let end   = 0;
+        let count = 0;
+        let max = 20;
+        let vaiable='';
+        for (let i = 0; i < cantidad; i++){
+               count ++;
+               end = i;
+            if(count == max){
+              vaiable =  await generatePDFPart(start, end);
+                console.log(start +" hasta "+end );
+                start  = end+1;
+                count = 0;
+            }
+           
+
+        }
+        console.log(start +" hasta "+end );
+         vaiable = await generatePDFPart(start, end);
+        document.getElementById("overlay").style.display = "none";
+
+    }
+    function generatePDF2() {
         const element = document.getElementById('contenido');
         const options = {
-            margin: 10,
-            filename: 'LIBROFINAL<?= $informacion_inst["info_id"] ?>_<?= $year ?>_<?= $grado ?>_<?= $grupo ?>_<?= $idEstudiante ?>.pdf',
+            margin: 0,
+            filename: 'LIBROFINAL<?= $informacion_inst["info_id"] ?>_<?= $year ?>_<?= $grado ?>_<?= $grupo ?>_.pdf',
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
