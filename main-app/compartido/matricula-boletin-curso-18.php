@@ -201,11 +201,12 @@ $colspan = 5 + $celdas;
                             Utilidades::valordefecto($carga["periodos"][$j]['bol_nota'],0);
                             $recupero = $carga["periodos"][$j]['bol_tipo'] == '2';
                             $nota     = $carga["periodos"][$j]["bol_nota"];
+                            $nota     = Boletin::notaDecimales($nota);
                             $desempeno = Boletin::determinarRango($nota , $tiposNotas);
 
                         ?>
                             <td align="center" style="font-size:12px;<?= $recupero ? 'color: #2b34f4;" title="Nota del periodo Recuperada ' . $carga['periodos'][$j]['bol_nota_anterior'] . '"' : '' ?>">
-                            <?= Boletin::notaDecimales($nota);  ?>
+                            <?= $nota  ?>
                             </td>
                             <td align="center" style=" font-size:12px;"><?= $desempeno["notip_nombre"] ?></td>
                         <?php }
