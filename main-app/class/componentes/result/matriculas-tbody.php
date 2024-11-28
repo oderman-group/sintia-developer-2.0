@@ -47,7 +47,7 @@ $permisoReportes          = Modulos::validarSubRol(['DT0117']);
 foreach ($data["data"] as $resultado) {
 
 	$bgColor = $resultado['uss_bloqueado'] == 1 ? 'style="background-color: #ff572238;"' : '';
-	$color = $resultado["mat_inclusion"] == 1 ? 'style="color: blue;' : '';
+	$color = $resultado["mat_inclusion"] == 1 ? 'style="color: blue;"' : '';
 
 
 	$miArray = [
@@ -67,7 +67,11 @@ foreach ($data["data"] as $resultado) {
 	$fotoEstudiante = $usuariosClase->verificarFoto($resultado['mat_foto']);
 
 	$marcaMediaTecnica     = '';
-	if ($resultado['mat_tipo_matricula'] == GRADO_INDIVIDUAL && array_key_exists(10, $arregloModulos) && $moduloMediaTecnica) {
+	if (
+		$resultado['mat_tipo_matricula'] == GRADO_INDIVIDUAL && 
+		array_key_exists(10, $arregloModulos) 
+		&& $moduloMediaTecnica
+	) {
 		$marcaMediaTecnica = '<i class="fa fa-bookmark" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Media técnica"></i> ';
 	}
 
