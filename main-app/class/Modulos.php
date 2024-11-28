@@ -15,6 +15,9 @@ class Modulos {
     public const MODULO_ADMISIONES     = 8;
     public const MODULO_RESERVA_CUPO   = 9;
     public const MODULO_MEDIA_TECNICA  = 10;
+    public const MODULO_SUB_ROLES      = 16;
+    public const MODULO_CUESTIONARIOS  = 18;
+    public const MODULO_INFORMES_BASE  = 22;
 
     /**
      * Verifica los permisos de acceso a una página interna según el ID de la página.
@@ -105,7 +108,7 @@ class Modulos {
      * @global string $baseDatosServicios - El nombre de la base de datos de servicios.
      *
      * @param int $idInstitucion - El ID de la institución.
-     * @param int $idModulos - El ID del módulo.
+     * @param int $idModulo - El ID del módulo.
      *
      * @return bool - Devuelve `true` si los módulos de la institución están habilitados, de lo contrario, devuelve `false`.
      *
@@ -121,26 +124,38 @@ class Modulos {
      * }
      * ```
      */
-    public static function verificarModulosDeInstitucion($idInstitucion,$idModulos)
+    public static function verificarModulosDeInstitucion(int $idInstitucion, int $idModulo): bool
     {
         global $conexion, $baseDatosServicios;
 
-        $consultaModulos = mysqli_query($conexion, "SELECT ipmod_modulo AS id_modulo FROM ".BD_ADMIN.".instituciones_modulos 
-        WHERE ipmod_institucion='".$idInstitucion."' AND ipmod_modulo='".$idModulos."'
+        $consultaModulos = mysqli_query($conexion, "SELECT ipmod_modulo AS id_modulo 
+        FROM ".BD_ADMIN.".instituciones_modulos 
+        WHERE 
+            ipmod_institucion='".$idInstitucion."' 
+        AND ipmod_modulo='".$idModulo."'
         UNION
-        SELECT paqext_id_paquete AS id_modulo FROM ".BD_ADMIN.".instituciones_paquetes_extras 
-        WHERE paqext_institucion='".$idInstitucion."' AND paqext_id_paquete='".$idModulos."' AND paqext_tipo='".MODULOS."'");
+        SELECT paqext_id_paquete AS id_modulo 
+        FROM ".BD_ADMIN.".instituciones_paquetes_extras 
+        WHERE 
+            paqext_institucion='".$idInstitucion."' 
+        AND paqext_id_paquete='".$idModulo."' 
+        AND paqext_tipo='".MODULOS."'
+        ");
+
         $modulos = mysqli_fetch_array($consultaModulos, MYSQLI_BOTH);
-        if (empty($modulos[0])) { 
+
+        if (empty($modulos[0])) {
             $datosPaquetes = Plataforma::contarDatosPaquetes($idInstitucion, PAQUETES);
             if (!empty($datosPaquetes['plns_modulos'])) {
                 $modulosArray = explode(',', $datosPaquetes['plns_modulos']);
-                if (in_array($idModulos, $modulosArray)) {
+                if (in_array($idModulo, $modulosArray)) {
                     return true;
                 }
             }
+
             return false;
         }
+
         return true;
     }
 
@@ -209,7 +224,7 @@ class Modulos {
         if( 
             ( 
                 $datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && 
-                (empty($arregloModulos) || !array_key_exists(16, $arregloModulos)) 
+                (empty($arregloModulos) || !array_key_exists(self::MODULO_SUB_ROLES, $arregloModulos)) 
             ) || 
             $datosUsuarioActual['uss_tipo'] == TIPO_DEV 
         ) {
@@ -220,32 +235,19 @@ class Modulos {
             return false;
         }
 
-        try{
-            $consultaSubRoles = mysqli_query($conexion, "SELECT spu_id_sub_rol FROM ".$baseDatosServicios.".sub_roles_usuarios 
-            WHERE spu_id_usuario='".$datosUsuarioActual['uss_id']."' AND spu_institucion='".$config['conf_id_institucion']."'");
-        } catch (Exception $e) {
-            include("../compartido/error-catch-to-report.php");
-        }
-        $numSubRoles=mysqli_num_rows($consultaSubRoles);
-        if ($numSubRoles<1) { 
+        $numSubRoles = count($_SESSION["datosUsuario"]["sub_roles"]);
+
+        // Si al usuario directivo no le han asignado ningun subrol entonces tiene acceso a todo.
+        if ($numSubRoles < 1) {
             return true;
-        }else{
-            $subRoles = mysqli_fetch_all($consultaSubRoles, MYSQLI_ASSOC);
-            $valoresArray = array_column($subRoles, 'spu_id_sub_rol');
-            $valoresCadena = implode(',', $valoresArray);
-            try{
-                $consultaPaginaSubRoles = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".sub_roles_paginas 
-                WHERE spp_id_rol IN ($valoresCadena)");
-            } catch (Exception $e) {
-                include("../compartido/error-catch-to-report.php");
-            }
-            $subRolesPaginas = mysqli_fetch_all($consultaPaginaSubRoles, MYSQLI_ASSOC);
-            $valoresPaginas = array_column($subRolesPaginas, 'spp_id_pagina');
-            $permitidos= array_intersect($paginas,$valoresPaginas);
-            if(!empty($permitidos)){
+        } else {
+            $permitidos = array_intersect($paginas, $_SESSION["datosUsuario"]["sub_roles_paginas"]);
+
+            if (!empty($permitidos)) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -329,14 +331,18 @@ class Modulos {
      * 
      * @return bool
     **/
-    public static function validarModulosActivos($conexion, $modulo){
+    public static function validarModulosActivos($conexion, $modulo) {
 
         try{
-            $consultaModulo = mysqli_query($conexion, "SELECT mod_estado FROM ".BD_ADMIN.".modulos WHERE mod_id='".$modulo."' AND mod_types_customer LIKE '%".$_SESSION["datosUnicosInstitucion"]['ins_tipo']."%'");
+            $consultaModulo = mysqli_query($conexion, "SELECT mod_estado FROM ".BD_ADMIN.".modulos 
+            WHERE 
+                mod_id='".$modulo."' 
+            AND mod_types_customer LIKE '%".$_SESSION["datosUnicosInstitucion"]['ins_tipo']."%'
+            ");
         } catch (Exception $e) {
             include("../compartido/error-catch-to-report.php");
         }
-        $numDatosModulo=mysqli_num_rows($consultaModulo);
+        $numDatosModulo = mysqli_num_rows($consultaModulo);
         if ($numDatosModulo > 0) { 
             $datosModulo = mysqli_fetch_array($consultaModulo, MYSQLI_BOTH);
             if ($datosModulo['mod_estado'] == 1) {

@@ -109,7 +109,7 @@ if ($num>0)
 	if (empty($url)) {
 		switch($fila['uss_tipo']){
 			case 1:
-				$url = '../directivo/noticias.php';
+				$url = '../directivo/usuarios.php';
 			break;
 			
 			case 2:
@@ -151,11 +151,39 @@ if ($num>0)
 	$arregloModulos = RedisInstance::getModulesInstitution(true);
 	$_SESSION["modulos"] = $arregloModulos;
 
+	$consultaSubRolesUsuario = mysqli_query($conexion, "SELECT spu_id_sub_rol 
+	FROM ".$baseDatosServicios.".sub_roles_usuarios 
+	WHERE 
+		spu_id_usuario='".$fila['uss_id']."' 
+	AND spu_institucion='".$config['conf_id_institucion']."'
+	");
+
+	$datosSubRolesUsuario = [];
+	$valoresPaginas       = [];
+
+	if (mysqli_num_rows($consultaSubRolesUsuario) > 0) {
+		$datosSubRolesUsuario = mysqli_fetch_all($consultaSubRolesUsuario, MYSQLI_ASSOC);
+		$datosSubRolesUsuario = array_column($datosSubRolesUsuario, 'spu_id_sub_rol');
+		$valoresCadena        = implode(',', $datosSubRolesUsuario);
+
+		//Consulta de paginas habilitadas para los subroles del usuario.
+		$consultaPaginaSubRoles = mysqli_query($conexion, "SELECT * 
+		FROM ".$baseDatosServicios.".sub_roles_paginas 
+		WHERE 
+			spp_id_rol IN ($valoresCadena)
+		");
+
+		$subRolesPaginas = mysqli_fetch_all($consultaPaginaSubRoles, MYSQLI_ASSOC);
+		$valoresPaginas  = array_column($subRolesPaginas, 'spp_id_pagina');
+	}
+
 	//RedisInstance::getMatriculas(true);
 
 	//INICIO SESION
-	$_SESSION["id"] = $fila['uss_id'];
-	$_SESSION["datosUsuario"] = $fila;
+	$_SESSION["id"]                                = $fila['uss_id'];
+	$_SESSION["datosUsuario"]                      = $fila;
+	$_SESSION["datosUsuario"]["sub_roles"]         = $datosSubRolesUsuario;
+	$_SESSION["datosUsuario"]["sub_roles_paginas"] = $valoresPaginas;
 
 	include("navegador.php");
 
