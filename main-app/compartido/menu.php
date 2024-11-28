@@ -66,7 +66,7 @@
 							<li class="nav-item">
 								<a href="javascript:void(0);" class="nav-link nav-toggle"> 
 									<i class="fa fa-question-circle"></i>
-									<span class="title">Ayuda</span> <span class="arrow"></span>
+									<span class="title">Ayuda</span>
 								</a>
 								<ul class="sub-menu">
 									<li class="nav-item start">
@@ -87,7 +87,7 @@
 										</a>
 									</li>
 									<li class="nav-item start">
-										<a href="<?=REDIRECT_ROUTE."/releases.php";?>" target="_blank" class="nav-link">
+										<a href="<https://docs.google.com/document/d/1ytMzsH-w3qPUVPF7ScPG3tzEXYcSKbAcaIgLN-VtuyM/edit?usp=sharing" target="_blank" class="nav-link">
 											<span class="title">Lanzamientos</span>
 										</a>
 									</li>
