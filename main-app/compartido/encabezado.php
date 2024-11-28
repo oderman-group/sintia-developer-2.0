@@ -55,7 +55,7 @@ $institucionNombre = $institucion['ins_siglas'];
                     <ul class="nav navbar-nav pull-right">
 						
 						
-                    	<li><a href="javascript:;" class="fullscreen-btn"><i class="fa fa-arrows-alt"></i></a></li>
+                    	<!--<li><a href="javascript:;" class="fullscreen-btn"><i class="fa fa-arrows-alt"></i></a></li>-->
 
                         <?php
                             if ($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO || $datosUsuarioActual['uss_tipo'] == TIPO_DEV) {

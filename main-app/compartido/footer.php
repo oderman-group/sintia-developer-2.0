@@ -109,7 +109,7 @@ LIMIT ".$empezar.",1
 <!-- boton de chat -->
 <?php if($idPaginaInterna != 'DT0209' && $datosUsuarioActual['uss_tipo'] == TIPO_DEV ){ ?>
 <a id="boton_notificacion" style="text-shadow: none;color: #fefefe;font-family:arial; background:<?= $Plataforma->colorUno; ?>;" href="../directivo/chat2.php" class="float"> <!-- "fa-beat-fade" se agregará una clase cuando hay una nueva notificacion  -->
-	<i class="fas fa-comments my-float"></i>
+	<i class="fa fa-comments my-float"></i>
 	<?php
 
 	$consultaNotificaicones = mysqli_query(
