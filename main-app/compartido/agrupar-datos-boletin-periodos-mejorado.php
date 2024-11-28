@@ -1,6 +1,11 @@
 <?php
 
 // se reparte la informacion en arrays
+$periodosTodos    = [];
+for ($i = 1; $i <= $periodoSeleccionado; $i++) {
+    $periodosTodos[$i] = $i;
+}
+
 $conteoEstudiante             = 0;
 $contarAreas                  = 0;
 $contarCargas                 = 0;

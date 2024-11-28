@@ -210,12 +210,13 @@ $colspan = 5 + $celdas;
                             <td align="center" style=" font-size:12px;"><?= $desempeno["notip_nombre"] ?></td>
                         <?php }
                         $notaAcumulada = $carga["nota_carga_acumulada"];
+                        $notaAcumulada = Boletin::notaDecimales($notaAcumulada);
                         $desempenoAcumulado = Boletin::determinarRango($notaAcumulada, $tiposNotas);
                         if ($notaAcumulada  < $config['conf_nota_minima_aprobar']) {
                             $materiasPerdidas++;
                         }
                         ?>
-                        <td align="center" style=" font-size:12px;font-weight:bold; "><?=  Boletin::notaDecimales($notaAcumulada); ?></td>
+                        <td align="center" style=" font-size:12px;font-weight:bold; "><?=  $notaAcumulada ?></td>
                         <td align="center" style=" font-size:12px;font-weight:bold; "><?= $desempenoAcumulado["notip_nombre"] ?></td>
                     </tr>
                     <?php if (!empty($notasPeriodos[$estudiante["mat_id"]][$area["ar_id"]][$carga["car_id"]][$periodoSeleccionado]["bol_observaciones_boletin"])) { ?>
@@ -238,20 +239,23 @@ $colspan = 5 + $celdas;
                 
                 <?php 
                 $promedioFinal     = 0; 
-                $porcentajePeriodo = 0;                
-                foreach ($estudiante["promedios_generales"] as $periodo) {
-                        Utilidades::valordefecto($periodo["nota_materia_promedio"],0);
-						$promedio          =  $periodo["nota_materia_promedio"] ;
-                        $porcentajePeriodo =  $periodo["porcentaje_periodo"] ;
-						$promedioFinal     += $periodoFinal? $promedio * ($porcentajePeriodo/100): $promedio/$periodoSeleccionado;
-						?>
+                $porcentajePeriodo = 0;
+                for ($i = 1; $i <= $periodoSeleccionado; $i++) {
+                    $periodo=$estudiante["promedios_generales"][$i] ;
+                    Utilidades::valordefecto($periodo["nota_materia_promedio"],0);
+                    $promedio          =  $periodo["nota_materia_promedio"] ;
+                    $porcentajePeriodo =  $periodo["porcentaje_periodo"] ;
+                    $promedioFinal     += $periodoFinal? $promedio * ($porcentajePeriodo/100): $promedio/$periodoSeleccionado;
+                    ?>
                         <td style=" font-size:12px;font-weight:bold;"><?= Boletin::notaDecimales($promedio, $tiposNotas); ?></td>
                         <td style=" font-size:12px;font-weight:bold;"><?= Boletin::determinarRango($promedio, $tiposNotas)["notip_nombre"]; ?></td>
+                      
+                      
 					<?php } ?>
                 <?php
-               
+                $promedioFinal=Boletin::notaDecimales($promedioFinal, $tiposNotas);
                 ?>
-                <td style=" font-size:12px;"><?= Boletin::notaDecimales($promedioFinal, $tiposNotas); ?></td>
+                <td style=" font-size:12px;"><?= $promedioFinal ?></td>
                 <td style=" font-size:12px;"><?= Boletin::determinarRango($promedioFinal, $tiposNotas)["notip_nombre"]; ?></td>
             </tr>
             <tr bgcolor="#EAEAEA" style="font-size:12px; text-align:center;">
@@ -312,7 +316,7 @@ $colspan = 5 + $celdas;
         <?php } ?>
         <p >&nbsp;</p>
         <div style="font-weight:bold;">
-        <?= Boletin::mensajeFinalEstudainte($periodoSeleccionado,$materiasPerdidas,$estudiante["nombre"],$estudiante["genero"])?>
+        <?= Boletin::mensajeFinalEstudainte($periodoSeleccionado,$materiasPerdidas,$estudiante["nombre"],$estudiante["genero"],$promedioFinal)?>
         </div>
         <?php include("../compartido/firmas-informes.php");?>
         <p>&nbsp;</p>
