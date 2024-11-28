@@ -1671,7 +1671,7 @@ class Boletin {
      *
      * @return string Mensaje en formato HTML que indica si el estudiante fue promovido, debe nivelar materias, o no fue promovido.
      */
-    public static function mensajeFinalEstudainte($periodo,$materiasPerdidas,$estudainte,$genero):string {
+    public static function mensajeFinalEstudainte($periodo,$materiasPerdidas,$estudainte,$genero,$promedioGeneral = 0):string {
         global  $config;
         Utilidades::valordefecto($materiasPerdidas,0);
         Utilidades::valordefecto($genero,'126');
@@ -1680,7 +1680,7 @@ class Boletin {
         if ($genero != UsuariosPadre::GENERO_MASCULINO) {
             $prefijo = ['LA', 'A'];
         }
-        
+        $plural ='';
         if ($materiasPerdidas > 1) {
             $plural = "S";
         }
@@ -1689,9 +1689,19 @@ class Boletin {
         if ($periodo >= $config["conf_periodos_maximos"]) {
             if ($materiasPerdidas >= $config["conf_num_materias_perder_agno"])
                 $msj = "<center> $prefijo[0] ESTUDIANTE " . $estudainte . " NO FUE PROMOVID$prefijo[1] AL GRADO SIGUIENTE ($materiasPerdidas) MATERIA$plural PERDIDA$plural</center>";
-            elseif ($materiasPerdidas < $config["conf_num_materias_perder_agno"] and $materiasPerdidas > 0)
-                $msj = "<center> $prefijo[0] ESTUDIANTE " . $estudainte . " DEBE NIVELAR LA$plural ($materiasPerdidas) MATERIA$plural PERDIDA$plural</center>";
-            else
+            elseif ($materiasPerdidas < $config["conf_num_materias_perder_agno"] and $materiasPerdidas > 0){
+                if(($config['conf_id_institucion'] == NUEVO_GANDY || $config['conf_id_institucion'] == INTEGRADO_POPULAR) && $materiasPerdidas = 1){
+                    $promedioGeneral = self::notaDecimales($promedioGeneral);
+                    if ($promedioGeneral  < $config['conf_nota_minima_aprobar']) {
+                        $msj = "<center> $prefijo[0] ESTUDIANTE " . $estudainte . " DEBE NIVELAR LA$plural ($materiasPerdidas) MATERIA$plural PERDIDA$plural</center>";
+                    }else{
+                        $msj = "<center> $prefijo[0] ESTUDIANTE " . $estudainte . " FUE PROMOVID$prefijo[1] AL GRADO SIGUIENTE</center>"; 
+                    }
+                }else{
+                    $msj = "<center> $prefijo[0] ESTUDIANTE " . $estudainte . " DEBE NIVELAR LA$plural ($materiasPerdidas) MATERIA$plural PERDIDA$plural</center>";
+                }
+                
+            }else
                 $msj = "<center> $prefijo[0] ESTUDIANTE " . $estudainte . " FUE PROMOVID$prefijo[1] AL GRADO SIGUIENTE</center>";
         }
         
