@@ -24,7 +24,7 @@
 					<span id="mensajeGrupos" style="color: #6017dc; display:none;">Espere un momento mientras se cargan los grupos.</span>
 					<select class="form-control" id="gruposMatricula" name="grupo"  <?= $disabledPermiso; ?>>
 						<?php 
-                        $cv = Grupos::traerGrupos($conexion, $config);
+                        $cv = Grupos::listarGrupos();
 						while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
 							if ($rv['gru_id'] == $datosEstudianteActual['mat_grupo'])
 								echo '<option value="' . $rv['gru_id'] . '" selected>' . $rv['gru_nombre'] . '</option>';
@@ -162,7 +162,7 @@
 				<div style="display: none;">
 					<select id="grupoBase" multiple class="form-control select2-multiple">
 						<?php
-                        $cv = Grupos::traerGrupos($conexion, $config);
+                        $cv = Grupos::listarGrupos();
 						while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
 							echo '<option value="' . $rv['gru_id'] . '" selected >' . $rv['gru_nombre'] . '</option>';
 						} ?>
@@ -209,7 +209,7 @@
 											<td>
 												<select id="grupo-<?= $idCurso["gra_id"]; ?>" class="form-control" onchange="editarCurso('<?= $idCurso['gra_id']; ?>')" <?= $disabledPermiso; ?>>
 													<?php
-													$cv = Grupos::traerGrupos($conexion, $config);
+													$cv = Grupos::listarGrupos();
 													while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
 														if ($rv['gru_id'] == $idCurso['matcur_id_grupo'])
 															echo '<option value="' . $rv['gru_id'] . '" selected>' . $rv['gru_nombre'] . '</option>';
