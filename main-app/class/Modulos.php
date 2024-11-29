@@ -116,61 +116,14 @@ class Modulos {
     }
 
     /**
-     * Verifica si los módulos de una institución están habilitados.
-     *
-     * @global mysqli $conexion - La conexión a la base de datos.
-     * @global string $baseDatosServicios - El nombre de la base de datos de servicios.
-     *
-     * @param int $idInstitucion - El ID de la institución.
-     * @param int $idModulo - El ID del módulo.
-     *
-     * @return bool - Devuelve `true` si los módulos de la institución están habilitados, de lo contrario, devuelve `false`.
-     *
-     * @example
-     * ```php
-     * // Ejemplo de uso para verificar módulos de una institución
-     * $idInstitucion = 1;
-     * $idModulo = 2;
-     * if (verificarModulosDeInstitucion($idInstitucion, $idModulo)) {
-     *     echo "Los módulos de la institución están habilitados.";
-     * } else {
-     *     echo "Los módulos de la institución no están habilitados.";
-     * }
-     * ```
+     * Utiliza los modulos activos para la institución cargados en la sesion al momento
+     * de la autenticación.
+     * 
+     * Todo: Se debe hacer una limpieza del parametro idInstitucion, ya que no es más necesario.
      */
-    public static function verificarModulosDeInstitucion(int $idInstitucion, int $idModulo): bool
+    public static function verificarModulosDeInstitucion(int|null $idInstitucion = null, int $idModulo): bool
     {
-        global $conexion, $baseDatosServicios;
-
-        $consultaModulos = mysqli_query($conexion, "SELECT ipmod_modulo AS id_modulo 
-        FROM ".BD_ADMIN.".instituciones_modulos 
-        WHERE 
-            ipmod_institucion='".$idInstitucion."' 
-        AND ipmod_modulo='".$idModulo."'
-        UNION
-        SELECT paqext_id_paquete AS id_modulo 
-        FROM ".BD_ADMIN.".instituciones_paquetes_extras 
-        WHERE 
-            paqext_institucion='".$idInstitucion."' 
-        AND paqext_id_paquete='".$idModulo."' 
-        AND paqext_tipo='".MODULOS."'
-        ");
-
-        $modulos = mysqli_fetch_array($consultaModulos, MYSQLI_BOTH);
-
-        if (empty($modulos[0])) {
-            $datosPaquetes = Plataforma::contarDatosPaquetes($idInstitucion, PAQUETES);
-            if (!empty($datosPaquetes['plns_modulos'])) {
-                $modulosArray = explode(',', $datosPaquetes['plns_modulos']);
-                if (in_array($idModulo, $modulosArray)) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        return true;
+        return !empty($_SESSION["modulos"]) && array_key_exists($idModulo, $_SESSION["modulos"]);
     }
 
     /**

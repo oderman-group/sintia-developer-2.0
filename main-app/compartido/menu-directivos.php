@@ -278,14 +278,14 @@
 							
 							<?php 
 							//MÓDULO MERCADEO
-								if(Modulos::verificarModulosDeInstitucion($informacion_inst["info_institucion"], Modulos::MODULO_MERCADEO)){
+								if(Modulos::verificarModulosDeInstitucion(null, Modulos::MODULO_MERCADEO)){
 							?>
 								<li class="nav-item">
-									<a <?php validarModuloMenu(6, "#", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-phone"></i>
+									<a <?php validarModuloMenu(Modulos::MODULO_MERCADEO, "#", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-phone"></i>
 										<span class="title"><?=$frases[210][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 									</a>
 									<ul class="sub-menu">
-										<li class="nav-item"><a <?php validarModuloMenu(6, "#", MENU) ?> class="nav-link "> <span class="title"><?=$frases[75][$datosUsuarioActual['uss_idioma']];?></span></a></li>
+										<li class="nav-item"><a <?php validarModuloMenu(Modulos::MODULO_MERCADEO, "#", MENU) ?> class="nav-link "> <span class="title"><?=$frases[75][$datosUsuarioActual['uss_idioma']];?></span></a></li>
 									</ul>
 								</li>
 							<?php }?>
