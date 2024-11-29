@@ -8,8 +8,10 @@
 								) {
 							?>
 							<li <?php agregarClass(MENU_PADRE,["DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195","DT0196","DT0197"]) ?> data-step="2" data-intro="<b>Gestión Académica:</b> Aquí podrás gestionar las opciones académicas: Matriculas, cursos, áreas, asignaturas, cargas académicas, etc." data-position='left'>
-	                            <a <?php validarModuloMenu(Modulos::MODULO_ACADEMICO, "#", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="material-icons">assignment_ind</i>
-	                                <span class="title"><?=$frases[88][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
+	                            <a <?php validarModuloMenu(Modulos::MODULO_ACADEMICO, "#", MENU_PADRE) ?> class="nav-link nav-toggle"> 
+									<i class="fa fa-vcard"></i>
+	                                <span class="title"><?=$frases[88][$datosUsuarioActual['uss_idioma']];?></span> 
+									<span class="arrow"></span>
 	                            </a>
 	                            <ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0001","DT0062","DT0017","DT0020","DT0032","DT0121","DT0195","DT0196","DT0197"]) ?> >
 									
@@ -198,7 +200,7 @@
 								) {
 							?>
 							<li <?php agregarClass(MENU_PADRE,["DT0011","DT0122","DT0124","DT0126","DT0204","DT0205"]) ?> data-step="6" data-intro="<b>Gestión administrativa:</b> Gestiona tus tipos de usuarios, asigna roles y permisos. También puedes revisar las solicitudes desbloqueo." data-position='bottom' data-scrollTo='tooltip'>
-	                            <a <?php validarModuloMenu(Modulos::MODULO_ADMINISTRATIVO, "#", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-tachometer"></i>
+	                            <a <?php validarModuloMenu(Modulos::MODULO_ADMINISTRATIVO, "#", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-briefcase"></i>
 	                                <span class="title"><?=$frases[87][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 	                            </a>
 	                            <ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0011","DT0122","DT0124","DT0126","DT0204","DT0205"])?>>
@@ -249,7 +251,7 @@
 								) {
 							?>
 								<li <?php agregarClass(MENU_PADRE,["DT0281","DT0283","DT0285","DT0288","DT0289","DT0291","DT0308","DT0309","DT0311"]) ?> data-step="7" data-intro="<b>Módulo de cuestionarios:</b> Crear cuestionarios para evaluar a los usuarios de todos los roles y obten reportes precisos de dichos cuestionarios." data-position='bottom' data-scrollTo='tooltip'>
-									<a <?php validarModuloMenu(Modulos::MODULO_CUESTIONARIOS, "#", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-question"></i>
+									<a <?php validarModuloMenu(Modulos::MODULO_CUESTIONARIOS, "#", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-check-square-o"></i>
 										<span class="title"><?=$frases[388][$datosUsuarioActual['uss_idioma']];?></span> <span class="arrow"></span>
 									</a>
 									<ul class="sub-menu" <?php agregarClass(SUB_MENU,["DT0281","DT0283","DT0285","DT0288","DT0289","DT0291","DT0308","DT0309","DT0311"])?>>								
