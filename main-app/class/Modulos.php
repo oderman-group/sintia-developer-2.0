@@ -5,19 +5,33 @@ require_once(ROOT_PATH."/main-app/class/BindSQL.php");
 
 class Modulos {
 
-    public const MODULO_ACADEMICO      = 1;
-    public const MODULO_FINANCIERO     = 2;
-    public const MODULO_DISCIPLINARIO  = 3;
-    public const MODULO_ADMINISTRATIVO = 4;
-    public const MODULO_COMUNICATIVO   = 5;
-    public const MODULO_MERCADEO       = 6;
-    public const MODULO_GENERAL        = 7;
-    public const MODULO_ADMISIONES     = 8;
-    public const MODULO_RESERVA_CUPO   = 9;
-    public const MODULO_MEDIA_TECNICA  = 10;
-    public const MODULO_SUB_ROLES      = 16;
-    public const MODULO_CUESTIONARIOS  = 18;
-    public const MODULO_INFORMES_BASE  = 22;
+    public const MODULO_ACADEMICO       = 1;
+    public const MODULO_FINANCIERO      = 2;
+    public const MODULO_DISCIPLINARIO   = 3;
+    public const MODULO_ADMINISTRATIVO  = 4;
+    public const MODULO_COMUNICATIVO    = 5;
+    public const MODULO_MERCADEO        = 6;
+    public const MODULO_GENERAL         = 7;
+    public const MODULO_ADMISIONES      = 8;
+    public const MODULO_RESERVA_CUPO    = 9;
+    public const MODULO_MEDIA_TECNICA   = 10;
+    public const MODULO_CLASES          = 11; // También incluye las unidades temáticas
+    public const MODULO_EVALUACIONES    = 12;
+    public const MODULO_FOROS           = 13;
+    public const MODULO_ACTIVIDAES      = 14; // Tareas para la casa
+    public const MODULO_CRONOGRAMA      = 15;
+    public const MODULO_SUB_ROLES       = 16;
+    public const MODULO_MI_CUENTA       = 17;
+    public const MODULO_CUESTIONARIOS   = 18;
+    public const MODULO_CARPETAS        = 19;
+    public const MODULO_MARKETPLACE     = 20;
+    public const MODULO_IMPORTAR_INFO   = 21;
+    public const MODULO_INFORMES_BASE   = 22;
+    public const MODULO_CUALITATIVO     = 23; // Calificaciones cualitativas
+    public const MODULO_FAC_RECURRENTES = 30;
+    public const MODULO_REP_FIN_GRAFICO = 31;
+    public const MODULO_CHAT_ATENCION   = 34;
+    public const MODULO_AI_INDICADORES  = 35;
 
     /**
      * Verifica los permisos de acceso a una página interna según el ID de la página.
@@ -301,26 +315,40 @@ class Modulos {
     {
         global $conexion, $baseDatosServicios, $config;
 
-        $consultaPaginaActualUsuarios = mysqli_query($conexion, "SELECT pp.* FROM ".BD_ADMIN.".paginas_publicidad pp
-        INNER JOIN ".BD_ADMIN.".instituciones_modulos ON ipmod_modulo=pagp_modulo AND ipmod_institucion='".$config['conf_id_institucion']."'
+        $consultaPaginaActualUsuarios = mysqli_query($conexion, "SELECT pp.* 
+        FROM ".BD_ADMIN.".paginas_publicidad pp
+        INNER JOIN ".BD_ADMIN.".instituciones_modulos 
+            ON ipmod_modulo=pagp_modulo 
+            AND ipmod_institucion='".$config['conf_id_institucion']."'
         WHERE pagp_id='".$idPaginaInterna."'
         UNION
         SELECT pp.* FROM ".BD_ADMIN.".paginas_publicidad pp
-        INNER JOIN ".BD_ADMIN.".instituciones_paquetes_extras ON paqext_institucion='".$config['conf_id_institucion']."' AND paqext_id_paquete=pagp_modulo AND paqext_tipo='".MODULOS."'
-        WHERE pagp_id='".$idPaginaInterna."'");
+        INNER JOIN ".BD_ADMIN.".instituciones_paquetes_extras 
+            ON paqext_institucion='".$config['conf_id_institucion']."' 
+            AND paqext_id_paquete=pagp_modulo 
+            AND paqext_tipo='".MODULOS."'
+        WHERE 
+            pagp_id='".$idPaginaInterna."'
+        ");
+
         $paginaActualUsuario = mysqli_fetch_array($consultaPaginaActualUsuarios, MYSQLI_BOTH);
+
         if (empty($paginaActualUsuario)) { 
             $datosPaquetes = Plataforma::contarDatosPaquetes($config['conf_id_institucion'], PAQUETES);
+
             if (!empty($datosPaquetes['plns_modulos'])) {
                 $consultaPaginaActualUsuarios2 = mysqli_query($conexion, "SELECT * FROM ".BD_ADMIN.".paginas_publicidad pp
                 WHERE pagp_id='".$idPaginaInterna."' AND pagp_modulo IN (".$datosPaquetes['plns_modulos'].")");
                 $paginaActualUsuario = mysqli_fetch_array($consultaPaginaActualUsuarios2, MYSQLI_BOTH);
+
                 if (!empty($paginaActualUsuario)) { 
                     return $paginaActualUsuario;
                 }
             }
+
             return [];
         }
+
         return $paginaActualUsuario;
     }
 
@@ -375,6 +403,7 @@ class Modulos {
         int     $idInstitucion
     ){
         $arregloModulos = array();
+
         $modulosSintia = mysqli_query($conexion, "SELECT mod_id, mod_nombre FROM ".BD_ADMIN.".modulos
         INNER JOIN ".BD_ADMIN.".instituciones_modulos ON ipmod_institucion='".$idInstitucion."' AND ipmod_modulo=mod_id
         WHERE mod_estado=1
@@ -382,11 +411,13 @@ class Modulos {
         SELECT mod_id, mod_nombre FROM ".BD_ADMIN.".modulos
         INNER JOIN ".BD_ADMIN.".instituciones_paquetes_extras ON paqext_institucion='".$idInstitucion."' AND paqext_id_paquete=mod_id AND paqext_tipo='".MODULOS."'
         WHERE mod_estado=1");
+
         while($modI = mysqli_fetch_array($modulosSintia, MYSQLI_BOTH)){
             $arregloModulos [$modI['mod_id']] = $modI['mod_nombre'];
         }
 
         $datosPaquetes = Plataforma::contarDatosPaquetes($idInstitucion, PAQUETES);
+
         if (!empty($datosPaquetes['plns_modulos'])) {
             $modulosSintia2 = mysqli_query($conexion, "SELECT mod_id, mod_nombre FROM ".BD_ADMIN.".modulos
             INNER JOIN ".BD_ADMIN.".instituciones_modulos ON ipmod_institucion='".$idInstitucion."' AND ipmod_modulo=mod_id

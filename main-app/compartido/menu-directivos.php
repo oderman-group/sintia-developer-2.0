@@ -278,7 +278,7 @@
 							
 							<?php 
 							//MÓDULO MERCADEO
-								if(Modulos::validarModulosActivos($conexion, 6)){
+								if(Modulos::verificarModulosDeInstitucion($informacion_inst["info_institucion"], Modulos::MODULO_MERCADEO)){
 							?>
 								<li class="nav-item">
 									<a <?php validarModuloMenu(6, "#", MENU_PADRE) ?> class="nav-link nav-toggle"> <i class="fa fa-phone"></i>
