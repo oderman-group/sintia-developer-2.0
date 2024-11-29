@@ -20,10 +20,10 @@ if (!empty($data["dataTotal"])) {
 }
 
 $contReg               = 1;
-$moduloMediaTecnica    = Modulos::validarModulosActivos($conexion, 10);
-$moduloAdministrativo  = Modulos::validarModulosActivos($conexion, modulo: 4);
-$moduloFinanciero      = Modulos::validarModulosActivos($conexion, modulo: 2);
-$moduloConvivencia     = Modulos::validarModulosActivos($conexion, modulo: 3);
+$moduloMediaTecnica    = Modulos::verificarModulosDeInstitucion($informacion_inst["info_institucion"], Modulos::MODULO_MEDIA_TECNICA);
+$moduloAdministrativo  = Modulos::verificarModulosDeInstitucion($informacion_inst["info_institucion"], Modulos::MODULO_ADMINISTRATIVO);
+$moduloFinanciero      = Modulos::verificarModulosDeInstitucion($informacion_inst["info_institucion"], Modulos::MODULO_FINANCIERO);
+$moduloConvivencia     = Modulos::verificarModulosDeInstitucion($informacion_inst["info_institucion"], Modulos::MODULO_DISCIPLINARIO);
 
 $permisoBloquearUsuario   = Modulos::validarSubRol(['DT0087']);
 $permisoCambiarEstado     = Modulos::validarSubRol(['DT0217']);
