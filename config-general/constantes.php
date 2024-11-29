@@ -24,9 +24,9 @@ define('JOBS_PRIORIDAD_ALTA', '1');
 define('JOBS_PRIORIDAD_MEDIA', '2');
 define('JOBS_PRIORIDAD_BAJA', '3');
 
-define('MENU', 'menu');
-define('MENU_PADRE', 'menu-padre');
-define('SUB_MENU', 'sub-menu');
+define('MENU_PADRE', 'menu-padre'); // Ejemplo: G. Académica, Inscripciones.
+define('SUB_MENU', 'sub-menu'); // El UL contenedor de los items del menú.
+define('MENU', 'menu'); // Item final del menú con link a una pagina.
 
 // Solicitudes de cancelación de uso de la plataforma
 define('SOLICITUD_CANCELACION_PENDIENTE', 'Pendiente');

@@ -28,7 +28,7 @@ if (!empty($_SESSION["infoCargaActual"])) {
     }
 
     .elemento-draggable .blogThumb {
-        height: 200px; /* Establece la altura que desees */
+        height: 250px; /* Establece la altura que desees */
         overflow: hidden; /* Oculta el contenido que sobrepase la altura */
     }
 </style>
@@ -112,7 +112,7 @@ if (!empty($_SESSION["infoCargaActual"])) {
                                 }
 
                                 if (!empty($_COOKIE["carga"]) && $carga['car_id'] == $_COOKIE["carga"]) {
-                                    $fondoCargaActual = '#6017dc1f';
+                                    $fondoCargaActual = '#2836551f';
                                     $seleccionado     = true;
                                 }
 
@@ -143,7 +143,7 @@ if (!empty($_SESSION["infoCargaActual"])) {
                                 ?>
                                 <div class="col-lg-2 col-md-6 col-12 col-sm-6 sortable-item elemento-draggable"
                                     draggable="true" id="carga-<?= $carga['car_id']; ?>">
-                                    <div class="blogThumb border border-info" style="background-color:<?= $fondoCargaActual; ?>;">
+                                    <div class="blogThumb border border-dark" style="background-color:<?= $fondoCargaActual; ?>;">
                                         <!-- <div class="thumb-center">
                                             <a href="cargas-seleccionar.php?carga=<?= base64_encode($carga['car_id']); ?>&periodo=<?= base64_encode($carga['car_periodo']); ?>"
                                                 title="Entrar">
