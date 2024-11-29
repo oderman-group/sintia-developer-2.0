@@ -15,6 +15,7 @@ require_once(ROOT_PATH . "/main-app/class/Boletin.php");
 require_once(ROOT_PATH . "/main-app/class/Indicadores.php");
 require_once(ROOT_PATH . "/main-app/class/Utilidades.php");
 require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php");
+require_once(ROOT_PATH . "/main-app/class/Disciplina.php");
 
 $year = $_SESSION["bd"];
 if (isset($_GET["year"])) {
@@ -393,9 +394,8 @@ if ($grado >= 12 && $grado <= 15) {
                                         $explode = explode(",", $rndisiplina['dn_observacion']);
                                         $numDatos = count($explode);
                                         for ($i = 0; $i < $numDatos; $i++) {
-                                            $consultaObservaciones = mysqli_query($conexion, "SELECT * FROM " . $baseDatosServicios . ".observaciones WHERE obser_id=$explode[$i] AND obser_id_institucion=" . $config['conf_id_institucion'] . " AND obser_years=" . $config['conf_agno'] . "");
-                                            $observaciones = mysqli_fetch_array($consultaObservaciones, MYSQLI_BOTH);
-                                            echo "- " . $observaciones['obser_descripcion'] . "<br>";
+                                            $observaciones = Disciplina::traerDatosObservacion($config, $explode[$i], "obser_descripcion");
+                                            echo "- " . $observaciones['obser_descripcion'] . "<br> ";
                                         }
                                     } else {
                                         echo "- " . $rndisiplina["dn_observacion"] . "<br>";

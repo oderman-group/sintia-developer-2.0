@@ -124,7 +124,7 @@ if ($periodoActual == 4)
         while ($row = $datos->fetch_assoc()) {
             $listaDatos[] = $row;
         }
-        include("../compartido/agrupar-datos-boletin-periodos_mejorado.php");
+        include("../compartido/agrupar-datos-boletin-periodos-mejorado.php");
     }
     $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
     ?>

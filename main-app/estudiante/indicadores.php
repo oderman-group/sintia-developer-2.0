@@ -35,19 +35,18 @@ require_once(ROOT_PATH."/main-app/class/Calificaciones.php");?>
 						<div class="row">
 
 							<div class="col-md-4 col-lg-3">
-
 								<div class="panel">
 									<header class="panel-heading panel-heading-purple"><?= $frases[106][$datosUsuarioActual['uss_idioma']]; ?> </header>
 									<div class="panel-body">
 										<?php
 										$porcentaje = 0;
 										for ($i = 1; $i <= $datosEstudianteActual['gra_periodos']; $i++) {
-                                            $periodosCursos = Grados::traerPorcentajePorPeriodosGrados($conexion, $config, $datosEstudianteActual['mat_grado'], $i);
-                                            
-                                            $porcentajeGrado=25;
-                                            if(!empty($periodosCursos['gvp_valor'])){
-                                                $porcentajeGrado=$periodosCursos['gvp_valor'];
-                                            }
+											$periodosCursos = Grados::traerPorcentajePorPeriodosGrados($conexion, $config, $datosEstudianteActual['mat_grado'], $i);
+											
+											$porcentajeGrado=25;
+											if(!empty($periodosCursos['gvp_valor'])){
+												$porcentajeGrado=$periodosCursos['gvp_valor'];
+											}
 
 											$notapp = Boletin::traerNotaBoletinCargaPeriodo($config, $i, $datosEstudianteActual['mat_id'], $cargaConsultaActual);
 											$porcentaje =0;
@@ -63,7 +62,11 @@ require_once(ROOT_PATH."/main-app/class/Calificaciones.php");?>
 												<a href="<?= $_SERVER['PHP_SELF']; ?>?carga=<?= base64_encode($cargaConsultaActual); ?>&periodo=<?= base64_encode($i); ?>" <?= $estiloResaltadoP; ?>><?= strtoupper($frases[27][$datosUsuarioActual['uss_idioma']]); ?> <?= $i; ?> (<?= $porcentajeGrado; ?>%)</a>
 
 												<?php
-													if(!empty($notapp['bol_nota']) and $config['conf_sin_nota_numerica']!=1){
+													if(
+														!empty($notapp['bol_nota']) && 
+														$config['conf_sin_nota_numerica']!=1 && 
+														!$config['conf_ocultar_panel_lateral_notas_estudiantes']
+													) {
 
 													$notaPorPeriodo=$notapp['bol_nota'];
 													if($config['conf_forma_mostrar_notas'] == CUALITATIVA){

@@ -66,7 +66,7 @@ function comportamientoPeriodo(datosPeriodo) {
  * @param {HTMLElement} element - El elemento en el cual se alternará el texto.
  */
 function toggleFullText(element) {
-    const fullText = element.getAttribute('title'); // Obtiene el texto completo del atributo 'title'.
+    const fullText = element.getAttribute('data-observacion'); // Obtiene el texto completo del atributo 'data-observacion'.
     const isExpanded = element.getAttribute('data-expanded') === 'true'; // Verifica si el texto ya está expandido.
 
     if (isExpanded) {

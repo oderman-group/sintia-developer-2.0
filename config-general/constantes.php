@@ -63,6 +63,8 @@ define('DEVELOPER', 22);
 define('DEVELOPER_PROD', 30);
 define('ELLEN_KEY', 16);
 define('EOA_CIRUELOS', 17);
+define('INTEGRADO_POPULAR', 24);
+define('NUEVO_GANDY', 23);
 
 /* CONSTANTES ACADEMICAS */
 define('CONFIG_MANUAL_CALIFICACIONES', 1);

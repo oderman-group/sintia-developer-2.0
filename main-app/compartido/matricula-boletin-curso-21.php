@@ -21,11 +21,13 @@ if (isset($_GET["year"])) {
 }
 
 $modulo = 1;
+$periodoFinal=false;
 if (empty($_GET["periodo"])) {
     $periodoActual = 1;
 } else {
     $periodoActual = base64_decode($_GET["periodo"]);
 }
+$periodoFinal= ($periodoActual == $config['conf_periodos_maximos']);
 
 if ($periodoActual == 1)
     $periodoActuales = "Primero";
@@ -98,7 +100,7 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
     while ($row = $datos->fetch_assoc()) {
         $listaDatos[] = $row;
     }
-    include("../compartido/agrupar-datos-boletin-periodos_mejorado.php");
+    include("../compartido/agrupar-datos-boletin-periodos-mejorado.php");
 }
 
 
@@ -161,7 +163,7 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
                     <td width="2%" rowspan="2">I.H.</td>
 
                     <?php for ($j = 1; $j <= $periodoActual; $j++) { ?>
-                        <td width="3%" colspan="2"><a href="<?= $_SERVER['PHP_SELF']; ?>?id=<?= $datosUsr['mat_id']; ?>&periodo=<?= $j ?>" style="color:#000; text-decoration:none;">Periodo <?= $j ?></a></td>
+                        <td width="3%" colspan="2"><a href="<?= $_SERVER['PHP_SELF']; ?>?id=<?= $estudiante['mat_id']; ?>&periodo=<?= $j ?>" style="color:#000; text-decoration:none;">Periodo <?= $j ?></a></td>
                     <?php } ?>
                     <td width="3%" colspan="3">Final</td>
                 </tr>
@@ -210,8 +212,10 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
                                 
                                 $nota = $carga["periodos"][$j]["bol_nota"];
                                 ?>
-                                <td align="center">
-                                    <?= $recupero ? $carga['periodos'][$j]['bol_nota_anterior'] . " / " . Boletin::formatoNota($nota, $tiposNotas) . " Recuperada" : Boletin::formatoNota($nota, $tiposNotas) ?>
+                                <td align="center">                                    
+                                   
+                                    <?= $recupero ? $carga['periodos'][$j]['bol_nota_anterior'] . " /  <span style='font-weight: bold;'> " . Boletin::formatoNota($nota, $tiposNotas) . " Recu. </span>" :  Boletin::formatoNota($nota, $tiposNotas)?>
+                                   
                                 </td>
                                 <td align="center"><img
                                         src="../files/iconos/<?= Boletin::determinarRango($nota, $tiposNotas)['notip_imagen']; ?>"
@@ -223,7 +227,9 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
                                 }
                             }
 
-                            $notaFinal = $carga["carga_acumulada"];
+                            $notaFinal =$periodoFinal? $carga["nota_carga_acumulada"]: $carga["suma_nota_carga"]/$periodoActual;
+                            $notaFinal = round($notaFinal, $config['conf_decimales_notas']);
+						    $notaFinal = number_format($notaFinal, $config['conf_decimales_notas']);
                             Utilidades::valordefecto($promedios[$j], 0);
                             Utilidades::valordefecto($ausencias[$j], 0);
                             $promedios[$j] += $notaFinal;
@@ -245,16 +251,35 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
                 <tr style="font-weight:bold; text-align:center;">
                     <td style="text-align:left;">PROMEDIO GENERAL</td>
                     <td>&nbsp;</td>
-                    <?php foreach ($estudiante["promedios_generales"] as $promedio) {
-						$promedio = round(($promedio["suma_notas_materias"] / ($promedio["cantidad_materias"])), $config['conf_decimales_notas']);
+                    <?php
+                        $promedioFinal     = 0; 
+                        $porcentajePeriodo = 0;
+                        for ($k = 1; $k <= $periodoActual; $k++) {
+                            if ( !empty($estudiante["promedios_generales"][$k]["suma_notas_materias"]) ) {
+                                $notaPromedio      = $estudiante["promedios_generales"][$k]["suma_notas_materias"] ;
+                                $cantidadMaterias  = $estudiante["promedios_generales"][$k]["cantidad_materias"] ;
+                                $porcentajePeriodo = $estudiante["promedios_generales"][$k]["porcentaje_periodo"] ;
+                                $promedio = round(( $notaPromedio/ ( $cantidadMaterias)), $config['conf_decimales_notas']);
+                            }else{
+                                $notaPromedio      = 0;
+                                $porcentajePeriodo = 0;
+                                $promedio          = 0;
+                            }
+
+						
 						$promedio = number_format($promedio, $config['conf_decimales_notas']);
+                        
+                        $promedioFinal +=  $periodoFinal? $promedio * ($porcentajePeriodo/100): $promedio/$periodoActual;
 						?>
-                        <td align="center" style="font-weight:bold; background:#EAEAEA; font-size:16px;" ><?= Boletin::formatoNota($promedio, $tiposNotas); ?></td>
+                        <td align="center" style="font-weight:bold;  font-size:14px;" ><?= Boletin::formatoNota($promedio, $tiposNotas); ?></td>
                         <td align="center"><img
                                 src="../files/iconos/<?= Boletin::determinarRango($promedio, $tiposNotas)['notip_imagen']; ?>"
                                 width="15" height="15"></td>
 					<?php } ?>
-                    <td>-</td>
+                    <td align="center" style="font-weight:bold;  font-size:14px;" ><?= Boletin::formatoNota($promedioFinal, $tiposNotas); ?></td>
+                        <td align="center"><img
+                                src="../files/iconos/<?= Boletin::determinarRango($promedioFinal, $tiposNotas)['notip_imagen']; ?>"
+                                width="15" height="15"></td>
                 </tr>
                 <tr style="font-weight:bold; text-align:center;">
                     <td style="text-align:left;">AUSENCIAS</td>

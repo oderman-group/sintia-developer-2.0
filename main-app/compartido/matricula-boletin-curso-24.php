@@ -75,11 +75,11 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
 	for ($i = 1; $i <= $periodoActual; $i++) {
 		$periodos[$i] = $i;
 	}
-	$datos = Boletin::datosBoletin($curso, $grupo, $periodos, $year, $idEstudiante, true);
+	$datos = Boletin::datosBoletin($curso, $grupo, $periodos, $year, $idEstudiante);
 	while ($row = $datos->fetch_assoc()) {
 		$listaDatos[] = $row;
 	}
-	include("../compartido/agrupar-datos-boletin-periodos_mejorado.php");
+	include("../compartido/agrupar-datos-boletin-periodos-mejorado.php");
 }
 ?>
 <!doctype html>
@@ -137,7 +137,7 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
 
 					<?php
 					for ($j = 1; $j <= $periodoActual; $j++) {
-						$valorPeriodo = $estudiante["promedios_generales"][$j]["porcentaje_periodo"];
+						$valorPeriodo =empty($estudiante["promedios_generales"][$j]["porcentaje_periodo"])?(100/$periodoActual):$estudiante["promedios_generales"][$j]["porcentaje_periodo"];
 						?>
 						<td width="3%" colspan="2">Periodo <?= $j . "<br>($valorPeriodo%)" ?></>
 						</td>
@@ -211,7 +211,7 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
 							<!-- INDICADORES -->
 							<tr>
 								<td colspan="<?= (2 * $periodoActual) - 1 ?>">
-									<?= $indicador['ind_id'] . ") " . $indicador['ind_nombre']; ?>
+									<?= $indicador['ind_id'] . " " . $indicador['ind_nombre']; ?>
 								</td>
 								<td align="center"> <?= $indicador['valor_porcentaje_indicador'] . "%"; ?></td>
 								<td align="center"
@@ -230,9 +230,19 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
 					<?php
 					$promedioAcumulado = 0;
 					for ($k = 1; $k <= $periodoActual; $k++) {
-						$promedio = round(($estudiante["promedios_generales"][$k]["suma_notas_materias"] / ($estudiante["promedios_generales"][$k]["cantidad_materias"])), $config['conf_decimales_notas']);
-						$promedioAcumulado += $promedio;
+						if ( !empty($estudiante["promedios_generales"][$k]["suma_notas_materias"]) ) {
+							$notaPromedio      = $estudiante["promedios_generales"][$k]["suma_notas_materias"] ;
+							$cantidadMaterias  = $estudiante["promedios_generales"][$k]["cantidad_materias"] ;
+							$porcentajePeriodo = $estudiante["promedios_generales"][$k]["porcentaje_periodo"] ;
+							$promedio = round(( $notaPromedio/ ( $cantidadMaterias)), $config['conf_decimales_notas']);
+						}else{
+							$notaPromedio      = 0;
+							$porcentajePeriodo = 0;
+							$promedio          = 0;
+						}
+						$promedioAcumulado += $promedio;						
 						$promedio = number_format($promedio, $config['conf_decimales_notas']);
+						
 						?>
 						<td><?= $promedio ?></td>
 						<td><?= Boletin::determinarRango($promedio, $tiposNotas)['notip_nombre'] ?></td>
@@ -298,7 +308,7 @@ if (!empty($curso) && !empty($grupo) && !empty($year)) {
 				</td>
 			</tr>
 		</table>
-
+		<p>&nbsp;</p>
 		<div id="saltoPagina"></div>
 
 		<?php

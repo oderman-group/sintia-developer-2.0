@@ -167,7 +167,7 @@ $contadorEstudiantes = 0;
                         <?=$informacion_inst["info_direccion"]?><br>
                         Informes: <?=$informacion_inst["info_telefono"]?>
                     </td>
-                    <td>Código:<br> <b style="color: #00adefad;"><?=number_format($matriculadosDatos["mat_id"],0,",",".");?></b></td>
+                    <td>Código:<br> <b style="color: #00adefad;"><?=$matriculadosDatos["mat_id"];?></b></td>
                     <td>Nombre:<br> <b style="color: #00adefad;"><?=$nombreEstudainte?></b></td>
                 </tr>
                 <tr>

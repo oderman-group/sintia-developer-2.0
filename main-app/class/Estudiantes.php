@@ -286,6 +286,8 @@ class Estudiantes {
                         AND   matcur_id_institucion  = ?
                         AND   matcur_years           = ?
                         AND   matcur_estado          = '".ACTIVO."'
+                        AND   matcur_id_curso        = car.car_curso 
+                        AND   matcur_id_grupo        = car.car_grupo
                         
                         GROUP BY mat.mat_id 
                         HAVING acumulado < ".Boletin::PORCENTAJE_MINIMO_GENERAR_INFORME."  OR acumulado IS NULL
