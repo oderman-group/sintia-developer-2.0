@@ -8,6 +8,7 @@ require_once(ROOT_PATH."/main-app/class/Usuarios.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/Instituciones.php");
 require_once(ROOT_PATH."/main-app/class/Usuarios/Directivo.php");
+require_once ROOT_PATH.'/main-app/class/App/Administrativo/Usuario/SubRoles.php';
 
 class Autenticate {
 
@@ -143,6 +144,7 @@ class Autenticate {
      */
     public function switchInstitution(int $idInstitucion, array $datosUsuarioActual): void
     {
+        // Si es la misma Institucion
         if ($_SESSION["idInstitucion"] == $idInstitucion) {
             return;
         }
@@ -165,13 +167,17 @@ class Autenticate {
         $dataInstitution  = mysqli_fetch_array($objetInstitution, MYSQLI_ASSOC);
         $mySelf           = Directivo::getMyselfByDocument($datosUsuarioActual["uss_documento"], $datosUsuarioActual["uss_tipo"], $idInstitucion);
 
-        $_SESSION["idInstitucion"]           = $idInstitucion;
-        $_SESSION['id']                      = $mySelf["uss_id"];
-        $_SESSION["inst"]                    = $dataInstitution['ins_bd'];
-        $_SESSION["bd"]                      = $dataInstitution['ins_year_default'];
-        $_SESSION["datosUnicosInstitucion"]  = $dataInstitution;
-        $_SESSION["modulos"]                 = RedisInstance::getModulesInstitution(true);
-        $_SESSION["informacionInstConsulta"] = Instituciones::getGeneralInformationFromInstitution($_SESSION["idInstitucion"], $_SESSION["bd"]);;
-        $_SESSION["datosUsuario"]            = UsuariosPadre::sesionUsuario($_SESSION['id']);
+        $infoRolesUsuario = Administrativo_Usuario_SubRoles::getInfoRolesFromUser($mySelf["uss_id"], $idInstitucion);
+
+        $_SESSION["idInstitucion"]                     = $idInstitucion;
+        $_SESSION['id']                                = $mySelf["uss_id"];
+        $_SESSION["inst"]                              = $dataInstitution['ins_bd'];
+        $_SESSION["bd"]                                = $dataInstitution['ins_year_default'];
+        $_SESSION["datosUnicosInstitucion"]            = $dataInstitution;
+        $_SESSION["modulos"]                           = RedisInstance::getModulesInstitution(true);
+        $_SESSION["informacionInstConsulta"]           = Instituciones::getGeneralInformationFromInstitution($_SESSION["idInstitucion"], $_SESSION["bd"]);
+        $_SESSION["datosUsuario"]                      = UsuariosPadre::sesionUsuario($_SESSION['id']);
+        $_SESSION["datosUsuario"]["sub_roles"]         = $infoRolesUsuario['datos_sub_roles_usuario'];
+        $_SESSION["datosUsuario"]["sub_roles_paginas"] = $infoRolesUsuario['valores_paginas'];
     }
 }

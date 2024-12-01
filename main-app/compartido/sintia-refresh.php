@@ -5,6 +5,7 @@ $idPaginaInterna = 'CM0063';
 include(ROOT_PATH."/main-app/compartido/historial-acciones-guardar.php");
 require_once(ROOT_PATH."/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/RedisInstance.php");
+require_once ROOT_PATH.'/main-app/class/App/Administrativo/Usuario/SubRoles.php';
 
 $config = RedisInstance::getSystemConfiguration(true);
 
@@ -26,34 +27,10 @@ $rst_usr = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_id='".$_SESSI
 $fila = mysqli_fetch_array($rst_usr, MYSQLI_BOTH);
 $_SESSION["datosUsuario"] = $fila;
 
-$consultaSubRolesUsuario = mysqli_query($conexion, "SELECT spu_id_sub_rol 
-FROM ".$baseDatosServicios.".sub_roles_usuarios 
-WHERE 
-    spu_id_usuario='".$_SESSION["id"]."' 
-AND spu_institucion='".$config['conf_id_institucion']."'
-");
+$infoRolesUsuario = Administrativo_Usuario_SubRoles::getInfoRolesFromUser($_SESSION["id"], $config['conf_id_institucion']);
 
-$datosSubRolesUsuario = [];
-$valoresPaginas       = [];
-
-if (mysqli_num_rows($consultaSubRolesUsuario) > 0) {
-    $datosSubRolesUsuario = mysqli_fetch_all($consultaSubRolesUsuario, MYSQLI_ASSOC);
-    $datosSubRolesUsuario = array_column($datosSubRolesUsuario, 'spu_id_sub_rol');
-    $valoresCadena        = implode(',', $datosSubRolesUsuario);
-
-    //Consulta de paginas habilitadas para los subroles del usuario.
-    $consultaPaginaSubRoles = mysqli_query($conexion, "SELECT * 
-    FROM ".$baseDatosServicios.".sub_roles_paginas 
-    WHERE 
-        spp_id_rol IN ($valoresCadena)
-    ");
-
-    $subRolesPaginas = mysqli_fetch_all($consultaPaginaSubRoles, MYSQLI_ASSOC);
-    $valoresPaginas  = array_column($subRolesPaginas, 'spp_id_pagina');
-}
-
-$_SESSION["datosUsuario"]["sub_roles"]         = $datosSubRolesUsuario;
-$_SESSION["datosUsuario"]["sub_roles_paginas"] = $valoresPaginas;
+$_SESSION["datosUsuario"]["sub_roles"]         = $infoRolesUsuario['datos_sub_roles_usuario'];
+$_SESSION["datosUsuario"]["sub_roles_paginas"] = $infoRolesUsuario['valores_paginas'];
 
 include(ROOT_PATH."/main-app/compartido/guardar-historial-acciones.php");
 echo '<script type="text/javascript">window.location.href="' . $_SERVER['HTTP_REFERER'] . '";</script>';

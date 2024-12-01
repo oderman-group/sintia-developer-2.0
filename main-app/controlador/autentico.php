@@ -5,6 +5,7 @@ require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.ph
 require_once(ROOT_PATH."/main-app/class/Autenticate.php");
 require_once(ROOT_PATH."/main-app/class/Instituciones.php");
 require_once(ROOT_PATH."/main-app/class/RedisInstance.php");
+require_once ROOT_PATH.'/main-app/class/App/Administrativo/Usuario/SubRoles.php';
 
 $auth = Autenticate::getInstance();
 
@@ -136,54 +137,25 @@ if ($num>0)
 
 	$config = RedisInstance::getSystemConfiguration(true);
 
-	$informacionInstConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".general_informacion
-	LEFT JOIN ".$baseDatosServicios.".localidad_ciudades ON ciu_id=info_ciudad
-	LEFT JOIN ".$baseDatosServicios.".localidad_departamentos ON dep_id=ciu_departamento
-	WHERE info_institucion='" . $config['conf_id_institucion'] . "' AND info_year='" . $_SESSION["bd"] . "'");
-	$informacionInstitucion = mysqli_fetch_array($informacionInstConsulta, MYSQLI_BOTH);
+	$informacionInstitucion = Instituciones::getGeneralInformationFromInstitution($config['conf_id_institucion'], $_SESSION["bd"]);
 	$_SESSION["informacionInstConsulta"] = $informacionInstitucion;
 
-	$datosUnicosInstitucionConsulta = mysqli_query($conexion, "SELECT * FROM ".$baseDatosServicios.".instituciones 
-	WHERE ins_id='".$config['conf_id_institucion']."' AND ins_enviroment='".ENVIROMENT."'");
+	$datosUnicosInstitucionConsulta = Instituciones::getDataInstitution($config['conf_id_institucion']);
 	$datosUnicosInstitucion = mysqli_fetch_array($datosUnicosInstitucionConsulta, MYSQLI_BOTH);
 	$_SESSION["datosUnicosInstitucion"] = $datosUnicosInstitucion;
 
 	$arregloModulos = RedisInstance::getModulesInstitution(true);
 	$_SESSION["modulos"] = $arregloModulos;
 
-	$consultaSubRolesUsuario = mysqli_query($conexion, "SELECT spu_id_sub_rol 
-	FROM ".$baseDatosServicios.".sub_roles_usuarios 
-	WHERE 
-		spu_id_usuario='".$fila['uss_id']."' 
-	AND spu_institucion='".$config['conf_id_institucion']."'
-	");
-
-	$datosSubRolesUsuario = [];
-	$valoresPaginas       = [];
-
-	if (mysqli_num_rows($consultaSubRolesUsuario) > 0) {
-		$datosSubRolesUsuario = mysqli_fetch_all($consultaSubRolesUsuario, MYSQLI_ASSOC);
-		$datosSubRolesUsuario = array_column($datosSubRolesUsuario, 'spu_id_sub_rol');
-		$valoresCadena        = implode(',', $datosSubRolesUsuario);
-
-		//Consulta de paginas habilitadas para los subroles del usuario.
-		$consultaPaginaSubRoles = mysqli_query($conexion, "SELECT * 
-		FROM ".$baseDatosServicios.".sub_roles_paginas 
-		WHERE 
-			spp_id_rol IN ($valoresCadena)
-		");
-
-		$subRolesPaginas = mysqli_fetch_all($consultaPaginaSubRoles, MYSQLI_ASSOC);
-		$valoresPaginas  = array_column($subRolesPaginas, 'spp_id_pagina');
-	}
+	$infoRolesUsuario = Administrativo_Usuario_SubRoles::getInfoRolesFromUser($fila['uss_id'], $config['conf_id_institucion']);
 
 	//RedisInstance::getMatriculas(true);
 
 	//INICIO SESION
 	$_SESSION["id"]                                = $fila['uss_id'];
 	$_SESSION["datosUsuario"]                      = $fila;
-	$_SESSION["datosUsuario"]["sub_roles"]         = $datosSubRolesUsuario;
-	$_SESSION["datosUsuario"]["sub_roles_paginas"] = $valoresPaginas;
+	$_SESSION["datosUsuario"]["sub_roles"]         = $infoRolesUsuario['datos_sub_roles_usuario'];
+	$_SESSION["datosUsuario"]["sub_roles_paginas"] = $infoRolesUsuario['valores_paginas'];
 
 	include("navegador.php");
 
