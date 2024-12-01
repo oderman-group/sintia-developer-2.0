@@ -47,7 +47,7 @@ if(!isset($_GET['nodb'])) {
 
 <body>
     <div class="login-container">
-        <div class=" vertical-center text-center">
+        <div class="vertical-center text-center">
             <div class="container">
                 <div class="row">
                     <div class="col-md-8 offset-md-2" id="login">
