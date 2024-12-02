@@ -323,6 +323,11 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'Se te envío un correo con el nuevo usuarios de acceso.';
             break;
 
+            case 'SC_GN_7':
+                $tipo = 'success';
+                $mensaje = 'Hemos enviado su solicitud de desbloqueo, pronto un directivo se pondrá en contacto contigo.';
+            break;
+
             default:
                 $tipo = 'secondary';
                 $mensaje = 'Error desconocido: '.$_GET['error'];
