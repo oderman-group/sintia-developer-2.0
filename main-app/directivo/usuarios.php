@@ -26,7 +26,10 @@ if (!Modulos::validarPermisoEdicion()) {
 	rel="stylesheet" type="text/css" />
 </head>
 <!-- END HEAD -->
-<?php include("../compartido/body.php"); ?>
+<?php
+	include("../compartido/body.php");
+	include("usuarios-bloquear-modal.php");
+?>
 <div class="page-wrapper">
 	<?php include("../compartido/encabezado.php"); ?>
 
