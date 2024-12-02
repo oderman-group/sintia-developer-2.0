@@ -191,7 +191,7 @@ if (!Modulos::validarPermisoEdicion()) {
 																		<label class="switchToggle">
 																			<input type="checkbox"
 																				id="<?= $usuario['uss_id']; ?>" name="bloqueado"
-																				value="1" onChange="guardarAjax(this)"
+																				value="1" onChange="ajaxBloqueoDesbloqueo(this)"
 																				<?= $cheked; ?> 		<?= $disabledPermiso; ?>>
 																			<span class="slider red round"></span>
 																		</label>
