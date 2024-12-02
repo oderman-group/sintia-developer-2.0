@@ -2,7 +2,7 @@
 require_once ROOT_PATH.'/main-app/class/App/Administrativo/Usuario/Estudiante.php';
 
 $Estudiante = new Administrativo_Usuario_Estudiante([
-	'mat_id' => $id
+	'mat_id' => $idMatricula
 ]);
 
 $tieneRegistrosAcademicos = (bool) $Estudiante->tieneRegistrosAcademicos();

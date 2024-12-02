@@ -24,8 +24,9 @@ class Administrativo_Usuario_Estudiante extends BDT_Tablas{
         $resultado = Boletin::traerNotaBoletinEstudiante(
             [
                 'conf_id_institucion' => $_SESSION["idInstitucion"]
-            ], 
-            $this->estudiante['mat_id'], $_SESSION["bd"]
+            ],
+            $this->estudiante['mat_id'],
+            $_SESSION["bd"]
         );
 
         return !empty($resultado);
