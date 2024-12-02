@@ -1,3 +1,15 @@
+<?php
+require_once ROOT_PATH.'/main-app/class/App/Administrativo/Usuario/Estudiante.php';
+
+$Estudiante = new Administrativo_Usuario_Estudiante([
+	'mat_id' => $id
+]);
+
+$tieneRegistrosAcademicos = (bool) $Estudiante->tieneRegistrosAcademicos();
+
+$disabledCamposAcademicos = $tieneRegistrosAcademicos ? 'disabled' : '';
+?>
+
 <fieldset>
 	<div class="row">
 		<div class="col-sm-12 col-xl-6">
@@ -5,14 +17,13 @@
 				<label class="col-sm-3 control-label">Curso <span style="color: red;">(*)</span></label>
 				<div class="col-sm-9">
 					<select class="form-control" name="grado" id="gradoMatricula"  <?= $disabledPermiso; ?> onchange="listarGrupos(this.value)">
-						<option value="">Seleccione una opción</option>
 						<?php 
 						$cv = Grados::traerGradosInstitucion($config, GRADO_GRUPAL);
 						while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
 							if ($rv['gra_id'] == $datosEstudianteActual['mat_grado'])
 								echo '<option value="' . $rv['gra_id'] . '" selected>' . $rv['gra_nombre'] . '</option>';
 							else
-								echo '<option value="' . $rv['gra_id'] . '">' . $rv['gra_nombre'] . '</option>';
+								echo '<option value="' . $rv['gra_id'] . '" '.$disabledCamposAcademicos.'>' . $rv['gra_nombre'] . '</option>';
 						} ?>
 					</select>
 				</div>
@@ -29,7 +40,7 @@
 							if ($rv['gru_id'] == $datosEstudianteActual['mat_grupo'])
 								echo '<option value="' . $rv['gru_id'] . '" selected>' . $rv['gru_nombre'] . '</option>';
 							else
-								echo '<option value="' . $rv['gru_id'] . '">' . $rv['gru_nombre'] . '</option>';
+								echo '<option value="' . $rv['gru_id'] . '" '.$disabledCamposAcademicos.'>' . $rv['gru_nombre'] . '</option>';
 						} ?>
 					</select>
 				</div>
@@ -71,7 +82,7 @@
 					<select class="form-control" name="matestM" <?= $disabledPermiso; ?>>
 						<option value="">Seleccione una opción</option>
 						<?php foreach ($estadosMatriculasEstudiantes as $clave => $valor) { ?>
-							<option value="<?= $clave; ?>" <?php if ($datosEstudianteActual["mat_estado_matricula"] == $clave) echo 'selected'; ?>><?= $valor; ?></option>
+							<option value="<?= $clave; ?>" <?php if ($datosEstudianteActual["mat_estado_matricula"] == $clave) echo 'selected'; else echo $disabledCamposAcademicos ?>><?= $valor; ?></option>
 						<?php } ?>
 					</select>
 				</div>
