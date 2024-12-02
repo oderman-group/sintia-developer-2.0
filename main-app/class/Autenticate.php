@@ -166,7 +166,7 @@ class Autenticate {
         $objetInstitution = Instituciones::getDataInstitution($idInstitucion);
         $dataInstitution  = mysqli_fetch_array($objetInstitution, MYSQLI_ASSOC);
         $mySelf           = Directivo::getMyselfByDocument($datosUsuarioActual["uss_documento"], $datosUsuarioActual["uss_tipo"], $idInstitucion);
-
+        $config           = RedisInstance::getSystemConfiguration(true);
         $infoRolesUsuario = Administrativo_Usuario_SubRoles::getInfoRolesFromUser($mySelf["uss_id"], $idInstitucion);
 
         $_SESSION["idInstitucion"]                     = $idInstitucion;
@@ -174,6 +174,7 @@ class Autenticate {
         $_SESSION["inst"]                              = $dataInstitution['ins_bd'];
         $_SESSION["bd"]                                = $dataInstitution['ins_year_default'];
         $_SESSION["datosUnicosInstitucion"]            = $dataInstitution;
+        $_SESSION["datosUnicosInstitucion"]["config"]  = $config;
         $_SESSION["modulos"]                           = RedisInstance::getModulesInstitution(true);
         $_SESSION["informacionInstConsulta"]           = Instituciones::getGeneralInformationFromInstitution($_SESSION["idInstitucion"], $_SESSION["bd"]);
         $_SESSION["datosUsuario"]                      = UsuariosPadre::sesionUsuario($_SESSION['id']);

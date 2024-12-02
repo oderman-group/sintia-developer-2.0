@@ -13,8 +13,9 @@ $informacion_inst = Instituciones::getGeneralInformationFromInstitution($config[
 $_SESSION["informacionInstConsulta"] = $informacion_inst;
 
 $datosUnicosInstitucionConsulta = Instituciones::getDataInstitution($config['conf_id_institucion']);
-$datosUnicosInstitucion = mysqli_fetch_array($datosUnicosInstitucionConsulta, MYSQLI_BOTH);
-$_SESSION["datosUnicosInstitucion"] = $datosUnicosInstitucion;
+$datosUnicosInstitucion         = mysqli_fetch_array($datosUnicosInstitucionConsulta, MYSQLI_BOTH);
+$_SESSION["datosUnicosInstitucion"]           = $datosUnicosInstitucion;
+$_SESSION["datosUnicosInstitucion"]["config"] = $config;
 
 $_SESSION["modulos"] = RedisInstance::getModulesInstitution(true);
 

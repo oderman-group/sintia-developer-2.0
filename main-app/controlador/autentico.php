@@ -141,8 +141,9 @@ if ($num>0)
 	$_SESSION["informacionInstConsulta"] = $informacionInstitucion;
 
 	$datosUnicosInstitucionConsulta = Instituciones::getDataInstitution($config['conf_id_institucion']);
-	$datosUnicosInstitucion = mysqli_fetch_array($datosUnicosInstitucionConsulta, MYSQLI_BOTH);
-	$_SESSION["datosUnicosInstitucion"] = $datosUnicosInstitucion;
+	$datosUnicosInstitucion         = mysqli_fetch_array($datosUnicosInstitucionConsulta, MYSQLI_BOTH);
+	$_SESSION["datosUnicosInstitucion"]           = $datosUnicosInstitucion;
+	$_SESSION["datosUnicosInstitucion"]["config"] = $config;
 
 	$arregloModulos = RedisInstance::getModulesInstitution(true);
 	$_SESSION["modulos"] = $arregloModulos;
