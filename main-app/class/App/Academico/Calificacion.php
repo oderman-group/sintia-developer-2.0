@@ -8,7 +8,7 @@ class Academico_Calificacion extends BDT_Tablas {
 
     public static $primaryKey = 'cal_id';
 
-    public static function contarRegistrosEnCalificaciones($predicado) {
+    public static function contarRegistrosEnCalificaciones(array $predicado = []) {
         return self::numRows($predicado);
     }
 }
