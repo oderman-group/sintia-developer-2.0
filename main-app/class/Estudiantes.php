@@ -1156,8 +1156,13 @@ class Estudiantes {
      * @param $procedencia String
      * @param $pasosMatricula String
      */
-    public static function actualizarEstudiantes($conexionPDO, $POST, $fechaNacimiento = '', $procedencia = '', $pasosMatricula = '')
-    {
+    public static function actualizarEstudiantes(
+        $conexionPDO, 
+        $POST, 
+        $fechaNacimiento = '', 
+        $procedencia = '', 
+        $pasosMatricula = ''
+    ) {
         global $config, $conexion;
 
         $tipoD         = isset($POST["tipoD"]) ? $POST["tipoD"] : "";
@@ -1224,7 +1229,6 @@ class Estudiantes {
             mat_valor_matricula   = :va_matricula, 
             mat_inclusion         = :inclusion, 
             mat_extranjero        = :extran, 
-            mat_fecha             = NOW(), 
             mat_numero_matricula  = :NumMatricula, 
             mat_estado_agno       = :estadoAgno,
             mat_tipo_sangre       = :tipoSangre, 
