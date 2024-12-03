@@ -170,6 +170,8 @@ function verificarCodigo() {
   // Seleccionar todos los inputs
   const inputs = document.querySelectorAll('.code-input');
   const message = document.getElementById('message');
+  const btnValidarCodigo = document.getElementById('btnValidarCodigo');
+  btnValidarCodigo.style.visibility = 'hidden';
 
   // Verificar si todos los inputs están llenos
   let allFilled = true;
@@ -195,6 +197,7 @@ function verificarCodigo() {
             miFuncionConDelay(message, 'alert-success');
             enableButton()
           } else {
+            btnValidarCodigo.style.visibility = 'visible';
             message.innerHTML = data.message;
             message.style.visibility = 'visible';
             message.classList.add('alert-danger', 'animate__animated', 'animate__flash', 'animate__repeat-2');
@@ -211,12 +214,14 @@ function verificarCodigo() {
           }
         })
         .catch(error => {
+          btnValidarCodigo.style.visibility = 'visible';
           message.innerHTML = 'Error al validar el código: comunicate con un asesor.';
           message.style.visibility = 'visible';
           message.classList.add('alert-danger', 'animate__animated', 'animate__flash', 'animate__repeat-2');
           miFuncionConDelay(message, 'alert-danger');
         });
   } else {
+    btnValidarCodigo.style.visibility = 'visible';
     message.innerHTML = 'Faltan llenar algunos campos.';
     message.style.visibility = 'visible';
     message.classList.add('alert-danger', 'animate__animated', 'animate__flash', 'animate__repeat-2');
