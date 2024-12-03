@@ -7,6 +7,7 @@ if ($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol
 	exit();
 }
 include(ROOT_PATH . "/main-app/compartido/historial-acciones-guardar.php");
+require_once(ROOT_PATH . "/main-app/compartido/overlay.php");
 require_once(ROOT_PATH . "/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH . "/main-app/class/Plataforma.php");
 require_once(ROOT_PATH . "/main-app/class/Usuarios.php");
@@ -117,12 +118,20 @@ if (!empty($curso) && !empty($grupo) && !empty($periodoFinal) && !empty($year)) 
 	<link rel="shortcut icon" href="<?= $Plataforma->logo; ?>">
 	<link href="../../config-general/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    	<!-- notifications -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<style type="text/css">
 	        .page {
             page-break-after: always;
             /* Crea un salto de página después de este div */
         }
+        .swal2-container {
+        z-index:19999 !important;
+        }
 
+        #saltoPagina {
+            PAGE-BREAK-AFTER: always;
+        }
         #guardarPDF {
             cursor: pointer;
         }
@@ -134,14 +143,22 @@ if (!empty($curso) && !empty($grupo) && !empty($periodoFinal) && !empty($year)) 
         }
 
         .btn-flotante {
-            font-size: 16px;            /* Cambiar el tamaño de la tipografia */
-            text-transform: uppercase;            /* Texto en mayusculas */
-            font-weight: bold;            /* Fuente en negrita o bold */
-            color: #ffffff;            /* Color del texto */
-            border-radius: 5px;            /* Borde del boton */
-            letter-spacing: 2px;            /* Espacio entre letras */
-            background-color: #E91E63;            /* Color de fondo */
-            padding: 18px 30px;            /* Relleno del boton */
+            font-size: 16px;
+            /* Cambiar el tamaño de la tipografia */
+            text-transform: uppercase;
+            /* Texto en mayusculas */
+            font-weight: bold;
+            /* Fuente en negrita o bold */
+            color: #ffffff;
+            /* Color del texto */
+            border-radius: 5px;
+            /* Borde del boton */
+            letter-spacing: 2px;
+            /* Espacio entre letras */
+            background-color: #E91E63;
+            /* Color de fondo */
+            padding: 18px 30px;
+            /* Relleno del boton */
             position: fixed;
             bottom: 40px;
             right: 40px;
@@ -151,7 +168,8 @@ if (!empty($curso) && !empty($grupo) && !empty($periodoFinal) && !empty($year)) 
         }
 
         .btn-flotante:hover {
-            background-color: #2c2fa5;            /* Color de fondo al pasar el cursor */
+            background-color: #2c2fa5;
+            /* Color de fondo al pasar el cursor */
             box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.3);
             transform: translateY(-7px);
         }
@@ -367,17 +385,88 @@ onclick="generatePDF()" value="Descargar PDF"></input>
 
 	<?php include(ROOT_PATH . "/main-app/compartido/guardar-historial-acciones.php"); ?>
 	<script type="application/javascript">
-	function generatePDF() {
+    async function generatePDFPart(start, end) {
         const element = document.getElementById('contenido');
+        const estudiantes = [...document.querySelectorAll('.page')];
+        const visibleEstudiantes = estudiantes.slice(start, end);
+
+        // Crear un contenedor temporal con los elementos visibles
+        const tempContainer = document.createElement('div');
+        visibleEstudiantes.forEach(estudiante => tempContainer.appendChild(estudiante.cloneNode(true)));
+
         const options = {
-            margin: 10,
-            filename: 'LIBROFINAL<?= $informacion_inst["info_id"] ?>_<?= $year ?>_<?= $grado ?>_<?= $grupo ?>_<?= $idEstudiante ?>.pdf',
+            margin: [8, 15, 8, 8], // top: 8, right: 15, bottom: 8, left: 8
+            filename: '.pdf',
+            filename: `LIBRO-FINAL-F3-<?= $informacion_inst["info_id"] ?>_<?= $year ?>_<?= $grado ?>_<?= $grupo ?>_paginas_${start}-${end}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
+        Swal.fire({
+                position: "bottom-end",
+                title: 'Generando PDF',
+                text: 'Sé generó archivo desde la pagina '+start+ ' '+end,
+                icon: 'success',
+                showCancelButton: false,
+                confirmButtonText: 'Si!',
+                cancelButtonText: 'No!',
+                timer: 1500
+            });
 
-        html2pdf().set(options).from(element).save();
+       return await html2pdf().set(options).from(tempContainer).save();
+
+    }
+    async function generatePDF() {
+        const estudiantes = [...document.querySelectorAll('.page')];
+        document.getElementById('overlay').style.display = 'flex';
+        let cantidad = estudiantes.length;
+        console.log(cantidad);
+        if(cantidad>1){
+            let start = 0;
+            let end   = 0;
+            let count = 0;
+            let max = 20;
+            let vaiable='';
+            for (let i = 0; i < cantidad; i++){
+                count ++;
+                end = i;
+                if(count == max){
+                vaiable =  await generatePDFPart(start, end);
+                    console.log(start +" hasta "+end );
+                    start  = end+1;
+                    count = 0;                       
+                }
+            }
+            console.log(start +" hasta "+end );
+            vaiable = await generatePDFPart(start, end);
+        } else if(cantidad == 1){
+            vaiable =  await generatePDF2();
+           
+        }    
+        document.getElementById("overlay").style.display = "none";   
+        
+
+    }
+    async function generatePDF2() {
+        const element = document.getElementById('contenido');
+        const options = {
+            margin: 0,
+            filename: 'LIBRO-FINAL-F3-<?= $informacion_inst["info_id"] ?>_<?= $year ?>_<?= $grado ?>_<?= $grupo ?>_<?=$idEstudiante?>.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+       variable = await html2pdf().set(options).from(element).save();  
+        Swal.fire({
+                position: "bottom-end",
+                title: 'Generando PDF',
+                text: 'se generó archivo del estudiante <?=$idEstudiante?>',
+                icon: 'success',
+                showCancelButton: false,
+                confirmButtonText: 'Si!',
+                cancelButtonText: 'No!',
+                timer: 3500
+            });    
     }
 	</script>
 </body>
