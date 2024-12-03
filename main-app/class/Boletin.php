@@ -1314,15 +1314,12 @@ class Boletin {
                 AND   bol_estudiante  = mat.mat_id
                 AND   bol_carga       = car.car_id
                 AND   bol_periodo             IN ($in_periodos2)
-<<<<<<< HEAD
 
                 LEFT JOIN " . BD_ACADEMICA . ".academico_grados_periodos per
                 ON    per.institucion = mat.institucion 
                 AND   per.year        = mat.year
                 AND   per.gvp_grado   = mat.mat_grado
                 AND   per.gvp_periodo = bol.bol_periodo
-=======
->>>>>>> e1bf0b38 (🚀 PES-1323 traer en consulta las notas de todas las materias aun las nullas)
 
                 LEFT JOIN " . BD_ACADEMICA . ".academico_clases cls 
                 ON  cls.institucion       = bol.institucion
