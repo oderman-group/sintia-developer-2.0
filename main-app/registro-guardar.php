@@ -260,5 +260,5 @@ $predicado = [
 $notificacion->actualizarCodigo($datos, $predicado);
 
 //FIN ENVÍO DE MENSAJE
-echo '<script type="text/javascript">window.location.href="https://plataformasintia.com/es/gracias.php";</script>';
+echo '<script type="text/javascript">window.location.href="bienvenida.php?inf=' . base64_encode(serialize($data)) . '";</script>';
 exit();
