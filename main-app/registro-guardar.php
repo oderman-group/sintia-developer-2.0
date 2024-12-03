@@ -243,7 +243,7 @@ $data = [
 	'usuario_clave'    => '12345678'
 ];
 $asunto = $_POST["nombre"] . ', Bienvenido a la Plataforma SINTIA';
-$bodyTemplateRoute = ROOT_PATH.'/config-general/plantilla-email-prueba.php';
+$bodyTemplateRoute = ROOT_PATH.'/config-general/plantilla-email-bienvenida.php';
 
 EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute,null,null);
 
