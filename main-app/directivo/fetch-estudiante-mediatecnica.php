@@ -24,22 +24,28 @@ if (!empty($tipo)) {
     try {
         switch ($tipo) {
             case ACCION_CREAR:
-                $parametros = [
-                    'matcur_id_curso' => $curso,
-                    'matcur_id_institucion' => $config['conf_id_institucion'],
-                    'matcur_years' => $config['conf_agno']
-                ];
-                $cantidad = MediaTecnicaServicios::contar($parametros);
-                // se valida que tenga disponibilidad el curso
-                if (intval($cantidad) >= intval($cursoActual["gra_maximum_quota"])) {
+                $existeEstudianteMT = MediaTecnicaServicios::existeEstudianteMTCursos($matricula, $curso, $config, $config['conf_agno']);
+                if (!$existeEstudianteMT) {
+                    $parametros = [
+                        'matcur_id_curso' => $curso,
+                        'matcur_id_institucion' => $config['conf_id_institucion'],
+                        'matcur_years' => $config['conf_agno']
+                    ];
+                    $cantidad = MediaTecnicaServicios::contar($parametros);
+                    // se valida que tenga disponibilidad el curso
+                    if (intval($cantidad) >= intval($cursoActual["gra_maximum_quota"])) {
+                        $response["ok"] = false;
+                        $response["msg"] = "El cupo maximo del curso " . $cursoActual["gra_nombre"] . " es de " . $cursoActual["gra_maximum_quota"];
+                        echo json_encode($response);
+                        exit();
+                    }
+                    MediaTecnicaServicios::guardarPorCurso($matricula, $curso);
+                    $response["ok"] = true;
+                    $response["msg"] = "Se Agregó a ".MatriculaServicios::nombreCompleto($matricualActual)." en el cruso ". $cursoActual["gra_nombre"] . " correctamente.";
+                } else {
                     $response["ok"] = false;
-                    $response["msg"] = "El cupo maximo del curso " . $cursoActual["gra_nombre"] . " es de " . $cursoActual["gra_maximum_quota"];
-                    echo json_encode($response);
-                    exit();
+                    $response["msg"] = "El estudiante ".MatriculaServicios::nombreCompleto($matricualActual)." ya existe en el cruso ". $cursoActual["gra_nombre"] . ".";
                 }
-                MediaTecnicaServicios::guardarPorCurso($matricula, $curso);
-                $response["ok"] = true;
-                $response["msg"] = "Se Agregó a ".MatriculaServicios::nombreCompleto($matricualActual)." en el cruso ". $cursoActual["gra_nombre"] . " correctamente.";
                 break;
             case ACCION_MODIFICAR:
                 if (empty($input)) {
