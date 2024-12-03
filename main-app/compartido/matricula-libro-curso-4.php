@@ -72,12 +72,17 @@ if (!empty($idEstudiante)) {
     <title>Libro Final</title>
     <meta name="tipo_contenido" content="text/html;" http-equiv="content-type" charset="utf-8">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    	<!-- notifications -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- favicon -->
     <link rel="shortcut icon" href="<?= $Plataforma->logo; ?>" />
     <style>
         .page {
             page-break-after: always;
             /* Crea un salto de página después de este div */
+        }
+        .swal2-container {
+        z-index:19999 !important;
         }
 
         #saltoPagina {
@@ -467,13 +472,23 @@ if ($grado >= 12 && $grado <= 15) {
         visibleEstudiantes.forEach(estudiante => tempContainer.appendChild(estudiante.cloneNode(true)));
 
         const options = {
-            margin: 5,
+            margin: [8, 15, 8, 8], // top: 8, right: 15, bottom: 8, left: 8
             filename: '.pdf',
-            filename: `LIBROFINAL<?= $informacion_inst["info_id"] ?>_<?= $year ?>_<?= $grado ?>_<?= $grupo ?>_paginas_${start}-${end}.pdf`,
+            filename: `LIBRO-FINAL-F2-<?= $informacion_inst["info_id"] ?>_<?= $year ?>_<?= $grado ?>_<?= $grupo ?>_paginas_${start}-${end}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
-            jsPDF: { unit: 'mm', format: 'b4', orientation: 'portrait' }
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
+        Swal.fire({
+                position: "bottom-end",
+                title: 'Generando PDF',
+                text: 'Sé generó archivo desde la pagina '+start+ ' '+end,
+                icon: 'success',
+                showCancelButton: false,
+                confirmButtonText: 'Si!',
+                cancelButtonText: 'No!',
+                timer: 1500
+            });
 
        return await html2pdf().set(options).from(tempContainer).save();
 
@@ -482,40 +497,53 @@ if ($grado >= 12 && $grado <= 15) {
         const estudiantes = [...document.querySelectorAll('.page')];
         document.getElementById('overlay').style.display = 'flex';
         let cantidad = estudiantes.length;
-        console.log(cantidad);       
-        let start = 0;
-        let end   = 0;
-        let count = 0;
-        let max = 20;
-        let vaiable='';
-        for (let i = 0; i < cantidad; i++){
-               count ++;
-               end = i;
-            if(count == max){
-              vaiable =  await generatePDFPart(start, end);
-                console.log(start +" hasta "+end );
-                start  = end+1;
-                count = 0;
+        console.log(cantidad);
+        if(cantidad>1){
+            let start = 0;
+            let end   = 0;
+            let count = 0;
+            let max = 20;
+            let vaiable='';
+            for (let i = 0; i < cantidad; i++){
+                count ++;
+                end = i;
+                if(count == max){
+                vaiable =  await generatePDFPart(start, end);
+                    console.log(start +" hasta "+end );
+                    start  = end+1;
+                    count = 0;                       
+                }
             }
+            console.log(start +" hasta "+end );
+            vaiable = await generatePDFPart(start, end);
+        } else if(cantidad == 1){
+            vaiable =  await generatePDF2();
            
-
-        }
-        console.log(start +" hasta "+end );
-         vaiable = await generatePDFPart(start, end);
-        document.getElementById("overlay").style.display = "none";
+        }    
+        document.getElementById("overlay").style.display = "none";   
+        
 
     }
-    function generatePDF2() {
+    async function generatePDF2() {
         const element = document.getElementById('contenido');
         const options = {
             margin: 0,
-            filename: 'LIBROFINAL<?= $informacion_inst["info_id"] ?>_<?= $year ?>_<?= $grado ?>_<?= $grupo ?>_.pdf',
+            filename: 'LIBRO-FINAL-F2-<?= $informacion_inst["info_id"] ?>_<?= $year ?>_<?= $grado ?>_<?= $grupo ?>_<?=$idEstudiante?>.pdf',
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
-
-        html2pdf().set(options).from(element).save();
+       variable = await html2pdf().set(options).from(element).save();  
+        Swal.fire({
+                position: "bottom-end",
+                title: 'Generando PDF',
+                text: 'se generó archivo del estudiante <?=$idEstudiante?>',
+                icon: 'success',
+                showCancelButton: false,
+                confirmButtonText: 'Si!',
+                cancelButtonText: 'No!',
+                timer: 3500
+            });    
     }
 </script>
 
