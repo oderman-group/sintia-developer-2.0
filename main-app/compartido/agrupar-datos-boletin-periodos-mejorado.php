@@ -1,11 +1,9 @@
 <?php
 
 // se reparte la informacion en arrays
-$periodosTodos    = [];
-for ($i = 1; $i <= $periodoSeleccionado; $i++) {
-    $periodosTodos[$i] = $i;
-}
-
+Utilidades::valordefecto($periodosArray,[]);
+Utilidades::valordefecto($year,$_SESSION["bd"]);
+Utilidades::valordefecto($traerIndicadores,false);
 $conteoEstudiante             = 0;
 $contarAreas                  = 0;
 $contarCargas                 = 0;
@@ -53,6 +51,7 @@ foreach ($listaDatos  as $registro) {
             "mat_documento"                     => $registro["mat_documento"],
             "nro"                               => $conteoEstudiante,
             "mat_matricula"                     => $registro["mat_matricula"],
+            "mat_tipo_matricula"                => $registro["mat_tipo_matricula"],
             "gra_id"                            => $registro["mat_grado"],
             "gra_nombre"                        => $registro["gra_nombre"],
             "genero"                        => $registro["mat_genero"],
@@ -238,7 +237,11 @@ foreach ($listaDatos  as $registro) {
             ];
         }
 }
+$estudiantesMediatecnica = [];
 foreach ($estudiantes as $estudiante) {
+    if($estudiante["mat_tipo_matricula"] == GRADO_INDIVIDUAL){
+        $estudiantesMediatecnica[]=$estudiante["mat_id"] ;       
+    }
     $cantidad_materias                  = 0;
     $suma_notas_materias_periodo        = [];
     $suma_notas_areas_periodo           = [];
@@ -300,3 +303,96 @@ foreach ($estudiantes as $estudiante) {
     $estudiantes[$estudiante["mat_id"]]["suma_promedios_generales_areas"]      = $suma_promedios_generales_areas;
     
 }
+// listar daots de media tecnica
+$individuales = [];
+if(!empty($estudiantesMediatecnica)){
+        $datos = Boletin::datosBoletinMediaTecnica($periodosArray, $year, $estudiantesMediatecnica,$traerIndicadores);
+     while ($row = $datos->fetch_assoc()) {
+         $individuales[] = $row;
+     }
+    
+   
+    $matcur_id_matricula                               ='';
+    $matcur_id_matricula_curso                         ='';
+    $matcur_id_matricula_curso_carga                   ='';
+    $matcur_id_matricula_curso_carga_periodo           ='';
+    $matcur_id_matricula_curso_carga_periodo_indicador ='';
+    foreach ($individuales as $datoMt) { 
+       
+        if ($matcur_id_matricula != $datoMt["matcur_id_matricula"]) {
+            $contCurso = 0;
+            $estudiantes[$datoMt["matcur_id_matricula"]]["cursos_adicionales"]=[];
+            $matcur_id_matricula=$datoMt["matcur_id_matricula"];
+        }
+        if($matcur_id_matricula_curso  !=  $matcur_id_matricula.'-'.$datoMt["matcur_id_curso"]){           
+            $contCurso       ++ ;
+            $contCursoCargas = 0;
+            $estudiantes[$datoMt["matcur_id_matricula"]]["cursos_adicionales"][$datoMt["matcur_id_curso"]]=[
+                "matcur_id_curso"            => $datoMt["matcur_id_curso"],
+                "gra_nombre"                 => $datoMt["gra_nombre"],
+                "nro"                        =>  $contCurso ,
+                "cargas"                     =>[]
+            ];
+          $matcur_id_matricula_curso = $matcur_id_matricula.'-'.$datoMt["matcur_id_curso"];
+        }
+        if($matcur_id_matricula_curso_carga  !=  $matcur_id_matricula_curso.'-'.$datoMt["car_id"]){           
+            $contCursoCargas  ++ ;
+            $contCursoMateria = 0;
+            $estudiantes[$datoMt["matcur_id_matricula"]]["cursos_adicionales"][$datoMt["matcur_id_curso"]]["cargas"][$datoMt["car_id"]]=[
+                "car_id"                     => $datoMt["car_id"],
+                "car_ih"                     => $datoMt["car_ih"],
+                "nro"                        => $contCursoCargas ,                
+                "mat_area"                   => $datoMt["mat_area"],
+                "ar_nombre"                  => $datoMt["ar_nombre"],
+                "car_materia"                => $datoMt["car_materia"],
+                "mat_nombre"                 => $datoMt["mat_nombre"],               
+                "periodos"                   => []
+            ];
+          $matcur_id_matricula_curso_carga = $matcur_id_matricula_curso.'-'.$datoMt["car_id"];
+        }
+
+        
+        if($matcur_id_matricula_curso_carga_periodo  !=  $matcur_id_matricula_curso_carga.'-'.$datoMt["ipc_periodo"]){            
+            $contCursoMateria  ++ ;
+            $contarIndicadores = 0;
+            $estudiantes[$datoMt["matcur_id_matricula"]]["cursos_adicionales"][$datoMt["matcur_id_curso"]]["cargas"][$datoMt["car_id"]]["periodos"][$datoMt["ipc_periodo"]]=[
+            "ipc_periodo"               => $datoMt["ipc_periodo"],
+            "nro"                       => $contCursoMateria ,
+            "bol_nota"                  => $datoMt['bol_nota'],
+            "bol_tipo"                  => $datoMt['bol_tipo'], 
+            "bol_nota_anterior"         => $datoMt['bol_nota_anterior'], 
+            "indicadores"      => [] 
+
+            ];
+            $matcur_id_matricula_curso_carga_periodo = $matcur_id_matricula_curso_carga.'-'.$datoMt["ipc_periodo"];
+        }
+        if($matcur_id_matricula_curso_carga_periodo_indicador  !=  $matcur_id_matricula_curso_carga_periodo.'-'.$datoMt["ipc_indicador"]){
+            $contarIndicadores   ++;
+            $indicadorRecuperado = false;
+            Utilidades::valordefecto($datoMt['act_valor'],100);
+            $valor_indicador = ($datoMt['cal_nota_equivalente_cien'] / $datoMt['act_valor'])*100;
+            $notaIndicador_recuperacion = empty($datoMt['rind_nota']) ? 0 : $datoMt['rind_nota'];    
+            if ($notaIndicador_recuperacion > $valor_indicador) {
+                $valor_indicador = $notaIndicador_recuperacion;
+                $indicadorRecuperado=true;
+            }
+            $estudiantes[$datoMt["matcur_id_matricula"]]["cursos_adicionales"][$datoMt["matcur_id_curso"]]["cargas"][$datoMt["car_id"]]["periodos"][$datoMt["ipc_periodo"]]["indicadores"][$datoMt["ipc_indicador"]]=[
+               "ipc_indicador"                => $datoMt["ipc_indicador"],
+               "nro"                          => $contarIndicadores ,
+               "ind_nombre"                   => $datoMt['ind_nombre'],
+               "indicador_porcentual"         => $datoMt['cal_nota_equivalente_cien'],
+                "valor_indicador"             => ($datoMt['cal_nota_equivalente_cien'] / $datoMt['act_valor'])*100,
+                "valor_indicador_recuperado"  => $datoMt['rind_nota'],            
+                "nota_final"                  => $valor_indicador,
+                "recuperado"                  => $indicadorRecuperado
+
+            ];
+            $matcur_id_matricula_curso_carga_periodo_indicador = $matcur_id_matricula_curso_carga_periodo.'-'.$datoMt["ipc_periodo"];
+        }
+        
+        
+    }
+
+
+}
+    
