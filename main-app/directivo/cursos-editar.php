@@ -558,7 +558,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                                                 <?php
                                                                                 $cv = Grupos::traerGrupos($conexion, $config);
                                                                                 while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
-                                                                                    if ($rv[0] == $idEstudiante['matcur_id_grupo'])
+                                                                                    if ($rv['gru_id'] == $idEstudiante['matcur_id_grupo'])
                                                                                         echo '<option value="' . $rv['gru_id'] . '" selected>' . $rv['gru_nombre'] . '</option>';
                                                                                     else
                                                                                         echo '<option value="' . $rv['gru_id'] . '">' . $rv['gru_nombre'] . '</option>';
