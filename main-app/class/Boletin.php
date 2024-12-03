@@ -1350,57 +1350,35 @@ class Boletin {
                 ";
                 if($traerIndicadores){
                 $sql .="
-                INNER JOIN " . BD_ACADEMICA . ".academico_indicadores_carga indc 
-                ON  indc.institucion  = mat.institucion
-                AND indc.year         = mat.year
-                AND indc.ipc_periodo  = bol.bol_periodo
-                AND indc.ipc_carga    = bol.bol_carga
+                    INNER JOIN " . BD_ACADEMICA . ".academico_indicadores_carga indc 
+                    ON  indc.institucion  = mat.institucion
+                    AND indc.year         = mat.year
+                    AND indc.ipc_periodo  = bol.bol_periodo
+                    AND indc.ipc_carga    = bol.bol_carga
 
-                INNER JOIN " . BD_ACADEMICA . ".academico_indicadores ind 
-                ON ind.institucion    = mat.institucion
-                AND ind.year          = mat.year
-                AND ind.ind_id        = indc.ipc_indicador                 
+                    INNER JOIN " . BD_ACADEMICA . ".academico_indicadores ind 
+                    ON ind.institucion    = mat.institucion
+                    AND ind.year          = mat.year
+                    AND ind.ind_id        = indc.ipc_indicador                 
 
-				LEFT JOIN " . BD_ACADEMICA . ".academico_indicadores_recuperacion indr 
-                ON  indr.institucion        = mat.institucion
-                AND indr.year               = mat.year
-                AND indr.rind_estudiante     = mat.mat_id
-                AND indr.rind_carga          = car.car_id
-				AND indr.rind_nota          > indr.rind_nota_original
-				AND indr.rind_periodo        IN ($in_periodos2)
+                    LEFT JOIN " . BD_ACADEMICA . ".academico_indicadores_recuperacion indr 
+                    ON  indr.institucion        = mat.institucion
+                    AND indr.year               = mat.year
+                    AND indr.rind_estudiante     = mat.mat_id
+                    AND indr.rind_carga          = car.car_id
+                    AND indr.rind_nota          > indr.rind_nota_original
+                    AND indr.rind_indicador      = indc.ipc_indicador
+                    AND indr.rind_periodo        = indc.ipc_periodo
 
-                LEFT JOIN (
-                SELECT
-                cal_id_estudiante,
-                act_id_carga,
-                act.act_id_tipo,
-                act_id,
-                act_descripcion,
-                act_periodo,
-                SUM(act_valor) as valor_porcentaje_indicador,
-                SUM(cal_nota_equivalente_cien) as indicador_porcentual,
-                SUM(cal_nota_equivalente_cien)/SUM(act_valor)*100 as valor_indicador,
-                cal.institucion,
-                cal.year
 
-                FROM " . BD_ACADEMICA . ".academico_calificaciones cal
-
-                INNER JOIN " . BD_ACADEMICA . ".academico_actividades act 
-                ON  act_id=cal_id_actividad 
-                AND cal.institucion=act.institucion
-                AND cal.year=act.year
-                and act_estado=1
-
-                WHERE act.act_periodo     IN ($in_periodos2)
-                AND cal.institucion       = ".$config['conf_id_institucion']."
-                AND cal.year              =  $year
-                AND cal.cal_nota          IS NOT NULL
-                GROUP BY cal.cal_id_estudiante,act.act_periodo,act.act_id_carga,act.act_id_tipo,cal.institucion,cal.year
-                ) AS indv
-                ON   indv.cal_id_estudiante = bol.bol_estudiante
-                AND  indv.act_id_tipo       = indc.ipc_indicador
-                AND  indv.act_id_carga      = car.car_id";
-                   }                
+                    LEFT JOIN  " . BD_ACADEMICA . ".vista_valores_indicadores_periodos_estudiantes  AS indv
+                    ON   indv.institucion       = mat.institucion
+                    AND  indv.year              = mat.year
+                    AND  indv.act_periodo       = indc.ipc_periodo
+                    AND  indv.cal_id_estudiante = bol.bol_estudiante
+                    AND  indv.act_id_tipo       = indc.ipc_indicador
+                    AND  indv.act_id_carga      = car.car_id";
+                }                
 
                 $sql .="
 
@@ -1446,8 +1424,51 @@ class Boletin {
                 if($traerIndicadores){
                 $sql .=",ind.ind_id";
                 }
-        $parametros = [$grado, $grupo, $config['conf_id_institucion'], $year];
+        $parametros = [$grado, $grupo, (int)$config['conf_id_institucion'], $year];
 
+        $resultado = BindSQL::prepararSQL($sql, $parametros);
+
+        return $resultado;
+    }
+
+    /**
+ * Obtiene los datos del boletín para estudiantes de media técnica con opción a incluir indicadores.
+ *
+ * @param array  $periodos         Array con los periodos que se deben consultar.
+ * @param string $year             Año académico para el cual se realiza la consulta. Si está vacío, se toma el año de la sesión actual.
+ * @param array  $estudinates      Array con los IDs de los estudiantes cuyos datos se van a consultar.
+ * @param bool   $traerIndicadores Indica si deben incluirse los indicadores en la consulta. Por defecto, es `false`.
+ *
+ * @return array Retorna el resultado de la consulta como un array. 
+ *               - Si `$traerIndicadores` es `true`, incluye los indicadores asociados a los estudiantes.
+ *               - Si es `false`, devuelve solo la información básica de los cursos de media técnica.
+ */
+    public static function datosBoletinMediaTecnica(
+        array  $periodos,
+        string $year,
+        array  $estudinates,
+        bool   $traerIndicadores=false,
+    ) {
+        global $conexion, $config;
+
+        $year = empty($year) ?  $_SESSION["bd"] : $year;
+        $in_periodos = implode(', ', $periodos);
+        $in_estudiantes = implode(', ', $estudinates);
+        if(!$traerIndicadores){
+            $sql ="SELECT * FROM  " . BD_ACADEMICA . ".vista_matriculas_cursos_individual 
+								WHERE  matcur_id_institucion       = ?
+								AND    matcur_years                = ?
+								AND    matcur_id_matricula         IN ($in_estudiantes)
+								AND    bol_periodo                 IN ($in_periodos)";
+        }else{
+            $sql = "
+            SELECT * FROM  " . BD_ACADEMICA . ".vista_matriculas_cursos_individual_indicadores 
+								WHERE  matcur_id_institucion       = ?
+								AND    matcur_years                = ?
+								AND    matcur_id_matricula         IN ($in_estudiantes)
+								AND    ipc_periodo           IN ($in_periodos)";
+        }
+        $parametros = [(int)$config['conf_id_institucion'], $year];
         $resultado = BindSQL::prepararSQL($sql, $parametros);
 
         return $resultado;
@@ -1581,7 +1602,7 @@ class Boletin {
                
                 ORDER BY  $odenNombres mat.mat_id,are.ar_posicion,car.car_id,bol.bol_periodo
                 ";
-        $parametros = [$grado, $grupo, $config['conf_id_institucion'], $year];
+        $parametros = [$grado, $grupo, (int)$config['conf_id_institucion'], $year];
 
         $resultado = BindSQL::prepararSQL($sql, $parametros);
 

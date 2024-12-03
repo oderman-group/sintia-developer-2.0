@@ -109,9 +109,9 @@ class MediaTecnicaServicios extends Servicios
                    FROM " . BD_ADMIN . ".mediatecnica_matriculas_cursos
                    
                    LEFT JOIN " . BD_ACADEMICA . ".academico_matriculas mat 
-                   ON  mat.mat_id          = matcur_id_matricula
-                   AND mat.institucion     = matcur_id_institucion
-                   AND mat.year            = matcur_years
+                   ON  mat.mat_id      = matcur_id_matricula  
+                   AND mat.institucion = matcur_id_institucion
+                   AND mat.year        = matcur_years
 
                    LEFT JOIN " . BD_ACADEMICA . ".academico_grados gra 
                    ON gra_id           = matcur_id_curso 

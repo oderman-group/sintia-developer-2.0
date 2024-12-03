@@ -494,7 +494,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                 <div class="panel-body">
 
                                                     <div class="form-group row">
-                                                        <label class="col-sm-2 control-label">Agregar un estudainte:</label>
+                                                        <label class="col-sm-2 control-label">Agregar un estudiante:</label>
                                                         <div class="col-sm-8">
                                                             <?php
                                                             $selectEctudiante2 = new includeSelectSearch("SeleccionEstudiante", "ajax-listar-estudiantes.php", "buscar estudiante", "agregarEstudainte");
