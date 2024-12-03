@@ -117,22 +117,21 @@ if ($periodoActual == 4)
         $tiposNotas[] = $row;
     }
     $listaDatos = [];
+    $traerIndicadores=true;
+
     if (!empty($grado) && !empty($grupo) && !empty($periodo) && !empty($year)) {
-        $periodos = [];
+        $periodosArray = [];
         for ($i = 1; $i <= $periodoActual; $i++) {
-            $periodos[$i] = $i;
+            $periodosArray[$i] = $i;
         }
-        $datos = Boletin::datosBoletin($grado, $grupo, $periodos, $year, $idEstudiante, true);
+       
+        $datos = Boletin::datosBoletin($grado, $grupo, $periodosArray, $year, $idEstudiante, $traerIndicadores);
         while ($row = $datos->fetch_assoc()) {
             $listaDatos[] = $row;
         }
         include("../compartido/agrupar-datos-boletin-periodos-mejorado.php");
     }
-    $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
-    ?>
-
-
-
+    $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);?>
 
     <?php foreach ($estudiantes as $estudiante) { ?>
         <div align="center" style="margin-bottom:20px;">
@@ -213,9 +212,58 @@ if ($periodoActual == 4)
                     <?php } ?>
                 <?php } ?>
             <?php } ?>
+
+            <!-- MEDIA TECNICA -->
+            <?php 
+            if(!empty($estudiante["cursos_adicionales"])){
+                foreach ($estudiante["cursos_adicionales"] as $curso) { ?>
+                    <tr style="background-color: #b9b91730" style="font-size:12px;">
+                        <td colspan="2" style="font-size:12px; height:25px; font-weight:bold;padding-left: 10;">
+                            <?= $curso["gra_nombre"]; ?>
+                        </td>
+                        <td align="center" style="font-weight:bold; font-size:12px;"></td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <?php foreach ($curso["cargas"] as $carga) { ?>                    
+                        <tr bgcolor="#EAEAEA" style="font-size:12px;">
+                            <td align="center"><?= $carga["nro"] ?></td>
+                            <td style="font-size:12px; height:35px; font-weight:bold;background:#EAEAEA;padding-left: 10;"><?= $carga["mat_nombre"] ?></td>
+                            <td align="center" style="font-weight:bold; font-size:12px;background:#EAEAEA;"><?= $carga["car_ih"]; ?></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <?php 
+                            Utilidades::valordefecto($carga["periodos"][$periodoActual]['indicadores'],[]); 
+                            foreach ($carga["periodos"][$periodoActual]['indicadores'] as $indicador) { 
+                            $recuperoIndicador = $indicador["recuperado"];
+                            ?> 
+                            <tr bgcolor="#FFF" style="font-size:12px;">
+                                <td align="center">&nbsp;</td>
+                                <td style="font-size:12px; height:15px;"><?= $indicador["nro"] . "." . $indicador["ind_nombre"]; ?></td>
+                                <td>&nbsp;</td>
+                                <td align="center" style="padding-left: 10;font-weight:bold; font-size:12px;<?= $recuperoIndicador ? 'color: #2b34f4;" title="Nota indicador recuperada ' . $indicador['valor_indicador'] . '"' : '' ?>"" <?= $indicador['ind_nombre']; ?> align="
+                                                    center"
+                                >
+                                <?= Boletin::formatoNota($indicador["nota_final"] , $tiposNotas) ?>
+                                <?= $recuperoIndicador ?"<br><span style='color:navy; font-size:9px;'> Recuperdo. </span>":"" ?>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                        <?php if(!empty($carga["periodos"][$periodoActual]['bol_observaciones_boletin'])) { ?>  
+                        <tr>
+                            <td colspan="4"> 
+                                <h5 align="center">Observaciones</h5>
+                                <p style="margin-left: 5px; font-size: 11px; margin-top: -10px; margin-bottom: 5px; font-style: italic;">
+                                    <?= $carga["periodos"][$periodoActual]['bol_observaciones_boletin'] ?>
+                                </p>
+                            </td>
+                        </tr>
+                        <?php } ?>
+                    <?php } ?>
+                <?php } ?>
+            <?php } ?>    
         </table>
         <p>&nbsp;</p>
-        <?php if(!empty($carga["periodos"][$periodoActual]['bol_observaciones_boletin'])) { ?>  
+        <?php if(!empty($estudiante["observaciones_generales"] )) { ?>  
         <table width="100%" cellspacing="0" cellpadding="0" rules="all" border="1" align="center">
             <tr style="font-weight:bold; background:#2e537dab; border-color:#036; height:40px; font-size:12px; text-align:center">
                 <td colspan="3">OBSERVACIONES DE CONVIVENCIA</td>
