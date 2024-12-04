@@ -21,8 +21,8 @@ if(!isset($_GET['nodb'])) {
     }
     
     if (!empty($_GET['error']) && $_GET['error'] == Mensajes_Informativos_Error::USUARIO_BLOQUEADO) {
-        require_once(ROOT_PATH."/main-app/class/Tables/BDT_usuarios_bloqueados.php");
-        require_once(ROOT_PATH."/main-app/class/Tables/BDT_usuarios.php");
+        require_once(ROOT_PATH."/main-app/class/App/Administrativo/Usuario/Usuario_Bloqueado.php");
+        require_once(ROOT_PATH."/main-app/class/App/Administrativo/Usuario/Usuario.php");
 
         $predicado = [
             'usblo_id_usuario'  => base64_decode($_GET['idU']),
@@ -31,7 +31,7 @@ if(!isset($_GET['nodb'])) {
         ];
     
         $campos = "usblo_motivo";
-        $consultaMotivo = BDT_usuariosBloqueados::Select($predicado, $campos, BD_ADMIN);
+        $consultaMotivo = Administrativo_Usuario_Usuario_Bloqueado::Select($predicado, $campos, BD_ADMIN);
         $datosMotivo = $consultaMotivo->fetch(PDO::FETCH_ASSOC);
         
         $motivo = !empty($datosMotivo['usblo_motivo']) ? $datosMotivo['usblo_motivo'] : "Motivo no registrado";

@@ -2,8 +2,8 @@
 require_once($_SERVER['DOCUMENT_ROOT']."/app-sintia/config-general/constantes.php");
 require_once(ROOT_PATH."/main-app/class/Utilidades.php");
 require_once(ROOT_PATH."/main-app/class/BindSQL.php");
-require_once(ROOT_PATH."/main-app/class/Tables/BDT_usuarios.php");
-require_once(ROOT_PATH."/main-app/class/Tables/BDT_usuarios_bloqueados.php");
+require_once(ROOT_PATH."/main-app/class/App/Administrativo/Usuario/Usuario.php");
+require_once(ROOT_PATH."/main-app/class/App/Administrativo/Usuario/Usuario_Bloqueado.php");
 
 class UsuariosPadre {
 
@@ -679,7 +679,7 @@ class UsuariosPadre {
         string  $idUsuario,
         int     $bloquearDesbloquear,
         string  $motivo = "",
-        string  $formaBloqueo = BDT_usuariosBloqueados::USUARIO_INDIVIDUAL
+        string  $formaBloqueo = Administrativo_Usuario_Usuario_Bloqueado::USUARIO_INDIVIDUAL
     ){
         $datos = [
             'uss_bloqueado'    => $bloquearDesbloquear
@@ -690,7 +690,7 @@ class UsuariosPadre {
             'institucion'   => $config['conf_id_institucion'],
             'year'          => $_SESSION["bd"]
         ];
-        BDT_usuarios::Update($datos, $predicado, BD_GENERAL);
+        Administrativo_Usuario_Usuario::Update($datos, $predicado, BD_GENERAL);
 
         if ($bloquearDesbloquear == 1) {
             $datosMotivo = [
@@ -701,7 +701,7 @@ class UsuariosPadre {
                 'usblo_year'          => $_SESSION["bd"],
                 'usblo_forma_creacion'=> $formaBloqueo
             ];
-            BDT_usuariosBloqueados::Insert($datosMotivo, BD_ADMIN);
+            Administrativo_Usuario_Usuario_Bloqueado::Insert($datosMotivo, BD_ADMIN);
         }
     }
 
