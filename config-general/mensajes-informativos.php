@@ -318,7 +318,7 @@ if(isset($_GET['error']) || isset($_GET['success'])){
 
             case 'SC_GN_7':
                 $tipo = 'success';
-                $mensaje = 'Hemos enviado su solicitud de desbloqueo, pronto un directivo se pondrá en contacto contigo.';
+                $mensaje = 'Hemos enviado su solicitud de desbloqueo, pronto un directivo se pondrá en contacto con usted.';
             break;
 
             default:
