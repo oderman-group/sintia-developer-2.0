@@ -1,6 +1,5 @@
 <?php
-require_once(ROOT_PATH."/main-app/class/App/Mensajes_Informativos/Error.php");
-require_once(ROOT_PATH."/main-app/class/App/Mensajes_Informativos/Success.php");
+require_once(ROOT_PATH."/main-app/class/App/Mensajes_Informativos/Mensajes_Informativos.php");
 if(isset($_GET['error']) || isset($_GET['success'])){
     /* MENSAJES DE ERROR O INFORMATIVOS */
     if(isset($_GET['error'])){
@@ -32,7 +31,7 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                             - Solo se admiten caracteres de la a-z, A-Z, números(0-9) y los siguientes simbolos(. y $).';
             break;
 
-            case Mensajes_Informativos_Error::USUARIO_BLOQUEADO:
+            case Mensajes_Informativos::USUARIO_BLOQUEADO:
                 $tipo = 'danger';
                 $mensaje = '
                     Su usuario se encuentra bloqueado por el siguiente motivo:<br>
@@ -317,7 +316,7 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = 'Se te envío un correo con el nuevo usuarios de acceso.';
             break;
 
-            case Mensajes_Informativos_Success::SOLICITUD_DESBLOQUEO:
+            case Mensajes_Informativos::SOLICITUD_DESBLOQUEO:
                 $tipo = 'success';
                 $mensaje = 'Hemos enviado su solicitud de desbloqueo, pronto un directivo se pondrá en contacto con usted.';
             break;
