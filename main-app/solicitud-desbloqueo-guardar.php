@@ -1,6 +1,6 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . "/app-sintia/config-general/constantes.php");
-require_once(ROOT_PATH."/main-app/class/Tables/BDT_general_solicitudes.php");
+require_once(ROOT_PATH."/main-app/class/App/Administrativo/Solicitud_Desbloqueo/General_Solicitud.php");
 
 $datosMotivo = [
 	'soli_id_recurso'   => $_POST["usuario"],
@@ -12,7 +12,7 @@ $datosMotivo = [
 	'soli_institucion'  => $_POST["inst"],
 	'soli_year'			=> date("Y")
 ];
-BDT_generalSolicitudes::Insert($datosMotivo, BD_GENERAL);
+Administrativo_Solicitud_Desbloqueo_General_Solicitud::Insert($datosMotivo, BD_GENERAL);
 
 echo '<script type="text/javascript">window.location.href="index.php?success=SC_GN_7&inst='.base64_encode($_POST["inst"]).'&year='.base64_encode($datosMotivo["soli_year"]).'";</script>';
 exit();
