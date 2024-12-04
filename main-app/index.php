@@ -32,20 +32,9 @@ if(!isset($_GET['nodb'])) {
         $campos = "usblo_motivo";
         $consultaMotivo = BDT_usuariosBloqueados::Select($predicado, $campos, BD_ADMIN);
         $datosMotivo = $consultaMotivo->fetch(PDO::FETCH_ASSOC);
-        $motivo = !empty($datosMotivo['usblo_motivo']) ? $datosMotivo['usblo_motivo'] : "Motivo no registrado";
-
         
-        $predicado = [
-            'uss_id'        => $informacion_inst["info_secretaria_academica"],
-            'institucion'   => base64_decode($_GET['inst']),
-            'year'          => date("Y")
-        ];
-    
-        $campos = "uss_email, uss_celular";
-        $consultaSecretaria = BDT_usuarios::Select($predicado, $campos, BD_GENERAL);
-        $datosSecretaria = $consultaSecretaria->fetch(PDO::FETCH_ASSOC);
-        $email = !empty($datosSecretaria['uss_email']) ? $datosSecretaria['uss_email'] : "";
-        $telefono = !empty($datosSecretaria['uss_celular']) ? $datosSecretaria['uss_celular'] : "";
+        $motivo = !empty($datosMotivo['usblo_motivo']) ? $datosMotivo['usblo_motivo'] : "Motivo no registrado";
+        $telefono = !empty($informacion_inst['info_telefono']) ? $informacion_inst['info_telefono'] : "";
     }
 }
 ?>

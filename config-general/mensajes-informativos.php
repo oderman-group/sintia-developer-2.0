@@ -35,21 +35,13 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                 $mensaje = '
                     Su usuario se encuentra bloqueado por el siguiente motivo:<br>
                     <b>' . $motivo . '.</b><br>';
-                    if (!empty($email) || !empty($telefono)) {
+                    if (!empty($telefono)) {
                         $mensaje .= '
-                            Contacte con su institución:';
-                            if (!empty($email)) {
-                                $mensaje .= '
-                                    <b>Email:</b> ' . $email . '.<br>
-                                ';
-                            }
-                            if (!empty($telefono)) {
-                                $mensaje .= '
-                                    <b>Telefono:</b> ' . $telefono . '.<br>
-                                ';
-                            }
+                            Contacte con su institución:<br>
+                            <b>Telefono:</b> ' . $telefono . '.<br>
+                        ';
                     }
-                $mensaje .= 'Envie una solicitud de desbloqueo dando click <b><a class="forgot-password" id="forgot-password" href="solicitud-desbloqueo.php?inst=' . $_GET['inst'] . '&idU=' . $_GET['idU'] . '">AQUÍ</a></b>';
+                $mensaje .= 'Envíe una solicitud de desbloqueo dando click <b><a class="forgot-password" id="forgot-password" href="solicitud-desbloqueo.php?inst=' . $_GET['inst'] . '&idU=' . $_GET['idU'] . '">AQUÍ</a></b>';
             break;
 
             case 7:
