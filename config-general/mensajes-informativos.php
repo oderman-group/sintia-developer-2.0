@@ -1,5 +1,5 @@
 <?php
-require_once(ROOT_PATH."/main-app/class/APP/Mensajes_Informativos/Error.php");
+require_once(ROOT_PATH."/main-app/class/App/Mensajes_Informativos/Error.php");
 if(isset($_GET['error']) || isset($_GET['success'])){
     /* MENSAJES DE ERROR O INFORMATIVOS */
     if(isset($_GET['error'])){

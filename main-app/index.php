@@ -4,7 +4,7 @@ $logoWidth = 250;
 
 if(!isset($_GET['nodb'])) {
     require_once("index-logica.php");
-    require_once(ROOT_PATH."/main-app/class/APP/Mensajes_Informativos/Error.php");
+    require_once(ROOT_PATH."/main-app/class/App/Mensajes_Informativos/Error.php");
 
     if (!empty($_GET['inst']) && !empty($_GET['year'])) {
         try {
