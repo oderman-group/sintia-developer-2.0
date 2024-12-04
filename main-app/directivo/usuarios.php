@@ -24,39 +24,12 @@ if (!Modulos::validarPermisoEdicion()) {
 <!-- data tables -->
 <link href="../../config-general/assets/plugins/datatables/plugins/bootstrap/dataTables.bootstrap4.min.css"
 	rel="stylesheet" type="text/css" />
-
-
-<script type="text/javascript">
-	function guardarAjax(datos) {
-		var idR = datos.id;
-		var valor = 0;
-
-		if (document.getElementById(idR).checked) {
-			valor = 1;
-			document.getElementById("reg" + idR).style.backgroundColor = "#ff572238";
-		} else {
-			valor = 0;
-			document.getElementById("reg" + idR).style.backgroundColor = "white";
-		}
-		var operacion = 1;
-
-		$('#respuestaGuardar').empty().hide().html("").show(1);
-		datos = "idR=" + (idR) +
-			"&valor=" + (valor) +
-			"&operacion=" + (operacion);
-		$.ajax({
-			type: "POST",
-			url: "ajax-guardar.php",
-			data: datos,
-			success: function (data) {
-				$('#respuestaGuardar').empty().hide().html(data).show(1);
-			}
-		});
-	}
-</script>
 </head>
 <!-- END HEAD -->
-<?php include("../compartido/body.php"); ?>
+<?php
+	include("../compartido/body.php");
+	include("usuarios-bloquear-modal.php");
+?>
 <div class="page-wrapper">
 	<?php include("../compartido/encabezado.php"); ?>
 
@@ -221,7 +194,7 @@ if (!Modulos::validarPermisoEdicion()) {
 																		<label class="switchToggle">
 																			<input type="checkbox"
 																				id="<?= $usuario['uss_id']; ?>" name="bloqueado"
-																				value="1" onChange="guardarAjax(this)"
+																				value="1" onChange="ajaxBloqueoDesbloqueo(this)"
 																				<?= $cheked; ?> 		<?= $disabledPermiso; ?>>
 																			<span class="slider red round"></span>
 																		</label>
@@ -332,6 +305,7 @@ if (!Modulos::validarPermisoEdicion()) {
 	<!-- end page container -->
 	<?php include("../compartido/footer.php"); ?>
 </div>
+<script src="../js/Usuarios.js" ></script>
 <!-- start js include path -->
 <script src="../../config-general/assets/plugins/jquery/jquery.min.js"></script>
 <script src="../../config-general/assets/plugins/popper/popper.js"></script>
