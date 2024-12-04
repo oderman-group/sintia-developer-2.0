@@ -1,4 +1,5 @@
 <?php
+require_once(ROOT_PATH."/main-app/class/APP/Mensajes_Informativos/Error.php");
 if(isset($_GET['error']) || isset($_GET['success'])){
     /* MENSAJES DE ERROR O INFORMATIVOS */
     if(isset($_GET['error'])){
@@ -30,7 +31,7 @@ if(isset($_GET['error']) || isset($_GET['success'])){
                             - Solo se admiten caracteres de la a-z, A-Z, números(0-9) y los siguientes simbolos(. y $).';
             break;
 
-            case 6:
+            case Mensajes_Informativos_Error::USUARIO_BLOQUEADO:
                 $tipo = 'danger';
                 $mensaje = '
                     Su usuario se encuentra bloqueado por el siguiente motivo:<br>

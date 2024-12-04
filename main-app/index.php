@@ -4,6 +4,7 @@ $logoWidth = 250;
 
 if(!isset($_GET['nodb'])) {
     require_once("index-logica.php");
+    require_once(ROOT_PATH."/main-app/class/APP/Mensajes_Informativos/Error.php");
 
     if (!empty($_GET['inst']) && !empty($_GET['year'])) {
         try {
@@ -19,7 +20,7 @@ if(!isset($_GET['nodb'])) {
         }
     }
     
-    if (!empty($_GET['error']) && $_GET['error'] == 6) {
+    if (!empty($_GET['error']) && $_GET['error'] == Mensajes_Informativos_Error::USUARIO_BLOQUEADO) {
         require_once(ROOT_PATH."/main-app/class/Tables/BDT_usuarios_bloqueados.php");
         require_once(ROOT_PATH."/main-app/class/Tables/BDT_usuarios.php");
 
