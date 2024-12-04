@@ -71,19 +71,15 @@ if (!empty($idEstudiante)) {
 <head>
     <title>Libro Final</title>
     <meta name="tipo_contenido" content="text/html;" http-equiv="content-type" charset="utf-8">
+    <link href="../css/ButomDowloadPdf.css" rel="stylesheet" type="text/css" />
+	<script src="../js/ButomDowloadPdf.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     	<!-- notifications -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- favicon -->
     <link rel="shortcut icon" href="<?= $Plataforma->logo; ?>" />
     <style>
-        .page {
-            page-break-after: always;
-            /* Crea un salto de página después de este div */
-        }
-        .swal2-container {
-        z-index:19999 !important;
-        }
+       
 
         #saltoPagina {
             PAGE-BREAK-AFTER: always;
@@ -92,52 +88,7 @@ if (!empty($idEstudiante)) {
             cursor: pointer;
         }
 
-        .divBordeado {
-            height: 3px;
-            border: 3px solid #9ed8ed;
-            background-color: #00ACFB;
-        }
-
-        .btn-flotante {
-            font-size: 16px;
-            /* Cambiar el tamaño de la tipografia */
-            text-transform: uppercase;
-            /* Texto en mayusculas */
-            font-weight: bold;
-            /* Fuente en negrita o bold */
-            color: #ffffff;
-            /* Color del texto */
-            border-radius: 5px;
-            /* Borde del boton */
-            letter-spacing: 2px;
-            /* Espacio entre letras */
-            background-color: #E91E63;
-            /* Color de fondo */
-            padding: 18px 30px;
-            /* Relleno del boton */
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            transition: all 300ms ease 0ms;
-            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-            z-index: 99;
-        }
-
-        .btn-flotante:hover {
-            background-color: #2c2fa5;
-            /* Color de fondo al pasar el cursor */
-            box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.3);
-            transform: translateY(-7px);
-        }
-
-        @media only screen and (max-width: 600px) {
-            .btn-flotante {
-                font-size: 14px;
-                padding: 12px 20px;
-                bottom: 20px;
-                right: 20px;
-            }
-        }
+       
     </style>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 </head>
@@ -457,94 +408,10 @@ if ($grado >= 12 && $grado <= 15) {
              <div id="saltoPagina"></div>
         <?php } ?>
     </div>
-    <input type="button" class="btn btn-primary btn-flotante" id="guardarPDF" onclick="generatePDF()"
-        value="Descargar PDF"></input>
+    <input type="button" class="btn  btn-flotante btn-with-icon" id="guardarPDF" onclick="generatePDF('contenido','LIBRO_FINAL_F2',20)"
+        value="Descargar PDF">
+    </input>
 </body>
 
-<script type="application/javascript">
-    async function generatePDFPart(start, end) {
-        const element = document.getElementById('contenido');
-        const estudiantes = [...document.querySelectorAll('.page')];
-        const visibleEstudiantes = estudiantes.slice(start, end);
-
-        // Crear un contenedor temporal con los elementos visibles
-        const tempContainer = document.createElement('div');
-        visibleEstudiantes.forEach(estudiante => tempContainer.appendChild(estudiante.cloneNode(true)));
-
-        const options = {
-            margin: [8, 15, 8, 8], // top: 8, right: 15, bottom: 8, left: 8
-            filename: '.pdf',
-            filename: `LIBRO-FINAL-F2-<?= $informacion_inst["info_id"] ?>_<?= $year ?>_<?= $grado ?>_<?= $grupo ?>_paginas_${start}-${end}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-        Swal.fire({
-                position: "bottom-end",
-                title: 'Generando PDF',
-                text: 'Sé generó archivo desde la pagina '+start+ ' '+end,
-                icon: 'success',
-                showCancelButton: false,
-                confirmButtonText: 'Si!',
-                cancelButtonText: 'No!',
-                timer: 1500
-            });
-
-       return await html2pdf().set(options).from(tempContainer).save();
-
-    }
-    async function generatePDF() {
-        const estudiantes = [...document.querySelectorAll('.page')];
-        document.getElementById('overlay').style.display = 'flex';
-        let cantidad = estudiantes.length;
-        console.log(cantidad);
-        if(cantidad>1){
-            let start = 0;
-            let end   = 0;
-            let count = 0;
-            let max = 20;
-            let vaiable='';
-            for (let i = 0; i < cantidad; i++){
-                count ++;
-                end = i;
-                if(count == max){
-                vaiable =  await generatePDFPart(start, end);
-                    console.log(start +" hasta "+end );
-                    start  = end+1;
-                    count = 0;                       
-                }
-            }
-            console.log(start +" hasta "+end );
-            vaiable = await generatePDFPart(start, end);
-        } else if(cantidad == 1){
-            vaiable =  await generatePDF2();
-           
-        }    
-        document.getElementById("overlay").style.display = "none";   
-        
-
-    }
-    async function generatePDF2() {
-        const element = document.getElementById('contenido');
-        const options = {
-            margin: 0,
-            filename: 'LIBRO-FINAL-F2-<?= $informacion_inst["info_id"] ?>_<?= $year ?>_<?= $grado ?>_<?= $grupo ?>_<?=$idEstudiante?>.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-       variable = await html2pdf().set(options).from(element).save();  
-        Swal.fire({
-                position: "bottom-end",
-                title: 'Generando PDF',
-                text: 'se generó archivo del estudiante <?=$idEstudiante?>',
-                icon: 'success',
-                showCancelButton: false,
-                confirmButtonText: 'Si!',
-                cancelButtonText: 'No!',
-                timer: 3500
-            });    
-    }
-</script>
 
 </html>
