@@ -8,4 +8,5 @@ class Administrativo_Solicitud_Desbloqueo_General_Solicitud extends BDT_Tablas {
 
     public static $primaryKey = 'soli_id';
 
+    public const PENDIENTE = 1;
 }
