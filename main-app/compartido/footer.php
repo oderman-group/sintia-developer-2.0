@@ -95,7 +95,7 @@ LIMIT ".$empezar.",1
 	socket.on("notificar_solicitud_desbloqueo_<?=$_SESSION['idInstitucion']?>", (data) => {
 		$.toast({
 			heading: 'SOLICITUD DE DESBLOQUEO',  
-			text: 'Ha recibido una nueva solicitud de desbloqueo para el estudiante '+data['nombre']+'.',
+			text: 'Ha recibido una nueva solicitud de desbloqueo para el usuario '+data['nombre']+'.',
 			position: 'bottom-right',
 			showHideTransition: 'slide',
 			loaderBg:'#26c281', 
