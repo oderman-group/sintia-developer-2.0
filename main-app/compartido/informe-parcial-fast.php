@@ -9,9 +9,9 @@ if ($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol
 include(ROOT_PATH . "/main-app/compartido/historial-acciones-guardar.php");
 require_once(ROOT_PATH . "/main-app/class/UsuariosPadre.php");
 require_once(ROOT_PATH . "/main-app/class/Estudiantes.php");
-require_once(ROOT_PATH . "/main-app/class/Tables/BDT_academico_boletin.php");
-require_once(ROOT_PATH . "/main-app/class/Tables/BDT_notas_tipo.php");
 require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php");
+require_once(ROOT_PATH . "/main-app/class/App/Academico/boletin/Boletin.php");
+require_once(ROOT_PATH . "/main-app/class/App/Academico/Notas_tipo.php");
 $estudiante = "";
 if (!empty($_GET["estudiante"])) {
   $estudiante = base64_decode($_GET["estudiante"]);
@@ -41,7 +41,7 @@ if (!empty($estudiante)) {
 }
 
 
-$tiposNotas = BDT_notas_tipo::listarTipoDeNotas($config["conf_notas_categoria"], $year);
+$tiposNotas = Notas_tipo::listarTipoDeNotas($config["conf_notas_categoria"], $year);
 
 
 if (!empty($grado) && !empty($grupo) && !empty($cPeriodo) && !empty($year)) {
@@ -49,7 +49,7 @@ if (!empty($grado) && !empty($grupo) && !empty($cPeriodo) && !empty($year)) {
   for ($i = 1; $i <= $cPeriodo; $i++) {
     $periodos[$i] = $i;
   }
-  $listaEstudiantes = BDT_AcademicoBoletin::datosBoletin($grado, $grupo, $periodos, $year, $idEstudiante);
+  $listaEstudiantes = Academico_boletin::datosBoletin($grado, $grupo, $periodos, $year, $idEstudiante);
 }
 
 $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);

@@ -8,8 +8,8 @@ if ($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol
 }
 include(ROOT_PATH . "/main-app/compartido/historial-acciones-guardar.php");
 require_once(ROOT_PATH . "/main-app/class/Boletin.php");
-require_once(ROOT_PATH . "/main-app/class/Tables/BDT_academico_boletin.php");
-require_once(ROOT_PATH . "/main-app/class/Tables/BDT_notas_tipo.php");
+require_once(ROOT_PATH . "/main-app/class/App/Academico/boletin/Boletin.php");
+require_once(ROOT_PATH . "/main-app/class/App/Academico/Notas_tipo.php");
 
 
 $estudiante = "";
@@ -50,7 +50,7 @@ if (isset($_POST["grupo"])) {
   $grupo = $_POST["grupo"];
 }
 
-$tiposNotas = BDT_notas_tipo::listarTipoDeNotas($config["conf_notas_categoria"], $year);
+$tiposNotas = Notas_tipo::listarTipoDeNotas($config["conf_notas_categoria"], $year);
 
 
 if (!empty($grado) && !empty($grupo) && !empty($cPeriodo) && !empty($year)) {
@@ -59,9 +59,9 @@ if (!empty($grado) && !empty($grupo) && !empty($cPeriodo) && !empty($year)) {
     $periodos[$i] = $i;
   }
   $andString=[
-    "AND" => "bol_nota <= ".$config['conf_nota_minima_aprobar']." AND bol_periodo =".$cPeriodo
+    "AND" => "bol_nota < ".$config['conf_nota_minima_aprobar']." AND bol_periodo =".$cPeriodo
   ];
-  $listaEstudiantes = BDT_AcademicoBoletin::datosBoletin($grado, $grupo, $periodos, $year, $idEstudiante,false,$andString);
+  $listaEstudiantes = Academico_boletin::datosBoletin($grado, $grupo, $periodos, $year, $idEstudiante,false,$andString);
 }
 ?>
 
