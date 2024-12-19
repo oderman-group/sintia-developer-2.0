@@ -1,12 +1,12 @@
 <?php
-require_once 'BDT_Join.php';
-require_once 'BDT_tablas.php';
-require_once 'BDT_usuarios.php';
-require_once 'BDT_vista_datos_boletin.php';
-require_once 'BDT_vista_datos_boletin_indicadores.php';
-require_once 'BDT_JoinImplements.php';
+require_once ROOT_PATH.'/main-app/class/App/Administrativo/Usuario/Usuario.php';
+require_once ROOT_PATH.'/main-app/class/Tables/BDT_Join.php';
+require_once ROOT_PATH.'/main-app/class/Tables/BDT_tablas.php';
+require_once ROOT_PATH.'/main-app/class/Tables/BDT_JoinImplements.php';
+require_once 'Vista_datos_boletin.php';
+require_once 'Vista_datos_boletin_indicadores.php';
 
-class BDT_AcademicoBoletin extends BDT_Tablas implements BDT_JoinImplements{
+class Academico_boletin extends BDT_Tablas implements BDT_JoinImplements{
 
     public static $schema = BD_ACADEMICA;
     public static $tableName = 'academico_boletin';
@@ -27,9 +27,9 @@ class BDT_AcademicoBoletin extends BDT_Tablas implements BDT_JoinImplements{
        $listaClases=[];
         $year = empty($year) ?  $_SESSION["bd"] : $year;
         $in_periodos2 = implode(', ', $periodos);
-        $clasePrincipal=BDT_vista_datos_boletin::class;
+        $clasePrincipal=Vista_datos_boletin::class;
         if($traerIndicadores){
-            $clasePrincipal=BDT_vista_datos_boletin_indicadores::class;
+            $clasePrincipal=Vista_datos_boletin_indicadores::class;
         }
         $odenNombres    = '';
         switch ($config['conf_orden_nombre_estudiantes']) {
@@ -41,14 +41,14 @@ class BDT_AcademicoBoletin extends BDT_Tablas implements BDT_JoinImplements{
                 break;
          }
 
-         BDT_usuarios::foreignKey(  self::LEFT,[                      
+         Administrativo_Usuario_Usuario::foreignKey(  self::LEFT,[                      
             "institucion"       => $clasePrincipal::$tableAs.'.institucion',
             "year"              => $clasePrincipal::$tableAs.'.year',
             "uss_id"            => $clasePrincipal::$tableAs.'.car_docente'
         ]);  
      
 
-        $campos     = $clasePrincipal::$tableAs.".*,".BDT_usuarios::$tableAs.".*";
+        $campos     = $clasePrincipal::$tableAs.".*,".Administrativo_Usuario_Usuario::$tableAs.".*";
         
    
         $predicados =
@@ -70,7 +70,7 @@ class BDT_AcademicoBoletin extends BDT_Tablas implements BDT_JoinImplements{
         }
         $order ="$odenNombres mat_id,ar_posicion,car_id,bol_periodo";
         
-        $listaClases=[BDT_usuarios::class]; 
+        $listaClases=[Administrativo_Usuario_Usuario::class]; 
 
        $result = parent::SelectJoin(
         $predicados,
