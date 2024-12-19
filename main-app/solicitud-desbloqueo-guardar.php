@@ -1,6 +1,6 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . "/app-sintia/config-general/constantes.php");
-require_once(ROOT_PATH."/main-app/class/App/Administrativo/Solicitud_Desbloqueo/General_Solicitud.php");
+require_once(ROOT_PATH."/main-app/class/App/Administrativo/General_Solicitud.php");
 require_once(ROOT_PATH."/main-app/class/App/Administrativo/Usuario/Usuario.php");
 require_once(ROOT_PATH."/main-app/class/App/Mensajes_Informativos/Mensajes_Informativos.php");
 require_once(ROOT_PATH."/main-app/compartido/socket.php");
