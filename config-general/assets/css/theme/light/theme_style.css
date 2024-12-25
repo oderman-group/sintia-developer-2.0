@@ -1011,7 +1011,7 @@ body {
 form.search-form-opened {
     float: left;
     width: 100%;
-    max-width: 350px;
+    max-width: 200px;
     background-color: transparent;
     color: #fff;
     border-radius: 30px;
