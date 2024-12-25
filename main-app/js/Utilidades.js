@@ -280,7 +280,7 @@ function cambiarEstados (data) {
 
         // Al confirmar el motivo
         $('#confirmarMotivo').off('click').on('click', function () {
-            motivo = "Su solicitud de desbloqueo a sido rechazada.<br><b>Motivo:</b><br>" + document.getElementById("motivo").value.trim();
+            motivo = "Su solicitud de desbloqueo ha sido rechazada.<br><b>Motivo:</b><br>" + document.getElementById("motivo").value.trim();
 
             if (motivo === "") {
                 alert("Debe ingresar un motivo.");

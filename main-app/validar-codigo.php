@@ -40,7 +40,7 @@ try {
 
                     $arrayIdInsercion = [
                         "success" => true,
-                        "message" => "El proceso de activación a sido exitoso, da click en finalizar."
+                        "message" => "El proceso de activación ha sido exitoso, da click en finalizar."
                     ];
                 } else {
                     $arrayIdInsercion = [
