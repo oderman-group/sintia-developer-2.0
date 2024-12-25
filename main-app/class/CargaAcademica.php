@@ -881,7 +881,7 @@ class CargaAcademica {
             ON gru.gru_id=car_grupo 
             AND gru.institucion=car.institucion 
             AND gru.year=car.year
-        INNER JOIN ".BD_GENERAL.".usuarios uss 
+        LEFT JOIN ".BD_GENERAL.".usuarios uss 
             ON uss_id=car_docente 
             AND uss.institucion=car.institucion 
             AND uss.year=car.year

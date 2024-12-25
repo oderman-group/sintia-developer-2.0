@@ -243,7 +243,7 @@ $data = [
 	'usuario_clave'    => '12345678'
 ];
 $asunto = $_POST["nombre"] . ', Bienvenido a la Plataforma SINTIA';
-$bodyTemplateRoute = ROOT_PATH.'/config-general/plantilla-email-prueba.php';
+$bodyTemplateRoute = ROOT_PATH.'/config-general/plantilla-email-bienvenida.php';
 
 EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute,null,null);
 
@@ -260,5 +260,5 @@ $predicado = [
 $notificacion->actualizarCodigo($datos, $predicado);
 
 //FIN ENVÍO DE MENSAJE
-echo '<script type="text/javascript">window.location.href="https://plataformasintia.com/es/gracias.php";</script>';
+echo '<script type="text/javascript">window.location.href="bienvenida.php?inf=' . base64_encode(serialize($data)) . '";</script>';
 exit();

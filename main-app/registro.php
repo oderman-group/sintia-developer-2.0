@@ -203,7 +203,7 @@ $Plataforma = new Plataforma;
                                     </div>
 
                                     <p class="mt-4 alert alert-block" id="message" style="visibility: hidden;">-</p>
-                                    <button type="button" class="btn btn-primary mt-4" onclick="verificarCodigo()">Validar Código</button>
+                                    <button type="button" id="btnValidarCodigo" class="btn btn-primary mt-4" onclick="verificarCodigo()">Validar Código</button>
                                     <p class="mt-4">¿Tienes problemas? Revisa tu carpeta de spam o <a href="javascript:void(0);" id="intNuevo" class="text-decoration-none" data-colo-cambio="<?=$Plataforma->colorUno;?>" style="color: #000;">inténtalo de nuevo</a></p>
                                 </div>
                             </fieldset>
