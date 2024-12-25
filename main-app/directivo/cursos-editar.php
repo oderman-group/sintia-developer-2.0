@@ -494,7 +494,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                 <div class="panel-body">
 
                                                     <div class="form-group row">
-                                                        <label class="col-sm-2 control-label">Agregar un estudainte:</label>
+                                                        <label class="col-sm-2 control-label">Agregar un estudiante:</label>
                                                         <div class="col-sm-8">
                                                             <?php
                                                             $selectEctudiante2 = new includeSelectSearch("SeleccionEstudiante", "ajax-listar-estudiantes.php", "buscar estudiante", "agregarEstudainte");
@@ -558,7 +558,7 @@ if (!Modulos::validarPermisoEdicion()) {
                                                                                 <?php
                                                                                 $cv = Grupos::listarGrupos();
                                                                                 while ($rv = mysqli_fetch_array($cv, MYSQLI_BOTH)) {
-                                                                                    if ($rv[0] == $idEstudiante['matcur_id_grupo'])
+                                                                                    if ($rv['gru_id'] == $idEstudiante['matcur_id_grupo'])
                                                                                         echo '<option value="' . $rv['gru_id'] . '" selected>' . $rv['gru_nombre'] . '</option>';
                                                                                     else
                                                                                         echo '<option value="' . $rv['gru_id'] . '">' . $rv['gru_nombre'] . '</option>';

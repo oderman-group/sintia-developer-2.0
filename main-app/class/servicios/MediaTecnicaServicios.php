@@ -109,28 +109,28 @@ class MediaTecnicaServicios extends Servicios
                    FROM " . BD_ADMIN . ".mediatecnica_matriculas_cursos
                    
                    LEFT JOIN " . BD_ACADEMICA . ".academico_matriculas mat 
-                   ON  matcur_id_matricula = mat.mat_id 
-                   AND mat.institucion     = mat.institucion
-                   AND mat.year            = mat.year
+                   ON  mat.mat_id      = matcur_id_matricula  
+                   AND mat.institucion = matcur_id_institucion
+                   AND mat.year        = matcur_years
 
                    LEFT JOIN " . BD_ACADEMICA . ".academico_grados gra 
                    ON gra_id           = matcur_id_curso 
-                   AND gra.institucion = mat.institucion 
-                   AND gra.year        = mat.year
+                   AND gra.institucion = matcur_id_institucion 
+                   AND gra.year        = matcur_years
 
                    LEFT JOIN " . BD_ACADEMICA . ".academico_grupos gru 
                    ON gru.gru_id       = matcur_id_grupo 
-                   AND gru.institucion = mat.institucion
-                   AND gru.year        = mat.year
+                   AND gru.institucion = matcur_id_institucion
+                   AND gru.year        = matcur_years
 
                    LEFT JOIN " . BD_GENERAL . ".usuarios uss 
                    ON uss_id           = mat.mat_id_usuario 
-                   AND uss.institucion = mat.institucion
-                   AND uss.year        = mat.year
+                   AND uss.institucion = matcur_id_institucion
+                   AND uss.year        = matcur_years
 
                    LEFT JOIN ".BD_GENERAL.".usuarios  acud
-                   ON acud.institucion          = mat.institucion
-						       AND acud.year                = mat.year
+                   ON acud.institucion          = matcur_id_institucion
+						       AND acud.year                = matcur_years
 						       AND acud.uss_id              = mat.mat_acudiente
 
                    LEFT JOIN " . BD_ADMIN . ".opciones_generales 
