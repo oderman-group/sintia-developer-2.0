@@ -73,5 +73,5 @@ while ($datosDirectivo = $consultaDirectivos->fetch(PDO::FETCH_ASSOC)) {
 	</script>
 <?php
 
-echo '<script type="text/javascript">window.location.href="index.php?success='.Mensajes_Informativos::SOLICITUD_DESBLOQUEO.'&inst='.base64_encode($_POST["inst"]).'&year='.base64_encode($datosMotivo["soli_year"]).'";</script>';
+echo '<script type="text/javascript">window.location.href="index.php?success='.Mensajes_Informativos::SOLICITUD_DESBLOQUEO.'&inst='.base64_encode($_POST["inst"]).'";</script>';
 exit();

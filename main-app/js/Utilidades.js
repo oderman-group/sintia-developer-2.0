@@ -273,14 +273,14 @@ function cambiarEstados (data) {
     var idRecurso = data.getAttribute('data-id-recurso');
     var idUsuario = data.getAttribute('data-id-usuario');
 
-    var motivo = "Su solicitud de desbloqueo a sido aceptada, ya puede ingresar a la plataforma.";
+    var motivo = "Su solicitud de desbloqueo ha sido aceptada, ya puede ingresar a la plataforma.";
     if (idEstado == 4) {
         // Mostrar el modal
         $('#motivoModal').modal('show');
 
         // Al confirmar el motivo
         $('#confirmarMotivo').off('click').on('click', function () {
-            motivo = "Su solicitud de desbloqueo a sido rechazada,<br><b>Motivo:</b><br>" + document.getElementById("motivo").value.trim();
+            motivo = "Su solicitud de desbloqueo a sido rechazada.<br><b>Motivo:</b><br>" + document.getElementById("motivo").value.trim();
 
             if (motivo === "") {
                 alert("Debe ingresar un motivo.");
