@@ -83,10 +83,8 @@ if (isset($_GET['busqueda'])) {
             while($tipoUsuario = $tiposUsuarios->fetch()){
                 $estiloResaltado = '';
                 if($tipoUsuario['pes_id'] == $tipo) $estiloResaltado = 'style="color: '.$Plataforma->colorUno.';"';
-                if($tipoUsuario['pes_id'] != TIPO_ESTUDIANTE ) {
             ?>	
             <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>?tipo=<?=base64_encode($tipoUsuario['pes_id']);?>&busqueda=<?=$busqueda?>" <?=$estiloResaltado;?>><?=$tipoUsuario['pes_nombre'];?></a>
-            <?php }?>
         <?php }?>
         <a class="dropdown-item" href="<?=$_SERVER['PHP_SELF'];?>" style="font-weight: bold; text-align: center;">VER TODO</a>
         </div>
