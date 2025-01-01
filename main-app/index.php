@@ -31,7 +31,7 @@ if(!isset($_GET['nodb'])) {
         ];
     
         $campos = "usblo_motivo";
-        $consultaMotivo = Administrativo_Usuario_Usuario_Bloqueado::Select($predicado, $campos, BD_ADMIN);
+        $consultaMotivo = Administrativo_Usuario_Usuario_Bloqueado::SelectOrderLimit($predicado, $campos, "ORDER BY usblo_id DESC", "LIMIT 1");
         $datosMotivo = $consultaMotivo->fetch(PDO::FETCH_ASSOC);
         
         $motivo = !empty($datosMotivo['usblo_motivo']) ? $datosMotivo['usblo_motivo'] : "Motivo no registrado";
