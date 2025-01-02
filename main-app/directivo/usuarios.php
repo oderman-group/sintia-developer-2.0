@@ -135,7 +135,7 @@ if (!Modulos::validarPermisoEdicion()) {
 														"uss_bloqueado",
 														"uss_ultimo_ingreso"
 													];
-													$tipos = empty($tipo) ? [] : [$tipo];
+													$tipos = empty($tipo) ? [TIPO_DEV,TIPO_DOCENTE,TIPO_DIRECTIVO,TIPO_CLIENTE,TIPO_PROVEEDOR] : [$tipo];
 													$lista = Usuarios::listar($selectSql, $tipos, "uss_id");
 													$contReg = 1;
 													
