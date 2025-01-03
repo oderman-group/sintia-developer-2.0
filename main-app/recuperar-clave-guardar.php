@@ -35,7 +35,7 @@ if ($usuariosEncontrados == 1) {
 		EnviarEmail::enviar($data, $asunto, $bodyTemplateRoute, null, null);
 		Usuarios::guardarRegistroRestauracion($data);
 
-		echo '<script type="text/javascript">window.location.href="index.php?success=SC_DT_5&email=' . $datosUsuario['uss_email'] . '";</script>';
+		echo '<script type="text/javascript">window.location.href="index.php?success=SC_DT_5&email=' . base64_encode($datosUsuario['uss_email']) . '";</script>';
 		exit();
 	} else {
 		echo '<script type="text/javascript">window.location.href="recuperar-clave.php?error=1";</script>';
