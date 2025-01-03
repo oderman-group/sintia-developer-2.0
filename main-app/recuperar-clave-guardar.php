@@ -27,7 +27,7 @@ if ($usuariosEncontrados == 1) {
 			'usuario_email'    => $datosUsuario['uss_email'],
 			'usuario_nombre'   => $datosUsuario['uss_nombre'],
 			'usuario_usuario'  => $datosUsuario['uss_usuario'],
-			'nueva_clave'      => Usuarios::generatePassword(8)
+			'nueva_clave'      => $_REQUEST['password'],
 		];
 		$asunto = 'Tus credenciales han llegado';
 		$bodyTemplateRoute = ROOT_PATH . '/config-general/template-email-recuperar-clave.php';
@@ -38,20 +38,10 @@ if ($usuariosEncontrados == 1) {
 		echo '<script type="text/javascript">window.location.href="index.php?success=SC_DT_5&email=' . base64_encode($datosUsuario['uss_email']) . '";</script>';
 		exit();
 	} else {
-		echo '<script type="text/javascript">window.location.href="recuperar-clave.php?error=1";</script>';
+		echo '<script type="text/javascript">window.location.href="recuperar-clave-restaurar.php?usuarioId='.base64_encode($_REQUEST['usuarioId']).'&error=1";</script>';
 		exit();
 	}
-}
-if ($usuariosEncontrados > 1) {
-	// Serializar el array para pasarlo como un campo oculto
-	$usuariosSerializados = serialize($datosUsuario);
-	// Crear el formulario de redirección automática
-	echo '<form id="form" method="post" action="recuperar-clave.php?valor=' . base64_encode($_POST["Usuario"]) . '">';
-	echo '<input type="hidden" name="usuariosEncontrados" value="' . htmlspecialchars($usuariosSerializados) . '">';
-	echo '</form>';
-	echo '<script>document.getElementById("form").submit();</script>';
-	exit();
 } else {
-	echo '<script type="text/javascript">window.location.href="recuperar-clave.php?error=1";</script>';
+	echo '<script type="text/javascript">window.location.href="recuperar-clave-restaurar.php?usuarioId='.base64_encode($_REQUEST['usuarioId']).'&error=1";</script>';
 	exit();
 }
