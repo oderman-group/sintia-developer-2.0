@@ -7,10 +7,6 @@ if (!empty($_REQUEST['datosUsuario'])) {
     $datosUsuarioEncode = base64_decode($_REQUEST['datosUsuario']);
     $datosUsuario = unserialize($datosUsuarioEncode);
 }
-// echo "<pre>";
-// print_r($datosUsuario);
-// echo "</pre>";
-// exit;
 ?>
 
 <!DOCTYPE html>
