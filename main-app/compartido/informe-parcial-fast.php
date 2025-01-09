@@ -8,7 +8,6 @@ if ($datosUsuarioActual['uss_tipo'] == TIPO_DIRECTIVO && !Modulos::validarSubRol
 }
 include(ROOT_PATH . "/main-app/compartido/historial-acciones-guardar.php");
 require_once(ROOT_PATH . "/main-app/class/UsuariosPadre.php");
-require_once(ROOT_PATH . "/main-app/class/Estudiantes.php");
 require_once(ROOT_PATH . "/main-app/class/CargaAcademica.php");
 require_once(ROOT_PATH . "/main-app/class/App/Academico/boletin/Boletin.php");
 require_once(ROOT_PATH . "/main-app/class/App/Academico/Notas_tipo.php");
@@ -24,7 +23,8 @@ if (!empty($_POST["estudiante"])) {
 }
 
 //Año
-$year = date("Y");
+$year =  $_SESSION["bd"];
+
 if (isset($_GET["year"])) {
   $year = base64_decode($_GET["year"]);
 }
@@ -62,8 +62,14 @@ if (isset($_POST["grupo"])) {
 
 
 if (!empty($estudiante)) {
-  $matriculadosPorCursoEstudainte = Matricula::getCursosEstudiante($estudiante, $year);
- 
+  $filtro = " AND mat_id='" . $estudiante . "'";
+  $estudiantes[] = $estudiante;
+  $matriculadosPorCurso = Matricula::getCursosEstudiante($estudiantes, $year);
+  if (!empty($matriculadosPorCurso)) {
+    $idEstudiante = $matriculadosPorCurso[0]["mat_id"];
+    $grado = $matriculadosPorCurso[0]["mat_grado"];
+    $grupo = $matriculadosPorCurso[0]["mat_grupo"];
+  }
 }
 
 
@@ -75,7 +81,7 @@ if (!empty($grado) && !empty($grupo) && !empty($cPeriodo) && !empty($year)) {
   for ($i = 1; $i <= $cPeriodo; $i++) {
     $periodos[$i] = $i;
   }
-  $listaEstudiantes = Academico_boletin::datosBoletin($grado, $grupo, $periodos, $year, $matriculadosPorCursoEstudainte);
+  $listaEstudiantes = Academico_boletin::datosBoletin($grado, $grupo, $periodos, $year, $idEstudiante);
 }
 
 $rector = Usuarios::obtenerDatosUsuario($informacion_inst["info_rector"]);
