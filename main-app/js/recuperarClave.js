@@ -79,6 +79,9 @@ function startCountdown(durationInSeconds) {
     if (remainingTime === 0) {
       clearInterval(interval); // Detén la cuenta regresiva al llegar a 0
 
+      if (intento === 3) {
+        notificarDirectivos();
+      } else {
         // Cambiar el color del texto
         intNuevoElement.style.color = colorCambio;
         intNuevoElement.onclick = function () {
@@ -306,4 +309,32 @@ function enableButton(btn) {
     finishButton.classList.remove('disabled');
     finishButton.style.pointerEvents = 'auto';
     finishButton.style.opacity = '1';
+}
+
+function notificarDirectivos() {
+  var usuarioId         = document.getElementById('usuarioId').value;
+
+  // Enviar el código al correo electrónico
+  fetch('recuperar-clave-notificar-directivos.php?usuarioId=' + usuarioId, {
+    method: 'GET'
+  })
+    .then(response => response.json())
+    .then(data => {
+      disableButton("btnValidarCodigo");
+      const message = document.getElementById('message');
+      message.style.visibility = 'visible';
+
+      if (data.success) {
+        message.classList.add('alert-success');
+
+        setTimeout(() => {
+            window.location.href = 'index.php';
+        }, 5000);
+      } else {
+        message.classList.add('alert-danger');
+      }
+
+      message.classList.add('animate__animated', 'animate__flash', 'animate__repeat-2');
+      message.innerHTML = data.message;
+    });
 }
