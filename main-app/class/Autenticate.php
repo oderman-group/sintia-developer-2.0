@@ -81,7 +81,7 @@ class Autenticate {
         $data     = mysqli_fetch_array($consulta, MYSQLI_ASSOC);
 
         if (empty($data)) {
-            throw new Exception("El usuario o la clave son incorrectos");
+            throw new Exception("El usuario o la clave son incorrectos", -3);
         }
 
         return $data;
