@@ -61,6 +61,14 @@ class Autenticate {
             throw new Exception("La contraseña es invalida");
         }
 
+        $conexion = Conexion::newConnection('MYSQL');
+
+        $usuarioExiste = mysqli_query($conexion, "SELECT * FROM ".BD_GENERAL.".usuarios uss  WHERE uss_usuario='".trim($user)."' AND TRIM(uss_usuario)!='' AND uss_usuario IS NOT NULL");
+        $numUsuario = mysqli_num_rows($usuarioExiste);
+        if($numUsuario==0){
+            throw new Exception("El usuario no fue encontrado, por favor verifique.", -2);
+        }
+
         $sql = "SELECT id_nuevo, uss_usuario, uss_id, institucion, uss_intentos_fallidos FROM ".BD_GENERAL.".usuarios 
         WHERE uss_usuario='".trim($user)."' 
         AND TRIM(uss_usuario)!='' 
@@ -68,8 +76,6 @@ class Autenticate {
         AND uss_usuario IS NOT NULL  
         ORDER BY uss_ultimo_ingreso DESC 
         LIMIT 1";
-
-        $conexion = Conexion::newConnection('MYSQL');
 
         $consulta = mysqli_query($conexion, $sql);
         $data     = mysqli_fetch_array($consulta, MYSQLI_ASSOC);
