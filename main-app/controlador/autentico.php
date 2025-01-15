@@ -66,15 +66,10 @@ require_once("../class/Plataforma.php");
 require_once("../class/UsuariosPadre.php");
 require_once(ROOT_PATH."/main-app/class/Modulos.php");
 
-
-$rst_usrE = UsuariosPadre::obtenerTodosLosDatosDeUsuarios("AND uss_usuario='".trim($_POST["Usuario"])."' AND TRIM(uss_usuario)!='' AND uss_usuario IS NOT NULL");
-
-$numE = mysqli_num_rows($rst_usrE);
-if($numE==0){
-	header("Location:".REDIRECT_ROUTE."/index.php?error=1&inst=".base64_encode($_POST["bd"]));
+if($usrE['uss_intentos_fallidos']>=3 && (!array_key_exists("suma", $_POST) || md5($_POST["suma"]) != $_POST["sumaReal"])){
+	header("Location:".REDIRECT_ROUTE."/index.php?error=3&inst=".base64_encode($_POST["bd"]));
 	exit();
 }
-$usrE = mysqli_fetch_array($rst_usrE, MYSQLI_BOTH);
 
 $rst_usr = UsuariosPadre::obtenerTodosLosDatosDeUsuarios(" AND uss_usuario='".trim($_POST["Usuario"])."' AND uss_clave=SHA1('".$_POST["Clave"]."') AND TRIM(uss_usuario)!='' AND uss_usuario IS NOT NULL AND TRIM(uss_clave)!='' AND uss_clave IS NOT NULL");
 
