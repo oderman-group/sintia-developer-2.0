@@ -969,7 +969,7 @@ class Estudiantes {
         $celular2      = isset($POST["celular2"])       ? $POST["celular2"]                                       : null;
         $ciudadR       = isset($POST["ciudadR"])        ? $POST["ciudadR"]                                        : null;
         $fNac          = isset($POST["fNac"])           ? $POST["fNac"]                                           : null;
-        $tipoMatricula = isset($_POST["tipoMatricula"]) ? $POST["tipoMatricula"]                                  : null;
+        $tipoMatricula = isset($_POST["tipoMatricula"]) ? $POST["tipoMatricula"]                                  : GRADO_GRUPAL;
         $grupoEtnico   = isset($POST["grupoEtnico"])    ? $POST["grupoEtnico"]                                    : 1;
         $discapacidad  = isset($POST["discapacidad"])   ? $POST["discapacidad"]                                   : 1;
         $tipoSituacion = isset($POST["tipoSituacion"])  ? $POST["tipoSituacion"]                                  : 1;
