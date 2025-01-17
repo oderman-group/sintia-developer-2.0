@@ -19,6 +19,7 @@ if (!empty($_REQUEST['Usuario'])) {
 }
 
 if ($usuariosEncontrados == 1) {
+	$datosUsuario = !empty($_REQUEST['Usuario']) ? $datosUsuario[0] : $datosUsuario;
 	if (!empty($datosUsuario)) {
         $data = [
             'usuario_nombre'      => $datosUsuario['uss_nombre'] . ' ' . $datosUsuario['uss_apellido1'],
